@@ -7,12 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GovUk.Frontend.AspNetCore" Version="1.4.0" />
+    <Content Include="Scripts\alpine.js" />
+    <Content Include="Scripts\govukfrontendcss.js" />
+    <Content Include="Scripts\govukfrontendjs.js" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ASP.Application\ASP.Application.csproj" />
     <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

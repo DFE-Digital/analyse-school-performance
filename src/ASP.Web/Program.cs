@@ -1,4 +1,7 @@
-using GovUk.Frontend.AspNetCore;
+
+using ASP.Web.Middleware;
+using ASP.Web.Services;
+using Microsoft.AspNetCore.Builder.Extensions;
 
 namespace ASP.Web
 {
@@ -10,7 +13,7 @@ namespace ASP.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddGovUkFrontend();
+            builder.Services.AddScoped<INonceService>(serviceProvider => new NonceService(32));
 
             var app = builder.Build();
 
@@ -21,6 +24,8 @@ namespace ASP.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseNonce();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
