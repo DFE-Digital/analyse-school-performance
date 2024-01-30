@@ -72,6 +72,16 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(textContent.Trim(), element.TextContent.Trim());
         }
 
+        [Then(@"the page title should be ""(.*)""")]
+        public void ThenThePageTitleShouldBe(string expected)
+        {
+            Assert.NotNull(_response);
+
+            var actual = _response.HtmlContent.Title;
+
+            Assert.Equal(expected, actual);
+        }
+
         private string Minify(IElement element)
         {
             var minified = element.ToHtml(_minifier);
