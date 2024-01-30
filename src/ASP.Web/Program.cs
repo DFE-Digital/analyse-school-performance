@@ -15,12 +15,15 @@ namespace ASP.Web
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<INonceService>(serviceProvider => new NonceService(32));
 
+            builder.Configuration.AddJsonFile("appsettings.json");
+            builder.Configuration.AddJsonFile("appsettings.local.json", true);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/home/error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -34,9 +37,7 @@ namespace ASP.Web
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllers();
 
             app.Run();
         }
