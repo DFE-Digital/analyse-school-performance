@@ -1,0 +1,40 @@
+﻿@model EditViewComponentModel
+
+@{
+    var size = "Size";
+    if (!Model.ViewContent.ContainsKey(size))
+    {
+        Model.ViewContent[size] = "";
+    }
+
+    var text = "Text";
+    if (!Model.ViewContent.ContainsKey(text))
+    {
+        Model.ViewContent[text] = "";
+    }
+}
+
+<div class="govuk-fieldset">
+    <input type="hidden" asp-for="ViewId" />
+
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+            @Model.ViewId
+        </h1>
+    </legend>
+
+    <div class="govuk-form-group">
+        <label for="@Html.IdFor(m => m.ViewContent[size])" class="govuk-label govuk-!-margin-top-2 govuk-!-font-weight-bold">Size</label>
+        <select asp-for="ViewContent[size]" class="govuk-select">
+            <option value="l">L</option>
+            <option value="m">M</option>
+            <option value="s">S</option>
+            <option value="xs">XS</option>
+        </select>
+
+        <label for="@Html.IdFor(m => m.ViewContent[text])" class="govuk-label govuk-!-margin-top-2 govuk-!-font-weight-bold">Text</label>
+        <textarea asp-for="ViewContent[text]" class="govuk-textarea" rows="5" >
+
+        </textarea>
+    </div>
+</div>

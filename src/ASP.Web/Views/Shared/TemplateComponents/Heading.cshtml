@@ -1,0 +1,19 @@
+﻿@model DynamicViewModel
+
+<h1 id="@Model.ViewId" class=@($"govuk-heading-{Model.ViewContent.Size}")>
+    @if (Model.ViewContent.Caption is not null)
+    {
+        <span class="govuk-caption-@Model.ViewContent.CaptionSize">@Model.ViewContent.Caption</span>
+    }
+
+    @if (Model.ViewContent.LinkUrl is not null)
+    {
+        <a href="@Model.ViewContent.LinkUrl" class="govuk-link">
+            @Model.ViewContent.Text
+        </a>
+    }
+    else
+    {
+        @Model.ViewContent.Text
+    }
+</h1>

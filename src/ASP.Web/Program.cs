@@ -1,7 +1,5 @@
-
-using ASP.Web.Middleware;
-using ASP.Web.Services;
-using Microsoft.AspNetCore.Builder.Extensions;
+using ASP.Web.Extensions;
+using ASP.Application.Extensions;
 
 namespace ASP.Web
 {
@@ -9,16 +7,20 @@ namespace ASP.Web
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<INonceService>(serviceProvider => new NonceService(32));
+            builder.Services.RegisterDFEComponentLibraries()
+                .RegisterWebServices()
+                .RegisterRepositories()
+                .RegisterUseCases();
 
+            
             builder.Configuration.AddJsonFile("appsettings.json");
             builder.Configuration.AddJsonFile("appsettings.local.json", true);
 
-            var app = builder.Build();
+            WebApplication app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

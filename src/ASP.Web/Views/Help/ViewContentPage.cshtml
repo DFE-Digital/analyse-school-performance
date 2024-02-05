@@ -1,0 +1,11 @@
+﻿@model ViewContentPageModel
+
+@{
+    ViewData["Title"] = Model.DynamicPageTemplate.PageTitle;
+}
+
+<a asp-controller="Help" asp-action="EditContentPage" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+    Edit this page
+</a>
+
+@await Html.PartialAsync("DynamicPageView", Model.DynamicPageTemplate)

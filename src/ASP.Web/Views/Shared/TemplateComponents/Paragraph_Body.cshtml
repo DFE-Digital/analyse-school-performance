@@ -1,0 +1,15 @@
+﻿@model DynamicViewModel
+
+
+@if (Model.ViewContent.Size is not null)
+{
+    <p id="@Model.ViewId" class=@($"govuk-body-{Model.ViewContent.Size}")>
+        @Model.ViewContent.Text
+    </p>
+}
+else
+{
+    <p id="@Model.ViewId" class="govuk-body">
+        @Model.ViewContent.Text
+    </p>
+}

@@ -1,24 +1,37 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="Scripts\alpine.js" />
-    <Content Include="Scripts\govukfrontendcss.js" />
-    <Content Include="Scripts\govukfrontendjs.js" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Scripts\alpine.js" />
+		<Content Include="Scripts\govukfrontendcss.js" />
+		<Content Include="Scripts\govukfrontendjs.js" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ASP.Application\ASP.Application.csproj" />
-    <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ASP.Application\ASP.Application.csproj" />
+		<ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
+		<ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="wwwroot\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DfE.Data.ComponentLibrary.CleanArchitecture" Version="2.0.23-beta-CI-20231213-100114" />
+		<PackageReference Include="DfE.Data.ComponentLibrary.CrossCuttingConcerns.DependencyInjection" Version="2.0.23-beta-CI-20231213-100114" />
+		<PackageReference Include="DfE.Data.ComponentLibrary.CrossCuttingConcerns.Json" Version="2.0.23-beta-CI-20231213-100114" />
+		<PackageReference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb" Version="2.0.23-beta-CI-20231213-100114" />
+		<PackageReference Include="DfE.Data.DynamicPageTemplates.Core" Version="2.0.18-beta-CI-20240130-154119" />
+		<PackageReference Include="DfE.Data.DynamicPageTemplates.Web" Version="2.0.18-beta-CI-20240130-154119" />
+		<PackageReference Include="GracefulExpandoObject.Json" Version="1.6.0" />
+		<PackageReference Include="Microsoft.Azure.Cosmos" Version="3.37.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
 
 </Project>

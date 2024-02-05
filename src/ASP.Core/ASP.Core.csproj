@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DfE.Data.DynamicPageTemplates.Web" Version="2.0.18-beta-CI-20240130-154119" />
+    <PackageReference Include="ErrorOr" Version="1.9.0" />
+    <PackageReference Include="GracefulExpandoObject.Json" Version="1.6.0" />
+  </ItemGroup>
+
 </Project>

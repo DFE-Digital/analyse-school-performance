@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DfE.Data.ComponentLibrary.CleanArchitecture" Version="2.0.23-beta-CI-20231213-100114" />
+    <PackageReference Include="ErrorOr" Version="1.9.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
   </ItemGroup>
 

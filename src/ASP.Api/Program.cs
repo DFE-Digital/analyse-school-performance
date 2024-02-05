@@ -1,3 +1,4 @@
+using ASP.Application.Extensions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ namespace ASP.Api
                 {
                     services.AddApplicationInsightsTelemetryWorkerService();
                     services.ConfigureFunctionsApplicationInsights();
+                    services.RegisterUseCases();
                 })
                 .ConfigureAppConfiguration((context, builder) =>
                  {
@@ -26,6 +28,7 @@ namespace ASP.Api
                              optional: true, reloadOnChange: false)
                          .AddEnvironmentVariables();
                  });
+
 
             var host = builder.Build();
 

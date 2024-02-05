@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api", "src\ASP.Api\ASP.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Core", "src\ASP.Core\ASP.Core.csproj", "{E88375FB-49C7-4E98-833C-C1A28AB4AB44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.AcceptanceTests", "test\ASP.AcceptanceTests\ASP.AcceptanceTests.csproj", "{0FA88EE6-4197-45A2-98EE-0F4EF77948F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.AcceptanceTests", "test\ASP.AcceptanceTests\ASP.AcceptanceTests.csproj", "{0FA88EE6-4197-45A2-98EE-0F4EF77948F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.Infrastructure", "src\ASP.Infrastructure\ASP.Infrastructure.csproj", "{1222DE8D-8A75-45A4-90B0-AA85D4497ECE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{0FA88EE6-4197-45A2-98EE-0F4EF77948F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FA88EE6-4197-45A2-98EE-0F4EF77948F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FA88EE6-4197-45A2-98EE-0F4EF77948F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1222DE8D-8A75-45A4-90B0-AA85D4497ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1222DE8D-8A75-45A4-90B0-AA85D4497ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1222DE8D-8A75-45A4-90B0-AA85D4497ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1222DE8D-8A75-45A4-90B0-AA85D4497ECE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{671978FC-2579-484F-B2D0-9A18C5C51FD0} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
 		{E88375FB-49C7-4E98-833C-C1A28AB4AB44} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
 		{0FA88EE6-4197-45A2-98EE-0F4EF77948F8} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
+		{1222DE8D-8A75-45A4-90B0-AA85D4497ECE} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4950C0DD-CDAE-42E7-8BCB-678C73C51298}
