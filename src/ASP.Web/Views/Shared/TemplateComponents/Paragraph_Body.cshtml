@@ -1,15 +1,15 @@
-﻿@model DynamicViewModel
+﻿@model PageContentTemplateView
 
 
 @if (Model.ViewContent.Size is not null)
 {
-    <p id="@Model.ViewId" class=@($"govuk-body-{Model.ViewContent.Size}")>
+    <p id="@Model.ViewContent.Id" class=@($"govuk-body-{Model.ViewContent.Size}")>
         @Model.ViewContent.Text
     </p>
 }
 else
 {
-    <p id="@Model.ViewId" class="govuk-body">
+    <p id="@Model.ViewContent.Id" class="govuk-body">
         @Model.ViewContent.Text
     </p>
 }

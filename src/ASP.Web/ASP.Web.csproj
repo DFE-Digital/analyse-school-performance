@@ -23,12 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DfE.Data.ComponentLibrary.CleanArchitecture" Version="2.0.23-beta-CI-20231213-100114" />
-		<PackageReference Include="DfE.Data.ComponentLibrary.CrossCuttingConcerns.DependencyInjection" Version="2.0.23-beta-CI-20231213-100114" />
-		<PackageReference Include="DfE.Data.ComponentLibrary.CrossCuttingConcerns.Json" Version="2.0.23-beta-CI-20231213-100114" />
-		<PackageReference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb" Version="2.0.23-beta-CI-20231213-100114" />
-		<PackageReference Include="DfE.Data.DynamicPageTemplates.Core" Version="2.0.18-beta-CI-20240130-154119" />
-		<PackageReference Include="DfE.Data.DynamicPageTemplates.Web" Version="2.0.18-beta-CI-20240130-154119" />
+		<PackageReference Include="DfE.Data.DynamicPageTemplates.Web" Version="2.0.19-beta-CI-20240205-150456" />
 		<PackageReference Include="GracefulExpandoObject.Json" Version="1.6.0" />
 		<PackageReference Include="Microsoft.Azure.Cosmos" Version="3.37.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

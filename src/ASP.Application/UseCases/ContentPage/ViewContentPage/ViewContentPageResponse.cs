@@ -1,10 +1,9 @@
 ﻿using ASP.Core.PageContent;
 
-namespace ASP.Web.Models
+namespace ASP.Application.UseCases.ViewContentPage
 {
-    public class ViewContentPageModel
+    public class ViewContentPageResponse
     {
-        public string ContentId { get; set; }
         public PageContentTemplate PageContentTemplate { get; set; }
     }
 }

@@ -4,19 +4,27 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Io;
 using AngleSharp;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using ASP.Web;
+using AngleSharp.Dom;
+using ASP.Core;
+using ASP.Test.Core;
 
 namespace ASP.AcceptanceTests
 {
     public class AspWeb
     {
         private readonly HttpClient _client;
+        private readonly MemoryStore _store;
 
-        public AspWeb()
+        public AspWeb(MemoryStore store)
         {
-            var factory = new CustomWebApplicationFactory<Program>();
+            _store = store;
+
+            var factory = new CustomWebApplicationFactory<Program>(_store);
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions {
                 AllowAutoRedirect = false
             });
@@ -68,10 +76,21 @@ namespace ASP.AcceptanceTests
 
         private class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
         {
+            private readonly MemoryStore _store;
+
+            public CustomWebApplicationFactory(MemoryStore store)
+            {
+                _store = store;
+            }
+
             protected override void ConfigureWebHost(IWebHostBuilder builder)
             {
                 builder.ConfigureServices(services =>
                 {
+                    services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
+
+                    services.RemoveAll<IDocumentDatabase>();
+                    services.AddSingleton<IDocumentDatabase, InMemoryDocumentDatabase>();
                 });
 
                 builder.UseEnvironment("Development");

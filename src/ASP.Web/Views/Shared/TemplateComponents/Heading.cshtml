@@ -1,6 +1,6 @@
-﻿@model DynamicViewModel
+﻿@model PageContentTemplateView
 
-<h1 id="@Model.ViewId" class=@($"govuk-heading-{Model.ViewContent.Size}")>
+<h1 id="@Model.ViewContent.Id" class=@($"govuk-heading-{Model.ViewContent.Size}")>
     @if (Model.ViewContent.Caption is not null)
     {
         <span class="govuk-caption-@Model.ViewContent.CaptionSize">@Model.ViewContent.Caption</span>
