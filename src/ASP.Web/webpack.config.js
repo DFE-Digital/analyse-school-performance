@@ -5,7 +5,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const govukFrontendStyles = Object.assign({}, {
     mode: 'production',
     entry: {
-        govuk: path.resolve(__dirname, 'scripts/govukfrontendcss.js'),
+        app: path.resolve(__dirname, 'scripts/scss_imports.js'),
     },
     output: {
         path: path.resolve(__dirname, 'wwwroot'),
@@ -48,7 +48,7 @@ const govukFrontendStyles = Object.assign({}, {
 const govukFrontendJavaScript = Object.assign({}, {
     mode: 'production',
     entry: {
-        govuk: path.resolve(__dirname, 'scripts/govukfrontendjs.js'),
+        govuk: path.resolve(__dirname, 'scripts/js_imports.js'),
     },
     output: {
         path: path.resolve(__dirname, 'wwwroot/assets/js'),

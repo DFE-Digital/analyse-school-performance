@@ -6,11 +6,11 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<Content Include="Scripts\alpine.js" />
-		<Content Include="Scripts\govukfrontendcss.js" />
-		<Content Include="Scripts\govukfrontendjs.js" />
-	</ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\alpine.js" />
+    <Content Include="Scripts\scss_imports.js" />
+    <Content Include="Scripts\js_imports.js" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\ASP.Application\ASP.Application.csproj" />
@@ -18,9 +18,9 @@
 		<ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="wwwroot\" />
-	</ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\css\" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="DfE.Data.DynamicPageTemplates.Web" Version="2.0.19-beta-CI-20240205-150456" />
