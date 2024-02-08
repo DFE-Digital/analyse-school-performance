@@ -10,12 +10,13 @@ namespace ASP.Web
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services
+                .AddRouting(options => options.LowercaseUrls = true)
+                .AddControllersWithViews();
             builder.Services.RegisterDFEComponentLibraries()
                 .RegisterWebServices()
                 .RegisterRepositories()
                 .RegisterUseCases();
-
             
             builder.Configuration.AddJsonFile("appsettings.json");
             builder.Configuration.AddJsonFile("appsettings.local.json", true);
@@ -34,8 +35,6 @@ namespace ASP.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseRouting();
 
             app.UseAuthorization();
 

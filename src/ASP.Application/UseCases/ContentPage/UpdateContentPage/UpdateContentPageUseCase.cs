@@ -15,21 +15,14 @@ namespace ASP.Application.UseCases.UpdateContentPage
                 throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public async Task<UpdateContentPageResponse> HandleRequest(UpdateContentPageRequest request)
+        public async Task<ErrorOr<UpdateContentPageResponse>> HandleRequest(UpdateContentPageRequest request)
         {
-            var response = await JsonHelper.Deserialize<PageContentTemplate>(request.JsonValue)
+            return await JsonHelper.DeserializeIgnoringMissingMembers<PageContentTemplate>(request.JsonValue)
                 .ThenAsync(async updatedPageContent => { 
                     updatedPageContent.contentId = request.PageContentId;
                     return await _pageContentRepository.Update(updatedPageContent);
-                });
-
-            if (response.IsError)
-            {
-                throw new NotImplementedException(response.FirstError.Description);
-            }
-
-            // Return something meaningful later
-            return new UpdateContentPageResponse();
+                })
+                .Then(_ => new UpdateContentPageResponse());
         }
     }
 }

@@ -12,6 +12,7 @@ using ASP.Web;
 using AngleSharp.Dom;
 using ASP.Core;
 using ASP.Test.Core;
+using AngleSharp.Io.Network;
 
 namespace ASP.AcceptanceTests
 {
@@ -44,8 +45,10 @@ namespace ASP.AcceptanceTests
 
         private async Task<(string, IHtmlDocument)> GetDocumentAsync(HttpResponseMessage response)
         {
+            var requester = new HttpClientRequester(_client);
+            var config = Configuration.Default.With(requester).WithDefaultLoader();
             var content = await response.Content.ReadAsStringAsync();
-            var document = await BrowsingContext.New()
+            var document = await BrowsingContext.New(config)
                 .OpenAsync(ResponseFactory, CancellationToken.None);
 
             return (content, (IHtmlDocument)document);

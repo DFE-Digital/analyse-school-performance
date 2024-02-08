@@ -4,7 +4,7 @@
     ViewData["Title"] = Model.PageContentTemplate.PageTitle;
 }
 
-<a asp-controller="Help" asp-action="EditContentPage" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+<a id="asp-content-edit" asp-route="asp-content-edit" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
     Edit this page
 </a>
 

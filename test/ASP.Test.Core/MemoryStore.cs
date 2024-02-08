@@ -1,7 +1,5 @@
-﻿using ASP.Core;
-using ASP.Core.Helpers;
+﻿using ASP.Core.Helpers;
 using ErrorOr;
-using System.Runtime.InteropServices.JavaScript;
 
 namespace ASP.Test.Core
 {
@@ -9,9 +7,18 @@ namespace ASP.Test.Core
     public class MemoryStore
     {
         private Dictionary<string, Dictionary<(string, string), string>> _store = new();
+
         public void Clear()
         {
             _store = new();
+        }
+
+        public void EnsureContainer(string containerKey)
+        {
+            if (!_store.ContainsKey(containerKey))
+            {
+                _store[containerKey] = new();
+            }
         }
 
         public void Set(string containerKey, string id, string partitionKeyValue, object document)
@@ -21,10 +28,7 @@ namespace ASP.Test.Core
 
         public void Set(string containerKey, string id, string partitionKeyValue, string document)
         {
-            if (!_store.ContainsKey(containerKey))
-            {
-                _store[containerKey] = new();
-            }
+            EnsureContainer(containerKey);
             _store[containerKey][(id, partitionKeyValue)] = document;
         }
 

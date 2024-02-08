@@ -1,4 +1,5 @@
 ﻿using ASP.Core.PageContent.Repository;
+using ErrorOr;
 
 namespace ASP.Application.UseCases.ViewContentPage
 {
@@ -12,23 +13,10 @@ namespace ASP.Application.UseCases.ViewContentPage
                 throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public async Task<ViewContentPageResponse> HandleRequest(ViewContentPageRequest request)
+        public async Task<ErrorOr<ViewContentPageResponse>> HandleRequest(ViewContentPageRequest request)
         {
-            try
-            {
-                var response = await _pageContentRepository.Get(request.PageContentId);
-                if (response.IsError)
-                {
-                    throw new NotImplementedException(response.FirstError.Description);
-                }
-
-                return new ViewContentPageResponse { PageContentTemplate = response.Value };
-            }
-            catch (Exception ex)
-            {
-                throw new NotImplementedException(ex.Message);
-            }
-
+            return await _pageContentRepository.Get(request.PageContentId)
+                .Then(content => new ViewContentPageResponse { PageContentTemplate = content });
         }
     }
 }

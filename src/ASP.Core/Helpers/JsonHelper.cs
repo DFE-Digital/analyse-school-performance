@@ -25,7 +25,7 @@ namespace ASP.Core.Helpers
             }
             catch (Exception ex)
             {
-                return Error.Unexpected("JsonHelper.Deserialize", $"Error occurred deserializing object of type {typeof(T)}: {ex.Message}");
+                return Error.Unexpected("JsonHelper.Deserialize", $"Error occurred deserializing object of type {typeof(T)}: {ex.Message}. Object: {Environment.NewLine}{json}");
             }
 
             if (item == null)

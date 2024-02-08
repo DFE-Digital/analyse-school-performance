@@ -1,7 +1,9 @@
 using AngleSharp;
 using AngleSharp.Dom;
 using AngleSharp.Html;
+using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using ASP.Core.Helpers;
 using ASP.Test.Core;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +12,12 @@ using System.Net;
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using TechTalk.SpecFlow.Infrastructure;
-using Xunit.Sdk;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ASP.AcceptanceTests.StepDefinitions
 {
     [Binding]
-    public sealed class AspWebStepDefinitions
+    public sealed partial class AspWebStepDefinitions
     {
         private static readonly Regex _spacesAfterClosingTag = new Regex(@">([\s\t\n]*)([^\s\t\n])", RegexOptions.Compiled);
         private static readonly Regex _spacesBeforeOpeningTag = new Regex(@"([^\s\t\n])([\s\t\n]*)<", RegexOptions.Compiled);
@@ -32,14 +33,33 @@ namespace ASP.AcceptanceTests.StepDefinitions
         private readonly MemoryStore _store;
 
         AspWebResponse? _response = null;
+        IDocument _document = null;
 
         private readonly ISpecFlowOutputHelper _outputHelper;
 
         public AspWebStepDefinitions(ISpecFlowOutputHelper outputHelper)
         {
-            _outputHelper = outputHelper;
             _store = new MemoryStore();
             _web = new AspWeb(_store);
+            _outputHelper = outputHelper;
+        }
+
+        [Given(@"no page content exists")]
+        public void GivenNoPageContentExists()
+        {
+            _store.EnsureContainer("content");
+        }
+
+        [Given(@"page content ""([^""]*)"" exists:")]
+        public void GivenPageContentExists(string id, string data)
+        {
+            SetUpPageContent(id, data);
+        }
+
+        [Given(@"I navigate to ((?:/.*)+)")]
+        public async Task GivenINavigateTo(string path)
+        {
+            _response = await _web.GetAsync(path);
         }
 
         [When(@"I navigate to ((?:/.*)+)")]
@@ -48,21 +68,58 @@ namespace ASP.AcceptanceTests.StepDefinitions
             _response = await _web.GetAsync(path);
         }
 
+        [When(@"I update the textbox ""([^""]*)"" to have the value ""([^""]*)""")]
+        public void WhenIUpdateTheTextBoxToHaveTheValue(string selector, string value)
+        {
+            AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
+
+            var element = _response!.HtmlContent.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+
+            var input = Assert.IsAssignableFrom<IHtmlInputElement>(element);
+            input.Value = value;
+        }
+
+        [When(@"I submit the form ""([^""]*)""")]
+        public async Task WhenISubmitTheForm(string formSelector)
+        {
+            AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
+
+            var element = _response!.HtmlContent.QuerySelector(formSelector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{formSelector}"".");
+            var form = Assert.IsAssignableFrom<IHtmlFormElement>(element);
+
+            _document = await form.SubmitAsync();
+        }
+
         [Then(@"I should get a (.*) response")]
         public void ThenIShouldGetAResponse(int statusCode)
         {
-            AssertWithMessage.NotNull(_response, "No web response received. Is the scenario missing a step?");
-
-            if (_response!.StatusCode != HttpStatusCode.OK)
+            if (_document != null)
             {
-                _outputHelper.WriteLine(_response!.RawContent);
-            }
+                if (_document!.StatusCode != HttpStatusCode.OK)
+                {
+                    _outputHelper.WriteLine(_document!.Body.Html());
+                }
 
-            Assert.Equal(statusCode, (int)_response!.StatusCode);
+                Assert.Equal(statusCode, (int)_document!.StatusCode);
+            }
+            else if (_response != null)
+            {
+                if (_response!.StatusCode != HttpStatusCode.OK)
+                {
+                    _outputHelper.WriteLine(_response!.RawContent);
+                }
+
+                Assert.Equal(statusCode, (int)_response!.StatusCode);
+            } else
+            {
+                AssertWithMessage.Failed("No web response received. Is the scenario missing a step?");
+            }
         }
 
-        [Then(@"the HTML element with selector ""(.*)"" should have the following markup:")]
-        public void ThenTheHTMLElementWithIdShouldHaveTheFollowingMarkup(string selector, string expectedMarkup)
+        [Then(@"the element ""([^""]*)"" should have the following markup:")]
+        public void ThenTheElementShouldHaveTheFollowingMarkup(string selector, string expectedMarkup)
         {
             AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
 
@@ -78,8 +135,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expected, actual);
         }
 
-        [Then(@"the HTML element with selector ""(.*)"" should have the text content ""(.*)""")]
-        public void ThenTheHTMLElementWithSelectorShouldHaveTheTextContent(string selector, string textContent)
+        [Then(@"the element ""([^""]*)"" should have the text content ""([^""]*)""")]
+        public void ThenTheElementShouldHaveTheTextContent(string selector, string textContent)
         {
             AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
 
@@ -89,7 +146,46 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(textContent.Trim(), element!.TextContent.Trim());
         }
 
-        [Then(@"the page title should be ""(.*)""")]
+        [Then(@"the textbox ""([^""]*)"" should have the value ""([^""]*)""")]
+        public void ThenTheTextBoxShouldHaveTheValue(string selector, string value)
+        {
+            AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
+
+            var element = _response!.HtmlContent.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+
+            var input = Assert.IsAssignableFrom<IHtmlInputElement>(element);
+
+            Assert.Equal(value.Trim(), input!.Value.Trim());
+        }
+
+        [Then(@"the anchor ""([^""]*)"" should be an internal link to ""([^""]*)""")]
+        public void ThenTheAnchorShouldBeAnInternalLinkTo(string selector, string location)
+        {
+            AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
+
+            var element = _response!.HtmlContent.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+
+            var anchor = Assert.IsAssignableFrom<IHtmlAnchorElement>(element);
+
+            Assert.Equal($"http://localhost{location.Trim()}", anchor.Href.Trim());
+        }
+
+        [Then(@"the anchor ""([^""]*)"" should be an external link to ""([^""]*)""")]
+        public void ThenTheAnchorShouldBeAnExternalLinkTo(string selector, string location)
+        {
+            AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
+
+            var element = _response!.HtmlContent.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+
+            var anchor = Assert.IsAssignableFrom<IHtmlAnchorElement>(element);
+
+            Assert.Equal($"{location.Trim()}", anchor.Href.Trim());
+        }
+
+        [Then(@"the page title should be ""([^""]*)""")]
         public void ThenThePageTitleShouldBe(string expected)
         {
             AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
@@ -99,10 +195,90 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expected, actual);
         }
 
-        [Given(@"page content ""([^""]*)"" exists:")]
-        public void GivenPageContentExists(string id, string data)
+        [Then(@"page content ""([^""]*)"" should have property ""([^""]*)"" set to ""([^""]*)""")]
+        public void ThenPageContentShouldHavePropertySetTo(string id, string propertyPath, string propertyValue)
         {
-            SetUpPageContent(id, data);
+            GetPageContent(id).SwitchFirst(
+                data => {
+                    var value = GetPropertyPathValue(propertyPath, data);
+
+                    Assert.Equal(propertyValue, value);
+                },
+                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+            );
+        }
+
+        [Then(@"page content ""([^""]*)"" should have property ""([^""]*)"" set to:")]
+        public void ThenPageContentShouldHavePropertySetToMultiline(string id, string propertyPath, string propertyValue)
+        {
+            GetPageContent(id).SwitchFirst(
+                data => {
+                    string? expectedSerializedPropertyValue = null;
+                    JsonHelper.Deserialize<object>(propertyValue).SwitchFirst(
+                        v => expectedSerializedPropertyValue = JsonHelper.Serialize(v),
+                        e => AssertWithMessage.Failed(e.Description)
+                    );
+
+                    var value = GetPropertyPathValue(propertyPath, data);
+
+                    var serializedPropertyValue = JsonHelper.Serialize(value);
+                    Assert.Equal(expectedSerializedPropertyValue, serializedPropertyValue);
+                },
+                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+            );
+        }
+
+        private object GetPropertyPathValue(string propertyPath, string data)
+        {
+            var parts = propertyPath.Split('.');
+            var propertyName = parts[0];
+            var regex = new Regex(@"(.*)\[(\d+)\]");
+            var match = regex.Match(propertyName);
+            if (match.Success)
+            {
+                var arrayProperty = match.Groups[1].Value;
+                var arrayIndex = int.Parse(match.Groups[2].Value);
+
+                Dictionary<string, object>? dict = null;
+                JsonHelper.Deserialize<Dictionary<string, object>>(data).SwitchFirst(
+                    v => dict = v,
+                    e => AssertWithMessage.Failed(e.Description)
+                );
+                AssertWithMessage.True(dict!.ContainsKey(arrayProperty), $@"Page content object does not contain property ""{arrayProperty}"":\n{data}");
+                var arrayValue = dict![arrayProperty];
+                object[]? array = null;
+                JsonHelper.Deserialize<object[]>(JsonHelper.Serialize(arrayValue)).SwitchFirst(
+                    v => array = v,
+                    e => AssertWithMessage.Failed(e.Description)
+                );
+                if(array!.Length <= arrayIndex)
+                {
+                    AssertWithMessage.Failed($@"Array index {arrayIndex} does not exist on array ""{arrayProperty}"":\n{JsonHelper.Serialize(array!)}");
+                }
+                var value = array![arrayIndex];
+                var restOfPath = string.Join(".", parts.Skip(1));
+                if (restOfPath.Length > 0)
+                {
+                    return GetPropertyPathValue(restOfPath, JsonHelper.Serialize(value));
+                }
+                return value;
+            }
+            else
+            {
+                Dictionary<string, object>? dict = null;
+                JsonHelper.Deserialize<Dictionary<string, object>>(data).SwitchFirst(
+                    v => dict = v,
+                    e => AssertWithMessage.Failed(e.Description)
+                );
+                AssertWithMessage.True(dict!.ContainsKey(propertyName), $@"Page content object does not contain property ""{propertyName}"":\n{data}");
+                var value = dict![propertyName];
+                var restOfPath = string.Join(".", parts.Skip(1));
+                if (restOfPath.Length > 0)
+                {
+                    return GetPropertyPathValue(restOfPath, JsonHelper.Serialize(value));
+                }
+                return value;
+            }
         }
 
         private string Minify(IElement element)
@@ -112,19 +288,9 @@ namespace ASP.AcceptanceTests.StepDefinitions
             return _spacesBeforeOpeningTag.Replace(_spacesAfterClosingTag.Replace(minified, ">$2"), "$1<");
         }
 
-        private static class AssertWithMessage
+        private ErrorOr<string> GetPageContent(string id)
         {
-            public static void NotNull(object? @object, string message)
-            {
-                try
-                {
-                    Assert.NotNull(@object);
-                }
-                catch(XunitException)
-                {
-                    throw new XunitException(message);
-                }
-            }
+            return Retrieve("content", id, id);
         }
 
         private void SetUpPageContent(string id, string data)

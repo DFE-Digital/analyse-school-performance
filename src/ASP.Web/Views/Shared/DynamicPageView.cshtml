@@ -2,8 +2,9 @@
 @{
     string componentsLocation = "TemplateComponents";
 }
-
-@foreach (var dynamicViewModel in Model.Views)
-{
-    @await Html.PartialAsync($"{componentsLocation}/{dynamicViewModel.ViewId}", dynamicViewModel)
+@if(Model.Views != null) {
+    foreach (var dynamicViewModel in Model.Views)
+    {
+        @await Html.PartialAsync($"{componentsLocation}/{dynamicViewModel.ViewId}", dynamicViewModel)
+    }
 }
