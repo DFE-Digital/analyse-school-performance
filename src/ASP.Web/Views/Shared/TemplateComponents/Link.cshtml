@@ -1,0 +1,18 @@
+﻿@model PageContentTemplateView
+
+@if (Model.ViewContent.Size is not null)
+{
+    <p id="@Model.ViewContent.ViewId" class=@($"govuk-body-{Model.ViewContent.Size}")>
+        <a href="@Model.ViewContent.Url" class="govuk-link">
+            @Model.ViewContent.Text
+        </a>
+    </p>
+}
+else
+{
+    <p id="@Model.ViewContent.ViewId" class="govuk-body">
+        <a href="@Model.ViewContent.Url" class="govuk-link">
+            @Model.ViewContent.Text
+        </a>
+    </p>
+}

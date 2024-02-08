@@ -1,0 +1,13 @@
+﻿@model PageContentTemplateView
+
+@if (Model.ViewContent.Caption is not null)
+{
+    <p class="govuk-body">@Model.ViewContent.Caption</p>
+}
+
+<ul class="govuk-list govuk-list--bullet">
+    @foreach (var item in Model.ViewContent.Items)
+    {
+        <li>@item</li>
+    }
+</ul>

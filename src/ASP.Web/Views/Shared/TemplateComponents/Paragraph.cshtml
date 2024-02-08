@@ -4,12 +4,12 @@
 @if (Model.ViewContent.Size is not null)
 {
     <p id="@Model.ViewContent.Id" class=@($"govuk-body-{Model.ViewContent.Size}")>
-        @Model.ViewContent.Text
+        @MarkdownHelper.ConvertInlineMarkdown(Model.ViewContent.Text)
     </p>
 }
 else
 {
     <p id="@Model.ViewContent.Id" class="govuk-body">
-        @Model.ViewContent.Text
+        @MarkdownHelper.ConvertInlineMarkdown(Model.ViewContent.Text)
     </p>
 }
