@@ -6,13 +6,10 @@ using AngleSharp.Html.Parser;
 using ASP.Core.Helpers;
 using ASP.Test.Core;
 using ErrorOr;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using TechTalk.SpecFlow.Infrastructure;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ASP.AcceptanceTests.StepDefinitions
 {
