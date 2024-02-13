@@ -120,12 +120,14 @@
     <div class="govuk-width-container app-width-container">
         <a href="#" class="govuk-back-link">Back</a>
         <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
-            @RenderBody()
+            @RenderBody()          
         </main>
     </div>
-
-
-
+    <div class="govuk-width-container app-width-container app-print-hidden">
+        @{
+          await Html.RenderPartialAsync("_ImproveAspPartial");
+        }
+    </div>
     <footer class="govuk-footer" role="contentinfo">
         <div class="govuk-width-container">
             <div class="govuk-footer__meta">

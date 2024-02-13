@@ -40,6 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Features\HomePage.feature.cs">
+      <DependentUpon>HomePage.feature</DependentUpon>
+    </Compile>
     <Compile Update="Features\ParagraphComponent.feature.cs">
       <DependentUpon>ParagraphComponent.feature</DependentUpon>
     </Compile>
@@ -52,6 +55,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\HomePage.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\ParagraphComponent.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>

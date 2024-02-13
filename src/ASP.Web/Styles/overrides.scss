@@ -109,3 +109,9 @@ $app-frontend-breakpoint-custom: 801px;
 .app-phase-banner {
     border-bottom: none
 }
+
+@media print {
+    .app-print-hidden {
+        display: none !important;
+    }
+}
