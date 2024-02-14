@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit: " + Model.PageTitle;
 }
 
-<form id="asp-content-edit-form" method="POST">
+<form id="app-content-edit-form" method="POST">
     <input type="hidden" asp-for="Id" />
     <div class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -16,7 +16,7 @@
             <label for="@Html.IdFor(m => m.PageTitle)" class="govuk-label govuk-!-font-weight-bold">
                 Text
             </label>
-            <input type="text" id="asp-content-edit-page-title" asp-for="PageTitle" class="govuk-input">
+            <input type="text" id="app-content-edit-page-title" asp-for="PageTitle" class="govuk-input">
         </div>
     </div>
 
@@ -27,8 +27,8 @@
         }
     }
 
-    <button id="asp-content-edit-save" class="govuk-button" type="submit">Save</button>
-    <a id="asp-content-edit-cancel" asp-route="asp-content-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">
+    <button id="app-content-edit-save" class="govuk-button" type="submit">Save</button>
+    <a id="app-content-edit-cancel" asp-route="app-content-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">
         Cancel
     </a>
 </form>

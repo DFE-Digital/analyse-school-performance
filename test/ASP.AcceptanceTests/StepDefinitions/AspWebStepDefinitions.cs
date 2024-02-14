@@ -143,6 +143,28 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(textContent.Trim(), element!.TextContent.Trim());
         }
 
+        [Then(@"the element ""([^""]*)"" should have the tag name ""([^""]*)""")]
+        public void ThenTheElementShouldHaveTheTagName(string selector, string expectedTagName)
+        {
+            AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
+
+            var element = _response!.HtmlContent.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+
+            Assert.Equal(expectedTagName, element!.TagName.ToLower());
+        }
+
+        [Then(@"the element ""([^""]*)"" should have the class ""([^""]*)""")]
+        public void ThenTheElementShouldHaveTheClass(string selector, string expectedClass)
+        {
+            AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
+
+            var element = _response!.HtmlContent.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+
+            Assert.Equal(expectedClass, element!.ClassName);
+        }
+
         [Then(@"the textbox ""([^""]*)"" should have the value ""([^""]*)""")]
         public void ThenTheTextBoxShouldHaveTheValue(string selector, string value)
         {

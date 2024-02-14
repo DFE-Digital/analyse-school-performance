@@ -22,7 +22,7 @@ namespace ASP.Web.Controllers
                 throw new ArgumentNullException(nameof(updateContentUseCase));
         }
 
-        [HttpGet("{contentId}", Name = "asp-content-view")]
+        [HttpGet("{contentId}", Name = "app-content-view")]
         public async Task<IActionResult> ViewContentPage(string contentId)
         {
             string pageName = $"help-{contentId}".ToLower();
@@ -35,7 +35,7 @@ namespace ASP.Web.Controllers
                 }));
         }
 
-        [HttpGet("{contentId}/edit", Name = "asp-content-edit")]
+        [HttpGet("{contentId}/edit", Name = "app-content-edit")]
         public async Task<IActionResult> EditContentPage(string contentId)
         {
             string pageName = $"help-{contentId}".ToLower();

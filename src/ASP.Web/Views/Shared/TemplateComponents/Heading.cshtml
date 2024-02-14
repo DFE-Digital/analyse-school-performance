@@ -1,9 +1,16 @@
 ﻿@model PageContentTemplateView
 
-<h1 id="@Model.ViewContent.Id" class=@($"govuk-heading-{Model.ViewContent.Size}")>
+@{
+    var (tag, size) = Model.ViewContent.HeadingType switch {
+        "h3" => ("h3", "m"),
+        _ => ("h2", "l")
+    };
+}
+
+<@tag id="@Model.ViewContent.Id" class="govuk-heading-@size">
     @if (Model.ViewContent.Caption is not null)
     {
-        <span class="govuk-caption-@Model.ViewContent.CaptionSize">@Model.ViewContent.Caption</span>
+        <span class="govuk-caption-@size">@Model.ViewContent.Caption</span>
     }
 
     @if (Model.ViewContent.LinkUrl is not null)
@@ -16,4 +23,4 @@
     {
         @Model.ViewContent.Text
     }
-</h1>
+</@tag>
