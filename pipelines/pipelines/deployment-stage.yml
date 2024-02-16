@@ -33,8 +33,8 @@ jobs:
             downloadPath: '$(System.ArtifactsDirectory)\files'
 
         - task: AzureRmWebAppDeployment@4
-          displayName: 'Azure App Service Deploy: s192d02-app-poc-dev-02'
+          displayName: 'Azure App Service Deploy: $(appServiceName1)'
           inputs:
             azureSubscription: 's192d.azdo-deployment'
-            WebAppName: 's192d02-app-poc-dev-02'
+            WebAppName: '$(appServiceName1)'
             packageForLinux: '$(System.ArtifactsDirectory)\files\**\ASP.Web.zip'

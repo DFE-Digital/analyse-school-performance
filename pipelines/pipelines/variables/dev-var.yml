@@ -4,8 +4,8 @@ variables:
 - name: azureSubscription
   value: 's192-analyse-school-performance-development'
 - name: resourceGroupName
-  value: s192d02-poc-dev
+  value: s192d01-dev
 - name: appServiceName1
-  value: s192d02-app-poc-dev-02
+  value: s192d01-app-dev-01
 
   
