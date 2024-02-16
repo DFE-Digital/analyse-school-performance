@@ -1,0 +1,40 @@
+parameters:
+- name: name
+- name: displayName
+- name: dependsOn
+- name: jobName
+- name: jobDisplayName
+- name: envName
+- name: vmImageName
+- name: variableFile
+- name: azureSubscriptionName
+- name: azureSubscriptionId
+
+
+jobs:
+- deployment: ${{parameters.jobName}}
+  displayName: ${{parameters.jobDisplayName}}
+  environment: ${{parameters.envName}}
+
+  variables:
+  - template: ${{parameters.variableFile}}
+  pool:
+    vmImage: ${{parameters.vmImageName}}
+
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        
+        - task: DownloadPipelineArtifact@2
+          displayName: 'Download Files'
+          inputs:
+            artifact: drop
+            downloadPath: '$(System.ArtifactsDirectory)\files'
+
+        - task: AzureRmWebAppDeployment@4
+          displayName: 'Azure App Service Deploy: s192d02-app-poc-dev-02'
+          inputs:
+            azureSubscription: 's192d.azdo-deployment'
+            WebAppName: 's192d02-app-poc-dev-02'
+            packageForLinux: '$(System.ArtifactsDirectory)\files\**\ASP.Web.zip'

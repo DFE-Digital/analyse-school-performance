@@ -1,0 +1,12 @@
+# File: pipelines/variables/platorm-mailer-var.yml
+# all common pipeline level var should come here.
+# lots of variable values in this file are default and they are related to 'dev' environment
+variables:
+- name: vmImageName
+  value: 'windows-latest'
+- name: location
+  value: 'westeurope'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
