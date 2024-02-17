@@ -4,12 +4,16 @@ using AngleSharp.Html;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using ASP.Core.Helpers;
+using ASP.Core.PageContent;
+using ASP.Core.PageContent.Repository;
 using ASP.Test.Core;
+using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.Repositories;
 using ErrorOr;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text.RegularExpressions;
 using TechTalk.SpecFlow.Infrastructure;
+using Xunit.Sdk;
 
 namespace ASP.AcceptanceTests.StepDefinitions
 {
@@ -27,7 +31,6 @@ namespace ASP.AcceptanceTests.StepDefinitions
         };
 
         private readonly AspWeb _web;
-        private readonly MemoryStore _store;
 
         AspWebResponse? _response = null;
         IDocument _document = null;
@@ -36,21 +39,28 @@ namespace ASP.AcceptanceTests.StepDefinitions
 
         public AspWebStepDefinitions(ISpecFlowOutputHelper outputHelper)
         {
-            _store = new MemoryStore();
-            _web = new AspWeb(_store);
+            _web = new AspWeb();
             _outputHelper = outputHelper;
+        }
+
+        [BeforeScenario]
+        public async Task ClearDownPageContent()
+        {
+            await _web.PageContentRepository.DeleteAll();
         }
 
         [Given(@"no page content exists")]
         public void GivenNoPageContentExists()
         {
-            _store.EnsureContainer("content");
         }
 
         [Given(@"page content ""([^""]*)"" exists:")]
-        public void GivenPageContentExists(string id, string data)
+        public async Task GivenPageContentExists(string id, string data)
         {
-            SetUpPageContent(id, data);
+            await SetUpPageContent(id, data).SwitchFirst(
+                data => {
+                },
+                e => AssertWithMessage.Failed(@$"Could not update page content with id ""{id}"": {e.Description}"));
         }
 
         [Given(@"I navigate to ((?:/.*)+)")]
@@ -307,15 +317,15 @@ namespace ASP.AcceptanceTests.StepDefinitions
             return _spacesBeforeOpeningTag.Replace(_spacesAfterClosingTag.Replace(minified, ">$2"), "$1<");
         }
 
-        private ErrorOr<string> GetPageContent(string id)
+        private async Task<ErrorOr<string>> GetPageContent(string id)
         {
-            return Retrieve("content", id, id);
+            return await _web.PageContentRepository.Get(id).Then(JsonConvert.SerializeObject);
         }
 
-        private void SetUpPageContent(string id, string data)
+        private async Task<ErrorOr<Updated>> SetUpPageContent(string id, string data)
         {
-            var document = Retrieve("content", id, id)
-                .Match(v => v, _ => $$"""
+            var document = await _web.PageContentRepository.Get(id)
+                .Match(v => JsonConvert.SerializeObject(v), _ => $$"""
                 {
                     "id": "{{id}}",
                     "contentId": "{{id}}",
@@ -333,17 +343,9 @@ namespace ASP.AcceptanceTests.StepDefinitions
                 docDict[d.Key] = d.Value;
             }
 
-            Store("content", id, id, JsonConvert.SerializeObject(docDict));
-        }
+            var template = JsonConvert.DeserializeObject<PageContentTemplate>(JsonConvert.SerializeObject(docDict));
 
-        private void Store(string containerKey, string id, string partitionKeyValue, string document)
-        {
-            _store.Set(containerKey, id, partitionKeyValue, document);
-        }
-
-        private ErrorOr<string> Retrieve(string containerKey, string id, string partitionKeyValue)
-        {
-            return _store.Get(containerKey, id, partitionKeyValue);
+            return await _web.PageContentRepository.Update(template);
         }
     }
 }

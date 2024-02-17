@@ -13,20 +13,23 @@ using AngleSharp.Dom;
 using ASP.Core;
 using ASP.Test.Core;
 using AngleSharp.Io.Network;
+using Microsoft.AspNetCore.TestHost;
+using ASP.Core.PageContent.Repository;
+using TechTalk.SpecFlow.Assist;
 
 namespace ASP.AcceptanceTests
 {
     public class AspWeb
     {
         private readonly HttpClient _client;
-        private readonly MemoryStore _store;
+        private readonly CustomWebApplicationFactory<Program> _factory;
 
-        public AspWeb(MemoryStore store)
+        public IPageContentRepository PageContentRepository => _factory.PageContentRepository;
+
+        public AspWeb()
         {
-            _store = store;
-
-            var factory = new CustomWebApplicationFactory<Program>(_store);
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions {
+            _factory = new CustomWebApplicationFactory<Program>();
+            _client = _factory.CreateClient(new WebApplicationFactoryClientOptions {
                 AllowAutoRedirect = false
             });
         }
@@ -81,28 +84,54 @@ namespace ASP.AcceptanceTests
         {
             private readonly MemoryStore _store;
 
-            public CustomWebApplicationFactory(MemoryStore store)
+            private IPageContentRepository? _pageContentRepository = null;
+            public IPageContentRepository PageContentRepository 
+            { 
+                get
+                {
+                    if(_pageContentRepository != null)
+                    {
+                        return _pageContentRepository;
+                    }
+
+                    using (var scope = Services.CreateScope())
+                    {
+                        _pageContentRepository = scope.ServiceProvider.GetService<IPageContentRepository>()!;
+                        return _pageContentRepository;
+                    }
+                }
+            }
+
+            public CustomWebApplicationFactory()
             {
-                _store = store;
+                _store = new MemoryStore();
             }
 
             protected override void ConfigureWebHost(IWebHostBuilder builder)
             {
-                builder.ConfigureServices(services =>
+                var testMode = Environment.GetEnvironmentVariable("ASP_Test_Mode") ?? "Development";
+
+                builder.ConfigureTestServices(services =>
                 {
                     services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
 
-                    services.RemoveAll<IDocumentDatabase>();
-                    services.AddSingleton<IDocumentDatabase, InMemoryDocumentDatabase>();
+                    if (testMode == "Development")
+                    {
+                        services.RemoveAll<IDocumentDatabase>();
+                        services.AddSingleton<IDocumentDatabase, InMemoryDocumentDatabase>();
+                    }
                 });
 
-                builder.UseEnvironment("Development");
-                builder.UseConfiguration(new ConfigurationBuilder()
-                    .SetBasePath(Path.GetDirectoryName(GetType().Assembly.GetAssemblyLocation()))
-                    .AddJsonFile("appsettings.json")
-                    .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
-                    .Build()
-                );
+                builder.ConfigureAppConfiguration(configure => {
+                    var config = configure
+                        .SetBasePath(Path.GetDirectoryName(GetType().Assembly.GetAssemblyLocation()))
+                        .AddJsonFile("appsettings.Test.json", false);
+
+                    if (testMode == "Integration")
+                    {
+                        config.AddJsonFile("appsettings.Test.local.json", false);
+                    }
+                });
             }
         }
     }

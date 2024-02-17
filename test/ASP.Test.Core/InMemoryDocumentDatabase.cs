@@ -33,5 +33,12 @@ namespace ASP.Test.Core
 
             return Task.FromResult(Result.Updated.ToErrorOr());
         }
+
+        public Task<ErrorOr<Deleted>> DeleteAllAsync(string container)
+        {
+            _memoryStore.ClearContainer(container);
+
+            return Task.FromResult(Result.Deleted.ToErrorOr());
+        }
     }
 }

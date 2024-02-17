@@ -16,6 +16,11 @@ namespace ASP.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(documentDB));
         }
 
+        public Task<ErrorOr<Deleted>> DeleteAll()
+        {
+            return _documentDB.DeleteAllAsync(ContainerKey);
+        }
+
         public Task<ErrorOr<PageContentTemplate>> Get(string id)
         {
             return _documentDB.GetAsync<PageContentTemplate>(ContainerKey, id, id);

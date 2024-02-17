@@ -9,6 +9,7 @@
 
 # Local appsettings file
 appsettings.local.json
+appsettings.*.local.json
 appsettings.development.json
 
 

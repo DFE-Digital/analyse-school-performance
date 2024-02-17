@@ -13,6 +13,11 @@ namespace ASP.Test.Core
             _store = new();
         }
 
+        public void ClearContainer(string containerKey)
+        {
+            _store[containerKey] = new();
+        }
+
         public void EnsureContainer(string containerKey)
         {
             if (!_store.ContainsKey(containerKey))
