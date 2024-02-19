@@ -60,30 +60,26 @@
                     </svg>
                 </a>
             </div>
-            <div class="govuk-header__content app-header__content">
-                <a href="#" class="govuk-header__link govuk-header__service-name">
+           
+            <div class="app-header__content-service-name">
+                <a href="#" class="govuk-header__link govuk-header__service-name app-header__service-name">
                     Analyse school performance
+                </a>
+            </div>
+
+            <div class="app-header__content-account-signin">
+                <a href="#" class="govuk-header__link app-header__link-username">
+                    Account name
                 </a>
                 <a href="#" class="govuk-header__link app-header__link-signin">
                     Sign in
                 </a>
-                <a href="#" class="govuk-header__link app-header__link-username">
-                    Account name
-                </a>
             </div>
+            <button type="button" class="govuk-header__menu-button app-header__menu-button govuk-js-header-toggle" aria-controls="navigation" hidden>Menu</button>
         </div>
         <nav class="govuk-header__navigation app-header__navigation" id="header-navigation" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
             <div class="govuk-width-container">
-       @*          <p class="govuk-header__navigation-title">
-                    <span id="label-navigation">Menu</span>
-                    <button class="dfe-header__navigation-close" id="close-menu">
-                        <svg class="dfe-icon dfe-icon__close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="27" height="27">
-                            <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
-                        </svg>
-                        <span class="govuk-visually-hidden">Close menu</span>
-                    </button>
-                </p> *@
-                <ul class="govuk-header__navigation-list app-header__navigation-list">
+                <ul id="navigation" class="govuk-header__navigation-list app-header__navigation-list">
                     <li class="govuk-header__navigation-item app-header__navigation-item app-header__navigation-item--current">
                         <a class="govuk-header__link app-header__navigation-link" href="#">
                             Home
