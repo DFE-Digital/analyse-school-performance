@@ -53,7 +53,8 @@ const govukFrontendJavaScript = Object.assign({}, {
     output: {
         path: path.resolve(__dirname, 'wwwroot/assets/js'),
         filename: '[name].js',
-        clean: false
+        clean: false,
+
     }
 });
 
