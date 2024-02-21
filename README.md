@@ -9,11 +9,34 @@ Before getting started, ensure you have the following installed on your machine:
 
 
 # Getting Started
-To generate design system css/js/assets, you must run the below commands within `ASP.Web`
+To install the required node packages, you must run the below command within `ASP.Web`
 ```
 npm install
-npm run build
 ```
+
+# Running the application in development mode
+There are two npm scripts that you can use to run the application in development mode.
+
+```
+npm run build-dev
+npm run watch
+```
+
+`build-dev` will run webpack in development mode and output un-minified CSS and JS to `wwwroot\assets`.
+`watch` will run webpack in development and watch for changes to SCSS and JS files in Styles and Scripts folders. This allows you see
+style and javascript changes in the browser as you make them in application codebase.
+
+Note: 
+If you want to also see any updates you make to HTML files reflected in the browser automatically, you will need to use Visual Studio's
+'Hot Reload' feature. 
+
+To improve the 'Hot Reload' experience, you can activate the 'Hot Reload on save' feature from the 'Hot Reload' settings. If you also install the 'Auto file save' extension you can automate 
+saving and hence automatically trigger 'Hot Reload'
+
+# Build the application CSS, JS and other assets for production
+The following npm script will run webpack and output minified CSS and JS to `wwwroot\assets`.
+
+`npm run build-prod`
 
 # Acceptance tests using SpecFlow
 The `ASP.AcceptanceTests` project needs the `SpecFlow for Visual Studio 2022` extension to edit and run the SpecFlow tests from the Visual Studio test runner. The version in the Visual Studio Marketplace doesn't support .NET 8 yet, but there is an out-of-band release that supports it, [available here](https://github.com/SpecFlowOSS/SpecFlow.VS/releases/tag/v2022.1.93-net8) (download and run the `.vsix` file.)

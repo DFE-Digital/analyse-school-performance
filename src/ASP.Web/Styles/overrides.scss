@@ -9,12 +9,12 @@ $app-breakpoint-custom : 700px;
 }
 
 .app-header {
-    border-bottom: 0px
+    border-bottom: 10px;
 }
 
 .app-header__logo {
     width: 180px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
 }
 
 .app-header__content-service-name {
@@ -23,7 +23,7 @@ $app-breakpoint-custom : 700px;
 }
 
 .app-header__service-name {
-    margin-bottom: 0px;
+    margin-bottom: 10px;
 }
 
 @media(min-width: map-get($govuk-breakpoints, tablet)) {

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack"
+    "build-prod": "webpack --mode=production",
+    "build-dev": "webpack --mode=development",
+    "watch": "webpack --watch --mode=development"
   },
   "keywords": [],
   "author": "",
@@ -18,8 +20,7 @@
     "sass": "^1.70.0",
     "sass-loader": "^14.0.0",
     "webpack": "^5.90.1",
-    "webpack-cli": "^5.1.4",
-    "webpack-remove-empty-scripts": "^1.0.4"
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "@alpinejs/csp": "^3.13.5",

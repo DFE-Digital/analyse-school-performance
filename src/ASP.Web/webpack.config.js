@@ -2,14 +2,13 @@ const path = require('path')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
-const govukFrontendStyles = Object.assign({}, {
-    mode: 'production',
+const stylesConfig = {
+    mode: process.env.NODE_ENV,
     entry: {
-        app: path.resolve(__dirname, 'scripts/scss_imports.js'),
+        app: path.resolve(__dirname, 'scripts/scss_imports.js')
     },
     output: {
-        path: path.resolve(__dirname, 'wwwroot'),
-        clean: false
+        path: path.resolve(__dirname, 'wwwroot'),    
     },
     module: {
         rules: [
@@ -43,31 +42,28 @@ const govukFrontendStyles = Object.assign({}, {
             filename: 'assets/css/[name].css'
         })
     ]
-});
+};
 
-const govukFrontendJavaScript = Object.assign({}, {
-    mode: 'production',
+const javaScriptConfig = {
+    mode: process.env.NODE_ENV,
     entry: {
         govuk: path.resolve(__dirname, 'scripts/js_imports.js'),
     },
     output: {
         path: path.resolve(__dirname, 'wwwroot/assets/js'),
         filename: '[name].js',
-        clean: false,
-
     }
-});
+};
 
-const alpineConfig = Object.assign({}, {
-    mode: 'production',
+const alpineConfig = {
+    mode: process.env.NODE_ENV,
     entry: {
         alpine: path.resolve(__dirname, 'scripts/alpine.js'),
     },
     output: {
         path: path.resolve(__dirname, 'wwwroot/assets/js'),
         filename: '[name].js',
-        clean: false
     }
-});
+};
 
-module.exports = [govukFrontendJavaScript, govukFrontendStyles, alpineConfig];
+module.exports = [stylesConfig, javaScriptConfig, alpineConfig];

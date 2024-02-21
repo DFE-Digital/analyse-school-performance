@@ -12,9 +12,11 @@ appsettings.local.json
 appsettings.*.local.json
 appsettings.development.json
 
-
 # Azure Functions localsettings file
 local.settings.json
+
+#webpack generated license file
+*.LICENSE.txt
 
 # User-specific files
 *.suo
