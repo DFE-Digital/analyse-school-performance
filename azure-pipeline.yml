@@ -24,6 +24,16 @@ stages:
         inputs:
           restoreSolution: '**\*.sln'
 
+      - task: Npm@1
+        displayName: 'Install Node Packages'
+        inputs:
+          commands: 'install'  
+          
+      - task: Npm@1
+        displayName: 'Run Webpack'
+        inputs:
+          commands: 'build-prod'  
+
       - task: VSBuild@1
         displayName: 'Build solution'
         inputs:
