@@ -27,14 +27,17 @@ stages:
       - task: Npm@1
         displayName: 'Install Node Packages'
         inputs:
-          commands: 'install' 
+          command: 'install' 
           workingDir: '$(Build.SourcesDirectory)/src/asp.web'
+          verbose: true
           
       - task: Npm@1
         displayName: 'Run Webpack'
         inputs:
-          commands: 'run build-prod'  
+          command: 'custom'
+          customCommand: 'run build-prod' 
           workingDir: '$(Build.SourcesDirectory)/src/asp.web'
+          verbose: true
 
       - task: VSBuild@1
         displayName: 'Build solution'
