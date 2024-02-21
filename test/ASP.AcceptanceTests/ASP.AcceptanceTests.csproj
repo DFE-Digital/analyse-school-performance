@@ -45,6 +45,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
+      <HintPath>..\..\src\ASP.Web\bin\Debug\net8.0\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Features\HomePage.feature.cs">
       <DependentUpon>HomePage.feature</DependentUpon>
     </Compile>

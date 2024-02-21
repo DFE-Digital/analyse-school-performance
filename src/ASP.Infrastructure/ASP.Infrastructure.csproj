@@ -7,13 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb" Version="2.0.27-beta-CI-20240205-141548" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.37.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
+      <HintPath>Libraries\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
