@@ -190,6 +190,7 @@ Examples:
 	| input                                 | expected                                                     |
 	| [markdown link](https://google.co.uk) | <a href="https://google.co.uk">markdown link</a>             |
 	| **[Google](https://www.google.com)**  | <strong><a href="https://www.google.com">Google</a></strong> |
+	| *[Google](https://www.google.com)*    | <em><a href="https://www.google.com">Google</a></em>         |
 
 
 

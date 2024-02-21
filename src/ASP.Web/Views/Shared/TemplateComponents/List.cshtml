@@ -1,13 +1,15 @@
 ﻿@model PageContentTemplateView
-
-@if (Model.ViewContent.Caption is not null)
-{
-    <p class="govuk-body">@Model.ViewContent.Caption</p>
+@{
+    string componentsLocation = "TemplateComponents";
 }
 
-<ul class="govuk-list govuk-list--bullet">
-    @foreach (var item in Model.ViewContent.Items)
-    {
-        <li>@item</li>
-    }
-</ul>
+
+@if (Model.ChildViews is not null && Model.ChildViews.Count > 0)
+{
+    <ul id="@Model.ViewContent.Id" class="govuk-list govuk-list--bullet">
+        @foreach (PageContentTemplateView item in Model.ChildViews)
+        {
+            @await Html.PartialAsync($"{componentsLocation}/{item.ViewId}", item)
+        }
+    </ul>
+}

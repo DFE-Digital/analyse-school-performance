@@ -257,6 +257,16 @@ namespace ASP.AcceptanceTests.StepDefinitions
             );
         }
 
+
+        [Then(@"the element ""([^""]*)"" should not exist")]
+        public void ThenTheElementShouldNotExist(string selector)
+        {
+            AssertWithMessage.NotNull(_response, "No web response received. Is the test missing an action?");
+
+            IElement? element = _response!.HtmlContent.QuerySelector(selector);
+            AssertWithMessage.True(element == null, @$"Found an element with the selector ""{selector}"" but it should not exist.");
+        }
+
         private object GetPropertyPathValue(string propertyPath, string data)
         {
             var parts = propertyPath.Split('.');
