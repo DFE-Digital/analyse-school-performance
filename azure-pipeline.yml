@@ -33,7 +33,7 @@ stages:
       - task: Npm@1
         displayName: 'Run Webpack'
         inputs:
-          commands: 'build-prod'  
+          commands: 'run build-prod'  
           workingDir: '$(Build.SourcesDirectory)/src/asp.web'
 
       - task: VSBuild@1
