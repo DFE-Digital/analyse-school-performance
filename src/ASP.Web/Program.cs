@@ -17,6 +17,8 @@ namespace ASP.Web
                 .RegisterWebServices()
                 .RegisterRepositories()
                 .RegisterUseCases();
+
+            builder.Services.AddApplicationInsightsTelemetry();
             
             builder.Configuration.AddJsonFile("appsettings.json");
             builder.Configuration.AddJsonFile("appsettings.local.json", true);
