@@ -1,0 +1,7 @@
+﻿@model (string Name, string Path)
+
+<li class="govuk-header__navigation-item app-header__navigation-item @(Context.Request.Path.StartsWithSegments(Model.Path)? "app-header__navigation-item--current" : "")">
+    <a id="header-navigation-link-my-school" class="govuk-header__link app-header__navigation-link" href="@Model.Path">
+        @Model.Name
+    </a>
+</li>

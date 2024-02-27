@@ -1,0 +1,12 @@
+﻿<nav class="govuk-header__navigation app-header__navigation" id="header-navigation" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
+    <div class="govuk-width-container">
+        <ul id="navigation" class="govuk-header__navigation-list app-header__navigation-list">
+            <partial name="_TopNavigationItemPartial" model=@(("Home", "/")) />
+            <partial name="_TopNavigationItemPartial" model=@(("My school", "/school")) />
+            <partial name="_TopNavigationItemPartial" model=@(("Download data", "/download")) />
+            <partial name="_TopNavigationItemPartial" model=@(("Site news", "/news")) />
+            <partial name="_TopNavigationItemPartial" model=@(("Release timetable", "/help/release-timetable")) />
+            <partial name="_TopNavigationItemPartial" model=@(("Guidance", "/help/guidance")) />
+        </ul>
+    </div>
+</nav>

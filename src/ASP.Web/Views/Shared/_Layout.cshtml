@@ -18,6 +18,8 @@
     <script add-nonce="true">
         document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
     </script>
+
+    <!-- Hide until implemented
     <form action="/form-handler" method="post" novalidate>
         <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
             <div class="govuk-cookie-banner__message govuk-width-container">
@@ -42,11 +44,13 @@
             </div>
         </div>
     </form>
+    -->
+
     <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
     <header class="govuk-header app-header" role="banner" data-module="govuk-header">
         <div class="govuk-header__container app-header__container govuk-width-container">
             <div class="govuk-header__logo app-header__logo">
-                <a href="#" class="govuk-header__link govuk-header__link--homepage">
+                <a href="https://www.gov.uk/" class="govuk-header__link govuk-header__link--homepage">
                     <svg focusable="false"
                          role="img"
                          class="govuk-header__logotype"
@@ -62,11 +66,12 @@
             </div>
            
             <div class="app-header__content-service-name">
-                <a id="header-link-service-name" href="#" class="govuk-header__link govuk-header__service-name app-header__service-name">
+                <a id="header-link-service-name" href="/" class="govuk-header__link govuk-header__service-name app-header__service-name">
                     Analyse school performance
                 </a>
             </div>
 
+            <!-- Hide until implemented 
             <div class="app-header__content-account-signin">
                 <a id="header-link-account-name" href="#" class="govuk-header__link app-header__link-username">
                     Account name
@@ -75,30 +80,15 @@
                     Sign in
                 </a>
             </div>
+            -->
+
             <button type="button" class="govuk-header__menu-button app-header__menu-button govuk-js-header-toggle" aria-controls="navigation" hidden>Menu</button>
         </div>
-        <nav class="govuk-header__navigation app-header__navigation" id="header-navigation" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
-            <div class="govuk-width-container">
-                <ul id="navigation" class="govuk-header__navigation-list app-header__navigation-list">
-                    <li class="govuk-header__navigation-item app-header__navigation-item app-header__navigation-item--current">
-                        <a id="header-navigation-link-home" class="govuk-header__link app-header__navigation-link" href="#">
-                            Home
-                        </a>
-                    </li>
-                    <li class="govuk-header__navigation-item app-header__navigation-item">
-                        <a id="header-navigation-link-my-school" class="govuk-header__link app-header__navigation-link" href="#">
-                            My school
-                        </a>
-                    </li>
-                    <li class="govuk-header__navigation-item app-header__navigation-item">
-                        <a id="header-navigation-link-download-data" class="govuk-header__link app-header__navigation-link" href="#">
-                            Download data
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+
+        <partial name="_TopNavigationPartial" />
     </header>
+
+    <!-- Hide until implemented 
     <div class="app-phase-banner-container">
         <div class="govuk-width-container app-width-container">
             <div class="govuk-phase-banner app-phase-banner">
@@ -113,20 +103,22 @@
             </div>
         </div>
     </div>
+    -->
+
     <div class="govuk-width-container app-width-container">
-        <a href="#" class="govuk-back-link">Back</a>
+        <!-- Hide until implemented
+           <a href="#" class="govuk-back-link">Back</a>
+        -->
         <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
             @RenderBody()          
         </main>
     </div>
+
     <div class="govuk-width-container app-width-container app-print-hidden">
-        @{
-            await Html.RenderPartialAsync("_ImproveAspPartial");
-        }
+        <partial name="_ImproveAspPartial" />
     </div>
-    @{
-        await Html.RenderPartialAsync("_FooterPartial");
-    }
+
+    <partial name="_FooterPartial" />
 
     <script type="module" src="/assets/js/govuk.js" add-nonce="true"></script>
     <script src="/assets/js/alpine.js" add-nonce="true"></script>

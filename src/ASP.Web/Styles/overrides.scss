@@ -105,7 +105,8 @@ $app-breakpoint-custom : 700px;
 }
 
 @media(min-width: map-get($govuk-breakpoints, desktop)) {
-    .app-header__navigation-item--current {
+    .app-header__navigation-item--current,
+    .app-header__navigation-item--current:last-child {
         border-bottom: 4px solid #1d70b8;
     }
 }
