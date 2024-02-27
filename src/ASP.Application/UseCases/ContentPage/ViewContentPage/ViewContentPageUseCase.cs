@@ -1,4 +1,5 @@
-﻿using ASP.Core.PageContent.Repository;
+﻿using ASP.Core.PageContent;
+using ASP.Core.PageContent.Repository;
 using ErrorOr;
 
 namespace ASP.Application.UseCases.ViewContentPage
@@ -13,10 +14,9 @@ namespace ASP.Application.UseCases.ViewContentPage
                 throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public async Task<ErrorOr<ViewContentPageResponse>> HandleRequest(ViewContentPageRequest request)
+        public async Task<ErrorOr<PageContentTemplate>> HandleRequest(ViewContentPageRequest request)
         {
-            return await _pageContentRepository.Get(request.PageContentId)
-                .Then(content => new ViewContentPageResponse { PageContentTemplate = content });
+            return await _pageContentRepository.Get(request.PageContentId);
         }
     }
 }

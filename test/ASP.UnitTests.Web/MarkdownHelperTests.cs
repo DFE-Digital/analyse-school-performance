@@ -1,7 +1,7 @@
 using ASP.Web.Helpers;
 using Microsoft.AspNetCore.Html;
 
-namespace ASP.UnitTests.Web
+namespace ASP.UnitTest.Web
 {
     public class MarkdownHelperTests
     {

@@ -25,12 +25,12 @@ namespace ASP.Core.Helpers
             }
             catch (Exception ex)
             {
-                return Error.Unexpected("JsonHelper.Deserialize", $"Error occurred deserializing object of type {typeof(T)}: {ex.Message}. Object: {Environment.NewLine}{json}");
+                return Error.Unexpected(description: $"Error occurred deserializing object of type {typeof(T)}: {ex.Message}. Object: {Environment.NewLine}{json}");
             }
 
             if (item == null)
             {
-                return Error.Unexpected("JsonHelper.Deserialize", $"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
+                return Error.Unexpected(description: $"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
             }
 
             return item!;
@@ -46,12 +46,12 @@ namespace ASP.Core.Helpers
             }
             catch (Exception ex)
             {
-                return Error.Unexpected("JsonHelper.DeserializeIgnoringMissingMembers", $"Error occurred deserializing object of type {typeof(T)}: {ex.Message}");
+                return Error.Unexpected(description: $"Error occurred deserializing object of type {typeof(T)}: {ex.Message}");
             }
 
             if (item == null)
             {
-                return Error.Unexpected("JsonHelper.DeserializeIgnoringMissingMembers", $"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
+                return Error.Unexpected(description: $"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
             }
 
             return item!;

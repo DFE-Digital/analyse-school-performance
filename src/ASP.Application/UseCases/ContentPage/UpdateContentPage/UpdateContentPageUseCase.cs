@@ -17,11 +17,11 @@ namespace ASP.Application.UseCases.UpdateContentPage
 
         public async Task<ErrorOr<UpdateContentPageResponse>> HandleRequest(UpdateContentPageRequest request)
         {
-            return await JsonHelper.DeserializeIgnoringMissingMembers<PageContentTemplate>(request.JsonValue)
-                .ThenAsync(async updatedPageContent => { 
-                    updatedPageContent.contentId = request.PageContentId;
-                    return await _pageContentRepository.Update(updatedPageContent);
-                })
+            var updatedPageContent = request.PageContentTemplate;
+            updatedPageContent.id = request.PageContentId;
+            updatedPageContent.contentId = request.PageContentId;
+
+            return await _pageContentRepository.Update(updatedPageContent)
                 .Then(_ => new UpdateContentPageResponse());
         }
     }

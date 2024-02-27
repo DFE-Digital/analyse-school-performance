@@ -1,6 +1,7 @@
 ﻿using ASP.Application.UseCases.UpdateContentPage;
 using ASP.Application.UseCases.ViewContentPage;
 using ASP.Core.Helpers;
+using ASP.Core.PageContent;
 using ASP.Web.Extensions;
 using ASP.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +30,9 @@ namespace ASP.Web.Controllers
             ViewContentPageRequest request = new(pageName);
 
             return await _viewContentUseCase.HandleRequest(request)
-                .ToActionResult(response => View(new ViewContentPageModel {
+                .ToActionResult(template => View(new ViewContentPageModel {
                     ContentId = contentId,
-                    PageContentTemplate = response.PageContentTemplate
+                    PageContentTemplate = template
                 }));
         }
 
@@ -42,11 +43,11 @@ namespace ASP.Web.Controllers
             ViewContentPageRequest request = new(pageName);
 
             return await _viewContentUseCase.HandleRequest(request)
-                .ToActionResult(response => View(new EditContentPageModel {
+                .ToActionResult(template => View(new EditContentPageModel {
                     ContentId = contentId,
                     Id = pageName,
-                    PageTitle = response.PageContentTemplate.PageTitle,
-                    Views = response.PageContentTemplate.Views.Select(v => new EditViewComponentModel {
+                    PageTitle = template.PageTitle,
+                    Views = template.Views.Select(v => new EditViewComponentModel {
                         ViewId = v.ViewId,
                         ViewContent = ((IDictionary<string, object>)v.ViewContent).ToDictionary(c => c.Key, c => c.Value?.ToString() ?? "")
                     }).ToList()
@@ -56,13 +57,18 @@ namespace ASP.Web.Controllers
         [HttpPost("{contentId}/edit")]
         public async Task<IActionResult> EditContentPage(string contentId, EditContentPageModel model)
         {
-            UpdateContentPageRequest request = new() {
-                PageContentId = model.Id,
-                JsonValue = JsonHelper.SerializeIndented(model)
-            };
+            var pageContent = JsonHelper.DeserializeIgnoringMissingMembers<PageContentTemplate>(JsonHelper.SerializeIndented(model));
 
-            return await _updateContentUseCase.HandleRequest(request)
-                .ToActionResult(response => RedirectToAction(nameof(ViewContentPage), new { contentId }));
+            return await pageContent.Match(async v =>
+            {
+                UpdateContentPageRequest request = new(model.Id, v);
+
+                return await _updateContentUseCase.HandleRequest(request)
+                    .ToActionResult(response => RedirectToAction(nameof(ViewContentPage), new { contentId }));
+            },
+            e => {
+                return Task.FromResult((IActionResult) new StatusCodeResult(500));
+            });
         }
     }
 }

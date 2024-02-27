@@ -4,18 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-      <RunSettingsFilePath>$(MSBuildProjectDirectory)\test.runsettings</RunSettingsFilePath>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\test.runsettings</RunSettingsFilePath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="appsettings.Test.local.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\HeadingComponent - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\HomePage - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\StaticContentPage - Copy.feature.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.1.0" />
@@ -28,25 +18,23 @@
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.8.0" />
     <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
     <PackageReference Include="SpecFlow.xUnit" Version="3.9.74" />
-    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit" Version="2.6.6" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Drivers\" />
-    <Folder Include="Support\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\ASP.Api\ASP.Api.csproj" />
     <ProjectReference Include="..\..\src\ASP.Core\ASP.Core.csproj" />
     <ProjectReference Include="..\..\src\ASP.Web\ASP.Web.csproj" />
-    <ProjectReference Include="..\ASP.Test.Core\ASP.Test.Core.csproj" />
+    <ProjectReference Include="..\ASP.Test.Acceptance\ASP.Test.Acceptance.csproj" />
+    <ProjectReference Include="..\ASP.Test\ASP.Test.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
-      <HintPath>..\..\src\ASP.Web\bin\Debug\net8.0\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+      <HintPath>..\..\src\ASP.Infrastructure\Libraries\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+    </Reference>
+    <Reference Include="DfE.Data.DynamicPageTemplates.Web">
+      <HintPath>..\..\src\ASP.Web\Libraries\DfE.Data.DynamicPageTemplates.Web.dll</HintPath>
     </Reference>
   </ItemGroup>
 
@@ -67,6 +55,9 @@
 
   <ItemGroup>
     <None Update="appsettings.Test.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.Test.local.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="xunit.runner.json">

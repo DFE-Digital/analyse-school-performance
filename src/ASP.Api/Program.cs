@@ -1,7 +1,3 @@
-using ASP.Application.Extensions;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace ASP.Api
@@ -10,26 +6,8 @@ namespace ASP.Api
     {
         public static void Main(string[] args)
         {
-            var builder = new HostBuilder()
-                .ConfigureFunctionsWorkerDefaults()
-                .ConfigureServices(services =>
-                {
-                    services.AddApplicationInsightsTelemetryWorkerService();
-                    services.ConfigureFunctionsApplicationInsights();
-                    services.RegisterUseCases();
-                })
-                .ConfigureAppConfiguration((context, builder) =>
-                 {
-                     builder.AddJsonFile(Path.Combine(
-                             context.HostingEnvironment.ContentRootPath, "appsettings.json"),
-                             optional: false, reloadOnChange: false)
-                         .AddJsonFile(Path.Combine(
-                             context.HostingEnvironment.ContentRootPath, "appsettings.local.json"),
-                             optional: true, reloadOnChange: false)
-                         .AddEnvironmentVariables();
-                 });
-
-
+            var builder = new HostBuilder();
+            new Startup().Configure(builder);
             var host = builder.Build();
 
             host.Run();

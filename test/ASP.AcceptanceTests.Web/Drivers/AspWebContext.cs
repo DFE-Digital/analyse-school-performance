@@ -1,52 +1,67 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
+﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
+using AngleSharp.Io.Network;
 using AngleSharp.Io;
 using AngleSharp;
-using System.Net.Http.Headers;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
-using ASP.Web;
-using AngleSharp.Dom;
-using ASP.Core;
-using ASP.Test.Core;
-using AngleSharp.Io.Network;
-using Microsoft.AspNetCore.TestHost;
 using ASP.Core.PageContent.Repository;
-using TechTalk.SpecFlow.Assist;
+using ASP.Test.Core;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net.Http.Headers;
+using ASP.Web;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using ASP.Core;
+using Microsoft.Extensions.Configuration;
 
-namespace ASP.AcceptanceTests
+namespace ASP.AcceptanceTests.Drivers
 {
-    public class AspWeb
+    public class AspWebContext
     {
-        private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<Program> _factory;
+        private static readonly HttpClient _client;
+        private static readonly CustomWebApplicationFactory<Program> _factory;
 
-        public IPageContentRepository PageContentRepository => _factory.PageContentRepository;
+        private IDocument? _lastResponse = null;
 
-        public AspWeb()
+        static AspWebContext()
         {
             _factory = new CustomWebApplicationFactory<Program>();
-            _client = _factory.CreateClient(new WebApplicationFactoryClientOptions {
+            _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+            {
                 AllowAutoRedirect = false
             });
         }
 
-        public async Task<AspWebResponse> GetAsync(string path)
+        public IPageContentRepository PageContentRepository => _factory.PageContentRepository;
+
+        public IDocument LastResponse
+        {
+            get
+            {
+                if (_lastResponse == null)
+                {
+                    AssertWithMessage.NotNull(_lastResponse, "No web response received. Is the test missing an action?");
+                }
+
+                return _lastResponse!;
+            }
+        }
+
+        public async Task GetAsync(string path)
         {
             var response = await _client.GetAsync(path);
 
-            var (rawContent, htmlContent) = await GetDocumentAsync(response);
-            return new AspWebResponse {
-                StatusCode = response.StatusCode,
-                RawContent = rawContent,
-                HtmlContent = htmlContent
-            };
+            _lastResponse = await GetDocumentAsync(response);
         }
 
-        private async Task<(string, IHtmlDocument)> GetDocumentAsync(HttpResponseMessage response)
+        public async Task SubmitFormAsync(IHtmlFormElement form)
+        {
+            _lastResponse = await form.SubmitAsync();
+        }
+
+        private async Task<IHtmlDocument> GetDocumentAsync(HttpResponseMessage response)
         {
             var requester = new HttpClientRequester(_client);
             var config = Configuration.Default.With(requester).WithDefaultLoader();
@@ -54,7 +69,7 @@ namespace ASP.AcceptanceTests
             var document = await BrowsingContext.New(config)
                 .OpenAsync(ResponseFactory, CancellationToken.None);
 
-            return (content, (IHtmlDocument)document);
+            return (IHtmlDocument)document;
 
             void ResponseFactory(VirtualResponse htmlResponse)
             {
@@ -85,11 +100,11 @@ namespace ASP.AcceptanceTests
             private readonly MemoryStore _store;
 
             private IPageContentRepository? _pageContentRepository = null;
-            public IPageContentRepository PageContentRepository 
-            { 
+            public IPageContentRepository PageContentRepository
+            {
                 get
                 {
-                    if(_pageContentRepository != null)
+                    if (_pageContentRepository != null)
                     {
                         return _pageContentRepository;
                     }
@@ -110,6 +125,7 @@ namespace ASP.AcceptanceTests
             protected override void ConfigureWebHost(IWebHostBuilder builder)
             {
                 var testMode = Environment.GetEnvironmentVariable("ASP_Test_Mode") ?? "Development";
+                var path = Path.GetDirectoryName(GetType().Assembly.GetAssemblyLocation());
 
                 builder.ConfigureTestServices(services =>
                 {
@@ -122,14 +138,15 @@ namespace ASP.AcceptanceTests
                     }
                 });
 
-                builder.ConfigureAppConfiguration(configure => {
+                builder.ConfigureAppConfiguration(configure =>
+                {
                     var config = configure
-                        .SetBasePath(Path.GetDirectoryName(GetType().Assembly.GetAssemblyLocation()))
+                        .SetBasePath(path)
                         .AddJsonFile("appsettings.Test.json", false);
 
                     if (testMode == "Integration")
                     {
-                        config.AddJsonFile("appsettings.Test.local.json", false);
+                        config.AddJsonFile("appsettings.Test.local.json", true);
                     }
                 });
             }

@@ -124,30 +124,30 @@ Scenario: Any other heading type should default to h2 and class to l
 	And the element "#test3" should have the class "govuk-heading-l"
 
 Scenario: Caption should appear if Caption text populated in template
-Given page content "help-test" exists:
-	"""
-	{
-		"Views": [
-			{
-				"ViewId": "Heading",
-				"ViewContent": {
-					"Id": "test",
-					"Caption": "Test caption",
-					"Text": "Test heading text"
+	Given page content "help-test" exists:
+		"""
+		{
+			"Views": [
+				{
+					"ViewId": "Heading",
+					"ViewContent": {
+						"Id": "test",
+						"Caption": "Test caption",
+						"Text": "Test heading text"
+					}
 				}
-			}
-		]
-	}
-	"""
-When I navigate to /help/test
-Then I should get a 200 response
-And the element "#test" should have the following markup:
-	"""
-	<h2 id="test" class="govuk-heading-l">
-		<span class="govuk-caption-l">Test caption</span>
-		Test heading text
-	</h2>
-	"""
+			]
+		}
+		"""
+	When I navigate to /help/test
+	Then I should get a 200 response
+	And the element "#test" should have the following markup:
+		"""
+		<h2 id="test" class="govuk-heading-l">
+			<span class="govuk-caption-l">Test caption</span>
+			Test heading text
+		</h2>
+		"""
 
 Scenario: Heading type h2 should set caption class to l
 	Given page content "help-test" exists:

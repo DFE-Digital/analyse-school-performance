@@ -1,12 +1,10 @@
 Feature: Footer component
 
-
 Scenario: Footer should display Contact link
 	When I navigate to /
 	Then I should get a 200 response
 	And the element "#footer-link-contact" should have the text content "Contact"
 	Then the anchor "#footer-link-contact" should be an external link to "https://form.education.gov.uk/en/AchieveForms/?form_uri=sandbox-publish://AF-Process-2b61dfcd-9296-4f6a-8a26-4671265cae67/AF-Stage-f3f5200e-e605-4a1b-ae6b-3536bc77305c/definition.json"
-
 
 Scenario: Footer should display Terms of use link
 	When I navigate to /

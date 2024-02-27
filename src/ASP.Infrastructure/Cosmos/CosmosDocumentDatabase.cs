@@ -1,4 +1,5 @@
 ﻿using ASP.Core;
+using Azure;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.Providers;
 using ErrorOr;
 using Microsoft.Azure.Cosmos;
@@ -32,19 +33,20 @@ namespace ASP.Infrastructure.Cosmos
             }
             catch (CosmosException ex)
             {
-                if(ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                switch (ex.StatusCode)
                 {
-                    return Error.NotFound("CosmosDocumentDatabase.GetAsync", ex.Message);
-                } else
-                {
-                    _logger.LogCritical(ex.Message);
-                    return Error.Failure("CosmosDocumentDatabase.GetAsync", ex.Message);
+                    case System.Net.HttpStatusCode.NotFound:
+                        return Error.NotFound(description: ex.Message);
+
+                    default:
+                        _logger.LogCritical(ex.Message);
+                        return Error.Failure(description: ex.Message);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Failure("CosmosDocumentDatabase.GetAsync", ex.Message);
+                return Error.Failure(description: ex.Message);
             }
         }
 
@@ -66,20 +68,20 @@ namespace ASP.Infrastructure.Cosmos
             }
             catch (CosmosException ex)
             {
-                if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                switch (ex.StatusCode)
                 {
-                    return Error.NotFound("CosmosDocumentDatabase.UpsertAsync", ex.Message);
-                }
-                else
-                {
-                    _logger.LogCritical(ex.Message);
-                    return Error.Failure("CosmosDocumentDatabase.UpsertAsync", ex.Message);
+                    case System.Net.HttpStatusCode.NotFound:
+                        return Error.NotFound(description: ex.Message);
+
+                    default:
+                        _logger.LogCritical(ex.Message);
+                        return Error.Failure(description: ex.Message);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Failure("CosmosDocumentDatabase.UpsertAsync", ex.Message);
+                return Error.Failure(description: ex.Message);
             }
         }
 
@@ -98,9 +100,13 @@ namespace ASP.Infrastructure.Cosmos
                     var response = await container
                         .DeleteItemAsync<Dictionary<string, object>>(id, new PartitionKey(id));
 
-                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    switch(response.StatusCode)
                     {
-                        return Error.Failure(response.StatusCode.ToString(), response.ToString());
+                        case System.Net.HttpStatusCode.NotFound:
+                            return Error.NotFound(description: response.ToString());
+
+                        default:
+                            return Error.Failure(description: response.ToString());
                     }
                 }
 
@@ -108,20 +114,20 @@ namespace ASP.Infrastructure.Cosmos
             }
             catch (CosmosException ex)
             {
-                if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                switch (ex.StatusCode)
                 {
-                    return Error.NotFound("CosmosDocumentDatabase.DeleteAllAsync", ex.Message);
-                }
-                else
-                {
-                    _logger.LogCritical(ex.Message);
-                    return Error.Failure("CosmosDocumentDatabase.DeleteAllAsync", ex.Message);
+                    case System.Net.HttpStatusCode.NotFound:
+                        return Error.NotFound(description: ex.Message);
+
+                    default:
+                        _logger.LogCritical(ex.Message);
+                        return Error.Failure(description: ex.Message);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Failure("CosmosDocumentDatabase.DeleteAllAsync", ex.Message);
+                return Error.Failure(description: ex.Message);
             }
         }
     }
