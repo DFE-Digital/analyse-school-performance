@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ASP.Test\ASP.Test.csproj" />
+    <ProjectReference Include="..\ASP.Test.Core\ASP.Test.Core.csproj" />
   </ItemGroup>
 
 </Project>

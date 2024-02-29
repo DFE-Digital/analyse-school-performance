@@ -45,15 +45,34 @@ stages:
           msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
           platform: '$(BuildPlatform)'
           configuration: '$(BuildConfiguration)'
-
+    
       - task: VSTest@2
         displayName: 'Test Assemblies'
         inputs:
           testAssemblyVer2: |
-            **\$(BuildConfiguration)\*test*.dll
+            **\$(BuildConfiguration)\*[tT]est.dll
+            **\$(BuildConfiguration)\**\*[tT]est.dll
+            **\$(BuildConfiguration)\*[tT]ests.dll
+            **\$(BuildConfiguration)\**\*[tT]ests.dll
             !**\obj\**
+            !**\*Microsoft.TestPlatform*
+            !**\*Microsoft.VisualStudio.TestPlatform*
             platform: '$(BuildPlatform)'
             configuration: '$(BuildConfiguration)'
+
+      - task: SpecFlowPlus@0
+        inputs:
+          generatorSource: 'TestAssembly'
+          testAssemblyFilePath:  'test\ASP.Web.AcceptanceTests\bin\$(BuildConfiguration)\**\ASP.Web.AcceptanceTests.dll'
+          projectName: 'Web'
+          testExecutionJson: 'test\ASP.Web.AcceptanceTests\bin\$(BuildConfiguration)\**\TestExecution.json'
+
+      - task: SpecFlowPlus@0
+        inputs:
+          generatorSource: 'TestAssembly'
+          testAssemblyFilePath:  'test\ASP.Api.AcceptanceTests\bin\$(BuildConfiguration)\**\ASP.Api.AcceptanceTests.dll'
+          projectName: 'API'
+          testExecutionJson: 'test\ASP.Api.AcceptanceTests\bin\$(BuildConfiguration)\**\TestExecution.json'
 
       - task: PublishBuildArtifacts@1
         displayName: 'Publish Artifact'
