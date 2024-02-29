@@ -1,0 +1,43 @@
+﻿@model PageContentTemplateView
+
+@{
+    Model.ViewContent.Headings ??= new List<string>();
+    Model.ViewContent.Rows ??= new List<List<string>> { new List<string>() };
+
+    int maxCellCount = Model.ViewContent.Headings.Count;
+    foreach (var row in Model.ViewContent.Rows)
+    {
+        maxCellCount = Math.Max(maxCellCount, row.Count);
+    }
+}
+
+
+<table class="govuk-table" id="@Model.ViewContent.Id">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            @foreach (var heading in Model.ViewContent.Headings)
+            {
+                <th scope="col" class="govuk-table__header">@heading</th>
+            }
+            @for (int i = Model.ViewContent.Headings.Count; i < maxCellCount; i++)
+            {
+                <th scope="col" class="govuk-table__header"></th>
+            }
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @foreach (var row in Model.ViewContent.Rows)
+        {
+            <tr class="govuk-table__row">
+                @foreach (string cell in row)
+                {
+                    <td class="govuk-table__cell">@cell</td>
+                }
+                @for (int i = row.Count; i < maxCellCount; i++)
+                {
+                    <td class="govuk-table__cell"></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
