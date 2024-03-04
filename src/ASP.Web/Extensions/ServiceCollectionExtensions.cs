@@ -2,6 +2,7 @@
 using ASP.Core.PageContent.Repository;
 using ASP.Infrastructure.Cosmos;
 using ASP.Infrastructure.Repositories;
+using ASP.Web.Filters;
 using ASP.Web.Services;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb;
 
@@ -19,6 +20,8 @@ namespace ASP.Web.Extensions
         internal static IServiceCollection RegisterWebServices(this IServiceCollection services)
         {
             services.AddScoped<INonceService>(serviceProvider => new NonceService(32));
+            services.AddScoped<ICookieProvider, CookieProvider>();
+            services.AddScoped<CheckCookies>();
 
             return services;
         }
@@ -32,6 +35,6 @@ namespace ASP.Web.Extensions
             return services;
         }
 
-       
+
     }
 }

@@ -1,8 +1,10 @@
+using ASP.Web.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Controllers
 {
     [Route("news")]
+    [ServiceFilter<CheckCookies>]
     public class NewsController : Controller
     {
         private readonly ILogger<NewsController> _logger;

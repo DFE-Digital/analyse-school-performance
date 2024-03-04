@@ -1,3 +1,4 @@
+using ASP.Web.Filters;
 using ASP.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -5,6 +6,7 @@ using System.Diagnostics;
 namespace ASP.Web.Controllers
 {
     [Route("home")]
+    [ServiceFilter<CheckCookies>]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,7 +20,7 @@ namespace ASP.Web.Controllers
         [HttpGet("")]
         [HttpGet("index")]
         public IActionResult Index()
-        {
+        {    
             return View();
         }
 

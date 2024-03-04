@@ -1,3 +1,9 @@
+@using ASP.Core.Enums
+@{
+    var cookiePreferences = ViewData["CookiePreferences"] as CookiePreferencesModel;
+}
+
+
 <!DOCTYPE html>
 <html lang="en" class="govuk-template app-html-class">
 
@@ -11,7 +17,13 @@
     <link rel="mask-icon" href="/assets/images/govuk-icon-mask.svg" color="blue">
     <link rel="apple-touch-icon" href="/assets/images/govuk-icon-180.png">
     <link rel="manifest" href="/assets/manifest.json">
-    <link rel="stylesheet" href="/assets/css/app.css" add-nonce="true" />
+    <link rel="stylesheet" href="/assets/css/app.css" add-nonce="true"/>
+
+    @if (cookiePreferences?.AnalyticsTracking == AnalyticsTracking.Accepted)
+    {
+       //Add analytics tracking
+    }
+
 </head>
 
 <body class="govuk-template__body app-body-class" data-test="My value" data-other="report:details">
@@ -19,32 +31,7 @@
         document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
     </script>
 
-    <!-- Hide until implemented
-    <form action="/form-handler" method="post" novalidate>
-        <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
-            <div class="govuk-cookie-banner__message govuk-width-container">
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <h2 class="govuk-cookie-banner__heading govuk-heading-m">Cookies on Analyse school performance</h2>
-                        <div class="govuk-cookie-banner__content">
-                            <p class="govuk-body">We use some essential cookies to make this service work.</p>
-                            <p class="govuk-body">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="govuk-button-group">
-                    <button value="yes" type="submit" name="cookies[analytics]" class="govuk-button" data-module="govuk-button">
-                        Accept analytics cookies
-                    </button>
-                    <button value="no" type="submit" name="cookies[analytics]" class="govuk-button" data-module="govuk-button">
-                        Reject analytics cookies
-                    </button>
-                    <a class="govuk-link" href="#">View cookies</a>
-                </div>
-            </div>
-        </div>
-    </form>
-    -->
+    <partial name="_CookieBannerPartial"/>
 
     <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
     <header class="govuk-header app-header" role="banner" data-module="govuk-header">
@@ -64,14 +51,14 @@
                     </svg>
                 </a>
             </div>
-
+           
             <div class="app-header__content-service-name">
                 <a id="header-link-service-name" href="/" class="govuk-header__link govuk-header__service-name app-header__service-name">
                     Analyse school performance
                 </a>
             </div>
 
-            <!-- Hide until implemented
+            <!-- Hide until implemented 
             <div class="app-header__content-account-signin">
                 <a id="header-link-account-name" href="#" class="govuk-header__link app-header__link-username">
                     Account name
@@ -88,14 +75,29 @@
         <partial name="_TopNavigationPartial" />
     </header>
 
-    <partial name="_PhaseBannerPartial" />
+    <!-- Hide until implemented 
+    <div class="app-phase-banner-container">
+        <div class="govuk-width-container app-width-container">
+            <div class="govuk-phase-banner app-phase-banner">
+                <p class="govuk-phase-banner__content">
+                    <strong class="govuk-tag govuk-phase-banner__content__tag">
+                        Alpha
+                    </strong>
+                    <span class="govuk-phase-banner__text">
+                        This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    -->
 
     <div class="govuk-width-container app-width-container">
         <!-- Hide until implemented
            <a href="#" class="govuk-back-link">Back</a>
         -->
         <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
-            @RenderBody()
+            @RenderBody()          
         </main>
     </div>
 

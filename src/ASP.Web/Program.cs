@@ -19,7 +19,7 @@ namespace ASP.Web
                 .RegisterUseCases();
 
             builder.Services.AddApplicationInsightsTelemetry();
-            
+
             builder.Configuration.AddJsonFile("appsettings.json");
             builder.Configuration.AddJsonFile("appsettings.local.json", true);
 

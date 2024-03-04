@@ -3,12 +3,14 @@ using ASP.Application.UseCases.ViewContentPage;
 using ASP.Core.Helpers;
 using ASP.Core.PageContent;
 using ASP.Web.Extensions;
+using ASP.Web.Filters;
 using ASP.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Controllers
 {
     [Route("[controller]")]
+    [ServiceFilter<CheckCookies>]
     public class HelpController : Controller
     {
         private readonly IViewContentPageUseCase _viewContentUseCase;
