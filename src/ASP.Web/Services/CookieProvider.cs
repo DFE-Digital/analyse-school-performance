@@ -20,7 +20,9 @@
         {
             CookieOptions options = new()
             {
-                Expires = DateTime.Now.AddDays(365)
+                Expires = DateTime.Now.AddDays(365),
+                Secure = true,
+                HttpOnly = true,
             };
 
             _httpContextAccessor?.HttpContext?.Response.Cookies.Append(cookieKey, cookieValue, options);

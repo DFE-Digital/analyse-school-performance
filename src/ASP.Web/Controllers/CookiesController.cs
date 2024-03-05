@@ -1,5 +1,6 @@
 ﻿using ASP.Core.Enums;
 using ASP.Web.Services;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Controllers
@@ -10,7 +11,7 @@ namespace ASP.Web.Controllers
         private readonly ICookieProvider _cookieProvider = cookieProvider;
 
         public const string AnalyticsTrackingCookie = "AnalyticsTracking";
-        public const string AnalyticsTrackingConfirmationCookie = "AanalyticsTrackingConfirmation";
+        public const string AnalyticsTrackingConfirmationCookie = "AnalyticsTrackingConfirmation";
 
         [HttpPost("preferences")]
         public IActionResult CookiesPreferences(string analyticsTracking)

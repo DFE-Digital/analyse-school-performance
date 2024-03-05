@@ -29,7 +29,7 @@ namespace ASP.Web.Filters
                              out AnalyticsTracking resultTracking) == true ? resultTracking : AnalyticsTracking.NotSet,
                 AnalyticsTrackingConfirmation = Enum.TryParse(analyticsTrackingConfirmation,
                               out AnalyticsTrackingConfirmation resultConfirm) == true ? resultConfirm : AnalyticsTrackingConfirmation.HideBanner           
-             };
+            };
 
             controller?.ViewData.Add("CookiePreferences", cookiePreferences);
         }

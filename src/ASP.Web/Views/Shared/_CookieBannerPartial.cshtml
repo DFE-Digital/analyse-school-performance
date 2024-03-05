@@ -4,7 +4,7 @@
     var cookiePreferences = ViewData["CookiePreferences"] as CookiePreferencesModel;
 }
 
-@if (cookiePreferences.AnalyticsTracking == AnalyticsTracking.NotSet)
+@if (cookiePreferences?.AnalyticsTracking == AnalyticsTracking.NotSet)
 {
     <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
         <div class="govuk-cookie-banner__message govuk-width-container">
@@ -32,7 +32,7 @@
         </div>
     </div>
 }
-@if (cookiePreferences.AnalyticsTrackingConfirmation == AnalyticsTrackingConfirmation.ShowBanner)
+@if (cookiePreferences?.AnalyticsTrackingConfirmation == AnalyticsTrackingConfirmation.ShowBanner)
 {
     <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
         <div class="govuk-cookie-banner__message govuk-width-container">
