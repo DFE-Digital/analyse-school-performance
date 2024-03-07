@@ -13,6 +13,10 @@
 
 
 <table class="govuk-table" id="@Model.ViewContent.Id">
+    @if (Model.ViewContent.Caption is not null)
+    {
+        <caption class="govuk-table__caption govuk-table__caption--m">@Model.ViewContent.Caption</caption>
+    }
     <thead class="govuk-table__head">
         <tr class="govuk-table__row">
             @foreach (var heading in Model.ViewContent.Headings)

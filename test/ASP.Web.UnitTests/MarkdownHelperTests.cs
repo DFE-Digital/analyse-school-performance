@@ -57,8 +57,8 @@ namespace ASP.UnitTest.Web
         }
 
         [Theory]
-        [InlineData("[Google](https://www.google.com)", "<a href=\"https://www.google.com\">Google</a>")]
-        [InlineData("**[Google](https://www.google.com)**", "<strong><a href=\"https://www.google.com\">Google</a></strong>")]
+        [InlineData("[Google](https://www.google.com)", "<a href=\"https://www.google.com\" class=\"govuk-link\">Google</a>")]
+        [InlineData("**[Google](https://www.google.com)**", "<strong><a href=\"https://www.google.com\" class=\"govuk-link\">Google</a></strong>")]
         public void ConvertInlineMarkdown_WhenLink_ReturnsAnchorTag(string input, string expected)
         {
             // Act

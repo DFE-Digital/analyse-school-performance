@@ -27,7 +27,7 @@ namespace ASP.Web.Helpers
             inputString = Regex.Replace(inputString, @"\*(.+?)\*|_(.+?)_", "<em>$1$2</em>");
 
             // Convert inline links: [link text](url)
-            inputString = Regex.Replace(inputString, @"\[([^\]]+)\]\(([^)]+)\)", "<a href=\"$2\">$1</a>");
+            inputString = Regex.Replace(inputString, @"\[([^\]]+)\]\(([^)]+)\)", "<a href=\"$2\" class=\"govuk-link\">$1</a>");
 
             return new HtmlString(inputString);
         }

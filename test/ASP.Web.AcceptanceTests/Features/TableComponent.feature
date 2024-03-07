@@ -1,6 +1,147 @@
 Feature: Table component
 
 
+Scenario: Table content should display html correctly with a caption
+	Given page content "help-test" exists:
+		"""
+		{
+			"Views": [
+				{
+					"ViewId": "Table",
+					"ViewContent": {
+						"Id": "test",
+						"Caption": "Caption here",
+						"Headings": [
+							"Header A",
+							"Header B"
+						],
+						"Rows": [
+							[
+								"Cell A",
+								"Cell B"
+							],
+						]
+					},
+				}
+			]
+		}
+		"""
+	When I navigate to /help/test
+	Then I should get a 200 response
+	Then the element "#test" should have the following markup:
+		"""
+		<table class="govuk-table" id="test">
+			<caption class="govuk-table__caption govuk-table__caption--m">Caption here</caption>
+			<thead class="govuk-table__head">
+				<tr class="govuk-table__row">
+					 <th scope="col" class="govuk-table__header">Header A</th>
+					 <th scope="col" class="govuk-table__header">Header B</th>
+				</tr>
+			</thead>
+			<tbody class="govuk-table__body">
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell">Cell A</td>
+					<td class="govuk-table__cell">Cell B</td>
+				</tr>
+			</tbody>
+		</table>
+		"""
+
+
+Scenario: Table content should display html correctly when a caption is null
+	Given page content "help-test" exists:
+		"""
+		{
+			"Views": [
+				{
+					"ViewId": "Table",
+					"ViewContent": {
+						"Id": "test",
+						"Caption": null,
+						"Headings": [
+							"Header A",
+							"Header B"
+						],
+						"Rows": [
+							[
+								"Cell A",
+								"Cell B"
+							],
+						]
+					},
+				}
+			]
+		}
+		"""
+	When I navigate to /help/test
+	Then I should get a 200 response
+	Then the element "#test" should have the following markup:
+		"""
+		<table class="govuk-table" id="test">
+			<thead class="govuk-table__head">
+				<tr class="govuk-table__row">
+					 <th scope="col" class="govuk-table__header">Header A</th>
+					 <th scope="col" class="govuk-table__header">Header B</th>
+				</tr>
+			</thead>
+			<tbody class="govuk-table__body">
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell">Cell A</td>
+					<td class="govuk-table__cell">Cell B</td>
+				</tr>
+			</tbody>
+		</table>
+		"""
+
+
+Scenario: Table content should display html correctly when a caption is empty
+	Given page content "help-test" exists:
+		"""
+		{
+			"Views": [
+				{
+					"ViewId": "Table",
+					"ViewContent": {
+						"Id": "test",
+						"Caption": "",
+						"Headings": [
+							"Header A",
+							"Header B"
+						],
+						"Rows": [
+							[
+								"Cell A",
+								"Cell B"
+							],
+						]
+					},
+				}
+			]
+		}
+		"""
+	When I navigate to /help/test
+	Then I should get a 200 response
+	Then the element "#test" should have the following markup:
+		"""
+		<table class="govuk-table" id="test">
+			<caption class="govuk-table__caption govuk-table__caption--m"></caption>
+			<thead class="govuk-table__head">
+				<tr class="govuk-table__row">
+					 <th scope="col" class="govuk-table__header">Header A</th>
+					 <th scope="col" class="govuk-table__header">Header B</th>
+				</tr>
+			</thead>
+			<tbody class="govuk-table__body">
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell">Cell A</td>
+					<td class="govuk-table__cell">Cell B</td>
+				</tr>
+			</tbody>
+		</table>
+		"""
+
+
+
 Scenario: Table content should display html correctly with headings and rows
 	Given page content "help-test" exists:
 		"""
