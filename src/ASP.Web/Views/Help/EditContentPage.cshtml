@@ -1,11 +1,10 @@
-﻿@model EditContentPageModel
+﻿@model ContentTemplateEditModel
 
 @{
     ViewData["Title"] = "Edit: " + Model.PageTitle;
 }
 
 <form id="app-content-edit-form" method="POST">
-    <input type="hidden" asp-for="Id" />
     <div class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h1 class="govuk-fieldset__heading">
@@ -20,12 +19,7 @@
         </div>
     </div>
 
-    @if(Model.Views != null) {
-        for (var i = 0; i < Model.Views.Count; i++)
-        {
-            @Html.EditorFor(m => m.Views[i], Model.Views[i].ViewId)
-        }
-    }
+    @await Html.PartialAsync("ContentTemplateEdit", Model)
 
     <button id="app-content-edit-save" class="govuk-button" type="submit">Save</button>
     <a id="app-content-edit-cancel" asp-route="app-content-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">

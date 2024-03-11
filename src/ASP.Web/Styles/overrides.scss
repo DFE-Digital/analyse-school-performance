@@ -141,3 +141,12 @@ $app-breakpoint-custom : 700px;
         display: none !important;
     }
 }
+
+.app-list .app-list {
+    list-style-type: circle;
+    margin-bottom: 10px;
+}
+
+.app-list .app-list .app-list {
+    list-style-type: square;
+}

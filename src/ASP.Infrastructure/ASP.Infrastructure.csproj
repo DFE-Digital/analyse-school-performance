@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
-      <HintPath>Libraries\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+      <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
     </Reference>
   </ItemGroup>
 

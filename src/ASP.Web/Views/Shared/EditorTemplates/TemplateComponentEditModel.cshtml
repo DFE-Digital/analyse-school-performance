@@ -1,0 +1,49 @@
+﻿@model TemplateComponentEditModel
+
+<div class="govuk-fieldset app-component-edit">
+    <input type="hidden" asp-for="ViewId" />
+    
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+            @Model.ViewId
+        </h1>
+    </legend>
+
+    <div class="govuk-form-group">
+        @foreach(var kvp in Model.ViewContent) {
+            <label for="@Html.IdFor(m => m.ViewContent[@kvp.Key])" data-key="@kvp.Key" class="govuk-label govuk-!-margin-top-2 govuk-!-font-weight-bold">
+                @kvp.Key
+            </label>
+            @if (Model.Types[kvp.Key] == ViewContentPropertyType.Json)
+            {
+                <div id="hint-@Html.IdFor(m => m.ViewContent[@kvp.Key])" class="govuk-hint">
+                    This is a JSON field - please enter a valid JSON value. Values can be:
+                    <ul>
+                        <li>a null value (leave the field blank)</li>
+                        <li>a string value, e.g. "xyz" (with quotes)</li>
+                        <li>a number, e.g. 123</li>
+                        <li>an array, e.g. ["a", "b", "c"]</li>
+                        <li>an object, e.g. {"property1": "xyz", "property2": 123}</li>
+                    </ul>
+                </div>
+                <textarea asp-for="ViewContent[kvp.Key]" class="govuk-textarea" rows="5" area-describedby="hint-@Html.IdFor(m => m.ViewContent[@kvp.Key])">
+                </textarea>
+            }
+            else
+            {
+                <input asp-for="ViewContent[kvp.Key]" class="govuk-input" />
+            }
+            <input type="hidden" asp-for="Types[kvp.Key]" />
+        }
+    </div>
+
+    @if (Model.ChildViews != null)
+    {
+        for (var i = 0; i < Model.ChildViews.Count; i++)
+        {
+            <div style="margin-left: 40px">
+                @Html.EditorFor(m =>  m.ChildViews[i], Model.ChildViews[i].ViewId)
+            </div>
+        }
+    }
+</div>

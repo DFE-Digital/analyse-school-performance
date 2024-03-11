@@ -5,11 +5,12 @@ using ASP.Core.PageContent;
 using ASP.Web.Extensions;
 using ASP.Web.Filters;
 using ASP.Web.Models;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Controllers
 {
-    [Route("[controller]")]
+    [Route("help")]
     [ServiceFilter<CheckCookies>]
     public class HelpController : Controller
     {
@@ -28,49 +29,33 @@ namespace ASP.Web.Controllers
         [HttpGet("{contentId}", Name = "app-content-view")]
         public async Task<IActionResult> ViewContentPage(string contentId)
         {
-            string pageName = $"help-{contentId}".ToLower();
-            ViewContentPageRequest request = new(pageName);
+            string templateId = $"help-{contentId}".ToLower();
+            ViewContentPageRequest request = new(templateId);
 
             return await _viewContentUseCase.HandleRequest(request)
-                .ToActionResult(template => View(new ViewContentPageModel {
-                    ContentId = contentId,
-                    PageContentTemplate = template
-                }));
+                .Then(t => ContentTemplateViewModel.FromTemplate(contentId, t))
+                .ToActionResult(View);
         }
 
         [HttpGet("{contentId}/edit", Name = "app-content-edit")]
         public async Task<IActionResult> EditContentPage(string contentId)
         {
-            string pageName = $"help-{contentId}".ToLower();
-            ViewContentPageRequest request = new(pageName);
+            string templateId = $"help-{contentId}".ToLower();
+            ViewContentPageRequest request = new(templateId);
 
             return await _viewContentUseCase.HandleRequest(request)
-                .ToActionResult(template => View(new EditContentPageModel {
-                    ContentId = contentId,
-                    Id = pageName,
-                    PageTitle = template.PageTitle,
-                    Views = template.Views.Select(v => new EditViewComponentModel {
-                        ViewId = v.ViewId,
-                        ViewContent = ((IDictionary<string, object>)v.ViewContent).ToDictionary(c => c.Key, c => c.Value?.ToString() ?? "")
-                    }).ToList()
-                }));
+                .Then(t => ContentTemplateEditModel.FromTemplate(contentId, t))
+                .ToActionResult(View);
         }
 
         [HttpPost("{contentId}/edit")]
-        public async Task<IActionResult> EditContentPage(string contentId, EditContentPageModel model)
+        public async Task<IActionResult> EditContentPage(string contentId, ContentTemplateEditModel model)
         {
-            var pageContent = JsonHelper.DeserializeIgnoringMissingMembers<PageContentTemplate>(JsonHelper.SerializeIndented(model));
+            string templateId = $"help-{contentId}".ToLower();
 
-            return await pageContent.Match(async v =>
-            {
-                UpdateContentPageRequest request = new(model.Id, v);
-
-                return await _updateContentUseCase.HandleRequest(request)
-                    .ToActionResult(response => RedirectToAction(nameof(ViewContentPage), new { contentId }));
-            },
-            e => {
-                return Task.FromResult((IActionResult) new StatusCodeResult(500));
-            });
+            return await model.ToTemplate()
+                .ThenAsync(t => _updateContentUseCase.HandleRequest(new UpdateContentPageRequest(templateId, t)))
+                .ToActionResult(_ => RedirectToAction(nameof(ViewContentPage), new { contentId }));
         }
     }
 }

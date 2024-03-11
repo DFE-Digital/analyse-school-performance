@@ -1,0 +1,330 @@
+﻿Feature: Heading component
+The heading component provides the ability to add h2 and h3 tags to content templates. 
+![h2 example](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-584d6265-a71e-465b-b2a9-80573eece685.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
+The component JSON structure is as follows:
+```
+{
+    "ViewId": "Heading",
+    "ViewContent": {
+        "HeadingType": "h2" | "h3" (required, defaults to "h2"),
+        "Caption": <string> (optional),
+        "Text": <string> (required, defaults to "Heading text"),
+        "LinkUrl": <string> (optional)
+    }
+}
+```
+
+For example, a component like this:
+```
+{
+    "ViewId": "Heading",
+    "ViewContent": {
+        "HeadingType": "h2",
+        "Text": "This is a h2 heading"
+    },
+}
+```
+
+Will produce HTML like this:
+```
+<h2 class="govuk-heading-l">
+    This is a h2 heading
+</h2>
+```
+
+Please view the [Wiki documentation](https://dfe-ssp.visualstudio.com/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki?wikiVersion=GBwikiMaster&pagePath=/Analyse%20School%20Performance%20%28ASP%29%20Index/Technical%20specification/Components/Heading&pageId=14389&_a=edit) for more details.
+
+Scenario: When ViewContent property is missing, component should not error
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading"
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+
+Scenario: When ViewContent property is null, component should not error
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": null
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+
+#Scenario: When ViewContent property is not an object, component should not error and heading type should default to h2
+#	Given a content template contains the component:
+#		"""
+#		{
+#			"ViewId": "Heading",
+#			"ViewContent": []
+#		}
+#		"""
+#	When I view the component on the page
+#	Then there should be no errors
+#	And the component should exist
+
+Scenario: When HeadingType property is missing, component should not error and heading type should default to h2
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+			}
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+	And the component outer element should have the tag name "h2"
+
+Scenario Outline: When HeadingType property is not "h2" or "h3", component should not error and default to "h2"
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": <Value>
+			}
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+	And the component outer element should have the tag name "h2"
+	And the component outer element should have the class "govuk-heading-l"
+Examples:
+	| Value                  |
+	| null                   |
+	| 123                    |
+	| 1.0                    |
+	| true                   |
+	| [1,2,3]                |
+	| { "property": "value"} |
+	| ""                     |
+	| " "                    |
+	| "h1"                   |
+	| "h4"                   |
+	| "xxx"                  |
+
+Scenario Outline: HeadingType property should determine outer element tag type and class
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": <HeadingType>
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the component outer element should have the tag name "<Tag>"
+	And the component outer element should have the class "<Class>"
+Examples:
+	| HeadingType | Tag | Class           |
+	| "h2"        | h2  | govuk-heading-l |
+	| "h3"        | h3  | govuk-heading-m |
+
+Scenario: When Text property is missing, heading text should default to "Heading text"
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": "h2"
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the component should have the text content "Heading text"
+
+Scenario Outline: When Text property is invalid, component should not error and should handle the value appropriately
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": "h2",
+				"Text": <Value>
+			}
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+	And the component should have the text content "<Text>"
+Examples:
+	| Value                  | Text                 |
+	| null                   | Heading text         |
+	| ""                     | Heading text         |
+	| " "                    | Heading text         |
+	| 123                    | 123                  |
+	| 1.0                    | 1.0                  |
+	| true                   | true                 |
+	| [1,2,3]                | [1,2,3]              |
+	| { "property": "value"} | {"property":"value"} |
+
+Scenario: Heading text should be populated from Text property
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": "h2",
+				"Text": "This is a test"
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the component should have the text content "This is a test"
+
+Scenario: When Caption property is missing, heading caption should not be displayed
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": "h2",
+				"Text": "This is a test"
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the element "span[class^="govuk-caption-"]" within the component should not exist
+
+Scenario Outline: When Caption property is invalid, component should not error and should handle the value appropriately
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"Caption": <Value>
+			}
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+	And the element "span[class^="govuk-caption-"]" within the component should not exist
+Examples:
+	| Value                  |
+	| null                   |
+	| ""                     |
+	| " "                    |
+	| 123                    |
+	| 1.0                    |
+	| true                   |
+	| [1,2,3]                |
+	| { "property": "value"} |
+
+Scenario: Heading caption should be populated from Caption property
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": "h2",
+				"Caption": "Test caption",
+				"Text": "This is a test",
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the component should have the following markup:
+		"""
+		<h2 class="govuk-heading-l">
+			<span class="govuk-caption-l">Test caption</span>
+			This is a test
+		</h2>
+		"""
+
+Scenario Outline: Caption class should be determined by HeadingType property
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": <HeadingType>,
+				"Caption": "Test caption"
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the element "span" within the component should have the class "<Class>"
+Examples:
+	| HeadingType | Class           |
+	| "h2"        | govuk-caption-l |
+	| "h3"        | govuk-caption-m |
+
+Scenario: When LinkUrl property is missing, heading link should not be displayed
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": "h2",
+				"Text": "This is a test"
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the component should have the following markup:
+		"""
+		<h2 class="govuk-heading-l">
+			This is a test
+		</h2>
+		"""
+
+Scenario Outline: When LinkUrl property is invalid, component should not error and should handle the value appropriately
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": "h2",
+				"Text": "This is a test",
+				"LinkUrl": <Value>
+			}
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+	And the element "a" within the component should not exist
+Examples:
+	| Value                  |
+	| null                   |
+	| ""                     |
+	| " "                    |
+	| 123                    |
+	| 1.0                    |
+	| true                   |
+	| [1,2,3]                |
+	| { "property": "value"} |
+
+Scenario: Heading link should be populated from LinkUrl property
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"HeadingType": "h2",
+				"Text": "This is a test",
+				"LinkUrl": "http://google.com"
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the component should have the following markup:
+		"""
+		<h2 class="govuk-heading-l">
+			<a href="http://google.com" class="govuk-link">
+				This is a test
+			</a>
+		</h2>
+		"""

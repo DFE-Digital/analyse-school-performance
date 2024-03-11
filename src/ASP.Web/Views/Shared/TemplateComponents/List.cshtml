@@ -1,15 +1,11 @@
-﻿@model PageContentTemplateView
-@{
-    string componentsLocation = "TemplateComponents";
-}
-
+﻿@model TemplateComponentViewModel
 
 @if (Model.ChildViews is not null && Model.ChildViews.Count > 0)
 {
-    <ul id="@Model.ViewContent.Id" class="govuk-list govuk-list--bullet">
-        @foreach (PageContentTemplateView item in Model.ChildViews)
+    <ul class="govuk-list govuk-list--bullet app-list">
+        @foreach (TemplateComponentViewModel item in Model.ChildViews)
         {
-            @await Html.PartialAsync($"{componentsLocation}/{item.ViewId}", item)
+            @await Html.PartialAsync($"TemplateComponents/{item.ViewId}", item)
         }
     </ul>
 }

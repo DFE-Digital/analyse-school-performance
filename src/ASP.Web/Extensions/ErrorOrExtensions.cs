@@ -28,5 +28,29 @@ namespace ASP.Web.Extensions
                     }
                 );
         }
+
+        public static IActionResult ToActionResult<T>(this ErrorOr<T> errorOr) where T : IActionResult
+        {
+            return errorOr
+                .MatchFirst(
+                    response => (IActionResult) response,
+                    error => error.Type switch {
+                        ErrorType.NotFound => new ObjectResult(error.Description) { StatusCode = 404 },
+                        _ => new ObjectResult(error.Description) { StatusCode = 500 }
+                    }
+                );
+        }
+
+        public static async Task<IActionResult> ToActionResult<T>(this Task<ErrorOr<T>> errorOr) where T : IActionResult
+        {
+            return await errorOr
+                .MatchFirst(
+                    response => (IActionResult) response,
+                    error => error.Type switch {
+                        ErrorType.NotFound => new ObjectResult(error.Description) { StatusCode = 404 },
+                        _ => new ObjectResult(error.Description) { StatusCode = 500 }
+                    }
+                );
+        }
     }
 }

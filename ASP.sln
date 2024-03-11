@@ -27,6 +27,33 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api.AcceptanceTests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Acceptance", "test\ASP.Test.Acceptance\ASP.Test.Acceptance.csproj", "{220F3AF8-EC52-4461-AADF-9110407EA106}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "non-project files", "non-project files", "{61B563C2-68E3-42C1-A008-0B4DABE02323}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		azure-pipeline.yml = azure-pipeline.yml
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{57E44EE3-7A80-4F12-BDAA-D622C5D1B4A0}"
+	ProjectSection(SolutionItems) = preProject
+		lib\DfE.Data.ComponentLibrary.CleanArchitecture.dll = lib\DfE.Data.ComponentLibrary.CleanArchitecture.dll
+		lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll = lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll
+		lib\DfE.Data.DynamicPageTemplates.Web.dll = lib\DfE.Data.DynamicPageTemplates.Web.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipelines", "pipelines", "{A1F385D5-7621-4FD3-9686-3DFECA900C1C}"
+	ProjectSection(SolutionItems) = preProject
+		pipelines\deployment-stage.yml = pipelines\deployment-stage.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "variables", "variables", "{08649944-BB96-4D86-976F-197764779125}"
+	ProjectSection(SolutionItems) = preProject
+		pipelines\variables\common-var.yml = pipelines\variables\common-var.yml
+		pipelines\variables\dev-var.yml = pipelines\variables\dev-var.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Web", "test\ASP.Test.Web\ASP.Test.Web.csproj", "{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +100,10 @@ Global
 		{220F3AF8-EC52-4461-AADF-9110407EA106}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{220F3AF8-EC52-4461-AADF-9110407EA106}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{220F3AF8-EC52-4461-AADF-9110407EA106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +119,10 @@ Global
 		{9C913310-B8AA-41CA-8C3A-D0B9EAC16F38} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
 		{8CB3E6F6-8861-45AE-ACEE-1D09B65742F5} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
 		{220F3AF8-EC52-4461-AADF-9110407EA106} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
+		{57E44EE3-7A80-4F12-BDAA-D622C5D1B4A0} = {61B563C2-68E3-42C1-A008-0B4DABE02323}
+		{A1F385D5-7621-4FD3-9686-3DFECA900C1C} = {61B563C2-68E3-42C1-A008-0B4DABE02323}
+		{08649944-BB96-4D86-976F-197764779125} = {A1F385D5-7621-4FD3-9686-3DFECA900C1C}
+		{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4950C0DD-CDAE-42E7-8BCB-678C73C51298}

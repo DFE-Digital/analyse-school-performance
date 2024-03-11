@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <Reference Include="DfE.Data.ComponentLibrary.CleanArchitecture">
-      <HintPath>Libraries\DfE.Data.ComponentLibrary.CleanArchitecture.dll</HintPath>
+      <HintPath>..\..\lib\DfE.Data.ComponentLibrary.CleanArchitecture.dll</HintPath>
     </Reference>
   </ItemGroup>
 

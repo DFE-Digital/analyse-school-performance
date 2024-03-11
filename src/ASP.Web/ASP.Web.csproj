@@ -7,6 +7,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Views\Test\**" />
+	  <Content Remove="Views\Test\**" />
+	  <EmbeddedResource Remove="Views\Test\**" />
+	  <None Remove="Views\Test\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\ASP.Application\ASP.Application.csproj" />
 		<ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
 		<ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
@@ -21,13 +28,13 @@
 
 	<ItemGroup>
 	  <Reference Include="DfE.Data.ComponentLibrary.CleanArchitecture">
-	    <HintPath>..\ASP.Application\Libraries\DfE.Data.ComponentLibrary.CleanArchitecture.dll</HintPath>
+	    <HintPath>..\..\lib\DfE.Data.ComponentLibrary.CleanArchitecture.dll</HintPath>
 	  </Reference>
 	  <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
-	    <HintPath>..\ASP.Infrastructure\Libraries\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+	    <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
 	  </Reference>
 	  <Reference Include="DfE.Data.DynamicPageTemplates.Web">
-	    <HintPath>Libraries\DfE.Data.DynamicPageTemplates.Web.dll</HintPath>
+	    <HintPath>..\..\lib\DfE.Data.DynamicPageTemplates.Web.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 

@@ -43,7 +43,7 @@ Scenario: Endpoint should create content template if one doesn't exist
 		}
 		"""
 	Then I should get a 200 response
-	And page content "help-test" should have property "PageTitle" set to "Updated title"
+	And page content "help-test" property "PageTitle" should be equal to "Updated title"
 
 Scenario: Endpoint should update content template
 	Given page content "help-test" exists:
@@ -59,4 +59,4 @@ Scenario: Endpoint should update content template
 		}
 		"""
 	Then I should get a 200 response
-	And page content "help-test" should have property "PageTitle" set to "Updated title"
+	And page content "help-test" property "PageTitle" should be equal to "Updated title"

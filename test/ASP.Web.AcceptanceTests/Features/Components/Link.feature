@@ -1,6 +1,5 @@
 Feature: Link component
 
-
 Scenario: Link content should display html correctly with link
 	Given page content "help-test" exists:
 			"""

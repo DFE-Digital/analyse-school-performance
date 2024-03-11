@@ -1,6 +1,4 @@
-﻿using ASP.Core.Helpers;
-using ASP.Core.PageContent;
-using ASP.Core.PageContent.Repository;
+﻿using ASP.Core.PageContent.Repository;
 using ErrorOr;
 
 namespace ASP.Application.UseCases.UpdateContentPage

@@ -1,11 +1,13 @@
-﻿@model ViewContentPageModel
+﻿@model ContentTemplateViewModel
 
 @{
-    ViewData["Title"] = Model.PageContentTemplate.PageTitle;
+    ViewData["Title"] = Model.PageTitle;
 }
+
+<h1 class="govuk-heading-xl">@Model.PageTitle</h1>
 
 <a id="app-content-edit" asp-route="app-content-edit" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
     Edit this page
 </a>
 
-@await Html.PartialAsync("DynamicPageView", Model.PageContentTemplate)
+@await Html.PartialAsync("ContentTemplateView", Model)

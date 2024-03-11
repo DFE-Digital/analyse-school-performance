@@ -27,29 +27,33 @@
     <ProjectReference Include="..\..\src\ASP.Web\ASP.Web.csproj" />
     <ProjectReference Include="..\ASP.Test.Acceptance\ASP.Test.Acceptance.csproj" />
     <ProjectReference Include="..\ASP.Test.Core\ASP.Test.Core.csproj" />
+    <ProjectReference Include="..\ASP.Test.Web\ASP.Test.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="DfE.Data.ComponentLibrary.CleanArchitecture">
+      <HintPath>..\..\lib\DfE.Data.ComponentLibrary.CleanArchitecture.dll</HintPath>
+    </Reference>
     <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
-      <HintPath>..\..\src\ASP.Infrastructure\Libraries\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+      <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
     </Reference>
     <Reference Include="DfE.Data.DynamicPageTemplates.Web">
-      <HintPath>..\..\src\ASP.Web\Libraries\DfE.Data.DynamicPageTemplates.Web.dll</HintPath>
+      <HintPath>..\..\lib\DfE.Data.DynamicPageTemplates.Web.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Features\HomePage.feature.cs">
+    <Compile Update="Features\Service\HomePage.feature.cs">
       <DependentUpon>HomePage.feature</DependentUpon>
     </Compile>
-    <Compile Update="Features\ParagraphComponent.feature.cs">
-      <DependentUpon>ParagraphComponent.feature</DependentUpon>
+    <Compile Update="Features\Components\ParagraphView.feature.cs">
+      <DependentUpon>ParagraphView.feature</DependentUpon>
     </Compile>
-    <Compile Update="Features\HeadingComponent.feature.cs">
-      <DependentUpon>HeadingComponent.feature</DependentUpon>
+    <Compile Update="Features\Components\HeadingEdit.feature.cs">
+      <DependentUpon>HeadingEdit.feature</DependentUpon>
     </Compile>
-    <Compile Update="Features\HelpContent.feature.cs">
-      <DependentUpon>HelpContent.feature</DependentUpon>
+    <Compile Update="Features\Service\HelpPageView.feature.cs">
+      <DependentUpon>HelpPageView.feature</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -66,19 +70,27 @@
   </ItemGroup>
 
   <ItemGroup>
-    <SpecFlowFeatureFiles Update="Features\HomePage.feature">
+    <SpecFlowFeatureFiles Update="Features\Components\Heading.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Features\ParagraphComponent.feature">
+    <SpecFlowFeatureFiles Update="Features\Service\HelpPageEdit.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Features\HeadingComponent.feature">
+    <SpecFlowFeatureFiles Update="Features\Service\HomePage.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Features\HelpContent.feature">
+    <SpecFlowFeatureFiles Update="Features\Components\Paragraph.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Components\HeadingEdit.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Service\HelpPage.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>

@@ -1,26 +1,41 @@
-﻿@model PageContentTemplateView
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@model TemplateComponentViewModel
 
 @{
-    var (tag, size) = Model.ViewContent.HeadingType switch {
+    var (tag, size) = Model.ViewContent.HeadingType switch
+    {
         "h3" => ("h3", "m"),
         _ => ("h2", "l")
     };
+
+    var headingText = Model.ViewContent.Text switch
+    {
+        null => "Heading text",
+        string s when !string.IsNullOrWhiteSpace(s) => s,
+        string s when string.IsNullOrWhiteSpace(s) => "Heading text",
+        bool b => JsonConvert.SerializeObject(b),
+        double d => JsonConvert.SerializeObject(d),
+        JArray a => JsonConvert.SerializeObject(a),
+        JObject o => JsonConvert.SerializeObject(o),
+        _ => Model.ViewContent.Text.ToString()
+    };
 }
 
-<@tag id="@Model.ViewContent.Id" class="govuk-heading-@size">
-    @if (Model.ViewContent.Caption is not null)
+<@tag class="govuk-heading-@size">
+    @if (Model.ViewContent.Caption is string && !string.IsNullOrWhiteSpace(Model.ViewContent.Caption))
     {
         <span class="govuk-caption-@size">@Model.ViewContent.Caption</span>
     }
 
-    @if (Model.ViewContent.LinkUrl is not null)
+    @if (Model.ViewContent.LinkUrl is string && !string.IsNullOrWhiteSpace(Model.ViewContent.LinkUrl))
     {
         <a href="@Model.ViewContent.LinkUrl" class="govuk-link">
-            @Model.ViewContent.Text
+            @headingText
         </a>
     }
     else
     {
-        @Model.ViewContent.Text
+        @headingText
     }
 </@tag>

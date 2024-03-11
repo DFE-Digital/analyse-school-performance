@@ -29,6 +29,18 @@ namespace ASP.Test.Core
             }
         }
 
+        public static void Null(object? @object, string message)
+        {
+            try
+            {
+                Assert.Null(@object);
+            }
+            catch (XunitException)
+            {
+                throw new XunitException(message);
+            }
+        }
+
         public static void Failed(string message)
         {
             throw new XunitException(message);

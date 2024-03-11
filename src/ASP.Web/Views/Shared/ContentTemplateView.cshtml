@@ -1,11 +1,10 @@
-﻿@model PageContentTemplate
+﻿@model ContentTemplateViewModel
 @{
     string componentsLocation = "TemplateComponents";
 }
 
-<h1 class="govuk-heading-xl">@Model.PageTitle</h1>
-
-@if(Model.Views != null) {
+@if(Model.Views != null) 
+{
     foreach (var dynamicViewModel in Model.Views)
     {
         @await Html.PartialAsync($"{componentsLocation}/{dynamicViewModel.ViewId}", dynamicViewModel)

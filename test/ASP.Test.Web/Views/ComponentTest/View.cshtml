@@ -1,0 +1,9 @@
+﻿@model ASP.Web.Models.ContentTemplateViewModel
+
+@{
+    ViewData["Title"] = Model.PageTitle;
+}
+
+<div id="test">
+    @await Html.PartialAsync("ContentTemplateView", Model)
+</div>

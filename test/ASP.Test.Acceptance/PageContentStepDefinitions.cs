@@ -35,8 +35,8 @@ namespace ASP.Test.Acceptance.Core
         {
         }
 
-        [Given(@"page content ""([^""]*)"" exists:")]
-        public async Task GivenPageContentExists(string id, string data)
+        [Given(@"page content ""([^""]+)"" exists:")]
+        public async Task GivenPageContentExistsMultiline(string id, string data)
         {
             await SetUpPageContent(id, data).SwitchFirst(
                 data =>
@@ -45,57 +45,85 @@ namespace ASP.Test.Acceptance.Core
                 e => AssertWithMessage.Failed(@$"Could not update page content with id ""{id}"": {e.Description}"));
         }
 
-        [Then(@"page content ""([^""]*)"" should have property ""([^""]*)"" set to ""([^""]*)""")]
-        public void ThenPageContentShouldHavePropertySetTo(string id, string propertyPath, string propertyValue)
+        [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to (.+)")]
+        public async Task ThenPageContentPropertyShouldBeEqualTo(string id, string propertyPath, string propertyValue)
         {
-            GetPageContent(id).SwitchFirst(
+            await GetPageContent(id).SwitchFirst(
                 data =>
                 {
                     var value = GetPropertyPathValue(propertyPath, data);
-
                     Assert.Equal(propertyValue, value);
                 },
                 e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
             );
         }
 
-        [Then(@"page content ""([^""]*)"" should have property ""([^""]*)"" set to:")]
-        public void ThenPageContentShouldHavePropertySetToMultiline(string id, string propertyPath, string propertyValue)
+        [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to:")]
+        public async Task ThenPageContentPropertyShouldBeEqualToMultiline(string id, string propertyPath, string propertyValue)
         {
-            GetPageContent(id).SwitchFirst(
-                data =>
+            await GetPageContent(id).SwitchFirst(
+                pageContent => JsonHelper.Deserialize<object>(propertyValue).SwitchFirst(
+                    expected =>
+                    {
+                        var expectedSerializedPropertyValue = JsonHelper.Serialize(expected);
+                        var actualSerializedPropertyValue = GetPropertyPathValue(propertyPath, pageContent);
+
+                        Assert.Equal(expectedSerializedPropertyValue, actualSerializedPropertyValue);
+                    },
+                    e => AssertWithMessage.Failed(e.Description)
+                ),
+                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+            );
+        }
+
+        [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should match:")]
+        public async Task ThenPageContentPropertyShouldMatchMultiline(string id, string propertyPath, string expected)
+        {
+            await GetPageContent(id).SwitchFirst(
+                pageContent =>
                 {
-                    string? expectedSerializedPropertyValue = null;
-                    JsonHelper.Deserialize<object>(propertyValue).SwitchFirst(
-                        v => expectedSerializedPropertyValue = JsonHelper.Serialize(v),
-                        e => AssertWithMessage.Failed(e.Description)
-                    );
+                    var actual = GetPropertyPathValue(propertyPath, pageContent);
 
-                    var value = GetPropertyPathValue(propertyPath, data);
-
-                    var serializedPropertyValue = JsonHelper.Serialize(value);
-                    Assert.Equal(expectedSerializedPropertyValue, serializedPropertyValue);
+                    MatchProperties(expected, actual);
                 },
                 e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
             );
         }
 
-        private async Task<ErrorOr<string>> GetPageContent(string id)
+        [Then(@"page content ""([^""]+)"" should match:")]
+        public async Task ThenPageContentShouldMatchMultiline(string id, string expected)
         {
-            return await _repository.Get(id).Then(JsonConvert.SerializeObject);
+            await GetPageContent(id).SwitchFirst(
+                actual => MatchProperties(expected, actual),
+                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+            );
         }
 
-        private async Task<ErrorOr<Updated>> SetUpPageContent(string id, string data)
+        [Then(@"page content ""([^""]*)"" should be equal to:")]
+        public async Task ThenPageContentShouldBeEqualToMultiline(string id, string properties)
+        {
+            await GetPageContent(id).SwitchFirst(
+                actual => 
+                {
+                    var expected = JsonHelper.Serialize(JsonHelper.Deserialize<object>(properties));
+                    Assert.Equal(expected, actual);
+                },
+                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+            );
+        }
+
+        protected async Task<ErrorOr<string>> GetPageContent(string id)
+        {
+            return await _repository.Get(id).Then(JsonHelper.Serialize);
+        }
+
+        protected async Task<ErrorOr<Updated>> SetUpPageContent(string id, string data)
         {
             var document = await _repository.Get(id)
                 .Match(v => JsonConvert.SerializeObject(v), _ => $$"""
                 {
                     "id": "{{id}}",
-                    "contentId": "{{id}}",
-                    "published": true,
-                    "PageTitle": null,
-                    "PageContent": {},
-                    "Views": []
+                    "contentId": "{{id}}"
                 }
             """);
 
@@ -111,7 +139,7 @@ namespace ASP.Test.Acceptance.Core
             return await _repository.Update(template);
         }
 
-        private object GetPropertyPathValue(string propertyPath, string data)
+        protected string GetPropertyPathValue(string propertyPath, string data)
         {
             var parts = propertyPath.Split('.');
             var propertyName = parts[0];
@@ -138,11 +166,11 @@ namespace ASP.Test.Acceptance.Core
                 {
                     AssertWithMessage.Failed($@"Array index {arrayIndex} does not exist on array ""{arrayProperty}"":\n{JsonHelper.Serialize(array!)}");
                 }
-                var value = array![arrayIndex];
+                var value = JsonHelper.Serialize(array![arrayIndex]);
                 var restOfPath = string.Join(".", parts.Skip(1));
                 if (restOfPath.Length > 0)
                 {
-                    return GetPropertyPathValue(restOfPath, JsonHelper.Serialize(value));
+                    return GetPropertyPathValue(restOfPath, value);
                 }
                 return value;
             }
@@ -154,14 +182,113 @@ namespace ASP.Test.Acceptance.Core
                     e => AssertWithMessage.Failed(e.Description)
                 );
                 AssertWithMessage.True(dict!.ContainsKey(propertyName), $@"Page content object does not contain property ""{propertyName}"":\n{data}");
-                var value = dict![propertyName];
+                var value = JsonHelper.Serialize(dict![propertyName]);
                 var restOfPath = string.Join(".", parts.Skip(1));
                 if (restOfPath.Length > 0)
                 {
-                    return GetPropertyPathValue(restOfPath, JsonHelper.Serialize(value));
+                    return GetPropertyPathValue(restOfPath, value);
                 }
                 return value;
             }
+        }
+
+        private void MatchProperties(string expected, string actual)
+        {
+            PruneTree(expected, actual, serializedActual =>
+            {
+                JsonHelper.Deserialize<object>(expected).SwitchFirst(
+                    ex =>
+                    {
+                        var serializedExpected = JsonHelper.Serialize(ex);
+                        Assert.Equal(serializedExpected, serializedActual);
+                    },
+                    e =>
+                    {
+                        AssertWithMessage.Failed(e.Description);
+                    }
+                );
+            });
+        }
+
+        private void PruneTree(string expected, string actual, Action<string> doSomething)
+        {
+            JsonHelper.Deserialize<Dictionary<string, object>>(actual).SwitchFirst(
+                actualDict =>
+                {
+                    JsonHelper.Deserialize<Dictionary<string, object>>(expected).SwitchFirst(
+                        expectedDict =>
+                        {
+                            var resultDict = new Dictionary<string, object>();
+                            foreach (var kvp in expectedDict)
+                            {
+                                PruneTree(JsonHelper.Serialize(kvp.Value), JsonHelper.Serialize(actualDict[kvp.Key]), r =>
+                                {
+                                    JsonHelper.Deserialize<object>(r).SwitchFirst(
+                                        v =>
+                                        {
+                                            resultDict[kvp.Key] = v;
+                                        },
+                                        e =>
+                                        {
+                                            AssertWithMessage.Failed(e.Description);
+                                        }
+                                    );
+                                });
+                            }
+
+                            var result = JsonHelper.Serialize(resultDict);
+
+                            doSomething(result);
+                        },
+                        e =>
+                        {
+                            AssertWithMessage.Failed(e.Description);
+                        }
+                    );
+                },
+                e =>
+                {
+                    JsonHelper.Deserialize<List<object>>(actual).SwitchFirst(
+                        actualList =>
+                        {
+                            JsonHelper.Deserialize<List<object>>(expected).SwitchFirst(
+                                expectedList =>
+                                {
+                                    var resultList = new List<object>();
+                                    for (var i = 0; i < Math.Min(expectedList.Count, actualList.Count); i++)
+                                    {
+                                        PruneTree(JsonHelper.Serialize(expectedList[i]), JsonHelper.Serialize(actualList[i]), r =>
+                                        {
+                                            JsonHelper.Deserialize<object>(r).SwitchFirst(
+                                                v =>
+                                                {
+                                                    resultList.Add(v);
+                                                },
+                                                e =>
+                                                {
+                                                    AssertWithMessage.Failed(e.Description);
+                                                }
+                                            );
+                                        });
+                                    }
+
+                                    var result = JsonHelper.Serialize(resultList);
+
+                                    doSomething(result);
+                                },
+                                e =>
+                                {
+                                    AssertWithMessage.Failed(e.Description);
+                                }
+                            );
+                        },
+                        e =>
+                        {
+                            doSomething(actual);
+                        }
+                    );
+                }
+            );
         }
     }
 }

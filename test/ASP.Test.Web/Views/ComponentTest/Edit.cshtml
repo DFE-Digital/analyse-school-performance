@@ -1,0 +1,11 @@
+﻿@model ASP.Web.Models.ContentTemplateEditModel
+
+@{
+    ViewData["Title"] = "Edit: " + Model.PageTitle;
+}
+
+<form id="form" method="POST">
+    <div id="test">
+        @await Html.PartialAsync("ContentTemplateEdit", Model)
+    </div>
+</form>

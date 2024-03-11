@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ASP.Core;
 using Microsoft.Extensions.Configuration;
+using ASP.Web.Controllers;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -129,6 +130,8 @@ namespace ASP.AcceptanceTests.Drivers
 
                 builder.ConfigureTestServices(services =>
                 {
+                    var testAssembly = typeof(ComponentTestController).Assembly;
+                    services.AddMvc().AddApplicationPart(testAssembly).AddControllersAsServices();
                     services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
 
                     if (testMode == "Development")

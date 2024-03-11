@@ -3,13 +3,16 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using ASP.AcceptanceTests.Drivers;
 using ASP.Test.Core;
+using System.IO;
 using System.Net;
 using TechTalk.SpecFlow.Infrastructure;
+using Xunit.Sdk;
 
 namespace ASP.AcceptanceTests.StepDefinitions
 {
+
     [Binding]
-    public sealed partial class AspWebStepDefinitions
+    public partial class AspWebStepDefinitions
     {
         private readonly AspWebContext _web;
         private readonly ISpecFlowOutputHelper _outputHelper;
@@ -58,6 +61,32 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(statusCode, (int)_web.LastResponse.StatusCode);
         }
 
+        [Then(@"the page title should be ""([^""]*)""")]
+        public void ThenThePageTitleShouldBe(string expected)
+        {
+            var actual = _web.LastResponse.Title;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Then(@"the element ""([^""]*)"" should not exist")]
+        public void ThenTheElementShouldNotExist(string selector)
+        {
+            AssertWithMessage.NotNull(_web.LastResponse, "No web response received. Is the test missing an action?");
+
+            IElement? element = _web.LastResponse.QuerySelector(selector);
+            AssertWithMessage.Null(element, @$"Found an element with the selector ""{selector}"".");
+        }
+
+        [Then(@"the element ""([^""]*)"" should exist")]
+        public void ThenTheElementShouldExist(string selector)
+        {
+            AssertWithMessage.NotNull(_web.LastResponse, "No web response received. Is the test missing an action?");
+
+            IElement? element = _web.LastResponse.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Cold not fin an element with the selector ""{selector}"".");
+        }
+
         [Then(@"the element ""([^""]*)"" should have the following markup:")]
         public void ThenTheElementShouldHaveTheFollowingMarkup(string selector, string expectedMarkup)
         {
@@ -69,13 +98,22 @@ namespace ASP.AcceptanceTests.StepDefinitions
             AssertHtml.Equivalent(expected, element);
         }
 
-        [Then(@"the element ""([^""]*)"" should have the text content ""([^""]*)""")]
+        [Then(@"the element ""([^""]*)"" should have the text content ""(.*)""")]
         public void ThenTheElementShouldHaveTheTextContent(string selector, string textContent)
         {
             var element = _web.LastResponse.QuerySelector(selector);
             AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
 
             Assert.Equal(textContent.Trim(), element!.TextContent.Trim());
+        }
+
+        [Then(@"the element ""([^""]*)"" should match the selector ""(.+)""")]
+        public void ThenTheElementShouldMatchTheSelector(string selector, string selectorToMatch)
+        {
+            var element = _web.LastResponse.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+
+            AssertWithMessage.True(element!.Matches(selectorToMatch), @$"The element did not match ""{selectorToMatch}"".");
         }
 
         [Then(@"the element ""([^""]*)"" should have the tag name ""([^""]*)""")]
@@ -129,21 +167,22 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal($"{location.Trim()}", anchor.Href.Trim());
         }
 
-        [Then(@"the page title should be ""([^""]*)""")]
-        public void ThenThePageTitleShouldBe(string expected)
+        [Then(@"the field labelled ""(.+)"" should have the value ""(.*)""")]
+        public void ThenTheFieldLabelledShouldHaveTheValue(string labelText, string expectedValue)
         {
-            var actual = _web.LastResponse.Title;
+            var label = _web.LastResponse!.QuerySelectorAll("label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
+            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
 
-            Assert.Equal(expected, actual);
-        }
+            var field = _web.LastResponse!.QuerySelector($"#{label?.Attributes["for"]?.Value}");
+            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
-        [Then(@"the element ""([^""]*)"" should not exist")]
-        public void ThenTheElementShouldNotExist(string selector)
-        {
-            AssertWithMessage.NotNull(_web.LastResponse, "No web response received. Is the test missing an action?");
+            var value = field switch {
+                IHtmlSelectElement select => select.Value,
+                IHtmlInputElement input => input.Value,
+                _ => throw new XunitException($"Could not find the value of element of type {field!.GetType().Name}.")
+            };
 
-            IElement? element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.True(element == null, @$"Found an element with the selector ""{selector}"" but it should not exist.");
+            Assert.Equal(expectedValue, value);
         }
 
         private IElement CreateElement(string expectedMarkup)

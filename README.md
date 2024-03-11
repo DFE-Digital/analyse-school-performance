@@ -41,6 +41,12 @@ The following npm script will run webpack and output minified CSS and JS to `www
 # Acceptance tests using SpecFlow
 The `ASP.AcceptanceTests` project needs the `SpecFlow for Visual Studio 2022` extension to edit and run the SpecFlow tests from the Visual Studio test runner. The version in the Visual Studio Marketplace doesn't support .NET 8 yet, but there is an out-of-band release that supports it, [available here](https://github.com/SpecFlowOSS/SpecFlow.VS/releases/tag/v2022.1.93-net8) (download and run the `.vsix` file.)
 
+## Generating reports locally
+
+dotnet tool install --global --configfile NuGet-ToolInstall.config SpecFlow.Plus.LivingDoc.CLI
+livingdoc feature-folder test/ASP.AcceptanceTests.Web
+
+
 ## Acceptance test modes
 Acceptance test projects can be switched between Development mode and Integration Test mode.
 

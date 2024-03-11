@@ -1,5 +1,6 @@
 using ASP.Web.Extensions;
 using ASP.Application.Extensions;
+using ASP.Web.Models;
 
 namespace ASP.Web
 {
@@ -12,7 +13,9 @@ namespace ASP.Web
             // Add services to the container.
             builder.Services
                 .AddRouting(options => options.LowercaseUrls = true)
-                .AddControllersWithViews();
+                .AddControllersWithViews(options =>                 {
+                    options.ModelBinderProviders.Insert(0, new TemplateComponentEditModelBinderProvider());
+                });
             builder.Services.RegisterDFEComponentLibraries()
                 .RegisterWebServices()
                 .RegisterRepositories()

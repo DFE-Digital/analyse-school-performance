@@ -1,18 +1,13 @@
-﻿@model PageContentTemplateView
-
+﻿@model TemplateComponentViewModel
 
 <li>
     @MarkdownHelper.ConvertInlineMarkdown(Model.ViewContent.Text)
 
     @if (Model.ChildViews is not null && Model.ChildViews.Count > 0)
     {
-        <ul>
-            @foreach (PageContentTemplateView item in Model.ChildViews)
-            {
-                <li>
-                    @MarkdownHelper.ConvertInlineMarkdown(item.ViewContent.Text)
-                </li>
-            }
-        </ul>
+        @foreach (TemplateComponentViewModel item in Model.ChildViews)
+        {
+            @await Html.PartialAsync($"TemplateComponents/{item.ViewId}", item)
+        }
     }
 </li>
