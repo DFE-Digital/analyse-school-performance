@@ -87,7 +87,7 @@ Scenario: List content should display html correctly with single list item
 	Then there should be no errors
 	And the component should have the following markup:
 		"""
-		<ul class="govuk-list govuk-list--bullet">
+		<ul class="govuk-list govuk-list--bullet app-list">
 			<li>List item</li>
 		</ul>
 		"""
@@ -111,7 +111,7 @@ Scenario: List content should display html correctly with bold markdown
 	Then there should be no errors
 	And the component should have the following markup:
 		"""
-		<ul class="govuk-list govuk-list--bullet">
+		<ul class="govuk-list govuk-list--bullet app-list">
 			<li><expected></li>
 		</ul>
 		"""
@@ -141,7 +141,7 @@ Scenario: List content should display html correctly with italic markdown
 	Then there should be no errors
 	And the component should have the following markup:
 		"""
-		<ul class="govuk-list govuk-list--bullet">
+		<ul class="govuk-list govuk-list--bullet app-list">
 			<li><expected></li>
 		</ul>
 		"""
@@ -171,7 +171,7 @@ Scenario: List content should display html correctly with link markdown
 	Then there should be no errors
 	And the component should have the following markup:
 		"""
-		<ul class="govuk-list govuk-list--bullet">
+		<ul class="govuk-list govuk-list--bullet app-list">
 			<li><expected></li>
 		</ul>
 		"""
@@ -203,7 +203,7 @@ Scenario: List html should be correctly escaped
 	Then there should be no errors
 	And the component should have the following markup:
 		"""
-		<ul class="govuk-list govuk-list--bullet">
+		<ul class="govuk-list govuk-list--bullet app-list">
 			<li><expected></li>
 		</ul>
 		"""
@@ -246,10 +246,10 @@ Scenario: List content should display html correctly with nested list items
 	Then there should be no errors
 	And the component should have the following markup:
 		"""
-		<ul class="govuk-list govuk-list--bullet">
+		<ul class="govuk-list govuk-list--bullet app-list">
 			<li>
 				List item
-				<ul class="govuk-list govuk-list--bullet">
+				<ul class="govuk-list govuk-list--bullet app-list">
 					<li>Nested item</li>
 				</ul>
 			</li>
