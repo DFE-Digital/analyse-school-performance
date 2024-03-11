@@ -1,6 +1,7 @@
 ﻿Feature: Heading component (edit)
+The heading component provides the ability to add h2 and h3 tags to content templates.
 
-![Heading edit](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-853dafb3-92ed-4f94-95f3-847e6160fee6.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
+For more information please view the [technical specification for this component](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14389/Heading?anchor=editing).
 
 Scenario: When ViewContent property is missing, component should not error
 	Given a content template contains the component:

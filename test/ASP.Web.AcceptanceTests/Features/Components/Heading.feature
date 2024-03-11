@@ -1,38 +1,7 @@
 ﻿Feature: Heading component
-The heading component provides the ability to add h2 and h3 tags to content templates. 
-![h2 example](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-584d6265-a71e-465b-b2a9-80573eece685.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
-The component JSON structure is as follows:
-```
-{
-    "ViewId": "Heading",
-    "ViewContent": {
-        "HeadingType": "h2" | "h3" (required, defaults to "h2"),
-        "Caption": <string> (optional),
-        "Text": <string> (required, defaults to "Heading text"),
-        "LinkUrl": <string> (optional)
-    }
-}
-```
+The heading component provides the ability to add h2 and h3 tags to content templates.
 
-For example, a component like this:
-```
-{
-    "ViewId": "Heading",
-    "ViewContent": {
-        "HeadingType": "h2",
-        "Text": "This is a h2 heading"
-    },
-}
-```
-
-Will produce HTML like this:
-```
-<h2 class="govuk-heading-l">
-    This is a h2 heading
-</h2>
-```
-
-Please view the [Wiki documentation](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14389/Heading) for more details.
+For more information please view the [technical specification for this component](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14389/Heading).
 
 Scenario: When ViewContent property is missing, component should not error
 	Given a content template contains the component:
