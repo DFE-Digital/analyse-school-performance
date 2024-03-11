@@ -43,9 +43,17 @@ The `ASP.AcceptanceTests` project needs the `SpecFlow for Visual Studio 2022` ex
 
 ## Generating reports locally
 
-dotnet tool install --global --configfile NuGet-ToolInstall.config SpecFlow.Plus.LivingDoc.CLI
-livingdoc feature-folder test/ASP.AcceptanceTests.Web
+You can generate the SpecFlow LivingDoc test html page locally by using the `livingdoc` CLI tool.
+To install this run the following from the repository root folder:
 
+```
+dotnet tool install --global --configfile NuGet-ToolInstall.config SpecFlow.Plus.LivingDoc.CLI
+```
+Then once installed you can run `livingdoc feature-folder` with a test project root like so:
+```
+livingdoc feature-folder test/ASP.Web.AcceptanceTests
+```
+Documentation for this is [here](https://docs.specflow.org/projects/specflow-livingdoc/en/latest/LivingDocGenerator/CLI/livingdoc-feature-folder.html)
 
 ## Acceptance test modes
 Acceptance test projects can be switched between Development mode and Integration Test mode.
