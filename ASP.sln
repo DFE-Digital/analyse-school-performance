@@ -30,8 +30,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "non-project files", "non-project files", "{61B563C2-68E3-42C1-A008-0B4DABE02323}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		azure-pipeline.yml = azure-pipeline.yml
+		deploy-pipeline.yml = deploy-pipeline.yml
 		README.md = README.md
+		validate-pipeline.yml = validate-pipeline.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{57E44EE3-7A80-4F12-BDAA-D622C5D1B4A0}"
