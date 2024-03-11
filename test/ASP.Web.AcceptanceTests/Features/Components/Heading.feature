@@ -32,7 +32,7 @@ Will produce HTML like this:
 </h2>
 ```
 
-Please view the [Wiki documentation](https://dfe-ssp.visualstudio.com/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki?wikiVersion=GBwikiMaster&pagePath=/Analyse%20School%20Performance%20%28ASP%29%20Index/Technical%20specification/Components/Heading&pageId=14389&_a=edit) for more details.
+Please view the [Wiki documentation](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14389/Heading) for more details.
 
 Scenario: When ViewContent property is missing, component should not error
 	Given a content template contains the component:

@@ -5,7 +5,9 @@ variables:
   value: 's192-analyse-school-performance-development'
 - name: resourceGroupName
   value: s192d01-dev
-- name: appServiceName1
+- name: appServiceName
   value: s192d01-app-dev-01
+- name: functionAppName
+  value: s192d01-func-dev-01
 
   

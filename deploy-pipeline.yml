@@ -1,0 +1,128 @@
+trigger:
+  branches:
+    include:
+    - main
+      
+variables:
+  - template: pipelines/variables/common-var.yml
+ 
+stages:
+- stage: Build
+  displayName: Build stage
+
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+      - task: NuGetToolInstaller@1
+
+      - task: NuGetCommand@2
+        displayName: 'NuGet restore'
+        inputs:
+          restoreSolution: '**\*.sln'
+
+      - task: Npm@1
+        displayName: 'Install Node Packages'
+        inputs:
+          command: 'install' 
+          workingDir: '$(Build.SourcesDirectory)/src/asp.web'
+          verbose: true
+          
+      - task: Npm@1
+        displayName: 'Run Webpack'
+        inputs:
+          command: 'custom'
+          customCommand: 'run build-prod' 
+          workingDir: '$(Build.SourcesDirectory)/src/asp.web'
+          verbose: true
+
+      - task: VSBuild@1
+        displayName: 'Build solution'
+        inputs:
+          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+          platform: '$(BuildPlatform)'
+          configuration: '$(BuildConfiguration)'
+    
+      - task: VSTest@2
+        displayName: 'Test Assemblies'
+        inputs:
+          testAssemblyVer2: |
+            **\$(BuildConfiguration)\*[tT]est.dll
+            **\$(BuildConfiguration)\**\*[tT]est.dll
+            **\$(BuildConfiguration)\*[tT]ests.dll
+            **\$(BuildConfiguration)\**\*[tT]ests.dll
+            !**\obj\**
+            !**\*Microsoft.TestPlatform*
+            !**\*Microsoft.VisualStudio.TestPlatform*
+            platform: '$(BuildPlatform)'
+            configuration: '$(BuildConfiguration)'
+            
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet restore'
+        inputs:
+          command: restore
+          projects: src/ASP.Api/ASP.Api.csproj
+
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet build'
+        inputs:
+          projects: src/ASP.Api/ASP.Api.csproj
+          arguments: '--configuration $(BuildConfiguration)'
+
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet publish'
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: src/ASP.Api/ASP.Api.csproj
+          arguments: '--configuration $(BuildConfiguration) -o $(build.artifactstagingdirectory)\api'
+          modifyOutputPath: false
+
+      - task: SpecFlowPlus@0
+        inputs:
+          generatorSource: 'TestAssembly'
+          testAssemblyFilePath:  'test\ASP.Web.AcceptanceTests\bin\$(BuildConfiguration)\**\ASP.Web.AcceptanceTests.dll'
+          projectName: 'Web'
+          testExecutionJson: 'test\ASP.Web.AcceptanceTests\bin\$(BuildConfiguration)\**\TestExecution.json'
+
+      - task: SpecFlowPlus@0
+        inputs:
+          generatorSource: 'TestAssembly'
+          testAssemblyFilePath:  'test\ASP.Api.AcceptanceTests\bin\$(BuildConfiguration)\**\ASP.Api.AcceptanceTests.dll'
+          projectName: 'API'
+          testExecutionJson: 'test\ASP.Api.AcceptanceTests\bin\$(BuildConfiguration)\**\TestExecution.json'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact'
+        inputs:
+          PathtoPublish: '$(build.artifactstagingdirectory)'
+          ArtifactName: drop-web
+        condition: succeededOrFailed()
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact'
+        inputs:
+          PathtoPublish: '$(build.artifactstagingdirectory)\api'
+          ArtifactName: drop-api
+        condition: succeededOrFailed()
+          
+
+- stage: 'DeployDev'
+  displayName: 'Deploy Dev stage '
+  dependsOn: 'Build'
+  jobs: 
+  - template: 'pipelines/deployment-stage.yml'
+    parameters:
+      name: 'DeployDev'
+      displayName: 'Deploy Dev stage'
+      dependsOn: 'Build'
+      jobName: 'Deploy'
+      jobDisplayName: 'Deploy Dev '
+      envName: Dev
+      vmImageName: $(vmImageName)
+      variableFile: variables/dev-var.yml
+      azureSubscriptionName: s192d.azdo-deployment
+      azureSubscriptionId: '212193cd-152c-4621-97d1-85cb63f025b4'

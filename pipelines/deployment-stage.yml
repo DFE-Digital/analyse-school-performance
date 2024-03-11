@@ -29,12 +29,26 @@ jobs:
         - task: DownloadPipelineArtifact@2
           displayName: 'Download Files'
           inputs:
-            artifact: drop
-            downloadPath: '$(System.ArtifactsDirectory)\files'
+            artifact: drop-web
+            downloadPath: '$(System.ArtifactsDirectory)\files-web'
+
+        - task: DownloadPipelineArtifact@2
+          displayName: 'Download Files'
+          inputs:
+            artifact: drop-api
+            downloadPath: '$(System.ArtifactsDirectory)\files-api'
 
         - task: AzureRmWebAppDeployment@4
-          displayName: 'Azure App Service Deploy: $(appServiceName1)'
+          displayName: 'Azure App Service Deploy: $(appServiceName)'
           inputs:
             azureSubscription: 's192d.azdo-deployment'
-            WebAppName: '$(appServiceName1)'
-            packageForLinux: '$(System.ArtifactsDirectory)\files\**\ASP.Web.zip'
+            WebAppName: '$(appServiceName)'
+            packageForLinux: '$(System.ArtifactsDirectory)\files-web\**\ASP.Web.zip'
+
+        - task: AzureFunctionApp@2
+          displayName: 'Azure Function App Deploy: $(functionAppName)'
+          inputs:
+            connectedServiceNameARM: 's192d.azdo-deployment'
+            appType: functionApp
+            appName: '$(functionAppName)'
+            package: '$(System.ArtifactsDirectory)\files-api\**\api.zip'
