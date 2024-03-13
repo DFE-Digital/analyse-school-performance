@@ -27,5 +27,7 @@
 
             _httpContextAccessor?.HttpContext?.Response.Cookies.Append(cookieKey, cookieValue, options);
         }
+
+        public void ClearCookies() { }
     }
 }

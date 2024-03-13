@@ -6,7 +6,7 @@
 
 @if (cookiePreferences?.AnalyticsTracking == AnalyticsTracking.NotSet)
 {
-    <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
+    <div id="app-cookie-banner" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
         <div class="govuk-cookie-banner__message govuk-width-container">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
@@ -17,16 +17,16 @@
                     </div>
                 </div>
             </div>
-            @using (Html.BeginForm("CookiesPreferences", "Cookies", FormMethod.Post))
+            @using (Html.BeginForm("CookiesPreferences", "Cookies", FormMethod.Post, new { @id = "app-cookie-banner-preferences-form" }))
             {
                 <div class="govuk-button-group">
-                    <button value="Accepted" type="submit" name="analyticsTracking" class="govuk-button" data-module="govuk-button">
+                    <button id="app-cookie-banner-accept-button" value="Accepted" type="submit" name="analyticsTracking" class="govuk-button" data-module="govuk-button">
                         Accept analytics cookies
                     </button>
-                    <button value="Rejected" type="submit" name="analyticsTracking" class="govuk-button" data-module="govuk-button">
+                    <button id="app-cookie-banner-reject-button" value="Rejected" type="submit" name="analyticsTracking" class="govuk-button" data-module="govuk-button">
                         Reject analytics cookies
                     </button>
-                    <a class="govuk-link" href="/help/cookies">View cookies</a>
+                    <a id="app-cookie-banner-view-cookies-link" class="govuk-link" href="/help/cookies">View cookies</a>
                 </div>
             }
         </div>
@@ -34,12 +34,12 @@
 }
 @if (cookiePreferences?.AnalyticsTrackingConfirmation == AnalyticsTrackingConfirmation.ShowBanner)
 {
-    <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
+    <div id="app-cookie-confirmation-banner" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
         <div class="govuk-cookie-banner__message govuk-width-container">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                     <div class="govuk-cookie-banner__content">
-                        <p class="govuk-body">
+                        <p id="app-cookie-confirmation-banner-message" class="govuk-body">
                             You have @(cookiePreferences.AnalyticsTracking == AnalyticsTracking.Accepted ? "accepted" : "rejected") additional cookies.
                             You can
                             <a class="govuk-link" href="/help/cookies">change your cookie settings</a>

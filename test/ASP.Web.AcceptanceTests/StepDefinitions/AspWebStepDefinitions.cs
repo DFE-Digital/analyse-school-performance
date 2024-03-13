@@ -3,7 +3,6 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using ASP.AcceptanceTests.Drivers;
 using ASP.Test.Core;
-using System.IO;
 using System.Net;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit.Sdk;
@@ -23,12 +22,59 @@ namespace ASP.AcceptanceTests.StepDefinitions
             _outputHelper = outputHelper;
         }
 
+        [BeforeScenario]
+        public void ClearDownPageContent()
+        {
+            _web.CookieProvider.ClearCookies();
+        }
+
         [Given(@"I navigate to ((?:/.*)+)")]
         [When(@"I navigate to ((?:/.*)+)")]
         public async Task INavigateTo(string path)
         {
             await _web.GetAsync(path);
         }
+
+        [Then(@"the cookie ""(.*)"" should be set to ""(.*)""")]
+        public void ThenTheCookieShouldBeSetTo(string key, string value)
+        {
+            var cookieValue = _web.CookieProvider.GetCookie(key);
+
+            Assert.Equal(cookieValue, value);
+        }
+
+        [When(@"the cookie ""(.*)"" has been set to ""(.*)""")]
+        public void WhenTheCookieHasBeenSetTo(string key, string value)
+        {
+            _web.CookieProvider.SetCookie(key, value);
+        }
+
+        [Then(@"the radio ""([^""]*)"" is checked")]
+        public void ThenTheRadioIsChecked(string selector)
+        {
+            var element = _web.LastResponse.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+
+            var input = Assert.IsAssignableFrom<IHtmlInputElement>(element);
+            Assert.True(input.IsChecked());
+        }
+
+        [When(@"I check the radio button ""([^""]*)""")]
+        public void WhenICheckTheRadioButton(string selector)
+        {
+            var element = _web.LastResponse.QuerySelector(selector);
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+
+            var input = Assert.IsAssignableFrom<IHtmlInputElement>(element);
+            var radios = _web.LastResponse.QuerySelectorAll<IHtmlInputElement>(@$"[name=""{input.Name}""]");
+            foreach (var radio in radios)
+            {
+                radio.IsChecked = false;
+            }
+
+            input.IsChecked = true;
+        }
+
 
         [When(@"I update the textbox ""([^""]*)"" to have the value ""([^""]*)""")]
         public void WhenIUpdateTheTextBoxToHaveTheValue(string selector, string value)
@@ -48,6 +94,20 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var form = Assert.IsAssignableFrom<IHtmlFormElement>(element);
 
             await _web.SubmitFormAsync(form);
+        }
+
+        [When(@"I submit the form ""([^""]*)"" using the element ""([^""]*)""")]
+        public async Task whenISubmitTheFormUsingTheElement(string formSelector, string elementSelector)
+        {
+            var formElement = _web.LastResponse.QuerySelector(formSelector);
+            AssertWithMessage.NotNull(formElement, @$"Could not find an element with the selector ""{formSelector}"".");
+            var form = Assert.IsAssignableFrom<IHtmlFormElement>(formElement);
+
+            var inputElement = _web.LastResponse.QuerySelector(elementSelector);
+            AssertWithMessage.NotNull(inputElement, @$"Could not find an element with the selector ""{elementSelector}"".");
+            var element = Assert.IsAssignableFrom<IHtmlElement>(inputElement);
+
+            await _web.SubmitFormAsync(form, element);
         }
 
         [Then(@"I should get a (.*) response")]
@@ -84,7 +144,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             AssertWithMessage.NotNull(_web.LastResponse, "No web response received. Is the test missing an action?");
 
             IElement? element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Cold not fin an element with the selector ""{selector}"".");
+            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
         }
 
         [Then(@"the element ""([^""]*)"" should have the following markup:")]
@@ -176,7 +236,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var field = _web.LastResponse!.QuerySelector($"#{label?.Attributes["for"]?.Value}");
             AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
-            var value = field switch {
+            var value = field switch
+            {
                 IHtmlSelectElement select => select.Value,
                 IHtmlInputElement input => input.Value,
                 _ => throw new XunitException($"Could not find the value of element of type {field!.GetType().Name}.")

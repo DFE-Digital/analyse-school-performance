@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using ASP.Core;
 using Microsoft.Extensions.Configuration;
 using ASP.Web.Controllers;
+using ASP.Web.AcceptanceTests.Services;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -36,6 +37,7 @@ namespace ASP.AcceptanceTests.Drivers
         }
 
         public IPageContentRepository PageContentRepository => _factory.PageContentRepository;
+        public TestCookieProvider CookieProvider => _factory.CookieProvider;
 
         public IDocument LastResponse
         {
@@ -60,6 +62,11 @@ namespace ASP.AcceptanceTests.Drivers
         public async Task SubmitFormAsync(IHtmlFormElement form)
         {
             _lastResponse = await form.SubmitAsync();
+        }
+
+        public async Task SubmitFormAsync(IHtmlFormElement form, IHtmlElement element)
+        {
+            _lastResponse = await form.SubmitAsync(element);
         }
 
         private async Task<IHtmlDocument> GetDocumentAsync(HttpResponseMessage response)
@@ -99,6 +106,7 @@ namespace ASP.AcceptanceTests.Drivers
         private class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
         {
             private readonly MemoryStore _store;
+            private readonly TestCookieProvider _cookieProvider;
 
             private IPageContentRepository? _pageContentRepository = null;
             public IPageContentRepository PageContentRepository
@@ -118,9 +126,12 @@ namespace ASP.AcceptanceTests.Drivers
                 }
             }
 
+            public TestCookieProvider CookieProvider => _cookieProvider;
+
             public CustomWebApplicationFactory()
             {
                 _store = new MemoryStore();
+                _cookieProvider = new TestCookieProvider();
             }
 
             protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -133,6 +144,9 @@ namespace ASP.AcceptanceTests.Drivers
                     var testAssembly = typeof(ComponentTestController).Assembly;
                     services.AddMvc().AddApplicationPart(testAssembly).AddControllersAsServices();
                     services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
+                    services.RemoveAll<ASP.Web.Services.ICookieProvider>();
+                    services.Add(new ServiceDescriptor(typeof(ASP.Web.Services.ICookieProvider), _cookieProvider));
+
 
                     if (testMode == "Development")
                     {
