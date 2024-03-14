@@ -86,7 +86,7 @@ Scenario: Component array property should be editable by a textarea field
 		"""
 	When I edit the component on the page
 	Then the input element of the component field labelled "ArrayProperty" should match the selector "textarea"
-	And the component field labelled "ArrayProperty" should have the JSON value "[1,2,3]"
+	And the component field labelled "ArrayProperty" should match the JSON string "[1,2,3]"
 
 Scenario: Component array property should be updated from the textarea field when saved
 	Given a content template contains the component:
@@ -124,7 +124,7 @@ Scenario: Component object property should be editable by a textarea field
 		"""
 	When I edit the component on the page
 	Then the input element of the component field labelled "ObjectProperty" should match the selector "textarea"
-	And the component field labelled "ObjectProperty" should have the JSON value "{"x":1,"y":2}"
+	And the component field labelled "ObjectProperty" should match the JSON string "{"x":1,"y":2}"
 
 Scenario: Component object property should be updated from the textarea field when saved
 	Given a content template contains the component:

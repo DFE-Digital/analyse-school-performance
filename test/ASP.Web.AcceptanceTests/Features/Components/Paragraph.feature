@@ -1,225 +1,231 @@
 ﻿Feature: Paragraph component
 
-Scenario: Page content should be populated from template
-	Given page content "help-test" exists:
+The Paragraph component provides the ability to add paragraphs to content templates.
+
+For more information please view the [technical specification for this component](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14454/Paragraph).
+
+Scenario: When ViewContent property is missing, component should not error
+	Given a content template contains the component:
 		"""
 		{
-			"Views": [
-				{
-					"ViewId": "Paragraph",
-					"ViewContent": {
-						"Id": "test",
-						"Text": "Test paragraph text",
-					}
-				}
-			]
+			"ViewId": "Paragraph"
 		}
 		"""
-	When I navigate to /help/test
-	Then I should get a 200 response
-	And the element "#test" should have the text content "Test paragraph text"
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
 
-
-Scenario: Paragraph content html should be correct for null text
-	Given page content "help-test" exists:
+Scenario: When ViewContent property is null, component should not error
+	Given a content template contains the component:
 		"""
 		{
-			"Views": [
-				{
-					"ViewId": "Paragraph",
-					"ViewContent": {
-						"Id": "test",
-						"Text": null,
-					}
-				}
-			]
+			"ViewId": "Paragraph",
+			"ViewContent": null
 		}
 		"""
-	When I navigate to /help/test
-	Then the element "#test" should have the following markup:
-		"""
-		<p id="test" class="govuk-body"></p>
-		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
 
-
-Scenario: Paragraph content html should be correct for empty text
-	Given page content "help-test" exists:
+Scenario Outline: When IsLarge property is missing, component should not error and should default to normal size
+	Given a content template contains the component:
 		"""
 		{
-			"Views": [
-				{
-					"ViewId": "Paragraph",
-					"ViewContent": {
-						"Id": "test",
-						"Text": "",
-					}
-				}
-			]
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"Text": "Test paragraph text"
+			}
 		}
 		"""
-	When I navigate to /help/test
-	Then the element "#test" should have the following markup:
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+	Then the component should have the following markup:
 		"""
-		<p id="test" class="govuk-body"></p>
-		"""
-
-
-Scenario: paragraph content should escape html
-	Given page content "help-test" exists:
-		"""
-		{
-			"Views": [
-				{
-					"ViewId": "Paragraph",
-					"ViewContent": {
-						"Id": "test",
-						"Text": "<script>alert('test')</script>",
-					}
-				}
-			]
-		}
-		"""
-	When I navigate to /help/test
-	Then I should get a 200 response
-	And the element "#test" should have the text content "<script>alert('test')</script>"
-
-
-Scenario: paragraph content should escape embedded html within markdown
-	Given page content "help-test" exists:
-		"""
-		{
-			"Views": [
-				{
-					"ViewId": "Paragraph",
-					"ViewContent": {
-						"Id": "test",
-						"Text": "**bold <script>alert('test')</script>**",
-					}
-				}
-			]
-		}
-		"""
-	When I navigate to /help/test
-	Then I should get a 200 response
-	And the element "#test" should have the text content "bold <script>alert('test')</script>"
-
-
-
-Scenario: Paragraph html should be correct when using bold markdown
-	Given page content "help-test" exists:
-		"""
-		{
-			"Views": [
-				{
-					"ViewId": "Paragraph",
-					"ViewContent": {
-						"Id": "test",
-						"Text": "<input>",
-					}
-				}
-			]
-		}
-		"""
-	When I navigate to /help/test
-	Then the element "#test" should have the following markup:
-		"""
-		<p id="test" class="govuk-body">
-			<expected>
+		<p class="govuk-body">
+			Test paragraph text
 		</p>
 		"""
 
-Examples:
-	| input             | expected                      |
-	| Expected **bold** | Expected<strong>bold</strong> |
-	| Expected __bold__ | Expected<strong>bold</strong> |
-
-
-Scenario: Paragraph html should be correct when using italic markdown
-	Given page content "help-test" exists:
+Scenario Outline: When IsLarge property is invalid, component should not error and should default to normal size
+	Given a content template contains the component:
 		"""
 		{
-			"Views": [
-				{
-					"ViewId": "Paragraph",
-					"ViewContent": {
-						"Id": "test",
-						"Text": "<input>",
-					}
-				}
-			]
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"IsLarge": <Value>,
+				"Text": "Test paragraph text"
+			}
 		}
 		"""
-	When I navigate to /help/test
-	Then the element "#test" should have the following markup:
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+	Then the component should have the following markup:
 		"""
-		<p id="test" class="govuk-body">
-			<expected>
+		<p class="govuk-body">
+			Test paragraph text
+		</p>
+		"""
+Examples:
+	| Value                  |
+	| null                   |
+	| ""                     |
+	| " "                    |
+	| 123                    |
+	| 1.0                    |
+	| [1,2,3]                |
+	| { "property": "value"} |
+
+Scenario: Paragraph size should be determined from IsLarge property
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"IsLarge": <Value>,
+				"Text": "Test paragraph text",
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the component should have the following markup:
+		"""
+		<p class="<Class>">
+			Test paragraph text
+		</p>
+		"""
+Examples:
+	| Value   | Class        |
+	| true    | govuk-body-l |
+	| "true"  | govuk-body-l |
+	| false   | govuk-body   |
+	| "false" | govuk-body   |
+
+Scenario Outline: When Text property is missing, component should not error and should handle the value appropriately
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Paragraph",
+			"ViewContent": {
+			}
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+	And the component should have the text content "Paragraph text"
+
+Scenario Outline: When Text property is invalid, component should not error and should handle the value appropriately
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"Text": <Value>
+			}
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the component should exist
+	And the component should have the text content "<Text>"
+Examples:
+	| Value                  | Text                 |
+	| null                   | Paragraph text       |
+	| ""                     | Paragraph text       |
+	| " "                    | Paragraph text       |
+	| 123                    | 123                  |
+	| 1.0                    | 1.0                  |
+	| true                   | true                 |
+	| [1,2,3]                | [1,2,3]              |
+	| { "property": "value"} | {"property":"value"} |
+
+Scenario: Paragraph text should be populated from Text property
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"Text": "Test paragraph text",
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the component should have the following markup:
+		"""
+		<p class="govuk-body">
+			Test paragraph text
 		</p>
 		"""
 
-Examples:
-	| input             | expected                |
-	| Expected *italic* | Expected<em>italic</em> |
-	| Expected _italic_ | Expected<em>italic</em> |
-
-
-Scenario: Paragraph html should be correct when using links markdown
-	Given page content "help-test" exists:
+Scenario: When Text property contains HTML content within markdown, HTML content should be escaped on the page
+	Given a content template contains the component:
 		"""
 		{
-			"Views": [
-				{
-					"ViewId": "Paragraph",
-					"ViewContent": {
-						"Id": "test",
-						"Text": "<input>",
-					}
-				}
-			]
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"Text": "**bold <script>alert('test')</script>**",
+			}
 		}
 		"""
-	When I navigate to /help/test
-	Then the element "#test" should have the following markup:
-		"""
-		<p id="test" class="govuk-body">
-			<expected>
-		</p>
-		"""
+	When I view the component on the page
+	Then the component should have the inner HTML "<strong>bold &lt;script&gt;alert('test')&lt;/script&gt;</strong>"
 
-Examples:
-	| input                                 | expected                                                                      |
-	| [markdown link](https://google.co.uk) | <a href="https://google.co.uk" class="govuk-link">markdown link</a>             |
-	| **[Google](https://www.google.com)**  | <strong><a href="https://www.google.com" class="govuk-link">Google</a></strong> |
-	| *[Google](https://www.google.com)*    | <em><a href="https://www.google.com" class="govuk-link">Google</a></em>         |
-
-
-
-Scenario: Paragraph html should be correctly escaped
-	Given page content "help-test" exists:
+Scenario: When Text property contains bold, italic, or link markdown it should be converted to <strong>, <em>, and <a> tags
+	Given a content template contains the component:
 		"""
 		{
-			"Views": [
-				{
-					"ViewId": "Paragraph",
-					"ViewContent": {
-						"Id": "test",
-						"Text": "<input>",
-					}
-				}
-			]
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"Text": "<Input>",
+			}
 		}
 		"""
-	When I navigate to /help/test
-	Then the element "#test" should have the following markup:
+	When I view the component on the page
+	Then the component should have the inner HTML "<Expected>"
+Examples:
+	| Input                                | Expected                                                                        |
+	| **bold**                             | <strong>bold</strong>                                                           |
+	| __bold__                             | <strong>bold</strong>                                                           |
+	| *italic*                             | <em>italic</em>                                                                 |
+	| _italic_                             | <em>italic</em>                                                                 |
+	| **__double bold__**                  | <strong><strong>double bold</strong></strong>                                   |
+	| __**double bold**__                  | <strong><strong>double bold</strong></strong>                                   |
+	| *_double italic_*                    | <em><em>double italic</em></em>                                                 |
+	| _*double italic*_                    | <em><em>double italic</strong></em>                                             |
+	| **_italic in bold_**                 | <strong><em>italic in bold</em></strong>                                        |
+	| ___italic in bold___                 | <strong><em>italic in bold</em></strong>                                        |
+	| __*italic in bold*__                 | <strong><em>italic in bold</em></strong>                                        |
+	| ***italic in bold***                 | <strong><em>italic in bold</em></strong>                                        |
+	| _**bold in italic**_                 | <em><strong>bold in italic</strong></em>                                        |
+	| *__bold in italic__*                 | <em><strong>bold in italic</strong></em>                                        |
+	| [markdown link](https://google.com)  | <a href="https://google.com" class="govuk-link">markdown link</a>               |
+	| **[Google](https://www.google.com)** | <strong><a href="https://www.google.com" class="govuk-link">Google</a></strong> |
+	| *[Google](https://www.google.com)*   | <em><a href="https://www.google.com" class="govuk-link">Google</a></em>         |
+	| __[Google](https://www.google.com)__ | <strong><a href="https://www.google.com" class="govuk-link">Google</a></strong> |
+	| _[Google](https://www.google.com)_   | <em><a href="https://www.google.com" class="govuk-link">Google</a></em>         |
+	| [**Google**](https://www.google.com) | <a href="https://www.google.com" class="govuk-link"><strong>Google</strong></a> |
+	| [*Google*](https://www.google.com)   | <a href="https://www.google.com" class="govuk-link"><em>Google</em></a>         |
+	| [__Google__](https://www.google.com) | <a href="https://www.google.com" class="govuk-link"><strong>Google</strong></a> |
+	| [_Google_](https://www.google.com)   | <a href="https://www.google.com" class="govuk-link"><em>Google</em></a>         |
+
+Scenario: When Text property contains HTML content, HTML content should be escaped on the page
+	Given a content template contains the component:
 		"""
-		<p id="test" class="govuk-body">
-			<expected>
-		</p>
+		{
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"Text": "<Input>",
+			}
+		}
 		"""
+	When I view the component on the page
+	Then the component should have the inner HTML "<Expected>"
 
 Examples:
-	| input                                      | expected                                                           |
+	| Input                                      | Expected                                                           |
 	| <script>alert('Hello');</script>           | &lt;script&gt;alert(&#39;Hello&#39;);&lt;/script&gt;               |
 	| <div>Some <strong>bold</strong> text</div> | &lt;div&gt;Some &lt;strong&gt;bold&lt;/strong&gt; text&lt;/div&gt; |
-	| <a href=\\"https://example.com\\">Link</a> | &lt;a href=&quot;https://example.com&quot;&gt;Link&lt;/a&gt;       |
+	| <a href=\\"https://example.com\\">Link</a> | &lt;a href="https://example.com"&gt;Link&lt;/a&gt;       |
 	| <img src=\\"image.jpg\\" alt=\\"Image\\">  | &lt;img src=&quot;image.jpg&quot; alt=&quot;Image&quot;&gt;        |

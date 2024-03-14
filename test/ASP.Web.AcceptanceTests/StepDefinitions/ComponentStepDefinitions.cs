@@ -46,10 +46,10 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await _web.SubmitFormAsync(form);
         }
 
-        [When(@"I update the (component|component editor) field labelled ""(.+)"" to have the value ""(.*)""")]
-        public void WhenIUpdateTheComponentFieldLabelledToHaveTheValue(string type, string labelText, string value)
+        [When(@"I update the component field labelled ""(.+)"" to have the value ""(.*)""")]
+        public void WhenIUpdateTheComponentFieldLabelledToHaveTheValue(string labelText, string value)
         {
-            var component = ComponentShouldExist(type == "component editor");
+            var component = ComponentShouldExist();
 
             var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
             AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
@@ -65,6 +65,23 @@ namespace ASP.AcceptanceTests.StepDefinitions
             };
         }
 
+        [When(@"I update the component field labelled ""(.+)"" to be (checked|unchecked)")]
+        public void WhenIUpdateTheComponentFieldLabelledToBe(string labelText, string state)
+        {
+            var component = ComponentShouldExist();
+
+            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
+            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+
+            var field = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
+            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+
+            var _ = field switch {
+                IHtmlInputElement input => input.IsChecked = state == "checked",
+                _ => throw new XunitException($"Could not set the checked state of element of type {field!.GetType().Name}.")
+            };
+        }
+
         [Then(@"there should be no errors")]
         public void ThenThereShouldBeNoErrors()
         {
@@ -76,92 +93,98 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(HttpStatusCode.OK, _web.LastResponse.StatusCode);
         }
 
-        [Then(@"the (component|component editor) should exist")]
-        public void ThenTheComponentShouldExist(string type)
+        [Then(@"the component should exist")]
+        public void ThenTheComponentShouldExist()
         {
-            ComponentShouldExist(type == "component editor");
+            ComponentShouldExist();
         }
 
-        [Then(@"the (component|component editor) should not exist")]
-        public void ThenTheComponentShouldNotExist(string type)
+        [Then(@"the component should not exist")]
+        public void ThenTheComponentShouldNotExist()
         {
-            ComponentShouldNotExist(type == "component editor");
+            ComponentShouldNotExist();
         }
 
-        [Then(@"the (component|component editor) should have the following markup:")]
-        public void ThenTheComponentShouldHaveTheFollowingMarkup(string type, string expectedMarkup)
+        [Then(@"the component should have the following markup:")]
+        public void ThenTheComponentShouldHaveTheFollowingMarkup(string expectedMarkup)
         {
-            var component = ComponentShouldExist(type == "component editor");
+            var component = ComponentShouldExist();
 
-            var expected = CreateElement(expectedMarkup);
-
-            AssertHtml.Equivalent(expected, component!);
+            AssertHtml.Equivalent(expectedMarkup, component!, _outputHelper.WriteLine);
         }
 
-        [Then(@"the (component|component editor) should have the text content ""(.*)""")]
-        public void ThenTheComponentShouldHaveTheTextContent(string type, string textContent)
+        [Then(@"the component should have the text content ""(.*)""")]
+        public void ThenTheComponentShouldHaveTheTextContent(string textContent)
         {
-            var component = ComponentShouldExist(type == "component editor");
+            var component = ComponentShouldExist();
 
             Assert.Equal(textContent.Trim(), component!.TextContent.Trim());
         }
 
-        [Then(@"the (component|component editor) outer element should have the tag name ""([^""]*)""")]
-        public void ThenTheComponentOuterElementShouldHaveTheTagName(string type, string expectedTagName)
+        [Then(@"the component should have the inner HTML ""(.*)""")]
+        public void ThenTheComponentShouldHaveTheInnerHtml(string expectedHtml)
         {
-            var component = ComponentShouldExist(type == "component editor");
+            var component = ComponentShouldExist();
+
+            AssertHtml.Equivalent(expectedHtml, component!.InnerHtml, _outputHelper.WriteLine);
+        }
+
+        [Then(@"the component outer element should have the tag name ""([^""]*)""")]
+        public void ThenTheComponentOuterElementShouldHaveTheTagName(string expectedTagName)
+        {
+            var component = ComponentShouldExist();
 
             Assert.Equal(expectedTagName, component!.TagName.ToLower());
         }
 
-        [Then(@"the (component|component editor) outer element should have the class ""([^""]*)""")]
-        public void ThenTheComponentOuterElementShouldHaveTheClass(string type, string expectedClass)
+        [Then(@"the component outer element should have the class ""([^""]*)""")]
+        public void ThenTheComponentOuterElementShouldHaveTheClass(string expectedClass)
         {
-            var component = ComponentShouldExist(type == "component editor");
+            var component = ComponentShouldExist();
 
             Assert.Equal(expectedClass, component!.ClassName);
         }
 
-        [Then(@"the element ""(.+)"" within the (component|component editor) should exist")]
-        public void ThenTheElementWithinTheComponentShouldExist(string selector, string type)
+        [Then(@"the element ""(.+)"" within the component should exist")]
+        public void ThenTheElementWithinTheComponentShouldExist(string selector)
         {
-            ComponentElementShouldExist(type == "component editor", selector);
+            ComponentElementShouldExist(selector);
         }
 
-        [Then(@"the element ""(.+)"" within the (component|component editor) should not exist")]
-        public void ThenTheElementWithinTheComponentShouldNotExist(string selector, string type)
+        [Then(@"the element ""(.+)"" within the component should not exist")]
+        public void ThenTheElementWithinTheComponentShouldNotExist(string selector)
         {
-            ComponentElementShouldNotExist(type == "component editor", selector);
+            ComponentElementShouldNotExist(selector);
         }
 
-        [Then(@"the element ""(.+)"" within the (component|component editor) should have the tag name ""([^""]+)""")]
-        public void ThenTheElementWithinTheComponentShouldHaveTheTagName(string selector, string type, string expectedTagName)
+        [Then(@"the element ""(.+)"" within the component should have the tag name ""([^""]+)""")]
+        public void ThenTheElementWithinTheComponentShouldHaveTheTagName(string selector, string expectedTagName)
         {
-            var element = ComponentElementShouldExist(type == "component editor", selector);
+            var element = ComponentElementShouldExist(selector);
 
             Assert.Equal(expectedTagName, element!.TagName.ToLower());
         }
 
-        [Then(@"the element ""(.+)"" within the (component|component editor) should have the class ""(.*)""")]
-        public void ThenTheElementWithinTheComponentShouldHaveTheClass(string selector, string type, string expectedClass)
+        [Then(@"the element ""(.+)"" within the component should have the class ""(.*)""")]
+        public void ThenTheElementWithinTheComponentShouldHaveTheClass(string selector, string expectedClass)
         {
-            var element = ComponentElementShouldExist(type == "component editor", selector);
+            var element = ComponentElementShouldExist(selector);
 
             Assert.Equal(expectedClass, element!.ClassName);
         }
 
-        [Then(@"the element ""(.+)"" within the (component|component editor) should have the text content ""(.*)""")]
-        public void ThenTheElementWithinTheComponentShouldHaveTheTextContent(string selector, string type, string textContent)
+        [Then(@"the element ""(.+)"" within the component should have the text content ""(.*)""")]
+        public void ThenTheElementWithinTheComponentShouldHaveTheTextContent(string selector, string textContent)
         {
-            var element = ComponentElementShouldExist(type == "component editor", selector);
+            var element = ComponentElementShouldExist(selector);
 
             Assert.Equal(textContent.Trim(), element!.TextContent.Trim());
         }
 
-        [Then(@"the (component|component editor) field labelled ""(.+)"" should have the value ""(.*)""")]
-        public void ThenTheComponentFieldLabelledShouldHaveTheValue(string type, string labelText, string expectedValue)
+        [Then(@"the component field labelled ""(.+)"" should have the value ""(.*)""")]
+        public void ThenTheComponentFieldLabelledShouldHaveTheValue(string labelText, string expectedValue)
         {
-            var component = ComponentShouldExist(type == "component editor");
+            var component = ComponentShouldExist();
 
             var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
             AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
@@ -179,10 +202,29 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expectedValue, value);
         }
 
-        [Then(@"the (component|component editor) field labelled ""(.+)"" should have the JSON value ""(.*)""")]
-        public void ThenTheComponentFieldLabelledShouldHaveTheJSONValue(string type, string labelText, string expectedValue)
+        [Then(@"the component field labelled ""(.+)"" should be (checked|unchecked)")]
+        public void ThenTheComponentFieldLabelledShouldBeUnchecked(string labelText, string state)
         {
-            var component = ComponentShouldExist(type == "component editor");
+            var component = ComponentShouldExist();
+
+            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
+            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+
+            var field = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
+            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+
+            var isChecked = field! switch {
+                IHtmlInputElement input => input.IsChecked,
+                _ => throw new XunitException($"Could not find the checked state of element of type {field!.GetType().Name}.")
+            };
+
+            Assert.Equal(state == "checked", isChecked);
+        }
+
+        [Then(@"the component field labelled ""(.+)"" should match the JSON string ""(.*)""")]
+        public void ThenTheComponentFieldLabelledShouldMatchTheJSONString(string labelText, string expectedValue)
+        {
+            var component = ComponentShouldExist();
 
             var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
             AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
@@ -202,10 +244,10 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(normalizedExpected, normalizedActual);
         }
 
-        [Then(@"the input element of the (component|component editor) field labelled ""(.+)"" should match the selector ""(.+)""")]
-        public void ThenTheInputElementOfTheComponentFieldLabelledShouldMatchTheSelector(string type, string labelText, string selector)
+        [Then(@"the input element of the component field labelled ""(.+)"" should match the selector ""(.+)""")]
+        public void ThenTheInputElementOfTheComponentFieldLabelledShouldMatchTheSelector(string labelText, string selector)
         {
-            var component = ComponentShouldExist(type == "component editor");
+            var component = ComponentShouldExist();
 
             var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
             AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
@@ -216,38 +258,31 @@ namespace ASP.AcceptanceTests.StepDefinitions
             AssertWithMessage.True(element!.Matches(selector), @$"The associated input element for the label ""{labelText}"" did not match ""{selector}"".");
         }
 
-        private IElement CreateElement(string expectedMarkup)
-        {
-            var parser = new HtmlParser();
-            var document = parser.ParseDocument($@"<div id=""__test__"">{expectedMarkup}</div>");
-            return document!.QuerySelector("#__test__ > *")!;
-        }
-
-        private IElement ComponentShouldExist(bool editor)
+        private IElement ComponentShouldExist()
         {
             ThenThereShouldBeNoErrors();
             var testWrapper = _web.LastResponse.QuerySelector("#test");
             AssertWithMessage.NotNull(testWrapper, @$"Could not find an element with the selector ""#test"".");
 
-            var component = testWrapper!.QuerySelector(editor? ":scope > .app-component-edit" : ":scope > *");
+            var component = testWrapper!.QuerySelector(":scope > *");
             AssertWithMessage.NotNull(component, @$"Could not find the component's outer element on the page.");
 
             return component!;
         }
 
-        private void ComponentShouldNotExist(bool editor)
+        private void ComponentShouldNotExist()
         {
             ThenThereShouldBeNoErrors();
             var testWrapper = _web.LastResponse.QuerySelector("#test");
             AssertWithMessage.NotNull(testWrapper, @$"Could not find an element with the selector ""#test"".");
 
-            var component = testWrapper!.QuerySelector(editor ? ":scope > .app-component-edit" : ":scope > *");
+            var component = testWrapper!.QuerySelector(":scope > *");
             AssertWithMessage.Null(component, @$"Found the component's outer element on the page.");
         }
 
-        private IElement ComponentElementShouldExist(bool editor, string selector)
+        private IElement ComponentElementShouldExist(string selector)
         {
-            var component = ComponentShouldExist(editor);
+            var component = ComponentShouldExist();
 
             var element = component!.QuerySelector($":scope {selector}");
             AssertWithMessage.NotNull(element, @$"Could not find an element within the component with the selector ""{selector}"".");
@@ -255,9 +290,9 @@ namespace ASP.AcceptanceTests.StepDefinitions
             return element!;
         }
 
-        private void ComponentElementShouldNotExist(bool editor, string selector)
+        private void ComponentElementShouldNotExist(string selector)
         {
-            var component = ComponentShouldExist(editor);
+            var component = ComponentShouldExist();
 
             var element = component!.QuerySelector($":scope {selector}");
             AssertWithMessage.Null(element, @$"Found an element within the component with the selector ""{selector}"".");

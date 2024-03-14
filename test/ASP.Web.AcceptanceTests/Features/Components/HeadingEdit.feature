@@ -1,5 +1,5 @@
 ﻿Feature: Heading component (edit)
-The heading component provides the ability to add h2 and h3 tags to content templates.
+The Heading component provides the ability to add h2 and h3 tags to content templates.
 
 For more information please view the [technical specification for this component](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14389/Heading?anchor=editing).
 
@@ -129,7 +129,7 @@ Scenario: When Caption property is a JSON value, component should not error and 
 	When I edit the component on the page
 	Then there should be no errors
 	And the component should exist
-	And the component field labelled "Caption" should have the JSON value <TextValue>
+	And the component field labelled "Caption" should match the JSON string <TextValue>
 Examples:
 	| Value                  | TextValue              |
 	| 123                    | "123"                  |
@@ -166,6 +166,43 @@ Scenario: Updating Caption field should update Caption property on template
 	And I save the component
 	Then I should get a 200 response
 	And the component template property "Caption" should be equal to "Updated caption"
+
+Scenario: When Text property is null, component should not error and should handle the value appropriately
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"Text": null
+			}
+		}
+		"""
+	When I edit the component on the page
+	Then there should be no errors
+	And the component should exist
+	And the component field labelled "Text" should have the value ""
+
+Scenario: When Text property is a JSON value, component should not error and should handle the value appropriately
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Heading",
+			"ViewContent": {
+				"Text": <Value>
+			}
+		}
+		"""
+	When I edit the component on the page
+	Then there should be no errors
+	And the component should exist
+	And the component field labelled "Text" should match the JSON string <TextValue>
+Examples:
+	| Value                  | TextValue              |
+	| 123                    | "123"                  |
+	| 1.2                    | "1.2"                  |
+	| true                   | "true"                 |
+	| [1,2,3]                | "[1,2,3]"              |
+	| { "property": "value"} | "{"property":"value"}" |
 
 Scenario: Text field should be populated from Text property
 	Given a content template contains the component:
@@ -224,7 +261,7 @@ Scenario: When LinkUrl property is a JSON value, component should not error and 
 	When I edit the component on the page
 	Then there should be no errors
 	And the component should exist
-	And the component field labelled "Link URL" should have the JSON value <TextValue>
+	And the component field labelled "Link URL" should match the JSON string <TextValue>
 Examples:
 	| Value                  | TextValue              |
 	| 123                    | "123"                  |

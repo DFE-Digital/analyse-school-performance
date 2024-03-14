@@ -153,9 +153,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var element = _web.LastResponse.QuerySelector(selector);
             AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
 
-            var expected = CreateElement(expectedMarkup);
-
-            AssertHtml.Equivalent(expected, element);
+            AssertHtml.Equivalent(expectedMarkup, element!, _outputHelper.WriteLine);
         }
 
         [Then(@"the element ""([^""]*)"" should have the text content ""(.*)""")]
@@ -244,13 +242,6 @@ namespace ASP.AcceptanceTests.StepDefinitions
             };
 
             Assert.Equal(expectedValue, value);
-        }
-
-        private IElement CreateElement(string expectedMarkup)
-        {
-            var parser = new HtmlParser();
-            var document = parser.ParseDocument($@"<div id=""__test__"">{expectedMarkup}</div>");
-            return document!.QuerySelector("#__test__ > *")!;
         }
     }
 }

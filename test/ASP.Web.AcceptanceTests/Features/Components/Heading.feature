@@ -1,5 +1,5 @@
 ﻿Feature: Heading component
-The heading component provides the ability to add h2 and h3 tags to content templates.
+The Heading component provides the ability to add h2 and h3 tags to content templates.
 
 For more information please view the [technical specification for this component](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14389/Heading).
 

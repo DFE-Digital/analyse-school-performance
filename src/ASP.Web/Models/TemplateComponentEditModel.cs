@@ -14,6 +14,7 @@ namespace ASP.Web.Models
 
         public TemplateComponentEditModel()
         {
+            InitializeTypes();
         }
 
         public TemplateComponentEditModel(PageContentTemplateView contentTemplate)
@@ -34,17 +35,25 @@ namespace ASP.Web.Models
                     _ => c.Value.ToString() ?? ""
                 });
             ChildViews = childViews.Select(Create).ToList();
-            Types = viewContent.ToDictionary(c => c.Key, c =>
-                c.Value switch
+
+            InitializeTypes();
+
+            foreach (var (key, value) in viewContent)
+            {
+                if (!Types.ContainsKey(key))
                 {
-                    null => ViewContentPropertyType.Json,
-                    string s => ViewContentPropertyType.String,
-                    bool b => ViewContentPropertyType.Bool,
-                    double d => ViewContentPropertyType.Double,
-                    long l => ViewContentPropertyType.Long,
-                    _ => ViewContentPropertyType.Json,
+                    Types[key] = value switch {
+                        null => ViewContentPropertyType.Json,
+                        string s => ViewContentPropertyType.String,
+                        bool b => ViewContentPropertyType.Bool,
+                        double d => ViewContentPropertyType.Double,
+                        long l => ViewContentPropertyType.Long,
+                        _ => ViewContentPropertyType.Json,
+                    };
                 }
-            );
+            }
+
+            InitializeViewContent();
         }
 
         public string ViewId { get; set; } = "";
@@ -59,16 +68,7 @@ namespace ASP.Web.Models
             set
             {
                 _viewContent = value;
-
-                foreach(var (key, config) in ViewContentProperties)
-                {
-                    if (!_viewContent.ContainsKey(key))
-                    {
-                        _viewContent[key] = config.DefaultValue;
-                    }
-
-                    _viewContent[key] = config.Preprocess(_viewContent[key]);
-                }
+                InitializeViewContent();
             }
         }
 
@@ -80,34 +80,51 @@ namespace ASP.Web.Models
         {
             var serialized = JsonHelper.SerializeIndented(new {
                 ViewId,
-                ViewContent = ViewContent.ToDictionary(c => c.Key, c =>
-                {
-                    var type = Types.ContainsKey(c.Key) 
-                        ? Types[c.Key] 
-                        : ViewContentPropertyType.String;
-
-                    switch (type)
-                    {
-                        case ViewContentPropertyType.String:
-                            return c.Value;
-
-                        case ViewContentPropertyType.Bool:
-                            return bool.Parse(c.Value);
-
-                        case ViewContentPropertyType.Double:
-                            return double.Parse(c.Value);
-
-                        case ViewContentPropertyType.Long:
-                            return long.Parse(c.Value);
-
-                        default:
-                            return JsonHelper.Deserialize<object>(c.Value).MatchFirst(v => v, e => null!);
-                    }
-                }),
+                ViewContent = ViewContent.ToDictionary(c => c.Key, c => ConvertToPropertyType(c.Key, c.Value)),
                 ChildViews = ChildViews.Select(v => v.ToTemplate().MatchFirst(t => t, e => new object())).ToList()
             });
 
             return JsonHelper.DeserializeIgnoringMissingMembers<PageContentTemplateView>(serialized);
+        }
+
+        private void InitializeTypes()
+        {
+            foreach (var (key, config) in ViewContentProperties)
+            {
+                if (!Types.ContainsKey(key))
+                {
+                    Types[key] = config.PropertyType;
+                }
+            }
+        }
+
+        private void InitializeViewContent()
+        {
+            foreach (var (key, config) in ViewContentProperties)
+            {
+                if (!_viewContent.ContainsKey(key))
+                {
+                    _viewContent[key] = config.DefaultValue == null ? "" : config.DefaultValue.ToString() ?? "";
+                }
+
+                var propertyValue = config.Preprocess(_viewContent[key]);
+                _viewContent[key] = ConvertToPropertyType(key, propertyValue).ToString() ?? "";
+            }
+        }
+
+        private object ConvertToPropertyType(string key, string value)
+        {
+            var type = Types.ContainsKey(key)
+                ? Types[key]
+                : ViewContentPropertyType.String;
+
+            return type switch {
+                ViewContentPropertyType.String => value,
+                ViewContentPropertyType.Bool => bool.TryParse(value, out var b) ? b : false,
+                ViewContentPropertyType.Double => double.TryParse(value, out var d) ? d : 0.0,
+                ViewContentPropertyType.Long => long.TryParse(value, out var l) ? l : 0,
+                _ => JsonHelper.Deserialize<object>(value).MatchFirst(v => v, e => null!)
+            };
         }
 
         public static TemplateComponentEditModel Create(PageContentTemplateView v)
