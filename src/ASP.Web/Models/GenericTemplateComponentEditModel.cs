@@ -1,4 +1,4 @@
-﻿using ASP.Core.PageContent;
+﻿using ASP.Core.Templating;
 
 namespace ASP.Web.Models
 {
@@ -9,7 +9,7 @@ namespace ASP.Web.Models
         {
         }
 
-        public GenericTemplateComponentEditModel(PageContentTemplateView contentTemplate) 
+        public GenericTemplateComponentEditModel(TemplateComponent contentTemplate) 
             : base(contentTemplate)
         {
         }

@@ -9,7 +9,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
     public sealed partial class AspApiStepDefinitions
     {
         private const string HTTP_METHOD = @"(GET|POST)";
-        private const string API_ENDPOINT = @"/(ViewContentPage|UpdateContentPage)";
+        private const string API_ENDPOINT = @"/([^\?]+)";
         private const string QUERY_STRING = @"\?([^ ]*)";
         private const string STATUS_CODE = @"(\d+)";
         private const string RESPONSE_MESSAGE = @"""(.+)""";

@@ -13,7 +13,7 @@ using ASP.Core;
 using ASP.Test.Core;
 using AngleSharp.Io.Network;
 using Microsoft.AspNetCore.TestHost;
-using ASP.Core.PageContent.Repository;
+using ASP.Core.Templating.Repository;
 using AngleSharp.Dom;
 
 namespace ASP.AcceptanceTests

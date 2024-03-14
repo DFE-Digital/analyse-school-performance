@@ -1,5 +1,5 @@
-﻿using ASP.Application.UseCases.UpdateContentPage;
-using ASP.Application.UseCases.ViewContentPage;
+﻿using ASP.Application.UseCases.UpdateContentTemplate;
+using ASP.Application.UseCases.ViewContentTemplate;
 using ASP.Web.Extensions;
 using ASP.Web.Models;
 using ErrorOr;
@@ -12,11 +12,11 @@ namespace ASP.Web.Controllers
     {
         private const string TEST_COMPONENT_TEMPLATE_ID = "test-component";
 
-        private readonly IViewContentPageUseCase _viewContentUseCase;
-        private readonly IUpdateContentPageUseCase _updateContentUseCase;
+        private readonly IViewContentTemplateUseCase _viewContentUseCase;
+        private readonly IUpdateContentTemplateUseCase _updateContentUseCase;
 
-        public ComponentTestController(IViewContentPageUseCase viewContentUseCase,
-            IUpdateContentPageUseCase updateContentUseCase)
+        public ComponentTestController(IViewContentTemplateUseCase viewContentUseCase,
+            IUpdateContentTemplateUseCase updateContentUseCase)
         {
             _viewContentUseCase = viewContentUseCase ??
                 throw new ArgumentNullException(nameof(viewContentUseCase));
@@ -27,7 +27,7 @@ namespace ASP.Web.Controllers
         [HttpGet("view")]
         public new async Task<IActionResult> View()
         {
-            return await _viewContentUseCase.HandleRequest(new ViewContentPageRequest(TEST_COMPONENT_TEMPLATE_ID))
+            return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID))
                 .Then(t => ContentTemplateViewModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, t))
                 .ToActionResult(View);
         }
@@ -35,7 +35,7 @@ namespace ASP.Web.Controllers
         [HttpGet("edit")]
         public async Task<IActionResult> Edit()
         {
-            return await _viewContentUseCase.HandleRequest(new ViewContentPageRequest(TEST_COMPONENT_TEMPLATE_ID))
+            return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID))
                 .Then(t => ContentTemplateEditModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, t))
                 .ToActionResult(View);
         }
@@ -44,7 +44,7 @@ namespace ASP.Web.Controllers
         public async Task<IActionResult> Edit(ContentTemplateEditModel model)
         {         
             return await model.ToTemplate()
-                .ThenAsync(v => _updateContentUseCase.HandleRequest(new UpdateContentPageRequest(TEST_COMPONENT_TEMPLATE_ID, v)))
+                .ThenAsync(v => _updateContentUseCase.HandleRequest(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, v)))
                 .ToActionResult(_ => RedirectToAction(nameof(View)));
         }
     }

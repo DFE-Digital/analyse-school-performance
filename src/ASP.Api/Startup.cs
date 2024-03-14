@@ -1,4 +1,4 @@
-﻿using ASP.Core.PageContent.Repository;
+﻿using ASP.Core.Templating.Repository;
 using ASP.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,8 +6,8 @@ using Microsoft.Extensions.Hosting;
 using ASP.Infrastructure.Repositories;
 using ASP.Infrastructure.Cosmos;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb;
-using ASP.Application.UseCases.ViewContentPage;
-using ASP.Application.UseCases.UpdateContentPage;
+using ASP.Application.UseCases.ViewContentTemplate;
+using ASP.Application.UseCases.UpdateContentTemplate;
 
 namespace ASP.Api
 {
@@ -19,14 +19,14 @@ namespace ASP.Api
                 .ConfigureFunctionsWebApplication()
                 .ConfigureServices(services =>
                 {
-                    services.AddScoped<IPageContentRepository, PageContentRepository>();
+                    services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
                     services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
                     services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
 
                     services.AddCosmosDbDependencies();
 
-                    services.AddScoped<IViewContentPageUseCase, ViewContentPageUseCase>();
-                    services.AddScoped<IUpdateContentPageUseCase, UpdateContentPageUseCase>();
+                    services.AddScoped<IViewContentTemplateUseCase, ViewContentTemplateUseCase>();
+                    services.AddScoped<IUpdateContentTemplateUseCase, UpdateContentTemplateUseCase>();
                 })
                 .ConfigureAppConfiguration((context, builder) =>
                 {

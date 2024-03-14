@@ -1,4 +1,4 @@
-﻿using ASP.Core.PageContent;
+﻿using ASP.Core.Templating;
 
 namespace ASP.Web.Models
 {
@@ -8,13 +8,13 @@ namespace ASP.Web.Models
         public string PageTitle { get; set; } = "";
         public List<TemplateComponentViewModel> Views { get; set; } = new();
 
-        public static ContentTemplateViewModel FromTemplate(string contentId, PageContentTemplate template)
+        public static ContentTemplateViewModel FromTemplate(string contentId, ContentTemplate template)
         {
             return new ContentTemplateViewModel
             {
                 ContentId = contentId,
                 PageTitle = template.PageTitle ?? "",
-                Views = (template.Views ?? new List<PageContentTemplateView>()).Select(TemplateComponentViewModel.FromTemplateView).ToList()
+                Views = (template.Views ?? new List<TemplateComponent>()).Select(TemplateComponentViewModel.FromTemplateView).ToList()
             };
         }
     }

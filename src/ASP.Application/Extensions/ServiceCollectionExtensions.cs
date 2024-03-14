@@ -1,5 +1,5 @@
-﻿using ASP.Application.UseCases.UpdateContentPage;
-using ASP.Application.UseCases.ViewContentPage;
+﻿using ASP.Application.UseCases.UpdateContentTemplate;
+using ASP.Application.UseCases.ViewContentTemplate;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ASP.Application.Extensions
@@ -8,8 +8,8 @@ namespace ASP.Application.Extensions
     {
         public static IServiceCollection RegisterUseCases(this IServiceCollection services)
         {
-            services.AddScoped<IUpdateContentPageUseCase, UpdateContentPageUseCase>();
-            services.AddScoped<IViewContentPageUseCase, ViewContentPageUseCase>();
+            services.AddScoped<IUpdateContentTemplateUseCase, UpdateContentTemplateUseCase>();
+            services.AddScoped<IViewContentTemplateUseCase, ViewContentTemplateUseCase>();
 
             return services;
         }

@@ -1,4 +1,4 @@
-﻿using ASP.Core.PageContent;
+﻿using ASP.Core.Templating;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using ASP.Core.Helpers;
@@ -17,10 +17,10 @@ namespace ASP.Web.Models
             InitializeTypes();
         }
 
-        public TemplateComponentEditModel(PageContentTemplateView contentTemplate)
+        public TemplateComponentEditModel(TemplateComponent contentTemplate)
         {
             IDictionary<string, object> viewContent = contentTemplate.ViewContent ?? new Dictionary<string, object>();
-            IList<PageContentTemplateView> childViews = contentTemplate.ChildViews ?? new List<PageContentTemplateView>();
+            IList<TemplateComponent> childViews = contentTemplate.ChildViews ?? new List<TemplateComponent>();
 
             ViewId = contentTemplate.ViewId;
             ViewContent = viewContent.ToDictionary(c => c.Key, c =>
@@ -76,7 +76,7 @@ namespace ASP.Web.Models
         public Dictionary<string, ViewContentPropertyType> Types { get; set; } = new();
         public virtual Dictionary<string, ViewContentPropertyConfig> ViewContentProperties => _viewContentProperties;
 
-        public ErrorOr<PageContentTemplateView> ToTemplate()
+        public ErrorOr<TemplateComponent> ToTemplate()
         {
             var serialized = JsonHelper.SerializeIndented(new {
                 ViewId,
@@ -84,7 +84,7 @@ namespace ASP.Web.Models
                 ChildViews = ChildViews.Select(v => v.ToTemplate().MatchFirst(t => t, e => new object())).ToList()
             });
 
-            return JsonHelper.DeserializeIgnoringMissingMembers<PageContentTemplateView>(serialized);
+            return JsonHelper.DeserializeIgnoringMissingMembers<TemplateComponent>(serialized);
         }
 
         private void InitializeTypes()
@@ -127,7 +127,7 @@ namespace ASP.Web.Models
             };
         }
 
-        public static TemplateComponentEditModel Create(PageContentTemplateView v)
+        public static TemplateComponentEditModel Create(TemplateComponent v)
         {
             var editModelType = FindEditModelType(typeof(TemplateComponentEditModel).Assembly.GetTypes(), v.ViewId);
 

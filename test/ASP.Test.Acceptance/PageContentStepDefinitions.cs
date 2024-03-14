@@ -1,7 +1,7 @@
 ﻿using AngleSharp.Dom;
 using ASP.Core.Helpers;
-using ASP.Core.PageContent;
-using ASP.Core.PageContent.Repository;
+using ASP.Core.Templating;
+using ASP.Core.Templating.Repository;
 using ASP.Test.Core;
 using ErrorOr;
 using Newtonsoft.Json;
@@ -15,10 +15,10 @@ namespace ASP.Test.Acceptance.Core
     [Binding]
     public partial class PageContentStepDefinitions
     {
-        private readonly IPageContentRepository _repository;
+        private readonly IContentTemplateRepository _repository;
         private readonly ISpecFlowOutputHelper _outputHelper;
 
-        public PageContentStepDefinitions(IPageContentRepository repository, ISpecFlowOutputHelper outputHelper)
+        public PageContentStepDefinitions(IContentTemplateRepository repository, ISpecFlowOutputHelper outputHelper)
         {
             _repository = repository;
             _outputHelper = outputHelper;
@@ -122,8 +122,6 @@ namespace ASP.Test.Acceptance.Core
             var document = await _repository.Get(id)
                 .Match(v => JsonConvert.SerializeObject(v), _ => $$"""
                 {
-                    "id": "{{id}}",
-                    "contentId": "{{id}}"
                 }
             """);
 
@@ -134,9 +132,9 @@ namespace ASP.Test.Acceptance.Core
                 docDict[d.Key] = d.Value;
             }
 
-            var template = JsonConvert.DeserializeObject<PageContentTemplate>(JsonConvert.SerializeObject(docDict));
+            var template = JsonConvert.DeserializeObject<ContentTemplate>(JsonConvert.SerializeObject(docDict));
 
-            return await _repository.Update(template);
+            return await _repository.Update(id, template);
         }
 
         protected string GetPropertyPathValue(string propertyPath, string data)

@@ -1,4 +1,4 @@
-﻿using ASP.Core.PageContent.Repository;
+﻿using ASP.Core.Templating.Repository;
 using ASP.Test.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +12,9 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Reflection;
+using Microsoft.Azure.Functions.Worker;
+using Xunit.Sdk;
 
 namespace ASP.Api.AcceptanceTests.Drivers
 {
@@ -22,16 +25,39 @@ namespace ASP.Api.AcceptanceTests.Drivers
 
         private readonly ISpecFlowOutputHelper _outputHelper;
 
-        private IPageContentRepository? _pageContentRepository = null;
+        private IContentTemplateRepository? _pageContentRepository = null;
         private HttpRequest? _lastRequest = null;
         private ApiResult? _lastResponse = null;
+        private static readonly Dictionary<string, Func<HttpRequest, Task<ApiResult>>> _functions;
+        private static readonly List<Type> _functionTypes;
 
         static AspApiContext()
         {
+            var functionType = typeof(ApiFunction);
+            _functionTypes = functionType.Assembly.GetTypes()
+                .Where(t => t != functionType && t.IsAssignableTo(functionType))
+                .ToList();
+
             var builder = new HostBuilder();
             new Startup().Configure(builder);
             Configure(builder);
             _host = builder.Build();
+
+            _functions = _functionTypes.ToDictionary(
+                t => {
+                    var runMethod = t.GetMethod("Run") 
+                        ?? throw new XunitException($@"Function ""{t.Name}"" does not have a Run method");
+
+                    var functionAttribute = runMethod.GetCustomAttribute<FunctionAttribute>()
+                        ?? throw new XunitException($@"Function ""{t.Name}"" does not have a FunctionAttribute on its Run method");
+
+                    return functionAttribute.Name;
+                },
+                t => (Func<HttpRequest, Task<ApiResult>>) (async (HttpRequest req) => {
+                    var function = (ApiFunction)_host.Services.GetService(t)!;
+                    return await function.Run(req);
+                })
+            );
         }
 
         public HttpRequest LastRequest
@@ -63,7 +89,7 @@ namespace ASP.Api.AcceptanceTests.Drivers
             }
         }
 
-        public IPageContentRepository PageContentRepository
+        public IContentTemplateRepository PageContentRepository
         {
             get
             {
@@ -74,7 +100,7 @@ namespace ASP.Api.AcceptanceTests.Drivers
 
                 using (var scope = _host.Services.CreateScope())
                 {
-                    _pageContentRepository = scope.ServiceProvider.GetService<IPageContentRepository>()!;
+                    _pageContentRepository = scope.ServiceProvider.GetService<IContentTemplateRepository>()!;
                     return _pageContentRepository;
                 }
             }
@@ -88,11 +114,9 @@ namespace ASP.Api.AcceptanceTests.Drivers
         public async Task Run(string function, HttpRequest request)
         {
             Func<HttpRequest, Task<ApiResult>> func =
-                function switch {
-                    "ViewContentPage" => _host.Services.GetService<ViewContentPage>()!.Run,
-                    "UpdateContentPage" => _host.Services.GetService<UpdateContentPage>()!.Run,
-                    _ => _ => Task.FromResult(new ApiResult(404, $"Function {function} not found."))
-                };
+                _functions.TryGetValue(function, out var runMethod)
+                    ? runMethod
+                    : _ => Task.FromResult(new ApiResult(404, $"Function {function} not found."));
 
             _lastRequest = request;
             _lastResponse = await func(request);
@@ -107,8 +131,10 @@ namespace ASP.Api.AcceptanceTests.Drivers
 
             builder.ConfigureServices(services =>
             {
-                services.AddSingleton<ViewContentPage, ViewContentPage>();
-                services.AddSingleton<UpdateContentPage, UpdateContentPage>();
+                foreach (var functionType in _functionTypes)
+                {
+                    services.AddSingleton(functionType);
+                }
 
                 services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
 

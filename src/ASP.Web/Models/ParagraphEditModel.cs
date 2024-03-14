@@ -1,4 +1,4 @@
-﻿using ASP.Core.PageContent;
+﻿using ASP.Core.Templating;
 
 namespace ASP.Web.Models
 {
@@ -18,7 +18,7 @@ namespace ASP.Web.Models
         {
         }
 
-        public ParagraphEditModel(PageContentTemplateView contentTemplate)
+        public ParagraphEditModel(TemplateComponent contentTemplate)
             : base(contentTemplate)
         {
         }

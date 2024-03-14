@@ -1,5 +1,5 @@
 ﻿using ASP.Core.Helpers;
-using ASP.Core.PageContent;
+using ASP.Core.Templating;
 using ErrorOr;
 
 namespace ASP.Web.Models
@@ -10,7 +10,7 @@ namespace ASP.Web.Models
         public string PageTitle { get; set; } = "";
         public List<TemplateComponentEditModel> Views { get; set; } = new();
 
-        public ErrorOr<PageContentTemplate> ToTemplate()
+        public ErrorOr<ContentTemplate> ToTemplate()
         {
             var serialized = JsonHelper.SerializeIndented(new {
                 ContentId,
@@ -18,12 +18,12 @@ namespace ASP.Web.Models
                 Views = Views.Select(v => v.ToTemplate().MatchFirst(t => t, e => new object())).ToList()
             });
 
-            return JsonHelper.DeserializeIgnoringMissingMembers<PageContentTemplate>(serialized);
+            return JsonHelper.DeserializeIgnoringMissingMembers<ContentTemplate>(serialized);
         }
 
-        public static ContentTemplateEditModel FromTemplate(string contentId, PageContentTemplate template)
+        public static ContentTemplateEditModel FromTemplate(string contentId, ContentTemplate template)
         {
-            var views = template.Views ?? new List<PageContentTemplateView>();
+            var views = template.Views ?? new List<TemplateComponent>();
             return new ContentTemplateEditModel
             {
                 ContentId = contentId,

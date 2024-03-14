@@ -1,4 +1,4 @@
-﻿using ASP.Core.PageContent;
+﻿using ASP.Core.Templating;
 using MR;
 
 namespace ASP.Web.Models
@@ -9,13 +9,13 @@ namespace ASP.Web.Models
         public dynamic ViewContent { get; set; } = new GracefulExpandoObject();
         public List<TemplateComponentViewModel> ChildViews { get; set; } = new();
 
-        public static TemplateComponentViewModel FromTemplateView(PageContentTemplateView v)
+        public static TemplateComponentViewModel FromTemplateView(TemplateComponent v)
         {
             return new TemplateComponentViewModel
             {
                 ViewId = v.ViewId,
                 ViewContent = v.ViewContent ?? new GracefulExpandoObject(),
-                ChildViews = (v.ChildViews ?? new List<PageContentTemplateView>()).Select(FromTemplateView).ToList()
+                ChildViews = (v.ChildViews ?? new List<TemplateComponent>()).Select(FromTemplateView).ToList()
             };
         }
     }

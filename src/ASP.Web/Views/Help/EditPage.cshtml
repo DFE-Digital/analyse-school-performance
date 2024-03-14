@@ -22,7 +22,7 @@
     @await Html.PartialAsync("ContentTemplateEdit", Model)
 
     <button id="app-content-edit-save" class="govuk-button" type="submit">Save</button>
-    <a id="app-content-edit-cancel" asp-route="app-content-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">
+    <a id="app-content-edit-cancel" asp-route="app-route-help-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">
         Cancel
     </a>
 </form>

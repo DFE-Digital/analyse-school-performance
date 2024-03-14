@@ -1,6 +1,6 @@
-using ASP.Application.UseCases.UpdateContentPage;
+using ASP.Application.UseCases.UpdateContentTemplate;
 using ASP.Core.Helpers;
-using ASP.Core.PageContent;
+using ASP.Core.Templating;
 using ErrorOr;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
@@ -8,19 +8,19 @@ using Microsoft.Extensions.Logging;
 
 namespace ASP.Api
 {
-    public class UpdateContentPage
+    public class UpdateContentTemplate : ApiFunction
     {
         private readonly ILogger _logger;
-        private readonly IUpdateContentPageUseCase _update;
+        private readonly IUpdateContentTemplateUseCase _update;
 
-        public UpdateContentPage(ILoggerFactory loggerFactory, IUpdateContentPageUseCase update)
+        public UpdateContentTemplate(ILoggerFactory loggerFactory, IUpdateContentTemplateUseCase update)
         {
-            _logger = loggerFactory.CreateLogger<UpdateContentPage>();
+            _logger = loggerFactory.CreateLogger<UpdateContentTemplate>();
             _update = update;
         }
 
-        [Function("UpdateContentPage")]
-        public async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        [Function("UpdateContentTemplate")]
+        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
             if (req.Method != "POST")
             {
@@ -41,11 +41,11 @@ namespace ASP.Api
             using (var sr = new StreamReader(req.Body))
             {
                 var content = await sr.ReadToEndAsync();
-                return await JsonHelper.DeserializeIgnoringMissingMembers<PageContentTemplate>(content)
+                return await JsonHelper.DeserializeIgnoringMissingMembers<ContentTemplate>(content)
                     .Else(e => {
                         return Error.Validation(description: "Request body was not a JSON object.");
                     })
-                    .ThenAsync(async pageContent => await _update.HandleRequest(new UpdateContentPageRequest(id, pageContent)))
+                    .ThenAsync(async pageContent => await _update.HandleRequest(new UpdateContentTemplateRequest(id, pageContent)))
                     .MatchFirst(r => new ApiResult(200, r), e =>
                     {
                         var statusCode = e.Code switch {

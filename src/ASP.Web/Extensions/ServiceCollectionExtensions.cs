@@ -1,5 +1,5 @@
 ﻿using ASP.Core;
-using ASP.Core.PageContent.Repository;
+using ASP.Core.Templating.Repository;
 using ASP.Infrastructure.Cosmos;
 using ASP.Infrastructure.Repositories;
 using ASP.Web.Filters;
@@ -28,7 +28,7 @@ namespace ASP.Web.Extensions
 
         internal static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IPageContentRepository, PageContentRepository>();
+            services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
             services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
             services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
 

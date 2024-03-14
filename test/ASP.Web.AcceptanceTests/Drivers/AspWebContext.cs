@@ -3,7 +3,7 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Io.Network;
 using AngleSharp.Io;
 using AngleSharp;
-using ASP.Core.PageContent.Repository;
+using ASP.Core.Templating.Repository;
 using ASP.Test.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -36,7 +36,7 @@ namespace ASP.AcceptanceTests.Drivers
             });
         }
 
-        public IPageContentRepository PageContentRepository => _factory.PageContentRepository;
+        public IContentTemplateRepository PageContentRepository => _factory.PageContentRepository;
         public TestCookieProvider CookieProvider => _factory.CookieProvider;
 
         public IDocument LastResponse
@@ -108,8 +108,8 @@ namespace ASP.AcceptanceTests.Drivers
             private readonly MemoryStore _store;
             private readonly TestCookieProvider _cookieProvider;
 
-            private IPageContentRepository? _pageContentRepository = null;
-            public IPageContentRepository PageContentRepository
+            private IContentTemplateRepository? _pageContentRepository = null;
+            public IContentTemplateRepository PageContentRepository
             {
                 get
                 {
@@ -120,7 +120,7 @@ namespace ASP.AcceptanceTests.Drivers
 
                     using (var scope = Services.CreateScope())
                     {
-                        _pageContentRepository = scope.ServiceProvider.GetService<IPageContentRepository>()!;
+                        _pageContentRepository = scope.ServiceProvider.GetService<IContentTemplateRepository>()!;
                         return _pageContentRepository;
                     }
                 }

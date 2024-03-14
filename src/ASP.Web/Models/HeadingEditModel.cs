@@ -1,4 +1,4 @@
-﻿using ASP.Core.PageContent;
+﻿using ASP.Core.Templating;
 
 namespace ASP.Web.Models
 {
@@ -26,7 +26,7 @@ namespace ASP.Web.Models
         {
         }
 
-        public HeadingEditModel(PageContentTemplateView contentTemplate)
+        public HeadingEditModel(TemplateComponent contentTemplate)
             : base(contentTemplate)
         {
         }
