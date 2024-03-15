@@ -159,18 +159,23 @@ Scenario: Paragraph text should be populated from Text property
 		</p>
 		"""
 
-Scenario: When Text property contains HTML content within markdown, HTML content should be escaped on the page
+Scenario: When Text property contains a new line this should be ignored when generating HTML
 	Given a content template contains the component:
 		"""
 		{
 			"ViewId": "Paragraph",
 			"ViewContent": {
-				"Text": "**bold <script>alert('test')</script>**",
+				"Text": "Test paragraph \n text",
 			}
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the inner HTML "<strong>bold &lt;script&gt;alert('test')&lt;/script&gt;</strong>"
+	Then the component should have the following markup:
+		"""
+		<p class="govuk-body">
+			Test paragraph text
+		</p>
+		"""
 
 Scenario: When Text property contains bold, italic, or link markdown it should be converted to <strong>, <em>, and <a> tags
 	Given a content template contains the component:
@@ -227,5 +232,18 @@ Examples:
 	| Input                                      | Expected                                                           |
 	| <script>alert('Hello');</script>           | &lt;script&gt;alert(&#39;Hello&#39;);&lt;/script&gt;               |
 	| <div>Some <strong>bold</strong> text</div> | &lt;div&gt;Some &lt;strong&gt;bold&lt;/strong&gt; text&lt;/div&gt; |
-	| <a href=\\"https://example.com\\">Link</a> | &lt;a href="https://example.com"&gt;Link&lt;/a&gt;       |
+	| <a href=\\"https://example.com\\">Link</a> | &lt;a href="https://example.com"&gt;Link&lt;/a&gt;                 |
 	| <img src=\\"image.jpg\\" alt=\\"Image\\">  | &lt;img src=&quot;image.jpg&quot; alt=&quot;Image&quot;&gt;        |
+
+Scenario: When Text property contains HTML content within markdown, HTML content should be escaped on the page
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"Text": "**bold <script>alert('test')</script>**",
+			}
+		}
+		"""
+	When I view the component on the page
+	Then the component should have the inner HTML "<strong>bold &lt;script&gt;alert('test')&lt;/script&gt;</strong>"

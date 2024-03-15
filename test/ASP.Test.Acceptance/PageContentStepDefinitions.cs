@@ -120,13 +120,11 @@ namespace ASP.Test.Acceptance.Core
         protected async Task<ErrorOr<Updated>> SetUpPageContent(string id, string data)
         {
             var document = await _repository.Get(id)
-                .Match(v => JsonConvert.SerializeObject(v), _ => $$"""
-                {
-                }
-            """);
+                .Match(v => JsonConvert.SerializeObject(v), _ => "{}");
 
             var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
             var docDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(document);
+
             foreach (var d in dataDict)
             {
                 docDict[d.Key] = d.Value;

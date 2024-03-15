@@ -108,12 +108,17 @@ namespace ASP.Web.Models
                 }
 
                 var propertyValue = config.Preprocess(_viewContent[key]);
-                _viewContent[key] = ConvertToPropertyType(key, propertyValue).ToString() ?? "";
+                _viewContent[key] = ConvertToPropertyType(key, propertyValue)?.ToString() ?? "";
             }
         }
 
-        private object ConvertToPropertyType(string key, string value)
+        private object? ConvertToPropertyType(string key, string value)
         {
+            if(value == null)
+            {
+                return null;
+            }
+
             var type = Types.ContainsKey(key)
                 ? Types[key]
                 : ViewContentPropertyType.String;

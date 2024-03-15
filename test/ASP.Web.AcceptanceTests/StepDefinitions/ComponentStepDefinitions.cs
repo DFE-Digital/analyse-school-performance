@@ -65,6 +65,25 @@ namespace ASP.AcceptanceTests.StepDefinitions
             };
         }
 
+        [When(@"I update the component field labelled ""(.+)"" to have the value:")]
+        public void WhenIUpdateTheComponentFieldLabelledToHaveTheValueMultiline(string labelText, string value)
+        {
+            var component = ComponentShouldExist();
+
+            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
+            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+
+            var field = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
+            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+
+            var _ = field switch {
+                IHtmlSelectElement select => select.Value = value,
+                IHtmlInputElement input => input.Value = value,
+                IHtmlTextAreaElement textarea => textarea.Value = value,
+                _ => throw new XunitException($"Could not set the value of element of type {field!.GetType().Name}.")
+            };
+        }
+
         [When(@"I update the component field labelled ""(.+)"" to be (checked|unchecked)")]
         public void WhenIUpdateTheComponentFieldLabelledToBe(string labelText, string state)
         {

@@ -166,3 +166,27 @@ Scenario: Updating Text field should update Text property on template
 	And I save the component
 	Then I should get a 200 response
 	And the component template property "Text" should be equal to "Updated paragraph"
+
+Scenario: Updating Text field with a new line should update Text property on template
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Paragraph",
+			"ViewContent": {
+				"Text": "Test paragraph text"
+			}
+		}
+		"""
+	And I edit the component on the page
+	When I update the component field labelled "Text" to have the value:
+	"""
+	Updated
+	paragraph
+	"""
+	And I save the component
+	Then I should get a 200 response
+	And the component template property "Text" should be equal to:
+	"""
+	"Updated
+	paragraph"
+	"""

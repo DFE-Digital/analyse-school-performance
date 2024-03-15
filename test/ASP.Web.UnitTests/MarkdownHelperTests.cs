@@ -36,7 +36,7 @@ namespace ASP.UnitTest.Web
         [Theory]
         [InlineData("**bold**", "<strong>bold</strong>")]
         [InlineData("__bold__", "<strong>bold</strong>")]
-        public void ConvertInlineMarkdown_WhenBoldText_ReturnsStrongTag(string input, string expected)
+        public void ConvertInlineMarkdown_WhenBoldText_ConvertsToStrongTag(string input, string expected)
         {
             // Act
             HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
@@ -48,7 +48,7 @@ namespace ASP.UnitTest.Web
         [Theory]
         [InlineData("*italic*", "<em>italic</em>")]
         [InlineData("_italic_", "<em>italic</em>")]
-        public void ConvertInlineMarkdown_WhenItalicText_ReturnsEmTag(string input, string expected)
+        public void ConvertInlineMarkdown_WhenItalicText_ConvertsToEmTag(string input, string expected)
         {
             // Act
             HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
@@ -60,7 +60,7 @@ namespace ASP.UnitTest.Web
         [Theory]
         [InlineData("* text *", "* text *")]
         [InlineData("_ text _", "_ text _")]
-        public void ConvertInlineMarkdown_WhenSpaceBetweenTextAndItalicMarker_DoesNotWrapInEmTag(string input, string expected)
+        public void ConvertInlineMarkdown_WhenSpaceBetweenTextAndItalicMarker_DoesNotConvertToEmTag(string input, string expected)
         {
             // Act
             HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
@@ -72,7 +72,7 @@ namespace ASP.UnitTest.Web
         [Theory]
         [InlineData("** text **", "** text **")]
         [InlineData("__ text __", "__ text __")]
-        public void ConvertInlineMarkdown_WhenSpaceBetweenTextAndBoldMarker_DoesNotWrapInStrongTag(string input, string expected)
+        public void ConvertInlineMarkdown_WhenSpaceBetweenTextAndBoldMarker_DoesNotConvertToStrongTag(string input, string expected)
         {
             // Act
             HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
@@ -85,20 +85,20 @@ namespace ASP.UnitTest.Web
         [Theory]
         [InlineData("**this is bold* text**", "<strong>this is bold* text</strong>")]
         [InlineData("**this is bold_ text**", "<strong>this is bold_ text</strong>")]
-        [InlineData("*this is italic* text*", "<em>this is italic* text</em>")]
         [InlineData("*this is italic_ text*", "<em>this is italic_ text</em>")]
+        [InlineData("_this is italic* text_", "<em>this is italic* text</em>")]
         [InlineData("__this is bold* text__", "<strong>this is bold* text</strong>")]
         [InlineData("__this is bold_ text__", "<strong>this is bold_ text</strong>")]
-        [InlineData("_this is italic* text_", "<em>this is italic* text</em>")]
-        [InlineData("_this is italic_ text_", "<em>this is italic_ text</em>")]
-        [InlineData("**this is bold** text**", "<strong>this is bold** text</strong>")]
         [InlineData("**this is bold__ text**", "<strong>this is bold__ text</strong>")]
+        [InlineData("__this is bold** text__", "<strong>this is bold** text</strong>")]
         [InlineData("*this is italic** text*", "<em>this is italic** text</em>")]
         [InlineData("*this is italic__ text*", "<em>this is italic__ text</em>")]
-        [InlineData("__this is bold** text__", "<strong>this is bold** text</strong>")]
-        [InlineData("__this is bold__ text__", "<strong>this is bold__ text</strong>")]
         [InlineData("_this is italic** text_", "<em>this is italic** text</em>")]
         [InlineData("_this is italic__ text_", "<em>this is italic__ text</em>")]
+        [InlineData("**this is bold** text**", "<strong>this is bold</strong> text**")]
+        [InlineData("__this is bold__ text__", "<strong>this is bold</strong> text__")]
+        [InlineData("*this is italic* text*", "<em>this is italic</em> text*")]
+        [InlineData("_this is italic_ text_", "<em>this is italic</em> text_")]
         public void ConvertInlineMarkdown_WhenUnbalancedMarker_DoesNotWrap(string input, string expected)
         {
             // Act
@@ -111,7 +111,7 @@ namespace ASP.UnitTest.Web
         [Theory]
         [InlineData("[Google](https://www.google.com)", "<a href=\"https://www.google.com\" class=\"govuk-link\">Google</a>")]
         [InlineData("**[Google](https://www.google.com)**", "<strong><a href=\"https://www.google.com\" class=\"govuk-link\">Google</a></strong>")]
-        public void ConvertInlineMarkdown_WhenLink_ReturnsAnchorTag(string input, string expected)
+        public void ConvertInlineMarkdown_WhenLink_ConvertsToAnchorTag(string input, string expected)
         {
             // Act
             HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
@@ -152,6 +152,109 @@ namespace ASP.UnitTest.Web
         [InlineData("<a href=\"https://example.com\">Link</a>", "&lt;a href=&quot;https://example.com&quot;&gt;Link&lt;/a&gt;")]
         [InlineData("<img src=\"image.jpg\" alt=\"Image\">", "&lt;img src=&quot;image.jpg&quot; alt=&quot;Image&quot;&gt;")]
         public void ConvertInlineMarkdown_WhenInputContainsHtmlCharacters_EscapesHtml(string input, string expected)
+        {
+            // Act
+            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+
+            // Assert
+            Assert.Equal(expected, result.ToString());
+        }
+
+        [Fact]
+        public void ConvertInlineMarkdown_WhenBoldTextStretchesOverNewLines_ConvertsToStrongTag()
+        {
+            //Arrange
+            var input =
+            """
+                **this is
+
+                bold text
+                over multiple
+
+                lines**
+            """;
+
+            // Act
+            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+
+            // Assert
+            var output =
+            """
+                <strong>this is
+
+                bold text
+                over multiple
+
+                lines</strong>
+            """;
+            Assert.Equal(output, result.ToString());
+        }
+
+        [Fact]
+        public void ConvertInlineMarkdown_WhenItalicTextStretchesOverNewLines_ConvertsToEmTag()
+        {
+            //Arrange
+            var input =
+            """
+                _this is
+
+                bold text
+                over multiple
+
+                lines_
+            """;
+
+            // Act
+            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+
+            // Assert
+            var output =
+            """
+                <em>this is
+
+                bold text
+                over multiple
+
+                lines</em>
+            """;
+            Assert.Equal(output, result.ToString());
+        }
+
+        [Theory]
+        [InlineData(
+            "The ASP website is operated by the **Department for Education** ('**DfE**', '**we**' or '**us**'). These terms of use apply to all and authorised users of the ASP website ('**you**').",
+            "The ASP website is operated by the <strong>Department for Education</strong> (&#39;<strong>DfE</strong>&#39;, &#39;<strong>we</strong>&#39; or &#39;<strong>us</strong>&#39;). These terms of use apply to all and authorised users of the ASP website (&#39;<strong>you</strong>&#39;)."
+        )]
+        [InlineData(
+            "The ASP website is operated by the *Department for Education* ('*DfE*', '*we*' or '*us*'). These terms of use apply to all and authorised users of the ASP website ('*you*').",
+            "The ASP website is operated by the <em>Department for Education</em> (&#39;<em>DfE</em>&#39;, &#39;<em>we</em>&#39; or &#39;<em>us</em>&#39;). These terms of use apply to all and authorised users of the ASP website (&#39;<em>you</em>&#39;)."
+        )]
+        public void ConvertInlineMarkdown_RegressionTests(string input, string expected)
+        {
+            // Act
+            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+
+            // Assert
+            Assert.Equal(expected, result.ToString());
+        }
+
+        [Theory]
+        [InlineData("*", "*")]
+        [InlineData("**", "**")]
+        [InlineData("***", "***")]
+        [InlineData("****", "****")]
+        [InlineData("*****", "*****")]
+        [InlineData("* *", "* *")]
+        [InlineData("** **", "** **")]
+        [InlineData("*** ***", "*** ***")]
+        [InlineData("**** ****", "**** ****")]
+        [InlineData("***** *****", "***** *****")]
+        [InlineData("*a*", "<em>a</em>")]
+        [InlineData("**a**", "<strong>a</strong>")]
+        [InlineData("***a***", "<strong><em>a</em></strong>")]
+        [InlineData("****a****", "<strong><strong>a</strong></strong>")]
+        [InlineData("*****a*****", "<strong><strong><em>a</em></strong></strong>")]
+        public void ConvertInlineMarkdown_MinimumLengths(string input, string expected)
         {
             // Act
             HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
