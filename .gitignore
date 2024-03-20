@@ -5,6 +5,7 @@
 # Assets/js/css
 /src/asp.web/wwwroot/assets/*
 /src/asp.Web/wwwroot/*.js
+/src/asp.Web/wwwroot/favicon.ico
 
 
 # Local appsettings file

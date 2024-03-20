@@ -36,6 +36,7 @@ const stylesConfig = {
         new CopyPlugin({
             patterns: [
                 { from: "node_modules/govuk-frontend/dist/govuk/assets", to: "assets" },
+                { from: "node_modules/govuk-frontend/dist/govuk/assets/images/favicon.ico", to: "" },
             ],
         }),
         new MiniCssExtractPlugin({
