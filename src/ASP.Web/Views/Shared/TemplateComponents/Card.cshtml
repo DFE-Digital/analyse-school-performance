@@ -1,0 +1,14 @@
+﻿@model TemplateComponentViewModel
+
+<div class="app-card">
+    <div class="app-card-container">
+        <h2 class="govuk-heading-m">
+            <a href="@Model.ViewContent.LinkUrl" class="app-card-link govuk-link govuk-link--no-visited-state">
+                @Model.ViewContent.Title
+            </a>
+        </h2>
+        <p class="govuk-body">
+            @Model.ViewContent.Text
+        </p>
+    </div>
+</div>

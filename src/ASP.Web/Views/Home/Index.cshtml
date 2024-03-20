@@ -1,7 +1,13 @@
-﻿@{
+﻿@model ContentTemplateViewModel
+
+@{
     ViewData["Title"] = "Home";
 }
 
-<h1 class="govuk-heading-xl">Analyse school performance</h1>
+<h1 class="govuk-heading-xl">@Model.PageTitle</h1>
 
-<p class="govuk-body">This page is still in progress.</p>
+<div class="gov-width-container">
+    <div class="app-grid-container-three-column app-grid-container--wider govuk-!-margin-top-5">
+            @await Html.PartialAsync("ContentTemplateView", Model)
+    </div>
+</div>

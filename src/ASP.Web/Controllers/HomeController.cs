@@ -1,7 +1,12 @@
+using ASP.Application.UseCases.UpdateContentTemplate;
+using ASP.Application.UseCases.ViewContentTemplate;
+using ASP.Web.Extensions;
 using ASP.Web.Filters;
 using ASP.Web.Models;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Net;
 
 namespace ASP.Web.Controllers
 {
@@ -9,19 +14,32 @@ namespace ASP.Web.Controllers
     [ServiceFilter<CheckCookies>]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IViewContentTemplateUseCase _viewContentUseCase;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IViewContentTemplateUseCase viewContentUseCase)
         {
-            _logger = logger;
+            _viewContentUseCase = viewContentUseCase ??
+                throw new ArgumentNullException(nameof(viewContentUseCase));
         }
 
         [HttpGet("/")]
         [HttpGet("")]
         [HttpGet("index")]
-        public IActionResult Index()
-        {    
-            return View();
+        public async Task<IActionResult> Index()
+        {
+            ViewContentTemplateRequest request = new("home-page");
+
+            var defaultIfNotFound = new ContentTemplateViewModel
+            {
+                PageTitle = "Analyse school performance",
+                Views = []
+            };
+
+            var result = await _viewContentUseCase.HandleRequest(request)
+                .Then(t => ContentTemplateViewModel.FromTemplate("home-page", t))
+                .ToActionResult(View, defaultIfNotFound);
+         
+            return result;
         }
 
         [HttpGet("privacy")]
