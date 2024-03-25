@@ -1,6 +1,5 @@
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
-using AngleSharp.Html.Parser;
 using ASP.AcceptanceTests.Drivers;
 using ASP.Test.Core;
 using System.Net;
@@ -73,6 +72,14 @@ namespace ASP.AcceptanceTests.StepDefinitions
             }
 
             input.IsChecked = true;
+        }
+
+        [Then(@"The number of ""([^""]*)"" elements on the page should equal (.*)")]
+        public void ThenTheNumberOfElementsOnThePageShouldEqual(string selector, int count)
+        {
+            var elements = _web.LastResponse.QuerySelectorAll(selector);
+
+            Assert.Equal(count, elements.Count());
         }
 
 
@@ -154,6 +161,34 @@ namespace ASP.AcceptanceTests.StepDefinitions
             AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
 
             AssertHtml.Equivalent(expectedMarkup, element!, _outputHelper.WriteLine);
+        }
+
+        [Then(@"the elements ""([^""]*)"" should have the following content")]
+        public void ThenTheElementsShouldHaveTheFollowingContent(string selector, Table content)
+        {
+            int index = 0;
+            var elements = _web.LastResponse.QuerySelectorAll(selector);
+
+            foreach (var item in content.Rows)
+            {
+                Assert.Equal(item.Values.First(), elements[index].TextContent.Trim());
+                index++;
+            }
+        }
+
+        [Then(@"the anchors ""([^""]*)"" should have the following URLs")]
+        public void ThenTheAnchorsShouldHaveTheFollowingUrls(string selector, Table content)
+        {
+            int index = 0;
+            var elements = _web.LastResponse.QuerySelectorAll(selector);
+
+            foreach (var item in content.Rows)
+            {
+                var anchor = Assert.IsAssignableFrom<IHtmlAnchorElement>(elements[index]);
+
+                Assert.Equal(item.Values.First(), anchor.PathName.Trim());
+                index++;
+            }
         }
 
         [Then(@"the element ""([^""]*)"" should have the text content ""(.*)""")]

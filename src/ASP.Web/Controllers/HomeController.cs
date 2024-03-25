@@ -6,7 +6,6 @@ using ASP.Web.Models;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Net;
 
 namespace ASP.Web.Controllers
 {
@@ -38,7 +37,7 @@ namespace ASP.Web.Controllers
             var result = await _viewContentUseCase.HandleRequest(request)
                 .Then(t => ContentTemplateViewModel.FromTemplate("home-page", t))
                 .ToActionResult(View, defaultIfNotFound);
-         
+
             return result;
         }
 
