@@ -21,7 +21,7 @@ namespace ASP.Web.Extensions
         {
             services.AddScoped<INonceService>(serviceProvider => new NonceService(32));
             services.AddScoped<ICookieProvider, CookieProvider>();
-            services.AddScoped<ICurrentVersionProvider, GitCommitHashCurrentVersionProvider>();
+            services.AddSingleton<ICurrentVersionProvider, GitCommitHashCurrentVersionProvider>();
             services.AddScoped<CheckCookies>();
             services.AddScoped<CurrentVersionActionFilter>();
 

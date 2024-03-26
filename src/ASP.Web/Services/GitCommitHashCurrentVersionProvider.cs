@@ -1,21 +1,25 @@
-﻿namespace ASP.Web.Services
+﻿using System.Reflection;
+
+namespace ASP.Web.Services
 {
     public class GitCommitHashCurrentVersionProvider : ICurrentVersionProvider
     {
-        private readonly string _rootPath;
-        public GitCommitHashCurrentVersionProvider(IHostEnvironment hostEnvironment)
+        private readonly string? _outputDirectory;
+        public GitCommitHashCurrentVersionProvider()
         {
-            _rootPath = hostEnvironment.ContentRootPath ?? 
-                throw new ArgumentNullException(nameof(hostEnvironment));
+            _outputDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         }
 
-        
+
         public string GetCurrentVersion()
         {
+            if(string.IsNullOrEmpty(_outputDirectory)) 
+                return string.Empty;
+
             // 'CurrentCommit.txt' is produced by a Post Build Event running 'git rev-parse --short HEAD'
             // The file will have the commit hash for the current branch when you build the solution
-            string filePath = Path.Combine(_rootPath, "CurrentCommit.txt");
-            
+            string filePath = Path.Combine(_outputDirectory, "CurrentCommit.txt");
+
             if (File.Exists(filePath))
                 return File.ReadAllText(filePath);
 
