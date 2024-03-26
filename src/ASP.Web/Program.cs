@@ -1,6 +1,7 @@
 using ASP.Web.Extensions;
 using ASP.Application.Extensions;
 using ASP.Web.Models;
+using ASP.Web.Filters;
 
 namespace ASP.Web
 {
@@ -13,8 +14,11 @@ namespace ASP.Web
             // Add services to the container.
             builder.Services
                 .AddRouting(options => options.LowercaseUrls = true)
-                .AddControllersWithViews(options =>                 {
+                .AddControllersWithViews(options =>  
+                {
                     options.ModelBinderProviders.Insert(0, new TemplateComponentEditModelBinderProvider());
+                    options.Filters.Add(typeof(CheckCookies));
+                    options.Filters.Add(typeof(CurrentVersionActionFilter));
                 });
             builder.Services.RegisterDFEComponentLibraries()
                 .RegisterWebServices()

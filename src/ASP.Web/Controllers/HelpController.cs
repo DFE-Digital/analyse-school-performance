@@ -1,9 +1,6 @@
 ﻿using ASP.Application.UseCases.UpdateContentTemplate;
 using ASP.Application.UseCases.ViewContentTemplate;
-using ASP.Core.Helpers;
-using ASP.Core.Templating;
 using ASP.Web.Extensions;
-using ASP.Web.Filters;
 using ASP.Web.Models;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace ASP.Web.Controllers
 {
     [Route("help")]
-    [ServiceFilter<CheckCookies>]
     public class HelpController : Controller
     {
         private readonly IViewContentTemplateUseCase _viewContentUseCase;

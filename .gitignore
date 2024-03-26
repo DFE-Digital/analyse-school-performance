@@ -281,3 +281,4 @@ __pycache__/
 
 # SpecFlow feature generated files
 *.feature.cs
+/src/ASP.Web/CurrentCommit.txt

@@ -1,6 +1,5 @@
 ﻿using ASP.Core.Enums;
 using ASP.Web.Services;
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Controllers
