@@ -37,11 +37,15 @@
 	    <HintPath>..\..\lib\DfE.Data.DynamicPageTemplates.Web.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
+	
+	<ItemGroup>
+		<None Remove="CurrentCommit.txt" />
+	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="CurrentCommit.txt">
+		<Content Include="CurrentCommit.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+		</Content>
 	</ItemGroup>
 	
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
