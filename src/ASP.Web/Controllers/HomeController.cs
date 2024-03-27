@@ -28,6 +28,9 @@ namespace ASP.Web.Controllers
             var defaultIfNotFound = new ContentTemplateViewModel
             {
                 PageTitle = "Analyse school performance",
+                PageContent = new {
+                    HeroDescription = "Service description goes here..."
+                },
                 Views = []
             };
 

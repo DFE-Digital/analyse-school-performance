@@ -17,12 +17,12 @@
     <link rel="mask-icon" href="/assets/images/govuk-icon-mask.svg" color="blue">
     <link rel="apple-touch-icon" href="/assets/images/govuk-icon-180.png">
     <link rel="manifest" href="/assets/manifest.json">
-    <link rel="stylesheet" href="/assets/css/app.css" add-nonce="true"/>
+    <link rel="stylesheet" href="/assets/css/app.css" add-nonce="true" />
 
     @if (cookiePreferences?.AnalyticsTracking == AnalyticsTracking.Accepted)
     {
-       //Add analytics tracking
-       <script id="app-analytics-tracking-code"></script>
+        //Add analytics tracking
+        <script id="app-analytics-tracking-code"></script>
     }
 
 </head>
@@ -32,7 +32,7 @@
         document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
     </script>
 
-    <partial name="_CookieBannerPartial"/>
+    <partial name="_CookieBannerPartial" />
 
     <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
     <header class="govuk-header app-header" role="banner" data-module="govuk-header">
@@ -52,14 +52,14 @@
                     </svg>
                 </a>
             </div>
-           
+
             <div class="app-header__content-service-name">
                 <a id="header-link-service-name" href="/" class="govuk-header__link govuk-header__service-name app-header__service-name">
                     Analyse school performance
                 </a>
             </div>
 
-            <!-- Hide until implemented 
+            <!-- Hide until implemented
             <div class="app-header__content-account-signin">
                 <a id="header-link-account-name" href="#" class="govuk-header__link app-header__link-username">
                     Account name
@@ -78,16 +78,16 @@
 
     <partial name="_PhaseBannerPartial" />
 
-    <div class="govuk-width-container app-width-container">
+
+    <main id="main-content" role="main">
         <!-- Hide until implemented
            <a href="#" class="govuk-back-link">Back</a>
         -->
-        <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
-            @RenderBody()          
-        </main>
-    </div>
 
-    <div class="govuk-width-container app-width-container app-print-hidden">
+        @RenderBody()
+    </main>
+
+    <div class="govuk-width-container app-width-container app-print-hidden govuk-!-static-padding-top-5">
         <partial name="_ImproveAspPartial" />
     </div>
 

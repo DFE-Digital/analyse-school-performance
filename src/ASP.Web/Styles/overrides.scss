@@ -5,6 +5,15 @@
 
 $app-breakpoint-custom : 700px;
 
+.app-hero {
+    background: govuk-colour("blue");
+    padding: 80px 0;
+}
+
+.app-hero h1, .app-hero p {
+    color: govuk-colour("white");
+}
+
 .app-header__container {
     display: flex;
     flex-wrap: wrap;

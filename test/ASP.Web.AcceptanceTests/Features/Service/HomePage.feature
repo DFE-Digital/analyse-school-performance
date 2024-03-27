@@ -114,7 +114,73 @@ Scenario: Home page should contain three cards
 
  Scenario: Home page cards show service title when home-page content is missing in the DB
    When I navigate to /
-   Then the element "h1.govuk-heading-xl" should have the following markup: 
+   Then the element "#app-hero h1" should have the following markup: 
    """
-      <h1 class="govuk-heading-xl">Analyse school performance</h1>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Analyse school performance</h1>
    """
+
+
+Scenario: Home page hero should display placeholder title when PageContent is missing
+	Given page content "home-page" exists:
+		"""
+		{
+			"id": "home-page",
+			"contentId": "home-page",
+			"PageTitle": "Analyse school performance"
+		}
+		"""
+	When I navigate to /
+	Then I should get a 200 response
+	Then the element "#app-hero h1" should have the text content "Analyse school performance"
+
+
+
+Scenario: Home page hero should display placeholder description when HeroDescription is missing
+	Given page content "home-page" exists:
+		"""
+		{
+			"id": "home-page",
+			"contentId": "home-page",
+			"PageTitle": "Analyse school performance",
+			"PageContent": {
+
+			}
+		}
+		"""
+	When I navigate to /
+	Then I should get a 200 response
+	Then the element "#app-hero p" should have the text content "Service description goes here..."
+
+
+Scenario: Home page hero should display placeholder description when HeroDescription is null
+	Given page content "home-page" exists:
+		"""
+		{
+			"id": "home-page",
+			"contentId": "home-page",
+			"PageTitle": "Analyse school performance",
+			"PageContent": {
+				"HeroDescription": null
+			}
+		}
+		"""
+	When I navigate to /
+	Then I should get a 200 response
+	Then the element "#app-hero p" should have the text content "Service description goes here..."
+
+Scenario: Home page hero should display correct heading and description
+	Given page content "home-page" exists:
+		"""
+		{
+			"id": "home-page",
+			"contentId": "home-page",
+			"PageTitle": "Analyse school performance",
+			"PageContent": {
+				"HeroDescription": "Hero description"
+			}
+		}
+		"""
+	When I navigate to /
+	Then I should get a 200 response
+	Then the element "#app-hero h1" should have the text content "Analyse school performance"
+	Then the element "#app-hero p" should have the text content "Hero description"
