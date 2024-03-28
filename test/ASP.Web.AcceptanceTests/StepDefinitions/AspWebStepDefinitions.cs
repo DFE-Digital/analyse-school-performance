@@ -1,282 +1,233 @@
-using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using ASP.AcceptanceTests.Drivers;
 using ASP.Test.Core;
 using System.Net;
 using TechTalk.SpecFlow.Infrastructure;
-using Xunit.Sdk;
 
 namespace ASP.AcceptanceTests.StepDefinitions
 {
-
+    // Step definitions for test scenarios that interact with the ASP web application
     [Binding]
-    public partial class AspWebStepDefinitions
+    public class AspWebStepDefinitions
     {
-        private readonly AspWebContext _web;
+        private readonly IWebDriver _web;
         private readonly ISpecFlowOutputHelper _outputHelper;
 
-        public AspWebStepDefinitions(AspWebContext web, ISpecFlowOutputHelper outputHelper)
+        public AspWebStepDefinitions(IWebDriver web, ISpecFlowOutputHelper outputHelper)
         {
             _web = web;
             _outputHelper = outputHelper;
-        }
-
-        [BeforeScenario]
-        public void ClearDownPageContent()
-        {
-            _web.CookieProvider.ClearCookies();
         }
 
         [Given(@"I navigate to ((?:/.*)+)")]
         [When(@"I navigate to ((?:/.*)+)")]
         public async Task INavigateTo(string path)
         {
-            await _web.GetAsync(path);
+            await _web.NavigateAsync(path);
         }
 
-        [Then(@"the cookie ""(.*)"" should be set to ""(.*)""")]
-        public void ThenTheCookieShouldBeSetTo(string key, string value)
+        [When(@"I update the element ""([^""]*)"" to be (checked|unchecked)")]
+        public async Task WhenIUpdateTheElementToBe(string selector, string state)
         {
-            var cookieValue = _web.CookieProvider.GetCookie(key);
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            Assert.Equal(cookieValue, value);
+            await element.SetCheckedAsync(state == "checked");
         }
-
-        [When(@"the cookie ""(.*)"" has been set to ""(.*)""")]
-        public void WhenTheCookieHasBeenSetTo(string key, string value)
-        {
-            _web.CookieProvider.SetCookie(key, value);
-        }
-
-        [Then(@"the radio ""([^""]*)"" is checked")]
-        public void ThenTheRadioIsChecked(string selector)
-        {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
-
-            var input = Assert.IsAssignableFrom<IHtmlInputElement>(element);
-            Assert.True(input.IsChecked());
-        }
-
-        [When(@"I check the radio button ""([^""]*)""")]
-        public void WhenICheckTheRadioButton(string selector)
-        {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
-
-            var input = Assert.IsAssignableFrom<IHtmlInputElement>(element);
-            var radios = _web.LastResponse.QuerySelectorAll<IHtmlInputElement>(@$"[name=""{input.Name}""]");
-            foreach (var radio in radios)
-            {
-                radio.IsChecked = false;
-            }
-
-            input.IsChecked = true;
-        }
-
-        [Then(@"The number of ""([^""]*)"" elements on the page should equal (.*)")]
-        public void ThenTheNumberOfElementsOnThePageShouldEqual(string selector, int count)
-        {
-            var elements = _web.LastResponse.QuerySelectorAll(selector);
-
-            Assert.Equal(count, elements.Count());
-        }
-
 
         [When(@"I update the textbox ""([^""]*)"" to have the value ""([^""]*)""")]
-        public void WhenIUpdateTheTextBoxToHaveTheValue(string selector, string value)
+        public async Task WhenIUpdateTheTextBoxToHaveTheValue(string selector, string value)
         {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            var input = Assert.IsAssignableFrom<IHtmlInputElement>(element);
-            input.Value = value;
+            await element.SetValueAsync(value);
         }
 
-        [When(@"I submit the form ""([^""]*)""")]
-        public async Task WhenISubmitTheForm(string formSelector)
+        [When(@"I click the button ""([^""]*)""")]
+        public async Task WhenIClickTheButton(string elementSelector)
         {
-            var element = _web.LastResponse.QuerySelector(formSelector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{formSelector}"".");
-            var form = Assert.IsAssignableFrom<IHtmlFormElement>(element);
+            var button = await _web.Element(elementSelector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{elementSelector}"".");
 
-            await _web.SubmitFormAsync(form);
-        }
-
-        [When(@"I submit the form ""([^""]*)"" using the element ""([^""]*)""")]
-        public async Task whenISubmitTheFormUsingTheElement(string formSelector, string elementSelector)
-        {
-            var formElement = _web.LastResponse.QuerySelector(formSelector);
-            AssertWithMessage.NotNull(formElement, @$"Could not find an element with the selector ""{formSelector}"".");
-            var form = Assert.IsAssignableFrom<IHtmlFormElement>(formElement);
-
-            var inputElement = _web.LastResponse.QuerySelector(elementSelector);
-            AssertWithMessage.NotNull(inputElement, @$"Could not find an element with the selector ""{elementSelector}"".");
-            var element = Assert.IsAssignableFrom<IHtmlElement>(inputElement);
-
-            await _web.SubmitFormAsync(form, element);
+            await button.ClickAsync();
         }
 
         [Then(@"I should get a (.*) response")]
-        public void ThenIShouldGetAResponse(int statusCode)
+        public async Task ThenIShouldGetAResponse(int statusCode)
         {
-            if (_web.LastResponse.StatusCode != HttpStatusCode.OK)
+            if (_web.Status != HttpStatusCode.OK)
             {
-                _outputHelper.WriteLine(_web.LastResponse.Body.Html());
+                var pageContent = await _web.PageContentAsync();
+                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
             }
 
-            Assert.Equal(statusCode, (int)_web.LastResponse.StatusCode);
+            Assert.Equal((HttpStatusCode)statusCode, _web.Status);
         }
 
         [Then(@"the page title should be ""([^""]*)""")]
-        public void ThenThePageTitleShouldBe(string expected)
+        public async Task ThenThePageTitleShouldBe(string expected)
         {
-            var actual = _web.LastResponse.Title;
+            var actual = await _web.PageTitleAsync();
 
             Assert.Equal(expected, actual);
         }
 
         [Then(@"the element ""([^""]*)"" should not exist")]
-        public void ThenTheElementShouldNotExist(string selector)
+        public async Task ThenTheElementShouldNotExist(string selector)
         {
-            AssertWithMessage.NotNull(_web.LastResponse, "No web response received. Is the test missing an action?");
-
-            IElement? element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.Null(element, @$"Found an element with the selector ""{selector}"".");
+            await _web.Element(selector)
+                .ShouldNotExistAsync(@$"Found an element with the selector ""{selector}"".");
         }
 
         [Then(@"the element ""([^""]*)"" should exist")]
-        public void ThenTheElementShouldExist(string selector)
+        public async Task ThenTheElementShouldExist(string selector)
         {
-            AssertWithMessage.NotNull(_web.LastResponse, "No web response received. Is the test missing an action?");
-
-            IElement? element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+            await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
         }
 
-        [Then(@"the element ""([^""]*)"" should have the following markup:")]
-        public void ThenTheElementShouldHaveTheFollowingMarkup(string selector, string expectedMarkup)
+        [Then(@"the element ""([^""]*)"" should have the outer HTML:")]
+        public async Task ThenTheElementShouldHaveTheOuterHtml(string selector, string expectedHtml)
         {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
-
-            AssertHtml.Equivalent(expectedMarkup, element!, _outputHelper.WriteLine);
-        }
-
-        [Then(@"the elements ""([^""]*)"" should have the following content")]
-        public void ThenTheElementsShouldHaveTheFollowingContent(string selector, Table content)
-        {
-            int index = 0;
-            var elements = _web.LastResponse.QuerySelectorAll(selector);
-
-            foreach (var item in content.Rows)
-            {
-                Assert.Equal(item.Values.First(), elements[index].TextContent.Trim());
-                index++;
-            }
-        }
-
-        [Then(@"the anchors ""([^""]*)"" should have the following URLs")]
-        public void ThenTheAnchorsShouldHaveTheFollowingUrls(string selector, Table content)
-        {
-            int index = 0;
-            var elements = _web.LastResponse.QuerySelectorAll(selector);
-
-            foreach (var item in content.Rows)
-            {
-                var anchor = Assert.IsAssignableFrom<IHtmlAnchorElement>(elements[index]);
-
-                Assert.Equal(item.Values.First(), anchor.PathName.Trim());
-                index++;
-            }
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            
+            var outerHtml = await element.OuterHtmlAsync();
+            AssertHtml.Equal(expectedHtml, outerHtml, _outputHelper.WriteLine);
         }
 
         [Then(@"the element ""([^""]*)"" should have the text content ""(.*)""")]
-        public void ThenTheElementShouldHaveTheTextContent(string selector, string textContent)
+        public async Task ThenTheElementShouldHaveTheTextContent(string selector, string expectedTextContent)
         {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            Assert.Equal(textContent.Trim(), element!.TextContent.Trim());
+            var textContent = await element.TextContentAsync();
+            Assert.Equal(expectedTextContent.Trim(), textContent.Trim());
         }
 
         [Then(@"the element ""([^""]*)"" should match the selector ""(.+)""")]
-        public void ThenTheElementShouldMatchTheSelector(string selector, string selectorToMatch)
+        public async Task ThenTheElementShouldMatchTheSelector(string selector, string selectorToMatch)
         {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            AssertWithMessage.True(element!.Matches(selectorToMatch), @$"The element did not match ""{selectorToMatch}"".");
+            var matches = await element.MatchesAsync(selectorToMatch);
+            AssertWithMessage.True(matches, @$"The element did not match ""{selectorToMatch}"".");
         }
 
         [Then(@"the element ""([^""]*)"" should have the tag name ""([^""]*)""")]
-        public void ThenTheElementShouldHaveTheTagName(string selector, string expectedTagName)
+        public async Task ThenTheElementShouldHaveTheTagName(string selector, string expectedTagName)
         {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            Assert.Equal(expectedTagName, element!.TagName.ToLower());
+            var tagName = await element.TagNameAsync();
+            Assert.Equal(expectedTagName, tagName);
         }
 
         [Then(@"the element ""([^""]*)"" should have the class ""([^""]*)""")]
-        public void ThenTheElementShouldHaveTheClass(string selector, string expectedClass)
+        public async Task ThenTheElementShouldHaveTheClass(string selector, string expectedClass)
         {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            Assert.Equal(expectedClass, element!.ClassName);
+            var @class = await element.AttributeAsync("class");
+            Assert.Equal(expectedClass, @class);
         }
 
         [Then(@"the textbox ""([^""]*)"" should have the value ""([^""]*)""")]
-        public void ThenTheTextBoxShouldHaveTheValue(string selector, string value)
+        public async Task ThenTheTextBoxShouldHaveTheValue(string selector, string expectedValue)
         {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            var input = Assert.IsAssignableFrom<IHtmlInputElement>(element);
-
-            Assert.Equal(value.Trim(), input!.Value.Trim());
+            var value = await element.ValueAsync();
+            Assert.Equal(expectedValue.Trim(), value.Trim());
         }
 
-        [Then(@"the anchor ""([^""]*)"" should be an internal link to ""([^""]*)""")]
-        public void ThenTheAnchorShouldBeAnInternalLinkTo(string selector, string location)
+        [Then(@"the element ""([^""]*)"" should be (checked|unchecked)")]
+        public async Task ThenTheElementShouldBe(string selector, string state)
         {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            var anchor = Assert.IsAssignableFrom<IHtmlAnchorElement>(element);
-
-            Assert.Equal($"http://localhost{location.Trim()}", anchor.Href.Trim());
+            var isChecked = await element.IsCheckedAsync();
+            Assert.Equal(state == "checked", isChecked);
         }
 
-        [Then(@"the anchor ""([^""]*)"" should be an external link to ""([^""]*)""")]
-        public void ThenTheAnchorShouldBeAnExternalLinkTo(string selector, string location)
+        [Then(@"the element ""([^""]*)"" should be an internal link to ""([^""]*)""")]
+        public async Task ThenTheElementShouldBeAnInternalLinkTo(string selector, string location)
         {
-            var element = _web.LastResponse.QuerySelector(selector);
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            var anchor = Assert.IsAssignableFrom<IHtmlAnchorElement>(element);
+            var tagName = await element.TagNameAsync();
+            var href = await element.AttributeAsync("href");
 
-            Assert.Equal($"{location.Trim()}", anchor.Href.Trim());
+            Assert.Equal("a", tagName);
+            Assert.Equal(location.Trim(), href.Trim());
+        }
+
+        [Then(@"the element ""([^""]*)"" should be an external link to ""([^""]*)""")]
+        public async Task ThenTheElementShouldBeAnExternalLinkTo(string selector, string location)
+        {
+            var element = await _web.Element(selector)
+                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+
+            var tagName = await element.TagNameAsync();
+            var href = await element.AttributeAsync("href");
+
+            Assert.Equal("a", tagName);
+            Assert.Equal(location.Trim(), href.Trim());
         }
 
         [Then(@"the field labelled ""(.+)"" should have the value ""(.*)""")]
-        public void ThenTheFieldLabelledShouldHaveTheValue(string labelText, string expectedValue)
+        public async Task ThenTheFieldLabelledShouldHaveTheValue(string labelText, string expectedValue)
         {
-            var label = _web.LastResponse!.QuerySelectorAll("label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+            var field = await _web.ElementByLabel(labelText)
+                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
-            var field = _web.LastResponse!.QuerySelector($"#{label?.Attributes["for"]?.Value}");
-            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+            var actualValue = await field.ValueAsync();
+            Assert.Equal(expectedValue, actualValue);
+        }
 
-            var value = field switch
+        [Then(@"The number of ""([^""]*)"" elements on the page should equal (.*)")]
+        public async Task ThenTheNumberOfElementsOnThePageShouldEqual(string selector, int expectedCount)
+        {
+            var elements = _web.Elements(selector);
+            var count = await elements.CountAsync();
+
+            Assert.Equal(expectedCount, count);
+        }
+
+        [Then(@"the elements ""([^""]*)"" should have the text contents:")]
+        public async Task ThenTheElementsShouldHaveTheTextContents(string selector, Table content)
+        {
+            int index = 0;
+            var elements = _web.Elements(selector);
+            var textContents = await elements.TextContentsAsync();
+
+            foreach (var item in content.Rows)
             {
-                IHtmlSelectElement select => select.Value,
-                IHtmlInputElement input => input.Value,
-                _ => throw new XunitException($"Could not find the value of element of type {field!.GetType().Name}.")
-            };
+                Assert.Equal(item.Values.First(), textContents[index].Trim());
+                index++;
+            }
+        }
 
-            Assert.Equal(expectedValue, value);
+        [Then(@"the elements ""([^""]*)"" should have the hrefs:")]
+        public async Task ThenTheElementsShouldHaveTheHrefs(string selector, Table content)
+        {
+            int index = 0;
+            var elements = _web.Elements(selector);
+            var hrefs = await elements.AttributeValuesAsync("href");
+
+            foreach (var item in content.Rows)
+            {
+                Assert.Equal(item.Values.First(), hrefs[index].Trim());
+                index++;
+            }
         }
     }
 }

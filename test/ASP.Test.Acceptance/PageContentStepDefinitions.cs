@@ -42,7 +42,7 @@ namespace ASP.Test.Acceptance.Core
                 data =>
                 {
                 },
-                e => AssertWithMessage.Failed(@$"Could not update page content with id ""{id}"": {e.Description}"));
+                e => AssertWithMessage.Fail(@$"Could not update page content with id ""{id}"": {e.Description}"));
         }
 
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to (.+)")]
@@ -54,7 +54,7 @@ namespace ASP.Test.Acceptance.Core
                     var value = GetPropertyPathValue(propertyPath, data);
                     Assert.Equal(propertyValue, value);
                 },
-                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
             );
         }
 
@@ -70,9 +70,9 @@ namespace ASP.Test.Acceptance.Core
 
                         Assert.Equal(expectedSerializedPropertyValue, actualSerializedPropertyValue);
                     },
-                    e => AssertWithMessage.Failed(e.Description)
+                    e => AssertWithMessage.Fail(e.Description)
                 ),
-                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
             );
         }
 
@@ -86,7 +86,7 @@ namespace ASP.Test.Acceptance.Core
 
                     MatchProperties(expected, actual);
                 },
-                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
             );
         }
 
@@ -95,7 +95,7 @@ namespace ASP.Test.Acceptance.Core
         {
             await GetPageContent(id).SwitchFirst(
                 actual => MatchProperties(expected, actual),
-                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
             );
         }
 
@@ -108,7 +108,7 @@ namespace ASP.Test.Acceptance.Core
                     var expected = JsonHelper.Serialize(JsonHelper.Deserialize<object>(properties));
                     Assert.Equal(expected, actual);
                 },
-                e => AssertWithMessage.Failed(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
             );
         }
 
@@ -149,18 +149,18 @@ namespace ASP.Test.Acceptance.Core
                 Dictionary<string, object>? dict = null;
                 JsonHelper.Deserialize<Dictionary<string, object>>(data).SwitchFirst(
                     v => dict = v,
-                    e => AssertWithMessage.Failed(e.Description)
+                    e => AssertWithMessage.Fail(e.Description)
                 );
                 AssertWithMessage.True(dict!.ContainsKey(arrayProperty), $@"Page content object does not contain property ""{arrayProperty}"":\n{data}");
                 var arrayValue = dict![arrayProperty];
                 object[]? array = null;
                 JsonHelper.Deserialize<object[]>(JsonHelper.Serialize(arrayValue)).SwitchFirst(
                     v => array = v,
-                    e => AssertWithMessage.Failed(e.Description)
+                    e => AssertWithMessage.Fail(e.Description)
                 );
                 if (array!.Length <= arrayIndex)
                 {
-                    AssertWithMessage.Failed($@"Array index {arrayIndex} does not exist on array ""{arrayProperty}"":\n{JsonHelper.Serialize(array!)}");
+                    AssertWithMessage.Fail($@"Array index {arrayIndex} does not exist on array ""{arrayProperty}"":\n{JsonHelper.Serialize(array!)}");
                 }
                 var value = JsonHelper.Serialize(array![arrayIndex]);
                 var restOfPath = string.Join(".", parts.Skip(1));
@@ -175,7 +175,7 @@ namespace ASP.Test.Acceptance.Core
                 Dictionary<string, object>? dict = null;
                 JsonHelper.Deserialize<Dictionary<string, object>>(data).SwitchFirst(
                     v => dict = v,
-                    e => AssertWithMessage.Failed(e.Description)
+                    e => AssertWithMessage.Fail(e.Description)
                 );
                 AssertWithMessage.True(dict!.ContainsKey(propertyName), $@"Page content object does not contain property ""{propertyName}"":\n{data}");
                 var value = JsonHelper.Serialize(dict![propertyName]);
@@ -200,7 +200,7 @@ namespace ASP.Test.Acceptance.Core
                     },
                     e =>
                     {
-                        AssertWithMessage.Failed(e.Description);
+                        AssertWithMessage.Fail(e.Description);
                     }
                 );
             });
@@ -226,7 +226,7 @@ namespace ASP.Test.Acceptance.Core
                                         },
                                         e =>
                                         {
-                                            AssertWithMessage.Failed(e.Description);
+                                            AssertWithMessage.Fail(e.Description);
                                         }
                                     );
                                 });
@@ -238,7 +238,7 @@ namespace ASP.Test.Acceptance.Core
                         },
                         e =>
                         {
-                            AssertWithMessage.Failed(e.Description);
+                            AssertWithMessage.Fail(e.Description);
                         }
                     );
                 },
@@ -262,7 +262,7 @@ namespace ASP.Test.Acceptance.Core
                                                 },
                                                 e =>
                                                 {
-                                                    AssertWithMessage.Failed(e.Description);
+                                                    AssertWithMessage.Fail(e.Description);
                                                 }
                                             );
                                         });
@@ -274,7 +274,7 @@ namespace ASP.Test.Acceptance.Core
                                 },
                                 e =>
                                 {
-                                    AssertWithMessage.Failed(e.Description);
+                                    AssertWithMessage.Fail(e.Description);
                                 }
                             );
                         },

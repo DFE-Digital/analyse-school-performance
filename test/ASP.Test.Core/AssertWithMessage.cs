@@ -1,9 +1,10 @@
-﻿using Xunit;
+﻿using System.Diagnostics.CodeAnalysis;
+using Xunit;
 using Xunit.Sdk;
 
 namespace ASP.Test.Core
 {
-    public static class AssertWithMessage
+    public partial class AssertWithMessage
     {
         public static void True(bool actual, string message)
         {
@@ -17,7 +18,7 @@ namespace ASP.Test.Core
             }
         }
 
-        public static void NotNull(object? @object, string message)
+        public static void NotNull([NotNull] object? @object, string message)
         {
             try
             {
@@ -41,9 +42,33 @@ namespace ASP.Test.Core
             }
         }
 
-        public static void Failed(string message)
+        public static void Fail(string message)
         {
             throw new XunitException(message);
+        }
+
+        public static T IsAssignableFrom<T>(object @object, string message)
+        {
+            try
+            {
+                return Assert.IsAssignableFrom<T>(@object);
+            }
+            catch(XunitException)
+            {
+                throw new XunitException(message);
+            }
+        }
+
+        public static void Equal<T>(T expected, T actual, string message)
+        {
+            try
+            {
+                Assert.Equal(expected, actual);
+            }
+            catch (XunitException)
+            {
+                throw new XunitException(message);
+            }
         }
     }
 }

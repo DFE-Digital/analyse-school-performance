@@ -4,6 +4,20 @@
     ViewData["Title"] = Model.PageTitle;
 }
 
-<div id="test">
-    @await Html.PartialAsync("ContentTemplateView", Model)
+@*
+    View for component tests to allow embedding a single component.
+
+    Allows components to be tested independently of any controllers defined in the web application, so
+    keeping application and test code separate
+*@
+
+@*
+    Giving test div an explicit size so it is always visible regardless of its content
+    (Playwright assertions wait until the element is visible on the page)
+*@
+<div id="test" style="border: 1px solid black; padding: 10px">
+    <span>This is the test container</span>
+    <div>
+        @await Html.PartialAsync("ContentTemplateView", Model)
+    </div>
 </div>

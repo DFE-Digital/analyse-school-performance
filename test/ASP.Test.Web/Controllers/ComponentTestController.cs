@@ -7,6 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Controllers
 {
+    // Test controller for components which is added as an Application Part to the test assembly:
+    //   services.AddMvc()
+    //     .AddApplicationPart(typeof(ComponentTestController).Assembly)
+    //     .AddControllersAsServices();
+    // 
+    // This allows components to be tested independently of any controllers defined in the web application, so
+    // keeping application and test code separate
     [Route("component-test")]
     public class ComponentTestController : Controller
     {

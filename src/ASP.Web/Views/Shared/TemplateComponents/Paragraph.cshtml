@@ -1,4 +1,4 @@
-﻿@using Newtonsoft.Json
+﻿@using ASP.Core.Helpers
 @using Newtonsoft.Json.Linq
 @model TemplateComponentViewModel
 
@@ -13,10 +13,10 @@
         null => "Paragraph text",
         string s when !string.IsNullOrWhiteSpace(s) => s,
         string s when string.IsNullOrWhiteSpace(s) => "Paragraph text",
-        bool b => JsonConvert.SerializeObject(b),
-        double d => JsonConvert.SerializeObject(d),
-        JArray a => JsonConvert.SerializeObject(a),
-        JObject o => JsonConvert.SerializeObject(o),
+        bool b => JsonHelper.Serialize(b),
+        double d => JsonHelper.Serialize(d),
+        JArray a => JsonHelper.Serialize(a),
+        JObject o => JsonHelper.Serialize(o),
         _ => Model.ViewContent.Text.ToString()
     };
 }

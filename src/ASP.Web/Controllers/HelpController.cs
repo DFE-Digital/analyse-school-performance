@@ -45,7 +45,7 @@ namespace ASP.Web.Controllers
         }
 
         [HttpPost("{contentId}/edit")]
-        public async Task<IActionResult> EditContentPage(string contentId, ContentTemplateEditModel model)
+        public async Task<IActionResult> EditPage(string contentId, ContentTemplateEditModel model)
         {
             string templateId = $"help-{contentId}".ToLower();
 

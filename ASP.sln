@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5D420B01-4CD0-4812-9F34-FC80F521DF5B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{446A54E3-2424-4278-8AF5-F0DD985D6C52}"
+	ProjectSection(SolutionItems) = preProject
+		test\Exclude Javascript tests.playlist = test\Exclude Javascript tests.playlist
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Application", "src\ASP.Application\ASP.Application.csproj", "{D1709BDE-D411-484C-9A03-631CCD575425}"
 EndProject

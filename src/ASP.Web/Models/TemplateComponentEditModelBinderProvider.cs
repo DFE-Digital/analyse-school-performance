@@ -4,20 +4,20 @@ namespace ASP.Web.Models
 {
     public class TemplateComponentEditModelBinderProvider : IModelBinderProvider
     {
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
-        {
-            var templateComponentEditModelType = typeof(TemplateComponentEditModel);
+        private static readonly Type _templateComponentEditModelType = typeof(TemplateComponentEditModel);
+        private static List<Type> _editModelTypes = _templateComponentEditModelType.Assembly.GetTypes()
+                .Where(t => t != _templateComponentEditModelType && t.IsAssignableTo(_templateComponentEditModelType))
+                .ToList();
 
-            if (context.Metadata.ModelType != templateComponentEditModelType)
+        public IModelBinder? GetBinder(ModelBinderProviderContext context)
+        {
+            if (context.Metadata.ModelType != _templateComponentEditModelType)
             {
                 return null;
             }
 
-            var editModelTypes = templateComponentEditModelType.Assembly.GetTypes()
-                .Where(t => t != templateComponentEditModelType && t.IsAssignableTo(templateComponentEditModelType));
-
             var binders = new Dictionary<Type, (ModelMetadata, IModelBinder)>();
-            foreach (var type in editModelTypes)
+            foreach (var type in _editModelTypes)
             {
                 var modelMetadata = context.MetadataProvider.GetMetadataForType(type);
                 binders[type] = (modelMetadata, context.CreateBinder(modelMetadata));

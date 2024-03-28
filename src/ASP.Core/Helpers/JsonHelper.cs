@@ -19,13 +19,18 @@ namespace ASP.Core.Helpers
         {
             T? item;
 
-            try
-            {
-                item = JsonConvert.DeserializeObject<T>(json);
-            }
-            catch (Exception ex)
-            {
-                return Error.Unexpected(description: $"Error occurred deserializing object of type {typeof(T)}: {ex.Message}. Object: {Environment.NewLine}{json}");
+            string? error = null;
+                item = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
+                    Error = (object? sender, Newtonsoft.Json.Serialization.ErrorEventArgs args) =>
+                    {
+                        error = args.ErrorContext.Error.Message;
+                        args.ErrorContext.Handled = true;
+                    }
+                });
+
+            if(error != null) 
+            { 
+                return Error.Unexpected(description: $"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}");
             }
 
             if (item == null)
@@ -40,15 +45,21 @@ namespace ASP.Core.Helpers
         {
             T? item;
 
-            try
-            {
-                item = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore });
-            }
-            catch (Exception ex)
-            {
-                return Error.Unexpected(description: $"Error occurred deserializing object of type {typeof(T)}: {ex.Message}");
-            }
+            string? error = null;
+            item = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                Error = (object? sender, Newtonsoft.Json.Serialization.ErrorEventArgs args) =>
+                {
+                    error = args.ErrorContext.Error.Message;
+                    args.ErrorContext.Handled = true;
+                }
+            });
 
+            if (error != null)
+            {
+                return Error.Unexpected(description: $"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}");
+            }
+            
             if (item == null)
             {
                 return Error.Unexpected(description: $"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");

@@ -40,6 +40,13 @@ stages:
           msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
           platform: '$(BuildPlatform)'
           configuration: '$(BuildConfiguration)'
+
+      - task: PowerShell@2
+        displayName: 'Download Playwright browsers'
+        inputs:
+          targetType: 'filePath'
+          filePath: 'test/ASP.Web.AcceptanceTests/bin/$(BuildConfiguration)/net8.0/playwright.ps1'
+          arguments: install
     
       - task: VSTest@2
         displayName: 'Test Assemblies'

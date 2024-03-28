@@ -1,5 +1,6 @@
 ﻿Feature: Home page
 
+@Javascript:disabled
 Scenario Outline: Home page should be accessible from multiple paths
 	When I navigate to <Path>
 	Then I should get a 200 response
@@ -11,7 +12,7 @@ Examples:
 	| /home       |
 	| /home/index |
 
-
+@Javascript:disabled
 Scenario: Home page should contain three cards
   Given page content "home-page" exists:
 		"""
@@ -32,8 +33,8 @@ Scenario: Home page should contain three cards
   When I navigate to /
   Then The number of ".app-card" elements on the page should equal 3
 
-
- Scenario: Home page cards are in the correct location
+@Javascript:disabled
+Scenario: Home page cards are in the correct location
       Given page content "home-page" exists:
 		"""
 		{
@@ -69,7 +70,7 @@ Scenario: Home page should contain three cards
 		}
 		"""
    When I navigate to /
-   Then the element ".app-grid-container-three-column" should have the following markup: 
+   Then the element ".app-grid-container-three-column" should have the outer HTML: 
      """
         <div id="app-card-container" class="app-grid-container-three-column app-grid-container--wider govuk-!-margin-top-5">   
             <div id="Id1" class="app-card">
@@ -111,15 +112,15 @@ Scenario: Home page should contain three cards
          </div>         
 	  """
 
-
- Scenario: Home page cards show service title when home-page content is missing in the DB
+@Javascript:disabled
+Scenario: Home page cards show service title when home-page content is missing in the DB
    When I navigate to /
-   Then the element "#app-hero h1" should have the following markup: 
+   Then the element "#app-hero h1" should have the outer HTML: 
    """
       <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Analyse school performance</h1>
    """
 
-
+@Javascript:disabled
 Scenario: Home page hero should display placeholder title when PageContent is missing
 	Given page content "home-page" exists:
 		"""
@@ -133,8 +134,7 @@ Scenario: Home page hero should display placeholder title when PageContent is mi
 	Then I should get a 200 response
 	Then the element "#app-hero h1" should have the text content "Analyse school performance"
 
-
-
+@Javascript:disabled
 Scenario: Home page hero should display placeholder description when HeroDescription is missing
 	Given page content "home-page" exists:
 		"""
@@ -151,7 +151,7 @@ Scenario: Home page hero should display placeholder description when HeroDescrip
 	Then I should get a 200 response
 	Then the element "#app-hero p" should have the text content "Service description goes here..."
 
-
+@Javascript:disabled
 Scenario: Home page hero should display placeholder description when HeroDescription is null
 	Given page content "home-page" exists:
 		"""
@@ -168,6 +168,7 @@ Scenario: Home page hero should display placeholder description when HeroDescrip
 	Then I should get a 200 response
 	Then the element "#app-hero p" should have the text content "Service description goes here..."
 
+@Javascript:disabled
 Scenario: Home page hero should display correct heading and description
 	Given page content "home-page" exists:
 		"""

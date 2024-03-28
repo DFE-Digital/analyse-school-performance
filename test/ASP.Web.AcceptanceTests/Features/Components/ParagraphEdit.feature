@@ -4,6 +4,7 @@ The Paragraph component provides the ability to add paragraphs to content templa
 
 For more information please view the [technical specification for this component](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14454/Paragraph).
 
+@Javascript:disabled
 Scenario: When ViewContent property is missing, component should not error
 	Given a content template contains the component:
 		"""
@@ -15,6 +16,7 @@ Scenario: When ViewContent property is missing, component should not error
 	Then there should be no errors
 	And the component should exist
 
+@Javascript:disabled
 Scenario: When ViewContent property is null, component should not error
 	Given a content template contains the component:
 		"""
@@ -27,6 +29,7 @@ Scenario: When ViewContent property is null, component should not error
 	Then there should be no errors
 	And the component should exist
 
+@Javascript:disabled
 Scenario: When IsLarge property is missing, component should not error and Is Large should default to false
 	Given a content template contains the component:
 		"""
@@ -41,7 +44,8 @@ Scenario: When IsLarge property is missing, component should not error and Is La
 	And the component should exist
 	And the component field labelled "Is Large" should be unchecked
 
-Scenario: When IsLarge property is invalid, component should not error and Is Large should default to false
+@Javascript:disabled
+Scenario Outline: When IsLarge property is invalid, component should not error and Is Large should default to false
 	Given a content template contains the component:
 		"""
 		{
@@ -66,7 +70,8 @@ Examples:
 	| " "                    |
 	| "xxx"                  |
 
-Scenario: Is Large field should be populated from the IsLarge property
+@Javascript:disabled
+Scenario Outline: Is Large field should be populated from the IsLarge property
 	Given a content template contains the component:
 		"""
 		{
@@ -85,6 +90,7 @@ Examples:
 	| "true"  | checked   |
 	| "false" | unchecked |
 
+@Javascript:disabled
 Scenario: Updating Is Large field should update IsLarge property on template
 	Given a content template contains the component:
 		"""
@@ -101,6 +107,7 @@ Scenario: Updating Is Large field should update IsLarge property on template
 	Then I should get a 200 response
 	And the component template property "IsLarge" should be equal to true
 
+@Javascript:disabled
 Scenario: When Text property is null, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
@@ -116,7 +123,8 @@ Scenario: When Text property is null, component should not error and should hand
 	And the component should exist
 	And the component field labelled "Text" should have the value ""
 
-Scenario: When Text property is a JSON value, component should not error and should handle the value appropriately
+@Javascript:disabled
+Scenario Outline: When Text property is a JSON value, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
 		{
@@ -138,6 +146,7 @@ Examples:
 	| [1,2,3]                | "[1,2,3]"              |
 	| { "property": "value"} | "{"property":"value"}" |
 
+@Javascript:disabled
 Scenario: Text field should be populated from Text property
 	Given a content template contains the component:
 		"""
@@ -151,6 +160,7 @@ Scenario: Text field should be populated from Text property
 	When I edit the component on the page
 	Then the component field labelled "Text" should have the value "Test paragraph text"
 
+@Javascript:disabled
 Scenario: Updating Text field should update Text property on template
 	Given a content template contains the component:
 		"""
@@ -167,6 +177,7 @@ Scenario: Updating Text field should update Text property on template
 	Then I should get a 200 response
 	And the component template property "Text" should be equal to "Updated paragraph"
 
+@Javascript:disabled
 Scenario: Updating Text field with a new line should update Text property on template
 	Given a content template contains the component:
 		"""

@@ -27,11 +27,11 @@ namespace ASP.Web.Models
                 c.Value switch {
                     null => "",
                     string s => s,
-                    bool b => JsonConvert.SerializeObject(b),
+                    bool b => JsonHelper.Serialize(b),
                     double d => d.ToString(),
                     long l => l.ToString(),
-                    JArray a => JsonConvert.SerializeObject(a, Formatting.Indented),
-                    JObject o => JsonConvert.SerializeObject(o, Formatting.Indented),
+                    JArray a => JsonHelper.SerializeIndented(a),
+                    JObject o => JsonHelper.SerializeIndented(o),
                     _ => c.Value.ToString() ?? ""
                 });
             ChildViews = childViews.Select(Create).ToList();

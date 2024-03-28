@@ -1,22 +1,19 @@
-﻿using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
-using AngleSharp.Html.Parser;
-using ASP.AcceptanceTests.Drivers;
+﻿using ASP.AcceptanceTests.Drivers;
 using ASP.Core.Helpers;
 using ASP.Test.Core;
 using System.Net;
 using TechTalk.SpecFlow.Infrastructure;
-using Xunit.Sdk;
 
 namespace ASP.AcceptanceTests.StepDefinitions
 {
+    // Step definitions for test scenarios that exercise a specific component in isolation
     [Binding]
     public partial class ComponentStepDefinitions
     {
-        private readonly AspWebContext _web;
+        private readonly IWebDriver _web;
         private readonly ISpecFlowOutputHelper _outputHelper;
 
-        public ComponentStepDefinitions(AspWebContext web, ISpecFlowOutputHelper outputHelper)
+        public ComponentStepDefinitions(IWebDriver web, ISpecFlowOutputHelper outputHelper)
         {
             _web = web;
             _outputHelper = outputHelper;
@@ -26,295 +23,277 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [When(@"I view the component on the page")]
         public async Task IViewTheComponentOnThePage()
         {
-            await _web.GetAsync("/component-test/view");
+            await _web.NavigateAsync("/component-test/view");
         }
 
         [Given(@"I edit the component on the page")]
         [When(@"I edit the component on the page")]
         public async Task IEditTheComponentOnThePage()
         {
-            await _web.GetAsync("/component-test/edit");
+            await _web.NavigateAsync("/component-test/edit");
         }
 
         [When(@"I save the component")]
         public async Task WhenISaveTheComponent()
         {
-            var element = _web.LastResponse.QuerySelector("#form");
-            AssertWithMessage.NotNull(element, @$"Could not find an element with the selector ""#form"".");
-            var form = Assert.IsAssignableFrom<IHtmlFormElement>(element);
+            var saveButton = await _web.Element("#test-save")
+                .ShouldExistAsync(@$"Could not find an element with the selector ""#test-save"".");
 
-            await _web.SubmitFormAsync(form);
+            await saveButton.ClickAsync();
         }
 
         [When(@"I update the component field labelled ""(.+)"" to have the value ""(.*)""")]
-        public void WhenIUpdateTheComponentFieldLabelledToHaveTheValue(string labelText, string value)
+        public async Task WhenIUpdateTheComponentFieldLabelledToHaveTheValue(string labelText, string value)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
 
-            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+            var field = await component.ElementByLabel(labelText)
+                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
-            var field = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
-            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
-
-            var _ = field switch {
-                IHtmlSelectElement select => select.Value = value,
-                IHtmlInputElement input => input.Value = value,
-                IHtmlTextAreaElement textarea => textarea.Value = value,
-                _ => throw new XunitException($"Could not set the value of element of type {field!.GetType().Name}.")
-            };
+            await field.SetValueAsync(value);
         }
 
         [When(@"I update the component field labelled ""(.+)"" to have the value:")]
-        public void WhenIUpdateTheComponentFieldLabelledToHaveTheValueMultiline(string labelText, string value)
+        public async Task WhenIUpdateTheComponentFieldLabelledToHaveTheValueMultiline(string labelText, string value)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
 
-            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+            var field = await component.ElementByLabel(labelText)
+                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
-            var field = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
-            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
-
-            var _ = field switch {
-                IHtmlSelectElement select => select.Value = value,
-                IHtmlInputElement input => input.Value = value,
-                IHtmlTextAreaElement textarea => textarea.Value = value,
-                _ => throw new XunitException($"Could not set the value of element of type {field!.GetType().Name}.")
-            };
+            await field.SetValueAsync(value);
         }
 
         [When(@"I update the component field labelled ""(.+)"" to be (checked|unchecked)")]
-        public void WhenIUpdateTheComponentFieldLabelledToBe(string labelText, string state)
+        public async Task WhenIUpdateTheComponentFieldLabelledToBe(string labelText, string state)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
 
-            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+            var field = await component.ElementByLabel(labelText)
+                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
-            var field = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
-            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+            await field.SetCheckedAsync(state == "checked");
+        }
 
-            var _ = field switch {
-                IHtmlInputElement input => input.IsChecked = state == "checked",
-                _ => throw new XunitException($"Could not set the checked state of element of type {field!.GetType().Name}.")
-            };
+        [When(@"I click on the element ""(.+)"" within the component")]
+        public async Task WhenIClickOnTheElementWithinTheComponent(string selector)
+        {
+            var element = await ComponentElementShouldExistAsync(selector);
+
+            await element.ClickAsync();
         }
 
         [Then(@"there should be no errors")]
-        public void ThenThereShouldBeNoErrors()
+        public async Task ThenThereShouldBeNoErrors()
         {
-            if (_web.LastResponse.StatusCode != HttpStatusCode.OK)
+            if (_web.Status != HttpStatusCode.OK)
             {
-                _outputHelper.WriteLine(_web.LastResponse.Body.Html());
+                var pageContent = await _web.PageContentAsync();
+                _outputHelper.WriteLine(pageContent);
             }
 
-            Assert.Equal(HttpStatusCode.OK, _web.LastResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, _web.Status);
         }
 
         [Then(@"the component should exist")]
-        public void ThenTheComponentShouldExist()
+        public async Task ThenTheComponentShouldExist()
         {
-            ComponentShouldExist();
+            await ComponentShouldExistAsync();
         }
 
         [Then(@"the component should not exist")]
-        public void ThenTheComponentShouldNotExist()
+        public async Task ThenTheComponentShouldNotExist()
         {
-            ComponentShouldNotExist();
+            await ComponentShouldNotExistAsync();
         }
 
-        [Then(@"the component should have the following markup:")]
-        public void ThenTheComponentShouldHaveTheFollowingMarkup(string expectedMarkup)
+        [Then(@"the component should have the outer HTML:")]
+        public async Task ThenTheComponentShouldHaveTheOuterHtml(string expectedHtml)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
+            var html = await component.OuterHtmlAsync();
 
-            AssertHtml.Equivalent(expectedMarkup, component!, _outputHelper.WriteLine);
+            AssertHtml.Equal(expectedHtml, html, _outputHelper.WriteLine);
         }
 
         [Then(@"the component should have the text content ""(.*)""")]
-        public void ThenTheComponentShouldHaveTheTextContent(string textContent)
+        public async Task ThenTheComponentShouldHaveTheTextContent(string expectedText)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
+            var textContent = await component.TextContentAsync();
 
-            Assert.Equal(textContent.Trim(), component!.TextContent.Trim());
+            Assert.Equal(expectedText.Trim(), textContent.Trim());
         }
 
         [Then(@"the component should have the inner HTML ""(.*)""")]
-        public void ThenTheComponentShouldHaveTheInnerHtml(string expectedHtml)
+        public async Task ThenTheComponentShouldHaveTheInnerHtml(string expectedHtml)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
+            var innerHtml = await component.InnerHtmlAsync();
 
-            AssertHtml.Equivalent(expectedHtml, component!.InnerHtml, _outputHelper.WriteLine);
+            AssertHtml.Equal(expectedHtml, innerHtml, _outputHelper.WriteLine);
         }
 
         [Then(@"the component outer element should have the tag name ""([^""]*)""")]
-        public void ThenTheComponentOuterElementShouldHaveTheTagName(string expectedTagName)
+        public async Task ThenTheComponentOuterElementShouldHaveTheTagName(string expectedTagName)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
+            var tagName = await component.TagNameAsync();
 
-            Assert.Equal(expectedTagName, component!.TagName.ToLower());
+            Assert.Equal(expectedTagName, tagName.ToLower());
         }
 
         [Then(@"the component outer element should have the class ""([^""]*)""")]
-        public void ThenTheComponentOuterElementShouldHaveTheClass(string expectedClass)
+        public async Task ThenTheComponentOuterElementShouldHaveTheClass(string expectedClass)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
+            var @class = await component.AttributeAsync("class");
 
-            Assert.Equal(expectedClass, component!.ClassName);
+            Assert.Equal(expectedClass, @class);
         }
 
         [Then(@"the element ""(.+)"" within the component should exist")]
-        public void ThenTheElementWithinTheComponentShouldExist(string selector)
+        public async Task ThenTheElementWithinTheComponentShouldExist(string selector)
         {
-            ComponentElementShouldExist(selector);
+            await ComponentElementShouldExistAsync(selector);
         }
 
         [Then(@"the element ""(.+)"" within the component should not exist")]
-        public void ThenTheElementWithinTheComponentShouldNotExist(string selector)
+        public async Task ThenTheElementWithinTheComponentShouldNotExist(string selector)
         {
-            ComponentElementShouldNotExist(selector);
+            await ComponentElementShouldNotExistAsync(selector);
         }
 
         [Then(@"the element ""(.+)"" within the component should have the tag name ""([^""]+)""")]
-        public void ThenTheElementWithinTheComponentShouldHaveTheTagName(string selector, string expectedTagName)
+        public async Task ThenTheElementWithinTheComponentShouldHaveTheTagName(string selector, string expectedTagName)
         {
-            var element = ComponentElementShouldExist(selector);
+            var element = await ComponentElementShouldExistAsync(selector);
+            var tagName = await element.TagNameAsync();
 
-            Assert.Equal(expectedTagName, element!.TagName.ToLower());
+            Assert.Equal(expectedTagName, tagName);
         }
 
         [Then(@"the element ""(.+)"" within the component should have the class ""(.*)""")]
-        public void ThenTheElementWithinTheComponentShouldHaveTheClass(string selector, string expectedClass)
+        public async Task ThenTheElementWithinTheComponentShouldHaveTheClass(string selector, string expectedClass)
         {
-            var element = ComponentElementShouldExist(selector);
+            var element = await ComponentElementShouldExistAsync(selector);
+            var @class = await element.AttributeAsync("class");
 
-            Assert.Equal(expectedClass, element!.ClassName);
+            Assert.Equal(expectedClass, @class);
         }
 
         [Then(@"the element ""(.+)"" within the component should have the text content ""(.*)""")]
-        public void ThenTheElementWithinTheComponentShouldHaveTheTextContent(string selector, string textContent)
+        public async Task ThenTheElementWithinTheComponentShouldHaveTheTextContent(string selector, string expectedTextContent)
         {
-            var element = ComponentElementShouldExist(selector);
+            var element = await ComponentElementShouldExistAsync(selector);
+            var textContent = await element.TextContentAsync();
 
-            Assert.Equal(textContent.Trim(), element!.TextContent.Trim());
+            Assert.Equal(expectedTextContent.Trim(), textContent.Trim());
+        }
+
+        [Then(@"the element ""(.+)"" within the component should have the outer HTML:")]
+        public async Task ThenTheElementWithinTheComponentShouldHaveTheOuterHtml(string selector, string expectedHtml)
+        {
+            var element = await ComponentElementShouldExistAsync(selector);
+            var html = await element.OuterHtmlAsync();
+
+            AssertHtml.Equal(expectedHtml, html, _outputHelper.WriteLine);
         }
 
         [Then(@"the component field labelled ""(.+)"" should have the value ""(.*)""")]
-        public void ThenTheComponentFieldLabelledShouldHaveTheValue(string labelText, string expectedValue)
+        public async Task ThenTheComponentFieldLabelledShouldHaveTheValue(string labelText, string expectedValue)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
 
-            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
-
-            var field = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
-            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
-
-            var value = field! switch {
-                IHtmlSelectElement select => select.Value,
-                IHtmlInputElement input => input.Value,
-                IHtmlTextAreaElement textArea => textArea.Value,
-                _ => throw new XunitException($"Could not find the value of element of type {field!.GetType().Name}.")
-            };
-
+            var field = await component.ElementByLabel(labelText)
+                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+           
+            var value = await field.ValueAsync();
             Assert.Equal(expectedValue, value);
         }
 
         [Then(@"the component field labelled ""(.+)"" should be (checked|unchecked)")]
-        public void ThenTheComponentFieldLabelledShouldBeUnchecked(string labelText, string state)
+        public async Task ThenTheComponentFieldLabelledShouldBeUnchecked(string labelText, string state)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
 
-            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
-
-            var field = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
-            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
-
-            var isChecked = field! switch {
-                IHtmlInputElement input => input.IsChecked,
-                _ => throw new XunitException($"Could not find the checked state of element of type {field!.GetType().Name}.")
-            };
-
+            var field = await component.ElementByLabel(labelText)
+                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+            
+            var isChecked = await field.IsCheckedAsync();
             Assert.Equal(state == "checked", isChecked);
         }
 
         [Then(@"the component field labelled ""(.+)"" should match the JSON string ""(.*)""")]
-        public void ThenTheComponentFieldLabelledShouldMatchTheJSONString(string labelText, string expectedValue)
+        public async Task ThenTheComponentFieldLabelledShouldMatchTheJSONString(string labelText, string expectedValue)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
 
-            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+            var field = await component.ElementByLabel(labelText)
+                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
-            var field = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
-            AssertWithMessage.NotNull(field, @$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
-
-            var actual = field! switch {
-                IHtmlSelectElement select => select.Value,
-                IHtmlInputElement input => input.Value,
-                IHtmlTextAreaElement textArea => textArea.Value,
-                _ => throw new XunitException($"Could not find the value of element of type {field!.GetType().Name}.")
-            };
+            var actualValue = await field.ValueAsync();
 
             var normalizedExpected = JsonHelper.Serialize(JsonHelper.Deserialize<object>(expectedValue));
-            var normalizedActual = JsonHelper.Serialize(JsonHelper.Deserialize<object>(actual!));
+            var normalizedActual = JsonHelper.Serialize(JsonHelper.Deserialize<object>(actualValue));
             Assert.Equal(normalizedExpected, normalizedActual);
         }
 
         [Then(@"the input element of the component field labelled ""(.+)"" should match the selector ""(.+)""")]
-        public void ThenTheInputElementOfTheComponentFieldLabelledShouldMatchTheSelector(string labelText, string selector)
+        public async Task ThenTheInputElementOfTheComponentFieldLabelledShouldMatchTheSelector(string labelText, string selector)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
 
-            var label = component!.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+            var field = await component.ElementByLabel(labelText)
+                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
-            var element = component!.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
-            AssertWithMessage.NotNull(element, @$"Could not find the associated input element for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+            var matches = await field.MatchesAsync(selector);
 
-            AssertWithMessage.True(element!.Matches(selector), @$"The associated input element for the label ""{labelText}"" did not match ""{selector}"".");
+            AssertWithMessage.True(matches, @$"The associated input element for the label ""{labelText}"" did not match ""{selector}"".");
         }
 
-        private IElement ComponentShouldExist()
+        private async Task<IElementDriver> ComponentShouldExistAsync()
         {
-            ThenThereShouldBeNoErrors();
-            var testWrapper = _web.LastResponse.QuerySelector("#test");
+            await ThenThereShouldBeNoErrors();
+
+            var testWrapper = await _web.Element("#test")
+                .ShouldExistAsync(@$"Could not find an element with the selector ""#test"".");
+            
+            var component = await testWrapper.Element(":scope > div > *")
+                .ShouldExistAsync(@$"Could not find the component's outer element on the page.");
+
+            return component;
+        }
+
+        private async Task ComponentShouldNotExistAsync()
+        {
+            await ThenThereShouldBeNoErrors();
+
+            var testWrapper = await _web.Element("#test")
+                .ShouldExistAsync(@$"Could not find an element with the selector ""#test"".");
+
             AssertWithMessage.NotNull(testWrapper, @$"Could not find an element with the selector ""#test"".");
 
-            var component = testWrapper!.QuerySelector(":scope > *");
-            AssertWithMessage.NotNull(component, @$"Could not find the component's outer element on the page.");
-
-            return component!;
+            await testWrapper.Element(":scope > div > *")
+                .ShouldNotExistAsync(@$"Found the component's outer element on the page.");
         }
 
-        private void ComponentShouldNotExist()
+        private async Task<IElementDriver> ComponentElementShouldExistAsync(string selector)
         {
-            ThenThereShouldBeNoErrors();
-            var testWrapper = _web.LastResponse.QuerySelector("#test");
-            AssertWithMessage.NotNull(testWrapper, @$"Could not find an element with the selector ""#test"".");
+            var component = await ComponentShouldExistAsync();
 
-            var component = testWrapper!.QuerySelector(":scope > *");
-            AssertWithMessage.Null(component, @$"Found the component's outer element on the page.");
+            var element = await component.Element($":scope {selector}")
+                .ShouldExistAsync(@$"Could not find an element within the component with the selector ""{selector}"".");
+
+            return element;
         }
 
-        private IElement ComponentElementShouldExist(string selector)
+        private async Task ComponentElementShouldNotExistAsync(string selector)
         {
-            var component = ComponentShouldExist();
+            var component = await ComponentShouldExistAsync();
 
-            var element = component!.QuerySelector($":scope {selector}");
-            AssertWithMessage.NotNull(element, @$"Could not find an element within the component with the selector ""{selector}"".");
-
-            return element!;
-        }
-
-        private void ComponentElementShouldNotExist(string selector)
-        {
-            var component = ComponentShouldExist();
-
-            var element = component!.QuerySelector($":scope {selector}");
-            AssertWithMessage.Null(element, @$"Found an element within the component with the selector ""{selector}"".");
+            await component.Element($":scope {selector}")
+                .ShouldNotExistAsync(@$"Found an element within the component with the selector ""{selector}"".");
         }
     }
 }

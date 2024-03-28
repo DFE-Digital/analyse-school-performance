@@ -3,6 +3,7 @@ The Heading component provides the ability to add h2 and h3 tags to content temp
 
 For more information please view the [technical specification for this component](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14389/Heading?anchor=editing).
 
+@Javascript:disabled
 Scenario: When ViewContent property is missing, component should not error
 	Given a content template contains the component:
 		"""
@@ -14,6 +15,7 @@ Scenario: When ViewContent property is missing, component should not error
 	Then there should be no errors
 	And the component should exist
 
+@Javascript:disabled
 Scenario: When ViewContent property is null, component should not error
 	Given a content template contains the component:
 		"""
@@ -26,6 +28,7 @@ Scenario: When ViewContent property is null, component should not error
 	Then there should be no errors
 	And the component should exist
 
+@Javascript:disabled
 Scenario: When HeadingType property is missing, component should not error and Heading Type should default to h2
 	Given a content template contains the component:
 		"""
@@ -40,7 +43,8 @@ Scenario: When HeadingType property is missing, component should not error and H
 	And the component should exist
 	And the component field labelled "Heading Type" should have the value "h2"
 
-Scenario: When HeadingType property is not "h2" or "h3", component should not error and Heading Type should default to "h2"
+@Javascript:disabled
+Scenario Outline: When HeadingType property is not "h2" or "h3", component should not error and Heading Type should default to "h2"
 	Given a content template contains the component:
 		"""
 		{
@@ -68,7 +72,8 @@ Examples:
 	| "h4"                   |
 	| "xxx"                  |
 
-Scenario: Heading Type field should be populated from the HeadingType property
+@Javascript:disabled
+Scenario Outline: Heading Type field should be populated from the HeadingType property
 	Given a content template contains the component:
 		"""
 		{
@@ -85,6 +90,7 @@ Examples:
 	| "h2"        |
 	| "h3"        |
 
+@Javascript:disabled
 Scenario: Updating Heading Type field should update HeadingType property on template
 	Given a content template contains the component:
 		"""
@@ -101,6 +107,7 @@ Scenario: Updating Heading Type field should update HeadingType property on temp
 	Then I should get a 200 response
 	And the component template property "HeadingType" should be equal to "h3"
 
+@Javascript:disabled
 Scenario: When Caption property is null, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
@@ -116,7 +123,8 @@ Scenario: When Caption property is null, component should not error and should h
 	And the component should exist
 	And the component field labelled "Caption" should have the value ""
 
-Scenario: When Caption property is a JSON value, component should not error and should handle the value appropriately
+@Javascript:disabled
+Scenario Outline: When Caption property is a JSON value, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
 		{
@@ -138,6 +146,7 @@ Examples:
 	| [1,2,3]                | "[1,2,3]"              |
 	| { "property": "value"} | "{"property":"value"}" |
 
+@Javascript:disabled
 Scenario: Caption field should be populated from Caption property
 	Given a content template contains the component:
 		"""
@@ -151,6 +160,7 @@ Scenario: Caption field should be populated from Caption property
 	When I edit the component on the page
 	Then the component field labelled "Caption" should have the value "Test caption"
 
+@Javascript:disabled
 Scenario: Updating Caption field should update Caption property on template
 	Given a content template contains the component:
 		"""
@@ -167,6 +177,7 @@ Scenario: Updating Caption field should update Caption property on template
 	Then I should get a 200 response
 	And the component template property "Caption" should be equal to "Updated caption"
 
+@Javascript:disabled
 Scenario: When Text property is null, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
@@ -182,7 +193,8 @@ Scenario: When Text property is null, component should not error and should hand
 	And the component should exist
 	And the component field labelled "Text" should have the value ""
 
-Scenario: When Text property is a JSON value, component should not error and should handle the value appropriately
+@Javascript:disabled
+Scenario Outline: When Text property is a JSON value, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
 		{
@@ -204,6 +216,7 @@ Examples:
 	| [1,2,3]                | "[1,2,3]"              |
 	| { "property": "value"} | "{"property":"value"}" |
 
+@Javascript:disabled
 Scenario: Text field should be populated from Text property
 	Given a content template contains the component:
 		"""
@@ -217,6 +230,7 @@ Scenario: Text field should be populated from Text property
 	When I edit the component on the page
 	Then the component field labelled "Text" should have the value "Test heading text"
 
+@Javascript:disabled
 Scenario: Updating Text field should update Text property on template
 	Given a content template contains the component:
 		"""
@@ -233,6 +247,7 @@ Scenario: Updating Text field should update Text property on template
 	Then I should get a 200 response
 	And the component template property "Text" should be equal to "Updated heading"
 
+@Javascript:disabled
 Scenario: When LinkUrl property is null, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
@@ -248,7 +263,8 @@ Scenario: When LinkUrl property is null, component should not error and should h
 	And the component should exist
 	And the component field labelled "Link URL" should have the value ""
 
-Scenario: When LinkUrl property is a JSON value, component should not error and should handle the value appropriately
+@Javascript:disabled
+Scenario Outline: When LinkUrl property is a JSON value, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
 		{
@@ -270,6 +286,7 @@ Examples:
 	| [1,2,3]                | "[1,2,3]"              |
 	| { "property": "value"} | "{"property":"value"}" |
 
+@Javascript:disabled
 Scenario: Link URL field should be populated from LinkUrl property
 	Given a content template contains the component:
 		"""
@@ -283,6 +300,7 @@ Scenario: Link URL field should be populated from LinkUrl property
 	When I edit the component on the page
 	Then the component field labelled "Link URL" should have the value "https://google.com"
 
+@Javascript:disabled
 Scenario: Updating Link URL field should update LinkUrl property on template
 	Given a content template contains the component:
 		"""

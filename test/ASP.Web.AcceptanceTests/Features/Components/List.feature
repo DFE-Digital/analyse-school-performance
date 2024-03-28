@@ -1,5 +1,6 @@
 Feature: List component
 
+@Javascript:disabled
 Scenario: When ViewContent property is missing, component should not error
 	Given a content template contains the component:
 		"""
@@ -19,6 +20,7 @@ Scenario: When ViewContent property is missing, component should not error
 	Then there should be no errors
 	And the component should exist
 
+@Javascript:disabled
 Scenario: When ViewContent property is null, component should not error
 	Given a content template contains the component:
 		"""
@@ -39,6 +41,7 @@ Scenario: When ViewContent property is null, component should not error
 	Then there should be no errors
 	And the component should exist
 
+@Javascript:disabled
 Scenario: When ChildViews property is missing, component should not error and component should not be displayed
 	Given a content template contains the component:
 		"""
@@ -51,7 +54,8 @@ Scenario: When ChildViews property is missing, component should not error and co
 	Then there should be no errors
 	And the component should not exist
 
-Scenario: When ChildViews property is null or empty, component should not error and component should not be displayed
+@Javascript:disabled
+Scenario Outline: When ChildViews property is null or empty, component should not error and component should not be displayed
 	Given a content template contains the component:
 		"""
 		{
@@ -68,6 +72,7 @@ Examples:
 	| null  |
 	| []    |
 
+@Javascript:disabled
 Scenario: List content should display html correctly with single list item
 	Given a content template contains the component:
 		"""
@@ -85,14 +90,15 @@ Scenario: List content should display html correctly with single list item
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the following markup:
+	And the component should have the outer HTML:
 		"""
 		<ul class="govuk-list govuk-list--bullet app-list">
 			<li>List item</li>
 		</ul>
 		"""
 
-Scenario: List content should display html correctly with bold markdown
+@Javascript:disabled
+Scenario Outline: List content should display html correctly with bold markdown
 	Given a content template contains the component:
 		"""
 		{
@@ -109,7 +115,7 @@ Scenario: List content should display html correctly with bold markdown
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the following markup:
+	And the component should have the outer HTML:
 		"""
 		<ul class="govuk-list govuk-list--bullet app-list">
 			<li><expected></li>
@@ -122,7 +128,8 @@ Examples:
 	| Expected __bold__ | Expected<strong>bold</strong> |
 
 
-Scenario: List content should display html correctly with italic markdown
+@Javascript:disabled
+Scenario Outline: List content should display html correctly with italic markdown
 	Given a content template contains the component:
 		"""
 		{
@@ -139,20 +146,20 @@ Scenario: List content should display html correctly with italic markdown
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the following markup:
+	And the component should have the outer HTML:
 		"""
 		<ul class="govuk-list govuk-list--bullet app-list">
 			<li><expected></li>
 		</ul>
 		"""
-
 Examples:
 	| input             | expected                |
 	| Expected *italic* | Expected<em>italic</em> |
 	| Expected _italic_ | Expected<em>italic</em> |
 
 
-Scenario: List content should display html correctly with link markdown
+@Javascript:disabled
+Scenario Outline: List content should display html correctly with link markdown
 	Given a content template contains the component:
 		"""
 		{
@@ -169,22 +176,20 @@ Scenario: List content should display html correctly with link markdown
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the following markup:
+	And the component should have the outer HTML:
 		"""
 		<ul class="govuk-list govuk-list--bullet app-list">
 			<li><expected></li>
 		</ul>
 		"""
-
 Examples:
 	| input                                 | expected                                                                        |
 	| [markdown link](https://google.co.uk) | <a href="https://google.co.uk" class="govuk-link">markdown link</a>             |
 	| **[Google](https://www.google.com)**  | <strong><a href="https://www.google.com" class="govuk-link">Google</a></strong> |
 	| *[Google](https://www.google.com)*    | <em><a href="https://www.google.com" class="govuk-link">Google</a></em>         |
 
-
-
-Scenario: List html should be correctly escaped
+@Javascript:disabled
+Scenario Outline: List html should be correctly escaped
 	Given a content template contains the component:
 		"""
 		{
@@ -201,7 +206,7 @@ Scenario: List html should be correctly escaped
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the following markup:
+	And the component should have the outer HTML:
 		"""
 		<ul class="govuk-list govuk-list--bullet app-list">
 			<li><expected></li>
@@ -214,6 +219,7 @@ Examples:
 	| <a href=\\"https://example.com\\">Link</a> | &lt;a href=&quot;https://example.com&quot;&gt;Link&lt;/a&gt;       |
 	| <img src=\\"image.jpg\\" alt=\\"Image\\">  | &lt;img src=&quot;image.jpg&quot; alt=&quot;Image&quot;&gt;        |
 
+@Javascript:disabled
 Scenario: List content should display html correctly with nested list items
 	Given a content template contains the component:
 		"""
@@ -244,7 +250,7 @@ Scenario: List content should display html correctly with nested list items
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the following markup:
+	And the component should have the outer HTML:
 		"""
 		<ul class="govuk-list govuk-list--bullet app-list">
 			<li>

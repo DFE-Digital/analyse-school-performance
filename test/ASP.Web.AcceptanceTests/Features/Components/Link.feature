@@ -1,5 +1,6 @@
 Feature: Link component
 
+@Javascript:disabled
 Scenario: Link content should display html correctly with link
 	Given page content "help-test" exists:
 			"""
@@ -18,7 +19,7 @@ Scenario: Link content should display html correctly with link
 			"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 	  """
 		<p id="test" class="govuk-body">
 			<a href="https://google.co.uk" class="govuk-link">Test link</a>
@@ -26,6 +27,7 @@ Scenario: Link content should display html correctly with link
 	  """
 
 
+@Javascript:disabled
 Scenario: Link content should display html correctly without link
 	Given page content "help-test" exists:
 			"""
@@ -43,7 +45,7 @@ Scenario: Link content should display html correctly without link
 			"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 	  """
 		<p id="test" class="govuk-body">
 			<a class="govuk-link">Test link</a>
@@ -51,6 +53,7 @@ Scenario: Link content should display html correctly without link
 	  """
 
 
+@Javascript:disabled
 Scenario: Link content should encode html correctly
 	Given page content "help-test" exists:
 			"""
@@ -69,7 +72,7 @@ Scenario: Link content should encode html correctly
 			"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 	  """
 		<p id="test" class="govuk-body">
 			<a href=https://google.co.uk class="govuk-link">

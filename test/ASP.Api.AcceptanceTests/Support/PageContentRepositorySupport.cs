@@ -1,4 +1,5 @@
 ﻿using ASP.Api.AcceptanceTests.Drivers;
+using ASP.Core.Templating.Repository;
 using BoDi;
 
 namespace ASP.AcceptanceTests.Support
@@ -18,7 +19,10 @@ namespace ASP.AcceptanceTests.Support
         [BeforeScenario]
         public void InitializeRepository()
         {
-            _objectContainer.RegisterInstanceAs(_api.PageContentRepository);
+            if (!_objectContainer.IsRegistered<IContentTemplateRepository>())
+            {
+                _objectContainer.RegisterInstanceAs(_api.PageContentRepository);
+            }
         }
     }
 }

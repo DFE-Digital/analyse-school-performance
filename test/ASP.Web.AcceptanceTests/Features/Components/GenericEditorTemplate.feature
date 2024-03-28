@@ -1,5 +1,6 @@
 ﻿Feature: Generic component editor
 
+@Javascript:disabled
 Scenario: Component with no editor template should be editable by the generic component editor
 	Given a content template contains the component:
 		"""
@@ -14,6 +15,7 @@ Scenario: Component with no editor template should be editable by the generic co
 	Then there should be no errors
 	And the component should exist
 
+@Javascript:disabled
 Scenario: Component string property should be editable by a textbox field
 	Given a content template contains the component:
 		"""
@@ -28,6 +30,7 @@ Scenario: Component string property should be editable by a textbox field
 	Then the input element of the component field labelled "StringProperty" should match the selector "input[type="text"]"
 	And the component field labelled "StringProperty" should have the value "xyz"
 
+@Javascript:disabled
 Scenario: Component string property should be updated from the textbox field when saved
 	Given a content template contains the component:
 		"""
@@ -44,6 +47,7 @@ Scenario: Component string property should be updated from the textbox field whe
 	Then I should get a 200 response
 	And the component template property "StringProperty" should be equal to "abc"
 
+@Javascript:disabled
 Scenario: Component int property should be editable by a textbox field
 	Given a content template contains the component:
 		"""
@@ -58,6 +62,7 @@ Scenario: Component int property should be editable by a textbox field
 	Then the input element of the component field labelled "IntProperty" should match the selector "input[type="text"]"
 	And the component field labelled "IntProperty" should have the value "123"
 
+@Javascript:disabled
 Scenario: Component int property should be updated from the textbox field when saved
 	Given a content template contains the component:
 		"""
@@ -74,6 +79,7 @@ Scenario: Component int property should be updated from the textbox field when s
 	Then I should get a 200 response
 	And the component template property "IntProperty" should be equal to 456
 
+@Javascript:disabled
 Scenario: Component array property should be editable by a textarea field
 	Given a content template contains the component:
 		"""
@@ -88,6 +94,7 @@ Scenario: Component array property should be editable by a textarea field
 	Then the input element of the component field labelled "ArrayProperty" should match the selector "textarea"
 	And the component field labelled "ArrayProperty" should match the JSON string "[1,2,3]"
 
+@Javascript:disabled
 Scenario: Component array property should be updated from the textarea field when saved
 	Given a content template contains the component:
 		"""
@@ -112,6 +119,7 @@ Scenario: Component array property should be updated from the textarea field whe
 		}
 		"""
 
+@Javascript:disabled
 Scenario: Component object property should be editable by a textarea field
 	Given a content template contains the component:
 		"""
@@ -126,6 +134,7 @@ Scenario: Component object property should be editable by a textarea field
 	Then the input element of the component field labelled "ObjectProperty" should match the selector "textarea"
 	And the component field labelled "ObjectProperty" should match the JSON string "{"x":1,"y":2}"
 
+@Javascript:disabled
 Scenario: Component object property should be updated from the textarea field when saved
 	Given a content template contains the component:
 		"""
@@ -150,6 +159,7 @@ Scenario: Component object property should be updated from the textarea field wh
 		}
 		"""
 
+@Javascript:disabled
 Scenario: Component property with null value should be editable by a textarea field
 	Given a content template contains the component:
 		"""
@@ -164,6 +174,7 @@ Scenario: Component property with null value should be editable by a textarea fi
 	Then the input element of the component field labelled "NullProperty" should match the selector "textarea"
 	And the component field labelled "NullProperty" should have the value ""
 
+@Javascript:disabled
 Scenario: Component object property should be updated to null when saved if textarea field is set to "null"
 	Given a content template contains the component:
 		"""
@@ -180,6 +191,7 @@ Scenario: Component object property should be updated to null when saved if text
 	Then I should get a 200 response
 	And the component template property "ObjectProperty" should be equal to null
 
+@Javascript:disabled
 Scenario: Component object property should be updated to null when saved if textarea field is empty
 	Given a content template contains the component:
 		"""
@@ -196,6 +208,7 @@ Scenario: Component object property should be updated to null when saved if text
 	Then I should get a 200 response
 	And the component template property "ObjectProperty" should be equal to null
 
+@Javascript:disabled
 Scenario: Component ViewContent property should be unchanged by the generic editor template when saving unmodified
 	Given a content template contains the component:
 		"""
@@ -225,6 +238,7 @@ Scenario: Component ViewContent property should be unchanged by the generic edit
 		}
 		"""
 
+@Javascript:disabled
 Scenario: Component ChildViews property should be unchanged by the generic editor template when saving unmodified
 	Given a content template contains the component:
 		"""

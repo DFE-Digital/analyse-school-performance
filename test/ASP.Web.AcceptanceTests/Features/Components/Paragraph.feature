@@ -4,6 +4,7 @@ The Paragraph component provides the ability to add paragraphs to content templa
 
 For more information please view the [technical specification for this component](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14454/Paragraph).
 
+@Javascript:disabled
 Scenario: When ViewContent property is missing, component should not error
 	Given a content template contains the component:
 		"""
@@ -15,6 +16,7 @@ Scenario: When ViewContent property is missing, component should not error
 	Then there should be no errors
 	And the component should exist
 
+@Javascript:disabled
 Scenario: When ViewContent property is null, component should not error
 	Given a content template contains the component:
 		"""
@@ -27,7 +29,8 @@ Scenario: When ViewContent property is null, component should not error
 	Then there should be no errors
 	And the component should exist
 
-Scenario Outline: When IsLarge property is missing, component should not error and should default to normal size
+@Javascript:disabled
+Scenario: When IsLarge property is missing, component should not error and should default to normal size
 	Given a content template contains the component:
 		"""
 		{
@@ -40,13 +43,14 @@ Scenario Outline: When IsLarge property is missing, component should not error a
 	When I view the component on the page
 	Then there should be no errors
 	And the component should exist
-	Then the component should have the following markup:
+	Then the component should have the outer HTML:
 		"""
 		<p class="govuk-body">
 			Test paragraph text
 		</p>
 		"""
 
+@Javascript:disabled
 Scenario Outline: When IsLarge property is invalid, component should not error and should default to normal size
 	Given a content template contains the component:
 		"""
@@ -61,7 +65,7 @@ Scenario Outline: When IsLarge property is invalid, component should not error a
 	When I view the component on the page
 	Then there should be no errors
 	And the component should exist
-	Then the component should have the following markup:
+	Then the component should have the outer HTML:
 		"""
 		<p class="govuk-body">
 			Test paragraph text
@@ -77,7 +81,8 @@ Examples:
 	| [1,2,3]                |
 	| { "property": "value"} |
 
-Scenario: Paragraph size should be determined from IsLarge property
+@Javascript:disabled
+Scenario Outline: Paragraph size should be determined from IsLarge property
 	Given a content template contains the component:
 		"""
 		{
@@ -89,7 +94,7 @@ Scenario: Paragraph size should be determined from IsLarge property
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the following markup:
+	Then the component should have the outer HTML:
 		"""
 		<p class="<Class>">
 			Test paragraph text
@@ -102,7 +107,8 @@ Examples:
 	| false   | govuk-body   |
 	| "false" | govuk-body   |
 
-Scenario Outline: When Text property is missing, component should not error and should handle the value appropriately
+@Javascript:disabled
+Scenario: When Text property is missing, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
 		{
@@ -116,6 +122,7 @@ Scenario Outline: When Text property is missing, component should not error and 
 	And the component should exist
 	And the component should have the text content "Paragraph text"
 
+@Javascript:disabled
 Scenario Outline: When Text property is invalid, component should not error and should handle the value appropriately
 	Given a content template contains the component:
 		"""
@@ -141,6 +148,7 @@ Examples:
 	| [1,2,3]                | [1,2,3]              |
 	| { "property": "value"} | {"property":"value"} |
 
+@Javascript:disabled
 Scenario: Paragraph text should be populated from Text property
 	Given a content template contains the component:
 		"""
@@ -152,13 +160,14 @@ Scenario: Paragraph text should be populated from Text property
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the following markup:
+	Then the component should have the outer HTML:
 		"""
 		<p class="govuk-body">
 			Test paragraph text
 		</p>
 		"""
 
+@Javascript:disabled
 Scenario: When Text property contains a new line this should be ignored when generating HTML
 	Given a content template contains the component:
 		"""
@@ -170,14 +179,15 @@ Scenario: When Text property contains a new line this should be ignored when gen
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the following markup:
+	Then the component should have the outer HTML:
 		"""
 		<p class="govuk-body">
 			Test paragraph text
 		</p>
 		"""
 
-Scenario: When Text property contains bold, italic, or link markdown it should be converted to <strong>, <em>, and <a> tags
+@Javascript:disabled
+Scenario Outline: When Text property contains bold, italic, or link markdown it should be converted to <strong>, <em>, and <a> tags
 	Given a content template contains the component:
 		"""
 		{
@@ -215,7 +225,8 @@ Examples:
 	| [__Google__](https://www.google.com) | <a href="https://www.google.com" class="govuk-link"><strong>Google</strong></a> |
 	| [_Google_](https://www.google.com)   | <a href="https://www.google.com" class="govuk-link"><em>Google</em></a>         |
 
-Scenario: When Text property contains HTML content, HTML content should be escaped on the page
+@Javascript:disabled
+Scenario Outline: When Text property contains HTML content, HTML content should be escaped on the page
 	Given a content template contains the component:
 		"""
 		{
@@ -235,6 +246,7 @@ Examples:
 	| <a href=\\"https://example.com\\">Link</a> | &lt;a href="https://example.com"&gt;Link&lt;/a&gt;                 |
 	| <img src=\\"image.jpg\\" alt=\\"Image\\">  | &lt;img src=&quot;image.jpg&quot; alt=&quot;Image&quot;&gt;        |
 
+@Javascript:disabled
 Scenario: When Text property contains HTML content within markdown, HTML content should be escaped on the page
 	Given a content template contains the component:
 		"""

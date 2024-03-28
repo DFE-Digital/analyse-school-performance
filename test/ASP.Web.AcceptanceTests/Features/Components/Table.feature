@@ -1,6 +1,7 @@
 Feature: Table component
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with a caption
 	Given page content "help-test" exists:
 		"""
@@ -28,7 +29,7 @@ Scenario: Table content should display html correctly with a caption
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<caption class="govuk-table__caption govuk-table__caption--m">Caption here</caption>
@@ -48,6 +49,7 @@ Scenario: Table content should display html correctly with a caption
 		"""
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly when a caption is null
 	Given page content "help-test" exists:
 		"""
@@ -75,7 +77,7 @@ Scenario: Table content should display html correctly when a caption is null
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -94,6 +96,7 @@ Scenario: Table content should display html correctly when a caption is null
 		"""
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly when a caption is empty
 	Given page content "help-test" exists:
 		"""
@@ -121,7 +124,7 @@ Scenario: Table content should display html correctly when a caption is empty
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<caption class="govuk-table__caption govuk-table__caption--m"></caption>
@@ -142,6 +145,7 @@ Scenario: Table content should display html correctly when a caption is empty
 
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with headings and rows
 	Given page content "help-test" exists:
 		"""
@@ -172,7 +176,7 @@ Scenario: Table content should display html correctly with headings and rows
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -195,6 +199,7 @@ Scenario: Table content should display html correctly with headings and rows
 		"""
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with more row columns than heading columns
 	Given page content "help-test" exists:
 		"""
@@ -224,7 +229,7 @@ Scenario: Table content should display html correctly with more row columns than
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -247,6 +252,7 @@ Scenario: Table content should display html correctly with more row columns than
 		"""
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with more heading columns than rows columns
 Given page content "help-test" exists:
 		"""
@@ -273,7 +279,7 @@ Given page content "help-test" exists:
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -294,6 +300,7 @@ Given page content "help-test" exists:
 		"""
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with no Rows specified
 	Given page content "help-test" exists:
 		"""
@@ -314,7 +321,7 @@ Scenario: Table content should display html correctly with no Rows specified
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -333,6 +340,7 @@ Scenario: Table content should display html correctly with no Rows specified
 		"""
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with no Headings specified
 	Given page content "help-test" exists:
 		"""
@@ -359,7 +367,7 @@ Scenario: Table content should display html correctly with no Headings specified
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -382,6 +390,7 @@ Scenario: Table content should display html correctly with no Headings specified
 		"""
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with empty rows
 	Given page content "help-test" exists:
 		"""
@@ -406,7 +415,7 @@ Scenario: Table content should display html correctly with empty rows
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -429,6 +438,7 @@ Scenario: Table content should display html correctly with empty rows
 		"""
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with empty headings
 	Given page content "help-test" exists:
 		"""
@@ -454,7 +464,7 @@ Scenario: Table content should display html correctly with empty headings
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -476,6 +486,7 @@ Scenario: Table content should display html correctly with empty headings
 
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with Row having null value
 	Given page content "help-test" exists:
 		"""
@@ -501,7 +512,7 @@ Scenario: Table content should display html correctly with Row having null value
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -520,6 +531,7 @@ Scenario: Table content should display html correctly with Row having null value
 		"""
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with Row as null
 	Given page content "help-test" exists:
 		"""
@@ -541,7 +553,7 @@ Scenario: Table content should display html correctly with Row as null
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -562,6 +574,7 @@ Scenario: Table content should display html correctly with Row as null
 
 
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with Headings as null
 	Given page content "help-test" exists:
 		"""
@@ -585,7 +598,7 @@ Scenario: Table content should display html correctly with Headings as null
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
@@ -603,6 +616,7 @@ Scenario: Table content should display html correctly with Headings as null
 		</table>
 		"""
 
+@Javascript:disabled
 Scenario: Table content should display html correctly with Headings having null value
 	Given page content "help-test" exists:
 		"""
@@ -628,7 +642,7 @@ Scenario: Table content should display html correctly with Headings having null 
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the following markup:
+	Then the element "#test" should have the outer HTML:
 		"""
 		<table class="govuk-table" id="test">
 			<thead class="govuk-table__head">
