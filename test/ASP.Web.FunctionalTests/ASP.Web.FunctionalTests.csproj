@@ -33,7 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ASP.Core\ASP.Core.csproj" />
     <ProjectReference Include="..\..\src\ASP.Web\ASP.Web.csproj" />
-    <ProjectReference Include="..\ASP.Test.Acceptance\ASP.Test.Acceptance.csproj" />
+    <ProjectReference Include="..\ASP.Test.SpecFlow\ASP.Test.SpecFlow.csproj" />
     <ProjectReference Include="..\ASP.Test.Core\ASP.Test.Core.csproj" />
     <ProjectReference Include="..\ASP.Test.Web\ASP.Test.Web.csproj" />
   </ItemGroup>

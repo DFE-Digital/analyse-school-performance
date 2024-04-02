@@ -50,7 +50,7 @@ stages:
         displayName: 'Download Playwright browsers'
         inputs:
           targetType: 'filePath'
-          filePath: 'test/ASP.Web.AcceptanceTests/bin/$(BuildConfiguration)/net8.0/playwright.ps1'
+          filePath: 'test/ASP.Web.FunctionalTests/bin/$(BuildConfiguration)/net8.0/playwright.ps1'
           arguments: install
 
       - task: VSTest@2
@@ -91,16 +91,16 @@ stages:
       - task: SpecFlowPlus@0
         inputs:
           generatorSource: 'TestAssembly'
-          testAssemblyFilePath:  'test\ASP.Web.AcceptanceTests\bin\$(BuildConfiguration)\**\ASP.Web.AcceptanceTests.dll'
+          testAssemblyFilePath:  'test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\ASP.Web.FunctionalTests.dll'
           projectName: 'Web'
-          testExecutionJson: 'test\ASP.Web.AcceptanceTests\bin\$(BuildConfiguration)\**\TestExecution.json'
+          testExecutionJson: 'test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json'
 
       - task: SpecFlowPlus@0
         inputs:
           generatorSource: 'TestAssembly'
-          testAssemblyFilePath:  'test\ASP.Api.AcceptanceTests\bin\$(BuildConfiguration)\**\ASP.Api.AcceptanceTests.dll'
+          testAssemblyFilePath:  'test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\ASP.Api.FunctionalTests.dll'
           projectName: 'API'
-          testExecutionJson: 'test\ASP.Api.AcceptanceTests\bin\$(BuildConfiguration)\**\TestExecution.json'
+          testExecutionJson: 'test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json'
 
       - task: PublishBuildArtifacts@1
         displayName: 'Publish Artifact'

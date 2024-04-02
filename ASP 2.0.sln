@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api", "src\ASP.Api\ASP.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Core", "src\ASP.Core\ASP.Core.csproj", "{E88375FB-49C7-4E98-833C-C1A28AB4AB44}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.AcceptanceTests", "test\ASP.Web.AcceptanceTests\ASP.Web.AcceptanceTests.csproj", "{0FA88EE6-4197-45A2-98EE-0F4EF77948F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.AcceptanceTests", "test\ASP.Web.FunctionalTests\ASP.Web.FunctionalTests.csproj", "{0FA88EE6-4197-45A2-98EE-0F4EF77948F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Infrastructure", "src\ASP.Infrastructure\ASP.Infrastructure.csproj", "{1222DE8D-8A75-45A4-90B0-AA85D4497ECE}"
 EndProject
@@ -26,9 +26,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.UnitTests", "test\A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Core", "test\ASP.Test.Core\ASP.Test.Core.csproj", "{9C913310-B8AA-41CA-8C3A-D0B9EAC16F38}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api.AcceptanceTests", "test\ASP.Api.AcceptanceTests\ASP.Api.AcceptanceTests.csproj", "{8CB3E6F6-8861-45AE-ACEE-1D09B65742F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api.AcceptanceTests", "test\ASP.Api.FunctionalTests\ASP.Api.FunctionalTests.csproj", "{8CB3E6F6-8861-45AE-ACEE-1D09B65742F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Acceptance", "test\ASP.Test.Acceptance\ASP.Test.Acceptance.csproj", "{220F3AF8-EC52-4461-AADF-9110407EA106}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Acceptance", "test\ASP.Test.SpecFlow\ASP.Test.SpecFlow.csproj", "{220F3AF8-EC52-4461-AADF-9110407EA106}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "non-project files", "non-project files", "{61B563C2-68E3-42C1-A008-0B4DABE02323}"
 	ProjectSection(SolutionItems) = preProject
