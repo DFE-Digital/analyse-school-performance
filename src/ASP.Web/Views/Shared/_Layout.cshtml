@@ -17,7 +17,9 @@
     <link rel="mask-icon" href="/assets/images/govuk-icon-mask.svg" color="blue">
     <link rel="apple-touch-icon" href="/assets/images/govuk-icon-180.png">
     <link rel="manifest" href="/assets/manifest.json">
+    <link rel="stylesheet" href="/assets/css/govuk.css" add-nonce="true" />
     <link rel="stylesheet" href="/assets/css/app.css" add-nonce="true" />
+    <link rel="stylesheet" href="/assets/css/components.css" add-nonce="true" />
 
     @if (cookiePreferences?.AnalyticsTracking == AnalyticsTracking.Accepted)
     {
@@ -94,6 +96,7 @@
     <partial name="_FooterPartial" />
 
     <script src="/assets/js/govuk.js" add-nonce="true"></script>
+    <script src="/assets/js/components.js" add-nonce="true"></script>
     <script src="/assets/js/alpine.js" add-nonce="true"></script>
 </body>
 

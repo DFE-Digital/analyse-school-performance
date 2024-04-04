@@ -8,13 +8,19 @@ namespace ASP.AcceptanceTests.Drivers
     // Driver for tests to interact with an element on the page using AngleSharp (see AngleSharpWebDriver)
     public class AngleSharpElementDriver : IElementDriver
     {
+        private IElement _outerElement;
+        private string _selector;
         private IElement? _element;
+        private int _elementCount;
         private AngleSharpWebDriver _web;
 
-        public AngleSharpElementDriver(IElement? element, AngleSharpWebDriver web)
+        public AngleSharpElementDriver(IElement outerElement, string selector, AngleSharpWebDriver web)
         {
-            _element = element;
+            _outerElement = outerElement;
+            _selector = selector;
             _web = web;
+            _elementCount = _outerElement.QuerySelectorAll(_selector).Count();
+            _element = _outerElement.QuerySelector(_selector);
         }
 
         private IElement El
@@ -29,9 +35,7 @@ namespace ASP.AcceptanceTests.Drivers
 
         public IElementDriver Element(string selector)
         {
-            var element = El.QuerySelector(selector);
-
-            return new AngleSharpElementDriver(element, _web);
+            return new AngleSharpElementDriver(El, selector, _web);
         }
 
         public IElementDriver ElementByLabel(string labelText)
@@ -39,9 +43,21 @@ namespace ASP.AcceptanceTests.Drivers
             var label = El.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
             AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
 
-            var field = El.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
+            var fieldSelector = $":scope #{label?.Attributes["for"]?.Value}";
 
-            return new AngleSharpElementDriver(field, _web);
+            return new AngleSharpElementDriver(El, fieldSelector, _web);
+        }
+
+        public IElementsDriver Elements(string selector)
+        {
+            return new AngleSharpElementsDriver(El, selector, _web);
+        }
+
+        public Task ShouldHaveCountAsync(int count, string errorIfIncorrectCount)
+        {
+            AssertWithMessage.Equal(count, _elementCount, errorIfIncorrectCount);
+
+            return Task.CompletedTask;
         }
 
         public Task ShouldNotExistAsync(string errorIfExists)

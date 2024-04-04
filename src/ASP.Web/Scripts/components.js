@@ -1,6 +1,3 @@
-import { initAll } from 'govuk-frontend'
-initAll()
-
 // Include all standalone Javascript files from the Views/Shared folder.
 // This is so as to include any Component Javascript files from the EditorTemplates
 // and TemplateComponents folders. This allows us to define the .js file for a component

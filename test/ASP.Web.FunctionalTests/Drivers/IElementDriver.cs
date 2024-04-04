@@ -5,6 +5,9 @@
     {
         IElementDriver Element(string selector);
         IElementDriver ElementByLabel(string labelText);
+        IElementsDriver Elements(string selector);
+
+        Task ShouldHaveCountAsync(int count, string errorIfIncorrectCount);
         Task ShouldNotExistAsync(string errorIfExists);
         Task<IElementDriver> ShouldExistAsync(string errorIfNotExists);
         Task<string> TextContentAsync();
@@ -15,6 +18,7 @@
         Task<bool> IsCheckedAsync();
         Task<bool> MatchesAsync(string selector);
         Task<string> AttributeAsync(string attributeName);
+
         Task SetValueAsync(string value);
         Task SetCheckedAsync(bool isChecked);
         Task ClickAsync();

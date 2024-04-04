@@ -28,6 +28,24 @@ namespace ASP.Web.AcceptanceTests.Drivers
             return new PlaywrightElementDriver(element, _page);
         }
 
+        public IElementsDriver Elements(string selector)
+        {
+            var elements = _element.Locator(selector);
+            return new PlaywrightElementsDriver(elements, _page);
+        }
+
+        public async Task ShouldHaveCountAsync(int count, string errorIfIncorrectCount)
+        {
+            try
+            {
+                await Assertions.Expect(_element).ToHaveCountAsync(count);
+            }
+            catch (PlaywrightException)
+            {
+                AssertWithMessage.Fail(errorIfIncorrectCount);
+            }
+        }
+
         public async Task ShouldNotExistAsync(string errorIfExists)
         {
             try

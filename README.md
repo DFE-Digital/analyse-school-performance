@@ -23,23 +23,31 @@ npm run watch
 ```
 
 `build-dev` will run webpack in development mode and output un-minified CSS and JS to `wwwroot\assets`.
-`watch` will run webpack in development and watch for changes to SCSS and JS files in Styles and Scripts folders. This allows you see
-style and javascript changes in the browser as you make them in application codebase.
+`watch` will run webpack in development and watch for changes to SCSS and JS files in Styles and Scripts folders. This allows you to see style and javascript changes in the browser as you make them in application codebase.
 
-Note: 
-If you want to also see any updates you make to HTML files reflected in the browser automatically, you will need to use Visual Studio's
-'Hot Reload' feature. 
+**Note:**
+If you want to also see any updates you make to HTML files reflected in the browser automatically, you will need to use Visual Studio's 'Hot Reload' feature. 
 
-To improve the 'Hot Reload' experience, you can activate the 'Hot Reload on save' feature from the 'Hot Reload' settings. If you also install the 'Auto file save' extension you can automate 
-saving and hence automatically trigger 'Hot Reload'
+To improve the 'Hot Reload' experience, you can activate the 'Hot Reload on save' feature from the 'Hot Reload' settings. If you also install the 'Auto file save' extension you can automate saving and hence automatically trigger 'Hot Reload'.
 
 # Build the application CSS, JS and other assets for production
 The following npm script will run webpack and output minified CSS and JS to `wwwroot\assets`.
 
 `npm run build-prod`
 
-# Acceptance tests using SpecFlow
-The `ASP.AcceptanceTests` project needs the `SpecFlow for Visual Studio 2022` extension to edit and run the SpecFlow tests from the Visual Studio test runner. The version in the Visual Studio Marketplace doesn't support .NET 8 yet, but there is an out-of-band release that supports it, [available here](https://github.com/SpecFlowOSS/SpecFlow.VS/releases/tag/v2022.1.93-net8) (download and run the `.vsix` file.)
+# Functional tests using SpecFlow
+The `ASP.Web.FunctionalTests` and `ASP.Api.FunctionalTests` projects need the `SpecFlow for Visual Studio 2022` extension to edit and run the SpecFlow tests from the Visual Studio test runner. The version in the Visual Studio Marketplace doesn't support .NET 8 yet, but there is an out-of-band release that supports it, [available here](https://github.com/SpecFlowOSS/SpecFlow.VS/releases/tag/v2022.1.93-net8) (download and run the `.vsix` file.)
+
+## Javascript enabled/disabled
+The `ASP.Web.FunctionalTests` spin up the `ASP.Web` web application in a test host using ASP.NET Core's `WebApplicationFactory`. This allows us to interact with the HTML on the page to fully test the behaviour of the application and components. The web application must be functional when Javascript is disabled and when it is enabled, so in order to test the functionality in each circumstance a different web driver must be used.
+
+Each test scenario that interacts with the web application must specify which web driver to use for the scenario, which is done by adding the `@Javascript:disabled` or `@Javascript:enabled` attribute. This tells SpecFlow to use either the `AngleSharp` or `Playwright` web driver. `AngleSharp` is the preferred web driver for tests that do not require Javascript as tests that use it are quicker and require less initializing time. `Playwright` is a browser-based automation tool that spins up a full web browser, so while this allows testing of the Javascript and CSS on the page this has an overhead, so should only be used when necessary.
+
+## Playwright setup
+Before the Javascript tests can be run, the Playwright browsers must be installed locally. To do this, run the PowerShell command `pwsh bin/Debug/net8.0/playwright.ps1 install` from within the `test\ASP.Web.FunctionalTests` directory (the solution must be built first). See https://playwright.dev/dotnet/docs/intro for more detailed instructions.
+
+## Test runner playlist to exclude Javascript tests
+As the Javascript tests take longer to run, a playlist exists dynamically excludes all the `@Javascript:enabled` tests from the test run. This is just to make it easier to skip those tests if they are not needed. To use this playlist go to the `Test Explorer` in Visual Studio, and click `Open Playlist File`, then select the file `test\Exclude Javascript tests.playlist`. This opens the playlist in a separate Test Explorer view which can be run separately.
 
 ## Generating reports locally
 
@@ -51,15 +59,16 @@ dotnet tool install --global --configfile NuGet-ToolInstall.config SpecFlow.Plus
 ```
 Then once installed you can run `livingdoc feature-folder` with a test project root like so:
 ```
-livingdoc feature-folder test/ASP.Web.AcceptanceTests
+livingdoc feature-folder test/ASP.Web.FunctionalTests
 ```
 Documentation for this is [here](https://docs.specflow.org/projects/specflow-livingdoc/en/latest/LivingDocGenerator/CLI/livingdoc-feature-folder.html)
 
-## Acceptance test modes
-Acceptance test projects can be switched between Development mode and Integration Test mode.
+## Functional test modes
+Functional test projects can be switched between Development mode and Integration Test mode.
 
-Configuration is in ASP.AcceptanceTests\test.runsettings:
+Configuration is in `test.runsettings` in the functional test project root:
 
+```
 <RunSettings>
   <RunConfiguration>
       <EnvironmentVariables>
@@ -68,24 +77,31 @@ Configuration is in ASP.AcceptanceTests\test.runsettings:
       </EnvironmentVariables>
   </RunConfiguration>
 </RunSettings>
-ASP_Test_Mode
-value	function
-Development	tests are run using an in-memory database (fast running to enable development with quick feedback)
-Integration	tests are run using a real database (slow but exercises the real database connection code)
-Test database config
+```
+
+### ASP_Test_Mode
+| value |function|
+|-|-|
+|Development|tests are run using an in-memory database (fast running to enable development with quick feedback)|
+|Integration|tests are run using a real database (slow but exercises the real database connection code)|
+
+### Test database config
 Test database is configured using appsettings.Test.json and appsettings.Test.local.json.
 
 appsettings.Test.json is a replica of appsettings.json in the ASP.Web project, containing this section:
 
-    "RepositoryOptions": {
-        "EndpointUri": null,
-        "PrimaryKey": null,
-        "DatabaseId": "test",
-        "Containers": [ ... ]
-        ...
-     }
-DatabaseId defaults to test which should be a database completely dedicated to integration tests. Integration tests can (and should) be run as part of development to catch errors but care should be taken as if two test runs are happening at the same time it will cause the tests to fail.
+```
+"RepositoryOptions": {
+    "EndpointUri": null,
+    "PrimaryKey": null,
+    "DatabaseId": "test",
+    "Containers": [ ... ]
+    ...
+}
+```
 
-appsettings.Test.local.json should be created locally to point to the test database on dev. One way to avoid conflicting test runs could be if each developer has their own test database on dev and wire up the local config to point to that.
+`DatabaseId` defaults to `"test"` which should be a database completely dedicated to integration tests. Integration tests can (and should) be run as part of development to catch errors but care should be taken as if two test runs are happening at the same time it will cause the tests to fail.
+
+`appsettings.Test.local.json` should be created locally to point to the test database on dev. One way to avoid conflicting test runs could be if each developer has their own test database on dev and wire up the local config to point to that.
 
 The intention is that these are run on a dedicated database on CI build - suggest a unique database is created/destroyed on each pipeline run so as to avoid issues when multiple builds are triggered simultaneously.

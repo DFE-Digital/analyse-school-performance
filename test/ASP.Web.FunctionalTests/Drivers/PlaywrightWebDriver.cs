@@ -119,11 +119,11 @@ namespace ASP.Web.AcceptanceTests.Drivers
             var element = Page.GetByLabel(labelText);
             return new PlaywrightElementDriver(element, Page);
         }
+
         public IElementsDriver Elements(string selector)
         {
             var elements = Page.Locator(selector);
             return new PlaywrightElementsDriver(elements, Page);
         }
-
     }
 }
