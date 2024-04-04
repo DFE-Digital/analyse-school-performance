@@ -1,6 +1,6 @@
-// Include all standalone Javascript files from the Views/Shared folder.
-// This is so as to include any Component Javascript files from the EditorTemplates
-// and TemplateComponents folders. This allows us to define the .js file for a component
+// Include all standalone Scss files from the Views/Shared folder.
+// This is so as to include any Component Scss files from the EditorTemplates
+// and TemplateComponents folders. This allows us to define the .js and .scss files for a component
 // alongside the .cshtml file in the same file structure e.g.:
 //
 //  Shared
@@ -8,8 +8,10 @@
 //    +- TemplateComponents
 //         +- Chart.cshtml
 //         +- Chart.js
+//         +- Chart.scss
 //         +- Table.cshtml
 //         +- Table.js
+//         +- Table.scss
 
 function requireAll(r) {
     r.keys().forEach(r);
