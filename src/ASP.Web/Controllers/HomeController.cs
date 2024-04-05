@@ -53,8 +53,7 @@ namespace ASP.Web.Controllers
         [HttpGet("error")]
         public IActionResult Error()
         {
-            //return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-            return View("~/Views/Shared/Errors/ServerError.cshtml", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
+            return View("~/Views/Shared/Errors/ServerError.cshtml", new ErrorViewModel { ErrorCode = HttpContext.TraceIdentifier });
         }
     }
 }

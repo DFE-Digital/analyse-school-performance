@@ -1,6 +1,4 @@
-﻿using Azure;
-using Azure.Data.Tables;
-using Azure.Data.Tables.Models;
+﻿using Azure.Data.Tables;
 using Microsoft.Extensions.Options;
 
 namespace ASP.Infrastructure.TableStorage
@@ -12,9 +10,9 @@ namespace ASP.Infrastructure.TableStorage
 
         public TableStorageProvider(IOptions<TableStorageConfiguration> tableStorageConfiguration)
         {
-           _tableStorageConfiguration = tableStorageConfiguration.Value;
+            _tableStorageConfiguration = tableStorageConfiguration.Value;
 
-           _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
+            _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
         }
 
         public async Task<TableClient> GetTable(string tableName = "ASPProdErrors")

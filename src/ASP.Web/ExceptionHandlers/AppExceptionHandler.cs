@@ -15,7 +15,7 @@ namespace ASP.Web.ExceptionHandlers
 
                 var appException = CreateTableEntry(httpContext, exception);
 
-                await tableClient.AddEntityAsync(appException);
+                await tableClient.AddEntityAsync(appException, cancellationToken);
             }
 
             return false;
