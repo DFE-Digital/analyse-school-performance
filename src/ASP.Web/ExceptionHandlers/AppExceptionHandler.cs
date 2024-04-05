@@ -21,7 +21,7 @@ namespace ASP.Web.ExceptionHandlers
             return false;
         }
 
-        private AppException CreateTableEntry(HttpContext httpContext, Exception exception)
+        private static AppException CreateTableEntry(HttpContext httpContext, Exception exception)
         {
             var appException = new AppException()
             {
