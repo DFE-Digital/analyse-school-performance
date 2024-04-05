@@ -4,12 +4,20 @@
     ViewData["Title"] = Model.PageTitle;
 }
 
-<div class="govuk-width-container govuk-!-static-padding-top-5">
-    <h1 class="govuk-heading-xl">@Model.PageTitle</h1>
+<div class="govuk-width-container govuk-main-wrapper">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-xl">@Model.PageTitle</h1>
+        </div>
+    </div>
 
-    <a id="app-content-edit" asp-route="app-route-help-edit" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
-        Edit this page
-    </a>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <a id="app-content-edit" asp-route="app-route-help-edit" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+                Edit this page
+            </a>
 
-    @await Html.PartialAsync("ContentTemplateView", Model)
+            @await Html.PartialAsync("ContentTemplateView", Model)
+        </div>
+    </div>
 </div>
