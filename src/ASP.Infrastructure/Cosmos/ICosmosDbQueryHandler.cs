@@ -1,5 +1,4 @@
-﻿using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.Handlers.Query;
-using Microsoft.Azure.Cosmos;
+﻿using Microsoft.Azure.Cosmos;
 using System.Linq.Expressions;
 
 namespace ASP.Infrastructure.Cosmos

@@ -23,6 +23,8 @@ namespace ASP.Web.Controllers
         [HttpGet("index")]
         public async Task<IActionResult> Index()
         {
+            throw new Exception();
+
             ViewContentTemplateRequest request = new("home-page");
 
             var defaultIfNotFound = new ContentTemplateViewModel
@@ -51,7 +53,8 @@ namespace ASP.Web.Controllers
         [HttpGet("error")]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            //return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View("~/Views/Shared/Errors/ServerError.cshtml", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier });
         }
     }
 }

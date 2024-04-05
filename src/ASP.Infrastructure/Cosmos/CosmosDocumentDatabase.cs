@@ -1,5 +1,4 @@
 ﻿using ASP.Core;
-using Azure;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.Providers;
 using ErrorOr;
 using Microsoft.Azure.Cosmos;
@@ -100,7 +99,7 @@ namespace ASP.Infrastructure.Cosmos
                     var response = await container
                         .DeleteItemAsync<Dictionary<string, object>>(id, new PartitionKey(id));
 
-                    switch(response.StatusCode)
+                    switch (response.StatusCode)
                     {
                         case System.Net.HttpStatusCode.NotFound:
                             return Error.NotFound(description: response.ToString());
