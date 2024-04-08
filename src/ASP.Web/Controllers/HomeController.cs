@@ -1,7 +1,7 @@
 using ASP.Application.UseCases.ViewContentTemplate;
+using ASP.Core.Results;
 using ASP.Web.Extensions;
 using ASP.Web.Models;
-using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -35,7 +35,7 @@ namespace ASP.Web.Controllers
             };
 
             var result = await _viewContentUseCase.HandleRequest(request)
-                .Then(t => ContentTemplateViewModel.FromTemplate("home-page", t))
+                .Map(t => ContentTemplateViewModel.FromTemplate("home-page", t))
                 .ToActionResult(View, defaultIfNotFound);
 
             return result;

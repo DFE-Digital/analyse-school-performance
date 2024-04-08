@@ -1,8 +1,8 @@
 ﻿using ASP.Application.UseCases.UpdateContentTemplate;
 using ASP.Application.UseCases.ViewContentTemplate;
+using ASP.Core.Results;
 using ASP.Web.Extensions;
 using ASP.Web.Models;
-using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Controllers
@@ -35,7 +35,7 @@ namespace ASP.Web.Controllers
         public new async Task<IActionResult> View()
         {
             return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID))
-                .Then(t => ContentTemplateViewModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, t))
+                .Map(t => ContentTemplateViewModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, t))
                 .ToActionResult(View);
         }
 
@@ -43,7 +43,7 @@ namespace ASP.Web.Controllers
         public async Task<IActionResult> Edit()
         {
             return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID))
-                .Then(t => ContentTemplateEditModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, t))
+                .Map(t => ContentTemplateEditModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, t))
                 .ToActionResult(View);
         }
 

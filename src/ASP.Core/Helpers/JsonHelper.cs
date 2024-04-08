@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+﻿using ASP.Core.Results;
 using Newtonsoft.Json;
 
 namespace ASP.Core.Helpers
@@ -15,7 +15,7 @@ namespace ASP.Core.Helpers
             return JsonConvert.SerializeObject(obj, Formatting.Indented);
         }
 
-        public static ErrorOr<T> Deserialize<T>(string json)
+        public static Result<T> Deserialize<T>(string json)
         {
             T? item;
 
@@ -30,18 +30,18 @@ namespace ASP.Core.Helpers
 
             if(error != null) 
             { 
-                return Error.Unexpected(description: $"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}");
+                return Error.Unexpected($"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}");
             }
 
             if (item == null)
             {
-                return Error.Unexpected(description: $"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
+                return Error.Unexpected($"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
             }
 
             return item!;
         }
 
-        public static ErrorOr<T> DeserializeIgnoringMissingMembers<T>(string json)
+        public static Result<T> DeserializeIgnoringMissingMembers<T>(string json)
         {
             T? item;
 
@@ -57,12 +57,12 @@ namespace ASP.Core.Helpers
 
             if (error != null)
             {
-                return Error.Unexpected(description: $"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}");
+                return Error.Unexpected($"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}");
             }
             
             if (item == null)
             {
-                return Error.Unexpected(description: $"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
+                return Error.Unexpected($"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
             }
 
             return item!;

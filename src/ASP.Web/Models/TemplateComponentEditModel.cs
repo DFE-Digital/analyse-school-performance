@@ -1,9 +1,8 @@
 ﻿using ASP.Core.Templating;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using ASP.Core.Helpers;
-using ErrorOr;
 using System.Reflection;
+using ASP.Core.Results;
 
 namespace ASP.Web.Models
 {
@@ -76,12 +75,12 @@ namespace ASP.Web.Models
         public Dictionary<string, ViewContentPropertyType> Types { get; set; } = new();
         public virtual Dictionary<string, ViewContentPropertyConfig> ViewContentProperties => _viewContentProperties;
 
-        public ErrorOr<TemplateComponent> ToTemplate()
+        public Result<TemplateComponent> ToTemplate()
         {
             var serialized = JsonHelper.SerializeIndented(new {
                 ViewId,
                 ViewContent = ViewContent.ToDictionary(c => c.Key, c => ConvertToPropertyType(c.Key, c.Value)),
-                ChildViews = ChildViews.Select(v => v.ToTemplate().MatchFirst(t => t, e => new object())).ToList()
+                ChildViews = ChildViews.Select(v => v.ToTemplate().Match(t => t, e => new object())).ToList()
             });
 
             return JsonHelper.DeserializeIgnoringMissingMembers<TemplateComponent>(serialized);
@@ -128,7 +127,7 @@ namespace ASP.Web.Models
                 ViewContentPropertyType.Bool => bool.TryParse(value, out var b) ? b : false,
                 ViewContentPropertyType.Double => double.TryParse(value, out var d) ? d : 0.0,
                 ViewContentPropertyType.Long => long.TryParse(value, out var l) ? l : 0,
-                _ => JsonHelper.Deserialize<object>(value).MatchFirst(v => v, e => null!)
+                _ => JsonHelper.Deserialize<object>(value).Match(v => v, e => null!)
             };
         }
 

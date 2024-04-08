@@ -1,7 +1,6 @@
 ﻿using ASP.Core;
-using Azure;
+using ASP.Core.Results;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.Providers;
-using ErrorOr;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +24,7 @@ namespace ASP.Infrastructure.Cosmos
                 throw new ArgumentNullException(nameof(queryHandler));
         }
 
-        public async Task<ErrorOr<TItem>> GetAsync<TItem>(string containerKey, string id, string partitionKeyValue) where TItem : class
+        public async Task<Result<TItem>> GetAsync<TItem>(string containerKey, string id, string partitionKeyValue) where TItem : class
         {
             try
             {
@@ -36,26 +35,26 @@ namespace ASP.Infrastructure.Cosmos
                 switch (ex.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:
-                        return Error.NotFound(description: ex.Message);
+                        return Error.NotFound(ex.Message);
 
                     default:
                         _logger.LogCritical(ex.Message);
-                        return Error.Failure(description: ex.Message);
+                        return Error.Unexpected(ex.Message);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Failure(description: ex.Message);
+                return Error.Unexpected(ex.Message);
             }
         }
 
-        public Task<ErrorOr<IEnumerable<TItem>>> QueryAsync<TItem>(string containerKey, Func<IQueryable<TItem>, IQueryable<TItem>> query) where TItem : class
+        public Task<Result<IEnumerable<TItem>>> QueryAsync<TItem>(string containerKey, Func<IQueryable<TItem>, IQueryable<TItem>> query) where TItem : class
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ErrorOr<Updated>> UpsertAsync<TItem>(string containerKey, string id, string partitionKeyValue, TItem item) where TItem : class
+        public async Task<Result<Done>> UpsertAsync<TItem>(string containerKey, string id, string partitionKeyValue, TItem item) where TItem : class
         {
             try
             {
@@ -64,28 +63,28 @@ namespace ASP.Infrastructure.Cosmos
                 ItemResponse<TItem> response = await container
                     .UpsertItemAsync(item, new PartitionKey(partitionKeyValue));
 
-                return Result.Updated;
+                return Result.Done;
             }
             catch (CosmosException ex)
             {
                 switch (ex.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:
-                        return Error.NotFound(description: ex.Message);
+                        return Error.NotFound(ex.Message);
 
                     default:
                         _logger.LogCritical(ex.Message);
-                        return Error.Failure(description: ex.Message);
+                        return Error.Unexpected(ex.Message);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Failure(description: ex.Message);
+                return Error.Unexpected(ex.Message);
             }
         }
 
-        public async Task<ErrorOr<Deleted>> DeleteAllAsync(string containerKey)
+        public async Task<Result<Done>> DeleteAllAsync(string containerKey)
         {
             try
             {
@@ -103,31 +102,31 @@ namespace ASP.Infrastructure.Cosmos
                     switch(response.StatusCode)
                     {
                         case System.Net.HttpStatusCode.NotFound:
-                            return Error.NotFound(description: response.ToString());
+                            return Error.NotFound(response.ToString());
 
                         default:
-                            return Error.Failure(description: response.ToString());
+                            return Error.Unexpected(response.ToString());
                     }
                 }
 
-                return Result.Deleted;
+                return Result.Done;
             }
             catch (CosmosException ex)
             {
                 switch (ex.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:
-                        return Error.NotFound(description: ex.Message);
+                        return Error.NotFound(ex.Message);
 
                     default:
                         _logger.LogCritical(ex.Message);
-                        return Error.Failure(description: ex.Message);
+                        return Error.Unexpected(ex.Message);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Failure(description: ex.Message);
+                return Error.Unexpected(ex.Message);
             }
         }
     }

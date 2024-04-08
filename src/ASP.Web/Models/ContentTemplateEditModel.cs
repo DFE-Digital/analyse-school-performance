@@ -1,6 +1,6 @@
 ﻿using ASP.Core.Helpers;
+using ASP.Core.Results;
 using ASP.Core.Templating;
-using ErrorOr;
 
 namespace ASP.Web.Models
 {
@@ -10,12 +10,12 @@ namespace ASP.Web.Models
         public string PageTitle { get; set; } = "";
         public List<TemplateComponentEditModel> Views { get; set; } = new();
 
-        public ErrorOr<ContentTemplate> ToTemplate()
+        public Result<ContentTemplate> ToTemplate()
         {
             var serialized = JsonHelper.SerializeIndented(new {
                 ContentId,
                 PageTitle,
-                Views = Views.Select(v => v.ToTemplate().MatchFirst(t => t, e => new object())).ToList()
+                Views = Views.Select(v => v.ToTemplate().Match(t => t, e => new object())).ToList()
             });
 
             return JsonHelper.DeserializeIgnoringMissingMembers<ContentTemplate>(serialized);

@@ -1,10 +1,11 @@
 using ASP.Application.UseCases.UpdateContentTemplate;
 using ASP.Core.Helpers;
+using ASP.Core.Results;
 using ASP.Core.Templating;
-using ErrorOr;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 
 namespace ASP.Api
 {
@@ -28,7 +29,8 @@ namespace ASP.Api
             }
 
             var id = req.Query["id"];
-            if (string.IsNullOrWhiteSpace(id))
+
+            if (StringValues.IsNullOrEmpty(id))
             {
                 return new ApiResult(400, @"Missing parameter: ""id"".");
             }
@@ -42,19 +44,19 @@ namespace ASP.Api
             {
                 var content = await sr.ReadToEndAsync();
                 return await JsonHelper.DeserializeIgnoringMissingMembers<ContentTemplate>(content)
-                    .Else(e => {
-                        return Error.Validation(description: "Request body was not a JSON object.");
+                    .MapError(e => {
+                        return Error.Validation("Request body was not a JSON object.");
                     })
-                    .ThenAsync(async pageContent => await _update.HandleRequest(new UpdateContentTemplateRequest(id, pageContent)))
-                    .MatchFirst(r => new ApiResult(200, r), e =>
+                    .ThenAsync(async pageContent => await _update.HandleRequest(new UpdateContentTemplateRequest(id.ToString() ?? "", pageContent)))
+                    .Match(r => new ApiResult(200, r), e =>
                     {
-                        var statusCode = e.Code switch {
-                            "General.NotFound" => 404,
-                            "General.Validation" => 400,
+                        var statusCode = e switch {
+                            NotFoundError => 404,
+                            ValidationError => 400,
                             _ => 500
                         };
 
-                        return new ApiResult(statusCode, e.Description);
+                        return new ApiResult(statusCode, e.Message);
                     });
             }
         }

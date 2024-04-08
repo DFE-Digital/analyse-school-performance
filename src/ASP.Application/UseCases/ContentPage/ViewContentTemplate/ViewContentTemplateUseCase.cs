@@ -1,6 +1,6 @@
-﻿using ASP.Core.Templating;
+﻿using ASP.Core.Results;
+using ASP.Core.Templating;
 using ASP.Core.Templating.Repository;
-using ErrorOr;
 
 namespace ASP.Application.UseCases.ViewContentTemplate
 {
@@ -14,7 +14,7 @@ namespace ASP.Application.UseCases.ViewContentTemplate
                 throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public async Task<ErrorOr<ContentTemplate>> HandleRequest(ViewContentTemplateRequest request)
+        public async Task<Result<ContentTemplate>> HandleRequest(ViewContentTemplateRequest request)
         {
             return await _repository.Get(request.ContentTemplateId);
         }

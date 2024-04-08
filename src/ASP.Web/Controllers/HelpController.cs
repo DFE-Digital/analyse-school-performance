@@ -1,8 +1,8 @@
 ﻿using ASP.Application.UseCases.UpdateContentTemplate;
 using ASP.Application.UseCases.ViewContentTemplate;
+using ASP.Core.Results;
 using ASP.Web.Extensions;
 using ASP.Web.Models;
-using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Controllers
@@ -29,7 +29,7 @@ namespace ASP.Web.Controllers
             ViewContentTemplateRequest request = new(templateId);
 
             return await _viewContentUseCase.HandleRequest(request)
-                .Then(t => ContentTemplateViewModel.FromTemplate(contentId, t))
+                .Map(t => ContentTemplateViewModel.FromTemplate(contentId, t))
                 .ToActionResult(View);
         }
 
@@ -40,7 +40,7 @@ namespace ASP.Web.Controllers
             ViewContentTemplateRequest request = new(templateId);
 
             return await _viewContentUseCase.HandleRequest(request)
-                .Then(t => ContentTemplateEditModel.FromTemplate(contentId, t))
+                .Map(t => ContentTemplateEditModel.FromTemplate(contentId, t))
                 .ToActionResult(View);
         }
 
@@ -50,7 +50,7 @@ namespace ASP.Web.Controllers
             string templateId = $"help-{contentId}".ToLower();
 
             return await model.ToTemplate()
-                .ThenAsync(t => _updateContentUseCase.HandleRequest(new UpdateContentTemplateRequest(templateId, t)))
+                .ThenAsync(t => _updateContentUseCase.HandleRequest(new(templateId, t)))
                 .ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId }));
         }
     }

@@ -1,7 +1,7 @@
 ﻿using ASP.Core.Templating.Repository;
-using ErrorOr;
 using ASP.Core.Templating;
 using ASP.Core;
+using ASP.Core.Results;
 
 namespace ASP.Infrastructure.Repositories
 {
@@ -16,22 +16,22 @@ namespace ASP.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(documentDB));
         }
 
-        public Task<ErrorOr<Deleted>> DeleteAll()
+        public Task<Result<Done>> DeleteAll()
         {
             return _documentDB.DeleteAllAsync(ContainerKey);
         }
 
-        public Task<ErrorOr<ContentTemplate>> Get(string id)
+        public Task<Result<ContentTemplate>> Get(string contentId)
         {
-            return _documentDB.GetAsync<ContentTemplateDTO>(ContainerKey, id, id)
-                .Then(dto => dto.ToContentTemplate());
+            return _documentDB.GetAsync<ContentTemplateDTO>(ContainerKey, contentId, contentId)
+                .Map(dto => dto.ToContentTemplate());
         }
 
-        public Task<ErrorOr<Updated>> Update(string id, ContentTemplate contentTemplate)
+        public Task<Result<Done>> Update(string contentId, ContentTemplate contentTemplate)
         {
             var dto = new ContentTemplateDTO {
-                id = id,
-                contentId = id,
+                id = contentId,
+                contentId = contentId,
                 PageTitle = contentTemplate.PageTitle,
                 PageContent = contentTemplate.PageContent,
                 Views = (contentTemplate.Views ?? new List<TemplateComponent>())
@@ -39,7 +39,7 @@ namespace ASP.Infrastructure.Repositories
                     .ToList()
             };
 
-            return _documentDB.UpsertAsync(ContainerKey, id, id, dto);
+            return _documentDB.UpsertAsync(ContainerKey, contentId, contentId, dto);
         }
     }
 }
