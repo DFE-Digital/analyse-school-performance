@@ -16,6 +16,8 @@ $app-breakpoint-custom : 700px;
 .app-header__container {
     display: flex;
     flex-wrap: wrap;
+    border-bottom: none;
+    padding-bottom: 5px;
 }
 
 .app-header {
