@@ -44,6 +44,20 @@ Scenario: Page should not error if Views is null
 	Then I should get a 200 response
 
 @Javascript:disabled
+Scenario: Page should show a breadcrumb trail
+	Given page content "help-test" exists:
+		"""
+		{   
+		    "PageTitle" : "Current page", 
+			"Views": null
+		}
+		"""
+	When I navigate to /help/test
+	Then I should get a 200 response
+	And the element "#app-breadcrumb-home" should be an internal link to "/home/index"
+    And the element "#app-breadcrumb-current-page" should have the text content "Current page"
+
+@Javascript:disabled
 Scenario: Edit button should link to edit page
 	Given page content "help-test" exists:
 		"""
