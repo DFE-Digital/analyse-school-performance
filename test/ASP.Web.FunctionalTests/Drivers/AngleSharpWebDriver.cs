@@ -70,6 +70,8 @@ namespace ASP.AcceptanceTests.Drivers
         }
 
         public HttpStatusCode Status => LastResponse.StatusCode;
+        public string BaseAddress => _web.Client.BaseAddress!.AbsoluteUri.Trim('/') ?? string.Empty;
+        public string Path => LastResponse.Url;
         public Task<string> PageContentAsync() => Task.FromResult(LastResponse.ToHtml());
         public Task<string> PageTitleAsync() => Task.FromResult(LastResponse.Title ?? "");
 

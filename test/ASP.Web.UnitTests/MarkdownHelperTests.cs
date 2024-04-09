@@ -121,6 +121,17 @@ namespace ASP.UnitTest.Web
         }
 
         [Theory]
+        [InlineData("[Google](https://www.google.com){target=\"_blank\"}", "<a href=\"https://www.google.com\" class=\"govuk-link\" target=&quot;_blank&quot;>Google</a>")]
+        public void ConvertInlineMarkdown_WhenLinkHasTargetAttribute_ConvertsToAnchorTagAndSetsTarget(string input, string expected)
+        {
+            // Act
+            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+
+            // Assert
+            Assert.Equal(expected, result.ToString());
+        }
+
+        [Theory]
         [InlineData("**_bold italic_**", "<strong><em>bold italic</em></strong>")]
         [InlineData("___bold italic___", "<strong><em>bold italic</em></strong>")]
         [InlineData("***bold italic***", "<strong><em>bold italic</em></strong>")]

@@ -20,6 +20,12 @@ namespace ASP.AcceptanceTests.Drivers
         public HttpStatusCode Status =>
             throw new XunitException(ExceptionMessage);
 
+        public string Path => 
+            throw new XunitException(ExceptionMessage);
+
+        public string BaseAddress => 
+            throw new XunitException(ExceptionMessage);
+
         public IElementDriver Element(string selector)
         {
             throw new XunitException(ExceptionMessage);

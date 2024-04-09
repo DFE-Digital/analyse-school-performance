@@ -1,8 +1,10 @@
+using ASP.Web.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Controllers
 {
     [Route("school")]
+    [ServiceFilter<TermsOfUseActionFilter>]
     public class SchoolController : Controller
     {
         private readonly ILogger<SchoolController> _logger;

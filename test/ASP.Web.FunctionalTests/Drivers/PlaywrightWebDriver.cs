@@ -98,6 +98,10 @@ namespace ASP.Web.AcceptanceTests.Drivers
 
         public HttpStatusCode Status => (HttpStatusCode)LastResponse.Status;
 
+        public string Path => LastResponse.Url;
+
+        public string BaseAddress => _web.ServerAddress.TrimEnd('/') ?? string.Empty;
+
         public async Task<string> PageContentAsync()
         {
             return await LastResponse.TextAsync();

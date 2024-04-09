@@ -7,6 +7,9 @@ namespace ASP.AcceptanceTests.Drivers
     {
         Task NavigateAsync(string path);
         HttpStatusCode Status { get; }
+        string Path { get; }
+        string BaseAddress { get; }
+
         Task<string> PageContentAsync();
         Task<string> PageTitleAsync();
         IElementDriver Element(string selector);

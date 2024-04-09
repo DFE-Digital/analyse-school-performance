@@ -1,5 +1,5 @@
-﻿using ASP.Core.Enums;
-using ASP.Web.Controllers;
+﻿using ASP.Web.Enums;
+using ASP.Web.Constants;
 using ASP.Web.Models;
 using ASP.Web.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +20,8 @@ namespace ASP.Web.Filters
         {
             var controller = context.Controller as Controller;
 
-            var analyticsTracking = _cookieProvider?.GetCookie(CookiesController.AnalyticsTrackingCookie);
-            var analyticsTrackingConfirmation = _cookieProvider?.GetCookie(CookiesController.AnalyticsTrackingConfirmationCookie);
+            var analyticsTracking = _cookieProvider?.GetCookie(CookieKeys.AnalyticsTrackingCookie);
+            var analyticsTrackingConfirmation = _cookieProvider?.GetCookie(CookieKeys.AnalyticsTrackingConfirmationCookie);
 
             CookiePreferencesModel cookiePreferences = new()
             {

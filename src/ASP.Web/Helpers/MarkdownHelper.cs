@@ -8,7 +8,7 @@ namespace ASP.Web.Helpers
     {
         // Matches the inner text in e.g. "**text**" or "*text*" but not "** text **" or "* text *"
         private const string ASTERISK_WRAPPED_TEXT = @"[^\s\*]|[^\s\*](?:.|\n)*?[^\s\*]";
-        
+
         // Matches the inner text in e.g. "__text__" or "_text_" but not "__ text __" or "_ text _"
         private const string UNDERSCORE_WRAPPED_TEXT = @"[^\s_]|[^\s_](?:.|\n)*?[^\s_]";
 
@@ -50,7 +50,10 @@ namespace ASP.Web.Helpers
             // We're matching the preceding and following characters too so we'll need to add them back in when we 
             // do the replace.
             $@"(^|[^_])_(?<ITALIC_UNDERSCORE>{UNDERSCORE_WRAPPED_TEXT})_($|[^_])",
-    
+
+            // Matches "[text](url){target}"
+            @"\[(?<LINK_TARGET>.*?)\]\((.*?)\)\{([^}]*)\}",
+
             // Matches "[text](url)"
             @"\[(?<LINK>[^\]]+)\]\(([^)]+)\)"
         }), RegexOptions.Compiled | RegexOptions.Multiline);
@@ -58,7 +61,8 @@ namespace ASP.Web.Helpers
         public static HtmlString ConvertInlineMarkdown(object input)
         {
             // Convert input to string
-            var inputString = input switch {
+            var inputString = input switch
+            {
                 null => "",
                 string s => s,
                 _ => Convert.ToString(input) ?? ""
@@ -90,7 +94,8 @@ namespace ASP.Web.Helpers
                     // as names so will appear first in the list.
                     var namedGroup = groups[groups.Length - 1];
 
-                    switch(namedGroup.Name) {
+                    switch (namedGroup.Name)
+                    {
                         case "BOLD_BOLD_ITALIC_ASTERISK":
                         case "BOLD_BOLD_ITALIC_UNDERSCORE":
                             return $"<strong><strong><em>{namedGroup.Value}</em></strong></strong>";
@@ -113,11 +118,12 @@ namespace ASP.Web.Helpers
                             // back to the string
                             return $"{groups[0].Value}<em>{namedGroup.Value}</em>{groups[1].Value}";
 
-                        case "LINK": 
+                        case "LINK":
                             // First group is the URL
                             return $"<a href=\"{groups[0].Value}\" class=\"govuk-link\">{namedGroup.Value}</a>";
-
-                        default: 
+                        case "LINK_TARGET":
+                            return $"<a href=\"{groups[0].Value}\" class=\"govuk-link\" {groups[1].Value}>{namedGroup.Value}</a>";
+                        default:
                             return m.Value;
                     }
                 });

@@ -1,6 +1,7 @@
 using ASP.Application.UseCases.ViewContentTemplate;
 using ASP.Core.Results;
 using ASP.Web.Extensions;
+using ASP.Web.Filters;
 using ASP.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 namespace ASP.Web.Controllers
 {
     [Route("home")]
+    [ServiceFilter<TermsOfUseActionFilter>]
     public class HomeController : Controller
     {
         private readonly IViewContentTemplateUseCase _viewContentUseCase;

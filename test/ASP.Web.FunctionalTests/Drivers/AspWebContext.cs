@@ -65,7 +65,7 @@ namespace ASP.AcceptanceTests.Drivers
             {
                 _store = new MemoryStore();
                 _cookieProvider = new TestCookieProvider();
-                ClientOptions.AllowAutoRedirect = false;
+                ClientOptions.AllowAutoRedirect = true;
             }
 
             public IContentTemplateRepository PageContentRepository
