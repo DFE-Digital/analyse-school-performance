@@ -1,4 +1,4 @@
-﻿namespace ASP.Core.Enums
+﻿namespace ASP.Web.Enums
 {
     public enum AnalyticsTracking
     {

@@ -16,10 +16,16 @@ namespace ASP.AcceptanceTests.StepDefinitions
             _outputHelper = outputHelper;
         }
 
-        [BeforeScenario]
+        [BeforeScenario(Order = 0)]
         public void ClearDownCookies()
         {
             _web.CookieProvider.ClearCookies();
+        }
+
+        [BeforeScenario(Order = 1)]
+        public void SetAcceptedTermsOfUseCookie()
+        {
+            _web.CookieProvider.SetCookie("AcceptedTermsOfUse", "Accepted");
         }
 
         [Then(@"the cookie ""(.*)"" should be set to ""(.*)""")]
@@ -31,6 +37,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
         }
 
         [When(@"the cookie ""(.*)"" has been set to ""(.*)""")]
+        [Given(@"the cookie ""(.*)"" has been set to ""(.*)""")]
         public void WhenTheCookieHasBeenSetTo(string key, string value)
         {
             _web.CookieProvider.SetCookie(key, value);

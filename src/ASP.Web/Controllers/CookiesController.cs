@@ -1,4 +1,5 @@
-﻿using ASP.Core.Enums;
+﻿using ASP.Web.Enums;
+using ASP.Web.Constants;
 using ASP.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,14 +10,11 @@ namespace ASP.Web.Controllers
     {
         private readonly ICookieProvider _cookieProvider = cookieProvider;
 
-        public const string AnalyticsTrackingCookie = "AnalyticsTracking";
-        public const string AnalyticsTrackingConfirmationCookie = "AnalyticsTrackingConfirmation";
-
         [HttpPost("preferences")]
         public IActionResult CookiesPreferences(string analyticsTracking)
         {
-            _cookieProvider.SetCookie(AnalyticsTrackingCookie, analyticsTracking);
-            _cookieProvider.SetCookie(AnalyticsTrackingConfirmationCookie, AnalyticsTrackingConfirmation.ShowBanner.ToString());
+            _cookieProvider.SetCookie(CookieKeys.AnalyticsTrackingCookie, analyticsTracking);
+            _cookieProvider.SetCookie(CookieKeys.AnalyticsTrackingConfirmationCookie, AnalyticsTrackingConfirmation.ShowBanner.ToString());
 
             return Redirect(Request.Headers.Referer.ToString());
         }
@@ -24,7 +22,7 @@ namespace ASP.Web.Controllers
         [HttpGet("confirmation")]
         public IActionResult CookiesConfirmation()
         {
-            _cookieProvider.SetCookie(AnalyticsTrackingConfirmationCookie, AnalyticsTrackingConfirmation.HideBanner.ToString());
+            _cookieProvider.SetCookie(CookieKeys.AnalyticsTrackingConfirmationCookie, AnalyticsTrackingConfirmation.HideBanner.ToString());
 
             return Redirect(Request.Headers.Referer.ToString());
         }

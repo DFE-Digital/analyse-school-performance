@@ -25,6 +25,12 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await _web.NavigateAsync(path);
         }
 
+        [Then(@"The path should match ((?:/.*)+)")]
+        public void ThePathShouldMatch(string path)
+        {
+            Assert.Equal(_web.BaseAddress + path, _web.Path);
+        }
+
         [When(@"I update the element ""([^""]*)"" to be (checked|unchecked)")]
         public async Task WhenIUpdateTheElementToBe(string selector, string state)
         {
@@ -91,7 +97,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
         {
             var element = await _web.Element(selector)
                 .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
-            
+
             var outerHtml = await element.OuterHtmlAsync();
             AssertHtml.Equal(expectedHtml, outerHtml, _outputHelper.WriteLine);
         }

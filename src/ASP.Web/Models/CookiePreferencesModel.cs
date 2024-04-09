@@ -1,4 +1,4 @@
-﻿using ASP.Core.Enums;
+﻿using ASP.Web.Enums;
 
 namespace ASP.Web.Models
 {
