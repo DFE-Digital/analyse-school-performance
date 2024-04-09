@@ -1,11 +1,11 @@
-﻿using ErrorOr;
+﻿using ASP.Core.Results;
 
 namespace ASP.Core.Templating.Repository
 {
     public interface IContentTemplateRepository
     {
-        Task<ErrorOr<ContentTemplate>> Get(string id);
-        Task<ErrorOr<Updated>> Update(string id, ContentTemplate contentTemplate);
-        Task<ErrorOr<Deleted>> DeleteAll();
+        Task<Result<ContentTemplate>> Get(string contentId);
+        Task<Result<Done>> Update(string contentId, ContentTemplate contentTemplate);
+        Task<Result<Done>> DeleteAll();
     }
 }

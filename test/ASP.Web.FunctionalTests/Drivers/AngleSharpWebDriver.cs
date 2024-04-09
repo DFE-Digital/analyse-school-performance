@@ -75,9 +75,7 @@ namespace ASP.AcceptanceTests.Drivers
 
         public IElementDriver Element(string selector)
         {
-            var element = LastResponse.QuerySelector(selector);
-
-            return new AngleSharpElementDriver(element, this);
+            return new AngleSharpElementDriver(LastResponse.DocumentElement, selector, this);
         }
 
         public IElementDriver ElementByLabel(string labelText)
@@ -85,16 +83,14 @@ namespace ASP.AcceptanceTests.Drivers
             var label = LastResponse.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
             AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
 
-            var field = LastResponse.QuerySelector($":scope #{label?.Attributes["for"]?.Value}");
+            var fieldSelector = $":scope #{label?.Attributes["for"]?.Value}";
 
-            return new AngleSharpElementDriver(field, this);
+            return new AngleSharpElementDriver(LastResponse.DocumentElement, fieldSelector, this);
         }
 
         public IElementsDriver Elements(string selector)
         {
-            var elements = LastResponse.QuerySelectorAll(selector);
-
-            return new AngleSharpElementsDriver(elements, this);
+            return new AngleSharpElementsDriver(LastResponse.DocumentElement, selector, this);
         }
 
         public async Task SubmitFormAsync(IHtmlFormElement form, IHtmlElement element)

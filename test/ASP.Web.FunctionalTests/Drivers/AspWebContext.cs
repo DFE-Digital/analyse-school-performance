@@ -14,6 +14,7 @@ using ASP.Web.AcceptanceTests.Services;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.Hosting;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -32,11 +33,18 @@ namespace ASP.AcceptanceTests.Drivers
         // outstripped by the loss of launching more than one WebApplicationFactory.
         private static readonly HttpClient _client;
         private static readonly CustomWebApplicationFactory<Program> _factory;
+        private readonly ISpecFlowOutputHelper _output;
 
         static AspWebContext()
         {
             _factory = new CustomWebApplicationFactory<Program>();
             _client = _factory.CreateClient();
+        }
+
+        public AspWebContext(ISpecFlowOutputHelper output)
+        {
+            _output = output;
+            _output.WriteLine($"Test server running on: {ServerAddress}");
         }
 
         public HttpClient Client => _client;

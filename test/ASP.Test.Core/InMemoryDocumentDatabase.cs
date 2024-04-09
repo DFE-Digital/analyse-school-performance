@@ -1,5 +1,5 @@
 ﻿using ASP.Core;
-using ErrorOr;
+using ASP.Core.Results;
 
 namespace ASP.Test.Core
 {
@@ -12,33 +12,33 @@ namespace ASP.Test.Core
             _memoryStore = memoryStore;
         }
 
-        public Task<ErrorOr<TItem>> GetAsync<TItem>(string container, string id, string partitionKeyValue) where TItem : class
+        public Task<Result<TItem>> GetAsync<TItem>(string container, string id, string partitionKeyValue) where TItem : class
         {
             var items = _memoryStore.Get<TItem>(container, id, partitionKeyValue);
 
             return Task.FromResult(items);
         }
 
-        public Task<ErrorOr<IEnumerable<TItem>>> QueryAsync<TItem>(string container, Func<IQueryable<TItem>, IQueryable<TItem>> query) where TItem : class
+        public Task<Result<IEnumerable<TItem>>> QueryAsync<TItem>(string container, Func<IQueryable<TItem>, IQueryable<TItem>> query) where TItem : class
         {
             var items = _memoryStore.GetAll<TItem>(container)
-                .Then(all => query(all.AsQueryable()).AsEnumerable());
+                .Map(all => query(all.AsQueryable()).AsEnumerable());
 
             return Task.FromResult(items);
         }
 
-        public Task<ErrorOr<Updated>> UpsertAsync<TItem>(string container, string id, string partitionKeyValue, TItem item) where TItem : class
+        public Task<Result<Done>> UpsertAsync<TItem>(string container, string id, string partitionKeyValue, TItem item) where TItem : class
         {
             _memoryStore.Set(container, id, partitionKeyValue, item);
 
-            return Task.FromResult(Result.Updated.ToErrorOr());
+            return Task.FromResult(Result.Done.ToResult());
         }
 
-        public Task<ErrorOr<Deleted>> DeleteAllAsync(string container)
+        public Task<Result<Done>> DeleteAllAsync(string container)
         {
             _memoryStore.ClearContainer(container);
 
-            return Task.FromResult(Result.Deleted.ToErrorOr());
+            return Task.FromResult(Result.Done.ToResult());
         }
     }
 }

@@ -1,7 +1,9 @@
 using ASP.Application.UseCases.ViewContentTemplate;
+using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 
 namespace ASP.Api
 {
@@ -25,21 +27,22 @@ namespace ASP.Api
             }
 
             var id = req.Query["id"];
-            if (string.IsNullOrWhiteSpace(id))
+
+            if (StringValues.IsNullOrEmpty(id))
             {
                 return new ApiResult(400, @"Missing parameter: ""id"".");
             }
 
-            var response = await _view.HandleRequest(new ViewContentTemplateRequest(id));
+            var response = await _view.HandleRequest(new ViewContentTemplateRequest(id.ToString() ?? ""));
 
-            return response.MatchFirst(r => new ApiResult(200, r), e =>
+            return response.Match(r => new ApiResult(200, r), e =>
             {
-                var statusCode = e.Code switch {
-                    "General.NotFound" => 404,
+                var statusCode = e switch {
+                    NotFoundError => 404,
                     _ => 500
                 };
 
-                return new ApiResult(statusCode, e.Description);
+                return new ApiResult(statusCode, e.Message);
             });
         }
     }

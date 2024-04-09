@@ -1,5 +1,5 @@
-﻿using ASP.Core.Templating.Repository;
-using ErrorOr;
+﻿using ASP.Core.Results;
+using ASP.Core.Templating.Repository;
 
 namespace ASP.Application.UseCases.UpdateContentTemplate
 {
@@ -13,10 +13,10 @@ namespace ASP.Application.UseCases.UpdateContentTemplate
                 throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public async Task<ErrorOr<UpdateContentTemplateResponse>> HandleRequest(UpdateContentTemplateRequest request)
+        public async Task<Result<UpdateContentTemplateResponse>> HandleRequest(UpdateContentTemplateRequest request)
         {
             return await _repository.Update(request.ContentTemplateId, request.ContentTemplate)
-                .Then(_ => new UpdateContentTemplateResponse());
+                .Map(_ => new UpdateContentTemplateResponse());
         }
     }
 }

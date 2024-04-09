@@ -1,9 +1,8 @@
-﻿using AngleSharp.Dom;
-using ASP.Core.Helpers;
+﻿using ASP.Core.Helpers;
 using ASP.Core.Templating;
 using ASP.Core.Templating.Repository;
+using ASP.Core.Results;
 using ASP.Test.Core;
-using ErrorOr;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using TechTalk.SpecFlow;
@@ -38,31 +37,31 @@ namespace ASP.Test.Acceptance.Core
         [Given(@"page content ""([^""]+)"" exists:")]
         public async Task GivenPageContentExistsMultiline(string id, string data)
         {
-            await SetUpPageContent(id, data).SwitchFirst(
-                data =>
+            await SetUpPageContent(id, data).Switch(
+                _ =>
                 {
                 },
-                e => AssertWithMessage.Fail(@$"Could not update page content with id ""{id}"": {e.Description}"));
+                e => AssertWithMessage.Fail(@$"Could not update page content with id ""{id}"": {e.Message}"));
         }
 
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to (.+)")]
         public async Task ThenPageContentPropertyShouldBeEqualTo(string id, string propertyPath, string propertyValue)
         {
-            await GetPageContent(id).SwitchFirst(
+            await GetPageContent(id).Switch(
                 data =>
                 {
                     var value = GetPropertyPathValue(propertyPath, data);
                     Assert.Equal(propertyValue, value);
                 },
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to:")]
         public async Task ThenPageContentPropertyShouldBeEqualToMultiline(string id, string propertyPath, string propertyValue)
         {
-            await GetPageContent(id).SwitchFirst(
-                pageContent => JsonHelper.Deserialize<object>(propertyValue).SwitchFirst(
+            await GetPageContent(id).Switch(
+                pageContent => JsonHelper.Deserialize<object>(propertyValue).Switch(
                     expected =>
                     {
                         var expectedSerializedPropertyValue = JsonHelper.Serialize(expected);
@@ -70,54 +69,54 @@ namespace ASP.Test.Acceptance.Core
 
                         Assert.Equal(expectedSerializedPropertyValue, actualSerializedPropertyValue);
                     },
-                    e => AssertWithMessage.Fail(e.Description)
+                    e => AssertWithMessage.Fail(e.Message)
                 ),
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should match:")]
         public async Task ThenPageContentPropertyShouldMatchMultiline(string id, string propertyPath, string expected)
         {
-            await GetPageContent(id).SwitchFirst(
+            await GetPageContent(id).Switch(
                 pageContent =>
                 {
                     var actual = GetPropertyPathValue(propertyPath, pageContent);
 
                     MatchProperties(expected, actual);
                 },
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 
         [Then(@"page content ""([^""]+)"" should match:")]
         public async Task ThenPageContentShouldMatchMultiline(string id, string expected)
         {
-            await GetPageContent(id).SwitchFirst(
+            await GetPageContent(id).Switch(
                 actual => MatchProperties(expected, actual),
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 
         [Then(@"page content ""([^""]*)"" should be equal to:")]
         public async Task ThenPageContentShouldBeEqualToMultiline(string id, string properties)
         {
-            await GetPageContent(id).SwitchFirst(
+            await GetPageContent(id).Switch(
                 actual => 
                 {
                     var expected = JsonHelper.Serialize(JsonHelper.Deserialize<object>(properties));
                     Assert.Equal(expected, actual);
                 },
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Description}")
+                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 
-        protected async Task<ErrorOr<string>> GetPageContent(string id)
+        protected async Task<Result<string>> GetPageContent(string id)
         {
-            return await _repository.Get(id).Then(JsonHelper.Serialize);
+            return await _repository.Get(id).Map(JsonHelper.Serialize);
         }
 
-        protected async Task<ErrorOr<Updated>> SetUpPageContent(string id, string data)
+        protected async Task<Result<Done>> SetUpPageContent(string id, string data)
         {
             var document = await _repository.Get(id)
                 .Match(v => JsonConvert.SerializeObject(v), _ => "{}");
@@ -147,16 +146,16 @@ namespace ASP.Test.Acceptance.Core
                 var arrayIndex = int.Parse(match.Groups[2].Value);
 
                 Dictionary<string, object>? dict = null;
-                JsonHelper.Deserialize<Dictionary<string, object>>(data).SwitchFirst(
+                JsonHelper.Deserialize<Dictionary<string, object>>(data).Switch(
                     v => dict = v,
-                    e => AssertWithMessage.Fail(e.Description)
+                    e => AssertWithMessage.Fail(e.Message)
                 );
                 AssertWithMessage.True(dict!.ContainsKey(arrayProperty), $@"Page content object does not contain property ""{arrayProperty}"":\n{data}");
                 var arrayValue = dict![arrayProperty];
                 object[]? array = null;
-                JsonHelper.Deserialize<object[]>(JsonHelper.Serialize(arrayValue)).SwitchFirst(
+                JsonHelper.Deserialize<object[]>(JsonHelper.Serialize(arrayValue)).Switch(
                     v => array = v,
-                    e => AssertWithMessage.Fail(e.Description)
+                    e => AssertWithMessage.Fail(e.Message)
                 );
                 if (array!.Length <= arrayIndex)
                 {
@@ -173,9 +172,9 @@ namespace ASP.Test.Acceptance.Core
             else
             {
                 Dictionary<string, object>? dict = null;
-                JsonHelper.Deserialize<Dictionary<string, object>>(data).SwitchFirst(
+                JsonHelper.Deserialize<Dictionary<string, object>>(data).Switch(
                     v => dict = v,
-                    e => AssertWithMessage.Fail(e.Description)
+                    e => AssertWithMessage.Fail(e.Message)
                 );
                 AssertWithMessage.True(dict!.ContainsKey(propertyName), $@"Page content object does not contain property ""{propertyName}"":\n{data}");
                 var value = JsonHelper.Serialize(dict![propertyName]);
@@ -192,7 +191,7 @@ namespace ASP.Test.Acceptance.Core
         {
             PruneTree(expected, actual, serializedActual =>
             {
-                JsonHelper.Deserialize<object>(expected).SwitchFirst(
+                JsonHelper.Deserialize<object>(expected).Switch(
                     ex =>
                     {
                         var serializedExpected = JsonHelper.Serialize(ex);
@@ -200,7 +199,7 @@ namespace ASP.Test.Acceptance.Core
                     },
                     e =>
                     {
-                        AssertWithMessage.Fail(e.Description);
+                        AssertWithMessage.Fail(e.Message);
                     }
                 );
             });
@@ -208,10 +207,10 @@ namespace ASP.Test.Acceptance.Core
 
         private void PruneTree(string expected, string actual, Action<string> doSomething)
         {
-            JsonHelper.Deserialize<Dictionary<string, object>>(actual).SwitchFirst(
+            JsonHelper.Deserialize<Dictionary<string, object>>(actual).Switch(
                 actualDict =>
                 {
-                    JsonHelper.Deserialize<Dictionary<string, object>>(expected).SwitchFirst(
+                    JsonHelper.Deserialize<Dictionary<string, object>>(expected).Switch(
                         expectedDict =>
                         {
                             var resultDict = new Dictionary<string, object>();
@@ -219,14 +218,14 @@ namespace ASP.Test.Acceptance.Core
                             {
                                 PruneTree(JsonHelper.Serialize(kvp.Value), JsonHelper.Serialize(actualDict[kvp.Key]), r =>
                                 {
-                                    JsonHelper.Deserialize<object>(r).SwitchFirst(
+                                    JsonHelper.Deserialize<object>(r).Switch(
                                         v =>
                                         {
                                             resultDict[kvp.Key] = v;
                                         },
                                         e =>
                                         {
-                                            AssertWithMessage.Fail(e.Description);
+                                            AssertWithMessage.Fail(e.Message);
                                         }
                                     );
                                 });
@@ -238,16 +237,16 @@ namespace ASP.Test.Acceptance.Core
                         },
                         e =>
                         {
-                            AssertWithMessage.Fail(e.Description);
+                            AssertWithMessage.Fail(e.Message);
                         }
                     );
                 },
                 e =>
                 {
-                    JsonHelper.Deserialize<List<object>>(actual).SwitchFirst(
+                    JsonHelper.Deserialize<List<object>>(actual).Switch(
                         actualList =>
                         {
-                            JsonHelper.Deserialize<List<object>>(expected).SwitchFirst(
+                            JsonHelper.Deserialize<List<object>>(expected).Switch(
                                 expectedList =>
                                 {
                                     var resultList = new List<object>();
@@ -255,14 +254,14 @@ namespace ASP.Test.Acceptance.Core
                                     {
                                         PruneTree(JsonHelper.Serialize(expectedList[i]), JsonHelper.Serialize(actualList[i]), r =>
                                         {
-                                            JsonHelper.Deserialize<object>(r).SwitchFirst(
+                                            JsonHelper.Deserialize<object>(r).Switch(
                                                 v =>
                                                 {
                                                     resultList.Add(v);
                                                 },
                                                 e =>
                                                 {
-                                                    AssertWithMessage.Fail(e.Description);
+                                                    AssertWithMessage.Fail(e.Message);
                                                 }
                                             );
                                         });
@@ -274,7 +273,7 @@ namespace ASP.Test.Acceptance.Core
                                 },
                                 e =>
                                 {
-                                    AssertWithMessage.Fail(e.Description);
+                                    AssertWithMessage.Fail(e.Message);
                                 }
                             );
                         },

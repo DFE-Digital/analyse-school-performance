@@ -1,5 +1,5 @@
 ﻿using ASP.Core.Helpers;
-using ErrorOr;
+using ASP.Core.Results;
 
 namespace ASP.Test.Core
 {
@@ -37,54 +37,42 @@ namespace ASP.Test.Core
             _store[containerKey][(id, partitionKeyValue)] = document;
         }
 
-        public ErrorOr<string> Get(string container, string id, string partitionKeyValue)
+        public Result<string> Get(string container, string id, string partitionKeyValue)
         {
             if (!_store.ContainsKey(container))
             {
-                return Error.NotFound(description: $@"Container ""{container}"" does not exist.");
+                return Error.NotFound($@"Container ""{container}"" does not exist.");
             }
 
             if (!_store[container].ContainsKey((id, partitionKeyValue)))
             {
-                return Error.NotFound(description: $@"Document with id ""{id}"" and partition key ""{partitionKeyValue}"" does not exist in container ""{container}"".");
+                return Error.NotFound($@"Document with id ""{id}"" and partition key ""{partitionKeyValue}"" does not exist in container ""{container}"".");
             }
 
             return _store[container][(id, partitionKeyValue)];
         }
 
-        public ErrorOr<TItem> Get<TItem>(string container, string id, string partitionKeyValue) where TItem : class
+        public Result<TItem> Get<TItem>(string container, string id, string partitionKeyValue) where TItem : class
         {
             return Get(container, id, partitionKeyValue)
                 .Then(JsonHelper.DeserializeIgnoringMissingMembers<TItem>);
         }
 
-        public ErrorOr<IEnumerable<string>> GetAll(string container)
+        public Result<IEnumerable<string>> GetAll(string container)
         {
             if (!_store.ContainsKey(container))
             {
-                return Error.NotFound(description: $@"Container ""{container}"" does not exist.");
+                return Error.NotFound($@"Container ""{container}"" does not exist.");
             }
 
-            return _store[container].Values.AsEnumerable().ToErrorOr();
+            return (Result<IEnumerable<string>>) _store[container].Values.AsEnumerable();
         }
 
-        public ErrorOr<IEnumerable<TItem>> GetAll<TItem>(string container) where TItem : class
+        public Result<IEnumerable<TItem>> GetAll<TItem>(string container) where TItem : class
         {
             var result = GetAll(container);
 
-            return result.Then(r => ConvertAll(r.Select(JsonHelper.DeserializeIgnoringMissingMembers<TItem>)));
-        }
-
-        private ErrorOr<IEnumerable<TItem>> ConvertAll<TItem>(IEnumerable<ErrorOr<TItem>> items)
-        {
-            var deseralized = items.ToList();
-            var errors = deseralized.SelectMany(e => e.Errors).ToList();
-            if (errors.Any())
-            {
-                return errors;
-            }
-
-            return deseralized.Select(r => r.Value).ToErrorOr();
+            return result.Then(r => r.Select(JsonHelper.DeserializeIgnoringMissingMembers<TItem>).Combine());
         }
     }
 }

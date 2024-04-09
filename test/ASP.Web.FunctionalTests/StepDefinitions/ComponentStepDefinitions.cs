@@ -282,8 +282,9 @@ namespace ASP.AcceptanceTests.StepDefinitions
         {
             var component = await ComponentShouldExistAsync();
 
-            var element = await component.Element($":scope {selector}")
-                .ShouldExistAsync(@$"Could not find an element within the component with the selector ""{selector}"".");
+            var element = component.Element($":scope {selector}");
+            await element.ShouldHaveCountAsync(1, @$"More than one element within the component has the selector ""{selector}"".");
+            await element.ShouldExistAsync(@$"Could not find an element within the component with the selector ""{selector}"".");
 
             return element;
         }

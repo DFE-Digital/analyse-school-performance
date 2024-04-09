@@ -5,7 +5,9 @@ const CopyPlugin = require("copy-webpack-plugin");
 const stylesConfig = {
     mode: process.env.NODE_ENV,
     entry: {
-        app: path.resolve(__dirname, 'scripts/scss_imports.js')
+        govuk: path.resolve(__dirname, 'scripts/govuk_scss.js'),
+        app: path.resolve(__dirname, 'scripts/app_scss.js'),
+        components: path.resolve(__dirname, 'scripts/components_scss.js'),
     },
     output: {
         path: path.resolve(__dirname, 'wwwroot'),    
@@ -48,18 +50,9 @@ const stylesConfig = {
 const javaScriptConfig = {
     mode: process.env.NODE_ENV,
     entry: {
-        govuk: path.resolve(__dirname, 'scripts/js_imports.js'),
-    },
-    output: {
-        path: path.resolve(__dirname, 'wwwroot/assets/js'),
-        filename: '[name].js',
-    }
-};
-
-const alpineConfig = {
-    mode: process.env.NODE_ENV,
-    entry: {
+        govuk: path.resolve(__dirname, 'scripts/govuk.js'),
         alpine: path.resolve(__dirname, 'scripts/alpine.js'),
+        components: path.resolve(__dirname, 'scripts/components.js'),
     },
     output: {
         path: path.resolve(__dirname, 'wwwroot/assets/js'),
@@ -67,4 +60,4 @@ const alpineConfig = {
     }
 };
 
-module.exports = [stylesConfig, javaScriptConfig, alpineConfig];
+module.exports = [stylesConfig, javaScriptConfig];

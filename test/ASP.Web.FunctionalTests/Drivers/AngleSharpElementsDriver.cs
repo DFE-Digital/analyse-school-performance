@@ -5,13 +5,18 @@ namespace ASP.AcceptanceTests.Drivers
     // Driver for tests to interact with a group of elements on the page using AngleSharp (see AngleSharpWebDriver)
     public class AngleSharpElementsDriver : IElementsDriver
     {
+        private IElement _outerElement;
+        private string _selector;
+
         private readonly IHtmlCollection<IElement> _elements;
         private readonly AngleSharpWebDriver _web;
 
-        public AngleSharpElementsDriver(IHtmlCollection<IElement> elements, AngleSharpWebDriver web)
+        public AngleSharpElementsDriver(IElement outerElement, string selector, AngleSharpWebDriver web)
         {
-            _elements = elements;
+            _outerElement = outerElement;
+            _selector = selector;
             _web = web;
+            _elements = _outerElement.QuerySelectorAll(_selector);
         }
 
         public Task<int> CountAsync()
