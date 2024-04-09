@@ -11,11 +11,13 @@ namespace ASP.Web.ExceptionHandlers
         {
             if (httpContext.Response.StatusCode == (int)HttpStatusCode.InternalServerError)
             {
-                var tableClient = await tableStorageProvider.GetTable("ASPProdErrors");
+                var tableClient = await tableStorageProvider.GetTable("ASPExceptions");
 
                 var appException = CreateTableEntry(httpContext, exception);
 
                 await tableClient.AddEntityAsync(appException, cancellationToken);
+
+                return true;
             }
 
             return false;
