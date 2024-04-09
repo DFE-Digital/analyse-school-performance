@@ -21,7 +21,7 @@ namespace ASP.Api
                 {
                     services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
                     services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
-                    services.AddScoped<ITableStorageProvider, CosmosDbQueryHandler>();
+                    services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
 
                     services.AddCosmosDbDependencies();
 

@@ -99,7 +99,7 @@ namespace ASP.Infrastructure.Cosmos
                     var response = await container
                         .DeleteItemAsync<Dictionary<string, object>>(id, new PartitionKey(id));
 
-                    switch (response.StatusCode)
+                    switch(response.StatusCode)
                     {
                         case System.Net.HttpStatusCode.NotFound:
                             return Error.NotFound(response.ToString());
