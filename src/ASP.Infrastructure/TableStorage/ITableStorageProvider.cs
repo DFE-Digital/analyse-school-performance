@@ -1,4 +1,5 @@
-﻿using Azure.Data.Tables;
+﻿using ASP.Core.Results;
+using Azure.Data.Tables;
 
 namespace ASP.Infrastructure.TableStorage
 {

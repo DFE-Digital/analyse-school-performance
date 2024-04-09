@@ -1,17 +1,22 @@
-﻿using Azure.Data.Tables;
+﻿using ASP.Core.Results;
+using Azure;
+using Azure.Data.Tables;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace ASP.Infrastructure.TableStorage
 {
     public class TableStorageProvider : ITableStorageProvider
     {
+        private readonly ILogger<TableStorageProvider> _logger;
         private readonly TableServiceClient _tableServiceClient;
         private readonly TableStorageConfiguration _tableStorageConfiguration;
 
-        public TableStorageProvider(IOptions<TableStorageConfiguration> tableStorageConfiguration)
+        public TableStorageProvider(ILogger<TableStorageProvider> logger,
+            IOptions<TableStorageConfiguration> tableStorageConfiguration)
         {
+            _logger = logger;
             _tableStorageConfiguration = tableStorageConfiguration.Value;
-
             _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
         }
 
@@ -19,9 +24,17 @@ namespace ASP.Infrastructure.TableStorage
         {
             TableClient tableClient = _tableServiceClient.GetTableClient(tableName);
 
-            await tableClient.CreateIfNotExistsAsync();
+            try
+            {
+                await tableClient.CreateIfNotExistsAsync();
 
-            return tableClient;
+                return tableClient;
+            }
+            catch (RequestFailedException exception)
+            {
+                _logger.LogError(exception.Message);
+                throw;
+            }
         }
     }
 }

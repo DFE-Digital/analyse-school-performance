@@ -23,7 +23,7 @@ namespace ASP.Web.Controllers
         [HttpGet("index")]
         public async Task<IActionResult> Index()
         {
-            throw new Exception();
+          //  throw new Exception();
 
             ViewContentTemplateRequest request = new("home-page");
 

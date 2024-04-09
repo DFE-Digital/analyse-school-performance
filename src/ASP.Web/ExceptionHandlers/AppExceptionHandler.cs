@@ -1,5 +1,6 @@
 ﻿using ASP.Infrastructure.TableStorage;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace ASP.Web.ExceptionHandlers
@@ -16,8 +17,6 @@ namespace ASP.Web.ExceptionHandlers
                 var appException = CreateTableEntry(httpContext, exception);
 
                 await tableClient.AddEntityAsync(appException, cancellationToken);
-
-                return true;
             }
 
             return false;
@@ -28,10 +27,10 @@ namespace ASP.Web.ExceptionHandlers
             var appException = new AppException()
             {
                 RowKey = httpContext.TraceIdentifier,
-                PartitionKey = "123",
+                PartitionKey = "500",
                 StatusCode = (int)HttpStatusCode.InternalServerError,
                 Type = exception.GetType().Name,
-                Title = "",
+                Title = exception.Message,
                 Detail = exception.StackTrace,
             };
 
