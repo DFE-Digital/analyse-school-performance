@@ -10,14 +10,12 @@ namespace ASP.Web.ExceptionHandlers
             CancellationToken cancellationToken)
         {
             if (httpContext.Response.StatusCode == (int)HttpStatusCode.InternalServerError)
-            {
-                var tableClient = await tableStorageProvider.GetTable("ASPExceptions");
-
+            {                                                   
                 var tableStorageEntry = CreateTableStorageEntry(httpContext, exception,
                     HttpStatusCode.InternalServerError.ToString(),
                     (int)HttpStatusCode.InternalServerError);
 
-                await tableStorageProvider.UpdateTable(tableClient, tableStorageEntry);
+                await tableStorageProvider.UpdateTable("ASPExceptions", tableStorageEntry);
             }
 
             return false;

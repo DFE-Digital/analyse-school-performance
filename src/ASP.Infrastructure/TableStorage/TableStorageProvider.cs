@@ -20,27 +20,23 @@ namespace ASP.Infrastructure.TableStorage
             _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
         }
 
-        public async Task<TableClient> GetTable(string tableName)
+        public async Task<Result<Done>> UpdateTable(string tableName, TableStorageEntry tableStorageEntry)
         {
-            TableClient tableClient = _tableServiceClient.GetTableClient(tableName);
-
             try
             {
+                TableClient tableClient = _tableServiceClient.GetTableClient(tableName);
+
                 await tableClient.CreateIfNotExistsAsync();
 
-                return tableClient;
+                await tableClient.AddEntityAsync(tableStorageEntry);
+
+                return Result.Done;
             }
             catch (RequestFailedException exception)
             {
                 _logger.LogError(exception.Message);
-                throw;
+                return Error.Unexpected(exception.Message);
             }
-        }
-
-        public async Task<Response> UpdateTable(TableClient tableClient, 
-            TableStorageEntry tableStorageEntry)
-        {
-            return await tableClient.AddEntityAsync(tableStorageEntry);
         }
     }
 }
