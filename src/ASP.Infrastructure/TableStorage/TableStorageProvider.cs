@@ -38,10 +38,9 @@ namespace ASP.Infrastructure.TableStorage
         }
 
         public async Task<Response> AddTableEntry(TableClient tableClient, 
-            TableStorageEntry tableStorageEntry,
-            CancellationToken cancellationToken)
+            TableStorageEntry tableStorageEntry)
         {
-            return await tableClient.AddEntityAsync(tableStorageEntry, cancellationToken);
+            return await tableClient.AddEntityAsync(tableStorageEntry);
         }
     }
 }

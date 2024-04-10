@@ -10,7 +10,6 @@ namespace ASP.Infrastructure.TableStorage
 
 
         Task<Response> AddTableEntry(TableClient tableClient,
-            TableStorageEntry tableStorageEntry,
-            CancellationToken cancellationToken);
+            TableStorageEntry tableStorageEntry);
     }
 }
