@@ -254,7 +254,7 @@ Scenario: Table content should display html correctly with more row columns than
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with more heading columns than rows columns
-Given page content "help-test" exists:
+	Given page content "help-test" exists:
 		"""
 		{
 			"Views": [
@@ -483,9 +483,6 @@ Scenario: Table content should display html correctly with empty headings
 		"""
 
 
-
-
-
 @Javascript:disabled
 Scenario: Table content should display html correctly with Row having null value
 	Given page content "help-test" exists:
@@ -572,8 +569,6 @@ Scenario: Table content should display html correctly with Row as null
 		"""
 
 
-
-
 @Javascript:disabled
 Scenario: Table content should display html correctly with Headings as null
 	Given page content "help-test" exists:
@@ -615,6 +610,7 @@ Scenario: Table content should display html correctly with Headings as null
 			</tbody>
 		</table>
 		"""
+
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with Headings having null value
@@ -659,3 +655,227 @@ Scenario: Table content should display html correctly with Headings having null 
 			</tbody>
 		</table>
 		"""
+
+
+@Javascript:disabled
+Scenario: Table content should display first column as header when FirstCellAsHeader is true
+	Given page content "help-test" exists:
+		"""
+		{
+			"Views": [
+				{
+					"ViewId": "Table",
+					"ViewContent": {
+						"Id": "test",
+						"Headings": [
+							"Header A",
+							"Header B"
+						],
+						"Rows": [
+							[
+								"Cell A",
+								"Cell B"
+							],
+							[
+								"Cell C",
+								"Cell D"
+							]
+						],
+						"FirstCellAsHeader": true
+					},
+				}
+			]
+		}
+		"""
+	When I navigate to /help/test
+	Then I should get a 200 response
+	Then the element "#test" should have the outer HTML:
+		"""
+		<table class="govuk-table" id="test">
+			<thead class="govuk-table__head">
+				<tr class="govuk-table__row">
+					 <th scope="col" class="govuk-table__header">Header A</th>
+					 <th scope="col" class="govuk-table__header">Header B</th>
+				</tr>
+			</thead>
+			<tbody class="govuk-table__body">
+				<tr class="govuk-table__row">
+					<td class="govuk-table__header">Cell A</td>
+					<td class="govuk-table__cell">Cell B</td>
+				</tr>
+				<tr class="govuk-table__row">
+					<td class="govuk-table__header">Cell C</td>
+					<td class="govuk-table__cell">Cell D</td>
+				</tr>
+			</tbody>
+		</table>
+		"""
+
+
+@Javascript:disabled
+Scenario: Table content should not display first column as header when FirstCellAsHeader is false
+	Given page content "help-test" exists:
+		"""
+		{
+			"Views": [
+				{
+					"ViewId": "Table",
+					"ViewContent": {
+						"Id": "test",
+						"Headings": [
+							"Header A",
+							"Header B"
+						],
+						"Rows": [
+							[
+								"Cell A",
+								"Cell B"
+							],
+							[
+								"Cell C",
+								"Cell D"
+							]
+						],
+						"FirstCellAsHeader": false
+					},
+				}
+			]
+		}
+		"""
+	When I navigate to /help/test
+	Then I should get a 200 response
+	Then the element "#test" should have the outer HTML:
+		"""
+		<table class="govuk-table" id="test">
+			<thead class="govuk-table__head">
+				<tr class="govuk-table__row">
+					 <th scope="col" class="govuk-table__header">Header A</th>
+					 <th scope="col" class="govuk-table__header">Header B</th>
+				</tr>
+			</thead>
+			<tbody class="govuk-table__body">
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell">Cell A</td>
+					<td class="govuk-table__cell">Cell B</td>
+				</tr>
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell">Cell C</td>
+					<td class="govuk-table__cell">Cell D</td>
+				</tr>
+			</tbody>
+		</table>
+		"""
+
+
+@Javascript:disabled
+Scenario: Table content should not display first column as header when FirstCellAsHeader is missing
+	Given page content "help-test" exists:
+		"""
+		{
+			"Views": [
+				{
+					"ViewId": "Table",
+					"ViewContent": {
+						"Id": "test",
+						"Headings": [
+							"Header A",
+							"Header B"
+						],
+						"Rows": [
+							[
+								"Cell A",
+								"Cell B"
+							],
+							[
+								"Cell C",
+								"Cell D"
+							]
+						]
+					},
+				}
+			]
+		}
+		"""
+	When I navigate to /help/test
+	Then I should get a 200 response
+	Then the element "#test" should have the outer HTML:
+		"""
+		<table class="govuk-table" id="test">
+			<thead class="govuk-table__head">
+				<tr class="govuk-table__row">
+					 <th scope="col" class="govuk-table__header">Header A</th>
+					 <th scope="col" class="govuk-table__header">Header B</th>
+				</tr>
+			</thead>
+			<tbody class="govuk-table__body">
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell">Cell A</td>
+					<td class="govuk-table__cell">Cell B</td>
+				</tr>
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell">Cell C</td>
+					<td class="govuk-table__cell">Cell D</td>
+				</tr>
+			</tbody>
+		</table>
+		"""
+
+
+@Javascript:disabled
+Scenario: Table content should not display first column as header when FirstCellAsHeader is not a boolean value
+	Given page content "help-test" exists:
+		"""
+		{
+			"Views": [
+				{
+					"ViewId": "Table",
+					"ViewContent": {
+						"Id": "test",
+						"Headings": [
+							"Header A",
+							"Header B"
+						],
+						"Rows": [
+							[
+								"Cell A",
+								"Cell B"
+							],
+							[
+								"Cell C",
+								"Cell D"
+							]
+						],
+						"FirstCellAsHeader": <Value>
+					},
+				}
+			]
+		}
+		"""
+	When I navigate to /help/test
+	Then I should get a 200 response
+	Then the element "#test" should have the outer HTML:
+		"""
+		<table class="govuk-table" id="test">
+			<thead class="govuk-table__head">
+				<tr class="govuk-table__row">
+					 <th scope="col" class="govuk-table__header">Header A</th>
+					 <th scope="col" class="govuk-table__header">Header B</th>
+				</tr>
+			</thead>
+			<tbody class="govuk-table__body">
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell">Cell A</td>
+					<td class="govuk-table__cell">Cell B</td>
+				</tr>
+				<tr class="govuk-table__row">
+					<td class="govuk-table__cell">Cell C</td>
+					<td class="govuk-table__cell">Cell D</td>
+				</tr>
+			</tbody>
+		</table>
+		"""
+Examples:
+	| Value  |
+	| "true" |
+	| 12345  |
+	| null   |
