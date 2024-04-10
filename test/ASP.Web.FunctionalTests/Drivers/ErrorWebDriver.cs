@@ -26,12 +26,18 @@ namespace ASP.AcceptanceTests.Drivers
         public string BaseAddress => 
             throw new XunitException(ExceptionMessage);
 
-        public IElementDriver Element(string selector)
+        public int ExpectedStatusCode
+        {
+            get => throw new XunitException(ExceptionMessage);
+            set => throw new XunitException(ExceptionMessage);
+        }
+
+        public Task<IElementDriver> Element(string selector)
         {
             throw new XunitException(ExceptionMessage);
         }
 
-        public IElementDriver ElementByLabel(string labelText)
+        public Task<IElementDriver> ElementByLabel(string labelText)
         {
             throw new XunitException(ExceptionMessage);
         }
@@ -56,7 +62,7 @@ namespace ASP.AcceptanceTests.Drivers
             throw new XunitException(ExceptionMessage);
         }
 
-        public IElementsDriver Elements(string selector)
+        public Task<IElementsDriver> Elements(string selector)
         {
             throw new XunitException(ExceptionMessage);
         }

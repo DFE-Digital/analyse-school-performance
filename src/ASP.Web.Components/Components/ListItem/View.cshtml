@@ -1,0 +1,14 @@
+﻿@model TemplateComponentViewModel
+@inject MarkdownHelper MarkdownHelper
+
+<li>
+    @MarkdownHelper.ConvertInlineMarkdown(Model.ViewContent.Text)
+
+    @if (Model.ChildViews is not null && Model.ChildViews.Count > 0)
+    {
+        @foreach (TemplateComponentViewModel item in Model.ChildViews)
+        {
+            @await Html.PartialAsync(item.ViewId, item)
+        }
+    }
+</li>

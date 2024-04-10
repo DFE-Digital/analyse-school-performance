@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api", "src\ASP.Api\ASP.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Core", "src\ASP.Core\ASP.Core.csproj", "{E88375FB-49C7-4E98-833C-C1A28AB4AB44}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.AcceptanceTests", "test\ASP.Web.FunctionalTests\ASP.Web.FunctionalTests.csproj", "{0FA88EE6-4197-45A2-98EE-0F4EF77948F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.FunctionalTests", "test\ASP.Web.FunctionalTests\ASP.Web.FunctionalTests.csproj", "{0FA88EE6-4197-45A2-98EE-0F4EF77948F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Infrastructure", "src\ASP.Infrastructure\ASP.Infrastructure.csproj", "{1222DE8D-8A75-45A4-90B0-AA85D4497ECE}"
 EndProject
@@ -26,9 +26,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.UnitTests", "test\A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Core", "test\ASP.Test.Core\ASP.Test.Core.csproj", "{9C913310-B8AA-41CA-8C3A-D0B9EAC16F38}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api.AcceptanceTests", "test\ASP.Api.FunctionalTests\ASP.Api.FunctionalTests.csproj", "{8CB3E6F6-8861-45AE-ACEE-1D09B65742F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api.FunctionalTests", "test\ASP.Api.FunctionalTests\ASP.Api.FunctionalTests.csproj", "{8CB3E6F6-8861-45AE-ACEE-1D09B65742F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Acceptance", "test\ASP.Test.SpecFlow\ASP.Test.SpecFlow.csproj", "{220F3AF8-EC52-4461-AADF-9110407EA106}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.SpecFlow", "test\ASP.Test.SpecFlow\ASP.Test.SpecFlow.csproj", "{220F3AF8-EC52-4461-AADF-9110407EA106}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "non-project files", "non-project files", "{61B563C2-68E3-42C1-A008-0B4DABE02323}"
 	ProjectSection(SolutionItems) = preProject
@@ -57,6 +57,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "variables", "variables", "{
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Web", "test\ASP.Test.Web\ASP.Test.Web.csproj", "{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.Components", "src\ASP.Web.Components\ASP.Web.Components.csproj", "{2A45E8A6-D75F-4A5D-8470-EE7DB1946CD3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.Core", "src\ASP.Web.Core\ASP.Web.Core.csproj", "{83367C58-6C5B-4A30-8A09-E68454244225}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.Web.Core.UnitTests", "test\ASP.Web.Core.UnitTests\ASP.Web.Core.UnitTests.csproj", "{1D288915-50F2-444E-AE96-5BCBFC35D5CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,6 +114,18 @@ Global
 		{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A45E8A6-D75F-4A5D-8470-EE7DB1946CD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A45E8A6-D75F-4A5D-8470-EE7DB1946CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A45E8A6-D75F-4A5D-8470-EE7DB1946CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A45E8A6-D75F-4A5D-8470-EE7DB1946CD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83367C58-6C5B-4A30-8A09-E68454244225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83367C58-6C5B-4A30-8A09-E68454244225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83367C58-6C5B-4A30-8A09-E68454244225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83367C58-6C5B-4A30-8A09-E68454244225}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D288915-50F2-444E-AE96-5BCBFC35D5CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D288915-50F2-444E-AE96-5BCBFC35D5CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D288915-50F2-444E-AE96-5BCBFC35D5CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D288915-50F2-444E-AE96-5BCBFC35D5CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,6 +145,9 @@ Global
 		{A1F385D5-7621-4FD3-9686-3DFECA900C1C} = {61B563C2-68E3-42C1-A008-0B4DABE02323}
 		{08649944-BB96-4D86-976F-197764779125} = {A1F385D5-7621-4FD3-9686-3DFECA900C1C}
 		{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
+		{2A45E8A6-D75F-4A5D-8470-EE7DB1946CD3} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
+		{83367C58-6C5B-4A30-8A09-E68454244225} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
+		{1D288915-50F2-444E-AE96-5BCBFC35D5CF} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4950C0DD-CDAE-42E7-8BCB-678C73C51298}

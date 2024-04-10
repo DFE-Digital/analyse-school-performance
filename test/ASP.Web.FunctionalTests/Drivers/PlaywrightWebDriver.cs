@@ -3,6 +3,7 @@ using ASP.Test.Core;
 using Microsoft.Playwright;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.AcceptanceTests.Drivers
 {
@@ -16,11 +17,13 @@ namespace ASP.Web.AcceptanceTests.Drivers
         private static IPlaywright? _playwright;
         private static IBrowser? _browser;
         private readonly AspWebContext _web;
+        private readonly ISpecFlowOutputHelper _outputHelper;
         private IResponse? _lastResponse;
 
-        public PlaywrightWebDriver(AspWebContext web)
+        public PlaywrightWebDriver(AspWebContext web, ISpecFlowOutputHelper outputHelper)
         {
             _web = web;
+            _outputHelper = outputHelper;
 
             // The first instance will take longer to initialize as we spin up the
             // web browser, but this is static so future instances will have access to it
@@ -50,6 +53,8 @@ namespace ASP.Web.AcceptanceTests.Drivers
                     _page = await _browser!.NewPageAsync();
                 }).Wait();
             }
+
+            _page!.Response += (object? sender, IResponse e) => this.ExpectedStatusCode = 200;
         }
 
         // Clear down the static resources after the test run
@@ -94,6 +99,7 @@ namespace ASP.Web.AcceptanceTests.Drivers
         public async Task NavigateAsync(string path)
         {
             _lastResponse = await _page!.GotoAsync($"{_web.ServerAddress.TrimEnd('/')}{path}");
+            ExpectedStatusCode = 200;
         }
 
         public HttpStatusCode Status => (HttpStatusCode)LastResponse.Status;
@@ -101,6 +107,8 @@ namespace ASP.Web.AcceptanceTests.Drivers
         public string Path => LastResponse.Url;
 
         public string BaseAddress => _web.ServerAddress.TrimEnd('/') ?? string.Empty;
+
+        public int ExpectedStatusCode { get; set; }
 
         public async Task<string> PageContentAsync()
         {
@@ -112,22 +120,39 @@ namespace ASP.Web.AcceptanceTests.Drivers
             return await Page.TitleAsync();
         }
 
-        public IElementDriver Element(string selector)
+        public async Task<IElementDriver> Element(string selector)
         {
+            await ExpectStatusCode();
+
             var element = Page.Locator(selector);
             return new PlaywrightElementDriver(element, Page);
         }
 
-        public IElementDriver ElementByLabel(string labelText)
+        public async Task<IElementDriver> ElementByLabel(string labelText)
         {
+            await ExpectStatusCode();
+
             var element = Page.GetByLabel(labelText);
             return new PlaywrightElementDriver(element, Page);
         }
 
-        public IElementsDriver Elements(string selector)
+        public async Task<IElementsDriver> Elements(string selector)
         {
+            await ExpectStatusCode();
+
             var elements = Page.Locator(selector);
             return new PlaywrightElementsDriver(elements, Page);
+        }
+
+        private async Task ExpectStatusCode()
+        {
+            if ((int)Status != 200)
+            {
+                var pageContent = await PageContentAsync();
+                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+            }
+
+            AssertWithMessage.Equal(ExpectedStatusCode, (int)Status, $"Expected response status to be {ExpectedStatusCode} but was {(int)Status}.");
         }
     }
 }

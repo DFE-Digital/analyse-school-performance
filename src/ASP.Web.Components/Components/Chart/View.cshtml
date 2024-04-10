@@ -1,0 +1,66 @@
+﻿@model TemplateComponentViewModel
+
+@*
+    Sample chart component to suggest how progressive enhancement with Javascript could work for components.
+    
+    It expects a Component model like:
+
+    { 
+        "ViewId": "Chart",
+        "ViewContent": {
+            "SomeValue": 123
+        }
+    }
+
+    If Javascript is disabled it shows the table view (which for now is simply the text "This is a table. SomeValue is 123")
+    If Javascript is enabled it will default to the graph view ("This is a graph. SomeValue is 123") with a button
+    "Show as graph"/"Show as table" which will toggle between the graph and table views.
+
+    x-data="app-chart" tells Alpine.js this is an Alpine component - see the Alpine.data() call in ./Chart.js
+    x-init="init" tells Alpine to call the init() function as soon as the component is bound.
+
+    Due to Content Security Policy restrictions, some of the features of Alpine.js are not allowed, such as
+    evaluation of any templating code declared in element attributes (e.g. <label x-text="{x + 1}"></label>
+    or <button @click="doSomething()"></button) - instead, any attributes must be bound to methods or properties
+    defined on the object instantiated on the call to Alpine.data()
+
+    See https://alpinejs.dev/advanced/csp for more details.
+*@
+<div x-data="app-chart" x-init="init">
+    @* 
+        x-ref provides a reference to this element for the component to manipuate directly. The purpose of this
+        is to remove the element from the DOM to be replaced by the interactive table/graph views. From ./Chart.js:
+        
+          init() {
+            // Removes the element with ref="nojs" from the DOM
+            this.$refs.nojs.remove();
+          }
+        
+        If Javascript is disabled this element will be unaffected
+    *@
+    <div x-ref="nojs">
+        <div class="app-chart-label">This is a table. SomeValue is @Model.ViewContent.SomeValue</div>
+    </div>
+
+    @* 
+        If Javascript is disabled, these <template> elements will be invisible and non-functional.
+        If Javascript is enabled, then which of them is present in the DOM is determined by the
+        isGraphView/isTableView() members on the component object
+
+        Alpine requires that any x-if attributes should be declared on <template> elements, and
+        templates must contain a single root element
+    *@
+    <template x-if="isTableView">
+        <div>
+            <div class="app-chart-label">This is a table. SomeValue is @Model.ViewContent.SomeValue</div>
+            <button class="app-chart-toggle" @@click="toggleGraphView">Show as graph</button>
+        </div>
+    </template>
+
+    <template x-if="isGraphView">
+        <div>
+            <div class="app-chart-label">This is a graph. SomeValue is @Model.ViewContent.SomeValue</div>
+            <button class="app-chart-toggle" @@click="toggleGraphView">Show as table</button>
+        </div>
+    </template>
+</div>

@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ASP.Application\ASP.Application.csproj" />
     <ProjectReference Include="..\..\src\ASP.Core\ASP.Core.csproj" />
+    <ProjectReference Include="..\..\src\ASP.Web.Core\ASP.Web.Core.csproj" />
     <ProjectReference Include="..\..\src\ASP.Web\ASP.Web.csproj" />
   </ItemGroup>
 

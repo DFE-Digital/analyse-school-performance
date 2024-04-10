@@ -1,9 +1,0 @@
-﻿@model ContentTemplateEditModel
-
-@if (Model.Views != null)
-{
-    for (var i = 0; i < Model.Views.Count; i++)
-    {
-        @Html.EditorFor(m => m.Views[i], Model.Views[i].ViewId)
-    }
-}

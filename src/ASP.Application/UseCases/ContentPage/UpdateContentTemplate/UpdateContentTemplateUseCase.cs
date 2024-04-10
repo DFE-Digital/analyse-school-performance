@@ -1,5 +1,5 @@
 ﻿using ASP.Core.Results;
-using ASP.Core.Templating.Repository;
+using ASP.Core.Templating;
 
 namespace ASP.Application.UseCases.UpdateContentTemplate
 {

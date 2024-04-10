@@ -1,4 +1,5 @@
 ﻿using ASP.AcceptanceTests.Drivers;
+using ASP.Test.Core;
 using Microsoft.Playwright;
 
 namespace ASP.Web.AcceptanceTests.Drivers
@@ -13,6 +14,46 @@ namespace ASP.Web.AcceptanceTests.Drivers
         {
             _elements = elements;
             _page = page;
+        }
+
+        public async Task ShouldHaveCountAsync(int count, Func<int, string> errorIfIncorrectCount)
+        {
+            try
+            {
+                await Assertions.Expect(_elements).ToHaveCountAsync(count);
+            }
+            catch (PlaywrightException)
+            {
+                var actual = await _elements.CountAsync();
+
+                AssertWithMessage.Fail(errorIfIncorrectCount(actual));
+            }
+        }
+
+        public async Task ShouldNotExistAsync(string errorIfExists)
+        {
+            try
+            {
+                await Assertions.Expect(_elements).Not.ToBeVisibleAsync();
+            }
+            catch (PlaywrightException)
+            {
+                AssertWithMessage.Fail(errorIfExists);
+            }
+        }
+
+        public async Task<IElementsDriver> ShouldExistAsync(string errorIfNotExists)
+        {
+            try
+            {
+                await Assertions.Expect(_elements).ToBeVisibleAsync();
+            }
+            catch (PlaywrightException)
+            {
+                AssertWithMessage.Fail(errorIfNotExists);
+            }
+
+            return this;
         }
 
         public async Task<int> CountAsync()

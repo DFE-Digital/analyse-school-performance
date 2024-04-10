@@ -1,5 +1,4 @@
-﻿using ASP.Core.Templating.Repository;
-using ASP.Test.Core;
+﻿using ASP.Test.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
@@ -15,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Reflection;
 using Microsoft.Azure.Functions.Worker;
 using Xunit.Sdk;
+using ASP.Core.Templating;
 
 namespace ASP.Api.AcceptanceTests.Drivers
 {

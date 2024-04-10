@@ -22,7 +22,7 @@ namespace ASP.Infrastructure.Repositories
             );
         }
 
-        internal static ContentTemplateDTO FromContentTemplate(ContentTemplate template)
+        public static ContentTemplateDTO FromContentTemplate(ContentTemplate template)
         {
             return new ContentTemplateDTO {
                 PageTitle = template.PageTitle,
