@@ -28,7 +28,7 @@ namespace ASP.Web
                 .RegisterUseCases();
 
             builder.Services.AddApplicationInsightsTelemetry();
-            builder.Services.AddExceptionHandler<AppExceptionHandler>();
+            builder.Services.AddExceptionHandler<ExceptionHandlerServerError>();
 
             builder.Services.Configure<TableStorageConfiguration>(builder.Configuration.GetSection("TableStorage"));
 

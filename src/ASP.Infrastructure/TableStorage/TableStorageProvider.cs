@@ -20,7 +20,7 @@ namespace ASP.Infrastructure.TableStorage
             _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
         }
 
-        public async Task<TableClient> GetTable(string tableName = "ASPProdErrors")
+        public async Task<TableClient> GetTable(string tableName)
         {
             TableClient tableClient = _tableServiceClient.GetTableClient(tableName);
 
@@ -35,6 +35,13 @@ namespace ASP.Infrastructure.TableStorage
                 _logger.LogError(exception.Message);
                 throw;
             }
+        }
+
+        public async Task<Response> AddTableEntry(TableClient tableClient, 
+            TableStorageEntry tableStorageEntry,
+            CancellationToken cancellationToken)
+        {
+            return await tableClient.AddEntityAsync(tableStorageEntry, cancellationToken);
         }
     }
 }

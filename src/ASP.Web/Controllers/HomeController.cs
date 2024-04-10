@@ -4,7 +4,6 @@ using ASP.Web.Extensions;
 using ASP.Web.Filters;
 using ASP.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace ASP.Web.Controllers
 {
@@ -26,14 +25,15 @@ namespace ASP.Web.Controllers
         public async Task<IActionResult> Index()
         {
             // uncomment to testing AppExceptionHandler
-            //throw new Exception();
+            throw new Exception();
 
             ViewContentTemplateRequest request = new("home-page");
 
             var defaultIfNotFound = new ContentTemplateViewModel
             {
                 PageTitle = "Analyse school performance",
-                PageContent = new {
+                PageContent = new
+                {
                     HeroDescription = "Service description goes here..."
                 },
                 Views = []
