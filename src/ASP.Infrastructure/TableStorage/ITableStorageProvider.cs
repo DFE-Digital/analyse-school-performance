@@ -8,8 +8,7 @@ namespace ASP.Infrastructure.TableStorage
     {
         Task<TableClient> GetTable(string tableName);
 
-
-        Task<Response> AddTableEntry(TableClient tableClient,
+        Task<Response> UpdateTable(TableClient tableClient,
             TableStorageEntry tableStorageEntry);
     }
 }

@@ -37,7 +37,7 @@ namespace ASP.Infrastructure.TableStorage
             }
         }
 
-        public async Task<Response> AddTableEntry(TableClient tableClient, 
+        public async Task<Response> UpdateTable(TableClient tableClient, 
             TableStorageEntry tableStorageEntry)
         {
             return await tableClient.AddEntityAsync(tableStorageEntry);
