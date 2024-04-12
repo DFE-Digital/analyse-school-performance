@@ -10,14 +10,11 @@ namespace ASP.Infrastructure.TableStorage
 {
     public class TableStorageProvider : ITableStorageProvider
     {
-        private readonly ILogger<TableStorageProvider> _logger;
         private readonly TableClient _tableClient;
         private readonly TableStorageConfiguration _tableStorageConfiguration;
 
-        public TableStorageProvider(ILogger<TableStorageProvider> logger,
-            IOptions<TableStorageConfiguration> tableStorageConfiguration)
+        public TableStorageProvider(IOptions<TableStorageConfiguration> tableStorageConfiguration)
         {
-            _logger = logger;
             _tableStorageConfiguration = tableStorageConfiguration.Value;
             _tableClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString)
                 .GetTableClient(_tableStorageConfiguration.TableName);
