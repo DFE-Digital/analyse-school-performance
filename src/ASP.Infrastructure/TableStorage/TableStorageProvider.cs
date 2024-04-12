@@ -1,15 +1,17 @@
 ﻿using ASP.Core.Results;
 using Azure;
 using Azure.Data.Tables;
+using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace ASP.Infrastructure.TableStorage
 {
     public class TableStorageProvider : ITableStorageProvider
     {
         private readonly ILogger<TableStorageProvider> _logger;
-        private readonly TableServiceClient _tableServiceClient;
+        private readonly TableClient _tableClient;
         private readonly TableStorageConfiguration _tableStorageConfiguration;
 
         public TableStorageProvider(ILogger<TableStorageProvider> logger,
@@ -17,26 +19,32 @@ namespace ASP.Infrastructure.TableStorage
         {
             _logger = logger;
             _tableStorageConfiguration = tableStorageConfiguration.Value;
-            _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
+            _tableClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString)
+                .GetTableClient(_tableStorageConfiguration.TableName);
         }
 
-        public async Task<Result<Done>> UpdateTable(string tableName, TableStorageEntry tableStorageEntry)
+        public async Task<Result<Response>> UpdateTable(TableStorageEntry tableStorageEntry)
         {
             try
             {
-                TableClient tableClient = _tableServiceClient.GetTableClient(tableName);
+                var table = await CreateTable();
 
-                await tableClient.CreateIfNotExistsAsync();
+                var response = await _tableClient.AddEntityAsync(tableStorageEntry);
 
-                await tableClient.AddEntityAsync(tableStorageEntry);
+                return Result.Success(response);
 
-                return Result.Done;
             }
             catch (RequestFailedException exception)
-            {
-                _logger.LogError(exception.Message);
+            { 
                 return Error.Unexpected(exception.Message);
             }
+        }
+
+        private async Task<Response<TableItem>> CreateTable()
+        {
+            var response = await _tableClient.CreateIfNotExistsAsync();
+
+            return response;
         }
     }
 }

@@ -4,7 +4,8 @@ using System.Net;
 
 namespace ASP.Web.ExceptionHandlers
 {
-    public class ExceptionHandlerServerError(ITableStorageProvider tableStorageProvider) : ExceptionHandlerBase, IExceptionHandler
+    public class ExceptionHandlerServerError(ITableStorageProvider tableStorageProvider, 
+        ILogger<ExceptionHandlerServerError> logger) : ExceptionHandlerBase, IExceptionHandler
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
             CancellationToken cancellationToken)
@@ -15,7 +16,10 @@ namespace ASP.Web.ExceptionHandlers
                     HttpStatusCode.InternalServerError.ToString(),
                     (int)HttpStatusCode.InternalServerError);
 
-                await tableStorageProvider.UpdateTable("ASPExceptions", tableStorageEntry);
+               var result =  await tableStorageProvider.UpdateTable(tableStorageEntry);
+               result.Switch(
+                    success => logger.LogInformation(success.ReasonPhrase),
+                    failure => logger.LogError(failure.Message));
             }
 
             return false;

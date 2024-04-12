@@ -25,6 +25,12 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await _web.NavigateAsync(path);
         }
 
+        [When(@"the application processes a server error with status code ""([^""]*)""")]
+        public async Task TheApplicationProcessesAServerErrorWithStatusCode(string statusCode)
+        {
+            await _web.NavigateAsync($"/error-test/server-error/{statusCode}");
+        }
+
         [Then(@"The path should match ((?:/.*)+)")]
         public void ThePathShouldMatch(string path)
         {
