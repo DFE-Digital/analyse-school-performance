@@ -1,5 +1,6 @@
 ﻿using ASP.Core;
 using ASP.Core.Templating.Repository;
+using ASP.Infrastructure.TableStorage;
 using ASP.Test.Core;
 using ASP.Web;
 using ASP.Web.AcceptanceTests.Services;
@@ -50,7 +51,7 @@ namespace ASP.AcceptanceTests.Drivers
         public HttpClient Client => _client;
         public IContentTemplateRepository PageContentRepository => _factory.PageContentRepository;
         public TestCookieProvider CookieProvider => _factory.CookieProvider;
-        //public TestTableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
+        public TestTableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
 
         public string ServerAddress => _factory.ServerAddress;
 
@@ -59,19 +60,19 @@ namespace ASP.AcceptanceTests.Drivers
             private IHost? _host;
             private readonly MemoryStore _store;
             private readonly TestCookieProvider _cookieProvider;
-            // private readonly TestTableStorageProvider _tableStorageProvider;
+            private readonly TestTableStorageProvider _tableStorageProvider;
 
             private IContentTemplateRepository? _pageContentRepository;
 
             public TestCookieProvider CookieProvider => _cookieProvider;
-            //  public TestTableStorageProvider TableStorageProvider => _tableStorageProvider;
+            public TestTableStorageProvider TableStorageProvider => _tableStorageProvider;
 
 
             public CustomWebApplicationFactory()
             {
                 _store = new MemoryStore();
                 _cookieProvider = new TestCookieProvider();
-                //  _tableStorageProvider = new TestTableStorageProvider();
+                _tableStorageProvider = new TestTableStorageProvider();
                 ClientOptions.AllowAutoRedirect = true;
             }
 
@@ -188,8 +189,8 @@ namespace ASP.AcceptanceTests.Drivers
                     services.RemoveAll<Web.Services.ICookieProvider>();
                     services.Add(new ServiceDescriptor(typeof(Web.Services.ICookieProvider), _cookieProvider));
                     // Add test implementation of table storage provider
-                    //  services.RemoveAll<ITableStorageProvider>();
-                    //  services.Add(new ServiceDescriptor(typeof(ITableStorageProvider), _tableStorageProvider));
+                    services.RemoveAll<ITableStorageProvider>();
+                    services.Add(new ServiceDescriptor(typeof(ITableStorageProvider), _tableStorageProvider));
 
                     if (testMode == "Development")
                     {

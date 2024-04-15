@@ -2,11 +2,7 @@
 using Azure;
 using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
-
-//using Azure.Data.Tables.Models;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Net;
 
 namespace ASP.Infrastructure.TableStorage
 {
@@ -28,12 +24,9 @@ namespace ASP.Infrastructure.TableStorage
             {
                 var table = await CreateTable();
 
-                var response = await _tableClient.AddEntityAsync(tableStorageEntry);
+                await _tableClient.AddEntityAsync(tableStorageEntry);
 
-               // string location;
-               // var locationa = response. //.TryGetHeader("location", out location);
-
-                return Result.Success(_tableStorageConfiguration.TableName + " updated with error code " + tableStorageEntry.RowKey);
+                return Result.Success(table.Value.Name + " updated with error code " + tableStorageEntry.RowKey);
 
             }
             catch (RequestFailedException exception)

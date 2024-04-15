@@ -12,7 +12,7 @@ namespace ASP.Web.ExceptionHandlers
         {
             if (httpContext.Response.StatusCode == (int)HttpStatusCode.InternalServerError)
             {                                                   
-                var tableStorageEntry = CreateTableStorageEntry(httpContext, exception,
+               var tableStorageEntry = CreateTableStorageEntry(httpContext, exception,
                     HttpStatusCode.InternalServerError.ToString(),
                     (int)HttpStatusCode.InternalServerError);
 

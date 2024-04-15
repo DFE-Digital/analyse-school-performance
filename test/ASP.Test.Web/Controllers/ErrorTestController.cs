@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ASP.Web.Controllers
 {
@@ -11,12 +12,12 @@ namespace ASP.Web.Controllers
     public class ErrorTestController : Controller
     {
         [HttpGet("server-error/{statusCode}")]
-        public static void ServerError(string statusCode)
+        public void ServerError(int statusCode)
         {
-            // if (statusCode == (int)HttpStatusCode.InternalServerError)
-            // {
-            throw new Exception();
-            // }
+           if (statusCode == (int)HttpStatusCode.InternalServerError)
+           {
+               throw new Exception();
+           }
         }
     }
 }
