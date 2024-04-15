@@ -18,7 +18,7 @@ namespace ASP.Web.ExceptionHandlers
 
                var result =  await tableStorageProvider.UpdateTable(tableStorageEntry);
                result.Switch(
-                    success => logger.LogInformation(success.ReasonPhrase),
+                    success => logger.LogInformation(success),
                     failure => logger.LogError(failure.Message));
             }
 

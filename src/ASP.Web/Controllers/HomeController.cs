@@ -25,7 +25,7 @@ namespace ASP.Web.Controllers
         public async Task<IActionResult> Index()
         {
             // uncomment to test ExceptionHandlerServerError
-            throw new Exception();
+           // throw new Exception();
 
             ViewContentTemplateRequest request = new("home-page");
 

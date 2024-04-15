@@ -1,19 +1,19 @@
-﻿using ASP.Core.Templating.Repository;
+﻿using ASP.Core;
+using ASP.Core.Templating.Repository;
 using ASP.Test.Core;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
 using ASP.Web;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using ASP.Core;
-using Microsoft.Extensions.Configuration;
-using ASP.Web.Controllers;
 using ASP.Web.AcceptanceTests.Services;
-using Microsoft.AspNetCore.Hosting.Server.Features;
+using ASP.Web.Controllers;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.AcceptanceTests.Drivers
@@ -50,6 +50,8 @@ namespace ASP.AcceptanceTests.Drivers
         public HttpClient Client => _client;
         public IContentTemplateRepository PageContentRepository => _factory.PageContentRepository;
         public TestCookieProvider CookieProvider => _factory.CookieProvider;
+        //public TestTableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
+
         public string ServerAddress => _factory.ServerAddress;
 
         private class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
@@ -57,14 +59,19 @@ namespace ASP.AcceptanceTests.Drivers
             private IHost? _host;
             private readonly MemoryStore _store;
             private readonly TestCookieProvider _cookieProvider;
+            // private readonly TestTableStorageProvider _tableStorageProvider;
+
             private IContentTemplateRepository? _pageContentRepository;
 
             public TestCookieProvider CookieProvider => _cookieProvider;
+            //  public TestTableStorageProvider TableStorageProvider => _tableStorageProvider;
+
 
             public CustomWebApplicationFactory()
             {
                 _store = new MemoryStore();
                 _cookieProvider = new TestCookieProvider();
+                //  _tableStorageProvider = new TestTableStorageProvider();
                 ClientOptions.AllowAutoRedirect = true;
             }
 
@@ -171,6 +178,7 @@ namespace ASP.AcceptanceTests.Drivers
                     // Add component test controller and views from ASP.Test.Web for isolated testing of components
                     services.AddMvc()
                         .AddApplicationPart(typeof(ComponentTestController).Assembly)
+                        .AddApplicationPart(typeof(ErrorTestController).Assembly)
                         .AddControllersAsServices();
 
                     // Add in-memory data store
@@ -179,6 +187,9 @@ namespace ASP.AcceptanceTests.Drivers
                     // Add test implementation of cookie provider to control/inspect cookie state
                     services.RemoveAll<Web.Services.ICookieProvider>();
                     services.Add(new ServiceDescriptor(typeof(Web.Services.ICookieProvider), _cookieProvider));
+                    // Add test implementation of table storage provider
+                    //  services.RemoveAll<ITableStorageProvider>();
+                    //  services.Add(new ServiceDescriptor(typeof(ITableStorageProvider), _tableStorageProvider));
 
                     if (testMode == "Development")
                     {
