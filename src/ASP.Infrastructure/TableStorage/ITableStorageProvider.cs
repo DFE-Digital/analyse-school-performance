@@ -5,6 +5,6 @@ namespace ASP.Infrastructure.TableStorage
 {
     public interface ITableStorageProvider
     {
-        Task<Result<string>> UpdateTable(TableStorageEntry tableStorageEntry);
+        Task<Result<string>> AddTableEntry(TableStorageEntry tableStorageEntry);
     }
 }

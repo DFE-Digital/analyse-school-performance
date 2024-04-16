@@ -8,25 +8,24 @@ namespace ASP.Infrastructure.TableStorage
 {
     public class TableStorageProvider : ITableStorageProvider
     {
-        private readonly TableClient _tableClient;
+        private readonly TableServiceClient _tableServiceClient;
         private readonly TableStorageConfiguration _tableStorageConfiguration;
 
         public TableStorageProvider(IOptions<TableStorageConfiguration> tableStorageConfiguration)
         {
             _tableStorageConfiguration = tableStorageConfiguration.Value;
-            _tableClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString)
-                .GetTableClient(_tableStorageConfiguration.TableName);
+            _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
         }
 
-        public async Task<Result<string>> UpdateTable(TableStorageEntry tableStorageEntry)
+        public async Task<Result<string>> AddTableEntry(TableStorageEntry tableStorageEntry)
         {
             try
             {
-                var table = await CreateTable();
+                var tableClient = await CreateTable();
 
-                await _tableClient.AddEntityAsync(tableStorageEntry);
+                await tableClient.AddEntityAsync(tableStorageEntry);
 
-                return Result.Success(table.Value.Name + " updated with error code " + tableStorageEntry.RowKey);
+                return Result.Success("Error details added to " + tableClient.Name + " table with error code " + tableStorageEntry.RowKey);
 
             }
             catch (RequestFailedException exception)
@@ -35,11 +34,22 @@ namespace ASP.Infrastructure.TableStorage
             }
         }
 
-        private async Task<Response<TableItem>> CreateTable()
+        private async Task<TableClient> CreateTable()
         {
-            var response = await _tableClient.CreateIfNotExistsAsync();
+            bool exists = false;
+            await foreach (var table in _tableServiceClient.QueryAsync(t => t.Name == _tableStorageConfiguration.TableName))
+            {
+                exists = true;
+            }
 
-            return response;
+            if (!exists)
+            {
+               await _tableServiceClient.CreateTableAsync(_tableStorageConfiguration.TableName);
+
+               return _tableServiceClient.GetTableClient(_tableStorageConfiguration.TableName);
+            }
+
+            return _tableServiceClient.GetTableClient(_tableStorageConfiguration.TableName);
         }
     }
 }

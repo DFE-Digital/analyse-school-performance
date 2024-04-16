@@ -16,7 +16,7 @@ namespace ASP.Web.ExceptionHandlers
                     HttpStatusCode.InternalServerError.ToString(),
                     (int)HttpStatusCode.InternalServerError);
 
-               var result =  await tableStorageProvider.UpdateTable(tableStorageEntry);
+               var result =  await tableStorageProvider.AddTableEntry(tableStorageEntry);
                result.Switch(
                     success => logger.LogInformation(success),
                     failure => logger.LogError(failure.Message));
