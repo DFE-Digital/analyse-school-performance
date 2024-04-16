@@ -5,7 +5,7 @@ namespace ASP.Web.AcceptanceTests.Services
 {
     public class TestTableStorageProvider : ITableStorageProvider
     {
-        public async Task<Result<string>> UpdateTable(TableStorageEntry tableStorageEntry)
+        public async Task<Result<string>> AddTableEntry(TableStorageEntry tableStorageEntry)
         {
             return Result.Success("Message");
         }

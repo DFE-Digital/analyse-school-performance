@@ -25,10 +25,10 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await _web.NavigateAsync(path);
         }
 
-        [When(@"the application processes an error with status code ""([^""]*)""")]
-        public async Task TheApplicationProcessesAnErrorWithStatusCode(string statusCode)
+        [When(@"the application throws an exception")]
+        public async Task TheApplicationThrowsAnException()
         {
-            await _web.NavigateAsync($"/error-test/server-error/{statusCode}");
+            await _web.NavigateAsync("/error-test/throw-exception");
         }
 
         [Then(@"The path should match ((?:/.*)+)")]

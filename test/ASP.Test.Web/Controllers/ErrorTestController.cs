@@ -11,13 +11,10 @@ namespace ASP.Web.Controllers
     [Route("error-test")]
     public class ErrorTestController : Controller
     {
-        [HttpGet("server-error/{statusCode}")]
-        public void ServerError(int statusCode)
+        [HttpGet("throw-exception")]
+        public void ThrowException()
         {
-           if (statusCode == (int)HttpStatusCode.InternalServerError)
-           {
-               throw new Exception();
-           }
+           throw new Exception();
         }
     }
 }
