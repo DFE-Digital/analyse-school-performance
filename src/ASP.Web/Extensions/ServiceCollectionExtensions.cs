@@ -2,6 +2,7 @@
 using ASP.Core.Templating.Repository;
 using ASP.Infrastructure.Cosmos;
 using ASP.Infrastructure.Repositories;
+using ASP.Infrastructure.TableStorage;
 using ASP.Web.Filters;
 using ASP.Web.Services;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb;
@@ -32,6 +33,7 @@ namespace ASP.Web.Extensions
             services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
             services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
             services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
+            services.AddSingleton<ITableStorageProvider, TableStorageProvider>();
 
             return services;
         }

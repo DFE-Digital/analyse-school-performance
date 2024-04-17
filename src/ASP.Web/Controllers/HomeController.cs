@@ -4,7 +4,6 @@ using ASP.Web.Extensions;
 using ASP.Web.Filters;
 using ASP.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace ASP.Web.Controllers
 {
@@ -30,7 +29,8 @@ namespace ASP.Web.Controllers
             var defaultIfNotFound = new ContentTemplateViewModel
             {
                 PageTitle = "Analyse school performance",
-                PageContent = new {
+                PageContent = new
+                {
                     HeroDescription = "Service description goes here..."
                 },
                 Views = []
@@ -53,7 +53,7 @@ namespace ASP.Web.Controllers
         [HttpGet("error")]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View("~/Views/Shared/Errors/ServerError.cshtml", new ErrorViewModel { ErrorCode = HttpContext.TraceIdentifier });
         }
     }
 }

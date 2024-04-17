@@ -25,6 +25,12 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await _web.NavigateAsync(path);
         }
 
+        [When(@"the application throws an exception")]
+        public async Task TheApplicationThrowsAnException()
+        {
+            await _web.NavigateAsync("/error-test/throw-exception");
+        }
+
         [Then(@"The path should match ((?:/.*)+)")]
         public void ThePathShouldMatch(string path)
         {

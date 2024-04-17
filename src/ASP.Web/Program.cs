@@ -2,6 +2,8 @@ using ASP.Web.Extensions;
 using ASP.Application.Extensions;
 using ASP.Web.Models;
 using ASP.Web.Filters;
+using ASP.Infrastructure.TableStorage;
+using ASP.Web.ExceptionHandlers;
 
 namespace ASP.Web
 {
@@ -26,6 +28,9 @@ namespace ASP.Web
                 .RegisterUseCases();
 
             builder.Services.AddApplicationInsightsTelemetry();
+            builder.Services.AddExceptionHandler<ExceptionHandlerServerError>();
+
+            builder.Services.Configure<TableStorageConfiguration>(builder.Configuration.GetSection("TableStorage"));
 
             builder.Configuration.AddJsonFile("appsettings.json");
             builder.Configuration.AddJsonFile("appsettings.local.json", true);
@@ -35,12 +40,14 @@ namespace ASP.Web
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/home/error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
 
+                //not used in dev
                 app.UseNonce();
             }
+
+            app.UseExceptionHandler("/home/error");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
