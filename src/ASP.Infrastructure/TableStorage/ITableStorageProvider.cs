@@ -1,4 +1,5 @@
-﻿using ASP.Core.Results;
+﻿using ASP.Core.Logging;
+using ASP.Core.Results;
 using Azure;
 
 namespace ASP.Infrastructure.TableStorage

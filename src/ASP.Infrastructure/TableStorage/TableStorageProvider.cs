@@ -1,4 +1,5 @@
-﻿using ASP.Core.Results;
+﻿using ASP.Core.Logging;
+using ASP.Core.Results;
 using Azure;
 using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
