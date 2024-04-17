@@ -1,8 +1,6 @@
-﻿using ASP.Core.Logging;
-using ASP.Core.Results;
+﻿using ASP.Core.Results;
 using Azure;
 using Azure.Data.Tables;
-using Azure.Data.Tables.Models;
 using Microsoft.Extensions.Options;
 
 namespace ASP.Infrastructure.TableStorage
@@ -45,9 +43,9 @@ namespace ASP.Infrastructure.TableStorage
 
             if (!exists)
             {
-               await _tableServiceClient.CreateTableAsync(_tableStorageConfiguration.TableName);
+                await _tableServiceClient.CreateTableAsync(_tableStorageConfiguration.TableName);
 
-               return _tableServiceClient.GetTableClient(_tableStorageConfiguration.TableName);
+                return _tableServiceClient.GetTableClient(_tableStorageConfiguration.TableName);
             }
 
             return _tableServiceClient.GetTableClient(_tableStorageConfiguration.TableName);

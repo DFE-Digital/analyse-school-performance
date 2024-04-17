@@ -1,7 +1,8 @@
-﻿using ASP.Core.Exceptions;
+﻿using ASP.Core;
+using ASP.Core.Exceptions;
 using Microsoft.AspNetCore.Http;
 
-namespace ASP.Core.Logging
+namespace ASP.Infrastructure.TableStorage
 {
     public class TableStorageProblemDetails(HttpContext httpContext, string partitionKey) : IProblemDetails<TableStorageEntry>
     {

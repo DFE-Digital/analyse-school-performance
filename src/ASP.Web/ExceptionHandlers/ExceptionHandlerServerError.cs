@@ -1,5 +1,4 @@
 ﻿using ASP.Core.Exceptions;
-using ASP.Core.Logging;
 using ASP.Infrastructure.TableStorage;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;

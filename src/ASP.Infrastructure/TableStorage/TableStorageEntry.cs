@@ -2,7 +2,7 @@
 using Azure;
 using Azure.Data.Tables;
 
-namespace ASP.Core.Logging
+namespace ASP.Infrastructure.TableStorage
 {
     public class TableStorageEntry : ProblemDetails, ITableEntity
     {

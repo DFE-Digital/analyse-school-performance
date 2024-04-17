@@ -1,5 +1,4 @@
-﻿using ASP.Core.Logging;
-using ASP.Core.Results;
+﻿using ASP.Core.Results;
 using ASP.Infrastructure.TableStorage;
 
 namespace ASP.Web.AcceptanceTests.Services

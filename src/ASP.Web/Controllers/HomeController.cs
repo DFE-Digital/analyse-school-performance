@@ -24,8 +24,6 @@ namespace ASP.Web.Controllers
         [HttpGet("index")]
         public async Task<IActionResult> Index()
         {
-            throw new Exception();
-
             ViewContentTemplateRequest request = new("home-page");
 
             var defaultIfNotFound = new ContentTemplateViewModel
