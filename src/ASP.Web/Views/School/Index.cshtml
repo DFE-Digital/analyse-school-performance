@@ -1,9 +1,9 @@
 ﻿@{
     ViewData["Title"] = "My school";
 }
-
+@model EstablishmentDetailsViewModel
 <div class="govuk-width-container govuk-main-wrapper">
     <h1 class="govuk-heading-xl">My school</h1>
 
-    <p class="govuk-body">This page is still in progress.</p>
+    <p class="govuk-body"> @Model.Name (URN: @Model.Urn)</p>
 </div>

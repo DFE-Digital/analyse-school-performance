@@ -1,4 +1,5 @@
-﻿using ASP.Application.UseCases.UpdateContentTemplate;
+﻿using ASP.Application.UseCases.GetEstablishmentDetails;
+using ASP.Application.UseCases.UpdateContentTemplate;
 using ASP.Application.UseCases.ViewContentTemplate;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace ASP.Application.Extensions
         {
             services.AddScoped<IUpdateContentTemplateUseCase, UpdateContentTemplateUseCase>();
             services.AddScoped<IViewContentTemplateUseCase, ViewContentTemplateUseCase>();
+            services.AddScoped<IGetEstablishmentDetailsUseCase, GetEstablishmentDetailsUseCase>();
 
             return services;
         }

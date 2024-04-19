@@ -1,4 +1,5 @@
 ﻿using ASP.Core;
+using ASP.Core.Establishments.Repository;
 using ASP.Core.Templating.Repository;
 using ASP.Infrastructure.Cosmos;
 using ASP.Infrastructure.Repositories;
@@ -31,6 +32,7 @@ namespace ASP.Web.Extensions
         internal static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
             services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
+            services.AddScoped<IEstablishmentRepository, EstablishmentRepository>();
             services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
             services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
             services.AddSingleton<ITableStorageProvider, TableStorageProvider>();
