@@ -308,7 +308,7 @@ Scenario: Heading link should be populated from LinkUrl property
 	Then the component should have the outer HTML:
 		"""
 		<h2 class="govuk-heading-l">
-			<a href="http://google.com" class="govuk-link">
+			<a href="http://google.com" class="govuk-link" target="_blank">
 				This is a test
 			</a>
 		</h2>

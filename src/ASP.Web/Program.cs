@@ -2,8 +2,8 @@ using ASP.Web.Extensions;
 using ASP.Application.Extensions;
 using ASP.Web.Models;
 using ASP.Web.Filters;
-using ASP.Infrastructure.TableStorage;
 using ASP.Web.ExceptionHandlers;
+using ASP.Infrastructure.TableStorage;
 
 namespace ASP.Web
 {
@@ -27,6 +27,7 @@ namespace ASP.Web
                 .RegisterRepositories()
                 .RegisterUseCases();
 
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddApplicationInsightsTelemetry();
             builder.Services.AddExceptionHandler<ExceptionHandlerServerError>();
 

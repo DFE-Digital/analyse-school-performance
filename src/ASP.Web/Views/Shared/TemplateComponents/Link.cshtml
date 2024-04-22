@@ -1,9 +1,10 @@
 ﻿@model TemplateComponentViewModel
+@inject AttributeHelper AttributeHelper
 
 @if (Model.ViewContent.Size is not null)
 {
     <p id="@Model.ViewContent.Id" class=@($"govuk-body-{Model.ViewContent.Size}")>
-        <a href="@Model.ViewContent.Url" class="govuk-link">
+        <a href="@Model.ViewContent.Url" class="govuk-link" target="@AttributeHelper.SetTargetAttribute(Model.ViewContent.Url)">
             @Model.ViewContent.Text
         </a>
     </p>

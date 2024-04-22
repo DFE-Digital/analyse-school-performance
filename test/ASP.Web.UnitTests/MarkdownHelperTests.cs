@@ -1,34 +1,22 @@
 using ASP.Web.Helpers;
+using ASP.Web.UnitTests;
 using Microsoft.AspNetCore.Html;
-using System;
 
 namespace ASP.UnitTest.Web
 {
     public class MarkdownHelperTests
     {
-        [Fact]
-        public void ConvertInlineMarkdown_WhenEmpty_ReturnsEmptyString()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void ConvertInlineMarkdown_WhenEmptyOrNull_ReturnsEmptyString(string input)
         {
-            // Arrange
-            string input = "";
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
 
-            // Assert
-            Assert.Equal("", result.ToString());
-        }
-
-        [Fact]
-        public void ConvertInlineMarkdown_WhenNull_ReturnsEmptyString()
-        {
-            // Arrange
-            string? input = null;
-
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
-
-            // Assert
             Assert.Equal("", result.ToString());
         }
 
@@ -38,10 +26,12 @@ namespace ASP.UnitTest.Web
         [InlineData("__bold__", "<strong>bold</strong>")]
         public void ConvertInlineMarkdown_WhenBoldText_ConvertsToStrongTag(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
@@ -50,10 +40,12 @@ namespace ASP.UnitTest.Web
         [InlineData("_italic_", "<em>italic</em>")]
         public void ConvertInlineMarkdown_WhenItalicText_ConvertsToEmTag(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
@@ -62,10 +54,12 @@ namespace ASP.UnitTest.Web
         [InlineData("_ text _", "_ text _")]
         public void ConvertInlineMarkdown_WhenSpaceBetweenTextAndItalicMarker_DoesNotConvertToEmTag(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
@@ -74,10 +68,12 @@ namespace ASP.UnitTest.Web
         [InlineData("__ text __", "__ text __")]
         public void ConvertInlineMarkdown_WhenSpaceBetweenTextAndBoldMarker_DoesNotConvertToStrongTag(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
@@ -101,22 +97,27 @@ namespace ASP.UnitTest.Web
         [InlineData("_this is italic_ text_", "<em>this is italic</em> text_")]
         public void ConvertInlineMarkdown_WhenUnbalancedMarker_DoesNotWrap(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
         [Theory]
-        [InlineData("[Google](https://www.google.com)", "<a href=\"https://www.google.com\" class=\"govuk-link\">Google</a>")]
-        [InlineData("**[Google](https://www.google.com)**", "<strong><a href=\"https://www.google.com\" class=\"govuk-link\">Google</a></strong>")]
+        [InlineData("[Google](https://www.google.com)", "<a href=\"https://www.google.com\" class=\"govuk-link\" target=\"_blank\">Google</a>")]
+        [InlineData("**[Google](https://www.google.com)**", "<strong><a href=\"https://www.google.com\" class=\"govuk-link\" target=\"_blank\">Google</a></strong>")]
         public void ConvertInlineMarkdown_WhenLink_ConvertsToAnchorTag(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
 
-            // Assert
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
+
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
@@ -124,10 +125,12 @@ namespace ASP.UnitTest.Web
         [InlineData("[Google](https://www.google.com){target=\"_blank\"}", "<a href=\"https://www.google.com\" class=\"govuk-link\" target=&quot;_blank&quot;>Google</a>")]
         public void ConvertInlineMarkdown_WhenLinkHasTargetAttribute_ConvertsToAnchorTagAndSetsTarget(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
@@ -150,10 +153,12 @@ namespace ASP.UnitTest.Web
         [InlineData("_*__double italic bold__*_", "<em><em><strong>double italic bold</strong></em></em>")]
         public void ConvertInlineMarkdown_WhenBoldOrItalicText_ReturnsCorrectHtml(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
@@ -164,17 +169,18 @@ namespace ASP.UnitTest.Web
         [InlineData("<img src=\"image.jpg\" alt=\"Image\">", "&lt;img src=&quot;image.jpg&quot; alt=&quot;Image&quot;&gt;")]
         public void ConvertInlineMarkdown_WhenInputContainsHtmlCharacters_EscapesHtml(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
         [Fact]
         public void ConvertInlineMarkdown_WhenBoldTextStretchesOverNewLines_ConvertsToStrongTag()
         {
-            //Arrange
             var input =
             """
                 **this is
@@ -185,10 +191,12 @@ namespace ASP.UnitTest.Web
                 lines**
             """;
 
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             var output =
             """
                 <strong>this is
@@ -204,7 +212,6 @@ namespace ASP.UnitTest.Web
         [Fact]
         public void ConvertInlineMarkdown_WhenItalicTextStretchesOverNewLines_ConvertsToEmTag()
         {
-            //Arrange
             var input =
             """
                 _this is
@@ -215,10 +222,12 @@ namespace ASP.UnitTest.Web
                 lines_
             """;
 
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             var output =
             """
                 <em>this is
@@ -242,10 +251,12 @@ namespace ASP.UnitTest.Web
         )]
         public void ConvertInlineMarkdown_RegressionTests(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
 
@@ -267,10 +278,12 @@ namespace ASP.UnitTest.Web
         [InlineData("*****a*****", "<strong><strong><em>a</em></strong></strong>")]
         public void ConvertInlineMarkdown_MinimumLengths(string input, string expected)
         {
-            // Act
-            HtmlString result = MarkdownHelper.ConvertInlineMarkdown(input);
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
 
-            // Assert
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
             Assert.Equal(expected, result.ToString());
         }
     }

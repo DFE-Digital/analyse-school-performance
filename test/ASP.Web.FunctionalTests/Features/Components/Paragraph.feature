@@ -200,30 +200,30 @@ Scenario Outline: When Text property contains bold, italic, or link markdown it 
 	When I view the component on the page
 	Then the component should have the inner HTML "<Expected>"
 Examples:
-	| Input                                | Expected                                                                        |
-	| **bold**                             | <strong>bold</strong>                                                           |
-	| __bold__                             | <strong>bold</strong>                                                           |
-	| *italic*                             | <em>italic</em>                                                                 |
-	| _italic_                             | <em>italic</em>                                                                 |
-	| **__double bold__**                  | <strong><strong>double bold</strong></strong>                                   |
-	| __**double bold**__                  | <strong><strong>double bold</strong></strong>                                   |
-	| *_double italic_*                    | <em><em>double italic</em></em>                                                 |
-	| _*double italic*_                    | <em><em>double italic</strong></em>                                             |
-	| **_italic in bold_**                 | <strong><em>italic in bold</em></strong>                                        |
-	| ___italic in bold___                 | <strong><em>italic in bold</em></strong>                                        |
-	| __*italic in bold*__                 | <strong><em>italic in bold</em></strong>                                        |
-	| ***italic in bold***                 | <strong><em>italic in bold</em></strong>                                        |
-	| _**bold in italic**_                 | <em><strong>bold in italic</strong></em>                                        |
-	| *__bold in italic__*                 | <em><strong>bold in italic</strong></em>                                        |
-	| [markdown link](https://google.com)  | <a href="https://google.com" class="govuk-link">markdown link</a>               |
-	| **[Google](https://www.google.com)** | <strong><a href="https://www.google.com" class="govuk-link">Google</a></strong> |
-	| *[Google](https://www.google.com)*   | <em><a href="https://www.google.com" class="govuk-link">Google</a></em>         |
-	| __[Google](https://www.google.com)__ | <strong><a href="https://www.google.com" class="govuk-link">Google</a></strong> |
-	| _[Google](https://www.google.com)_   | <em><a href="https://www.google.com" class="govuk-link">Google</a></em>         |
-	| [**Google**](https://www.google.com) | <a href="https://www.google.com" class="govuk-link"><strong>Google</strong></a> |
-	| [*Google*](https://www.google.com)   | <a href="https://www.google.com" class="govuk-link"><em>Google</em></a>         |
-	| [__Google__](https://www.google.com) | <a href="https://www.google.com" class="govuk-link"><strong>Google</strong></a> |
-	| [_Google_](https://www.google.com)   | <a href="https://www.google.com" class="govuk-link"><em>Google</em></a>         |
+	| Input                                | Expected                                                                                        |
+	| **bold**                             | <strong>bold</strong>                                                                           |
+	| __bold__                             | <strong>bold</strong>                                                                           |
+	| *italic*                             | <em>italic</em>                                                                                 |
+	| _italic_                             | <em>italic</em>                                                                                 |
+	| **__double bold__**                  | <strong><strong>double bold</strong></strong>                                                   |
+	| __**double bold**__                  | <strong><strong>double bold</strong></strong>                                                   |
+	| *_double italic_*                    | <em><em>double italic</em></em>                                                                 |
+	| _*double italic*_                    | <em><em>double italic</strong></em>                                                             |
+	| **_italic in bold_**                 | <strong><em>italic in bold</em></strong>                                                        |
+	| ___italic in bold___                 | <strong><em>italic in bold</em></strong>                                                        |
+	| __*italic in bold*__                 | <strong><em>italic in bold</em></strong>                                                        |
+	| ***italic in bold***                 | <strong><em>italic in bold</em></strong>                                                        |
+	| _**bold in italic**_                 | <em><strong>bold in italic</strong></em>                                                        |
+	| *__bold in italic__*                 | <em><strong>bold in italic</strong></em>                                                        |
+	| [markdown link](https://google.com)  | <a href="https://google.com" class="govuk-link" target="_blank">markdown link</a>               |
+	| **[Google](https://www.google.com)** | <strong><a href="https://www.google.com" class="govuk-link" target="_blank">Google</a></strong> |
+	| *[Google](https://www.google.com)*   | <em><a href="https://www.google.com" class="govuk-link" target="_blank">Google</a></em>         |
+	| __[Google](https://www.google.com)__ | <strong><a href="https://www.google.com" class="govuk-link" target="_blank">Google</a></strong> |
+	| _[Google](https://www.google.com)_   | <em><a href="https://www.google.com" class="govuk-link" target="_blank">Google</a></em>         |
+	| [**Google**](https://www.google.com) | <a href="https://www.google.com" class="govuk-link" target="_blank"><strong>Google</strong></a> |
+	| [*Google*](https://www.google.com)   | <a href="https://www.google.com" class="govuk-link" target="_blank"><em>Google</em></a>         |
+	| [__Google__](https://www.google.com) | <a href="https://www.google.com" class="govuk-link" target="_blank"><strong>Google</strong></a> |
+	| [_Google_](https://www.google.com)   | <a href="https://www.google.com" class="govuk-link" target="_blank"><em>Google</em></a>         |
 
 @Javascript:disabled
 Scenario Outline: When Text property contains HTML content, HTML content should be escaped on the page

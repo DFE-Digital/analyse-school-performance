@@ -4,8 +4,15 @@ using System.Web;
 
 namespace ASP.Web.Helpers
 {
-    public static class MarkdownHelper
+    public class MarkdownHelper
     {
+        private readonly AttributeHelper _attributeHelper;
+        public MarkdownHelper(AttributeHelper attributeHelper)
+        {
+            _attributeHelper = attributeHelper ??
+                throw new ArgumentNullException(nameof(attributeHelper));
+        }
+
         // Matches the inner text in e.g. "**text**" or "*text*" but not "** text **" or "* text *"
         private const string ASTERISK_WRAPPED_TEXT = @"[^\s\*]|[^\s\*](?:.|\n)*?[^\s\*]";
 
@@ -58,7 +65,7 @@ namespace ASP.Web.Helpers
             @"\[(?<LINK>[^\]]+)\]\(([^)]+)\)"
         }), RegexOptions.Compiled | RegexOptions.Multiline);
 
-        public static HtmlString ConvertInlineMarkdown(object input)
+        public HtmlString ConvertInlineMarkdown(object input)
         {
             // Convert input to string
             var inputString = input switch
@@ -120,7 +127,7 @@ namespace ASP.Web.Helpers
 
                         case "LINK":
                             // First group is the URL
-                            return $"<a href=\"{groups[0].Value}\" class=\"govuk-link\">{namedGroup.Value}</a>";
+                            return $"<a href=\"{groups[0].Value}\" class=\"govuk-link\" target=\"{_attributeHelper.SetTargetAttribute(groups[0].Value)}\">{namedGroup.Value}</a>";
                         case "LINK_TARGET":
                             return $"<a href=\"{groups[0].Value}\" class=\"govuk-link\" {groups[1].Value}>{namedGroup.Value}</a>";
                         default:

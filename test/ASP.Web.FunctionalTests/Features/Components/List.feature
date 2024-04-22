@@ -183,10 +183,10 @@ Scenario Outline: List content should display html correctly with link markdown
 		</ul>
 		"""
 Examples:
-	| input                                 | expected                                                                        |
-	| [markdown link](https://google.co.uk) | <a href="https://google.co.uk" class="govuk-link">markdown link</a>             |
-	| **[Google](https://www.google.com)**  | <strong><a href="https://www.google.com" class="govuk-link">Google</a></strong> |
-	| *[Google](https://www.google.com)*    | <em><a href="https://www.google.com" class="govuk-link">Google</a></em>         |
+	| input                                 | expected                                                                                        |
+	| [markdown link](https://google.co.uk) | <a href="https://google.co.uk" class="govuk-link" target="_blank">markdown link</a>             |
+	| **[Google](https://www.google.com)**  | <strong><a href="https://www.google.com" class="govuk-link" target="_blank">Google</a></strong> |
+	| *[Google](https://www.google.com)*    | <em><a href="https://www.google.com" class="govuk-link" target="_blank">Google</a></em>         |
 
 @Javascript:disabled
 Scenario Outline: List html should be correctly escaped
