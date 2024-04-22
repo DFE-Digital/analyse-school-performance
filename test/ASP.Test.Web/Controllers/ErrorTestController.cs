@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace ASP.Web.Controllers
 {
@@ -15,6 +14,12 @@ namespace ASP.Web.Controllers
         public void ThrowException()
         {
            throw new Exception();
+        }
+        
+        [HttpGet("page-not-found-error/{errorMessage}")]
+        public IActionResult PageNotFoundError(string errorMessage)
+        {
+            return NotFound(errorMessage);
         }
     }
 }

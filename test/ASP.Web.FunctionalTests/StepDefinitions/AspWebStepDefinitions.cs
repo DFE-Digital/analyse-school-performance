@@ -30,6 +30,12 @@ namespace ASP.AcceptanceTests.StepDefinitions
         {
             await _web.NavigateAsync("/error-test/throw-exception");
         }
+        
+        [When(@"the application returns a 404 with error message ""([^""]*)""")]
+        public async Task TheApplicationReturns404WithErrorMessage(string errorMessage)
+        {
+            await _web.NavigateAsync($"/error-test/page-not-found-error/{errorMessage}");
+        }
 
         [Then(@"The path should match ((?:/.*)+)")]
         public void ThePathShouldMatch(string path)

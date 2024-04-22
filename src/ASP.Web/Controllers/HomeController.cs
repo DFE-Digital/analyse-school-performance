@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ASP.Application.UseCases.ViewContentTemplate;
 using ASP.Core.Results;
 using ASP.Web.Extensions;
@@ -51,9 +52,18 @@ namespace ASP.Web.Controllers
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("error")]
-        public IActionResult Error()
+        public IActionResult Error(int? statusCode = null)
         {
-            return View("~/Views/Shared/Errors/ServerError.cshtml", new ErrorViewModel { ErrorCode = HttpContext.TraceIdentifier });
+            // The errorModel is reused for both Error pages. Even though no properties of the model are utilized,
+            // it appears necessary for the view to initialize it with a specific property, particularly for the page not found error page.
+            var errorModel = new ErrorViewModel { ErrorCode = HttpContext.TraceIdentifier };
+            
+            if (statusCode.HasValue && statusCode == 404)
+            {
+                return View("~/Views/Shared/Errors/PageNotFoundError.cshtml", errorModel);
+            }
+            
+            return View("~/Views/Shared/Errors/ServerError.cshtml", errorModel);
         }
     }
 }

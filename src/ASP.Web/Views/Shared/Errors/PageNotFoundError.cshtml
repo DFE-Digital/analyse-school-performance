@@ -1,0 +1,26 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Page not found – ASP – GOV.UK";
+}
+
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <h1 class="govuk-heading-l">Page not found</h1>
+                <p class="govuk-body" data-testid="address-typing-instruction">
+                    If you typed the web address, check it is correct.
+                </p>
+                <p class="govuk-body" data-testid="address-pasting-instruction">
+                    If you pasted the web address, check you copied the entire address.
+                </p>
+                @if (Model.ShowErrorMessage)
+                {
+                    <p class="govuk-body" data-testid="error-display-message">
+                        <strong>Error message:</strong> <code>@Model.ErrorMessage</code>
+                    </p>
+                }
+            </div>
+        </div>
+    </main>
+</div>
