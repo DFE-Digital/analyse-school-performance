@@ -1,4 +1,5 @@
 ﻿@model TemplateComponentViewModel
+@inject MarkdownHelper MarkdownHelper
 
 <li>
     @MarkdownHelper.ConvertInlineMarkdown(Model.ViewContent.Text)
