@@ -1,5 +1,5 @@
 ﻿using ASP.Api.AcceptanceTests.Drivers;
-using ASP.Core.Templating.Repository;
+using ASP.Core.Templating;
 using BoDi;
 
 namespace ASP.AcceptanceTests.Support

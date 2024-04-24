@@ -54,7 +54,7 @@ Scenario: Page should show a breadcrumb trail
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	And the element "#app-breadcrumb-home" should be an internal link to "/home/index"
+	And the element "#app-breadcrumb-home" should be an internal link to "/"
     And the element "#app-breadcrumb-current-page" should have the text content "Current page"
 
 @Javascript:disabled

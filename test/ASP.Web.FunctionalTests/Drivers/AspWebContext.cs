@@ -1,10 +1,8 @@
 ﻿using ASP.Core;
-using ASP.Core.Templating.Repository;
 using ASP.Infrastructure.TableStorage;
 using ASP.Test.Core;
 using ASP.Web;
 using ASP.Web.AcceptanceTests.Services;
-using ASP.Web.Controllers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -16,6 +14,10 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using TechTalk.SpecFlow.Infrastructure;
+using ASP.Test.Web.Areas.ComponentTest;
+using ASP.Web.Features.Cookies;
+using ASP.Test.Web.Areas.ErrorTest;
+using ASP.Core.Templating;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -159,7 +161,7 @@ namespace ASP.AcceptanceTests.Drivers
                 // Don't think we need to actually start the testHost as we're not using it.
                 // Seems to work fine without starting but left it commented out just in case
                 // we need it after all - SS 27/03/24
-                // testHost.Start();
+                testHost.Start();
                 return testHost;
             }
 
@@ -177,7 +179,9 @@ namespace ASP.AcceptanceTests.Drivers
                 builder.ConfigureTestServices(services =>
                 {
                     // Add component test controller and views from ASP.Test.Web for isolated testing of components
-                    services.AddMvc()
+                    // We can use AddMvcCore() here because it uses IServiceCollection.TryAddEnumerable() behind the scenes which
+                    // is idempotent
+                    services.AddMvcCore()
                         .AddApplicationPart(typeof(ComponentTestController).Assembly)
                         .AddApplicationPart(typeof(ErrorTestController).Assembly)
                         .AddControllersAsServices();
@@ -186,8 +190,8 @@ namespace ASP.AcceptanceTests.Drivers
                     services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
 
                     // Add test implementation of cookie provider to control/inspect cookie state
-                    services.RemoveAll<Web.Services.ICookieProvider>();
-                    services.Add(new ServiceDescriptor(typeof(Web.Services.ICookieProvider), _cookieProvider));
+                    services.RemoveAll<ICookieProvider>();
+                    services.Add(new ServiceDescriptor(typeof(ICookieProvider), _cookieProvider));
                     // Add test implementation of table storage provider
                     services.RemoveAll<ITableStorageProvider>();
                     services.Add(new ServiceDescriptor(typeof(ITableStorageProvider), _tableStorageProvider));

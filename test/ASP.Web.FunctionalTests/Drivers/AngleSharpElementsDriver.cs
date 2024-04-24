@@ -1,4 +1,6 @@
 ﻿using AngleSharp.Dom;
+using ASP.Test.Core;
+using System.Xml.Linq;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -17,6 +19,28 @@ namespace ASP.AcceptanceTests.Drivers
             _selector = selector;
             _web = web;
             _elements = _outerElement.QuerySelectorAll(_selector);
+        }
+
+        public Task ShouldHaveCountAsync(int count, Func<int, string> errorIfIncorrectCount)
+        {
+            var actual = _elements.Count();
+            AssertWithMessage.Equal(count, actual, errorIfIncorrectCount(actual));
+
+            return Task.CompletedTask;
+        }
+
+        public Task ShouldNotExistAsync(string errorIfExists)
+        {
+            AssertWithMessage.Equal(0, _elements.Count(), errorIfExists);
+
+            return Task.CompletedTask;
+        }
+
+        public Task<IElementsDriver> ShouldExistAsync(string errorIfNotExists)
+        {
+            AssertWithMessage.NotEqual(0, _elements.Count(), errorIfNotExists);
+
+            return Task.FromResult((IElementsDriver)this);
         }
 
         public Task<int> CountAsync()

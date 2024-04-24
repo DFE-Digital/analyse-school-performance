@@ -70,5 +70,17 @@ namespace ASP.Test.Core
                 throw new XunitException(message);
             }
         }
+
+        public static void NotEqual<T>(T expected, T actual, string message)
+        {
+            try
+            {
+                Assert.NotEqual(expected, actual);
+            }
+            catch (XunitException)
+            {
+                throw new XunitException(message);
+            }
+        }
     }
 }

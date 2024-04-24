@@ -1,9 +1,17 @@
-using ASP.Web.Extensions;
 using ASP.Application.Extensions;
-using ASP.Web.Models;
-using ASP.Web.Filters;
-using ASP.Web.ExceptionHandlers;
-using ASP.Infrastructure.TableStorage;
+using ASP.Web.Features;
+using ASP.Web.Areas;
+using ASP.Web.Extensions;
+using ASP.Web.Components;
+using ASP.Web.Features.ContentSecurityPolicy;
+using ASP.Web.Features.ErrorHandling;
+using ASP.Web.Features.Logging;
+using ASP.Web.Core.Templating;
+using ASP.Web.Features.AnalyticsTrackingPreferences;
+using ASP.Web.Features.ApplicationServiceVersion;
+using ASP.Web.Features.ContentTemplates;
+using ASP.Web.Features.Cookies;
+using ASP.Web.Features.TermsOfUse;
 
 namespace ASP.Web
 {
@@ -13,50 +21,30 @@ namespace ASP.Web
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services
-                .AddRouting(options => options.LowercaseUrls = true)
-                .AddControllersWithViews(options =>  
-                {
-                    options.ModelBinderProviders.Insert(0, new TemplateComponentEditModelBinderProvider());
-                    options.Filters.Add(typeof(CheckCookies));
-                    options.Filters.Add(typeof(CurrentVersionActionFilter));
-                });
-            builder.Services.RegisterDFEComponentLibraries()
-                .RegisterWebServices()
-                .RegisterRepositories()
-                .RegisterUseCases();
-
-            builder.Services.AddHttpContextAccessor();
-            builder.Services.AddApplicationInsightsTelemetry();
-            builder.Services.AddExceptionHandler<ExceptionHandlerServerError>();
-
-            builder.Services.Configure<TableStorageConfiguration>(builder.Configuration.GetSection("TableStorage"));
-
-            builder.Configuration.AddJsonFile("appsettings.json");
-            builder.Configuration.AddJsonFile("appsettings.local.json", true);
+                .ConfigureApp(builder.Configuration)
+                .ConfigureAreas()
+                .ConfigureFeatures(builder.Configuration)
+                .ConfigureWebComponents()
+                .AddUseCases()
+                .ConfigureErrorHandling(builder.Configuration)
+                .ConfigureContentTemplates()
+                .ConfigureContentSecurityPolicy()
+                .ConfigureApplicationServiceVersion()
+                .ConfigureCookies()
+                .ConfigureTermsOfUse()
+                .ConfigureAnalyticsTrackingPreferences()
+                .ConfigureTemplateComponents()
+                .ConfigureLogging();
 
             WebApplication app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-
-                //not used in dev
-                app.UseNonce();
-            }
-
-            app.UseExceptionHandler("/home/error");
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseAuthorization();
-
+            app
+                .UseErrorHandling(app.Environment)
+                .UseAppConfiguration(app.Environment)
+                .UseContentSecurityPolicy(app.Environment)
+                .UseLogging();
             app.MapControllers();
-
             app.Run();
         }
     }

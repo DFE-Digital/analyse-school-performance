@@ -1,0 +1,10 @@
+﻿@using ASP.Web.Features.ContentTemplates
+@model ContentTemplateViewModel
+
+@if(Model.Views != null) 
+{
+    foreach (var view in Model.Views)
+    {
+        @await Html.PartialAsync(view.ViewId, view)
+    }
+}

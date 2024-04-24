@@ -30,18 +30,18 @@ namespace ASP.AcceptanceTests.StepDefinitions
         {
             await _web.NavigateAsync("/error-test/throw-exception");
         }
-
-        [Then(@"The path should match ((?:/.*)+)")]
-        public void ThePathShouldMatch(string path)
+        
+        [When(@"the application returns a 404 with error message ""([^""]*)""")]
+        public async Task TheApplicationReturns404WithErrorMessage(string errorMessage)
         {
-            Assert.Equal(_web.BaseAddress + path, _web.Path);
+            await _web.NavigateAsync($"/error-test/page-not-found-error/{errorMessage}");
         }
 
         [When(@"I update the element ""([^""]*)"" to be (checked|unchecked)")]
         public async Task WhenIUpdateTheElementToBe(string selector, string state)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             await element.SetCheckedAsync(state == "checked");
         }
@@ -49,8 +49,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [When(@"I update the textbox ""([^""]*)"" to have the value ""([^""]*)""")]
         public async Task WhenIUpdateTheTextBoxToHaveTheValue(string selector, string value)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             await element.SetValueAsync(value);
         }
@@ -58,8 +58,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [When(@"I click the button ""([^""]*)""")]
         public async Task WhenIClickTheButton(string elementSelector)
         {
-            var button = await _web.Element(elementSelector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{elementSelector}"".");
+            var button = await _web.Element(elementSelector);
+            await button.ShouldExistAsync(@$"Could not find an element with the selector ""{elementSelector}"".");
 
             await button.ClickAsync();
         }
@@ -67,13 +67,21 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"I should get a (.*) response")]
         public async Task ThenIShouldGetAResponse(int statusCode)
         {
-            if (_web.Status != HttpStatusCode.OK)
+            _web.ExpectedStatusCode = statusCode;
+
+            if ((int)_web.Status != 200)
             {
                 var pageContent = await _web.PageContentAsync();
                 _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
             }
 
             Assert.Equal((HttpStatusCode)statusCode, _web.Status);
+        }
+
+        [Then(@"The path should match ((?:/.*)+)")]
+        public void ThePathShouldMatch(string path)
+        {
+            Assert.Equal(_web.BaseAddress + path, _web.Path);
         }
 
         [Then(@"the page title should be ""([^""]*)""")]
@@ -87,22 +95,22 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the element ""([^""]*)"" should not exist")]
         public async Task ThenTheElementShouldNotExist(string selector)
         {
-            await _web.Element(selector)
-                .ShouldNotExistAsync(@$"Found an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldNotExistAsync(@$"Found an element with the selector ""{selector}"".");
         }
 
         [Then(@"the element ""([^""]*)"" should exist")]
         public async Task ThenTheElementShouldExist(string selector)
         {
-            await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
         }
 
         [Then(@"the element ""([^""]*)"" should have the outer HTML:")]
         public async Task ThenTheElementShouldHaveTheOuterHtml(string selector, string expectedHtml)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             var outerHtml = await element.OuterHtmlAsync();
             AssertHtml.Equal(expectedHtml, outerHtml, _outputHelper.WriteLine);
@@ -111,8 +119,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the element ""([^""]*)"" should have the text content ""(.*)""")]
         public async Task ThenTheElementShouldHaveTheTextContent(string selector, string expectedTextContent)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             var textContent = await element.TextContentAsync();
             Assert.Equal(expectedTextContent.Trim(), textContent.Trim());
@@ -121,8 +129,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the element ""([^""]*)"" should match the selector ""(.+)""")]
         public async Task ThenTheElementShouldMatchTheSelector(string selector, string selectorToMatch)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             var matches = await element.MatchesAsync(selectorToMatch);
             AssertWithMessage.True(matches, @$"The element did not match ""{selectorToMatch}"".");
@@ -131,8 +139,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the element ""([^""]*)"" should have the tag name ""([^""]*)""")]
         public async Task ThenTheElementShouldHaveTheTagName(string selector, string expectedTagName)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             var tagName = await element.TagNameAsync();
             Assert.Equal(expectedTagName, tagName);
@@ -141,8 +149,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the element ""([^""]*)"" should have the class ""([^""]*)""")]
         public async Task ThenTheElementShouldHaveTheClass(string selector, string expectedClass)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             var @class = await element.AttributeAsync("class");
             Assert.Equal(expectedClass, @class);
@@ -151,8 +159,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the textbox ""([^""]*)"" should have the value ""([^""]*)""")]
         public async Task ThenTheTextBoxShouldHaveTheValue(string selector, string expectedValue)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             var value = await element.ValueAsync();
             Assert.Equal(expectedValue.Trim(), value.Trim());
@@ -161,8 +169,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the element ""([^""]*)"" should be (checked|unchecked)")]
         public async Task ThenTheElementShouldBe(string selector, string state)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             var isChecked = await element.IsCheckedAsync();
             Assert.Equal(state == "checked", isChecked);
@@ -171,8 +179,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the element ""([^""]*)"" should be an internal link to ""([^""]*)""")]
         public async Task ThenTheElementShouldBeAnInternalLinkTo(string selector, string location)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             var tagName = await element.TagNameAsync();
             var href = await element.AttributeAsync("href");
@@ -184,8 +192,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the element ""([^""]*)"" should be an external link to ""([^""]*)""")]
         public async Task ThenTheElementShouldBeAnExternalLinkTo(string selector, string location)
         {
-            var element = await _web.Element(selector)
-                .ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
             var tagName = await element.TagNameAsync();
             var href = await element.AttributeAsync("href");
@@ -197,8 +205,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"the field labelled ""(.+)"" should have the value ""(.*)""")]
         public async Task ThenTheFieldLabelledShouldHaveTheValue(string labelText, string expectedValue)
         {
-            var field = await _web.ElementByLabel(labelText)
-                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+            var field = await _web.ElementByLabel(labelText);
+            await field.ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
             var actualValue = await field.ValueAsync();
             Assert.Equal(expectedValue, actualValue);
@@ -207,17 +215,16 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"The number of ""([^""]*)"" elements on the page should equal (.*)")]
         public async Task ThenTheNumberOfElementsOnThePageShouldEqual(string selector, int expectedCount)
         {
-            var elements = _web.Elements(selector);
-            var count = await elements.CountAsync();
-
-            Assert.Equal(expectedCount, count);
+            var elements = await _web.Elements(selector);
+            await elements.ShouldHaveCountAsync(expectedCount, actual => $"Expected {expectedCount} elements but found {actual}");
         }
 
         [Then(@"the elements ""([^""]*)"" should have the text contents:")]
         public async Task ThenTheElementsShouldHaveTheTextContents(string selector, Table content)
         {
             int index = 0;
-            var elements = _web.Elements(selector);
+            var elements = await _web.Elements(selector);
+            await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
             var textContents = await elements.TextContentsAsync();
 
             foreach (var item in content.Rows)
@@ -231,7 +238,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         public async Task ThenTheElementsShouldHaveTheHrefs(string selector, Table content)
         {
             int index = 0;
-            var elements = _web.Elements(selector);
+            var elements = await _web.Elements(selector);
+            await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
             var hrefs = await elements.AttributeValuesAsync("href");
 
             foreach (var item in content.Rows)

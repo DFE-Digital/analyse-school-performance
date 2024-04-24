@@ -1,0 +1,47 @@
+﻿@using ASP.Web.Features.AnalyticsTrackingPreferences
+@model TemplateComponentViewModel
+
+@{
+    var preferences = ViewData["AnalyticsTrackingPreferences"] as TrackingPreferencesModel;
+}
+
+@using (Html.BeginForm("SavePreferences", "AnalyticsTrackingPreferences", FormMethod.Post, new { @id = "app-cookie-preferences-form" }))
+{
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="set-analytics-preferences">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                <h2 class="govuk-fieldset__heading" id="set-analytics-preferences">
+                    Set your analytics preferences for Analyse school performance
+                </h2>
+            </legend>
+            <div class="govuk-radios" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                    <input id="app-accept-analytics" class="govuk-radios__input" name="analyticsTracking"
+                           type="radio"
+                           value="Accepted"
+                           aria-describedby="accept-analytics-label"
+                           @(preferences?.AnalyticsTracking == AnalyticsTracking.Accepted ? "checked" : "" ) />
+                    <label class="govuk-label govuk-radios__label" id="accept-analytics-label" for="app-accept-analytics">
+                        Use cookies that measure my website use
+                    </label>
+                </div>
+                <div class="govuk-radios__item">
+                    <input id="app-reject-analytics" class="govuk-radios__input" name="analyticsTracking"
+                           type="radio"
+                           value="Rejected"
+                           aria-describedby="reject-analytics-label"
+                           @(preferences?.AnalyticsTracking == AnalyticsTracking.NotSet ? "checked" 
+                                        : preferences?.AnalyticsTracking == AnalyticsTracking.Rejected ? "checked" : ""  ) />
+                    <label class="govuk-label govuk-radios__label" id="reject-analytics-label" for="app-reject-analytics">
+                        Do not use cookies that measure my website use
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="govuk-button-group">
+        <button id="app-cookie-preferences-save-button" type="submit" class="govuk-button" data-module="govuk-button">
+            Save cookie settings
+        </button>
+    </div>
+}

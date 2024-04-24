@@ -1,6 +1,7 @@
 ﻿using ASP.AcceptanceTests.Drivers;
 using ASP.Core.Helpers;
 using ASP.Test.Core;
+using Microsoft.AspNetCore.Http;
 using System.Net;
 using TechTalk.SpecFlow.Infrastructure;
 
@@ -36,8 +37,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [When(@"I save the component")]
         public async Task WhenISaveTheComponent()
         {
-            var saveButton = await _web.Element("#test-save")
-                .ShouldExistAsync(@$"Could not find an element with the selector ""#test-save"".");
+            var saveButton = await _web.Element("#test-save");
+            await saveButton.ShouldExistAsync(@$"Could not find an element with the selector ""#test-save"".");
 
             await saveButton.ClickAsync();
         }
@@ -86,10 +87,12 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then(@"there should be no errors")]
         public async Task ThenThereShouldBeNoErrors()
         {
-            if (_web.Status != HttpStatusCode.OK)
+            _web.ExpectedStatusCode = 200;
+
+            if ((int)_web.Status != 200)
             {
                 var pageContent = await _web.PageContentAsync();
-                _outputHelper.WriteLine(pageContent);
+                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
             }
 
             Assert.Equal(HttpStatusCode.OK, _web.Status);
@@ -256,8 +259,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         {
             await ThenThereShouldBeNoErrors();
 
-            var testWrapper = await _web.Element("#test")
-                .ShouldExistAsync(@$"Could not find an element with the selector ""#test"".");
+            var testWrapper = await _web.Element("#test");
+            await testWrapper.ShouldExistAsync(@$"Could not find an element with the selector ""#test"".");
             
             var component = await testWrapper.Element(":scope > div > *")
                 .ShouldExistAsync(@$"Could not find the component's outer element on the page.");
@@ -269,8 +272,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
         {
             await ThenThereShouldBeNoErrors();
 
-            var testWrapper = await _web.Element("#test")
-                .ShouldExistAsync(@$"Could not find an element with the selector ""#test"".");
+            var testWrapper = await _web.Element("#test");
+            await testWrapper.ShouldExistAsync(@$"Could not find an element with the selector ""#test"".");
 
             AssertWithMessage.NotNull(testWrapper, @$"Could not find an element with the selector ""#test"".");
 
@@ -283,7 +286,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var element = component.Element($":scope {selector}");
-            await element.ShouldHaveCountAsync(1, @$"More than one element within the component has the selector ""{selector}"".");
+            await element.ShouldHaveCountAsync(1, actual => @$"Found {actual} elements within the component with the selector ""{selector}"".");
             await element.ShouldExistAsync(@$"Could not find an element within the component with the selector ""{selector}"".");
 
             return element;

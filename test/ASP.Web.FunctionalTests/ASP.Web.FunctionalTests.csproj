@@ -17,7 +17,7 @@
     <PackageReference Include="AngleSharp.Js" Version="0.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="Microsoft.Playwright" Version="1.42.0" />
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.9.0" />
