@@ -1,4 +1,6 @@
+using ASP.Application.UseCases.GetEstablishmentDetails;
 using ASP.Web.Features.TermsOfUse;
+using ASP.Core.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Areas.School
@@ -9,17 +11,23 @@ namespace ASP.Web.Areas.School
     public class SchoolController : Controller
     {
         private readonly ILogger<SchoolController> _logger;
+        private readonly IGetEstablishmentDetailsUseCase _useCase;
 
-        public SchoolController(ILogger<SchoolController> logger)
+        public SchoolController(ILogger<SchoolController> logger, IGetEstablishmentDetailsUseCase useCase)
         {
             _logger = logger;
+            _useCase = useCase;
         }
 
-        [HttpGet("")]
-        [HttpGet("index")]
-        public IActionResult Index()
+        [HttpGet("{urn}")]
+        public async Task<IActionResult> Index(string urn)
         {
-            return View();
+            GetEstablishmentDetailsUseCaseRequest request = new(urn);
+
+            return await _useCase.HandleRequest(request)
+                .Map(t => new EstablishmentDetailsViewModel{ Urn = t.Urn, Name = t.Name })
+                .ToActionResult(View);
         }
+
     }
 }
