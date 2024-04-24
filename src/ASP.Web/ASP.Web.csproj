@@ -7,16 +7,34 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Views\Test\**" />
-	  <Content Remove="Views\Test\**" />
-	  <EmbeddedResource Remove="Views\Test\**" />
-	  <None Remove="Views\Test\**" />
+	  <Compile Remove="Components\**" />
+	  <Compile Remove="Enums\**" />
+	  <Compile Remove="ExceptionHandlers\**" />
+	  <Compile Remove="Services\**" />
+	  <Compile Remove="Views\**" />
+	  <Content Remove="Components\**" />
+	  <Content Remove="Enums\**" />
+	  <Content Remove="ExceptionHandlers\**" />
+	  <Content Remove="Services\**" />
+	  <Content Remove="Views\**" />
+	  <EmbeddedResource Remove="Components\**" />
+	  <EmbeddedResource Remove="Enums\**" />
+	  <EmbeddedResource Remove="ExceptionHandlers\**" />
+	  <EmbeddedResource Remove="Services\**" />
+	  <EmbeddedResource Remove="Views\**" />
+	  <None Remove="Components\**" />
+	  <None Remove="Enums\**" />
+	  <None Remove="ExceptionHandlers\**" />
+	  <None Remove="Services\**" />
+	  <None Remove="Views\**" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\ASP.Application\ASP.Application.csproj" />
 		<ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
 		<ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
+		<ProjectReference Include="..\ASP.Web.Components\ASP.Web.Components.csproj" />
+		<ProjectReference Include="..\ASP.Web.Core\ASP.Web.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -46,6 +64,11 @@
 		<Content Include="CurrentCommit.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Areas\Shared\" />
+	  <Folder Include="Features\Shared\" />
 	</ItemGroup>
 	
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">

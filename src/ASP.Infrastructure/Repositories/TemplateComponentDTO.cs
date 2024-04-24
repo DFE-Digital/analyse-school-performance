@@ -22,7 +22,7 @@ namespace ASP.Infrastructure.Repositories
             );
         }
 
-        internal static TemplateComponentDTO FromTemplateComponent(TemplateComponent component)
+        public static TemplateComponentDTO FromTemplateComponent(TemplateComponent component)
         {
             return new TemplateComponentDTO {
                 ViewId = component.ViewId,

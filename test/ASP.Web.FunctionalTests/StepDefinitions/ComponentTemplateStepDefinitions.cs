@@ -1,4 +1,4 @@
-﻿using ASP.Core.Templating.Repository;
+﻿using ASP.Core.Templating;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.AcceptanceTests.StepDefinitions

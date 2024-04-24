@@ -1,6 +1,5 @@
 ﻿using ASP.Core.Results;
 using ASP.Core.Templating;
-using ASP.Core.Templating.Repository;
 
 namespace ASP.Application.UseCases.ViewContentTemplate
 {

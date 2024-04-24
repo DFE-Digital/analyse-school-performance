@@ -1,4 +1,4 @@
-﻿using ASP.Web.Services;
+﻿using ASP.Web.Features.Cookies;
 
 namespace ASP.Web.AcceptanceTests.Services
 {

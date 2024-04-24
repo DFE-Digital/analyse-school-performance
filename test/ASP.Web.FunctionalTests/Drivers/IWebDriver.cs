@@ -9,11 +9,12 @@ namespace ASP.AcceptanceTests.Drivers
         HttpStatusCode Status { get; }
         string Path { get; }
         string BaseAddress { get; }
+        int ExpectedStatusCode { get; set; }
 
         Task<string> PageContentAsync();
         Task<string> PageTitleAsync();
-        IElementDriver Element(string selector);
-        IElementDriver ElementByLabel(string labelText);
-        IElementsDriver Elements(string selector);
+        Task<IElementDriver> Element(string selector);
+        Task<IElementDriver> ElementByLabel(string labelText);
+        Task<IElementsDriver> Elements(string selector);
     }
 }

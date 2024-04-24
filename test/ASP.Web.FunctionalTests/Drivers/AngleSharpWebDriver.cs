@@ -6,6 +6,7 @@ using ASP.Test.Core;
 using System.Net.Http.Headers;
 using System.Net;
 using System.Diagnostics.CodeAnalysis;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -18,11 +19,13 @@ namespace ASP.AcceptanceTests.Drivers
     {
         private static IBrowsingContext? _browsingContext;
         private readonly AspWebContext _web;
+        private readonly ISpecFlowOutputHelper _outputHelper;
         private IDocument? _lastResponse;
 
-        public AngleSharpWebDriver(AspWebContext web)
+        public AngleSharpWebDriver(AspWebContext web, ISpecFlowOutputHelper outputHelper)
         {
             _web = web;
+            _outputHelper = outputHelper;
 
             // The first instance will take longer to initialize as we spin up the
             // browsing context, but this is static so future instances will have access to it
@@ -62,11 +65,14 @@ namespace ASP.AcceptanceTests.Drivers
             }
         }
 
+        public int ExpectedStatusCode { get; set; }
+
         public async Task NavigateAsync(string path)
         {
             var response = await _web.Client.GetAsync(path);
 
             _lastResponse = await GetDocumentAsync(response);
+            ExpectedStatusCode = 200;
         }
 
         public HttpStatusCode Status => LastResponse.StatusCode;
@@ -75,13 +81,17 @@ namespace ASP.AcceptanceTests.Drivers
         public Task<string> PageContentAsync() => Task.FromResult(LastResponse.ToHtml());
         public Task<string> PageTitleAsync() => Task.FromResult(LastResponse.Title ?? "");
 
-        public IElementDriver Element(string selector)
+        public async Task<IElementDriver> Element(string selector)
         {
+            await ExpectStatusCode();
+
             return new AngleSharpElementDriver(LastResponse.DocumentElement, selector, this);
         }
 
-        public IElementDriver ElementByLabel(string labelText)
+        public async Task<IElementDriver> ElementByLabel(string labelText)
         {
+            await ExpectStatusCode();
+
             var label = LastResponse.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
             AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
 
@@ -90,14 +100,17 @@ namespace ASP.AcceptanceTests.Drivers
             return new AngleSharpElementDriver(LastResponse.DocumentElement, fieldSelector, this);
         }
 
-        public IElementsDriver Elements(string selector)
+        public async Task<IElementsDriver> Elements(string selector)
         {
+            await ExpectStatusCode();
+
             return new AngleSharpElementsDriver(LastResponse.DocumentElement, selector, this);
         }
 
         public async Task SubmitFormAsync(IHtmlFormElement form, IHtmlElement element)
         {
             _lastResponse = await form.SubmitAsync(element);
+            ExpectedStatusCode = 200;
         }
 
         private async Task<IHtmlDocument> GetDocumentAsync(HttpResponseMessage response)
@@ -128,6 +141,17 @@ namespace ASP.AcceptanceTests.Drivers
                 });
 
             return (IHtmlDocument)document;
+        }
+
+        private async Task ExpectStatusCode()
+        {
+            if ((int)Status != 200)
+            {
+                var pageContent = await PageContentAsync();
+                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+            }
+
+            AssertWithMessage.Equal(ExpectedStatusCode, (int)Status, $"Expected response status to be {ExpectedStatusCode} but was {(int)Status}.");
         }
     }
 }

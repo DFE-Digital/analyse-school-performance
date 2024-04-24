@@ -6,7 +6,7 @@ namespace ASP.Application.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterUseCases(this IServiceCollection services)
+        public static IServiceCollection AddUseCases(this IServiceCollection services)
         {
             services.AddScoped<IUpdateContentTemplateUseCase, UpdateContentTemplateUseCase>();
             services.AddScoped<IViewContentTemplateUseCase, ViewContentTemplateUseCase>();

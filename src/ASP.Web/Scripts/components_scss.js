@@ -13,14 +13,27 @@
 //         +- Table.js
 //         +- Table.scss
 
-function requireAll(r) {
-    r.keys().forEach(r);
-} 
+function requireAll(folders) {
+    for (var f of folders) {
+        f.keys().forEach(f);
+    }
+}
 
-requireAll(
+requireAll([
     require.context(
-        "../Views/Shared", // context folder
-        true,              // include subdirectories
-        /.*\.scss/         // RegExp
+        "../Areas",   // context folder
+        true,         // include subdirectories
+        /.*\.scss/    // RegExp
+    ),
+    require.context(
+        "../Features",   // context folder
+        true,            // include subdirectories
+        /.*\.scss/       // RegExp
+    ),
+    require.context(
+        // TODO: Make this dynamic somehow
+        "../../ASP.Web.Components/Components", // context folder
+        true,                                  // include subdirectories
+        /.*\.scss/                             // RegExp
     )
-);
+]);
