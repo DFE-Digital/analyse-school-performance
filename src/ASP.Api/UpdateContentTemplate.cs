@@ -21,28 +21,27 @@ namespace ASP.Api
         }
 
         [Function("UpdateContentTemplate")]
-        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", "get")] HttpRequest req)
         {
-            if (req.Method != "POST")
+            if (req.Method != HttpMethods.Post)
             {
                 return new ApiResult(405, $"The HTTP method {req.Method} is not allowed.") { Headers = { { "Allow", "POST" } } };
             }
 
-            var id = req.Query["id"];
-
+            StringValues id = req.Query["id"];
             if (StringValues.IsNullOrEmpty(id))
             {
                 return new ApiResult(400, @"Missing parameter: ""id"".");
             }
 
-            if (req.Body.Length == 0)
-            {
-                return new ApiResult(400, "Missing request body.");
-            }
 
             using (var sr = new StreamReader(req.Body))
             {
-                var content = await sr.ReadToEndAsync();
+                string content = await sr.ReadToEndAsync();
+                if (content.Length == 0)
+                    return new ApiResult(400, "Missing request body.");
+
+
                 return await JsonHelper.DeserializeIgnoringMissingMembers<ContentTemplate>(content)
                     .MapError(e => {
                         return Error.Validation("Request body was not a JSON object.");
@@ -50,7 +49,7 @@ namespace ASP.Api
                     .ThenAsync(async pageContent => await _update.HandleRequest(new UpdateContentTemplateRequest(id.ToString() ?? "", pageContent)))
                     .Match(r => new ApiResult(200, r), e =>
                     {
-                        var statusCode = e switch {
+                        int statusCode = e switch {
                             NotFoundError => 404,
                             ValidationError => 400,
                             _ => 500

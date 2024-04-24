@@ -1,5 +1,6 @@
 using ASP.Application.UseCases.ViewContentTemplate;
 using ASP.Core.Results;
+using ASP.Core.Templating;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -21,23 +22,22 @@ namespace ASP.Api
         [Function("ViewContentTemplate")]
         public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
-            if (req.Method != "GET")
+            if (req.Method != HttpMethods.Get)
             {
                 return new ApiResult(405, $"The HTTP method {req.Method} is not allowed.") { Headers = { { "Allow", "GET" } } };
             }
 
-            var id = req.Query["id"];
-
+            StringValues id = req.Query["id"];
             if (StringValues.IsNullOrEmpty(id))
             {
                 return new ApiResult(400, @"Missing parameter: ""id"".");
             }
 
-            var response = await _view.HandleRequest(new ViewContentTemplateRequest(id.ToString() ?? ""));
-
+            Result<ContentTemplate> response = await _view.HandleRequest(new ViewContentTemplateRequest(id.ToString() ?? ""));
+            
             return response.Match(r => new ApiResult(200, r), e =>
             {
-                var statusCode = e switch {
+                int statusCode = e switch {
                     NotFoundError => 404,
                     _ => 500
                 };

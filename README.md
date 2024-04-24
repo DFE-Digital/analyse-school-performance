@@ -105,3 +105,47 @@ appsettings.Test.json is a replica of appsettings.json in the ASP.Web project, c
 `appsettings.Test.local.json` should be created locally to point to the test database on dev. One way to avoid conflicting test runs could be if each developer has their own test database on dev and wire up the local config to point to that.
 
 The intention is that these are run on a dedicated database on CI build - suggest a unique database is created/destroyed on each pipeline run so as to avoid issues when multiple builds are triggered simultaneously.
+
+## Running local API
+You will need to add a `local.settings.json` file with the below info:
+
+```
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+    }
+}
+```
+
+You'll also need your local cosmos instance running and update the details win your `appsettings.json`:
+```
+{
+  ...,
+  "RepositoryOptions": {
+    "EndpointUri": "https://localhost:8081",
+    "PrimaryKey": "your-key-here",
+    "DatabaseId": "your-database-id",
+    "Containers": [
+      {
+        "content": {
+          "ContainerName": "content",
+          "PartitionKey": "/contentId"
+        }
+      }
+    ]
+  }
+}
+```
+
+When runniing locally, there is no need to include the "x-functions-key" header, this is due to the Authorization level being 'Anonymous' when running locally.
+
+
+## Troubleshooting Local API Project Setup
+If you encounter a "There is no functions runtime available that matches the version specified" error while attempting to run the API project locally, follow these steps to resolve the issue:
+
+- Navigate to Tools -> Options -> Projects & Solutions -> Azure Functions in Visual Studio.
+- Click on the "Check for updates" button.
+- Allow Visual Studio some time to update. Note that the update process may take a while, and Visual Studio may crash during this time.
+- Once the update is complete, attempt to run the API project again.
