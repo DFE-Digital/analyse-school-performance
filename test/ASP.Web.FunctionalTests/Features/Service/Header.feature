@@ -18,7 +18,7 @@ Scenario: Header navigation should contain Home link
 Scenario: Header navigation should contain My school link
 	When I navigate to /
 	Then the element "#header-navigation-link-my-school" should have the text content "My school"
-	And  the element "#header-navigation-link-my-school" should be an internal link to "/school"
+	And  the element "#header-navigation-link-my-school" should be an internal link to "/school/136028"
 
 @Javascript:disabled
 Scenario: Header navigation should contain Download data link

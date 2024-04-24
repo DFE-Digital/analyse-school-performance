@@ -12,6 +12,7 @@ using ASP.Web.Features.ApplicationServiceVersion;
 using ASP.Web.Features.ContentTemplates;
 using ASP.Web.Features.Cookies;
 using ASP.Web.Features.TermsOfUse;
+using ASP.Web.Areas.School;
 
 namespace ASP.Web
 {
@@ -35,7 +36,8 @@ namespace ASP.Web
                 .ConfigureTermsOfUse()
                 .ConfigureAnalyticsTrackingPreferences()
                 .ConfigureTemplateComponents()
-                .ConfigureLogging();
+                .ConfigureLogging()
+                .ConfigureSchoolPages();
 
             WebApplication app = builder.Build();
 

@@ -28,11 +28,10 @@ Scenario: Should not be redirected to accept terms when Accepted terms cookie is
 	Then I should get a 200 response
 	Then The path should match <Path>
 Examples:
-	| Path      |
-	| /         |
-	| /school   |
-	| /download |
-	| /news     |
+	| Path           |
+	| /              |
+	| /download      |
+	| /news          |
 
 
 @Javascript:disabled
@@ -75,10 +74,10 @@ Scenario: Should set referral url when Accepted terms cookie is set to Rejected
 	Then The path should match <ExpectedPath>
 	Then the element "#app-accept-terms-button" should exist
 Examples:
-	| Path      | ExpectedPath                                |
-	| /school   | /help/accept-terms-of-use?ref-url=/school   |
-	| /download | /help/accept-terms-of-use?ref-url=/download |
-	| /news     | /help/accept-terms-of-use?ref-url=/news     |
+	| Path           | ExpectedPath                                     |
+	| /school/136028 | /help/accept-terms-of-use?ref-url=/school/136028 |
+	| /download      | /help/accept-terms-of-use?ref-url=/download      |
+	| /news          | /help/accept-terms-of-use?ref-url=/news          |
 
 
 @Javascript:disabled
