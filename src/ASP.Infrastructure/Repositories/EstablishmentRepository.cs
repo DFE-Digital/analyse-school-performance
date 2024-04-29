@@ -1,6 +1,6 @@
 ﻿using ASP.Core;
-using ASP.Core.Results;
 using ASP.Core.Establishments;
+using ASP.Core.Results;
 
 namespace ASP.Infrastructure.Repositories
 {
@@ -15,11 +15,16 @@ namespace ASP.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(documentDB));
         }
 
-   
+
         public Task<Result<EstablishmentDetails>> GetEstablishmentDetails(string urn)
         {
             return _documentDB.GetAsync<EstablishmentDTO>(ContainerKey, urn, urn)
                .Map(dto => dto.ToEstablishment());
+        }
+
+        public Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails)
+        {
+            return _documentDB.UpsertAsync(ContainerKey, contentId, establishmentDetails.Urn, establishmentDetails);
         }
     }
 }

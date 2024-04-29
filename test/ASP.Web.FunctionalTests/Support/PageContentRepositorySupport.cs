@@ -19,6 +19,7 @@ namespace ASP.AcceptanceTests.Support
         public void InitializeRepository()
         {
             _objectContainer.RegisterInstanceAs(_web.PageContentRepository);
+            _objectContainer.RegisterInstanceAs(_web.EstablishmentRepository);
         }
     }
 }

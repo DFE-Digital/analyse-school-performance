@@ -8,6 +8,7 @@ using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb;
 using ASP.Application.UseCases.ViewContentTemplate;
 using ASP.Application.UseCases.UpdateContentTemplate;
 using ASP.Core.Templating;
+using ASP.Core.Establishments;
 
 namespace ASP.Api
 {
@@ -20,6 +21,7 @@ namespace ASP.Api
                 .ConfigureServices(services =>
                 {
                     services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
+                    services.AddScoped<IEstablishmentRepository, EstablishmentRepository>();
                     services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
                     services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
 

@@ -7,25 +7,28 @@ using System.Text.RegularExpressions;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit;
+using ASP.Core.Establishments;
 
 namespace ASP.Test.Acceptance.Core
 {
     [Binding]
     public partial class PageContentStepDefinitions
     {
-        private readonly IContentTemplateRepository _repository;
+        private readonly IContentTemplateRepository _contentTemplateRepository;
+        private readonly IEstablishmentRepository _establishmentRepository;
         private readonly ISpecFlowOutputHelper _outputHelper;
 
-        public PageContentStepDefinitions(IContentTemplateRepository repository, ISpecFlowOutputHelper outputHelper)
+        public PageContentStepDefinitions(IContentTemplateRepository contentTemplateRepository, IEstablishmentRepository establishmentRepository, ISpecFlowOutputHelper outputHelper)
         {
-            _repository = repository;
+            _contentTemplateRepository = contentTemplateRepository;
+            _establishmentRepository = establishmentRepository;
             _outputHelper = outputHelper;
         }
 
         [BeforeScenario]
         public async Task ClearDownPageContent()
         {
-            await _repository.DeleteAll();
+            await _contentTemplateRepository.DeleteAll();
         }
 
         [Given(@"no page content exists")]
@@ -41,6 +44,16 @@ namespace ASP.Test.Acceptance.Core
                 {
                 },
                 e => AssertWithMessage.Fail(@$"Could not update page content with id ""{id}"": {e.Message}"));
+        }
+
+        [Given(@"establishment details ""([^""]+)"" exists:")]
+        public async Task GivenEstablishmentDetailsExistsMultiline(string id, string data)
+        {
+            await SetUpEstablishmentDetails(id, data).Switch(
+                _ =>
+                {
+                },
+                e => AssertWithMessage.Fail(@$"Could not update establishment details with id ""{id}"": {e.Message}"));
         }
 
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to (.+)")]
@@ -112,12 +125,12 @@ namespace ASP.Test.Acceptance.Core
 
         protected async Task<Result<string>> GetPageContent(string id)
         {
-            return await _repository.Get(id).Map(JsonHelper.Serialize);
+            return await _contentTemplateRepository.Get(id).Map(JsonHelper.Serialize);
         }
 
         protected async Task<Result<Done>> SetUpPageContent(string id, string data)
         {
-            var document = await _repository.Get(id)
+            var document = await _contentTemplateRepository.Get(id)
                 .Match(v => JsonConvert.SerializeObject(v), _ => "{}");
 
             var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
@@ -130,7 +143,25 @@ namespace ASP.Test.Acceptance.Core
 
             var template = JsonConvert.DeserializeObject<ContentTemplate>(JsonConvert.SerializeObject(docDict));
 
-            return await _repository.Update(id, template);
+            return await _contentTemplateRepository.Update(id, template);
+        }
+
+        protected async Task<Result<Done>> SetUpEstablishmentDetails(string id, string data)
+        {
+            var document = await _establishmentRepository.GetEstablishmentDetails(id)
+                .Match(v => JsonConvert.SerializeObject(v), _ => "{}");
+
+            var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+            var docDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(document);
+
+            foreach (var d in dataDict)
+            {
+                docDict[d.Key] = d.Value;
+            }
+
+            var template = JsonConvert.DeserializeObject<EstablishmentDetails>(JsonConvert.SerializeObject(docDict));
+            
+            return await _establishmentRepository.Create(id, template);
         }
 
         protected string GetPropertyPathValue(string propertyPath, string data)

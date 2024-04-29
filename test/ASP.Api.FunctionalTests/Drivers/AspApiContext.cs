@@ -1,20 +1,21 @@
-﻿using ASP.Test.Core;
+﻿using ASP.Core;
+using ASP.Core.Establishments;
+using ASP.Core.Templating;
+using ASP.Test.Core;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using ASP.Core;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using TechTalk.SpecFlow.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System.Reflection;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
+using Newtonsoft.Json;
+using System.Reflection;
+using TechTalk.SpecFlow.Infrastructure;
 using Xunit.Sdk;
-using ASP.Core.Templating;
 
 namespace ASP.Api.AcceptanceTests.Drivers
 {
@@ -26,6 +27,8 @@ namespace ASP.Api.AcceptanceTests.Drivers
         private readonly ISpecFlowOutputHelper _outputHelper;
 
         private IContentTemplateRepository? _pageContentRepository = null;
+        private IEstablishmentRepository? _establishmentRepository;
+
         private HttpRequest? _lastRequest = null;
         private ApiResult? _lastResponse = null;
         private static readonly Dictionary<string, Func<HttpRequest, Task<ApiResult>>> _functions;
@@ -44,8 +47,9 @@ namespace ASP.Api.AcceptanceTests.Drivers
             _host = builder.Build();
 
             _functions = _functionTypes.ToDictionary(
-                t => {
-                    var runMethod = t.GetMethod("Run") 
+                t =>
+                {
+                    var runMethod = t.GetMethod("Run")
                         ?? throw new XunitException($@"Function ""{t.Name}"" does not have a Run method");
 
                     var functionAttribute = runMethod.GetCustomAttribute<FunctionAttribute>()
@@ -53,7 +57,8 @@ namespace ASP.Api.AcceptanceTests.Drivers
 
                     return functionAttribute.Name;
                 },
-                t => (Func<HttpRequest, Task<ApiResult>>) (async (HttpRequest req) => {
+                t => (Func<HttpRequest, Task<ApiResult>>)(async (HttpRequest req) =>
+                {
                     var function = (ApiFunction)_host.Services.GetService(t)!;
                     return await function.Run(req);
                 })
@@ -105,6 +110,22 @@ namespace ASP.Api.AcceptanceTests.Drivers
                 }
             }
         }
+        public IEstablishmentRepository EstablishmentRepository
+        {
+            get
+            {
+                if (_establishmentRepository != null)
+                {
+                    return _establishmentRepository;
+                }
+
+                using (var scope = _host.Services.CreateScope())
+                {
+                    _establishmentRepository = scope.ServiceProvider.GetService<IEstablishmentRepository>()!;
+                    return _establishmentRepository;
+                }
+            }
+        }
 
         public AspApiContext(ISpecFlowOutputHelper outputHelper)
         {
@@ -145,7 +166,8 @@ namespace ASP.Api.AcceptanceTests.Drivers
                 }
             });
 
-            builder.ConfigureAppConfiguration(configure => {
+            builder.ConfigureAppConfiguration(configure =>
+            {
                 var config = configure
                     .SetBasePath(path)
                     .AddJsonFile("appsettings.Test.json", false);

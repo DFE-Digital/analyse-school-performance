@@ -1,4 +1,5 @@
-﻿using ASP.Core.Templating;
+﻿using ASP.Core.Establishments;
+using ASP.Core.Templating;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.AcceptanceTests.StepDefinitions
@@ -6,8 +7,10 @@ namespace ASP.AcceptanceTests.StepDefinitions
     [Binding]
     public partial class ComponentTemplateStepDefinitions : Test.Acceptance.Core.PageContentStepDefinitions
     {
-        public ComponentTemplateStepDefinitions(IContentTemplateRepository repository, ISpecFlowOutputHelper outputHelper)
-            : base(repository, outputHelper)
+        public ComponentTemplateStepDefinitions(IContentTemplateRepository repository, 
+            IEstablishmentRepository establishmentRepository, 
+            ISpecFlowOutputHelper outputHelper)
+            : base(repository, establishmentRepository, outputHelper)
         {
         }
 

@@ -4,6 +4,7 @@ using ASP.Infrastructure.Repositories;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb;
 using ASP.Web.Core.Templating;
 using ASP.Core.Templating;
+using ASP.Core.Establishments;
 
 namespace ASP.Web.Features.ContentTemplates
 {
@@ -13,6 +14,7 @@ namespace ASP.Web.Features.ContentTemplates
         {
             services.AddCosmosDbDependencies();
             services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
+            services.AddScoped<IEstablishmentRepository, EstablishmentRepository>();
             services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
             services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
             services.AddScoped<IRequestHostProvider, RequestHostProvider>();

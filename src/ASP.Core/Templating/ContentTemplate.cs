@@ -1,4 +1,5 @@
-﻿namespace ASP.Core.Templating
+﻿
+namespace ASP.Core.Templating
 {
     public class ContentTemplate
     {

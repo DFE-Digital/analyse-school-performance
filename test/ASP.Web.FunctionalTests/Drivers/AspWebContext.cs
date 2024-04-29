@@ -18,6 +18,7 @@ using ASP.Test.Web.Areas.ComponentTest;
 using ASP.Web.Features.Cookies;
 using ASP.Test.Web.Areas.ErrorTest;
 using ASP.Core.Templating;
+using ASP.Core.Establishments;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -52,6 +53,7 @@ namespace ASP.AcceptanceTests.Drivers
 
         public HttpClient Client => _client;
         public IContentTemplateRepository PageContentRepository => _factory.PageContentRepository;
+        public IEstablishmentRepository EstablishmentRepository => _factory.EstablishmentRepository;
         public TestCookieProvider CookieProvider => _factory.CookieProvider;
         public TestTableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
 
@@ -65,6 +67,7 @@ namespace ASP.AcceptanceTests.Drivers
             private readonly TestTableStorageProvider _tableStorageProvider;
 
             private IContentTemplateRepository? _pageContentRepository;
+            private IEstablishmentRepository? _establishmentRepository;
 
             public TestCookieProvider CookieProvider => _cookieProvider;
             public TestTableStorageProvider TableStorageProvider => _tableStorageProvider;
@@ -91,6 +94,23 @@ namespace ASP.AcceptanceTests.Drivers
                     {
                         _pageContentRepository = scope.ServiceProvider.GetService<IContentTemplateRepository>()!;
                         return _pageContentRepository;
+                    }
+                }
+            }
+
+            public IEstablishmentRepository EstablishmentRepository
+            {
+                get
+                {
+                    if (_establishmentRepository != null)
+                    {
+                        return _establishmentRepository;
+                    }
+
+                    using (var scope = Services.CreateScope())
+                    {
+                        _establishmentRepository = scope.ServiceProvider.GetService<IEstablishmentRepository>()!;
+                        return _establishmentRepository;
                     }
                 }
             }

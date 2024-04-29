@@ -1,6 +1,7 @@
 @import '/node_modules/govuk-frontend/dist/govuk/settings/_media-queries.scss';
 @import '/node_modules/govuk-frontend/dist/govuk/helpers/_media-queries.scss';
 @import '/node_modules/govuk-frontend/dist/govuk/helpers/_colour.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/settings/_colours-applied.scss';
 
 $app-breakpoint-custom : 700px;
 
@@ -19,6 +20,8 @@ $app-breakpoint-custom : 700px;
     border-bottom: none;
     padding-bottom: 5px;
 }
+
+
 
 .app-header {
     border-bottom: 10px;
@@ -136,6 +139,8 @@ $app-breakpoint-custom : 700px;
     text-decoration: underline govuk-colour("dark-blue") solid 2px
 }
 
+
+
 .app-phase-banner-container {
     border-bottom: 1px solid govuk-colour("mid-grey")
 }
@@ -149,7 +154,6 @@ $app-breakpoint-custom : 700px;
         display: none !important;
     }
 }
-
 
 
 
@@ -227,4 +231,64 @@ $app-breakpoint-custom : 700px;
     top: 0;
     right: 0;
     bottom: 0;
+}
+
+.govuk-details .app-school-details-open {
+    display: none;
+}
+
+.govuk-details[open] .app-school-details-open {
+    display: inline;
+}
+
+.govuk-details[open] .app-school-details-closed {
+    display: none;
+}
+
+.app-school-details-summary-heading {
+    font-weight: bold;
+}
+
+.app-school-details-summary-key {
+    font-weight: normal;
+}
+
+.app-ofsted-colour-rating {
+    display: inline-block;
+    padding: 2px 8px 0;
+    border-radius: 5px;
+    color: #fff;
+    background-color: govuk-colour("dark-grey");
+}
+
+.app-ofsted-rating-1 {
+    background-color: govuk-colour("green");
+}
+
+.app-ofsted-rating-2 {
+    background-color: govuk-colour("blue");
+}
+
+.app-ofsted-rating-3 {
+    background-color: govuk-colour("orange");
+    color: govuk-colour("black");
+}
+
+.app-ofsted-rating-4 {
+    background-color: govuk-colour("red");
+}
+
+.app-ofsted-rating-description {
+    display: block;
+    padding: 10px 0 10px;
+    margin: 0 !important;
+
+    @include govuk-media-query($until: tablet) {
+        padding-top: 12px;
+    }
+}
+
+.app-ofsted-last-inspection {
+    color: $govuk-secondary-text-colour;
+    display: block;
 }

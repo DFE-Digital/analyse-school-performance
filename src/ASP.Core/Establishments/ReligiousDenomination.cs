@@ -1,0 +1,14 @@
+﻿namespace ASP.Core.Establishments
+{
+    public class ReligiousDenomination
+    {
+        public int Code { get; }
+        public string Name { get; }
+
+        public ReligiousDenomination(int code, string name)
+        {
+            Code = code;
+            Name = name;
+        }
+    }
+}
