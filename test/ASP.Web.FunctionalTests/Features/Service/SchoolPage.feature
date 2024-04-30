@@ -1,6 +1,28 @@
 Feature: School Page
 
 @Javascript:disabled
+Scenario: School page should be accessible when provided urn
+  Given establishment details "123456" exists:
+		"""
+		{
+            
+            "id": "123456",
+            "name": "Hollinswood Primary School",
+            "urn": "123456",
+        }
+		"""
+    When I navigate to /school/123456
+	Then I should get a 200 response
+	Then the page title should be "My school | Analyse school performance"
+	Then the element "h1.govuk-heading-xl" should have the text content "My school" 
+    Then the element "h1.govuk-heading-l" should have the outer HTML:
+       """
+       <h1 class="govuk-heading-l"> Hollinswood Primary School
+            <span style="font-weight:400;">(URN: 123456)</span>
+        </h1>
+       """
+
+@Javascript:disabled
 Scenario: School page should contain a school details disclosure element
   Given establishment details "123456" exists:
 		"""

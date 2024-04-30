@@ -21,6 +21,7 @@ namespace ASP.Infrastructure.Repositories
         public AdmissionsPolicy AdmissionsPolicy { get; set; } = default!;
         public ResourcedProvisionType ResourcedProvisionType { get; set; } = default!;
         public int NoOfPupils { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         internal EstablishmentDetails ToEstablishment()
         {
@@ -41,7 +42,8 @@ namespace ASP.Infrastructure.Repositories
                 ReligiousDenomination,
                 AdmissionsPolicy,
                 ResourcedProvisionType,
-                NoOfPupils
+                NoOfPupils,
+                IsDeleted
             );
         }
 

@@ -22,5 +22,6 @@ namespace ASP.Web.Areas.School
         public AdmissionsPolicy AdmissionsPolicy { get; set; } = default!;
         public ResourcedProvisionType ResourcedProvisionType { get; set; } = default!;
         public int NoOfPupils { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

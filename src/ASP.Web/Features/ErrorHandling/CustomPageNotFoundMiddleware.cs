@@ -1,4 +1,5 @@
-﻿using ASP.Web.Extensions;
+﻿using ASP.Core.Establishments;
+using ASP.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Features.ErrorHandling
@@ -46,16 +47,22 @@ namespace ASP.Web.Features.ErrorHandling
                 // This allows the middleware to inspect or log the response body text.
                 var responseBody = await new StreamReader(memoryStream).ReadToEndAsync();
 
+
                 // Checks if the status code of the response is 404.
                 // If the condition is met, it assumes an error has occurred that should be handled.
                 if (context.Response.StatusCode == 404)
                 {
-                    // Prepare the custom error response directly here
-                    context.Response.Body = originalBodyStream;
-                    context.Response.ContentType = "text/html";
-                    var errorViewModel = new ErrorViewModel {
+
+                    var text = CustomResponseBody(context);
+                    responseBody = !string.IsNullOrEmpty(text) ? text : responseBody;
+                    var errorViewModel = new ErrorViewModel
+                    {
                         ErrorMessage = responseBody
                     };
+                    context.Response.ContentType = "text/html";
+
+                    // Prepare the custom error response directly here
+                    context.Response.Body = originalBodyStream;
 
                     await context.RenderViewAsync("~/Features/ErrorHandling/PageNotFoundError.cshtml", errorViewModel);
                     return;
@@ -72,5 +79,17 @@ namespace ASP.Web.Features.ErrorHandling
             // or the application's response handling mechanism uses the correct stream.
             context.Response.Body = originalBodyStream;
         }
+
+        private static string CustomResponseBody(HttpContext context)
+        {
+            string text = "";
+            if ((context.Request.Path == "/school") || (context.Request.Path == "/school/"))
+            {
+                text = "School URN is not provided. Please provide valid URN";
+            }
+            return text;
+        }
     }
+
+    
 }

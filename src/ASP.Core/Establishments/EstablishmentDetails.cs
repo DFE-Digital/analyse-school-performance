@@ -19,7 +19,7 @@
         public AdmissionsPolicy AdmissionsPolicy { get;}
         public ResourcedProvisionType ResourcedProvisionType { get; }
         public int NoOfPupils { get;}
-
+        public bool IsDeleted { get; }
         public EstablishmentDetails(string urn, 
             string name, 
             bool isPrimary,
@@ -36,7 +36,7 @@
             ReligiousDenomination religiousDenomination,
             AdmissionsPolicy admissionsPolicy,
             ResourcedProvisionType resourcedProvisionType,
-            int noOfPupils)
+            int noOfPupils, bool isDeleted)
         {
             Urn = urn;
             Name = name;
@@ -55,6 +55,7 @@
             AdmissionsPolicy = admissionsPolicy;
             ResourcedProvisionType = resourcedProvisionType;
             NoOfPupils = noOfPupils;
+            IsDeleted = isDeleted;
         }
     }
 }
