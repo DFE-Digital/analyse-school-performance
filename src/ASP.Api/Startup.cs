@@ -9,6 +9,9 @@ using ASP.Application.UseCases.ViewContentTemplate;
 using ASP.Application.UseCases.UpdateContentTemplate;
 using ASP.Core.Templating;
 using ASP.Core.Establishments;
+using Azure.Identity;
+using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariables;
+
 
 namespace ASP.Api
 {
@@ -39,6 +42,16 @@ namespace ASP.Api
                             context.HostingEnvironment.ContentRootPath, "appsettings.local.json"),
                             optional: true)
                         .AddEnvironmentVariables();
+                    
+                    var builtConfig = builder.Build();
+
+                    var keyVaultName = builtConfig[AppEnvironmentVariables.AspAzureKeyVaultName];
+
+                    if (!string.IsNullOrEmpty(keyVaultName))
+                    {
+                        var credential = new DefaultAzureCredential();
+                        builder.AddAzureKeyVault(new Uri($"https://{keyVaultName}.vault.azure.net/"), credential);
+                    }
                 });
         }
     }

@@ -24,6 +24,7 @@ namespace ASP.Web
 
             builder.Services
                 .ConfigureApp(builder.Configuration)
+                .ConfigureAppEnvironment(builder.Configuration)
                 .ConfigureAreas()
                 .ConfigureFeatures(builder.Configuration)
                 .ConfigureWebComponents()
