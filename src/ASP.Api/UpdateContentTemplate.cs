@@ -1,4 +1,4 @@
-using ASP.Application.UseCases.UpdateContentTemplate;
+using ASP.Application.UseCases.ContentPage.UpdateContentTemplate;
 using ASP.Core.Helpers;
 using ASP.Core.Results;
 using ASP.Core.Templating;

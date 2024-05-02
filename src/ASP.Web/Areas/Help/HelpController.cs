@@ -1,4 +1,5 @@
-﻿using ASP.Application.UseCases.UpdateContentTemplate;
+﻿using ASP.Application.UseCases.ContentPage.UpdateContentTemplate;
+using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
 using ASP.Application.UseCases.ViewContentTemplate;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Mvc;

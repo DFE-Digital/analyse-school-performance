@@ -1,4 +1,4 @@
-﻿namespace ASP.Application.UseCases.UpdateContentTemplate
+﻿namespace ASP.Application.UseCases.ContentPage.UpdateContentTemplate
 {
     public class UpdateContentTemplateResponse
     {

@@ -1,4 +1,4 @@
-﻿namespace ASP.Application.UseCases.ViewContentTemplate
+﻿namespace ASP.Application.UseCases.ContentPage.ViewContentTemplate
 {
     public class ViewContentTemplateRequest
     {

@@ -1,7 +1,7 @@
 ﻿using ASP.Core.Establishments;
 using ASP.Core.Results;
 
-namespace ASP.Application.UseCases.GetEstablishmentDetails
+namespace ASP.Application.UseCases.Establishments.GetEstablishmentDetails
 {
     public class GetEstablishmentDetailsUseCase : IGetEstablishmentDetailsUseCase
     {

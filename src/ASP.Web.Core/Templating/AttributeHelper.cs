@@ -1,6 +1,4 @@
-﻿using ASP.Core.Templating;
-
-namespace ASP.Web.Core.Templating
+﻿namespace ASP.Web.Core.Templating
 {
     public class AttributeHelper
     {

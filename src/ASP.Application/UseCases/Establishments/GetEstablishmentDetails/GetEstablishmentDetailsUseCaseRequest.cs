@@ -1,4 +1,4 @@
-﻿namespace ASP.Application.UseCases.GetEstablishmentDetails
+﻿namespace ASP.Application.UseCases.Establishments.GetEstablishmentDetails
 {
     public class GetEstablishmentDetailsUseCaseRequest
     {

@@ -17,10 +17,10 @@ namespace ASP.Web.Features.ErrorHandling
 
             if (statusCode.HasValue && statusCode == 404)
             {
-                return View("PageNotFoundError", errorModel);
+                return View("~/Features/ErrorHandling/PageNotFoundError.cshtml", errorModel);
             }
 
-            return View("ServerError", errorModel);
+            return View("~/Features/ErrorHandling/ServerError.cshtml", errorModel);
         }
     }
 }

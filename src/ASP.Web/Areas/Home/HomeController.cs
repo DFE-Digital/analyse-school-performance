@@ -1,5 +1,4 @@
-using System.Diagnostics;
-using ASP.Application.UseCases.ViewContentTemplate;
+using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
 using ASP.Core.Results;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Mvc;

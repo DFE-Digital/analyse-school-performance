@@ -1,8 +1,4 @@
-﻿using ASP.Core.Establishments;
-using ASP.Web.Extensions;
-using Microsoft.AspNetCore.Mvc;
-
-namespace ASP.Web.Features.ErrorHandling
+﻿namespace ASP.Web.Features.ErrorHandling
 {
     public class CustomPageNotFoundMiddleware
     {
@@ -16,7 +12,7 @@ namespace ASP.Web.Features.ErrorHandling
         }
 
         /// <summary>
-        /// This middleware method intercepts HTTP responses to identify 404 errors containing the specific string "404," 
+        /// This middleware method intercepts HTTP responses to identify 404 errors" 
         /// and then customizes the page not found error page based on the response content. It captures the response in a memory stream, 
         /// enabling inspection and modification before restoring the original stream. This ensures response integrity for downstream processing and client delivery. 
         /// The middleware resolves the issue where a request for a URL results in a 404 not found error due to a DB error, as exemplified in the provided response snippet.
@@ -52,7 +48,6 @@ namespace ASP.Web.Features.ErrorHandling
                 // If the condition is met, it assumes an error has occurred that should be handled.
                 if (context.Response.StatusCode == 404)
                 {
-
                     var text = CustomResponseBody(context);
                     responseBody = !string.IsNullOrEmpty(text) ? text : responseBody;
                     var errorViewModel = new ErrorViewModel
@@ -75,6 +70,7 @@ namespace ASP.Web.Features.ErrorHandling
                 // ensuring that the response sent to the client includes any modifications or inspections performed by this middleware.
                 await memoryStream.CopyToAsync(originalBodyStream);
             }
+
             // Restores the original response body stream to ensure that further middleware
             // or the application's response handling mechanism uses the correct stream.
             context.Response.Body = originalBodyStream;
@@ -87,9 +83,8 @@ namespace ASP.Web.Features.ErrorHandling
             {
                 text = "School URN is not provided. Please provide valid URN";
             }
+
             return text;
         }
     }
-
-    
 }

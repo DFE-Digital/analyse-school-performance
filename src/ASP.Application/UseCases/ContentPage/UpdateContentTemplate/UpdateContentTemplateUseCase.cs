@@ -1,7 +1,7 @@
 ﻿using ASP.Core.Results;
 using ASP.Core.Templating;
 
-namespace ASP.Application.UseCases.UpdateContentTemplate
+namespace ASP.Application.UseCases.ContentPage.UpdateContentTemplate
 {
     public class UpdateContentTemplateUseCase : IUpdateContentTemplateUseCase
     {

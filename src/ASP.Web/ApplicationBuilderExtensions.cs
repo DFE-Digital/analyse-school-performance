@@ -1,4 +1,4 @@
-﻿namespace ASP.Web.Extensions;
+﻿namespace ASP.Web;
 
 public static class ApplicationBuilderExtensions
 {

@@ -9,10 +9,20 @@
         {
             return new SuccessResult<TValue>(value);
         }
+        
+        public static Task<Result<T>> ToTask<T>(this Result<T> result)
+        {
+            return Task.FromResult(result);
+        }
+
     }
 
     public abstract class Result<TValue>
     {
+        public abstract bool IsSuccess { get; }
+        public abstract bool IsError { get; }
+        public abstract TValue? Value { get; }
+        
         public abstract Result<TNextValue> Map<TNextValue>(Func<TValue, TNextValue> mapFunction);
         public abstract Task<Result<TNextValue>> MapAsync<TNextValue>(Func<TValue, Task<TNextValue>> mapFunction);
 

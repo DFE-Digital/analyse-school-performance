@@ -1,5 +1,5 @@
 ﻿using ASP.Core;
-using ASP.Core.Exceptions;
+using ASP.Core.Logging;
 using Microsoft.AspNetCore.Http;
 
 namespace ASP.Infrastructure.TableStorage

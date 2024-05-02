@@ -1,4 +1,4 @@
-﻿namespace ASP.Core.Exceptions
+﻿namespace ASP.Core.Logging
 {
     public class ProblemDetails
     {

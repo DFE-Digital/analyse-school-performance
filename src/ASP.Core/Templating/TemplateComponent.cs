@@ -1,6 +1,4 @@
-﻿using MR;
-
-namespace ASP.Core.Templating
+﻿namespace ASP.Core.Templating
 {
     public sealed class TemplateComponent
     {

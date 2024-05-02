@@ -1,4 +1,5 @@
-﻿using ASP.Core.Results;
+﻿using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
+using ASP.Core.Results;
 using ASP.Core.Templating;
 
 namespace ASP.Application.UseCases.ViewContentTemplate

@@ -1,4 +1,4 @@
-﻿using ASP.Core.Exceptions;
+﻿using ASP.Core.Logging;
 using Azure;
 using Azure.Data.Tables;
 

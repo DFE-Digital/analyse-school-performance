@@ -1,7 +1,7 @@
-﻿using ASP.Core.Exceptions;
-using ASP.Infrastructure.TableStorage;
+﻿using ASP.Infrastructure.TableStorage;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
+using ASP.Core.Logging;
 
 namespace ASP.Web.Features.ErrorHandling
 {

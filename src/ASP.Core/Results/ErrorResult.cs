@@ -8,6 +8,10 @@
         {
             Error = error;
         }
+        
+        public override bool IsSuccess => false;
+        public override bool IsError => true;
+        public override TValue? Value => default(TValue);
 
         public override Result<TNextValue> Map<TNextValue>(Func<TValue, TNextValue> mapFunction)
         {

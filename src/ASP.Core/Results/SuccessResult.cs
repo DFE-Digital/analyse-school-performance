@@ -2,12 +2,15 @@
 {
     public class SuccessResult<TValue> : Result<TValue>
     {
-        public TValue Value { get; }
+        public override TValue Value { get; }
 
         public SuccessResult(TValue value)
         {
             Value = value;
         }
+        
+        public override bool IsSuccess => true;
+        public override bool IsError => false;
 
         public override Result<TNextValue> Map<TNextValue>(Func<TValue, TNextValue> mapFunction)
         {
