@@ -1,5 +1,5 @@
 Feature: School Page
-
+ 
 @Javascript:disabled
 Scenario: School page should contain seven app card container element when the PhaseOfEducation is Primary
     Given page content "school-landing-page" exists:
@@ -192,7 +192,7 @@ Scenario: School page should contain seven app card container element when the P
         </div>
     </div>
     """     
- 
+
 @Javascript:disabled   
 Scenario: School page should contain four app cards container element when the PhaseOfEducation is Secondary 
     Given page content "school-landing-page" exists:
@@ -348,7 +348,7 @@ Scenario: School page should contain four app cards container element when the P
     </div>
     
     """
-        
+
 @Javascript:disabled
 Scenario: School page should be accessible when provided urn
   Given establishment details "123456" exists:
@@ -370,6 +370,22 @@ Scenario: School page should be accessible when provided urn
             <span style="font-weight:400;">(URN: 123456)</span>
         </h1>
        """
+
+@Javascript:disabled
+Scenario: School page should be throw page not found if Urn is deleted
+  Given establishment details "112123" exists:
+		"""
+		{
+            
+            "id": "112123",
+            "name": "Thursby Primary School",
+            "urn": "112123",
+            "isDeleted": true
+        }
+		"""
+    When I navigate to /school/112123
+    Then I should get a 404 response
+    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Provided school urn is already removed"
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
@@ -556,4 +572,3 @@ Scenario: School page should contain a school details disclosure element
 Scenario: Details disclosure element text should read 'Show school details' when closed
   When I navigate to /school/123456
   Then the element "#app-school-page-details-state-closed" should have the text content "Show"
-

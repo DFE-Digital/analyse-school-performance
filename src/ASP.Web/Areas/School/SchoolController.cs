@@ -56,10 +56,13 @@ namespace ASP.Web.Areas.School
                     ReligiousDenomination = t.ReligiousDenomination,
                     AdmissionsPolicy = t.AdmissionsPolicy,
                     ResourcedProvisionType = t.ResourcedProvisionType,
-                    NoOfPupils = t.NoOfPupils
+                    NoOfPupils = t.NoOfPupils,
+                    IsDeleted = t.IsDeleted
                 });
-
-
+            if ((establishmentDetailsResult.IsSuccess) && (establishmentDetailsResult.Value?.IsDeleted ?? false))
+            {
+                return NotFound("Provided school urn is already removed");
+            }
             if (establishmentDetailsResult.IsSuccess && viewContentTemplateResult.IsError)
             {
                 var vm = new SchoolViewModel()
