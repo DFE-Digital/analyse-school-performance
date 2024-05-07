@@ -21,6 +21,12 @@
                         <strong>Error message:</strong> <code class="govuk-body">@Model.ErrorMessage</code>
                     </p>
                 }
+                @if (Model.ShowErrorCode)
+                {
+                    <p class="govuk-body" data-testid="error-display-message">
+                        <strong>Error code:</strong> <code class="govuk-body">@Model.ErrorCode</code>
+                    </p>
+                }
             </div>
         </div>
     </main>
