@@ -1,4 +1,6 @@
-﻿<footer class="govuk-footer" role="contentinfo">
+﻿@inject ICurrentVersionProvider VersionProvider
+
+<footer class="govuk-footer" role="contentinfo">
     <div class="govuk-width-container">
         <div class="govuk-footer__meta">
             <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
@@ -48,7 +50,7 @@
             </div>
         </div>
         <div>
-            <p class="govuk-body-s">Version: @ViewData["CurrentVersion"]</p>
+            <p class="govuk-body-s">Version: @VersionProvider.GetCurrentVersion()</p>
         </div>
     </div>
 </footer>

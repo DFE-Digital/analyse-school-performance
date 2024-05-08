@@ -1,17 +1,15 @@
-﻿using ASP.Application.UseCases.ContentPage.UpdateContentTemplate;
-using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
-using ASP.Core;
+﻿using ASP.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ASP.Infrastructure.Repositories;
 using ASP.Infrastructure.Cosmos;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb;
-using ASP.Application.UseCases.ViewContentTemplate;
 using ASP.Core.Templating;
 using ASP.Core.Establishments;
 using Azure.Identity;
 using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariables;
+using ASP.Application.Extensions;
 
 
 namespace ASP.Api
@@ -30,9 +28,7 @@ namespace ASP.Api
                     services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
 
                     services.AddCosmosDbDependencies();
-
-                    services.AddScoped<IViewContentTemplateUseCase, ViewContentTemplateUseCase>();
-                    services.AddScoped<IUpdateContentTemplateUseCase, UpdateContentTemplateUseCase>();
+                    services.AddUseCases();
                 })
                 .ConfigureAppConfiguration((context, builder) =>
                 {

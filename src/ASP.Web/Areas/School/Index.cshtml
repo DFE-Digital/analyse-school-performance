@@ -35,8 +35,8 @@
                     </dt>
                     <dd id="app-school-details-address-value" class="govuk-summary-list__value">
                         @(Model.EstablishmentDetails.Address == null
-                            ? ""
-                            : Model.EstablishmentDetails.Address.Street + ", " + Model.EstablishmentDetails.Address.Town + ", " + Model.EstablishmentDetails.Address.PostCode)
+                            ? string.Empty
+                            : $"{Model.EstablishmentDetails.Address.Street}, {Model.EstablishmentDetails.Address.Town}, {Model.EstablishmentDetails.Address.PostCode}")
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -44,7 +44,9 @@
                         School type
                     </dt>
                     <dd id="app-school-details-school-type-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.EstablishmentType == null ? "" : @Model.EstablishmentDetails.EstablishmentType.Name)
+                        @(Model.EstablishmentDetails.EstablishmentType == null
+                            ? string.Empty
+                            : Model.EstablishmentDetails.EstablishmentType.Name)
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -60,7 +62,9 @@
                         Gender of entry
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.Gender == null ? "" : Model.EstablishmentDetails.Gender.Name)
+                        @(Model.EstablishmentDetails.Gender == null
+                            ? string.Empty
+                            : Model.EstablishmentDetails.Gender.Name)
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -74,7 +78,7 @@
                                 @Model.EstablishmentDetails.OfstedRating?.Code
                             </span>
                             <span>
-                                @Model.EstablishmentDetails.OfstedRating?.Name <wbr/> |
+                                @Model.EstablishmentDetails.OfstedRating?.Name <wbr /> |
                                 <a href="https://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/ELS/@Model.EstablishmentDetails.Urn" target="_blank" class="govuk-link">
                                     Ofsted report
                                 </a>
@@ -102,7 +106,9 @@
                         Local authority
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.LocalAuthority == null ? "" : Model.EstablishmentDetails.LocalAuthority.Name)
+                        @(Model.EstablishmentDetails.LocalAuthority == null
+                            ? string.Empty
+                            : Model.EstablishmentDetails.LocalAuthority.Name)
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -110,7 +116,9 @@
                         Headteacher / Principal
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.HeadTeacher == null ? "" : Model.EstablishmentDetails.HeadTeacher.Title + " " + Model.EstablishmentDetails.HeadTeacher.FirstName + " " + Model.EstablishmentDetails.HeadTeacher.LastName)
+                        @(Model.EstablishmentDetails.HeadTeacher == null
+                            ? string.Empty
+                            : $"{Model.EstablishmentDetails.HeadTeacher.Title} {Model.EstablishmentDetails.HeadTeacher.FirstName} {Model.EstablishmentDetails.HeadTeacher.LastName}")
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -118,7 +126,9 @@
                         Age range
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.AgeRange == null ? "" : Model.EstablishmentDetails.AgeRange.Low + " to " + Model.EstablishmentDetails.AgeRange.High)
+                        @(Model.EstablishmentDetails.AgeRange == null
+                            ? string.Empty
+                            : $"{Model.EstablishmentDetails.AgeRange.Low} to {Model.EstablishmentDetails.AgeRange.High}")
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -126,7 +136,9 @@
                         Religious character
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.ReligiousDenomination == null ? "" : Model.EstablishmentDetails.ReligiousDenomination.Name)
+                        @(Model.EstablishmentDetails.ReligiousDenomination == null
+                            ? string.Empty
+                            : Model.EstablishmentDetails.ReligiousDenomination.Name)
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -134,7 +146,9 @@
                         Admissions policy
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.AdmissionsPolicy == null ? "" : Model.EstablishmentDetails.AdmissionsPolicy.Name)
+                        @(Model.EstablishmentDetails.AdmissionsPolicy == null
+                            ? string.Empty
+                            : Model.EstablishmentDetails.AdmissionsPolicy.Name)
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -142,7 +156,9 @@
                         SEN unit or resourced provision
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.ResourcedProvisionType == null ? "" : Model.EstablishmentDetails.ResourcedProvisionType.Name)
+                        @(Model.EstablishmentDetails.ResourcedProvisionType == null
+                            ? string.Empty
+                            : Model.EstablishmentDetails.ResourcedProvisionType.Name)
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -150,7 +166,7 @@
                         Number of pupils
                     </dt>
                     <dd class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.NoOfPupils.ToString() ?? "")
+                        @(Model.EstablishmentDetails.NoOfPupils.ToString() ?? string.Empty)
                     </dd>
                 </div>
             </dl>
