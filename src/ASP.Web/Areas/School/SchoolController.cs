@@ -49,7 +49,7 @@ namespace ASP.Web.Areas.School
                     EstablishmentType = t.EstablishmentType,
                     Gender = t.Gender,
                     OfstedRating = t.OfstedRating,
-                    LastInspectionDate = t.LastInspectionDate,
+                    OfstedLastInspectionDate = t.OfstedLastInspectionDate,
                     LocalAuthority = t.LocalAuthority,
                     HeadTeacher = t.HeadTeacher,
                     AgeRange = t.AgeRange,

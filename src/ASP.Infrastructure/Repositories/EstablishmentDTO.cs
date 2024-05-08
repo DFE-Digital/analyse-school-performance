@@ -13,7 +13,7 @@ namespace ASP.Infrastructure.Repositories
         public EstablishmentType EstablishmentType { get; set; } = default!;
         public Gender Gender { get; set; } = default!;
         public OfstedRating OfstedRating { get; set; } = default!;
-        public DateOnly LastInspectionDate { get; set; } = default!;
+        public DateTime OfstedLastInspectionDate { get; set; } = default!;
         public LocalAuthority LocalAuthority { get; set; } = default!;
         public HeadTeacher HeadTeacher { get; set; } = default!;
         public AgeRange AgeRange { get; set; } = default!;
@@ -35,7 +35,7 @@ namespace ASP.Infrastructure.Repositories
                 EstablishmentType,
                 Gender,
                 OfstedRating,
-                LastInspectionDate,
+                OfstedLastInspectionDate,
                 LocalAuthority,
                 HeadTeacher,
                 AgeRange,

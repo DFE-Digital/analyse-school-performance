@@ -83,9 +83,9 @@
                                     Ofsted report
                                 </a>
                             </span>
-                            if (Model.EstablishmentDetails.LastInspectionDate != null)
+                            if (Model.EstablishmentDetails.OfstedLastInspectionDate != null)
                             {
-                                <span class="app-ofsted-last-inspection">Inspected @Model.EstablishmentDetails.LastInspectionDate.Value.ToString("dd MMMM yyyy")</span>
+                                <span class="app-ofsted-last-inspection">Inspected @Model.EstablishmentDetails.OfstedLastInspectionDate.Value.ToString("dd MMMM yyyy")</span>
                             }
                         }
                         else if (Model.EstablishmentDetails.OfstedRating?.Code == "99")

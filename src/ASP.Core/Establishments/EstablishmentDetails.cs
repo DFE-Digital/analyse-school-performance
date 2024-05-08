@@ -11,7 +11,7 @@
         public EstablishmentType EstablishmentType { get; }
         public Gender Gender { get;}
         public OfstedRating OfstedRating { get; }
-        public DateOnly LastInspectionDate { get; }
+        public DateTime OfstedLastInspectionDate { get; }
         public LocalAuthority LocalAuthority { get; }
         public HeadTeacher HeadTeacher { get;}
         public AgeRange AgeRange { get; }
@@ -29,7 +29,7 @@
             EstablishmentType establishmentType,
             Gender gender,
             OfstedRating ofstedRating,
-            DateOnly lastInspectionDate,
+            DateTime ofstedLastInspectionDate,
             LocalAuthority localAuthority,
             HeadTeacher headTeacher,
             AgeRange ageRange,
@@ -47,7 +47,7 @@
             EstablishmentType = establishmentType;
             Gender = gender;
             OfstedRating = ofstedRating;
-            LastInspectionDate = lastInspectionDate;
+            OfstedLastInspectionDate = ofstedLastInspectionDate;
             LocalAuthority = localAuthority;
             HeadTeacher = headTeacher;
             AgeRange = ageRange;

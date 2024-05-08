@@ -424,6 +424,7 @@ Scenario: School page should contain a school details disclosure element
             },
             "name": "Hollinswood Primary School",
             "noOfPupils": 404,
+            "ofstedLastInspectionDate": "2020-01-22T00:00:00",
             "ofstedRating": {
                 "code": "2",
                 "name": "Good",
@@ -504,7 +505,7 @@ Scenario: School page should contain a school details disclosure element
                                     Ofsted report
                                 </a>
                             </span>
-                                <span class="app-ofsted-last-inspection">Inspected 01 January 0001</span>
+                                <span class="app-ofsted-last-inspection">Inspected 22 January 2020</span>
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">

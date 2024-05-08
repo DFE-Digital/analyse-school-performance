@@ -14,7 +14,7 @@ namespace ASP.Web.Areas.School.ViewModels
         public string PhaseOfEducation { get; set; } = "";
         public Gender? Gender { get; set; }
         public OfstedRating? OfstedRating { get; set; }
-        public DateOnly? LastInspectionDate { get; set; }
+        public DateTime? OfstedLastInspectionDate { get; set; }
         public LocalAuthority? LocalAuthority { get; set; }
         public HeadTeacher? HeadTeacher { get; set; }
         public AgeRange? AgeRange { get; set; }
