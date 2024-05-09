@@ -14,15 +14,18 @@ namespace ASP.Web.Areas.Help
         private readonly IViewContentTemplateUseCase _viewContentUseCase;
         private readonly IUpdateContentTemplateUseCase _updateContentUseCase;
         private readonly ITemplateComponentEditModelFactory _editModelFactory;
+        private readonly IHostEnvironment _hostEnvironment;
 
         public HelpController(IViewContentTemplateUseCase viewContentUseCase,
-            IUpdateContentTemplateUseCase updateContentUseCase, ITemplateComponentEditModelFactory editModelFactory)
+            IUpdateContentTemplateUseCase updateContentUseCase, ITemplateComponentEditModelFactory editModelFactory, 
+            IHostEnvironment hostEnvironment)
         {
             _viewContentUseCase = viewContentUseCase ??
                 throw new ArgumentNullException(nameof(viewContentUseCase));
             _updateContentUseCase = updateContentUseCase ??
                 throw new ArgumentNullException(nameof(updateContentUseCase));
             _editModelFactory = editModelFactory;
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet("{contentId}", Name = "app-route-help-view")]
@@ -33,7 +36,7 @@ namespace ASP.Web.Areas.Help
 
             return await _viewContentUseCase.HandleRequest(request)
                 .Map(t => ContentTemplateViewModel.FromTemplate(contentId, t))
-                .ToActionResult(View);
+                .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("{contentId}/edit", Name = "app-route-help-edit")]
@@ -44,7 +47,7 @@ namespace ASP.Web.Areas.Help
 
             return await _viewContentUseCase.HandleRequest(request)
                 .Map(t => ContentTemplateEditModel.FromTemplate(contentId, t, _editModelFactory))
-                .ToActionResult(View);
+                .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpPost("{contentId}/edit")]
@@ -54,7 +57,7 @@ namespace ASP.Web.Areas.Help
 
             return await model.ToTemplate()
                 .ThenAsync(t => _updateContentUseCase.HandleRequest(new(templateId, t)))
-                .ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId }));
+                .ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId }), _hostEnvironment);
         }
     }
 }

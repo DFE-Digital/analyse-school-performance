@@ -18,13 +18,15 @@ namespace ASP.Web.Areas.School
         private readonly ILogger<SchoolController> _logger;
         private readonly IGetEstablishmentDetailsUseCase _useCase;
         private readonly IViewContentTemplateUseCase _viewContentUseCase;
+        private readonly IHostEnvironment _hostEnvironment;
 
         public SchoolController(ILogger<SchoolController> logger, IGetEstablishmentDetailsUseCase useCase,
-            IViewContentTemplateUseCase viewContentUseCase)
+            IViewContentTemplateUseCase viewContentUseCase, IHostEnvironment hostEnvironment)
         {
             _logger = logger;
             _useCase = useCase;
             _viewContentUseCase = viewContentUseCase;
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet("{urn}")]
@@ -73,25 +75,20 @@ namespace ASP.Web.Areas.School
                 return View("~/Areas/School/Index.cshtml", vm);
             }
             
-            if (viewContentTemplateResult.IsSuccess && establishmentDetailsResult.IsError)
+            if (establishmentDetailsResult.IsError)
             {
-                var vm = new SchoolViewModel()
-                {
-                    EstablishmentDetails = new EstablishmentDetailsViewModel(),
-                    ContentTemplate = viewContentTemplateResult.Value!
-                };
-                return View("~/Areas/School/Index.cshtml", vm);
+                return await establishmentDetailsResult.ToTask().ToActionResult(View, _hostEnvironment);
             }
             
             var combinedResult = viewContentTemplateResult.Combine(establishmentDetailsResult,
                 (viewContent,  establishmentDetails) => 
                     new SchoolViewModel() { ContentTemplate = viewContent, EstablishmentDetails = establishmentDetails });
 
-            if (!combinedResult.IsSuccess) return await combinedResult.ToTask().ToActionResult(View);
+            if (!combinedResult.IsSuccess) return await combinedResult.ToTask().ToActionResult(View, _hostEnvironment);
             
             combinedResult = FilterSecondarySchoolResultView(combinedResult);
 
-            return await combinedResult.ToTask().ToActionResult(View);
+            return await combinedResult.ToTask().ToActionResult(View, _hostEnvironment);
 
         }
 

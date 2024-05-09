@@ -46,7 +46,7 @@ namespace ASP.Test.Core
 
             if (!_store[container].ContainsKey((id, partitionKeyValue)))
             {
-                return Error.NotFound($@"Document with id ""{id}"" and partition key ""{partitionKeyValue}"" does not exist in container ""{container}"".");
+                return Error.NotFound($@"404 Error: Could not find object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{container}"".");
             }
 
             return _store[container][(id, partitionKeyValue)];

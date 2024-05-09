@@ -4,6 +4,7 @@ using ASP.Core.Results;
 using ASP.Web;
 using ASP.Web.Core.Templating;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace ASP.Test.Web.Areas.ComponentTest
 {
@@ -23,15 +24,19 @@ namespace ASP.Test.Web.Areas.ComponentTest
         private readonly IViewContentTemplateUseCase _viewContentUseCase;
         private readonly IUpdateContentTemplateUseCase _updateContentUseCase;
         private readonly ITemplateComponentEditModelFactory _editModelFactory;
+        private readonly IHostEnvironment _hostEnvironment;
+
 
         public ComponentTestController(IViewContentTemplateUseCase viewContentUseCase,
-            IUpdateContentTemplateUseCase updateContentUseCase, ITemplateComponentEditModelFactory editModelFactory)
+            IUpdateContentTemplateUseCase updateContentUseCase, 
+            ITemplateComponentEditModelFactory editModelFactory, IHostEnvironment hostEnvironment)
         {
             _viewContentUseCase = viewContentUseCase ??
                 throw new ArgumentNullException(nameof(viewContentUseCase));
             _updateContentUseCase = updateContentUseCase ??
                 throw new ArgumentNullException(nameof(updateContentUseCase));
             _editModelFactory = editModelFactory;
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet("view")]
@@ -39,7 +44,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         {
             return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID))
                 .Map(t => ContentTemplateViewModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, t))
-                .ToActionResult(View);
+                .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("edit")]
@@ -47,7 +52,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         {
             return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID))
                 .Map(t => ContentTemplateEditModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, t, _editModelFactory))
-                .ToActionResult(View);
+                .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpPost("edit")]
@@ -55,7 +60,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         {
             return await model.ToTemplate()
                 .ThenAsync(v => _updateContentUseCase.HandleRequest(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, v)))
-                .ToActionResult(_ => RedirectToAction(nameof(View)));
+                .ToActionResult(_ => RedirectToAction(nameof(View)), _hostEnvironment);
         }
     }
 }

@@ -57,18 +57,40 @@ namespace ASP.Web
                 );
         }
 
-        public static async Task<IActionResult> ToActionResult<T>(this Task<Result<T>> result, Func<T, IActionResult> action)
+        public static async Task<IActionResult> ToActionResult<T>(this Task<Result<T>> result, Func<T, IActionResult> action,
+            IHostEnvironment hostEnvironment)
         {
-            return await result
-                .Match(
-                    response => action(response),
-                    error => error switch
+           return await result.Match(
+                response => action(response),
+                error => {
+                    // Check if the application is in development mode
+                    if (hostEnvironment.IsDevelopment())
                     {
-                        NotFoundError e => new ObjectResult(e.Message) { StatusCode = 404 },
-                        _ => new ObjectResult(error.Message) { StatusCode = 500 }
+                        // Development-specific error handling
+                        return error switch
+                        {
+                            NotFoundError e => new ObjectResult(e.Message) { StatusCode = StatusCodes.Status404NotFound }, 
+                            _ => new ObjectResult(error.Message) { StatusCode = StatusCodes.Status500InternalServerError } 
+                        };
                     }
-                );
+                    else
+                    {
+                        // Production error handling
+                        // For non-dev environments, display a 'Page Not Found' (404) page using `StatusCodeResult`.
+                        // This ensures proper utilization of `UseStatusCodePagesWithReExecute`.
+                        // `UseStatusCodePagesWithReExecute` will not trigger if the response body has already started to be written.
+                        // Ensure that our `ToActionResult` method does not write to the response body directly for non-dev environments.
+                        // Instead, it should only set the status code.
+                        return error switch
+                        {
+                            NotFoundError e => new StatusCodeResult(StatusCodes.Status404NotFound), 
+                            _ => new StatusCodeResult(StatusCodes.Status500InternalServerError) 
+                        };
+                    }
+                }
+            );
         }
+
 
         public static async Task<IActionResult> ToActionResult<T>(this Task<Result<T>> result, Func<T, IActionResult> action, T defaultIfNotFound)
         {

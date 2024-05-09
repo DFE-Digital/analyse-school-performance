@@ -23,7 +23,7 @@ Scenario: Endpoint should return NotFound (404) response if template with id doe
 	Given no page content exists
 	When I send a GET request to /ViewContentTemplate?id=help-test
 	Then I should get a 404 response
-	And the response should be the message "Document with id "help-test" and partition key "help-test" does not exist in container "content"."
+	And the response should be the message "404 Error: Could not find object with id "help-test" and partition key "help-test" in container "content"."
 
 Scenario: Endpoint should return template object if template exists
 	Given page content "help-test" exists:

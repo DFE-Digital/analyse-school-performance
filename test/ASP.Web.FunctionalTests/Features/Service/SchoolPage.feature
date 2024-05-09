@@ -573,3 +573,24 @@ Scenario: School page should contain a school details disclosure element
 Scenario: Details disclosure element text should read 'Show school details' when closed
   When I navigate to /school/123456
   Then the element "#app-school-page-details-state-closed" should have the text content "Show"
+  
+@Javascript:disabled
+Scenario: School page should display page not found page if School URN is invalid
+    Given establishment details "112123" exists:
+    """
+    {
+              
+              "id": "112123",
+              "name": "Thursby Primary School",
+              "urn": "112123",
+              "isDeleted": false
+          }
+    """
+    When I navigate to /school/112
+    Then I should get a 404 response
+    And the page title should be "Page not found – ASP – GOV.UK | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Page not found"
+    And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
+    And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
+    And the element "*[data-testid='error-display-message']" should exist
+    And the element "*[data-testid='error-display-message']" should have the text content "Error message: 404 Error: Could not find object with id "112" and partition key "112" in container "establishments"."
