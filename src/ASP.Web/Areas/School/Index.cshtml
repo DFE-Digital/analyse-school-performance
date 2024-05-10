@@ -34,9 +34,7 @@
                         Address
                     </dt>
                     <dd id="app-school-details-address-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.Address == null
-                            ? string.Empty
-                            : $"{Model.EstablishmentDetails.Address.Street}, {Model.EstablishmentDetails.Address.Town}, {Model.EstablishmentDetails.Address.PostCode}")
+                        @Model.EstablishmentDetails.Address?.ToString()
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">

@@ -1,4 +1,6 @@
-﻿namespace ASP.Core.Establishments
+﻿using ASP.Core.Helpers;
+
+namespace ASP.Core.Establishments
 {
     public class Address
     {
@@ -11,6 +13,12 @@
             Street = street;
             Town = town;
             PostCode = postCode;
+        }
+
+
+        public override string ToString()
+        {
+            return StringHelper.ConcatNonEmpties(", ", Street, Town, PostCode);
         }
     }
 }
