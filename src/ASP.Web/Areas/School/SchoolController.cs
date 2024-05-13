@@ -86,43 +86,8 @@ namespace ASP.Web.Areas.School
 
             if (!combinedResult.IsSuccess) return await combinedResult.ToTask().ToActionResult(View, _hostEnvironment);
             
-            combinedResult = FilterSecondarySchoolResultView(combinedResult);
-
             return await combinedResult.ToTask().ToActionResult(View, _hostEnvironment);
 
-        }
-
-        /// <summary>
-        /// Filters the views within a SchoolViewModel based on the education phase. If the phase is 'Secondary', 
-        /// it retains only specific views identified by their IDs. This method is intended for use with SchoolViewModel 
-        /// instances that include detailed view components, ensuring that only relevant data is presented for secondary schools.
-        /// </summary>
-        /// <param name="combinedResult">A Result object containing a SchoolViewModel which may contain multiple views.</param>
-        /// <returns>A Result object containing the filtered SchoolViewModel if the phase of education is 'Secondary'; 
-        /// otherwise, returns the original unfiltered Result object.</returns>
-        private static Result<SchoolViewModel> FilterSecondarySchoolResultView(Result<SchoolViewModel> combinedResult)
-        {
-            var phaseOfEducation = combinedResult.Value?.EstablishmentDetails.PhaseOfEducation;
-
-            if (string.IsNullOrEmpty(phaseOfEducation) || !phaseOfEducation.Equals("Secondary"))
-            {
-                return combinedResult;
-            }
-    
-            // List of IDs to filter for secondary views
-            var filterIds = new HashSet<string>
-            {
-                "app-card-useful-links", 
-                "app-card-other-reports", 
-                "app-card-key-stage-4",
-                "app-card-qla", 
-            };
-            
-            // Filter the Views to only include specified IDs for secondary views
-            combinedResult.Value!.ContentTemplate.Views = combinedResult.Value.ContentTemplate.Views
-                .Where(view => filterIds.Contains(view.ViewContent.Id))
-                .ToList();
-            return combinedResult;
         }
         
         /// <summary>
