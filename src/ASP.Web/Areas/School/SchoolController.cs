@@ -40,8 +40,6 @@ namespace ASP.Web.Areas.School
             var viewContentTemplateResult = await _viewContentUseCase.HandleRequest(viewContentTemplateRequest)
                 .Map(t => ContentTemplateViewModel.FromTemplate(contentId, t));
 
-            viewContentTemplateResult = UpdateContentTemplateSchoolUri(viewContentTemplateResult, "136028", urn);
-
             var establishmentDetailsResult = await _useCase.HandleRequest(establishmentDetailsUseCaseRequest)
                 .Map(t => new EstablishmentDetailsViewModel {
                     Urn = t.Urn,
@@ -88,30 +86,6 @@ namespace ASP.Web.Areas.School
             
             return await combinedResult.ToTask().ToActionResult(View, _hostEnvironment);
 
-        }
-        
-        /// <summary>
-        /// Updates the URIs within the content template views by replacing the old school Unique Reference Number (URN) with the provided new URN.
-        /// </summary>
-        /// <param name="contentTemplate">The content template result containing views to be updated.</param>
-        /// <param name="oldId">The old school URN to replace.</param>
-        /// <param name="newId">The new school URN to be used in replacement.</param>
-        /// <returns>A result containing the updated content template with modified URIs.</returns>
-        private static Result<ContentTemplateViewModel> UpdateContentTemplateSchoolUri(Result<ContentTemplateViewModel> contentTemplate, string oldId, string newId)
-        {
-            if (!contentTemplate.IsSuccess || contentTemplate.Value?.Views == null) return contentTemplate;
-
-            contentTemplate.Value.Views.ForEach(view =>
-            {
-                dynamic viewContent = view.ViewContent;
-                string linkUrl = viewContent.LinkUrl;
-                if (!string.IsNullOrEmpty(linkUrl) && linkUrl.Contains(oldId))
-                {
-                    viewContent.LinkUrl = Regex.Replace(linkUrl, oldId, newId);
-                }
-            });
-
-            return contentTemplate;
         }
         
         private static string GetPhaseOfEducation(EstablishmentDetails establishmentDetails)

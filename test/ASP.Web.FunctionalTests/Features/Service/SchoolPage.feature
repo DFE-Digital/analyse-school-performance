@@ -11,7 +11,7 @@ Scenario: School page should contain seven app card container element
             "ViewContent": {
                 "Id": "app-card-phonics",
                 "Title": "Phonics",
-                "LinkUrl": "/school/136028/phonics",
+                "LinkUrl": "phonics",
                 "Text": "View data based on expected standard, average score and attainment in phonics."
             }
         },
@@ -20,7 +20,7 @@ Scenario: School page should contain seven app card container element
             "ViewContent": {
                 "Id": "app-card-mtc",
                 "Title": "Multiplication table check (MTC)",
-                "LinkUrl": "/school/136028/mtc",
+                "LinkUrl": "mtc",
                 "Text": "Identify pupils who have not yet mastered their times tables, so that additional support can be provided."
             }
         },
@@ -29,7 +29,7 @@ Scenario: School page should contain seven app card container element
             "ViewContent": {
                 "Id": "app-card-key-stage-2",
                 "Title": "Key stage 2",
-                "LinkUrl": "/school/136028/key-stage-2",
+                "LinkUrl": "key-stage-2",
                 "Text": "See data for key stage 2 including headline measures & reports, progress & attainment scatter plots, and additional reports."
             }
         },
@@ -38,7 +38,7 @@ Scenario: School page should contain seven app card container element
             "ViewContent": {
                 "Id": "app-card-key-stage-4",
                 "Title": "Key stage 4",
-                "LinkUrl": "/school/136028/key-stage-4",
+                "LinkUrl": "key-stage-4",
                 "Text": "See data for key stage 4 including headline measures & reports, progress & attainment scatter plots, and additional reports."
             }
         },
@@ -47,7 +47,7 @@ Scenario: School page should contain seven app card container element
             "ViewContent": {
                 "Id": "app-card-qla",
                 "Title": "Question level analysis (QLA)",
-                "LinkUrl": "/school/136028/qla",
+                "LinkUrl": "qla",
                 "Text": "Assess how pupils performed in the key stage 2 tests and compare these with the national average."
             }
         },
@@ -56,7 +56,7 @@ Scenario: School page should contain seven app card container element
             "ViewContent": {
                 "Id": "app-card-other-reports",
                 "Title": "Other reports",
-                "LinkUrl": "/school/136028/other-reports",
+                "LinkUrl": "other-reports",
                 "Text": "View reports on school performance, Ofsted inspections, asbence and exclusions and school characteristics."
             }
         },
@@ -65,7 +65,7 @@ Scenario: School page should contain seven app card container element
             "ViewContent": {
                 "Id": "app-card-useful-links",
                 "Title": "Useful links",
-                "LinkUrl": "/school/136028/useful-links",
+                "LinkUrl": "useful-links",
                 "Text": "View links to other services and published documents that may be useful."
             }
         }
@@ -96,7 +96,7 @@ Scenario: School page should contain seven app card container element
         "urn": "123456"
     }
     """
-    When I navigate to /school/123456
+    When I navigate to /school/123456/
     Then The number of ".app-card" elements on the page should equal 7 
     Then the element "#app-card-container" should have the outer HTML:
     """
@@ -105,7 +105,7 @@ Scenario: School page should contain seven app card container element
         <div id="app-card-phonics" class="app-card">
             <div class="app-card-container">
                 <h2 class="govuk-heading-m">
-                    <a href="/school/123456/phonics" class="app-card-link govuk-link govuk-link--no-visited-state">
+                    <a href="phonics" class="app-card-link govuk-link govuk-link--no-visited-state">
                         Phonics
                     </a>
                 </h2>
@@ -117,7 +117,7 @@ Scenario: School page should contain seven app card container element
         <div id="app-card-mtc" class="app-card">
             <div class="app-card-container">
                 <h2 class="govuk-heading-m">
-                    <a href="/school/123456/mtc" class="app-card-link govuk-link govuk-link--no-visited-state">
+                    <a href="mtc" class="app-card-link govuk-link govuk-link--no-visited-state">
                         Multiplication table check (MTC)
                     </a>
                 </h2>
@@ -130,7 +130,7 @@ Scenario: School page should contain seven app card container element
         <div id="app-card-key-stage-2" class="app-card">
             <div class="app-card-container">
                 <h2 class="govuk-heading-m">
-                    <a href="/school/123456/key-stage-2" class="app-card-link govuk-link govuk-link--no-visited-state">
+                    <a href="key-stage-2" class="app-card-link govuk-link govuk-link--no-visited-state">
                         Key stage 2
                     </a>
                 </h2>
@@ -143,7 +143,7 @@ Scenario: School page should contain seven app card container element
         <div id="app-card-key-stage-4" class="app-card">
             <div class="app-card-container">
                 <h2 class="govuk-heading-m">
-                    <a href="/school/123456/key-stage-4" class="app-card-link govuk-link govuk-link--no-visited-state">
+                    <a href="key-stage-4" class="app-card-link govuk-link govuk-link--no-visited-state">
                         Key stage 4
                     </a>
                 </h2>
@@ -156,7 +156,7 @@ Scenario: School page should contain seven app card container element
         <div id="app-card-qla" class="app-card">
             <div class="app-card-container">
                 <h2 class="govuk-heading-m">
-                    <a href="/school/123456/qla" class="app-card-link govuk-link govuk-link--no-visited-state">
+                    <a href="qla" class="app-card-link govuk-link govuk-link--no-visited-state">
                         Question level analysis (QLA)
                     </a>
                 </h2>
@@ -168,7 +168,7 @@ Scenario: School page should contain seven app card container element
         <div id="app-card-other-reports" class="app-card">
             <div class="app-card-container">
                 <h2 class="govuk-heading-m">
-                    <a href="/school/123456/other-reports" class="app-card-link govuk-link govuk-link--no-visited-state">
+                    <a href="other-reports" class="app-card-link govuk-link govuk-link--no-visited-state">
                         Other reports
                     </a>
                 </h2>
@@ -181,7 +181,7 @@ Scenario: School page should contain seven app card container element
         <div id="app-card-useful-links" class="app-card">
             <div class="app-card-container">
                 <h2 class="govuk-heading-m">
-                    <a href="/school/123456/useful-links" class="app-card-link govuk-link govuk-link--no-visited-state">
+                    <a href="useful-links" class="app-card-link govuk-link govuk-link--no-visited-state">
                         Useful links
                     </a>
                 </h2>
