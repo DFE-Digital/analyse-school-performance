@@ -46,14 +46,14 @@ namespace ASP.Test.Acceptance.Core
                 e => AssertWithMessage.Fail(@$"Could not update page content with id ""{id}"": {e.Message}"));
         }
 
-        [Given(@"establishment details ""([^""]+)"" exists:")]
-        public async Task GivenEstablishmentDetailsExistsMultiline(string id, string data)
+        [Given(@"establishment ""([^""]+)"" exists:")]
+        public async Task GivenEstablishmentExistsMultiline(string id, string data)
         {
-            await SetUpEstablishmentDetails(id, data).Switch(
+            await SetUpEstablishment(id, data).Switch(
                 _ =>
                 {
                 },
-                e => AssertWithMessage.Fail(@$"Could not update establishment details with id ""{id}"": {e.Message}"));
+                e => AssertWithMessage.Fail(@$"Could not update establishment with id ""{id}"": {e.Message}"));
         }
 
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to (.+)")]
@@ -125,7 +125,8 @@ namespace ASP.Test.Acceptance.Core
 
         protected async Task<Result<string>> GetPageContent(string id)
         {
-            return await _contentTemplateRepository.Get(id).Map(JsonHelper.Serialize);
+            return await _contentTemplateRepository.Get(id)
+                .Map(JsonHelper.Serialize);
         }
 
         protected async Task<Result<Done>> SetUpPageContent(string id, string data)
@@ -146,7 +147,7 @@ namespace ASP.Test.Acceptance.Core
             return await _contentTemplateRepository.Update(id, template);
         }
 
-        protected async Task<Result<Done>> SetUpEstablishmentDetails(string id, string data)
+        protected async Task<Result<Done>> SetUpEstablishment(string id, string data)
         {
             var document = await _establishmentRepository.GetEstablishmentDetails(id)
                 .Match(v => JsonConvert.SerializeObject(v), _ => "{}");

@@ -72,7 +72,7 @@ Scenario: School page should contain seven app card container element
       ]
     }
     """
-    And establishment details "123456" exists:
+    And establishment "123456" exists:
     """
     {
         "isPrimary": true,
@@ -195,7 +195,7 @@ Scenario: School page should contain seven app card container element
 
 @Javascript:disabled
 Scenario: School page should be accessible when provided urn
-  Given establishment details "123456" exists:
+  Given establishment "123456" exists:
 		"""
 		{
             
@@ -216,8 +216,8 @@ Scenario: School page should be accessible when provided urn
        """
 
 @Javascript:disabled
-Scenario: School page should be throw page not found if Urn is deleted
-  Given establishment details "112123" exists:
+Scenario: School page should throw page not found if Establishment is deleted
+  Given establishment "112123" exists:
 		"""
 		{
             
@@ -229,11 +229,11 @@ Scenario: School page should be throw page not found if Urn is deleted
 		"""
     When I navigate to /school/112123
     Then I should get a 404 response
-    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Provided school urn is already removed"
+    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Establishment 112123 has been deleted."
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
-  Given establishment details "123456" exists:
+  Given establishment "123456" exists:
 		"""
 		{
             "isPost16": false,
@@ -420,7 +420,7 @@ Scenario: Details disclosure element text should read 'Show school details' when
   
 @Javascript:disabled
 Scenario: School page should display page not found page if School URN is invalid
-    Given establishment details "112123" exists:
+    Given establishment "112123" exists:
     """
     {
               

@@ -1,4 +1,6 @@
-﻿namespace ASP.Core.Results
+﻿using Newtonsoft.Json.Linq;
+
+namespace ASP.Core.Results
 {
     public class ErrorResult<TValue> : Result<TValue>
     {
@@ -9,16 +11,12 @@
             Error = error;
         }
         
-        public override bool IsSuccess => false;
-        public override bool IsError => true;
-        public override TValue? Value => default(TValue);
-
         public override Result<TNextValue> Map<TNextValue>(Func<TValue, TNextValue> mapFunction)
         {
             return new ErrorResult<TNextValue>(Error);
         }
 
-        public override Task<Result<TNextValue>> MapAsync<TNextValue>(Func<TValue, Task<TNextValue>> mapFunction)
+        public override Task<Result<TNextValue>> Map<TNextValue>(Func<TValue, Task<TNextValue>> mapFunction)
         {
             return Task.FromResult((Result<TNextValue>)new ErrorResult<TNextValue>(Error));
         }
@@ -28,7 +26,7 @@
             return new ErrorResult<TNextValue>(Error);
         }
 
-        public override Task<Result<TNextValue>> ThenAsync<TNextValue>(Func<TValue, Task<Result<TNextValue>>> onSuccess)
+        public override Task<Result<TNextValue>> Then<TNextValue>(Func<TValue, Task<Result<TNextValue>>> onSuccess)
         {
             return Task.FromResult((Result<TNextValue>)new ErrorResult<TNextValue>(Error));
         }
@@ -38,7 +36,7 @@
             return onError(Error);
         }
 
-        public override async Task<Result<TValue>> MapErrorAsync(Func<Error, Task<Error>> onError)
+        public override async Task<Result<TValue>> MapError(Func<Error, Task<Error>> onError)
         {
             var error = await onError(Error);
 
@@ -50,7 +48,7 @@
             return onError(Error);
         }
 
-        public override Task<TNextValue> MatchAsync<TNextValue>(Func<TValue, Task<TNextValue>> onSuccess, Func<Error, Task<TNextValue>> onError)
+        public override Task<TNextValue> Match<TNextValue>(Func<TValue, Task<TNextValue>> onSuccess, Func<Error, Task<TNextValue>> onError)
         {
             return onError(Error);
         }
@@ -60,7 +58,32 @@
             onError(Error);
         }
 
-        public override Task SwitchAsync(Func<TValue, Task> onSuccess, Func<Error, Task> onError)
+        public override Task Switch(Func<TValue, Task> onSuccess, Func<Error, Task> onError)
+        {
+            return onError(Error);
+        }
+
+        public override TValue GetValueOrDefault(TValue defaultValue)
+        {
+            return defaultValue;
+        }
+
+        public override SuccessResult<TValue> DefaultIfError(TValue defaultValue)
+        {
+            return (SuccessResult<TValue>)defaultValue;
+        }
+
+        public override Result<TValue> DefaultIf(Func<Error, bool> predicate, TValue defaultValue)
+        {
+            return predicate(Error) ? defaultValue : this;
+        }
+
+        public override Result<TValue> ErrorIf(Func<TValue, bool> predicate, Error error)
+        {
+            return this;
+        }
+
+        public override Result<TNextValue> Convert<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess, Func<Error, Result<TNextValue>> onError)
         {
             return onError(Error);
         }

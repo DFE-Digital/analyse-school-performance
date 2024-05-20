@@ -1,6 +1,5 @@
 ﻿using ASP.Application.UseCases.ContentPage.UpdateContentTemplate;
 using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
-using ASP.Application.UseCases.ViewContentTemplate;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Mvc;
 using ASP.Web.Core.Templating;
@@ -56,7 +55,7 @@ namespace ASP.Web.Areas.Help
             string templateId = $"help-{contentId}".ToLower();
 
             return await model.ToTemplate()
-                .ThenAsync(t => _updateContentUseCase.HandleRequest(new(templateId, t)))
+                .Then(t => _updateContentUseCase.HandleRequest(new(templateId, t)))
                 .ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId }), _hostEnvironment);
         }
     }

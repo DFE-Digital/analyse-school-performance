@@ -11,12 +11,16 @@ namespace ASP.Web.Areas.Home
     [ServiceFilter<TermsOfUseActionFilter>]
     public class HomeController : Controller
     {
-        private readonly IViewContentTemplateUseCase _viewContentUseCase;
+        const string CONTENT_TEMPLATE_ID = "home-page";
 
-        public HomeController(IViewContentTemplateUseCase viewContentUseCase)
+        private readonly IViewContentTemplateUseCase _viewContentUseCase;
+        private readonly IHostEnvironment _hostEnvironment;
+
+        public HomeController(IViewContentTemplateUseCase viewContentUseCase, IHostEnvironment hostEnvironment)
         {
             _viewContentUseCase = viewContentUseCase ??
                 throw new ArgumentNullException(nameof(viewContentUseCase));
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet("/")]
@@ -24,8 +28,6 @@ namespace ASP.Web.Areas.Home
         [HttpGet("index")]
         public async Task<IActionResult> Index()
         {
-            ViewContentTemplateRequest request = new("home-page");
-
             var defaultIfNotFound = new ContentTemplateViewModel
             {
                 PageTitle = "Analyse school performance",
@@ -36,11 +38,10 @@ namespace ASP.Web.Areas.Home
                 Views = []
             };
 
-            var result = await _viewContentUseCase.HandleRequest(request)
-                .Map(t => ContentTemplateViewModel.FromTemplate("home-page", t))
-                .ToActionResult(View, defaultIfNotFound);
-
-            return result;
+            return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID))
+                .Map(template => ContentTemplateViewModel.FromTemplate(CONTENT_TEMPLATE_ID, template))
+                .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
+                .ToActionResult(View, _hostEnvironment);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         public async Task<IActionResult> Edit(ContentTemplateEditModel model)
         {
             return await model.ToTemplate()
-                .ThenAsync(v => _updateContentUseCase.HandleRequest(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, v)))
+                .Then(v => _updateContentUseCase.HandleRequest(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, v)))
                 .ToActionResult(_ => RedirectToAction(nameof(View)), _hostEnvironment);
         }
     }

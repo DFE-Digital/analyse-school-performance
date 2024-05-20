@@ -34,7 +34,6 @@ namespace ASP.Api
                 return new ApiResult(400, @"Missing parameter: ""id"".");
             }
 
-
             using (var sr = new StreamReader(req.Body))
             {
                 string content = await sr.ReadToEndAsync();
@@ -43,10 +42,8 @@ namespace ASP.Api
 
 
                 return await JsonHelper.DeserializeIgnoringMissingMembers<ContentTemplate>(content)
-                    .MapError(e => {
-                        return Error.Validation("Request body was not a JSON object.");
-                    })
-                    .ThenAsync(async pageContent => await _update.HandleRequest(new UpdateContentTemplateRequest(id.ToString() ?? "", pageContent)))
+                    .MapError(_ => Error.Validation("Request body was not a JSON object."))
+                    .Then(async pageContent => await _update.HandleRequest(new UpdateContentTemplateRequest(id.ToString() ?? "", pageContent)))
                     .Match(r => new ApiResult(200, r), e =>
                     {
                         int statusCode = e switch {

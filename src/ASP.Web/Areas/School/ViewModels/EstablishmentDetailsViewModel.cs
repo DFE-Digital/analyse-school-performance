@@ -24,5 +24,36 @@ namespace ASP.Web.Areas.School.ViewModels
         public int? NoOfPupils { get; set; }
         
         public bool IsDeleted { get; set; }
+
+        public static EstablishmentDetailsViewModel FromEstablishmentDetails(EstablishmentDetails establishmentDetails)
+        {
+            return new EstablishmentDetailsViewModel {
+                Urn = establishmentDetails.Urn,
+                Name = establishmentDetails.Name,
+                PhaseOfEducation = GetPhaseOfEducation(establishmentDetails),
+                Address = establishmentDetails.Address,
+                EstablishmentType = establishmentDetails.EstablishmentType,
+                Gender = establishmentDetails.Gender,
+                OfstedRating = establishmentDetails.OfstedRating,
+                OfstedLastInspectionDate = establishmentDetails.OfstedLastInspectionDate,
+                LocalAuthority = establishmentDetails.LocalAuthority,
+                HeadTeacher = establishmentDetails.HeadTeacher,
+                AgeRange = establishmentDetails.AgeRange,
+                ReligiousDenomination = establishmentDetails.ReligiousDenomination,
+                AdmissionsPolicy = establishmentDetails.AdmissionsPolicy,
+                ResourcedProvisionType = establishmentDetails.ResourcedProvisionType,
+                NoOfPupils = establishmentDetails.NoOfPupils,
+                IsDeleted = establishmentDetails.IsDeleted
+            };
+        }
+
+        private static string GetPhaseOfEducation(EstablishmentDetails establishmentDetails)
+        {
+            var phaseOfEducation = "";
+            if (establishmentDetails.IsPrimary) phaseOfEducation = "Primary";
+            if (establishmentDetails.IsSecondary) phaseOfEducation = "Secondary";
+            if (establishmentDetails.IsPost16) phaseOfEducation = "16 to 18";
+            return phaseOfEducation;
+        }
     }
 }
