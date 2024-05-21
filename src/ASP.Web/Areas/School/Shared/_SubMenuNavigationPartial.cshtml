@@ -1,0 +1,13 @@
+﻿@model ASP.Web.Areas.School.ViewModels.SchoolViewModel
+<h2 id="school-name-heading" class="govuk-heading-m">@Model.EstablishmentDetails.Name <span class="urn">(URN: @Model.EstablishmentDetails.Urn)</span></h2>
+<nav class="app-sub-navigation" aria-label="Sub navigation">
+    <ul class="app-sub-navigation__list">
+        <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(("Phonics", $"/school/{Model.EstablishmentDetails.Urn}/phonics", "phonics")) />
+        <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(("Key stage 2", $"/school/{Model.EstablishmentDetails.Urn}/key-stage-2", "key-stage-2")) />
+        <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(("Multiplication table check", $"/school/{Model.EstablishmentDetails.Urn}/mtc", "mtc")) />
+        <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(("Key stage 4", $"/school/{Model.EstablishmentDetails.Urn}/key-stage-4", "key-stage-4")) />
+        <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(("Question level analysis", $"/school/{Model.EstablishmentDetails.Urn}/qla", "qla")) />
+        <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(("Other reports", $"/school/{Model.EstablishmentDetails.Urn}/other-reports", "other-reports")) />
+        <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(("Useful links", $"/school/{Model.EstablishmentDetails.Urn}/useful-links", "useful-links")) />
+    </ul>
+</nav>

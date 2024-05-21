@@ -30,7 +30,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
         {
             await _web.NavigateAsync("/error-test/throw-exception");
         }
-        
+
         [When(@"the application returns a 404 with error message ""([^""]*)""")]
         public async Task TheApplicationReturns404WithErrorMessage(string errorMessage)
         {
@@ -248,5 +248,16 @@ namespace ASP.AcceptanceTests.StepDefinitions
                 index++;
             }
         }
+
+        [Then(@"the element ""(.*)"" should have the attribute ""(.*)"" set to ""(.*)""")]
+        public async Task ThenTheElementShouldHaveTheAttribute(string selector, string attribute, string expectedValue)
+        {
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+
+            var @class = await element.AttributeAsync(attribute);
+            Assert.Equal(expectedValue, @class);
+        }
     }
+
 }

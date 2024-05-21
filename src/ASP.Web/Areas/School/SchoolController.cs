@@ -32,7 +32,8 @@ namespace ASP.Web.Areas.School
         [HttpGet("{urn}")]
         public async Task<IActionResult> Index(string urn)
         {
-            var defaultIfNotFound = new ContentTemplateViewModel {
+            var defaultIfNotFound = new ContentTemplateViewModel
+            {
                 Views = []
             };
 
@@ -42,11 +43,64 @@ namespace ASP.Web.Areas.School
                 .Then(async establishmentDetailsModel => await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID))
                     .Map(template => ContentTemplateViewModel.FromTemplate(CONTENT_TEMPLATE_ID, template))
                     .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
-                    .Map(contentTemplateModel => new SchoolViewModel {
+                    .Map(contentTemplateModel => new SchoolViewModel
+                    {
                         EstablishmentDetails = establishmentDetailsModel,
                         ContentTemplate = contentTemplateModel
                     }))
                 .ToActionResult(View, _hostEnvironment);
+
+        }
+
+        [HttpGet("{urn}/phonics")]
+        public async Task<IActionResult> Phonics(string urn)
+        {
+            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+        }
+
+        [HttpGet("{urn}/key-stage-2")]
+        public async Task<IActionResult> KeyStage2(string urn)
+        {
+            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+        }
+
+        [HttpGet("{urn}/key-stage-4")]
+        public async Task<IActionResult> KeyStage4(string urn)
+        {
+            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+        }
+
+        [HttpGet("{urn}/mtc")]
+        public async Task<IActionResult> Mtc(string urn)
+        {
+            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+        }
+
+        [HttpGet("{urn}/other-reports")]
+        public async Task<IActionResult> OtherReports(string urn)
+        {
+            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+        }
+
+        [HttpGet("{urn}/qla")]
+        public async Task<IActionResult> Qla(string urn)
+        {
+            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+        }
+
+        [HttpGet("{urn}/useful-links")]
+        public async Task<IActionResult> UsefulLinks(string urn)
+        {
+            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+        }
+
+        private async Task<Result<SchoolViewModel>> EstablishmentDetails(string urn)
+        {
+            return await _useCase.HandleRequest(new GetEstablishmentDetailsUseCaseRequest(urn))
+                 .ErrorIf(estab => estab.IsDeleted, Error.NotFound($"Establishment {urn} has been deleted."))
+                 .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
+                 .Map(establishmentDetailsModel => new SchoolViewModel() { EstablishmentDetails = establishmentDetailsModel });
+
         }
     }
 }

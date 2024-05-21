@@ -1,0 +1,7 @@
+﻿@model (string Name, string Path, string Id)
+
+<li class="app-sub-navigation__item">
+    <a class="app-sub-navigation__link" data-testid="@Model.Id-navigation" aria-current="@(Context.Request.Path.StartsWithSegments(Model.Path)? "page": "")" href="@Model.Path">
+        @Model.Name
+    </a>
+</li>
