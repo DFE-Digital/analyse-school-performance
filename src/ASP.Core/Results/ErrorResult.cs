@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace ASP.Core.Results
+﻿namespace ASP.Core.Results
 {
-    public class ErrorResult<TValue> : Result<TValue>
+    /// <summary>
+    /// Represents the failed result of an operation. See <see cref="Result{TValue}"/>
+    /// </summary>
+    /// <typeparam name="TValue">Type of the successful result of the operation</typeparam>
+    public sealed class ErrorResult<TValue> : Result<TValue>
     {
         public Error Error { get; }
 

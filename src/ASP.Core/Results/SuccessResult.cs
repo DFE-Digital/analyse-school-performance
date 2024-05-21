@@ -1,6 +1,10 @@
 ﻿namespace ASP.Core.Results
 {
-    public class SuccessResult<TValue> : Result<TValue>
+    /// <summary>
+    /// Represents the successful result of an operation. See <see cref="Result{TValue}"/>
+    /// </summary>
+    /// <typeparam name="TValue">Type of the successful result of the operation</typeparam>
+    public sealed class SuccessResult<TValue> : Result<TValue>
     {
         public TValue Value { get; }
 

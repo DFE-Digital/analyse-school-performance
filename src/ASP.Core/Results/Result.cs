@@ -26,6 +26,12 @@
         }
     }
 
+    /// <summary>
+    /// Represents the result of an operation that could fail. Derived classes represent the possible outcomes: <c>SuccessResult&lt;TValue&gt;</c> indicates
+    /// the operation was successful and contains the value of the result of type <typeparamref name="TValue"></typeparam>. <c>ErrorResult&lt;TValue&gt;</c>
+    /// indicates an error and contains an <c>Error</c> object
+    /// </summary>
+    /// <typeparam name="TValue">Type of the successful result of the operation</typeparam>
     public abstract class Result<TValue>
     {
         /// <summary>
@@ -546,7 +552,7 @@
         /// <typeparam name="TNextValue">Type of the value of the new result</typeparam>
         /// <param name="onSuccess">Function to use if the current result is a <c>SuccessResult</c></param>
         /// <param name="onError">Function to use if the current result is an <c>ErrorResult</c></param>
-        /// <returns></returns>
+        /// <returns>A result object of type <c>Result&lt;<typeparamref name="TNextValue"/>&gt;</c></returns>
         public abstract Result<TNextValue> Convert<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess, Func<Error, Result<TNextValue>> onError);
 
         public static implicit operator Result<TValue>(TValue value)
