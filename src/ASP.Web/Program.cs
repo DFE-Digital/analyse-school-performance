@@ -2,6 +2,7 @@ using ASP.Application.Extensions;
 using ASP.Web.Features;
 using ASP.Web.Areas;
 using ASP.Web.Components;
+using ASP.Web.Areas.School;
 using ASP.Web.Features.ContentSecurityPolicy;
 using ASP.Web.Features.ErrorHandling;
 using ASP.Web.Features.Logging;
@@ -11,7 +12,7 @@ using ASP.Web.Features.ApplicationServiceVersion;
 using ASP.Web.Features.ContentTemplates;
 using ASP.Web.Features.Cookies;
 using ASP.Web.Features.TermsOfUse;
-using ASP.Web.Areas.School;
+using ASP.Web.Features.UrlRewriting;
 
 namespace ASP.Web
 {
@@ -43,9 +44,20 @@ namespace ASP.Web
 
             app
                 .UseErrorHandling(app.Environment)
-                .UseAppConfiguration(app.Environment)
+                .UseHttpsRedirection()
+                .UseStaticFiles()
+                .UseAuthorization()
+                .UseRouting()
                 .UseContentSecurityPolicy(app.Environment)
-                .UseLogging();
+                .UseLogging()
+                .UseUrlRewriteRules();
+
+            if (!app.Environment.IsDevelopment())
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
             app.MapControllers();
             app.Run();
         }

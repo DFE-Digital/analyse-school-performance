@@ -18,8 +18,8 @@ Scenario: Continue button exists on terms of use page
 	When I click the button "#app-accept-terms-button"
 	Then the cookie "AcceptedTermsOfUse" should be set to "Accepted"
 Examples:
-	| Path                      |
-	| /help/accept-terms-of-use |
+	| Path                       |
+	| /help/accept-terms-of-use/ |
 
 
 @Javascript:disabled
@@ -30,8 +30,8 @@ Scenario: Should not be redirected to accept terms when Accepted terms cookie is
 Examples:
 	| Path           |
 	| /              |
-	| /download      |
-	| /news          |
+	| /download/     |
+	| /news/         |
 
 
 @Javascript:disabled
@@ -52,8 +52,8 @@ Scenario: Should get redirected to Accept terms when Accepted terms cookie is se
 	Then The path should match <ExpectedPath>
 	Then the element "#app-accept-terms-button" should exist
 Examples:
-	| Path | ExpectedPath              |
-	| /    | /help/accept-terms-of-use |
+	| Path | ExpectedPath               |
+	| /    | /help/accept-terms-of-use/ |
 
 
 @Javascript:disabled
@@ -74,10 +74,10 @@ Scenario: Should set referral url when Accepted terms cookie is set to Rejected
 	Then The path should match <ExpectedPath>
 	Then the element "#app-accept-terms-button" should exist
 Examples:
-	| Path           | ExpectedPath                                     |
-	| /school/136028 | /help/accept-terms-of-use?ref-url=/school/136028 |
-	| /download      | /help/accept-terms-of-use?ref-url=/download      |
-	| /news          | /help/accept-terms-of-use?ref-url=/news          |
+	| Path           | ExpectedPath                                       |
+	| /school/136028 | /help/accept-terms-of-use/?ref-url=/school/136028/ |
+	| /download      | /help/accept-terms-of-use/?ref-url=/download/      |
+	| /news          | /help/accept-terms-of-use/?ref-url=/news/          |
 
 
 @Javascript:disabled
