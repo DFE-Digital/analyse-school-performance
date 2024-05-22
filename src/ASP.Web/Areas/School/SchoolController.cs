@@ -13,8 +13,6 @@ namespace ASP.Web.Areas.School
     [ServiceFilter<TermsOfUseActionFilter>]
     public class SchoolController : Controller
     {
-        const string CONTENT_TEMPLATE_ID = "school-landing-page";
-
         private readonly ILogger<SchoolController> _logger;
         private readonly IGetEstablishmentDetailsUseCase _useCase;
         private readonly IViewContentTemplateUseCase _viewContentUseCase;
@@ -32,24 +30,7 @@ namespace ASP.Web.Areas.School
         [HttpGet("{urn}")]
         public async Task<IActionResult> Index(string urn)
         {
-            var defaultIfNotFound = new ContentTemplateViewModel
-            {
-                Views = []
-            };
-
-            return await _useCase.HandleRequest(new GetEstablishmentDetailsUseCaseRequest(urn))
-                .ErrorIf(estab => estab.IsDeleted, Error.NotFound($"Establishment {urn} has been deleted."))
-                .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
-                .Then(async establishmentDetailsModel => await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID))
-                    .Map(template => ContentTemplateViewModel.FromTemplate(CONTENT_TEMPLATE_ID, template))
-                    .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
-                    .Map(contentTemplateModel => new SchoolViewModel
-                    {
-                        EstablishmentDetails = establishmentDetailsModel,
-                        ContentTemplate = contentTemplateModel
-                    }))
-                .ToActionResult(View, _hostEnvironment);
-
+           return await EstablishmentDetailsWithTemplate(urn, "school-landing-page");
         }
 
         [HttpGet("{urn}/phonics")]
@@ -91,16 +72,34 @@ namespace ASP.Web.Areas.School
         [HttpGet("{urn}/useful-links")]
         public async Task<IActionResult> UsefulLinks(string urn)
         {
-            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+            return await EstablishmentDetailsWithTemplate(urn, "school-useful-links");
         }
 
         private async Task<Result<SchoolViewModel>> EstablishmentDetails(string urn)
         {
             return await _useCase.HandleRequest(new GetEstablishmentDetailsUseCaseRequest(urn))
-                 .ErrorIf(estab => estab.IsDeleted, Error.NotFound($"Establishment {urn} has been deleted."))
                  .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
                  .Map(establishmentDetailsModel => new SchoolViewModel() { EstablishmentDetails = establishmentDetailsModel });
 
+        }
+
+        private async Task<IActionResult> EstablishmentDetailsWithTemplate(string urn, string templateId)
+        {
+            var defaultIfNotFound = new ContentTemplateViewModel
+            {
+                Views = []
+            };
+            return await _useCase.HandleRequest(new GetEstablishmentDetailsUseCaseRequest(urn))
+               .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
+               .Then(async establishmentDetailsModel => await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(templateId))
+                   .Map(template => ContentTemplateViewModel.FromTemplate(templateId, template))
+                   .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
+                   .Map(contentTemplateModel => new SchoolViewModel
+                   {
+                       EstablishmentDetails = establishmentDetailsModel,
+                       ContentTemplate = contentTemplateModel
+                   }))
+               .ToActionResult(View, _hostEnvironment);
         }
     }
 }

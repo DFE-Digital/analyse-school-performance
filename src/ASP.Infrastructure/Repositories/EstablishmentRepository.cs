@@ -19,7 +19,8 @@ namespace ASP.Infrastructure.Repositories
         public Task<Result<EstablishmentDetails>> GetEstablishmentDetails(string urn)
         {
             return _documentDB.GetAsync<EstablishmentDTO>(ContainerKey, urn, urn)
-               .Map(dto => dto.ToEstablishment());
+                .ErrorIf(estab => estab.IsDeleted, Error.NotFound($"Establishment {urn} has been deleted."))
+                .Map(dto => dto.ToEstablishment());
         }
 
         public Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails)

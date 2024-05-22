@@ -1,6 +1,6 @@
 ﻿@model ASP.Web.Areas.School.ViewModels.SchoolViewModel
 <h2 id="school-name-heading" class="govuk-heading-m">@Model.EstablishmentDetails.Name <span class="urn">(URN: @Model.EstablishmentDetails.Urn)</span></h2>
-<nav class="app-sub-navigation" aria-label="Sub navigation">
+<nav aria-label="Sub navigation">
     <ul class="app-sub-navigation__list">
         <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(("Phonics", $"/school/{Model.EstablishmentDetails.Urn}/phonics", "phonics")) />
         <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(("Key stage 2", $"/school/{Model.EstablishmentDetails.Urn}/key-stage-2", "key-stage-2")) />

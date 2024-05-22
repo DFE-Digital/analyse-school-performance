@@ -7,6 +7,23 @@
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <h1 class="govuk-heading-xl">Useful links</h1>
         @await Html.PartialAsync("~/Areas/School/Shared/_SubMenuNavigationPartial.cshtml", Model)
-        <p class="govuk-body">This page is still in progress.</p>
+        <div class="govuk-width-container">
+            <main class="govuk-main-wrapper main-asp">
+                <div class="page-content js-content-target">
+                    <ul class="app-links-list">
+
+                        @if (Model.ContentTemplate.Views != null)
+                        {
+                            foreach (var view in Model.ContentTemplate.Views)
+                            {
+                                <li>
+                                    @await Html.PartialAsync("~/Components/Link/View.cshtml", view)
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </main>
+        </div>
     </main>
 </div>

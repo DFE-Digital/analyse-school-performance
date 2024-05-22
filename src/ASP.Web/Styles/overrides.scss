@@ -297,10 +297,6 @@ $app-breakpoint-custom : 700px;
     display: block;
 }
 
-.app-sub-navigation {
-    margin-bottom: 40px;
-}
-
 .app-sub-navigation__list {
     font-size: 0;
     list-style: none;
@@ -366,4 +362,27 @@ $app-breakpoint-custom : 700px;
     @include govuk-media-query($until: tablet) {
         padding-left: 10px;
     }
+}
+
+.app-links-list {
+    list-style: none;
+    padding: 0;
+}
+
+.app-links-list li {
+    padding: 10px 0px 10px 0px;
+    margin-bottom: 10px;
+    break-inside: avoid-column;
+    border-bottom: 1px solid #b2b4b6;
+}
+
+.app-links-list li a {
+    display: inline-block;
+    text-decoration: none;
+    color: #1d70b8;
+    font-size: 18px;
+    line-height: 28px;
+    font-family: "GDS Transport", arial, sans-serif;
+    text-underline-offset: 0.1578em;
+    -webkit-font-smoothing: antialiased;
 }
