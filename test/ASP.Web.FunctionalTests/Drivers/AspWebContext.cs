@@ -17,8 +17,6 @@ using TechTalk.SpecFlow.Infrastructure;
 using ASP.Test.Web.Areas.ComponentTest;
 using ASP.Web.Features.Cookies;
 using ASP.Test.Web.Areas.ErrorTest;
-using ASP.Core.Templating;
-using ASP.Core.Establishments;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -52,8 +50,7 @@ namespace ASP.AcceptanceTests.Drivers
         }
 
         public HttpClient Client => _client;
-        public IContentTemplateRepository PageContentRepository => _factory.PageContentRepository;
-        public IEstablishmentRepository EstablishmentRepository => _factory.EstablishmentRepository;
+        public IDocumentDatabase DocumentDatabase => _factory.DocumentDatabase;
         public TestCookieProvider CookieProvider => _factory.CookieProvider;
         public TestTableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
 
@@ -66,8 +63,7 @@ namespace ASP.AcceptanceTests.Drivers
             private readonly TestCookieProvider _cookieProvider;
             private readonly TestTableStorageProvider _tableStorageProvider;
 
-            private IContentTemplateRepository? _pageContentRepository;
-            private IEstablishmentRepository? _establishmentRepository;
+            private IDocumentDatabase _documentDatabase;
 
             public TestCookieProvider CookieProvider => _cookieProvider;
             public TestTableStorageProvider TableStorageProvider => _tableStorageProvider;
@@ -81,36 +77,19 @@ namespace ASP.AcceptanceTests.Drivers
                 ClientOptions.AllowAutoRedirect = true;
             }
 
-            public IContentTemplateRepository PageContentRepository
+            public IDocumentDatabase DocumentDatabase
             {
                 get
                 {
-                    if (_pageContentRepository != null)
+                    if (_documentDatabase != null)
                     {
-                        return _pageContentRepository;
+                        return _documentDatabase;
                     }
 
                     using (var scope = Services.CreateScope())
                     {
-                        _pageContentRepository = scope.ServiceProvider.GetService<IContentTemplateRepository>()!;
-                        return _pageContentRepository;
-                    }
-                }
-            }
-
-            public IEstablishmentRepository EstablishmentRepository
-            {
-                get
-                {
-                    if (_establishmentRepository != null)
-                    {
-                        return _establishmentRepository;
-                    }
-
-                    using (var scope = Services.CreateScope())
-                    {
-                        _establishmentRepository = scope.ServiceProvider.GetService<IEstablishmentRepository>()!;
-                        return _establishmentRepository;
+                        _documentDatabase = scope.ServiceProvider.GetService<IDocumentDatabase>()!;
+                        return _documentDatabase;
                     }
                 }
             }

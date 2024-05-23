@@ -110,15 +110,6 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await ComponentShouldNotExistAsync();
         }
 
-        [Then(@"the component should have the outer HTML:")]
-        public async Task ThenTheComponentShouldHaveTheOuterHtml(string expectedHtml)
-        {
-            var component = await ComponentShouldExistAsync();
-            var html = await component.OuterHtmlAsync();
-
-            AssertHtml.Equal(expectedHtml, html, _outputHelper.WriteLine);
-        }
-
         [Then(@"the component should have the text content ""(.*)""")]
         public async Task ThenTheComponentShouldHaveTheTextContent(string expectedText)
         {
@@ -155,6 +146,33 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expectedClass, @class);
         }
 
+        [Then(@"the component outer element class should contain ""([^""]*)""")]
+        public async Task ThenTheComponentOuterElementClassShouldContain(string expectedClass)
+        {
+            var component = await ComponentShouldExistAsync();
+            var @classes = await component.AttributeAsync("class");
+
+            Assert.Contains(expectedClass, @classes.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+        }
+
+        [Then(@"the component outer element should match the selector ""(.+)""")]
+        public async Task ThenTheComponentOuterElementShouldMatchTheSelector(string selector, string selectorToMatch)
+        {
+            var component = await ComponentShouldExistAsync();
+
+            var matches = await component.MatchesAsync(selectorToMatch);
+            AssertWithMessage.True(matches, @$"The element did not match ""{selectorToMatch}"".");
+        }
+
+        [Then(@"the component outer element should have the attribute ""(.*)"" set to ""(.*)""")]
+        public async Task ThenTheComponentOuterElementShouldHaveTheAttribute(string attribute, string expectedValue)
+        {
+            var component = await ComponentShouldExistAsync();
+
+            var @class = await component.AttributeAsync(attribute);
+            Assert.Equal(expectedValue, @class);
+        }
+
         [Then(@"the element ""(.+)"" within the component should exist")]
         public async Task ThenTheElementWithinTheComponentShouldExist(string selector)
         {
@@ -185,6 +203,15 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expectedClass, @class);
         }
 
+        [Then(@"the element ""(.+)"" within the component class should contain ""([^""]*)""")]
+        public async Task ThenTheElementWithinTheComponentClassShouldContain(string selector, string expectedClass)
+        {
+            var element = await ComponentElementShouldExistAsync(selector);
+            var @classes = await element.AttributeAsync("class");
+
+            Assert.Contains(expectedClass, @classes.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+        }
+
         [Then(@"the element ""(.+)"" within the component should have the text content ""(.*)""")]
         public async Task ThenTheElementWithinTheComponentShouldHaveTheTextContent(string selector, string expectedTextContent)
         {
@@ -194,13 +221,49 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expectedTextContent.Trim(), textContent.Trim());
         }
 
-        [Then(@"the element ""(.+)"" within the component should have the outer HTML:")]
-        public async Task ThenTheElementWithinTheComponentShouldHaveTheOuterHtml(string selector, string expectedHtml)
+        [Then(@"the element ""(.+)"" within the component should have the immediate text content ""(.*)""")]
+        public async Task ThenTheElementWithinTheComponentShouldHaveTheImmediateTextContent(string selector, string expectedTextContent)
         {
             var element = await ComponentElementShouldExistAsync(selector);
-            var html = await element.OuterHtmlAsync();
+            var textContent = await element.ImmediateTextContentAsync();
 
-            AssertHtml.Equal(expectedHtml, html, _outputHelper.WriteLine);
+            Assert.Equal(expectedTextContent.Trim(), textContent.Trim());
+        }
+
+        [Then(@"the element ""(.+)"" within the component should have the inner HTML ""(.*)""")]
+        public async Task ThenTheElementWithinTheComponentShouldHaveTheInnerHtml(string selector, string expectedHtml)
+        {
+            var element = await ComponentElementShouldExistAsync(selector);
+            var innerHtml = await element.InnerHtmlAsync();
+
+            AssertHtml.Equal(expectedHtml, innerHtml, _outputHelper.WriteLine);
+        }
+
+        [Then(@"the element ""(.+)"" within the component should have the href ""([^""]*)""")]
+        public async Task ThenTheElementWithinTheComponentShouldHaveTheHref(string selector, string expectedHref)
+        {
+            var element = await ComponentElementShouldExistAsync(selector);
+            var href = await element.AttributeAsync("href");
+
+            Assert.Equal(expectedHref.Trim(), href.Trim());
+        }
+
+        [Then(@"the element ""(.+)"" within the component should match the selector ""(.+)""")]
+        public async Task ThenTheElementWithinTheComponentShouldMatchTheSelector(string selector, string selectorToMatch)
+        {
+            var element = await ComponentElementShouldExistAsync(selector);
+
+            var matches = await element.MatchesAsync(selectorToMatch);
+            AssertWithMessage.True(matches, @$"The element did not match ""{selectorToMatch}"".");
+        }
+
+        [Then(@"the element ""(.*)"" within the component should have the attribute ""(.*)"" set to ""(.*)""")]
+        public async Task ThenTheElementWithinTheComponentShouldHaveTheAttribute(string selector, string attribute, string expectedValue)
+        {
+            var element = await ComponentElementShouldExistAsync(selector);
+
+            var @class = await element.AttributeAsync(attribute);
+            Assert.Equal(expectedValue, @class);
         }
 
         [Then(@"the component field labelled ""(.+)"" should have the value ""(.*)""")]

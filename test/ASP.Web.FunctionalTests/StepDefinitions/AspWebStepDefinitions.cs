@@ -126,6 +126,16 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expectedTextContent.Trim(), textContent.Trim());
         }
 
+        [Then(@"the element ""([^""]*)"" should have the inner HTML ""(.*)""")]
+        public async Task ThenTheElementShouldHaveTheInnerHtml(string selector, string expectedHtml)
+        {
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+
+            var innerHtml = await element.InnerHtmlAsync();
+            AssertHtml.Equal(expectedHtml, innerHtml, _outputHelper.WriteLine);
+        }
+
         [Then(@"the element ""([^""]*)"" should match the selector ""(.+)""")]
         public async Task ThenTheElementShouldMatchTheSelector(string selector, string selectorToMatch)
         {
@@ -156,6 +166,17 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expectedClass, @class);
         }
 
+        [Then(@"the element ""([^""]*)"" class should contain ""([^""]*)""")]
+        public async Task ThenTheElementClassShouldContain(string selector, string expectedClass)
+        {
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+
+            var @classes = await element.AttributeAsync("class");
+
+            Assert.Contains(expectedClass, @classes.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+        }
+
         [Then(@"the textbox ""([^""]*)"" should have the value ""([^""]*)""")]
         public async Task ThenTheTextBoxShouldHaveTheValue(string selector, string expectedValue)
         {
@@ -176,30 +197,24 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(state == "checked", isChecked);
         }
 
-        [Then(@"the element ""([^""]*)"" should be an internal link to ""([^""]*)""")]
-        public async Task ThenTheElementShouldBeAnInternalLinkTo(string selector, string location)
+        [Then(@"the element ""([^""]*)"" should have the href ""([^""]*)""")]
+        public async Task ThenTheElementShouldHaveTheHref(string selector, string expectedHref)
         {
             var element = await _web.Element(selector);
             await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
-
-            var tagName = await element.TagNameAsync();
             var href = await element.AttributeAsync("href");
 
-            Assert.Equal("a", tagName);
-            Assert.Equal(location.Trim(), href.Trim());
+            Assert.Equal(expectedHref.Trim(), href.Trim());
         }
 
-        [Then(@"the element ""([^""]*)"" should be an external link to ""([^""]*)""")]
-        public async Task ThenTheElementShouldBeAnExternalLinkTo(string selector, string location)
+        [Then(@"the element ""(.*)"" should have the attribute ""(.*)"" set to ""(.*)""")]
+        public async Task ThenTheElementShouldHaveTheAttribute(string selector, string attribute, string expectedValue)
         {
             var element = await _web.Element(selector);
             await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
 
-            var tagName = await element.TagNameAsync();
-            var href = await element.AttributeAsync("href");
-
-            Assert.Equal("a", tagName);
-            Assert.Equal(location.Trim(), href.Trim());
+            var @class = await element.AttributeAsync(attribute);
+            Assert.Equal(expectedValue, @class);
         }
 
         [Then(@"the field labelled ""(.+)"" should have the value ""(.*)""")]
@@ -212,14 +227,14 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expectedValue, actualValue);
         }
 
-        [Then(@"The number of ""([^""]*)"" elements on the page should equal (.*)")]
-        public async Task ThenTheNumberOfElementsOnThePageShouldEqual(string selector, int expectedCount)
+        [Then(@"the elements ""(.+)"" should total (.*)")]
+        public async Task ThenTheElementsShouldTotal(string selector, int expectedCount)
         {
             var elements = await _web.Elements(selector);
             await elements.ShouldHaveCountAsync(expectedCount, actual => $"Expected {expectedCount} elements but found {actual}");
         }
 
-        [Then(@"the elements ""([^""]*)"" should have the text contents:")]
+        [Then(@"the elements ""(.+)"" should have the text contents:")]
         public async Task ThenTheElementsShouldHaveTheTextContents(string selector, Table content)
         {
             int index = 0;
@@ -234,7 +249,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             }
         }
 
-        [Then(@"the elements ""([^""]*)"" should have the hrefs:")]
+        [Then(@"the elements ""(.+)"" should have the hrefs:")]
         public async Task ThenTheElementsShouldHaveTheHrefs(string selector, Table content)
         {
             int index = 0;
@@ -249,14 +264,27 @@ namespace ASP.AcceptanceTests.StepDefinitions
             }
         }
 
-        [Then(@"the element ""(.*)"" should have the attribute ""(.*)"" set to ""(.*)""")]
-        public async Task ThenTheElementShouldHaveTheAttribute(string selector, string attribute, string expectedValue)
+        [Then(@"the elements ""(.+)"" should have the classes:")]
+        public async Task ThenTheElementsShouldHaveTheClasses(string selector, Table content)
         {
-            var element = await _web.Element(selector);
-            await element.ShouldExistAsync(@$"Could not find an element with the selector ""{selector}"".");
+            int index = 0;
+            var elements = await _web.Elements(selector);
+            await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
+            var classes = await elements.AttributeValuesAsync("class");
 
-            var @class = await element.AttributeAsync(attribute);
-            Assert.Equal(expectedValue, @class);
+            foreach (var item in content.Rows)
+            {
+                Assert.Equal(item.Values.First(), classes[index].Trim());
+                index++;
+            }
+        }
+
+        [Then(@"the elements ""(.+)"" should all have the class ""(.+)""")]
+        public async Task ThenTheElementsShouldAllHaveTheClass(string selector, string expectedClass)
+        {
+            var elements = await _web.Elements(selector);
+            var classes = await elements.AttributeValuesAsync("class");
+            Assert.All(classes, c => Assert.Equal(expectedClass, c));
         }
     }
 

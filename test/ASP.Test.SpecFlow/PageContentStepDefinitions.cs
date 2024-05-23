@@ -1,5 +1,4 @@
 ﻿using ASP.Core.Helpers;
-using ASP.Core.Templating;
 using ASP.Core.Results;
 using ASP.Test.Core;
 using Newtonsoft.Json;
@@ -7,28 +6,20 @@ using System.Text.RegularExpressions;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit;
-using ASP.Core.Establishments;
+using ASP.Core;
 
 namespace ASP.Test.Acceptance.Core
 {
     [Binding]
     public partial class PageContentStepDefinitions
     {
-        private readonly IContentTemplateRepository _contentTemplateRepository;
-        private readonly IEstablishmentRepository _establishmentRepository;
+        private readonly IDocumentDatabase _database;
         private readonly ISpecFlowOutputHelper _outputHelper;
 
-        public PageContentStepDefinitions(IContentTemplateRepository contentTemplateRepository, IEstablishmentRepository establishmentRepository, ISpecFlowOutputHelper outputHelper)
+        public PageContentStepDefinitions(IDocumentDatabase database, ISpecFlowOutputHelper outputHelper)
         {
-            _contentTemplateRepository = contentTemplateRepository;
-            _establishmentRepository = establishmentRepository;
+            _database = database;
             _outputHelper = outputHelper;
-        }
-
-        [BeforeScenario]
-        public async Task ClearDownPageContent()
-        {
-            await _contentTemplateRepository.DeleteAll();
         }
 
         [Given(@"no page content exists")]
@@ -39,7 +30,7 @@ namespace ASP.Test.Acceptance.Core
         [Given(@"page content ""([^""]+)"" exists:")]
         public async Task GivenPageContentExistsMultiline(string id, string data)
         {
-            await SetUpPageContent(id, data).Switch(
+            await SetUpPageContent(id, id, data).Switch(
                 _ =>
                 {
                 },
@@ -59,7 +50,7 @@ namespace ASP.Test.Acceptance.Core
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to (.+)")]
         public async Task ThenPageContentPropertyShouldBeEqualTo(string id, string propertyPath, string propertyValue)
         {
-            await GetPageContent(id).Switch(
+            await GetPageContent(id, id).Switch(
                 data =>
                 {
                     var value = GetPropertyPathValue(propertyPath, data);
@@ -72,7 +63,7 @@ namespace ASP.Test.Acceptance.Core
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to:")]
         public async Task ThenPageContentPropertyShouldBeEqualToMultiline(string id, string propertyPath, string propertyValue)
         {
-            await GetPageContent(id).Switch(
+            await GetPageContent(id, id).Switch(
                 pageContent => JsonHelper.Deserialize<object>(propertyValue).Switch(
                     expected =>
                     {
@@ -90,7 +81,7 @@ namespace ASP.Test.Acceptance.Core
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should match:")]
         public async Task ThenPageContentPropertyShouldMatchMultiline(string id, string propertyPath, string expected)
         {
-            await GetPageContent(id).Switch(
+            await GetPageContent(id, id).Switch(
                 pageContent =>
                 {
                     var actual = GetPropertyPathValue(propertyPath, pageContent);
@@ -104,7 +95,7 @@ namespace ASP.Test.Acceptance.Core
         [Then(@"page content ""([^""]+)"" should match:")]
         public async Task ThenPageContentShouldMatchMultiline(string id, string expected)
         {
-            await GetPageContent(id).Switch(
+            await GetPageContent(id, id).Switch(
                 actual => MatchProperties(expected, actual),
                 e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
             );
@@ -113,7 +104,7 @@ namespace ASP.Test.Acceptance.Core
         [Then(@"page content ""([^""]*)"" should be equal to:")]
         public async Task ThenPageContentShouldBeEqualToMultiline(string id, string properties)
         {
-            await GetPageContent(id).Switch(
+            await GetPageContent(id, id).Switch(
                 actual => 
                 {
                     var expected = JsonHelper.Serialize(JsonHelper.Deserialize<object>(properties));
@@ -123,46 +114,40 @@ namespace ASP.Test.Acceptance.Core
             );
         }
 
-        protected async Task<Result<string>> GetPageContent(string id)
+        protected async Task<Result<string>> GetPageContent(string id, string contentId)
         {
-            return await _contentTemplateRepository.Get(id)
+            return await _database.GetAsync<Dictionary<string, object>>("content", id, contentId)
                 .Map(JsonHelper.Serialize);
         }
 
-        protected async Task<Result<Done>> SetUpPageContent(string id, string data)
+        protected async Task<Result<Done>> SetUpPageContent(string id, string contentId, string data)
         {
-            var document = await _contentTemplateRepository.Get(id)
-                .Match(v => JsonConvert.SerializeObject(v), _ => "{}");
+            var document = await _database.GetAsync<Dictionary<string, object>>("content", id, contentId)
+                .GetValueOrDefault(new Dictionary<string, object>());
 
             var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
-            var docDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(document);
 
             foreach (var d in dataDict)
             {
-                docDict[d.Key] = d.Value;
+                document[d.Key] = d.Value;
             }
 
-            var template = JsonConvert.DeserializeObject<ContentTemplate>(JsonConvert.SerializeObject(docDict));
-
-            return await _contentTemplateRepository.Update(id, template);
+            return await _database.UpsertAsync("content", id, contentId, document);
         }
 
         protected async Task<Result<Done>> SetUpEstablishment(string id, string data)
         {
-            var document = await _establishmentRepository.GetEstablishmentDetails(id)
-                .Match(v => JsonConvert.SerializeObject(v), _ => "{}");
+            var document = await _database.GetAsync<Dictionary<string, object>>("establishments", id, id)
+                .GetValueOrDefault(new Dictionary<string, object>());
 
             var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
-            var docDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(document);
 
             foreach (var d in dataDict)
             {
-                docDict[d.Key] = d.Value;
+                document[d.Key] = d.Value;
             }
 
-            var template = JsonConvert.DeserializeObject<EstablishmentDetails>(JsonConvert.SerializeObject(docDict));
-            
-            return await _establishmentRepository.Create(id, template);
+            return await _database.UpsertAsync("establishments", id, id, document);
         }
 
         protected string GetPropertyPathValue(string propertyPath, string data)

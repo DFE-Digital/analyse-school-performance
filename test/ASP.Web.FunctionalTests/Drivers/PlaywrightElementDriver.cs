@@ -86,6 +86,13 @@ namespace ASP.Web.AcceptanceTests.Drivers
             return await _element.TextContentAsync() ?? "";
         }
 
+        public async Task<string> ImmediateTextContentAsync()
+        {
+            var text = await _element.EvaluateAsync("node => [...node.childNodes].filter(e => e.nodeType === Node.TEXT_NODE).map(e => e.textContent).join('')");
+            
+            return text.ToString() ?? "";
+        }
+
         public async Task<string> InnerHtmlAsync()
         {
             return await _element.InnerHTMLAsync() ?? "";

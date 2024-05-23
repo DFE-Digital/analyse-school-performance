@@ -79,6 +79,12 @@ namespace ASP.AcceptanceTests.Drivers
             return Task.FromResult(El.TextContent);
         }
 
+        public Task<string> ImmediateTextContentAsync()
+        {
+            var text = String.Concat(El.ChildNodes.Where(c => c.NodeType == NodeType.Text).Select(n => n.TextContent.Trim()));
+            return Task.FromResult(text);
+        }
+
         public Task<string> InnerHtmlAsync()
         {
             return Task.FromResult(El.InnerHtml);

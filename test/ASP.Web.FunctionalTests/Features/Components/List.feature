@@ -90,12 +90,7 @@ Scenario: List content should display html correctly with single list item
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the outer HTML:
-		"""
-		<ul class="govuk-list govuk-list--bullet app-list">
-			<li>List item</li>
-		</ul>
-		"""
+	And the element "> li" within the component should have the text content "List item"
 
 @Javascript:disabled
 Scenario Outline: List content should display html correctly with bold markdown
@@ -115,12 +110,7 @@ Scenario Outline: List content should display html correctly with bold markdown
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the outer HTML:
-		"""
-		<ul class="govuk-list govuk-list--bullet app-list">
-			<li><expected></li>
-		</ul>
-		"""
+	And the element "> li" within the component should have the inner HTML "<expected>"
 
 Examples:
 	| input             | expected                      |
@@ -146,12 +136,8 @@ Scenario Outline: List content should display html correctly with italic markdow
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the outer HTML:
-		"""
-		<ul class="govuk-list govuk-list--bullet app-list">
-			<li><expected></li>
-		</ul>
-		"""
+	And the element "> li" within the component should have the inner HTML "<expected>"
+
 Examples:
 	| input             | expected                |
 	| Expected *italic* | Expected<em>italic</em> |
@@ -176,12 +162,8 @@ Scenario Outline: List content should display html correctly with link markdown
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the outer HTML:
-		"""
-		<ul class="govuk-list govuk-list--bullet app-list">
-			<li><expected></li>
-		</ul>
-		"""
+	And the element "> li" within the component should have the inner HTML "<expected>"
+
 Examples:
 	| input                                 | expected                                                                                        |
 	| [markdown link](https://google.co.uk) | <a href="https://google.co.uk" class="govuk-link" target="_blank">markdown link</a>             |
@@ -206,12 +188,8 @@ Scenario Outline: List html should be correctly escaped
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the outer HTML:
-		"""
-		<ul class="govuk-list govuk-list--bullet app-list">
-			<li><expected></li>
-		</ul>
-		"""
+	And the element "> li" within the component should have the inner HTML "<expected>"
+
 Examples:
 	| input                                      | expected                                                           |
 	| <script>alert('Hello');</script>           | &lt;script&gt;alert(&#39;Hello&#39;);&lt;/script&gt;               |
@@ -250,14 +228,5 @@ Scenario: List content should display html correctly with nested list items
 		"""
 	When I view the component on the page
 	Then there should be no errors
-	And the component should have the outer HTML:
-		"""
-		<ul class="govuk-list govuk-list--bullet app-list">
-			<li>
-				List item
-				<ul class="govuk-list govuk-list--bullet app-list">
-					<li>Nested item</li>
-				</ul>
-			</li>
-		</ul>
-		"""
+	And the element "> li" within the component should have the immediate text content "List item"
+	And the element "> li > ul > li" within the component should have the immediate text content "Nested item"

@@ -75,133 +75,49 @@ Scenario: School page should contain seven app card container element
     And establishment "123456" exists:
     """
     {
-        "isPrimary": true,
-        "isSecondary": false,
-        "address": {
-            "street": "Dale Acre Way",
-            "town": "Telford",
-            "postCode": "TF3 2EP"
-        },
-        "establishmentType": {
-            "name": "Community school",
-        },
-        "gender": {
-            "name": "Mixed",
-        },
-        "id": "123456",
-        "localAuthority": {
-            "name": "Telford and Wrekin",
-        },
         "name": "Hollinswood Primary School",
         "urn": "123456"
     }
     """
     When I navigate to /school/123456/
-    Then The number of ".app-card" elements on the page should equal 7 
-    Then the element "#app-card-container" should have the outer HTML:
-    """
-        <div id="app-card-container" class="app-grid-container-four-column app-grid-container--wider govuk-!-margin-top-5">
+    Then the element "#app-card-container" class should contain "app-grid-container-four-column"
+    And the elements "#app-card-container .app-card" should total 7
+
+    And the element "#app-card-phonics h2 a" should have the href "phonics"
+    And the element "#app-card-phonics h2 a" should have the text content "Phonics"
+    And the element "#app-card-phonics p" should have the text content "View data based on expected standard, average score and attainment in phonics."
     
-        <div id="app-card-phonics" class="app-card">
-            <div class="app-card-container">
-                <h2 class="govuk-heading-m">
-                    <a href="phonics" class="app-card-link govuk-link govuk-link--no-visited-state">
-                        Phonics
-                    </a>
-                </h2>
-                <p class="govuk-body">
-                    View data based on expected standard, average score and attainment in phonics.
-                </p>
-            </div>
-        </div>
-        <div id="app-card-mtc" class="app-card">
-            <div class="app-card-container">
-                <h2 class="govuk-heading-m">
-                    <a href="mtc" class="app-card-link govuk-link govuk-link--no-visited-state">
-                        Multiplication table check (MTC)
-                    </a>
-                </h2>
-                <p class="govuk-body">
-                    Identify pupils who have not yet mastered their times tables, so that additional support can be
-                    provided.
-                </p>
-            </div>
-        </div>
-        <div id="app-card-key-stage-2" class="app-card">
-            <div class="app-card-container">
-                <h2 class="govuk-heading-m">
-                    <a href="key-stage-2" class="app-card-link govuk-link govuk-link--no-visited-state">
-                        Key stage 2
-                    </a>
-                </h2>
-                <p class="govuk-body">
-                    See data for key stage 2 including headline measures &amp; reports, progress &amp; attainment scatter
-                    plots, and additional reports.
-                </p>
-            </div>
-        </div>
-        <div id="app-card-key-stage-4" class="app-card">
-            <div class="app-card-container">
-                <h2 class="govuk-heading-m">
-                    <a href="key-stage-4" class="app-card-link govuk-link govuk-link--no-visited-state">
-                        Key stage 4
-                    </a>
-                </h2>
-                <p class="govuk-body">
-                    See data for key stage 4 including headline measures &amp; reports, progress &amp; attainment scatter
-                    plots, and additional reports.
-                </p>
-            </div>
-        </div>
-        <div id="app-card-qla" class="app-card">
-            <div class="app-card-container">
-                <h2 class="govuk-heading-m">
-                    <a href="qla" class="app-card-link govuk-link govuk-link--no-visited-state">
-                        Question level analysis (QLA)
-                    </a>
-                </h2>
-                <p class="govuk-body">
-                    Assess how pupils performed in the key stage 2 tests and compare these with the national average.
-                </p>
-            </div>
-        </div>
-        <div id="app-card-other-reports" class="app-card">
-            <div class="app-card-container">
-                <h2 class="govuk-heading-m">
-                    <a href="other-reports" class="app-card-link govuk-link govuk-link--no-visited-state">
-                        Other reports
-                    </a>
-                </h2>
-                <p class="govuk-body">
-                    View reports on school performance, Ofsted inspections, asbence and exclusions and school
-                    characteristics.
-                </p>
-            </div>
-        </div>
-        <div id="app-card-useful-links" class="app-card">
-            <div class="app-card-container">
-                <h2 class="govuk-heading-m">
-                    <a href="useful-links" class="app-card-link govuk-link govuk-link--no-visited-state">
-                        Useful links
-                    </a>
-                </h2>
-                <p class="govuk-body">
-                    View links to other services and published documents that may be useful.
-                </p>
-            </div>
-        </div>
-    </div>
-    """     
+    And the element "#app-card-mtc h2 a" should have the href "mtc"
+    And the element "#app-card-mtc h2 a" should have the text content "Multiplication table check (MTC)"
+    And the element "#app-card-mtc p" should have the text content "Identify pupils who have not yet mastered their times tables, so that additional support can be provided."
+    
+    And the element "#app-card-key-stage-2 h2 a" should have the href "key-stage-2"
+    And the element "#app-card-key-stage-2 h2 a" should have the text content "Key stage 2"
+    And the element "#app-card-key-stage-2 p" should have the text content "See data for key stage 2 including headline measures & reports, progress & attainment scatter plots, and additional reports."
+
+    And the element "#app-card-key-stage-4 h2 a" should have the href "key-stage-4"
+    And the element "#app-card-key-stage-4 h2 a" should have the text content "Key stage 4"
+    And the element "#app-card-key-stage-4 p" should have the text content "See data for key stage 4 including headline measures & reports, progress & attainment scatter plots, and additional reports."
+    
+    And the element "#app-card-qla h2 a" should have the href "qla"
+    And the element "#app-card-qla h2 a" should have the text content "Question level analysis (QLA)"
+    And the element "#app-card-qla p" should have the text content "Assess how pupils performed in the key stage 2 tests and compare these with the national average."
+
+    And the element "#app-card-other-reports h2 a" should have the href "other-reports"
+    And the element "#app-card-other-reports h2 a" should have the text content "Other reports"
+    And the element "#app-card-other-reports p" should have the text content "View reports on school performance, Ofsted inspections, asbence and exclusions and school characteristics."
+
+    And the element "#app-card-useful-links h2 a" should have the href "useful-links"
+    And the element "#app-card-useful-links h2 a" should have the text content "Useful links"
+    And the element "#app-card-useful-links p" should have the text content "View links to other services and published documents that may be useful."
 
 @Javascript:disabled
 Scenario: School page should be accessible when provided urn
   Given establishment "123456" exists:
 		"""
 		{
-            
-            "id": "123456",
             "name": "Hollinswood Primary School",
-            "urn": "123456",
+            "urn": "123456"
         }
 		"""
     When I navigate to /school/123456
@@ -220,8 +136,6 @@ Scenario: School page should throw page not found if Establishment is deleted
   Given establishment "112123" exists:
 		"""
 		{
-            
-            "id": "112123",
             "name": "Thursby Primary School",
             "urn": "112123",
             "isDeleted": true
@@ -233,7 +147,7 @@ Scenario: School page should throw page not found if Establishment is deleted
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
-  Given establishment "123456" exists:
+    Given establishment "123456" exists:
 		"""
 		{
             "isPost16": false,
@@ -282,8 +196,8 @@ Scenario: School page should contain a school details disclosure element
             "urn": "123456",
         }
 		"""
-  When I navigate to /school/123456
-  Then the element ".govuk-details" should have the outer HTML: 
+    When I navigate to /school/123456
+    Then the element ".govuk-details" should have the outer HTML: 
     """
      <details id="app-school-page-details" class="govuk-details">
         <summary class="govuk-details__summary">
@@ -415,20 +329,25 @@ Scenario: School page should contain a school details disclosure element
 
 @Javascript:disabled
 Scenario: Details disclosure element text should read 'Show school details' when closed
-  When I navigate to /school/123456
-  Then the element "#app-school-page-details-state-closed" should have the text content "Show"
+    Given establishment "123456" exists:
+	"""
+	{
+        "name": "Hollinswood Primary School",
+        "urn": "123456",
+    }
+	"""
+    When I navigate to /school/123456
+    Then the element "#app-school-page-details-state-closed" should have the text content "Show"
   
 @Javascript:disabled
 Scenario: School page should display page not found page if School URN is invalid
     Given establishment "112123" exists:
     """
     {
-              
-              "id": "112123",
-              "name": "Thursby Primary School",
-              "urn": "112123",
-              "isDeleted": false
-          }
+        "name": "Thursby Primary School",
+        "urn": "112123",
+        "isDeleted": false
+    }
     """
     When I navigate to /school/112
     Then I should get a 404 response

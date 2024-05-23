@@ -13,7 +13,7 @@ Examples:
 	| /home/index |
 
 @Javascript:disabled
-Scenario: Home page should contain three cards
+Scenario: Home page cards should be populated from the "home-page" content template
   Given page content "home-page" exists:
 		"""
 		{
@@ -31,10 +31,11 @@ Scenario: Home page should contain three cards
 		}
 		"""
   When I navigate to /
-  Then The number of ".app-card" elements on the page should equal 3
+  Then the element "#app-card-container" class should contain "app-grid-container-three-column"
+  And the elements "#app-card-container .app-card" should total 3
 
 @Javascript:disabled
-Scenario: Home page cards are in the correct location
+Scenario: Home page cards should be populated correctly
       Given page content "home-page" exists:
 		"""
 		{
@@ -70,55 +71,22 @@ Scenario: Home page cards are in the correct location
 		}
 		"""
    When I navigate to /
-   Then the element ".app-grid-container-three-column" should have the outer HTML: 
-     """
-        <div id="app-card-container" class="app-grid-container-three-column app-grid-container--wider govuk-!-margin-top-5">   
-            <div id="Id1" class="app-card">
-                <div class="app-card-container">
-                    <h2 class="govuk-heading-m">
-                        <a href="/link1/" class="app-card-link govuk-link govuk-link--no-visited-state">
-                            Title1
-                        </a>
-                    </h2>
-                    <p class="govuk-body">
-                        Text1
-                    </p>
-                </div>
-            </div>
-            <div id="Id2" class="app-card">
-                <div class="app-card-container">
-                    <h2 class="govuk-heading-m">
-                        <a href="/link2/" class="app-card-link govuk-link govuk-link--no-visited-state">
-                            Title2
-                        </a>
-                    </h2>
-                    <p class="govuk-body">
-                        Text2
-                    </p>
-                </div>
-            </div>
-            <div id="Id3" class="app-card">
-                <div class="app-card-container">
-                    <h2 class="govuk-heading-m">
-                        <a href="/link3/" class="app-card-link govuk-link govuk-link--no-visited-state">
-                           Title3
-                        </a>
-                    </h2>
-                    <p class="govuk-body">
-                        Text3
-                    </p>
-                </div>
-            </div>
-         </div>         
-	  """
+   Then the element "#Id1 h2 a" should have the href "/link1/"
+   And  the element "#Id1 h2 a" should have the text content "Title1"
+   And  the element "#Id1 p" should have the text content "Text1"
+   
+   And  the element "#Id2 h2 a" should have the href "/link2/"
+   And  the element "#Id2 h2 a" should have the text content "Title2"
+   And  the element "#Id2 p" should have the text content "Text2"
+   
+   And  the element "#Id3 h2 a" should have the href "/link3/"
+   And  the element "#Id3 h2 a" should have the text content "Title3"
+   And  the element "#Id3 p" should have the text content "Text3"
 
 @Javascript:disabled
-Scenario: Home page cards show service title when home-page content is missing in the DB
+Scenario: Home page hero show service title when home-page content is missing in the DB
    When I navigate to /
-   Then the element "#app-hero h1" should have the outer HTML: 
-   """
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Analyse school performance</h1>
-   """
+   Then the element "#app-hero h1" should have the text content "Analyse school performance"
 
 @Javascript:disabled
 Scenario: Home page hero should display placeholder title when PageContent is missing

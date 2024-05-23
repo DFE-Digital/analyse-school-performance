@@ -26,7 +26,7 @@ Scenario: Analytics cookie banner should contain a 'Reject analytics cookies' bu
 @Javascript:disabled
 Scenario: Analytics cookie banner should contain an internal link
 	When I navigate to /
-	Then the element "#app-cookie-banner-view-cookies-link" should be an internal link to "/help/cookies"
+	Then the element "#app-cookie-banner-view-cookies-link" should have the href "/help/cookies"
 
 
 @Javascript:disabled

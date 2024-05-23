@@ -43,12 +43,9 @@ Scenario: When IsLarge property is missing, component should not error and shoul
 	When I view the component on the page
 	Then there should be no errors
 	And the component should exist
-	Then the component should have the outer HTML:
-		"""
-		<p class="govuk-body">
-			Test paragraph text
-		</p>
-		"""
+	And the component outer element should have the tag name "p"
+	And the component outer element should have the class "govuk-body"
+	And the component should have the text content "Test paragraph text"
 
 @Javascript:disabled
 Scenario Outline: When IsLarge property is invalid, component should not error and should default to normal size
@@ -65,12 +62,8 @@ Scenario Outline: When IsLarge property is invalid, component should not error a
 	When I view the component on the page
 	Then there should be no errors
 	And the component should exist
-	Then the component should have the outer HTML:
-		"""
-		<p class="govuk-body">
-			Test paragraph text
-		</p>
-		"""
+	And the component outer element should have the class "govuk-body"
+
 Examples:
 	| Value                  |
 	| null                   |
@@ -94,12 +87,8 @@ Scenario Outline: Paragraph size should be determined from IsLarge property
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the outer HTML:
-		"""
-		<p class="<Class>">
-			Test paragraph text
-		</p>
-		"""
+	Then the component outer element should have the class "<Class>"
+
 Examples:
 	| Value   | Class        |
 	| true    | govuk-body-l |
@@ -160,12 +149,7 @@ Scenario: Paragraph text should be populated from Text property
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the outer HTML:
-		"""
-		<p class="govuk-body">
-			Test paragraph text
-		</p>
-		"""
+	Then the component should have the text content "Test paragraph text"
 
 @Javascript:disabled
 Scenario: When Text property contains a new line this should be ignored when generating HTML
@@ -179,12 +163,7 @@ Scenario: When Text property contains a new line this should be ignored when gen
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the outer HTML:
-		"""
-		<p class="govuk-body">
-			Test paragraph text
-		</p>
-		"""
+	Then the component should have the inner HTML "Test paragraph text"
 
 @Javascript:disabled
 Scenario Outline: When Text property contains bold, italic, or link markdown it should be converted to <strong>, <em>, and <a> tags

@@ -174,7 +174,7 @@ Scenario: When Caption property is missing, heading caption should not be displa
 		}
 		"""
 	When I view the component on the page
-	Then the element "span[class^="govuk-caption-"]" within the component should not exist
+	Then the element "[class^="govuk-caption-"]" within the component should not exist
 
 @Javascript:disabled
 Scenario Outline: When Caption property is invalid, component should not error and should handle the value appropriately
@@ -190,7 +190,7 @@ Scenario Outline: When Caption property is invalid, component should not error a
 	When I view the component on the page
 	Then there should be no errors
 	And the component should exist
-	And the element "span[class^="govuk-caption-"]" within the component should not exist
+	And the element "[class^="govuk-caption-"]" within the component should not exist
 Examples:
 	| Value                  |
 	| null                   |
@@ -216,13 +216,7 @@ Scenario: Heading caption should be populated from Caption property
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the outer HTML:
-		"""
-		<h2 class="govuk-heading-l">
-			<span class="govuk-caption-l">Test caption</span>
-			This is a test
-		</h2>
-		"""
+	Then the element "[class^="govuk-caption-"]" within the component should have the text content "Test caption"
 
 @Javascript:disabled
 Scenario Outline: Caption class should be determined by HeadingType property
@@ -237,7 +231,7 @@ Scenario Outline: Caption class should be determined by HeadingType property
 		}
 		"""
 	When I view the component on the page
-	Then the element "span" within the component should have the class "<Class>"
+	Then the element "[class^="govuk-caption-"]" within the component should have the class "<Class>"
 Examples:
 	| HeadingType | Class           |
 	| "h2"        | govuk-caption-l |
@@ -256,12 +250,7 @@ Scenario: When LinkUrl property is missing, heading link should not be displayed
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the outer HTML:
-		"""
-		<h2 class="govuk-heading-l">
-			This is a test
-		</h2>
-		"""
+	Then the element "a" within the component should not exist
 
 @Javascript:disabled
 Scenario Outline: When LinkUrl property is invalid, component should not error and should handle the value appropriately
@@ -305,11 +294,7 @@ Scenario: Heading link should be populated from LinkUrl property
 		}
 		"""
 	When I view the component on the page
-	Then the component should have the outer HTML:
-		"""
-		<h2 class="govuk-heading-l">
-			<a href="http://google.com" class="govuk-link" target="_blank">
-				This is a test
-			</a>
-		</h2>
-		"""
+	Then the element "a" within the component should have the class "govuk-link"
+	And the element "a" within the component should have the attribute "target" set to "_blank"
+	And the element "a" within the component should have the text content "This is a test"
+	And the element "a" within the component should have the href "http://google.com"

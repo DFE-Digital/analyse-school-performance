@@ -47,7 +47,7 @@ Scenario: Cancel button should link to view page
 	When I navigate to /help/test/edit
 	Then I should get a 200 response
 	And the element "#app-content-edit-cancel" should have the text content "Cancel"
-	And the element "#app-content-edit-cancel" should be an internal link to "/help/test"
+	And the element "#app-content-edit-cancel" should have the href "/help/test"
 
 @Javascript:disabled
 Scenario: Page title should be editable

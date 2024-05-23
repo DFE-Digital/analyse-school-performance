@@ -11,6 +11,7 @@
         Task ShouldNotExistAsync(string errorIfExists);
         Task<IElementDriver> ShouldExistAsync(string errorIfNotExists);
         Task<string> TextContentAsync();
+        Task<string> ImmediateTextContentAsync();
         Task<string> InnerHtmlAsync();
         Task<string> TagNameAsync();
         Task<string> OuterHtmlAsync();

@@ -29,28 +29,23 @@ Scenario: Table content should display html correctly with a caption
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<caption class="govuk-table__caption govuk-table__caption--m">Caption here</caption>
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the element "#test" should have the tag name "table"
+	And the element "#test caption" should have the text content "Caption here"
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should all have the class "govuk-table__header"
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text     |
+	   | Header A |
+	   | Header B |
+	And the elements "#test tbody tr" should total 1
+	And the elements "#test tbody tr td" should all have the class "govuk-table__cell"
+	And the elements "#test tbody tr td" should have the text contents:
+	   | Text   |
+	   | Cell A |
+	   | Cell B |
 
 @Javascript:disabled
-Scenario: Table content should display html correctly when a caption is null
+Scenario: Table caption should be hidden when Caption property is null
 	Given page content "help-test" exists:
 		"""
 		{
@@ -61,14 +56,8 @@ Scenario: Table content should display html correctly when a caption is null
 						"Id": "test",
 						"Caption": null,
 						"Headings": [
-							"Header A",
-							"Header B"
 						],
 						"Rows": [
-							[
-								"Cell A",
-								"Cell B"
-							],
 						]
 					},
 				}
@@ -77,27 +66,10 @@ Scenario: Table content should display html correctly when a caption is null
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the element "#test caption" should not exist
 
 @Javascript:disabled
-Scenario: Table content should display html correctly when a caption is empty
+Scenario: Table caption should be hidden when Caption property is empty
 	Given page content "help-test" exists:
 		"""
 		{
@@ -108,14 +80,8 @@ Scenario: Table content should display html correctly when a caption is empty
 						"Id": "test",
 						"Caption": "",
 						"Headings": [
-							"Header A",
-							"Header B"
 						],
 						"Rows": [
-							[
-								"Cell A",
-								"Cell B"
-							],
 						]
 					},
 				}
@@ -124,26 +90,7 @@ Scenario: Table content should display html correctly when a caption is empty
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<caption class="govuk-table__caption govuk-table__caption--m"></caption>
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
-
+	And the element "#test caption" should not exist
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with headings and rows
@@ -176,28 +123,20 @@ Scenario: Table content should display html correctly with headings and rows
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell C</td>
-					<td class="govuk-table__cell">Cell D</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text     |
+	   | Header A |
+	   | Header B |
+	And the elements "#test tbody tr" should total 2
+	And the elements "#test tbody tr:nth-child(1) td" should have the text contents:
+	   | Text   |
+	   | Cell A |
+	   | Cell B |
+	And the elements "#test tbody tr:nth-child(2) td" should have the text contents:
+	   | Text   |
+	   | Cell C |
+	   | Cell D |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with more row columns than heading columns
@@ -229,28 +168,20 @@ Scenario: Table content should display html correctly with more row columns than
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header"></th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell C</td>
-					<td class="govuk-table__cell">Cell D</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text     |
+	   | Header A |
+	   |          |
+	And the elements "#test tbody tr" should total 2
+	And the elements "#test tbody tr:nth-child(1) td" should have the text contents:
+	   | Text   |
+	   | Cell A |
+	   | Cell B |
+	And the elements "#test tbody tr:nth-child(2) td" should have the text contents:
+	   | Text   |
+	   | Cell C |
+	   | Cell D |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with more heading columns than rows columns
@@ -279,26 +210,19 @@ Scenario: Table content should display html correctly with more heading columns 
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-					 <th scope="col" class="govuk-table__header">Header C</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell"></td>
-					<td class="govuk-table__cell"></td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text  |
+	   | Header A |
+	   | Header B |
+	   | Header C |
+	And the elements "#test tbody tr" should total 1
+	And the elements "#test tbody tr td" should total 3
+	And the elements "#test tbody tr td" should have the text contents:
+	   | Text   |
+	   | Cell A |
+	   |        |
+	   |        |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with no Rows specified
@@ -321,24 +245,17 @@ Scenario: Table content should display html correctly with no Rows specified
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell"></td>
-					<td class="govuk-table__cell"></td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text     |
+	   | Header A |
+	   | Header B |
+	And the elements "#test tbody tr" should total 1
+	And the elements "#test tbody tr td" should total 2
+	And the elements "#test tbody tr td" should have the text contents:
+	   | Text |
+	   |      |
+	   |      |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with no Headings specified
@@ -367,28 +284,20 @@ Scenario: Table content should display html correctly with no Headings specified
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header"></th>
-					 <th scope="col" class="govuk-table__header"></th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell C</td>
-					<td class="govuk-table__cell">Cell D</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text |
+	   |      |
+	   |      |
+	And the elements "#test tbody tr" should total 2
+	And the elements "#test tbody tr:nth-child(1) td" should have the text contents:
+	   | Text   |
+	   | Cell A |
+	   | Cell B |
+	And the elements "#test tbody tr:nth-child(2) td" should have the text contents:
+	   | Text   |
+	   | Cell C |
+	   | Cell D |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with empty rows
@@ -415,28 +324,20 @@ Scenario: Table content should display html correctly with empty rows
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell"></td>
-					<td class="govuk-table__cell"></td>
-				</tr>
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell"></td>
-					<td class="govuk-table__cell"></td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text     |
+	   | Header A |
+	   | Header B |
+	And the elements "#test tbody tr" should total 2
+	And the elements "#test tbody tr:nth-child(1) td" should have the text contents:
+	   | Text |
+	   |      |
+	   |      |
+	And the elements "#test tbody tr:nth-child(2) td" should have the text contents:
+	   | Text |
+	   |      |
+	   |      |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with empty headings
@@ -464,24 +365,16 @@ Scenario: Table content should display html correctly with empty headings
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header"></th>
-					 <th scope="col" class="govuk-table__header"></th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text |
+	   |      |
+	   |      |
+	And the elements "#test tbody tr" should total 1
+	And the elements "#test tbody tr td" should have the text contents:
+	   | Text   |
+	   | Cell A |
+	   | Cell B |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with Row having null value
@@ -509,24 +402,16 @@ Scenario: Table content should display html correctly with Row having null value
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell"></td>
-					<td class="govuk-table__cell"></td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text     |
+	   | Header A |
+	   | Header B |
+	And the elements "#test tbody tr" should total 1
+	And the elements "#test tbody tr td" should have the text contents:
+	   | Text |
+	   |      |
+	   |      |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with Row as null
@@ -550,24 +435,16 @@ Scenario: Table content should display html correctly with Row as null
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell"></td>
-					<td class="govuk-table__cell"></td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text     |
+	   | Header A |
+	   | Header B |
+	And the elements "#test tbody tr" should total 1
+	And the elements "#test tbody tr td" should have the text contents:
+	   | Text |
+	   |      |
+	   |      |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with Headings as null
@@ -593,24 +470,16 @@ Scenario: Table content should display html correctly with Headings as null
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header"></th>
-					 <th scope="col" class="govuk-table__header"></th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text |
+	   |      |
+	   |      |
+	And the elements "#test tbody tr" should total 1
+	And the elements "#test tbody tr td" should have the text contents:
+	   | Text   |
+	   | Cell A |
+	   | Cell B |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with Headings having null value
@@ -638,24 +507,16 @@ Scenario: Table content should display html correctly with Headings having null 
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header"></th>
-					 <th scope="col" class="govuk-table__header"></th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr" should total 1
+	And the elements "#test thead tr th" should have the text contents:
+	   | Text |
+	   |      |
+	   |      |
+	And the elements "#test tbody tr" should total 1
+	And the elements "#test tbody tr td" should have the text contents:
+	   | Text   |
+	   | Cell A |
+	   | Cell B |
 
 @Javascript:disabled
 Scenario: Table content should display first column as header when FirstCellAsHeader is true
@@ -689,28 +550,9 @@ Scenario: Table content should display first column as header when FirstCellAsHe
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__header">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-				<tr class="govuk-table__row">
-					<td class="govuk-table__header">Cell C</td>
-					<td class="govuk-table__cell">Cell D</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr th" should all have the class "govuk-table__header"
+	And the elements "#test tbody tr td:nth-child(1)" should all have the class "govuk-table__header"
+	And the elements "#test tbody tr td:nth-child(2)" should all have the class "govuk-table__cell"
 
 @Javascript:disabled
 Scenario: Table content should not display first column as header when FirstCellAsHeader is false
@@ -744,28 +586,8 @@ Scenario: Table content should not display first column as header when FirstCell
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell C</td>
-					<td class="govuk-table__cell">Cell D</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr th" should all have the class "govuk-table__header"
+	And the elements "#test tbody tr td" should all have the class "govuk-table__cell"
 
 @Javascript:disabled
 Scenario: Table content should not display first column as header when FirstCellAsHeader is missing
@@ -798,28 +620,8 @@ Scenario: Table content should not display first column as header when FirstCell
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell C</td>
-					<td class="govuk-table__cell">Cell D</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
-
+	And the elements "#test thead tr th" should all have the class "govuk-table__header"
+	And the elements "#test tbody tr td" should all have the class "govuk-table__cell"
 
 @Javascript:disabled
 Scenario: Table content should not display first column as header when FirstCellAsHeader is not a boolean value
@@ -853,27 +655,9 @@ Scenario: Table content should not display first column as header when FirstCell
 		"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	Then the element "#test" should have the outer HTML:
-		"""
-		<table class="govuk-table" id="test">
-			<thead class="govuk-table__head">
-				<tr class="govuk-table__row">
-					 <th scope="col" class="govuk-table__header">Header A</th>
-					 <th scope="col" class="govuk-table__header">Header B</th>
-				</tr>
-			</thead>
-			<tbody class="govuk-table__body">
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell A</td>
-					<td class="govuk-table__cell">Cell B</td>
-				</tr>
-				<tr class="govuk-table__row">
-					<td class="govuk-table__cell">Cell C</td>
-					<td class="govuk-table__cell">Cell D</td>
-				</tr>
-			</tbody>
-		</table>
-		"""
+	And the elements "#test thead tr th" should all have the class "govuk-table__header"
+	And the elements "#test tbody tr td" should all have the class "govuk-table__cell"
+
 Examples:
 	| Value  |
 	| "true" |

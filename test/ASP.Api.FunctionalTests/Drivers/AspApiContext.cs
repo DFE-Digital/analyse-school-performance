@@ -1,6 +1,4 @@
 ﻿using ASP.Core;
-using ASP.Core.Establishments;
-using ASP.Core.Templating;
 using ASP.Test.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,8 +24,7 @@ namespace ASP.Api.AcceptanceTests.Drivers
 
         private readonly ISpecFlowOutputHelper _outputHelper;
 
-        private IContentTemplateRepository? _pageContentRepository = null;
-        private IEstablishmentRepository? _establishmentRepository;
+        private IDocumentDatabase? _documentDatabase = null;
 
         private HttpRequest? _lastRequest = null;
         private ApiResult? _lastResponse = null;
@@ -94,35 +91,19 @@ namespace ASP.Api.AcceptanceTests.Drivers
             }
         }
 
-        public IContentTemplateRepository PageContentRepository
+        public IDocumentDatabase DocumentDatabase
         {
             get
             {
-                if (_pageContentRepository != null)
+                if (_documentDatabase != null)
                 {
-                    return _pageContentRepository;
+                    return _documentDatabase;
                 }
 
                 using (var scope = _host.Services.CreateScope())
                 {
-                    _pageContentRepository = scope.ServiceProvider.GetService<IContentTemplateRepository>()!;
-                    return _pageContentRepository;
-                }
-            }
-        }
-        public IEstablishmentRepository EstablishmentRepository
-        {
-            get
-            {
-                if (_establishmentRepository != null)
-                {
-                    return _establishmentRepository;
-                }
-
-                using (var scope = _host.Services.CreateScope())
-                {
-                    _establishmentRepository = scope.ServiceProvider.GetService<IEstablishmentRepository>()!;
-                    return _establishmentRepository;
+                    _documentDatabase = scope.ServiceProvider.GetService<IDocumentDatabase>()!;
+                    return _documentDatabase;
                 }
             }
         }

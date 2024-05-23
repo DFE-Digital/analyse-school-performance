@@ -15,7 +15,7 @@
 
 
 <table class="govuk-table" id="@Model.ViewContent.Id">
-    @if (Model.ViewContent.Caption is not null)
+    @if (!string.IsNullOrWhiteSpace(Model.ViewContent.Caption))
     {
         <caption class="govuk-table__caption govuk-table__caption--m">@Model.ViewContent.Caption</caption>
     }

@@ -12,34 +12,34 @@ Scenario: Header should contain user account and sign in links
 Scenario: Header navigation should contain Home link
 	When I navigate to /
 	Then the element "#header-navigation-link-home" should have the text content "Home"
-	And  the element "#header-navigation-link-home" should be an internal link to "/"
+	And  the element "#header-navigation-link-home" should have the href "/"
 
 @Javascript:disabled
 Scenario: Header navigation should contain My school link
 	When I navigate to /
 	Then the element "#header-navigation-link-my-school" should have the text content "My school"
-	And  the element "#header-navigation-link-my-school" should be an internal link to "/school/136028"
+	And  the element "#header-navigation-link-my-school" should have the href "/school/136028"
 
 @Javascript:disabled
 Scenario: Header navigation should contain Download data link
 	When I navigate to /
 	Then the element "#header-navigation-link-download" should have the text content "Download data"
-	And  the element "#header-navigation-link-download" should be an internal link to "/download"
+	And  the element "#header-navigation-link-download" should have the href "/download"
 
 @Javascript:disabled
 Scenario: Header navigation should contain Site news link
 	When I navigate to /
 	Then the element "#header-navigation-link-news" should have the text content "Site news"
-	And  the element "#header-navigation-link-news" should be an internal link to "/news"
+	And  the element "#header-navigation-link-news" should have the href "/news"
 
 @Javascript:disabled
 Scenario: Header navigation should contain Release timetable link
 	When I navigate to /
 	Then the element "#header-navigation-link-release-timetable" should have the text content "Release timetable"
-	And  the element "#header-navigation-link-release-timetable" should be an internal link to "/help/release-timetable"
+	And  the element "#header-navigation-link-release-timetable" should have the href "/help/release-timetable"
 
 @Javascript:disabled
 Scenario: Header navigation should contain Guidance link
 	When I navigate to /
 	Then the element "#header-navigation-link-guidance" should have the text content "Guidance"
-	And  the element "#header-navigation-link-guidance" should be an internal link to "/help/guidance"
+	And  the element "#header-navigation-link-guidance" should have the href "/help/guidance"

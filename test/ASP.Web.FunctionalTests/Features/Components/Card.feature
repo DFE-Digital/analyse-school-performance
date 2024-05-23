@@ -97,7 +97,7 @@ Scenario: Home page cards should contain correct text
       """
   When I navigate to /
   Then the elements "div.app-card-container > p" should have the text contents:
-   | Text   |
+   | Text  |
    | Text1 |
    | Text2 |
    | Text3 |
