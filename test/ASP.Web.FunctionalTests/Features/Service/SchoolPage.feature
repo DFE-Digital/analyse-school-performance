@@ -197,135 +197,174 @@ Scenario: School page should contain a school details disclosure element
         }
 		"""
     When I navigate to /school/123456
-    Then the element ".govuk-details" should have the outer HTML: 
-    """
-     <details id="app-school-page-details" class="govuk-details">
-        <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-                <span id="app-school-page-details-state-closed" class="app-school-details-closed">Show</span>
-                <span id="app-school-page-details-state-open" class="app-school-details-open">Hide</span>
-                school details
-            </span>
-        </summary>
-        <div class="govuk-details__text">
-            <dl class="govuk-summary-list">
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-heading">
-                        Detail type
-                    </dt>
-                    <dd class="govuk-summary-list__value app-school-details-summary-heading">
-                        School details
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt id="app-school-details-address-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Address
-                    </dt>
-                    <dd id="app-school-details-address-value" class="govuk-summary-list__value">
-                        Dale Acre Way, Telford, TF3 2EP
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt id="app-school-details-school-type-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        School type
-                    </dt>
-                    <dd id="app-school-details-school-type-value" class="govuk-summary-list__value">
-                        Community school
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        Education phase
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        Primary
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        Gender of entry
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        Mixed
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        Ofsted rating
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                            <span class="app-ofsted-colour-rating app-ofsted-rating-2">
-                                2
-                            </span>
-                            <span>
-                                Good <wbr /> |
-                                <a href="https://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/ELS/123456" target="_blank" class="govuk-link">
-                                    Ofsted report
-                                </a>
-                            </span>
-                                <span class="app-ofsted-last-inspection">Inspected 22 January 2020</span>
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        Local authority
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        Telford and Wrekin
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        Headteacher / Principal
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        Mrs Kath Osborne
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        Age range
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        3 to 11
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        Religious character
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        Does not apply
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        Admissions policy
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        Not applicable
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        SEN unit or resourced provision
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        Not recorded
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-key">
-                        Number of pupils
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        404
-                    </dd>
-                </div>
-            </dl>
-        </div>
-    </details>
-    """
+    Then I should get a 200 response
+    And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
+    And the element "*[data-testid='school-page-details-state-open']" should have the text content "Hide"
+    And the element "*[data-testid='school-details-address-key']" should have the text content "Address"
+    And the element "*[data-testid='school-details-address-value']" should have the text content "Dale Acre Way, Telford, TF3 2EP"
+    And the element "*[data-testid='school-details-school-type-key']" should have the text content "School type"
+    And the element "*[data-testid='school-details-school-type-value']" should have the text content "Community school"
+    And the element "*[data-testid='school-details-education-key']" should have the text content "Education phase"
+    And the element "*[data-testid='school-details-education-value']" should have the text content "Primary"
+    And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
+    And the element "*[data-testid='school-details-gender-value']" should have the text content "Mixed"
+    And the element "*[data-testid='school-details-ofsted-key']" should have the text content "Ofsted rating"
+    And the element "*[data-testid='school-details-ofsted-code-value']" should have the text content "2"
+    And the element "*[data-testid='school-details-ofsted-name-value']" should have the text content "Good"
+    And the element "*[data-testid='school-details-ofsted-inspection-value']" should have the text content "Inspected 22 January 2020"
+    And the element "*[data-testid='school-details-la-key']" should have the text content "Local authority"
+    And the element "*[data-testid='school-details-la-value']" should have the text content "Telford and Wrekin"
+    And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
+    And the element "*[data-testid='school-details-gender-value']" should have the text content "Mixed"
+    And the element "*[data-testid='school-details-principal-key']" should have the text content "Headteacher / Principal"
+    And the element "*[data-testid='school-details-principal-value']" should have the text content "Mrs Kath Osborne"
+    And the element "*[data-testid='school-details-age-key']" should have the text content "Age range"
+    And the element "*[data-testid='school-details-age-value']" should have the text content "3 to 11"
+    And the element "*[data-testid='school-details-religious-key']" should have the text content "Religious character"
+    And the element "*[data-testid='school-details-religious-value']" should have the text content "Does not apply"
+    And the element "*[data-testid='school-details-admission-key']" should have the text content "Admissions policy"
+    And the element "*[data-testid='school-details-admission-value']" should have the text content "Not applicable"
+    And the element "*[data-testid='school-details-provision-key']" should have the text content "SEN unit or resourced provision"
+    And the element "*[data-testid='school-details-provision-value']" should have the text content "Not recorded"
+    And the element "*[data-testid='school-details-pupils-key']" should have the text content "Number of pupils"
+    And the element "*[data-testid='school-details-pupils-value']" should have the text content "404"
+
+@Javascript:disabled
+Scenario: School page should show if values are null
+    Given establishment "123456" exists:
+		"""
+		{
+            "isPost16": null,
+            "isPrimary": null,
+            "isSecondary": null,
+            "address": null,
+            "admissionsPolicy": null,
+            "ageRange": null,
+            "establishmentType": null,
+            "gender": null,
+            "headteacher": null,
+            "id": "123456",
+            "localAuthority": null,
+            "name": "Hollinswood Primary School",
+            "noOfPupils": null,
+            "ofstedLastInspectionDate": null,
+            "ofstedRating": null,
+            "religiousDenomination": null,
+            "resourcedProvisionType": null,
+            "urn": "123456",
+        }
+		"""
+    When I navigate to /school/123456
+    Then I should get a 200 response
+    And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
+    And the element "*[data-testid='school-page-details-state-open']" should have the text content "Hide"
+    And the element "*[data-testid='school-details-address-key']" should have the text content "Address"
+    And the element "*[data-testid='school-details-address-value']" should have the text content ""
+    And the element "*[data-testid='school-details-school-type-key']" should have the text content "School type"
+    And the element "*[data-testid='school-details-school-type-value']" should have the text content ""
+    And the element "*[data-testid='school-details-education-key']" should have the text content "Education phase"
+    And the element "*[data-testid='school-details-education-value']" should have the text content ""
+    And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
+    And the element "*[data-testid='school-details-gender-value']" should have the text content ""
+    And the element "*[data-testid='school-details-ofsted-key']" should have the text content "Ofsted rating"
+    And the element "*[data-testid='school-details-la-key']" should have the text content "Local authority"
+    And the element "*[data-testid='school-details-la-value']" should have the text content ""
+    And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
+    And the element "*[data-testid='school-details-gender-value']" should have the text content ""
+    And the element "*[data-testid='school-details-principal-key']" should have the text content "Headteacher / Principal"
+    And the element "*[data-testid='school-details-principal-value']" should have the text content ""
+    And the element "*[data-testid='school-details-age-key']" should have the text content "Age range"
+    And the element "*[data-testid='school-details-age-value']" should have the text content ""
+    And the element "*[data-testid='school-details-religious-key']" should have the text content "Religious character"
+    And the element "*[data-testid='school-details-religious-value']" should have the text content ""
+    And the element "*[data-testid='school-details-admission-key']" should have the text content "Admissions policy"
+    And the element "*[data-testid='school-details-admission-value']" should have the text content ""
+    And the element "*[data-testid='school-details-provision-key']" should have the text content "SEN unit or resourced provision"
+    And the element "*[data-testid='school-details-provision-value']" should have the text content ""
+    And the element "*[data-testid='school-details-pupils-key']" should have the text content "Number of pupils"
+    And the element "*[data-testid='school-details-pupils-value']" should have the text content ""
+
+@Javascript:disabled
+Scenario: School page should show if values are null case 2
+    Given establishment "123456" exists:
+		"""
+		{
+            "isPost16": null,
+            "isPrimary": null,
+            "isSecondary": null,
+            "address": {
+                "street": null,
+                "town": null,
+                "postCode": null
+            },
+            "admissionsPolicy": {
+                "name": null,
+            },
+            "ageRange": {
+                "low": null,
+                "high": null
+            },
+            "establishmentType": {
+                "name": null,
+            },
+            "gender": {
+                "name": null,
+            },
+            "headteacher": {
+                "title": null,
+                "firstName": null,
+                "lastName": null
+            },
+            "id": "123456",
+            "localAuthority": {
+                "name": null,
+            },
+            "name": null,
+            "noOfPupils": null,
+            "ofstedLastInspectionDate": null,
+            "ofstedRating": {
+                "code": null,
+                "name": null,
+            },
+            "religiousDenomination": {
+                "name": null,
+            },
+            "resourcedProvisionType": {
+                "name": null,
+            },
+            "urn": "123456",
+        }
+		"""
+    When I navigate to /school/123456
+    Then I should get a 200 response
+    And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
+    And the element "*[data-testid='school-page-details-state-open']" should have the text content "Hide"
+    And the element "*[data-testid='school-details-address-key']" should have the text content "Address"
+    And the element "*[data-testid='school-details-address-value']" should have the text content ""
+    And the element "*[data-testid='school-details-school-type-key']" should have the text content "School type"
+    And the element "*[data-testid='school-details-school-type-value']" should have the text content ""
+    And the element "*[data-testid='school-details-education-key']" should have the text content "Education phase"
+    And the element "*[data-testid='school-details-education-value']" should have the text content ""
+    And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
+    And the element "*[data-testid='school-details-gender-value']" should have the text content ""
+    And the element "*[data-testid='school-details-ofsted-key']" should have the text content "Ofsted rating"
+    And the element "*[data-testid='school-details-la-key']" should have the text content "Local authority"
+    And the element "*[data-testid='school-details-la-value']" should have the text content ""
+    And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
+    And the element "*[data-testid='school-details-gender-value']" should have the text content ""
+    And the element "*[data-testid='school-details-principal-key']" should have the text content "Headteacher / Principal"
+    And the element "*[data-testid='school-details-principal-value']" should have the text content ""
+    And the element "*[data-testid='school-details-age-key']" should have the text content "Age range"
+    And the element "*[data-testid='school-details-age-value']" should have the text content ""
+    And the element "*[data-testid='school-details-religious-key']" should have the text content "Religious character"
+    And the element "*[data-testid='school-details-religious-value']" should have the text content ""
+    And the element "*[data-testid='school-details-admission-key']" should have the text content "Admissions policy"
+    And the element "*[data-testid='school-details-admission-value']" should have the text content ""
+    And the element "*[data-testid='school-details-provision-key']" should have the text content "SEN unit or resourced provision"
+    And the element "*[data-testid='school-details-provision-value']" should have the text content ""
+    And the element "*[data-testid='school-details-pupils-key']" should have the text content "Number of pupils"
+    And the element "*[data-testid='school-details-pupils-value']" should have the text content ""
+
 
 @Javascript:disabled
 Scenario: Details disclosure element text should read 'Show school details' when closed
@@ -337,7 +376,7 @@ Scenario: Details disclosure element text should read 'Show school details' when
     }
 	"""
     When I navigate to /school/123456
-    Then the element "#app-school-page-details-state-closed" should have the text content "Show"
+    Then the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
   
 @Javascript:disabled
 Scenario: School page should display page not found page if School URN is invalid

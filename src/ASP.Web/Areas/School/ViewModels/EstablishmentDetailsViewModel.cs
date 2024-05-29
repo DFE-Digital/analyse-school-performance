@@ -1,4 +1,5 @@
 ﻿using ASP.Core.Establishments;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace ASP.Web.Areas.School.ViewModels
 {
@@ -6,9 +7,9 @@ namespace ASP.Web.Areas.School.ViewModels
     {
         public string Urn { get; set; } = "";
         public string Name { get; set; } = "";
-        public bool IsPrimary { get; }
-        public bool IsSecondary { get; }
-        public bool Is16to18Establishment { get; }
+        public bool? IsPrimary { get; }
+        public bool? IsSecondary { get; }
+        public bool? Is16to18Establishment { get; }
         public Address? Address { get; set; }
         public EstablishmentType? EstablishmentType { get; set; }
         public string PhaseOfEducation { get; set; } = "";
@@ -50,9 +51,9 @@ namespace ASP.Web.Areas.School.ViewModels
         private static string GetPhaseOfEducation(EstablishmentDetails establishmentDetails)
         {
             var phaseOfEducation = "";
-            if (establishmentDetails.IsPrimary) phaseOfEducation = "Primary";
-            if (establishmentDetails.IsSecondary) phaseOfEducation = "Secondary";
-            if (establishmentDetails.IsPost16) phaseOfEducation = "16 to 18";
+            if (establishmentDetails.IsPost16??false) phaseOfEducation = "16 to 18";
+            else if (establishmentDetails.IsSecondary??false) phaseOfEducation = "Secondary";
+            else if (establishmentDetails.IsPrimary??false) phaseOfEducation = "Primary";
             return phaseOfEducation;
         }
     }
