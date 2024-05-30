@@ -35,7 +35,7 @@ namespace ASP.Infrastructure.Cosmos
                 switch (ex.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:
-                        return Error.NotFound($@"404 Error: Could not find object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{containerKey}"".");
+                        return Error.NotFound($@"Not found: could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{containerKey}"".");
 
                     default:
                         _logger.LogCritical(ex.Message);
@@ -70,7 +70,7 @@ namespace ASP.Infrastructure.Cosmos
                 switch (ex.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:
-                        return Error.NotFound($@"404 Error: Could not find object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{containerKey}"".");
+                        return Error.NotFound($@"Not found: could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{containerKey}"".");
 
                     default:
                         _logger.LogCritical(ex.Message);

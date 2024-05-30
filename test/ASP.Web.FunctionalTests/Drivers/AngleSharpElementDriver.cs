@@ -41,7 +41,7 @@ namespace ASP.AcceptanceTests.Drivers
         public IElementDriver ElementByLabel(string labelText)
         {
             var label = El.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+            AssertWithMessage.NotNull(label, $@"Could not find a label with the text ""{labelText}"".");
 
             var fieldSelector = $":scope #{label?.Attributes["for"]?.Value}";
 
@@ -144,7 +144,7 @@ namespace ASP.AcceptanceTests.Drivers
             if(isChecked)
             {
                 var input = Assert.IsAssignableFrom<IHtmlInputElement>(El);
-                var radios = _web.LastResponse.QuerySelectorAll<IHtmlInputElement>(@$"[name=""{input.Name}""]");
+                var radios = _web.LastResponse.QuerySelectorAll<IHtmlInputElement>($@"[name=""{input.Name}""]");
 
                 foreach (var radio in radios)
                 {

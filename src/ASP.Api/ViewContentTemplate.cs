@@ -1,11 +1,7 @@
 using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
-using ASP.Application.UseCases.ViewContentTemplate;
-using ASP.Core.Results;
-using ASP.Core.Templating;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 
 namespace ASP.Api
 {
@@ -21,30 +17,13 @@ namespace ASP.Api
         }
         
         [Function("ViewContentTemplate")]
-        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function)] HttpRequest req)
         {
-            if (req.Method != HttpMethods.Get)
-            {
-                return new ApiResult(405, $"The HTTP method {req.Method} is not allowed.") { Headers = { { "Allow", "GET" } } };
-            }
-
-            StringValues id = req.Query["id"];
-            if (StringValues.IsNullOrEmpty(id))
-            {
-                return new ApiResult(400, @"Missing parameter: ""id"".");
-            }
-
-            Result<ContentTemplate> response = await _view.HandleRequest(new ViewContentTemplateRequest(id.ToString() ?? ""));
-            
-            return response.Match(r => new ApiResult(200, r), e =>
-            {
-                int statusCode = e switch {
-                    NotFoundError => 404,
-                    _ => 500
-                };
-
-                return new ApiResult(statusCode, e.Message);
-            });
+            return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
+                .Then(_ => RequestValidation.RequiredParameter(req, "id")
+                .Then(id => RequestValidation.NotEmpty(id, "id"))
+                .Then(id => _view.HandleRequest(new ViewContentTemplateRequest(id))))
+                .ToApiResultAsync();
         }
     }
 }

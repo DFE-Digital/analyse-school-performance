@@ -11,7 +11,7 @@ namespace ASP.Test.Core
         private const string TEST_WRAPPER_TAG = "asp-test";
         private static readonly Regex _spacesAfterClosingTag = new Regex(@">([\s\t\n]*)([^\s\t\n])", RegexOptions.Compiled);
         private static readonly Regex _spacesBeforeOpeningTag = new Regex(@"([^\s\t\n])([\s\t\n]*)<", RegexOptions.Compiled);
-        private static readonly Regex _testWrapper = new Regex(@$"(<{TEST_WRAPPER_TAG}>)(.*)(</{TEST_WRAPPER_TAG}>)", RegexOptions.Compiled);
+        private static readonly Regex _testWrapper = new Regex($@"(<{TEST_WRAPPER_TAG}>)(.*)(</{TEST_WRAPPER_TAG}>)", RegexOptions.Compiled);
         private static readonly MinifyMarkupFormatter _minifier = new MinifyMarkupFormatter {
             ShouldKeepStandardElements = false,
             ShouldKeepAttributeQuotes = true,

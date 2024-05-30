@@ -93,7 +93,7 @@ namespace ASP.AcceptanceTests.Drivers
             await ExpectStatusCode();
 
             var label = LastResponse.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, @$"Could not find a label with the text ""{labelText}"".");
+            AssertWithMessage.NotNull(label, $@"Could not find a label with the text ""{labelText}"".");
 
             var fieldSelector = $":scope #{label?.Attributes["for"]?.Value}";
 

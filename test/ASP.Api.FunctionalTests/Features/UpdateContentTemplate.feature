@@ -4,26 +4,32 @@ Scenario: Endpoint should not accept GET method
 	Given no page content exists
 	When I send a GET request to /UpdateContentTemplate?id=help-test
 	Then I should get a 405 response
-	And the response should be the message "The HTTP method GET is not allowed."
+	And the response should be the message "Bad request: the HTTP method GET is not allowed."
 	And the response should include the header "Allow: POST"
 
 Scenario: Endpoint should return BadRequest (400) response if id parameter is missing 
 	Given no page content exists
 	When I send a POST request to /UpdateContentTemplate
 	Then I should get a 400 response
-	And the response should be the message "Missing parameter: "id"."
+	And the response should be the message "Bad request: the parameter "id" is missing."
+
+Scenario: Endpoint should return BadRequest (400) response if id parameter is duplicated
+	Given no page content exists
+	When I send a POST request to /UpdateContentTemplate?id=x&id=y
+	Then I should get a 400 response
+	And the response should be the message "Bad request: the parameter "id" is duplicated."
 
 Scenario: Endpoint should return BadRequest (400) response if id parameter is empty string 
 	Given no page content exists
 	When I send a POST request to /UpdateContentTemplate?id=
 	Then I should get a 400 response
-	And the response should be the message "Missing parameter: "id"."
+	And the response should be the message "Bad request: the parameter "id" should not be empty."
 
 Scenario: Endpoint should return BadRequest (400) response if request body is missing 
 	Given no page content exists
 	When I send a POST request to /UpdateContentTemplate?id=help-text
 	Then I should get a 400 response
-	And the response should be the message "Missing request body."
+	And the response should be the message "Bad request: the request body is missing."
 
 Scenario: Endpoint should return BadRequest (400) response if request body is not an object 
 	Given no page content exists
@@ -32,7 +38,7 @@ Scenario: Endpoint should return BadRequest (400) response if request body is no
 			Hello
 		"""
 	Then I should get a 400 response
-	And the response should be the message "Request body was not a JSON object."
+	And the response should be the message "Bad request: the request body is not a JSON object."
 
 Scenario: Endpoint should create content template if one doesn't exist 
 	Given no page content exists

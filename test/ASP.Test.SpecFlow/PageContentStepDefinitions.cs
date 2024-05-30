@@ -34,7 +34,7 @@ namespace ASP.Test.Acceptance.Core
                 _ =>
                 {
                 },
-                e => AssertWithMessage.Fail(@$"Could not update page content with id ""{id}"": {e.Message}"));
+                e => AssertWithMessage.Fail($@"Could not update page content with id ""{id}"": {e.Message}"));
         }
 
         [Given(@"establishment ""([^""]+)"" exists:")]
@@ -44,7 +44,7 @@ namespace ASP.Test.Acceptance.Core
                 _ =>
                 {
                 },
-                e => AssertWithMessage.Fail(@$"Could not update establishment with id ""{id}"": {e.Message}"));
+                e => AssertWithMessage.Fail($@"Could not update establishment with id ""{id}"": {e.Message}"));
         }
 
         [Then(@"page content ""([^""]+)"" property ""([^""]+)"" should be equal to (.+)")]
@@ -56,7 +56,7 @@ namespace ASP.Test.Acceptance.Core
                     var value = GetPropertyPathValue(propertyPath, data);
                     Assert.Equal(propertyValue, value);
                 },
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
+                e => AssertWithMessage.Fail($@"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 
@@ -74,7 +74,7 @@ namespace ASP.Test.Acceptance.Core
                     },
                     e => AssertWithMessage.Fail(e.Message)
                 ),
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
+                e => AssertWithMessage.Fail($@"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 
@@ -88,7 +88,7 @@ namespace ASP.Test.Acceptance.Core
 
                     MatchProperties(expected, actual);
                 },
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
+                e => AssertWithMessage.Fail($@"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 
@@ -97,7 +97,7 @@ namespace ASP.Test.Acceptance.Core
         {
             await GetPageContent(id, id).Switch(
                 actual => MatchProperties(expected, actual),
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
+                e => AssertWithMessage.Fail($@"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 
@@ -110,7 +110,7 @@ namespace ASP.Test.Acceptance.Core
                     var expected = JsonHelper.Serialize(JsonHelper.Deserialize<object>(properties));
                     Assert.Equal(expected, actual);
                 },
-                e => AssertWithMessage.Fail(@$"Could not find page content with id ""{id}"": {e.Message}")
+                e => AssertWithMessage.Fail($@"Could not find page content with id ""{id}"": {e.Message}")
             );
         }
 

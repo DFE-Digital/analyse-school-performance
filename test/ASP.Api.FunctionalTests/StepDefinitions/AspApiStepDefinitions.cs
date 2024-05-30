@@ -24,7 +24,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             _output = output;
         }
 
-        [When(@$"I send a {HTTP_METHOD} request to {API_ENDPOINT}")]
+        [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}")]
         public async Task WhenISendARequest(string method, string function)
         {
             var request = CreateRequest(method);
@@ -32,7 +32,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await _api.Run(function, request);
         }
 
-        [When(@$"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING}")]
+        [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING}")]
         public async Task WhenISendARequest(string method, string function, string queryString)
         {
             var request = CreateRequest(method, queryString);
@@ -40,7 +40,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await _api.Run(function, request);
         }
 
-        [When(@$"I send a {HTTP_METHOD} request to {API_ENDPOINT} with content:")]
+        [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT} with content:")]
         public async Task WhenISendARequestWithContent(string method, string function, string content)
         {
             var request = CreateRequest(method);
@@ -51,7 +51,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             }
         }
 
-        [When(@$"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING} with content:")]
+        [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING} with content:")]
         public async Task WhenISendARequestWithContent(string method, string function, string queryString, string content)
         {
             var request = CreateRequest(method, queryString);
@@ -62,19 +62,19 @@ namespace ASP.AcceptanceTests.StepDefinitions
             }
         }
 
-        [Then(@$"I should get a {STATUS_CODE} response")]
+        [Then($@"I should get a {STATUS_CODE} response")]
         public void ThenIShouldGetAResponse(int statusCode)
         {
             Assert.Equal(statusCode, _api.LastResponse.StatusCode);
         }
 
-        [Then(@$"the response should be the message {RESPONSE_MESSAGE}")]
+        [Then($@"the response should be the message {RESPONSE_MESSAGE}")]
         public void ThenTheResponseShouldBeTheMessage(string message)
         {
             Assert.Equal(message, _api.LastResponse.Value);
         }
 
-        [Then(@$"the response should include the header {HTTP_HEADER}")]
+        [Then($@"the response should include the header {HTTP_HEADER}")]
         public void ThenTheResponseShouldIncludeTheHeader(string name, string value)
         {
             Assert.Contains(name, _api.LastRequest.HttpContext.Response.Headers.Keys);
@@ -83,13 +83,13 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(value, header);
         }
 
-        [Then(@$"the response should be an object with these exact properties:")]
+        [Then($@"the response should be an object with these exact properties:")]
         public void ThenTheResponseShouldBeAnObjectWithTheseExactProperties(string expectedContent)
         {
             Assert.Equal(JsonConvert.SerializeObject(JsonConvert.DeserializeObject<object>(expectedContent)), JsonConvert.SerializeObject(_api.LastResponse.Value));
         }
 
-        [Then(@$"the response should be an object containing these properties:")]
+        [Then($@"the response should be an object containing these properties:")]
         public void ThenTheResponseShouldBeAnObjectContainingTheseProperties(string expectedContent)
         {
             var expectedProperties = JsonConvert.DeserializeObject<Dictionary<string, object>>(expectedContent);

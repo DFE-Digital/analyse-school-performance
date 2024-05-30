@@ -38,7 +38,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
         public async Task WhenISaveTheComponent()
         {
             var saveButton = await _web.Element("#test-save");
-            await saveButton.ShouldExistAsync(@$"Could not find an element with the selector ""#test-save"".");
+            await saveButton.ShouldExistAsync($@"Could not find an element with the selector ""#test-save"".");
 
             await saveButton.ClickAsync();
         }
@@ -49,7 +49,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var field = await component.ElementByLabel(labelText)
-                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+                .ShouldExistAsync($@"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
             await field.SetValueAsync(value);
         }
@@ -60,7 +60,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var field = await component.ElementByLabel(labelText)
-                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+                .ShouldExistAsync($@"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
             await field.SetValueAsync(value);
         }
@@ -71,7 +71,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var field = await component.ElementByLabel(labelText)
-                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+                .ShouldExistAsync($@"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
             await field.SetCheckedAsync(state == "checked");
         }
@@ -161,7 +161,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var matches = await component.MatchesAsync(selectorToMatch);
-            AssertWithMessage.True(matches, @$"The element did not match ""{selectorToMatch}"".");
+            AssertWithMessage.True(matches, $@"The element did not match ""{selectorToMatch}"".");
         }
 
         [Then(@"the component outer element should have the attribute ""(.*)"" set to ""(.*)""")]
@@ -254,7 +254,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var element = await ComponentElementShouldExistAsync(selector);
 
             var matches = await element.MatchesAsync(selectorToMatch);
-            AssertWithMessage.True(matches, @$"The element did not match ""{selectorToMatch}"".");
+            AssertWithMessage.True(matches, $@"The element did not match ""{selectorToMatch}"".");
         }
 
         [Then(@"the element ""(.*)"" within the component should have the attribute ""(.*)"" set to ""(.*)""")]
@@ -272,7 +272,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var field = await component.ElementByLabel(labelText)
-                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+                .ShouldExistAsync($@"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
            
             var value = await field.ValueAsync();
             Assert.Equal(expectedValue, value);
@@ -284,7 +284,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var field = await component.ElementByLabel(labelText)
-                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+                .ShouldExistAsync($@"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
             
             var isChecked = await field.IsCheckedAsync();
             Assert.Equal(state == "checked", isChecked);
@@ -296,7 +296,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var field = await component.ElementByLabel(labelText)
-                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+                .ShouldExistAsync($@"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
             var actualValue = await field.ValueAsync();
 
@@ -311,11 +311,11 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var field = await component.ElementByLabel(labelText)
-                .ShouldExistAsync(@$"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
+                .ShouldExistAsync($@"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
             var matches = await field.MatchesAsync(selector);
 
-            AssertWithMessage.True(matches, @$"The associated input element for the label ""{labelText}"" did not match ""{selector}"".");
+            AssertWithMessage.True(matches, $@"The associated input element for the label ""{labelText}"" did not match ""{selector}"".");
         }
 
         private async Task<IElementDriver> ComponentShouldExistAsync()
@@ -323,10 +323,10 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await ThenThereShouldBeNoErrors();
 
             var testWrapper = await _web.Element("#test");
-            await testWrapper.ShouldExistAsync(@$"Could not find an element with the selector ""#test"".");
+            await testWrapper.ShouldExistAsync($@"Could not find an element with the selector ""#test"".");
             
             var component = await testWrapper.Element(":scope > div > *")
-                .ShouldExistAsync(@$"Could not find the component's outer element on the page.");
+                .ShouldExistAsync($@"Could not find the component's outer element on the page.");
 
             return component;
         }
@@ -336,12 +336,12 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await ThenThereShouldBeNoErrors();
 
             var testWrapper = await _web.Element("#test");
-            await testWrapper.ShouldExistAsync(@$"Could not find an element with the selector ""#test"".");
+            await testWrapper.ShouldExistAsync($@"Could not find an element with the selector ""#test"".");
 
-            AssertWithMessage.NotNull(testWrapper, @$"Could not find an element with the selector ""#test"".");
+            AssertWithMessage.NotNull(testWrapper, $@"Could not find an element with the selector ""#test"".");
 
             await testWrapper.Element(":scope > div > *")
-                .ShouldNotExistAsync(@$"Found the component's outer element on the page.");
+                .ShouldNotExistAsync($@"Found the component's outer element on the page.");
         }
 
         private async Task<IElementDriver> ComponentElementShouldExistAsync(string selector)
@@ -349,8 +349,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var element = component.Element($":scope {selector}");
-            await element.ShouldHaveCountAsync(1, actual => @$"Found {actual} elements within the component with the selector ""{selector}"".");
-            await element.ShouldExistAsync(@$"Could not find an element within the component with the selector ""{selector}"".");
+            await element.ShouldHaveCountAsync(1, actual => $@"Found {actual} elements within the component with the selector ""{selector}"".");
+            await element.ShouldExistAsync($@"Could not find an element within the component with the selector ""{selector}"".");
 
             return element;
         }
@@ -360,7 +360,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             await component.Element($":scope {selector}")
-                .ShouldNotExistAsync(@$"Found an element within the component with the selector ""{selector}"".");
+                .ShouldNotExistAsync($@"Found an element within the component with the selector ""{selector}"".");
         }
     }
 }

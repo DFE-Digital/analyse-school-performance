@@ -395,4 +395,4 @@ Scenario: School page should display page not found page if School URN is invali
     And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
     And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
     And the element "*[data-testid='error-display-message']" should exist
-    And the element "*[data-testid='error-display-message']" should have the text content "Error message: 404 Error: Could not find object with id "112" and partition key "112" in container "establishments"."
+    And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: could not find the object with id "112" and partition key "112" in container "establishments"."
