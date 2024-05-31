@@ -19,7 +19,7 @@ namespace ASP.Api
         }
 
         [Function("UpdateContentTemplate")]
-        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function)] HttpRequest req)
+        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
             return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Post])
                 .Then(_ => RequestValidation.RequiredParameter(req, "id")
