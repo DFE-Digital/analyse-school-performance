@@ -235,6 +235,11 @@ $app-breakpoint-custom : 700px;
 
 .govuk-width-container {
     max-width: 1100px;
+
+    @include govuk-media-query(tablet) {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
 }
 
 .govuk-details .app-school-details-open {
