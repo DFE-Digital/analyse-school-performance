@@ -57,7 +57,7 @@ namespace ASP.Web.Features.TermsOfUse
             string originalRoute = context.HttpContext.Request.Path;
 
             // set query string if it is not the home route, this is so user can be redirected once terms are accepted
-            string redirectUrl = originalRoute == "/" ? _redirectURL : $"{_redirectURL}?ref-url={originalRoute}";
+            string redirectUrl = originalRoute == "/" ? _redirectURL : $"{_redirectURL}?referrer={originalRoute}";
 
             context.Result = new RedirectResult(redirectUrl);
         }

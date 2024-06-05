@@ -75,9 +75,9 @@ Scenario: Should set referral url when Accepted terms cookie is set to Rejected
 	Then the element "#app-accept-terms-button" should exist
 Examples:
 	| Path           | ExpectedPath                                       |
-	| /school/136028 | /help/accept-terms-of-use/?ref-url=/school/136028/ |
-	| /download      | /help/accept-terms-of-use/?ref-url=/download/      |
-	| /news          | /help/accept-terms-of-use/?ref-url=/news/          |
+	| /school/136028 | /help/accept-terms-of-use/?referrer=/school/136028/ |
+	| /download      | /help/accept-terms-of-use/?referrer=/download/      |
+	| /news          | /help/accept-terms-of-use/?referrer=/news/          |
 
 
 @Javascript:disabled
@@ -99,3 +99,29 @@ Scenario: Clicking Continue should set terms of use cookie to Accepted
 Examples:
 	| Path                      |
 	| /help/accept-terms-of-use |
+
+@Javascript:disabled
+Scenario: Should redirect to the correct referrer
+	Given page content "help-accept-terms-of-use" exists:
+		"""
+		{
+			"Views": [
+				{
+					"ViewId": "AcceptTerms",
+				}
+			]
+		}
+		"""
+	Given the cookie "AcceptedTermsOfUse" has been set to "Rejected"
+	And I navigate to <Path>
+	Then I should get a 200 response
+	Then The path should match <ExpectedPath>
+	Then the element "#app-accept-terms-button" should exist
+	When I click the button "#app-accept-terms-button"
+	Then The path should match <Path>
+
+Examples:
+	| Path            | ExpectedPath                                       |
+	| /school/136028/ | /help/accept-terms-of-use/?referrer=/school/136028/ |
+	| /download/      | /help/accept-terms-of-use/?referrer=/download/      |
+	| /news/          | /help/accept-terms-of-use/?referrer=/news/          |

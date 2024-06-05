@@ -19,8 +19,8 @@ namespace ASP.Web.Features.TermsOfUse
         {
             _cookieProvider.SetCookie(CookieKeys.AcceptedTermsOfUse, TermsOfUse.Accepted.ToString());
 
-            // Read the "ref-url" query string parameter, this is set from the terms of use action filter
-            string referer = HttpContext.Request.Query["ref-url"].ToString();
+            // Read the "referrer" query string parameter, this is set from the terms of use action filter
+            string referer = HttpContext.Request.Query["referrer"].ToString();
 
             return Redirect(string.IsNullOrEmpty(referer) ? "/" : referer);
         }

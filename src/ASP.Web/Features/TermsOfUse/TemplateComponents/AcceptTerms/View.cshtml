@@ -1,6 +1,6 @@
 ﻿@{
-    // Read the "ref-url" query string parameter
-    string? referrer = Context.Request.Query["ref-url"];
+    // Read the "referrer" query string parameter
+    string? referrer = Context.Request.Query["referrer"];
 }
 
 @using (Html.BeginForm("Accept", "TermsOfUse", new { referrer = referrer }, FormMethod.Post))
