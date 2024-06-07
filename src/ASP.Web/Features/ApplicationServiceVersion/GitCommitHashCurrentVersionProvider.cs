@@ -16,12 +16,14 @@ namespace ASP.Web.Features.ApplicationServiceVersion
             if (string.IsNullOrEmpty(_outputDirectory))
                 return string.Empty;
 
-            // 'CurrentCommit.txt' is produced by a Post Build Event running 'git rev-parse --short HEAD'
+            // 'CurrentCommit.txt' is produced by a Post Build Event running 'git rev-parse HEAD'
             // The file will have the commit hash for the current branch when you build the solution
             string filePath = Path.Combine(_outputDirectory, "CurrentCommit.txt");
 
             if (File.Exists(filePath))
-                return File.ReadAllText(filePath);
+                return new string(File.ReadAllText(filePath) // only take 8 characters to match azure hash
+                    .Take(8)
+                    .ToArray()); 
 
             return string.Empty;
         }

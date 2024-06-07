@@ -70,11 +70,10 @@
 
 	<ItemGroup>
 	  <Folder Include="Areas\Shared\" />
-	  <Folder Include="Features\Shared\" />
 	</ItemGroup>
 	
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-	  <Exec Command="git rev-parse --short HEAD &gt; &quot;$(ProjectDir)\CurrentCommit.txt&quot;" />
+	  <Exec Command="git rev-parse HEAD &gt; &quot;$(ProjectDir)\CurrentCommit.txt&quot;" />
 	</Target>
 
 </Project>
