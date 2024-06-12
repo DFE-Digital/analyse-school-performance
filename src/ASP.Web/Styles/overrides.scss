@@ -236,7 +236,7 @@ $app-breakpoint-custom : 700px;
 .govuk-width-container {
     max-width: 1100px;
 
-    @include govuk-media-query(tablet) {
+    @include govuk-media-query(1020px, 1160px) {
         margin-left: 30px;
         margin-right: 30px;
     }
