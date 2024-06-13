@@ -1,6 +1,8 @@
 ﻿using ASP.Core.Results;
 using Azure;
 using Azure.Data.Tables;
+using Azure.Identity;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace ASP.Infrastructure.TableStorage
@@ -9,11 +11,30 @@ namespace ASP.Infrastructure.TableStorage
     {
         private readonly TableServiceClient _tableServiceClient;
         private readonly TableStorageConfiguration _tableStorageConfiguration;
+        private readonly IHostEnvironment _hostEnvironment;
 
-        public TableStorageProvider(IOptions<TableStorageConfiguration> tableStorageConfiguration)
+        public TableStorageProvider(IOptions<TableStorageConfiguration> tableStorageConfiguration, IHostEnvironment hostEnvironment)
         {
+            _hostEnvironment = hostEnvironment;
+            
             _tableStorageConfiguration = tableStorageConfiguration.Value;
-            _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
+
+            // For the local development environment, we want to use the connection string to ensure that the _tableServiceClient functions correctly.
+            if (_hostEnvironment.IsDevelopment())
+            {
+                _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
+            }
+            else
+            {
+                var credentialOptions = new DefaultAzureCredentialOptions
+                {
+                    ManagedIdentityClientId = _tableStorageConfiguration.ManagedIdentityClientId
+                };
+                var credential = new DefaultAzureCredential(credentialOptions);
+                _tableServiceClient = new TableServiceClient(
+                    new Uri($"https://{_tableStorageConfiguration.StorageAccountName}.table.core.windows.net/"),
+                    credential);
+            }
         }
 
         public async Task<Result<string>> AddTableEntry(TableStorageEntry tableStorageEntry)
