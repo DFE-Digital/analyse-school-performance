@@ -12,17 +12,27 @@
 
         public static Result<TValue> NotFound<TValue>(string message)
         {
-            return Error.NotFound(message);
+            return Results.Error.NotFound(message);
         }
 
         public static Result<TValue> Unexpected<TValue>(string message)
         {
-            return Error.Unexpected(message);
+            return Results.Error.Unexpected(message);
         }
 
         public static Result<TValue> Validation<TValue>(string message)
         {
-            return Error.Validation(message);
+            return Results.Error.Validation(message);
+        }
+
+        public static Result<TValue> NotAllowed<TValue>(string message)
+        {
+            return Results.Error.NotAllowed(message);
+        }
+
+        public static Result<TValue> Error<TValue>(Error error)
+        {
+            return new ErrorResult<TValue>(error);
         }
     }
 

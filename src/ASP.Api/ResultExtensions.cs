@@ -16,10 +16,11 @@ namespace ASP.Api
             return result.Match(
                 r => new ApiResult(200, r),
                 r => r switch {
-                    MethodNotAllowedError e => new ApiResult(405, e.Message) { Headers = { { "Allow", string.Join(", ", e.AllowedMethods) } } },
-                    NotFoundError e => new ApiResult(404, e.Message),
-                    ValidationError e => new ApiResult(400, e.Message),
-                    UnexpectedError e => new ApiResult(500, e.Message),
+                    MethodNotAllowedError e => new ApiResult(405, e.ToString()) { Headers = { { "Allow", string.Join(", ", e.AllowedMethods) } } },
+                    NotFoundError e => new ApiResult(404, e.ToString()),
+                    ValidationError e => new ApiResult(400, e.ToString()),
+                    UnexpectedError e => new ApiResult(500, e.ToString()),
+                    NotAllowedError e => new ApiResult(403, e.ToString()),
                     _ => new ApiResult(500, $@"Unhandled error type ""{r.GetType().FullName}"".")
                 }
             );

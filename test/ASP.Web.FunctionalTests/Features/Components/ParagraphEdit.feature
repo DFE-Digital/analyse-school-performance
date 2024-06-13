@@ -105,7 +105,7 @@ Scenario: Updating Is Large field should update IsLarge property on template
 	When I update the component field labelled "Is Large" to be checked
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "IsLarge" should be equal to true
+	And the component template should have property "IsLarge" equal to true
 
 @Javascript:disabled
 Scenario: When Text property is null, component should not error and should handle the value appropriately
@@ -175,7 +175,7 @@ Scenario: Updating Text field should update Text property on template
 	When I update the component field labelled "Text" to have the value "Updated paragraph"
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "Text" should be equal to "Updated paragraph"
+	And the component template should have property "Text" equal to "Updated paragraph"
 
 @Javascript:disabled
 Scenario: Updating Text field with a new line should update Text property on template
@@ -196,7 +196,7 @@ Scenario: Updating Text field with a new line should update Text property on tem
 	"""
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "Text" should be equal to:
+	And the component template should have property "Text" equal to:
 	"""
 	"Updated
 	paragraph"

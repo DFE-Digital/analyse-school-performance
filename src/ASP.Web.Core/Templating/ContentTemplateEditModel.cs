@@ -7,6 +7,8 @@ namespace ASP.Web.Core.Templating
     public class ContentTemplateEditModel
     {
         public string ContentId { get; set; } = "";
+        public string? Revision { get; set; } = "";
+        public string UpdateRevision { get; set; } = "";
         public string PageTitle { get; set; } = "";
         public List<TemplateComponentEditModel> Views { get; set; } = new();
 
@@ -15,6 +17,7 @@ namespace ASP.Web.Core.Templating
             var serialized = JsonHelper.SerializeIndented(new
             {
                 ContentId,
+                Revision,
                 PageTitle,
                 Views = Views.Select(v => v.ToTemplate().Match(t => t, e => new object())).ToList()
             });
@@ -22,12 +25,15 @@ namespace ASP.Web.Core.Templating
             return JsonHelper.DeserializeIgnoringMissingMembers<ContentTemplate>(serialized);
         }
 
-        public static ContentTemplateEditModel FromTemplate(string contentId, ContentTemplate template, ITemplateComponentEditModelFactory editModelFactory)
+        public static ContentTemplateEditModel FromTemplate(string contentId, string? revision, ContentTemplate template, ITemplateComponentEditModelFactory editModelFactory)
         {
             var views = template.Views ?? new List<TemplateComponent>();
             return new ContentTemplateEditModel
             {
                 ContentId = contentId,
+                Revision = revision,
+                // If revision doesn't exist yet or is published (we can't edit published revisions), create a new revision id
+                UpdateRevision = revision == null || template.IsPublished ? Guid.NewGuid().ToString() : revision,
                 PageTitle = template.PageTitle ?? "",
                 Views = views.Select(editModelFactory.CreateTemplateComponentEditModel).ToList()
             };

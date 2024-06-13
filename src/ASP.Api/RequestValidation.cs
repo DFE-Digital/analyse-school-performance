@@ -1,5 +1,6 @@
-﻿using ASP.Core.Helpers;
+using ASP.Core.Helpers;
 using ASP.Core.Results;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
 
 namespace ASP.Api
@@ -22,22 +23,19 @@ namespace ASP.Api
 
             if (value.Count > 1)
             {
-                return Error.Validation($@"Bad request: the parameter ""{parameterName}"" is duplicated.");
+                return Error.Validation($@"The parameter ""{parameterName}"" is duplicated.");
             }
 
             if (value.Count == 0)
             {
-                return Error.Validation($@"Bad request: the parameter ""{parameterName}"" is missing.");
+                return Error.Validation($@"The parameter ""{parameterName}"" is missing.");
             }
 
-            return value.ToString();
-        }
+            var stringValue = value.ToString();
 
-        public static Result<string> NotEmpty(string stringValue, string parameterName)
-        {
             if (string.IsNullOrWhiteSpace(stringValue))
             {
-                return Error.Validation($@"Bad request: the parameter ""{parameterName}"" should not be empty.");
+                return Error.Validation($@"The parameter ""{parameterName}"" should not be empty.");
             }
 
             return stringValue;
@@ -49,7 +47,7 @@ namespace ASP.Api
 
             if (value.Count > 1)
             {
-                return Error.Validation($@"Bad request: the parameter ""{parameterName}"" is duplicated.");
+                return Error.Validation($@"The parameter ""{parameterName}"" is duplicated.");
             }
 
             if (value.Count == 0)
@@ -58,6 +56,11 @@ namespace ASP.Api
             }
 
             var stringValue = value.ToString();
+
+            if (string.IsNullOrWhiteSpace(stringValue))
+            {
+                return Error.Validation($@"The parameter ""{parameterName}"" should not be empty.");
+            }
 
             return Maybe<string>.Some(stringValue);
         }
@@ -68,10 +71,10 @@ namespace ASP.Api
             {
                 var content = await sr.ReadToEndAsync();
                 if (content.Length == 0)
-                    return Error.Validation("Bad request: the request body is missing.");
+                    return Error.Validation("The request body is missing.");
 
                 return JsonHelper.DeserializeIgnoringMissingMembers<TBody>(content)
-                    .MapError(e => Error.Validation("Bad request: the request body is not a JSON object."));
+                    .MapError(e => Error.Validation("The request body is not a JSON object."));
             }
         }
     }

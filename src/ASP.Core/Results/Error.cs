@@ -2,6 +2,7 @@
 {
     public abstract class Error
     {
+        public abstract string ErrorType { get; }
         public string Message { get; }
 
         public Error(string message)
@@ -23,5 +24,12 @@
         {
             return new ValidationError(message);
         }
+
+        public static Error NotAllowed(string message)
+        {
+            return new NotAllowedError(message);
+        }
+
+        public override string ToString() => $"{ErrorType}: {Message}";
     }
 }

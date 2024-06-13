@@ -10,5 +10,7 @@
         Task<int> CountAsync();
         Task<IList<string>> TextContentsAsync();
         Task<IList<string>> AttributeValuesAsync(string attributeName);
+        Task<IList<string>> TagNamesAsync();
+        Task<IList<string>> ValuesAsync();
     }
 }

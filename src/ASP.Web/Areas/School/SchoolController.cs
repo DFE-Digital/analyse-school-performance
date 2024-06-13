@@ -13,6 +13,9 @@ namespace ASP.Web.Areas.School
     [ServiceFilter<TermsOfUseActionFilter>]
     public class SchoolController : Controller
     {
+        const string LANDING_PAGE_CONTENT_TEMPLATE_ID = "school-landing-page";
+        const string USEFUL_LINKS_CONTENT_TEMPLATE_ID = "school-useful-links";
+
         private readonly ILogger<SchoolController> _logger;
         private readonly IGetEstablishmentDetailsUseCase _useCase;
         private readonly IViewContentTemplateUseCase _viewContentUseCase;
@@ -28,9 +31,9 @@ namespace ASP.Web.Areas.School
         }
 
         [HttpGet("{urn}")]
-        public async Task<IActionResult> Index(string urn)
+        public async Task<IActionResult> Index(string urn, string? revision)
         {
-           return await EstablishmentDetailsWithTemplate(urn, "school-landing-page");
+           return await EstablishmentDetailsWithTemplate(urn, LANDING_PAGE_CONTENT_TEMPLATE_ID, revision);
         }
 
         [HttpGet("{urn}/phonics")]
@@ -70,9 +73,9 @@ namespace ASP.Web.Areas.School
         }
 
         [HttpGet("{urn}/useful-links")]
-        public async Task<IActionResult> UsefulLinks(string urn)
+        public async Task<IActionResult> UsefulLinks(string urn, string? revision)
         {
-            return await EstablishmentDetailsWithTemplate(urn, "school-useful-links");
+            return await EstablishmentDetailsWithTemplate(urn, USEFUL_LINKS_CONTENT_TEMPLATE_ID, revision);
         }
 
         private async Task<Result<SchoolViewModel>> EstablishmentDetails(string urn)
@@ -83,7 +86,7 @@ namespace ASP.Web.Areas.School
 
         }
 
-        private async Task<IActionResult> EstablishmentDetailsWithTemplate(string urn, string templateId)
+        private async Task<IActionResult> EstablishmentDetailsWithTemplate(string urn, string contentTemplateId, string? revision)
         {
             var defaultIfNotFound = new ContentTemplateViewModel
             {
@@ -91,8 +94,8 @@ namespace ASP.Web.Areas.School
             };
             return await _useCase.HandleRequest(new GetEstablishmentDetailsUseCaseRequest(urn))
                .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
-               .Then(async establishmentDetailsModel => await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(templateId))
-                   .Map(template => ContentTemplateViewModel.FromTemplate(templateId, template))
+               .Then(async establishmentDetailsModel => await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(contentTemplateId, revision))
+                   .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template))
                    .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
                    .Map(contentTemplateModel => new SchoolViewModel
                    {

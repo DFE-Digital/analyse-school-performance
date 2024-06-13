@@ -45,7 +45,7 @@ Scenario: Component string property should be updated from the textbox field whe
 	When I update the component field labelled "StringProperty" to have the value "abc"
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "StringProperty" should be equal to "abc"
+	And the component template should have property "StringProperty" equal to "abc"
 
 @Javascript:disabled
 Scenario: Component int property should be editable by a textbox field
@@ -77,7 +77,7 @@ Scenario: Component int property should be updated from the textbox field when s
 	When I update the component field labelled "IntProperty" to have the value "456"
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "IntProperty" should be equal to 456
+	And the component template should have property "IntProperty" equal to 456
 
 @Javascript:disabled
 Scenario: Component array property should be editable by a textarea field
@@ -189,7 +189,7 @@ Scenario: Component object property should be updated to null when saved if text
 	When I update the component field labelled "ObjectProperty" to have the value "null"
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "ObjectProperty" should be equal to null
+	And the component template should have property "ObjectProperty" equal to null
 
 @Javascript:disabled
 Scenario: Component object property should be updated to null when saved if textarea field is empty
@@ -206,7 +206,7 @@ Scenario: Component object property should be updated to null when saved if text
 	When I update the component field labelled "ObjectProperty" to have the value ""
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "ObjectProperty" should be equal to null
+	And the component template should have property "ObjectProperty" equal to null
 
 @Javascript:disabled
 Scenario: Component ViewContent property should be unchanged by the generic editor template when saving unmodified

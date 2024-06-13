@@ -1,4 +1,4 @@
-﻿namespace ASP.Core.Results
+namespace ASP.Core.Results
 {
     public class Some<TValue> : Maybe<TValue> where TValue : notnull
     {

@@ -20,25 +20,41 @@ namespace ASP.Infrastructure.Repositories
             return _documentDB.DeleteAllAsync(ContainerKey);
         }
 
-        public Task<Result<ContentTemplate>> Get(string contentId)
+        public Task<Result<ContentTemplate>> GetPublishedRevision(string contentTemplateId)
         {
-            return _documentDB.GetAsync<ContentTemplateDTO>(ContainerKey, contentId, contentId)
+            return _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.contentId == contentTemplateId && t.IsPublished))
+                .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find a published revision for content template ""{contentTemplateId}""."))
+                .Map(dtos => dtos.First().ToContentTemplate());
+        }
+
+        public Task<Result<ContentTemplate>> GetRevision(string contentTemplateId, string revision)
+        {
+            return _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.id == revision && t.contentId == contentTemplateId))
+                .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find revision ""{revision}"" for content template ""{contentTemplateId}""."))
+                .Map(dtos => dtos.First().ToContentTemplate());
+        }
+
+        public Task<Result<ContentTemplate>> GetBaseTemplate(string contentTemplateId)
+        {
+            return _documentDB.GetAsync<ContentTemplateDTO>(ContainerKey, contentTemplateId, contentTemplateId)
+                .MapError(e => e is NotFoundError
+                    ? Error.NotFound($@"Could not find content template ""{contentTemplateId}"".")
+                    : e)
                 .Map(dto => dto.ToContentTemplate());
         }
 
-        public Task<Result<Done>> Update(string contentId, ContentTemplate contentTemplate)
+        public async Task<Result<Done>> Update(string contentTemplateId, string revision, ContentTemplate contentTemplate)
         {
-            var dto = new ContentTemplateDTO {
-                id = contentId,
-                contentId = contentId,
+            return await _documentDB.UpsertAsync(ContainerKey, revision, contentTemplateId, new ContentTemplateDTO {
+                id = revision,
+                contentId = contentTemplateId,
                 PageTitle = contentTemplate.PageTitle,
                 PageContent = contentTemplate.PageContent,
                 Views = (contentTemplate.Views ?? new List<TemplateComponent>())
                     .Select(TemplateComponentDTO.FromTemplateComponent)
                     .ToList()
-            };
-
-            return _documentDB.UpsertAsync(ContainerKey, contentId, contentId, dto);
+            });
         }
+
     }
 }

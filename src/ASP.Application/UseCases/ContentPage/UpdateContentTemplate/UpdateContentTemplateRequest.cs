@@ -5,11 +5,13 @@ namespace ASP.Application.UseCases.ContentPage.UpdateContentTemplate
     public class UpdateContentTemplateRequest
     {
         public string ContentTemplateId { get; set; }
+        public string? Revision { get; set; }
         public ContentTemplate ContentTemplate { get; set; }
 
-        public UpdateContentTemplateRequest(string contentTemplateId, ContentTemplate contentTemplate)
+        public UpdateContentTemplateRequest(string contentTemplateId, string? revision, ContentTemplate contentTemplate)
         {
             ContentTemplateId = contentTemplateId;
+            Revision = revision;
             ContentTemplate = contentTemplate;
         }
     }

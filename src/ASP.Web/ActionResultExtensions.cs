@@ -12,8 +12,8 @@ namespace ASP.Web
                     response => (IActionResult)response,
                     error => error switch
                     {
-                        NotFoundError e => new ObjectResult(e.Message) { StatusCode = 404 },
-                        _ => new ObjectResult(error.Message) { StatusCode = 500 }
+                        NotFoundError e => new ObjectResult(e.ToString()) { StatusCode = 404 },
+                        _ => new ObjectResult(error.ToString()) { StatusCode = 500 }
                     }
                 );
         }
@@ -25,8 +25,8 @@ namespace ASP.Web
                     response => (IActionResult)response,
                     error => error switch
                     {
-                        NotFoundError e => new ObjectResult(e.Message) { StatusCode = 404 },
-                        _ => new ObjectResult(error.Message) { StatusCode = 500 }
+                        NotFoundError e => new ObjectResult(e.ToString()) { StatusCode = 404 },
+                        _ => new ObjectResult(error.ToString()) { StatusCode = 500 }
                     }
                 );
         }
@@ -38,8 +38,8 @@ namespace ASP.Web
                     response => action(response),
                     error => error switch
                     {
-                        NotFoundError e => new ObjectResult(e.Message) { StatusCode = 404 },
-                        _ => new ObjectResult(error.Message) { StatusCode = 500 }
+                        NotFoundError e => new ObjectResult(e.ToString()) { StatusCode = 404 },
+                        _ => new ObjectResult(error.ToString()) { StatusCode = 500 }
                     }
                 );
         }
@@ -52,7 +52,7 @@ namespace ASP.Web
                     error => error switch
                     {
                         NotFoundError e => action(defaultIfNotFound),
-                        _ => new ObjectResult(error.Message) { StatusCode = 500 }
+                        _ => new ObjectResult(error.ToString()) { StatusCode = 500 }
                     }
                 );
         }
@@ -69,8 +69,8 @@ namespace ASP.Web
                         // Development-specific error handling
                         return error switch
                         {
-                            NotFoundError e => new ObjectResult(e.Message) { StatusCode = StatusCodes.Status404NotFound },
-                            _ => new ObjectResult(error.Message) { StatusCode = StatusCodes.Status500InternalServerError }
+                            NotFoundError e => new ObjectResult(e.ToString()) { StatusCode = StatusCodes.Status404NotFound },
+                            _ => new ObjectResult(error.ToString()) { StatusCode = StatusCodes.Status500InternalServerError }
                         };
                     }
                     else
@@ -100,7 +100,7 @@ namespace ASP.Web
                     error => error switch
                     {
                         NotFoundError e => action(defaultIfNotFound),
-                        _ => new ObjectResult(error.Message) { StatusCode = 500 }
+                        _ => new ObjectResult(error.ToString()) { StatusCode = 500 }
                     }
                 );
         }

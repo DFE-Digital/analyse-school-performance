@@ -1,6 +1,8 @@
 ﻿using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using ASP.Test.Core;
 using System.Xml.Linq;
+using Xunit.Sdk;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -56,6 +58,21 @@ namespace ASP.AcceptanceTests.Drivers
         public Task<IList<string>> AttributeValuesAsync(string attributeName)
         {
             return Task.FromResult((IList<string>)_elements.Select(e => e.GetAttribute(attributeName) ?? "").ToList());
+        }
+
+        public Task<IList<string>> TagNamesAsync()
+        {
+            return Task.FromResult((IList<string>)_elements.Select(e => e.TagName).ToList());
+        }
+
+        public Task<IList<string>> ValuesAsync()
+        {
+            return Task.FromResult((IList<string>)_elements.Select(e => e switch {
+                IHtmlSelectElement select => select.Value,
+                IHtmlInputElement input => input.Value,
+                IHtmlTextAreaElement textArea => textArea.Value,
+                _ => throw new XunitException($"Could not find the value of element of type {e.GetType().Name}.")
+            }).ToList());
         }
     }
 }

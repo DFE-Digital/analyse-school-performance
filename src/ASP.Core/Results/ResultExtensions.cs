@@ -100,6 +100,41 @@
             return result.ErrorIf(predicate, error);
         }
 
+        public static async Task<Result<TNewValue>> Combine<TValue, TOtherValue, TNewValue>(this Task<Result<TValue>> resultTask, Result<TOtherValue> otherResult, Func<TValue, TOtherValue, TNewValue> combineFunction)
+        {
+            var result = await resultTask;
+
+            return result.Combine(otherResult, combineFunction);
+        }
+
+        public static async Task<Result<TNewValue>> Combine<TValue, TValue1, TValue2, TNewValue>(this Task<Result<TValue>> resultTask, Result<TValue1> result1, Result<TValue2> result2, Func<TValue, TValue1, TValue2, TNewValue> combineFunction)
+        {
+            var result = await resultTask;
+
+            return result.Combine(result1, result2, combineFunction);
+        }
+
+        public static async Task<Result<TNewValue>> Combine<TValue, TValue1, TValue2, TValue3, TNewValue>(this Task<Result<TValue>> resultTask, Result<TValue1> result1, Result<TValue2> result2, Result<TValue3> result3, Func<TValue, TValue1, TValue2, TValue3, TNewValue> combineFunction)
+        {
+            var result = await resultTask;
+
+            return result.Combine(result1, result2, result3, combineFunction);
+        }
+
+        public static async Task<Result<TNewValue>> Combine<TValue, TValue1, TValue2, TValue3, TValue4, TNewValue>(this Task<Result<TValue>> resultTask, Result<TValue1> result1, Result<TValue2> result2, Result<TValue3> result3, Result<TValue4> result4, Func<TValue, TValue1, TValue2, TValue3, TValue4, TNewValue> combineFunction)
+        {
+            var result = await resultTask;
+
+            return result.Combine(result1, result2, result3, result4, combineFunction);
+        }
+
+        public static async Task<Result<TNextValue>> Convert<TValue, TNextValue>(this Task<Result<TValue>> resultTask, Func<TValue, Result<TNextValue>> onSuccess, Func<Error, Result<TNextValue>> onError)
+        {
+            var result = await resultTask;
+
+            return result.Convert(onSuccess, onError);
+        }
+
         public static Result<TValue> ToResult<TValue>(this TValue value)
         {
             return Result.Success(value);
@@ -116,7 +151,7 @@
 
             var values = results.OfType<SuccessResult<TValue>>().Select(r => r.Value);
 
-            return (Result<IEnumerable<TValue>>)values;
+            return Result.Success(values);
         }
     }
 }

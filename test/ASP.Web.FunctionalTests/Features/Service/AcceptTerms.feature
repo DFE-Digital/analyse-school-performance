@@ -2,7 +2,7 @@ Feature: Accept terms
 
 @Javascript:disabled
 Scenario: Continue button exists on terms of use page
-	Given page content "help-accept-terms-of-use" exists:
+	Given published content template "help-accept-terms-of-use" exists:
 		"""
 		{
 			"Views": [
@@ -36,7 +36,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Should get redirected to Accept terms when Accepted terms cookie is set to Rejected
-	Given page content "help-accept-terms-of-use" exists:
+	Given published content template "help-accept-terms-of-use" exists:
 		"""
 		{
 			"Views": [
@@ -58,7 +58,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Should set referral url when Accepted terms cookie is set to Rejected
-	Given page content "help-accept-terms-of-use" exists:
+	Given published content template "help-accept-terms-of-use" exists:
 		"""
 		{
 			"Views": [
@@ -82,7 +82,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Clicking Continue should set terms of use cookie to Accepted
-	Given page content "help-accept-terms-of-use" exists:
+	Given published content template "help-accept-terms-of-use" exists:
 		"""
 		{
 			"Views": [
@@ -102,7 +102,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Should redirect to the correct referrer
-	Given page content "help-accept-terms-of-use" exists:
+	Given published content template "help-accept-terms-of-use" exists:
 		"""
 		{
 			"Views": [

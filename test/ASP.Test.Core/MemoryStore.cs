@@ -41,12 +41,12 @@ namespace ASP.Test.Core
         {
             if (!_store.ContainsKey(container))
             {
-                return Error.NotFound($@"Not found: container ""{container}"" does not exist.");
+                return Error.NotFound($@"Container ""{container}"" does not exist.");
             }
 
             if (!_store[container].ContainsKey((id, partitionKeyValue)))
             {
-                return Error.NotFound($@"Not found: could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{container}"".");
+                return Error.NotFound($@"Could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{container}"".");
             }
 
             return _store[container][(id, partitionKeyValue)];
@@ -62,10 +62,12 @@ namespace ASP.Test.Core
         {
             if (!_store.ContainsKey(container))
             {
-                return Error.NotFound($@"Not found: container ""{container}"" does not exist.");
+                return Error.NotFound($@"Container ""{container}"" does not exist.");
             }
 
-            return (Result<IEnumerable<string>>) _store[container].Values.AsEnumerable();
+            var values = _store[container].Values;
+
+            return Result.Success(values.AsEnumerable());
         }
 
         public Result<IEnumerable<TItem>> GetAll<TItem>(string container) where TItem : class

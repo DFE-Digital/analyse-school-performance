@@ -21,8 +21,8 @@ namespace ASP.Api
         {
             return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
                 .Then(_ => RequestValidation.RequiredParameter(req, "id")
-                .Then(id => RequestValidation.NotEmpty(id, "id"))
-                .Then(id => _view.HandleRequest(new ViewContentTemplateRequest(id))))
+                .Then(id => RequestValidation.OptionalParameter(req, "revision")
+                .Then(revision => _view.HandleRequest(new ViewContentTemplateRequest(id, revision.ToNullable())))))
                 .ToApiResultAsync();
         }
     }

@@ -52,7 +52,7 @@ public class PageNotFoundLoggingMiddleware
                 var result = await _tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails));
                 result.Switch(
                     success => _logger.LogInformation(success),
-                    failure => _logger.LogError(failure.Message));
+                    failure => _logger.LogError(failure.ToString()));
             }
             await _next(httpContext);
         }

@@ -21,10 +21,14 @@ namespace ASP.Test.Core
 
         public Task<Result<IEnumerable<TItem>>> QueryAsync<TItem>(string container, Func<IQueryable<TItem>, IQueryable<TItem>> query) where TItem : class
         {
-            var items = _memoryStore.GetAll<TItem>(container)
-                .Map(all => query(all.AsQueryable()).AsEnumerable());
+            var items = _memoryStore.GetAll<TItem>(container);
 
-            return Task.FromResult(items);
+            var result = items.Map(all => {
+                return query(all.AsQueryable())
+                    .AsEnumerable();
+            });
+
+            return Task.FromResult(result);
         }
 
         public Task<Result<Done>> UpsertAsync<TItem>(string container, string id, string partitionKeyValue, TItem item) where TItem : class

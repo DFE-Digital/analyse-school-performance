@@ -7,6 +7,7 @@ namespace ASP.Infrastructure.Repositories
     {
         public string id { get; set; } = null!;
         public string contentId { get; set; } = null!;
+        public bool IsPublished { get; set; }
         public string? PageTitle { get; set; } = null!;
         public dynamic PageContent { get; set; } = new GracefulExpandoObject()!;
         public List<TemplateComponentDTO> Views { get; set; } = new List<TemplateComponentDTO>();
@@ -14,6 +15,7 @@ namespace ASP.Infrastructure.Repositories
         internal ContentTemplate ToContentTemplate()
         {
             return new ContentTemplate(
+                IsPublished,
                 PageTitle,
                 PageContent,
                 (Views ?? new List<TemplateComponentDTO>())
@@ -25,6 +27,7 @@ namespace ASP.Infrastructure.Repositories
         public static ContentTemplateDTO FromContentTemplate(ContentTemplate template)
         {
             return new ContentTemplateDTO {
+                IsPublished = template.IsPublished,
                 PageTitle = template.PageTitle,
                 PageContent = template.PageContent,
                 Views = (template.Views ?? new List<TemplateComponent>())

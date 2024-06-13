@@ -26,7 +26,7 @@ namespace ASP.Web.Features.ErrorHandling
                 var result = await tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails));
                 result.Switch(
                     success => logger.LogInformation(success),
-                    failure => logger.LogError(failure.Message));
+                    failure => logger.LogError(failure.ToString()));
             }
 
             return false;

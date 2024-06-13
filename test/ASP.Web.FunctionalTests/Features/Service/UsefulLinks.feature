@@ -10,7 +10,7 @@ Scenario: Useful links page should be accessible when valid urn is provided and 
             "urn": "136028",
         }
 		"""
-    And page content "school-useful-links" exists:
+    And published content template "school-useful-links" exists:
     """
     {
         "Views": [

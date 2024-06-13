@@ -1,0 +1,584 @@
+﻿using ASP.Core.Helpers;
+using ASP.Core.Results;
+using ASP.Test.Core;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
+using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Infrastructure;
+using Xunit;
+using ASP.Core;
+
+namespace ASP.Test.Acceptance.Core
+{
+    [Binding]
+    public partial class ContentTemplateStepDefinitions
+    {
+        private readonly ScenarioContext _scenarioContext;
+        private readonly IDocumentDatabase _database;
+        private readonly ISpecFlowOutputHelper _outputHelper;
+
+        public ContentTemplateStepDefinitions(IDocumentDatabase database, ISpecFlowOutputHelper outputHelper, ScenarioContext scenarioContext)
+        {
+            _database = database;
+            _outputHelper = outputHelper;
+            _scenarioContext = scenarioContext;
+        }
+
+        [Given(@"no content template exists")]
+        public void GivenNoContentTemplateExists()
+        {
+        }
+
+        [Given(@"published content template ""([^""]+)"" exists:")]
+        public async Task GivenContentTemplateExistsMultiline(string id, string data)
+        {
+            await SetUpPublishedContentTemplate(id, id, data).Switch(
+                _ =>
+                {
+                },
+                e => AssertWithMessage.Fail(e.ToString()));
+        }
+
+        [Given(@"published content template with id ""([^""]+)"" and contentId ""([^""]+)"" exists:")]
+        public async Task GivenContentTemplateWithIdAndContentIdExistsMultiline(string id, string contentId, string data)
+        {
+            await SetUpPublishedContentTemplate(id, contentId, data).Switch(
+                _ =>
+                {
+                },
+                e => AssertWithMessage.Fail(e.ToString()));
+        }
+
+        [Given(@"unpublished content template ""([^""]+)"" exists:")]
+        public async Task GivenUnpublishedContentTemplateExistsMultiline(string id, string data)
+        {
+            await SetUpUnpublishedContentTemplate(id, id, data).Switch(
+                _ =>
+                {
+                },
+                e => AssertWithMessage.Fail(e.ToString()));
+        }
+
+        [Given(@"unpublished content template with id ""([^""]+)"" and contentId ""([^""]+)"" exists:")]
+        public async Task GivenUnpublishedContentTemplateWithIdAndContentIdExistsMultiline(string id, string contentId, string data)
+        {
+            await SetUpUnpublishedContentTemplate(id, contentId, data).Switch(
+                _ =>
+                {
+                },
+                e => AssertWithMessage.Fail(e.ToString()));
+        }
+
+        [Given(@"establishment ""([^""]+)"" exists:")]
+        public async Task GivenEstablishmentExistsMultiline(string id, string data)
+        {
+            await SetUpEstablishment(id, data).Switch(
+                _ =>
+                {
+                },
+                e => AssertWithMessage.Fail(e.ToString()));
+        }
+
+        [Then(@"content template <(.+)> should have property ""([^""]+)"" equal to (.+)")]
+        public async Task ThenContentTemplateWithIdFromVariableShouldHavePropertyEqualTo(string idVariableName, string propertyPath, string propertyValue)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateShouldHavePropertyEqualTo(id, propertyPath, propertyValue);
+        }
+
+        [Then(@"content template ""([^""]+)"" should have property ""([^""]+)"" equal to (.+)")]
+        public async Task ThenContentTemplateShouldHavePropertyEqualTo(string id, string propertyPath, string propertyValue)
+        {
+            await GetContentTemplate(id, id).Switch(
+                data =>
+                {
+                    var value = GetPropertyPathValue(propertyPath, data);
+                    Assert.Equal(propertyValue, value);
+                },
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        [Then(@"content template with id <(.+)> and contentId ""([^""]+)"" should have property ""([^""]+)"" equal to (.+)")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdShouldHavePropertyEqualTo(string idVariableName, string contentId, string propertyPath, string propertyValue)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualTo(id, contentId, propertyPath, propertyValue);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId <(.+)> should have property ""([^""]+)"" equal to (.+)")]
+        public async Task ThenContentTemplateWithIdAndContentIdFromVariableShouldHavePropertyEqualTo(string id, string contentIdVariableName, string propertyPath, string propertyValue)
+        {
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualTo(id, contentId, propertyPath, propertyValue);
+        }
+
+        [Then(@"content template with id <(.+)> and contentId <(.+)> should have property ""([^""]+)"" equal to (.+)")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdFromVariableShouldHavePropertyEqualTo(string idVariableName, string contentIdVariableName, string propertyPath, string propertyValue)
+        {
+            var id = ResolveVariable(idVariableName);
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualTo(id, contentId, propertyPath, propertyValue);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId ""([^""]+)"" should have property ""([^""]+)"" equal to (.+)")]
+        public async Task ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualTo(string id, string contentId, string propertyPath, string propertyValue)
+        {
+            await GetContentTemplate(id, contentId).Switch(
+                data =>
+                {
+                    var value = GetPropertyPathValue(propertyPath, data);
+                    Assert.Equal(propertyValue, value);
+                },
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        [Then(@"content template <(.+)> should have property ""([^""]+)"" equal to:")]
+        public async Task ThenContentTemplateWithIdFromVariableShouldHavePropertyEqualToMultiline(string idVariableName, string propertyPath, string propertyValue)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateShouldHavePropertyEqualToMultiline(id, propertyPath, propertyValue);
+        }
+
+        [Then(@"content template ""([^""]+)"" should have property ""([^""]+)"" equal to:")]
+        public async Task ThenContentTemplateShouldHavePropertyEqualToMultiline(string id, string propertyPath, string propertyValue)
+        {
+            await GetContentTemplate(id, id).Switch(
+                contentTemplate => JsonHelper.Deserialize<object>(propertyValue).Switch(
+                    expected =>
+                    {
+                        var expectedSerializedPropertyValue = JsonHelper.Serialize(expected);
+                        var actualSerializedPropertyValue = GetPropertyPathValue(propertyPath, contentTemplate);
+
+                        Assert.Equal(expectedSerializedPropertyValue, actualSerializedPropertyValue);
+                    },
+                    e => AssertWithMessage.Fail(e.ToString())
+                ),
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        [Then(@"content template with id <(.+)> and contentId ""([^""]+)"" should have property ""([^""]+)"" equal to:")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdShouldHavePropertyEqualToMultiline(string idVariableName, string contentId, string propertyPath, string propertyValue)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualToMultiline(id, contentId, propertyPath, propertyValue);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId <(.+)> should have property ""([^""]+)"" equal to:")]
+        public async Task ThenContentTemplateWithIdAndContentIdFromVariableShouldHavePropertyEqualToMultiline(string id, string contentIdVariableName, string propertyPath, string propertyValue)
+        {
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualToMultiline(id, contentId, propertyPath, propertyValue);
+        }
+
+        [Then(@"content template with id <(.+)> and contentId <(.+)> should have property ""([^""]+)"" equal to:")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdFromVariableShouldHavePropertyEqualToMultiline(string idVariableName, string contentIdVariableName, string propertyPath, string propertyValue)
+        {
+            var id = ResolveVariable(idVariableName);
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualToMultiline(id, contentId, propertyPath, propertyValue);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId ""([^""]+)"" should have property ""([^""]+)"" equal to:")]
+        public async Task ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualToMultiline(string id, string contentId, string propertyPath, string propertyValue)
+        {
+            await GetContentTemplate(id, contentId).Switch(
+                contentTemplate => JsonHelper.Deserialize<object>(propertyValue).Switch(
+                    expected =>
+                    {
+                        var expectedSerializedPropertyValue = JsonHelper.Serialize(expected);
+                        var actualSerializedPropertyValue = GetPropertyPathValue(propertyPath, contentTemplate);
+
+                        Assert.Equal(expectedSerializedPropertyValue, actualSerializedPropertyValue);
+                    },
+                    e => AssertWithMessage.Fail(e.ToString())
+                ),
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        [Then(@"content template <(.+)> should have property ""([^""]+)"" matching:")]
+        public async Task ThenContentTemplateWithIdFromVariableShouldHavePropertyMatchingMultiline(string idVariableName, string propertyPath, string expected)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateShouldHavePropertyMatchingMultiline(id, propertyPath, expected);
+        }
+
+        [Then(@"content template ""([^""]+)"" should have property ""([^""]+)"" matching:")]
+        public async Task ThenContentTemplateShouldHavePropertyMatchingMultiline(string id, string propertyPath, string expected)
+        {
+            await GetContentTemplate(id, id).Switch(
+                contentTemplate =>
+                {
+                    var actual = GetPropertyPathValue(propertyPath, contentTemplate);
+
+                    MatchProperties(expected, actual);
+                },
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        [Then(@"content template with id <(.+)> and contentId ""([^""]+)"" should have property ""([^""]+)"" matching:")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdShouldHavePropertyMatchingMultiline(string idVariableName, string contentId, string propertyPath, string expected)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldHavePropertyMatchingMultiline(id, contentId, propertyPath, expected);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId <(.+)> should have property ""([^""]+)"" matching:")]
+        public async Task ThenContentTemplateWithIdAndContentIdFromVariableShouldHavePropertyMatchingMultiline(string id, string contentIdVariableName, string propertyPath, string expected)
+        {
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldHavePropertyMatchingMultiline(id, contentId, propertyPath, expected);
+        }
+
+        [Then(@"content template with id <(.+)> and contentId <(.+)> should have property ""([^""]+)"" matching:")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdFromVariableShouldHavePropertyMatchingMultiline(string idVariableName, string contentIdVariableName, string propertyPath, string expected)
+        {
+            var id = ResolveVariable(idVariableName);
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldHavePropertyMatchingMultiline(id, contentId, propertyPath, expected);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId ""([^""]+)"" should have property ""([^""]+)"" matching:")]
+        public async Task ThenContentTemplateWithIdAndContentIdShouldHavePropertyMatchingMultiline(string id, string contentId, string propertyPath, string expected)
+        {
+            await GetContentTemplate(id, contentId).Switch(
+                contentTemplate =>
+                {
+                    var actual = GetPropertyPathValue(propertyPath, contentTemplate);
+
+                    MatchProperties(expected, actual);
+                },
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        [Then(@"content template <(.+)> should match:")]
+        public async Task ThenContentTemplateWithIdFromVariableShouldMatchMultiline(string idVariableName, string expected)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateShouldMatchMultiline(id, expected);
+        }
+        
+        [Then(@"content template ""([^""]+)"" should match:")]
+        public async Task ThenContentTemplateShouldMatchMultiline(string id, string expected)
+        {
+            await GetContentTemplate(id, id).Switch(
+                actual => MatchProperties(expected, actual),
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        [Then(@"content template with id <(.+)> and contentId ""([^""]+)"" should match:")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdShouldMatchMultiline(string idVariableName, string contentId, string expected)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldMatchMultiline(id, contentId, expected);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId <(.+)> should match:")]
+        public async Task ThenContentTemplateWithIdAndContentIdFromVariableShouldMatchMultiline(string id, string contentIdVariableName, string expected)
+        {
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldMatchMultiline(id, contentId, expected);
+        }
+
+        [Then(@"content template with id <(.+)> and contentId <(.+)> should match:")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdFromVariableShouldMatchMultiline(string idVariableName, string contentIdVariableName, string expected)
+        {
+            var id = ResolveVariable(idVariableName);
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldMatchMultiline(id, contentId, expected);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId ""([^""]+)"" should match:")]
+        public async Task ThenContentTemplateWithIdAndContentIdShouldMatchMultiline(string id, string contentId, string expected)
+        {
+            await GetContentTemplate(id, contentId).Switch(
+                actual => MatchProperties(expected, actual),
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        [Then(@"content template <(.+)> should be equal to:")]
+        public async Task ThenContentTemplateWithIdFromVariableShouldBeEqualToMultiline(string idVariableName, string properties)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateShouldBeEqualToMultiline(id, properties);
+        }
+
+        [Then(@"content template ""([^""]+)"" should be equal to:")]
+        public async Task ThenContentTemplateShouldBeEqualToMultiline(string id, string properties)
+        {
+            await GetContentTemplate(id, id).Switch(
+                actual => 
+                {
+                    var expected = JsonHelper.Serialize(JsonHelper.Deserialize<object>(properties));
+                    Assert.Equal(expected, actual);
+                },
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        [Then(@"content template with id <(.+)> and contentId ""([^""]+)"" should be equal to:")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdShouldBeEqualToMultiline(string idVariableName, string contentId, string properties)
+        {
+            var id = ResolveVariable(idVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldBeEqualToMultiline(id, contentId, properties);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId <(.+)> should be equal to:")]
+        public async Task ThenContentTemplateWithIdAndContentIdFromVariableShouldBeEqualToMultiline(string id, string contentIdVariableName, string properties)
+        {
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldBeEqualToMultiline(id, contentId, properties);
+        }
+
+        [Then(@"content template with id <(.+)> and contentId <(.+)> should be equal to:")]
+        public async Task ThenContentTemplateWithIdFromVariableAndContentIdFromVariableShouldBeEqualToMultiline(string idVariableName, string contentIdVariableName, string properties)
+        {
+            var id = ResolveVariable(idVariableName);
+            var contentId = ResolveVariable(contentIdVariableName);
+            await ThenContentTemplateWithIdAndContentIdShouldBeEqualToMultiline(id, contentId, properties);
+        }
+
+        [Then(@"content template with id ""([^""]+)"" and contentId ""([^""]+)"" should be equal to:")]
+        public async Task ThenContentTemplateWithIdAndContentIdShouldBeEqualToMultiline(string id, string contentId, string properties)
+        {
+            await GetContentTemplate(id, contentId).Switch(
+                actual =>
+                {
+                    var expected = JsonHelper.Serialize(JsonHelper.Deserialize<object>(properties));
+                    Assert.Equal(expected, actual);
+                },
+                e => AssertWithMessage.Fail(e.ToString())
+            );
+        }
+
+        protected async Task<Result<string>> GetContentTemplate(string id, string contentId)
+        {
+            return await _database.GetAsync<Dictionary<string, object>>("content", id, contentId)
+                .Map(JsonHelper.Serialize);
+        }
+
+        protected async Task<Result<Done>> SetUpPublishedContentTemplate(string id, string contentId, string data)
+        {
+            var document = await _database.GetAsync<Dictionary<string, object>>("content", id, contentId)
+            .GetValueOrDefault(new Dictionary<string, object>());
+
+            var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+
+            foreach (var d in dataDict)
+            {
+                document[d.Key] = d.Value;
+            }
+            document["id"] = id;
+            document["contentId"] = contentId;
+            document["IsPublished"] = true;
+
+            return await _database.UpsertAsync("content", id, contentId, document);
+        }
+
+        protected async Task<Result<Done>> SetUpUnpublishedContentTemplate(string id, string contentId, string data)
+        {
+            var document = await _database.GetAsync<Dictionary<string, object>>("content", id, contentId)
+            .GetValueOrDefault(new Dictionary<string, object>());
+
+            var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+
+            foreach (var d in dataDict)
+            {
+                document[d.Key] = d.Value;
+            }
+            document["id"] = id;
+            document["contentId"] = contentId;
+            document["IsPublished"] = false;
+
+            return await _database.UpsertAsync("content", id, contentId, document);
+        }
+
+        protected async Task<Result<Done>> SetUpEstablishment(string id, string data)
+        {
+            var document = await _database.GetAsync<Dictionary<string, object>>("establishments", id, id)
+                .GetValueOrDefault(new Dictionary<string, object>());
+
+            var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+
+            foreach (var d in dataDict)
+            {
+                document[d.Key] = d.Value;
+            }
+
+            return await _database.UpsertAsync("establishments", id, id, document);
+        }
+
+        protected string GetPropertyPathValue(string propertyPath, string data)
+        {
+            var parts = propertyPath.Split('.');
+            var propertyName = parts[0];
+            var regex = new Regex(@"(.*)\[(\d+)\]");
+            var match = regex.Match(propertyName);
+            if (match.Success)
+            {
+                var arrayProperty = match.Groups[1].Value;
+                var arrayIndex = int.Parse(match.Groups[2].Value);
+
+                Dictionary<string, object>? dict = null;
+                JsonHelper.Deserialize<Dictionary<string, object>>(data).Switch(
+                    v => dict = v,
+                    e => AssertWithMessage.Fail(e.ToString())
+                );
+                AssertWithMessage.True(dict!.ContainsKey(arrayProperty), $@"Page content object does not contain property ""{arrayProperty}"":\n{data}");
+                var arrayValue = dict![arrayProperty];
+                object[]? array = null;
+                JsonHelper.Deserialize<object[]>(JsonHelper.Serialize(arrayValue)).Switch(
+                    v => array = v,
+                    e => AssertWithMessage.Fail(e.ToString())
+                );
+                if (array!.Length <= arrayIndex)
+                {
+                    AssertWithMessage.Fail($@"Array index {arrayIndex} does not exist on array ""{arrayProperty}"":\n{JsonHelper.Serialize(array!)}");
+                }
+                var value = JsonHelper.Serialize(array![arrayIndex]);
+                var restOfPath = string.Join(".", parts.Skip(1));
+                if (restOfPath.Length > 0)
+                {
+                    return GetPropertyPathValue(restOfPath, value);
+                }
+                return value;
+            }
+            else
+            {
+                Dictionary<string, object>? dict = null;
+                JsonHelper.Deserialize<Dictionary<string, object>>(data).Switch(
+                    v => dict = v,
+                    e => AssertWithMessage.Fail(e.ToString())
+                );
+                AssertWithMessage.True(dict!.ContainsKey(propertyName), $@"Page content object does not contain property ""{propertyName}"":\n{data}");
+                var value = JsonHelper.Serialize(dict![propertyName]);
+                var restOfPath = string.Join(".", parts.Skip(1));
+                if (restOfPath.Length > 0)
+                {
+                    return GetPropertyPathValue(restOfPath, value);
+                }
+                return value;
+            }
+        }
+
+        private void MatchProperties(string expected, string actual)
+        {
+            PruneTree(expected, actual, serializedActual =>
+            {
+                JsonHelper.Deserialize<object>(expected).Switch(
+                    ex =>
+                    {
+                        var serializedExpected = JsonHelper.Serialize(ex);
+                        Assert.Equal(serializedExpected, serializedActual);
+                    },
+                    e =>
+                    {
+                        AssertWithMessage.Fail(e.ToString());
+                    }
+                );
+            });
+        }
+
+        private void PruneTree(string expected, string actual, Action<string> doSomething)
+        {
+            JsonHelper.Deserialize<Dictionary<string, object>>(actual).Switch(
+                actualDict =>
+                {
+                    JsonHelper.Deserialize<Dictionary<string, object>>(expected).Switch(
+                        expectedDict =>
+                        {
+                            var resultDict = new Dictionary<string, object>();
+                            foreach (var kvp in expectedDict)
+                            {
+                                if(!actualDict.ContainsKey(kvp.Key))
+                                {
+                                    AssertWithMessage.Fail($@"Expected property ""{kvp.Key}"" to exist.");
+                                }
+                                PruneTree(JsonHelper.Serialize(kvp.Value), JsonHelper.Serialize(actualDict[kvp.Key]), r =>
+                                {
+                                    JsonHelper.Deserialize<object>(r).Switch(
+                                        v =>
+                                        {
+                                            resultDict[kvp.Key] = v;
+                                        },
+                                        e =>
+                                        {
+                                            AssertWithMessage.Fail(e.ToString());
+                                        }
+                                    );
+                                });
+                            }
+
+                            var result = JsonHelper.Serialize(resultDict);
+
+                            doSomething(result);
+                        },
+                        e =>
+                        {
+                            AssertWithMessage.Fail(e.ToString());
+                        }
+                    );
+                },
+                e =>
+                {
+                    JsonHelper.Deserialize<List<object>>(actual).Switch(
+                        actualList =>
+                        {
+                            JsonHelper.Deserialize<List<object>>(expected).Switch(
+                                expectedList =>
+                                {
+                                    var resultList = new List<object>();
+                                    for (var i = 0; i < Math.Min(expectedList.Count, actualList.Count); i++)
+                                    {
+                                        PruneTree(JsonHelper.Serialize(expectedList[i]), JsonHelper.Serialize(actualList[i]), r =>
+                                        {
+                                            JsonHelper.Deserialize<object>(r).Switch(
+                                                v =>
+                                                {
+                                                    resultList.Add(v);
+                                                },
+                                                e =>
+                                                {
+                                                    AssertWithMessage.Fail(e.ToString());
+                                                }
+                                            );
+                                        });
+                                    }
+
+                                    var result = JsonHelper.Serialize(resultList);
+
+                                    doSomething(result);
+                                },
+                                e =>
+                                {
+                                    AssertWithMessage.Fail(e.ToString());
+                                }
+                            );
+                        },
+                        e =>
+                        {
+                            doSomething(actual);
+                        }
+                    );
+                }
+            );
+        }
+
+        private string ResolveVariable(string variableName)
+        {
+            if (!_scenarioContext.ContainsKey(variableName))
+            {
+                Assert.Fail($@"Variable ""{variableName}"" was not set. Did you forget a ""When I remember ... "" step? ;)");
+            }
+
+            return (string)_scenarioContext[variableName];
+        }
+    }
+}

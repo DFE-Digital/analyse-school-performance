@@ -11,11 +11,13 @@ namespace ASP.AcceptanceTests.StepDefinitions
     {
         private readonly IWebDriver _web;
         private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly ScenarioContext _scenarioContext;
 
-        public AspWebStepDefinitions(IWebDriver web, ISpecFlowOutputHelper outputHelper)
+        public AspWebStepDefinitions(IWebDriver web, ISpecFlowOutputHelper outputHelper, ScenarioContext scenarioContext)
         {
             _web = web;
             _outputHelper = outputHelper;
+            _scenarioContext = scenarioContext;
         }
 
         [Given(@"I navigate to ((?:/.*)+)")]
@@ -37,7 +39,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await _web.NavigateAsync($"/error-test/page-not-found-error/{errorMessage}");
         }
 
-        [When(@"I update the element ""([^""]*)"" to be (checked|unchecked)")]
+        [When(@"I update the element ""(.+)"" to be (checked|unchecked)")]
         public async Task WhenIUpdateTheElementToBe(string selector, string state)
         {
             var element = await _web.Element(selector);
@@ -46,7 +48,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await element.SetCheckedAsync(state == "checked");
         }
 
-        [When(@"I update the textbox ""([^""]*)"" to have the value ""([^""]*)""")]
+        [When(@"I update the textbox ""(.+)"" to have the value ""([^""]*)""")]
         public async Task WhenIUpdateTheTextBoxToHaveTheValue(string selector, string value)
         {
             var element = await _web.Element(selector);
@@ -55,13 +57,33 @@ namespace ASP.AcceptanceTests.StepDefinitions
             await element.SetValueAsync(value);
         }
 
-        [When(@"I click the button ""([^""]*)""")]
+        [When(@"I click the button ""(.+)""")]
         public async Task WhenIClickTheButton(string elementSelector)
         {
             var button = await _web.Element(elementSelector);
             await button.ShouldExistAsync($@"Could not find an element with the selector ""{elementSelector}"".");
 
             await button.ClickAsync();
+        }
+
+        [When(@"I remember the (text content|tag name|class|value|href|outer HTML|inner HTML) of (element|textbox|input|hidden input|button) ""(.+)"" as <([^>]+)>")]
+        public async Task WhenIRememberTheElementValueAs(string valueType, string elementType, string selector, string variableName)
+        {
+            var element = await _web.Element(selector);
+            await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
+
+            var value = valueType switch {
+                "text content" => await element.TextContentAsync(),
+                "tag name" => await element.TagNameAsync(),
+                "class" => await element.AttributeAsync("class"),
+                "value" => await element.ValueAsync(),
+                "href" => await element.AttributeAsync("href"),
+                "outer HTML" => await element.OuterHtmlAsync(),
+                "inner HTML" => await element.InnerHtmlAsync(),
+                _ => throw new NotImplementedException("We shouldn't have got here")
+            };
+
+            _scenarioContext[variableName] = value.Trim();
         }
 
         [Then(@"I should get a (.*) response")]
@@ -92,52 +114,23 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expected, actual);
         }
 
-        [Then(@"the element ""([^""]*)"" should not exist")]
-        public async Task ThenTheElementShouldNotExist(string selector)
+        [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should (exist|not exist)")]
+        public async Task ThenTheElementShouldExist(string elementType, string selector, string criteria)
         {
             var element = await _web.Element(selector);
-            await element.ShouldNotExistAsync($@"Found an element with the selector ""{selector}"".");
+
+            if(criteria == "exist")
+            {
+                await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
+            }
+            else
+            {
+                await element.ShouldNotExistAsync($@"Found an element with the selector ""{selector}"".");
+            }
         }
 
-        [Then(@"the element ""([^""]*)"" should exist")]
-        public async Task ThenTheElementShouldExist(string selector)
-        {
-            var element = await _web.Element(selector);
-            await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
-        }
-
-        [Then(@"the element ""([^""]*)"" should have the outer HTML:")]
-        public async Task ThenTheElementShouldHaveTheOuterHtml(string selector, string expectedHtml)
-        {
-            var element = await _web.Element(selector);
-            await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
-
-            var outerHtml = await element.OuterHtmlAsync();
-            AssertHtml.Equal(expectedHtml, outerHtml, _outputHelper.WriteLine);
-        }
-
-        [Then(@"the element ""([^""]*)"" should have the text content ""(.*)""")]
-        public async Task ThenTheElementShouldHaveTheTextContent(string selector, string expectedTextContent)
-        {
-            var element = await _web.Element(selector);
-            await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
-
-            var textContent = await element.TextContentAsync();
-            Assert.Equal(expectedTextContent.Trim(), textContent.Trim());
-        }
-
-        [Then(@"the element ""([^""]*)"" should have the inner HTML ""(.*)""")]
-        public async Task ThenTheElementShouldHaveTheInnerHtml(string selector, string expectedHtml)
-        {
-            var element = await _web.Element(selector);
-            await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
-
-            var innerHtml = await element.InnerHtmlAsync();
-            AssertHtml.Equal(expectedHtml, innerHtml, _outputHelper.WriteLine);
-        }
-
-        [Then(@"the element ""([^""]*)"" should match the selector ""(.+)""")]
-        public async Task ThenTheElementShouldMatchTheSelector(string selector, string selectorToMatch)
+        [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should match the selector ""(.+)""")]
+        public async Task ThenTheElementShouldMatchTheSelector(string elementType, string selector, string selectorToMatch)
         {
             var element = await _web.Element(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
@@ -146,28 +139,31 @@ namespace ASP.AcceptanceTests.StepDefinitions
             AssertWithMessage.True(matches, $@"The element did not match ""{selectorToMatch}"".");
         }
 
-        [Then(@"the element ""([^""]*)"" should have the tag name ""([^""]*)""")]
-        public async Task ThenTheElementShouldHaveTheTagName(string selector, string expectedTagName)
+        [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should have the (outer HTML|inner HTML) <(.+)>")]
+        public async Task ThenTheElementShouldHaveTheHtmlFromVariable(string elementType, string selector, string valueType, string variableName)
+        {
+            var expectedValue = ResolveVariable(variableName);
+
+            await ThenTheElementShouldHaveTheHtmlMultiline(elementType, selector, valueType, expectedValue);
+        }
+
+        [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should have the (outer HTML|inner HTML):")]
+        public async Task ThenTheElementShouldHaveTheHtmlMultiline(string elementType, string selector, string valueType, string expectedValue)
         {
             var element = await _web.Element(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
-            var tagName = await element.TagNameAsync();
-            Assert.Equal(expectedTagName, tagName);
+            var value = valueType switch {
+                "outer HTML" => await element.OuterHtmlAsync(),
+                "inner HTML" => await element.InnerHtmlAsync(),
+                _ => throw new NotImplementedException("We shouldn't have got here")
+            };
+
+            AssertHtml.Equal(expectedValue.Trim(), value.Trim(), _outputHelper.WriteLine);
         }
 
-        [Then(@"the element ""([^""]*)"" should have the class ""([^""]*)""")]
-        public async Task ThenTheElementShouldHaveTheClass(string selector, string expectedClass)
-        {
-            var element = await _web.Element(selector);
-            await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
-
-            var @class = await element.AttributeAsync("class");
-            Assert.Equal(expectedClass, @class);
-        }
-
-        [Then(@"the element ""([^""]*)"" class should contain ""([^""]*)""")]
-        public async Task ThenTheElementClassShouldContain(string selector, string expectedClass)
+        [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" class should contain ""([^""]*)""")]
+        public async Task ThenTheElementClassShouldContain(string elementType, string selector, string expectedClass)
         {
             var element = await _web.Element(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
@@ -177,18 +173,34 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Contains(expectedClass, @classes.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
         }
 
-        [Then(@"the textbox ""([^""]*)"" should have the value ""([^""]*)""")]
-        public async Task ThenTheTextBoxShouldHaveTheValue(string selector, string expectedValue)
+        [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should have the (text content|tag name|class|value|href) <(.+)>")]
+        public async Task ThenTheElementShouldHaveTheValueFromVariable(string elementType, string selector, string valueType, string variableName)
+        {
+            var expectedValue = ResolveVariable(variableName);
+
+            await ThenTheElementShouldHaveTheValue(elementType, selector, valueType, expectedValue);
+        }
+
+        [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should have the (text content|tag name|class|value|href) ""(.*)""")]
+        public async Task ThenTheElementShouldHaveTheValue(string elementType, string selector, string valueType, string expectedValue)
         {
             var element = await _web.Element(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
-            var value = await element.ValueAsync();
-            Assert.Equal(expectedValue.Trim(), value.Trim());
+            var value = valueType switch {
+                "text content" => await element.TextContentAsync(),
+                "tag name" => await element.TagNameAsync(),
+                "class" => await element.AttributeAsync("class"),
+                "value" => await element.ValueAsync(),
+                "href" => await element.AttributeAsync("href"),
+                _ => throw new NotImplementedException("We shouldn't have got here")
+            };
+
+            AssertHtml.Equal(expectedValue.Trim(), value.Trim(), _outputHelper.WriteLine);
         }
 
-        [Then(@"the element ""([^""]*)"" should be (checked|unchecked)")]
-        public async Task ThenTheElementShouldBe(string selector, string state)
+        [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should be (checked|unchecked)")]
+        public async Task ThenTheElementShouldBe(string elementType, string selector, string state)
         {
             var element = await _web.Element(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
@@ -197,18 +209,8 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(state == "checked", isChecked);
         }
 
-        [Then(@"the element ""([^""]*)"" should have the href ""([^""]*)""")]
-        public async Task ThenTheElementShouldHaveTheHref(string selector, string expectedHref)
-        {
-            var element = await _web.Element(selector);
-            await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
-            var href = await element.AttributeAsync("href");
-
-            Assert.Equal(expectedHref.Trim(), href.Trim());
-        }
-
-        [Then(@"the element ""(.*)"" should have the attribute ""(.*)"" set to ""(.*)""")]
-        public async Task ThenTheElementShouldHaveTheAttribute(string selector, string attribute, string expectedValue)
+        [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should have the attribute ""(.*)"" set to ""(.*)""")]
+        public async Task ThenTheElementShouldHaveTheAttribute(string elementType, string selector, string attribute, string expectedValue)
         {
             var element = await _web.Element(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
@@ -227,65 +229,62 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expectedValue, actualValue);
         }
 
-        [Then(@"the elements ""(.+)"" should total (.*)")]
-        public async Task ThenTheElementsShouldTotal(string selector, int expectedCount)
+        [Then(@"the (elements|textboxes|inputs|hidden inputs|buttons) ""(.+)"" should total (.*)")]
+        public async Task ThenTheElementsShouldTotal(string elementType, string selector, int expectedCount)
         {
             var elements = await _web.Elements(selector);
             await elements.ShouldHaveCountAsync(expectedCount, actual => $"Expected {expectedCount} elements but found {actual}");
         }
 
-        [Then(@"the elements ""(.+)"" should have the text contents:")]
-        public async Task ThenTheElementsShouldHaveTheTextContents(string selector, Table content)
+        [Then(@"the (elements|textboxes|inputs|hidden inputs|buttons) ""(.+)"" should have the (text contents|tag names|classes|values|hrefs):")]
+        public async Task ThenTheElementsShouldHaveTheTextContents(string elementType, string selector, string valueTypes, Table content)
         {
             int index = 0;
             var elements = await _web.Elements(selector);
             await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
-            var textContents = await elements.TextContentsAsync();
+            
+            var values = valueTypes switch {
+                "text contents" => await elements.TextContentsAsync(),
+                "tag name" => await elements.TagNamesAsync(),
+                "classes" => await elements.AttributeValuesAsync("class"),
+                "value" => await elements.ValuesAsync(),
+                "hrefs" => await elements.AttributeValuesAsync("href"),
+                _ => throw new NotImplementedException("We shouldn't have got here")
+            };
 
             foreach (var item in content.Rows)
             {
-                Assert.Equal(item.Values.First(), textContents[index].Trim());
+                Assert.Equal(item.Values.First().Trim(), values[index].Trim());
                 index++;
             }
         }
 
-        [Then(@"the elements ""(.+)"" should have the hrefs:")]
-        public async Task ThenTheElementsShouldHaveTheHrefs(string selector, Table content)
+        [Then(@"the (elements|textboxes|inputs|hidden inputs|buttons) ""(.+)"" should all have the (text content|tag name|class|value|href) ""(.+)""")]
+        public async Task ThenTheElementsShouldAllHaveTheClass(string elementType, string selector, string valueType, string expectedValue)
         {
-            int index = 0;
             var elements = await _web.Elements(selector);
-            await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
-            var hrefs = await elements.AttributeValuesAsync("href");
 
-            foreach (var item in content.Rows)
-            {
-                Assert.Equal(item.Values.First(), hrefs[index].Trim());
-                index++;
-            }
-        }
+            var value = valueType switch {
+                "text content" => await elements.TextContentsAsync(),
+                "tag name" => await elements.TagNamesAsync(),
+                "class" => await elements.AttributeValuesAsync("class"),
+                "value" => await elements.ValuesAsync(),
+                "href" => await elements.AttributeValuesAsync("href"),
+                _ => throw new NotImplementedException("We shouldn't have got here")
+            };
 
-        [Then(@"the elements ""(.+)"" should have the classes:")]
-        public async Task ThenTheElementsShouldHaveTheClasses(string selector, Table content)
-        {
-            int index = 0;
-            var elements = await _web.Elements(selector);
-            await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
             var classes = await elements.AttributeValuesAsync("class");
-
-            foreach (var item in content.Rows)
-            {
-                Assert.Equal(item.Values.First(), classes[index].Trim());
-                index++;
-            }
+            Assert.All(classes, c => Assert.Equal(expectedValue, c));
         }
 
-        [Then(@"the elements ""(.+)"" should all have the class ""(.+)""")]
-        public async Task ThenTheElementsShouldAllHaveTheClass(string selector, string expectedClass)
+        private string ResolveVariable(string variableName)
         {
-            var elements = await _web.Elements(selector);
-            var classes = await elements.AttributeValuesAsync("class");
-            Assert.All(classes, c => Assert.Equal(expectedClass, c));
+            if (!_scenarioContext.ContainsKey(variableName))
+            {
+                Assert.Fail($@"Variable ""{variableName}"" was not set. Did you forget a ""When I remember ... "" step? ;)");
+            }
+
+            return (string)_scenarioContext[variableName];
         }
     }
-
 }

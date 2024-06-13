@@ -4,7 +4,6 @@ using ASP.Core.Templating;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-
 namespace ASP.Api
 {
     public class UpdateContentTemplate : ApiFunction
@@ -23,9 +22,9 @@ namespace ASP.Api
         {
             return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Post])
                 .Then(_ => RequestValidation.RequiredParameter(req, "id")
-                .Then(id => RequestValidation.NotEmpty(id, "id")))
-                .Then(id => RequestValidation.RequiredBodyAsync<ContentTemplate>(req)
-                .Then(contentTemplate => _update.HandleRequest(new UpdateContentTemplateRequest(id, contentTemplate))))
+                .Then(id => RequestValidation.OptionalParameter(req, "revision")
+                .Then(revision => RequestValidation.RequiredBodyAsync<ContentTemplate>(req)
+                .Then(contentTemplate => _update.HandleRequest(new UpdateContentTemplateRequest(id, revision.ToNullable(), contentTemplate))))))
                 .ToApiResultAsync();
         }
     }

@@ -14,7 +14,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Home page cards should be populated from the "home-page" content template
-  Given page content "home-page" exists:
+  Given published content template "home-page" exists:
 		"""
 		{
 			"Views": [
@@ -36,7 +36,7 @@ Scenario: Home page cards should be populated from the "home-page" content templ
 
 @Javascript:disabled
 Scenario: Home page cards should be populated correctly
-      Given page content "home-page" exists:
+      Given published content template "home-page" exists:
 		"""
 		{
 			"Views": [
@@ -90,11 +90,9 @@ Scenario: Home page hero show service title when home-page content is missing in
 
 @Javascript:disabled
 Scenario: Home page hero should display placeholder title when PageContent is missing
-	Given page content "home-page" exists:
+	Given published content template "home-page" exists:
 		"""
 		{
-			"id": "home-page",
-			"contentId": "home-page",
 			"PageTitle": "Analyse school performance"
 		}
 		"""
@@ -104,14 +102,11 @@ Scenario: Home page hero should display placeholder title when PageContent is mi
 
 @Javascript:disabled
 Scenario: Home page hero should display placeholder description when HeroDescription is missing
-	Given page content "home-page" exists:
+	Given published content template "home-page" exists:
 		"""
 		{
-			"id": "home-page",
-			"contentId": "home-page",
 			"PageTitle": "Analyse school performance",
 			"PageContent": {
-
 			}
 		}
 		"""
@@ -121,11 +116,9 @@ Scenario: Home page hero should display placeholder description when HeroDescrip
 
 @Javascript:disabled
 Scenario: Home page hero should display placeholder description when HeroDescription is null
-	Given page content "home-page" exists:
+	Given published content template "home-page" exists:
 		"""
 		{
-			"id": "home-page",
-			"contentId": "home-page",
 			"PageTitle": "Analyse school performance",
 			"PageContent": {
 				"HeroDescription": null
@@ -138,11 +131,9 @@ Scenario: Home page hero should display placeholder description when HeroDescrip
 
 @Javascript:disabled
 Scenario: Home page hero should display correct heading and description
-	Given page content "home-page" exists:
+	Given published content template "home-page" exists:
 		"""
 		{
-			"id": "home-page",
-			"contentId": "home-page",
 			"PageTitle": "Analyse school performance",
 			"PageContent": {
 				"HeroDescription": "Hero description"

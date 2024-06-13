@@ -1,4 +1,5 @@
-﻿using ASP.AcceptanceTests.Drivers;
+﻿using AngleSharp.Dom;
+using ASP.AcceptanceTests.Drivers;
 using ASP.Test.Core;
 using Microsoft.Playwright;
 
@@ -72,6 +73,22 @@ namespace ASP.Web.AcceptanceTests.Drivers
         {
             var all = await _elements.AllAsync();
             var values = await Task.WhenAll(all.Select(e => e.GetAttributeAsync(attributeName)));
+
+            return (values ?? []).Select(s => s ?? "").ToList();
+        }
+
+        public async Task<IList<string>> TagNamesAsync()
+        {
+            var all = await _elements.AllAsync();
+            var values = await Task.WhenAll(all.Select(e => e.EvaluateAsync("node => node.tagName")));
+
+            return (values ?? []).Select(s => s.ToString()?.ToLower() ?? "").ToList();
+        }
+
+        public async Task<IList<string>> ValuesAsync()
+        {
+            var all = await _elements.AllAsync();
+            var values = await Task.WhenAll(all.Select(e => e.InputValueAsync()));
 
             return (values ?? []).Select(s => s ?? "").ToList();
         }

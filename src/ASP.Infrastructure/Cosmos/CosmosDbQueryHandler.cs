@@ -1,7 +1,6 @@
 ﻿using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.Providers;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
-using System.Linq.Expressions;
 
 namespace ASP.Infrastructure.Cosmos
 {
@@ -36,8 +35,7 @@ namespace ASP.Infrastructure.Cosmos
 
         public async Task<IEnumerable<TItem>> ReadIterableItemsAsync<TItem>(
             string containerKey,
-            Expression<Func<TItem, TItem>> selector,
-            Expression<Func<TItem, bool>> predicate,
+            Func<IQueryable<TItem>, IQueryable<TItem>> query,
             CancellationToken cancellationToken = default)
                where TItem : class
         {
@@ -46,24 +44,8 @@ namespace ASP.Infrastructure.Cosmos
                     .GetContainerAsync(containerKey).ConfigureAwait(false);
 
             return await ReadIterableItemsAsync(
-                container.GetItemLinqQueryable<TItem>()
-                    .Where(predicate)
-                    .Select(selector)
+                query(container.GetItemLinqQueryable<TItem>())
                         .ToFeedIterator(), cancellationToken);
-        }
-
-        public async Task<IEnumerable<TItem>> ReadIterableItemsAsync<TItem>(
-            string containerKey,
-            QueryDefinition queryDefinition,
-            CancellationToken cancellationToken = default)
-               where TItem : class
-        {
-            Container container =
-                await _cosmosDbContainerProvider
-                    .GetContainerAsync(containerKey).ConfigureAwait(false);
-
-            return await ReadIterableItemsAsync(
-                container.GetItemQueryIterator<TItem>(queryDefinition), cancellationToken);
         }
 
         private static async Task<IEnumerable<TItem>> ReadIterableItemsAsync<TItem>(

@@ -1,7 +1,7 @@
 ﻿using ASP.AcceptanceTests.Drivers;
 using ASP.Core.Helpers;
 using ASP.Test.Core;
-using Microsoft.AspNetCore.Http;
+using ASP.Test.Web.Areas.ComponentTest;
 using System.Net;
 using TechTalk.SpecFlow.Infrastructure;
 
@@ -24,14 +24,14 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [When(@"I view the component on the page")]
         public async Task IViewTheComponentOnThePage()
         {
-            await _web.NavigateAsync("/component-test/view");
+            await _web.NavigateAsync($"/component-test/view?revision={ComponentTestController.TEST_COMPONENT_TEMPLATE_ID}");
         }
 
         [Given(@"I edit the component on the page")]
         [When(@"I edit the component on the page")]
         public async Task IEditTheComponentOnThePage()
         {
-            await _web.NavigateAsync("/component-test/edit");
+            await _web.NavigateAsync($"/component-test/edit?revision={ComponentTestController.TEST_COMPONENT_TEMPLATE_ID}");
         }
 
         [When(@"I save the component")]
@@ -264,6 +264,73 @@ namespace ASP.AcceptanceTests.StepDefinitions
 
             var @class = await element.AttributeAsync(attribute);
             Assert.Equal(expectedValue, @class);
+        }
+
+        [Then(@"the elements ""(.+)"" within the component should total (.*)")]
+        public async Task ThenTheElementsWithinTheComponentShouldTotal(string selector, int expectedCount)
+        {
+            var component = await ComponentShouldExistAsync();
+
+            var elements = component.Elements($":scope {selector}");
+            await elements.ShouldHaveCountAsync(expectedCount, actual => $"Expected {expectedCount} elements but found {actual}");
+        }
+
+        [Then(@"the elements ""(.+)"" within the component should have the text contents:")]
+        public async Task ThenTheElementsWithinTheComponentShouldHaveTheTextContents(string selector, Table content)
+        {
+            int index = 0;
+            var component = await ComponentShouldExistAsync();
+            var elements = component.Elements($":scope {selector}");
+            await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
+            var textContents = await elements.TextContentsAsync();
+
+            foreach (var item in content.Rows)
+            {
+                Assert.Equal(item.Values.First(), textContents[index].Trim());
+                index++;
+            }
+        }
+
+        [Then(@"the elements ""(.+)"" within the component should have the hrefs:")]
+        public async Task ThenTheElementsWithinTheComponentShouldHaveTheHrefs(string selector, Table content)
+        {
+            int index = 0;
+            var component = await ComponentShouldExistAsync();
+            var elements = component.Elements($":scope {selector}");
+            await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
+            var hrefs = await elements.AttributeValuesAsync("href");
+
+            foreach (var item in content.Rows)
+            {
+                Assert.Equal(item.Values.First(), hrefs[index].Trim());
+                index++;
+            }
+        }
+
+        [Then(@"the elements ""(.+)"" within the component should have the classes:")]
+        public async Task ThenTheElementsWithinTheComponentShouldHaveTheClasses(string selector, Table content)
+        {
+            int index = 0;
+            var component = await ComponentShouldExistAsync();
+            var elements = component.Elements($":scope {selector}");
+            await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
+            var classes = await elements.AttributeValuesAsync("class");
+
+            foreach (var item in content.Rows)
+            {
+                Assert.Equal(item.Values.First(), classes[index].Trim());
+                index++;
+            }
+        }
+
+        [Then(@"the elements ""(.+)"" within the component should all have the class ""(.+)""")]
+        public async Task ThenTheElementsWithinTheComponentShouldAllHaveTheClass(string selector, string expectedClass)
+        {
+            var component = await ComponentShouldExistAsync();
+            var elements = component.Elements($":scope {selector}");
+            var classes = await elements.AttributeValuesAsync("class");
+
+            Assert.All(classes, c => Assert.Equal(expectedClass, c));
         }
 
         [Then(@"the component field labelled ""(.+)"" should have the value ""(.*)""")]

@@ -1,7 +1,6 @@
 ﻿using ASP.Application.UseCases.ContentPage.UpdateContentTemplate;
 using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
-using ASP.Application.UseCases.ViewContentTemplate;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ASP.Application.Extensions

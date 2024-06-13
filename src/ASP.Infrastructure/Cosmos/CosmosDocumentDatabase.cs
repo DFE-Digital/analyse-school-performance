@@ -35,7 +35,7 @@ namespace ASP.Infrastructure.Cosmos
                 switch (ex.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:
-                        return Error.NotFound($@"Not found: could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{containerKey}"".");
+                        return Error.NotFound($@"Could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{containerKey}"".");
 
                     default:
                         _logger.LogCritical(ex.Message);
@@ -49,9 +49,33 @@ namespace ASP.Infrastructure.Cosmos
             }
         }
 
-        public Task<Result<IEnumerable<TItem>>> QueryAsync<TItem>(string containerKey, Func<IQueryable<TItem>, IQueryable<TItem>> query) where TItem : class
+        public async Task<Result<IEnumerable<TItem>>> QueryAsync<TItem>(string containerKey, Func<IQueryable<TItem>, IQueryable<TItem>> query) where TItem : class
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _queryHandler.ReadIterableItemsAsync(containerKey, query);
+
+                result = result.ToList();
+
+                return Result.Success(result);
+            }
+            catch (CosmosException ex)
+            {
+                switch (ex.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.NotFound:
+                        return Error.NotFound($@"Unable to find query result in container ""{containerKey}"".");
+
+                    default:
+                        _logger.LogCritical(ex.Message);
+                        return Error.Unexpected(ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex.Message);
+                return Error.Unexpected(ex.Message);
+            }
         }
 
         public async Task<Result<Done>> UpsertAsync<TItem>(string containerKey, string id, string partitionKeyValue, TItem item) where TItem : class
@@ -70,7 +94,7 @@ namespace ASP.Infrastructure.Cosmos
                 switch (ex.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:
-                        return Error.NotFound($@"Not found: could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{containerKey}"".");
+                        return Error.NotFound($@"Could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{containerKey}"".");
 
                     default:
                         _logger.LogCritical(ex.Message);
@@ -90,7 +114,7 @@ namespace ASP.Infrastructure.Cosmos
             {
                 Container container = await _containerProvider.GetContainerAsync(containerKey);
 
-                var items = await _queryHandler.ReadIterableItemsAsync<Dictionary<string, object>>(containerKey, q => q, q => true);
+                var items = await _queryHandler.ReadIterableItemsAsync<Dictionary<string, object>>(containerKey, q => q);
 
                 foreach (var item in items)
                 {

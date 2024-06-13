@@ -1,4 +1,4 @@
-﻿namespace ASP.Core.Results
+namespace ASP.Core.Results
 {
     public static class Maybe
     {

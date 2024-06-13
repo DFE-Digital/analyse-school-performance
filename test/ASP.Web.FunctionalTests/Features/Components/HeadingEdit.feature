@@ -105,7 +105,7 @@ Scenario: Updating Heading Type field should update HeadingType property on temp
 	When I update the component field labelled "Heading Type" to have the value "h3"
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "HeadingType" should be equal to "h3"
+	And the component template should have property "HeadingType" equal to "h3"
 
 @Javascript:disabled
 Scenario: When Caption property is null, component should not error and should handle the value appropriately
@@ -175,7 +175,7 @@ Scenario: Updating Caption field should update Caption property on template
 	When I update the component field labelled "Caption" to have the value "Updated caption"
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "Caption" should be equal to "Updated caption"
+	And the component template should have property "Caption" equal to "Updated caption"
 
 @Javascript:disabled
 Scenario: When Text property is null, component should not error and should handle the value appropriately
@@ -245,7 +245,7 @@ Scenario: Updating Text field should update Text property on template
 	When I update the component field labelled "Text" to have the value "Updated heading"
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "Text" should be equal to "Updated heading"
+	And the component template should have property "Text" equal to "Updated heading"
 
 @Javascript:disabled
 Scenario: When LinkUrl property is null, component should not error and should handle the value appropriately
@@ -315,4 +315,4 @@ Scenario: Updating Link URL field should update LinkUrl property on template
 	When I update the component field labelled "Link URL" to have the value "https://www.gov.uk"
 	And I save the component
 	Then I should get a 200 response
-	And the component template property "LinkUrl" should be equal to "https://www.gov.uk"
+	And the component template should have property "LinkUrl" equal to "https://www.gov.uk"

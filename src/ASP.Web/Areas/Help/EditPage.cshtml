@@ -4,9 +4,9 @@
     ViewData["Title"] = "Edit: " + Model.PageTitle;
 }
 
-
 <div class="govuk-width-container govuk-!-static-padding-top-5">
-    <form id="app-content-edit-form" method="POST">
+    <form method="POST">
+        <input type="hidden" data-testid="update-revision" asp-for="Revision" value="@Model.UpdateRevision" />
         <div class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
@@ -17,14 +17,14 @@
                 <label for="@Html.IdFor(m => m.PageTitle)" class="govuk-label govuk-!-font-weight-bold">
                     Text
                 </label>
-                <input type="text" id="app-content-edit-page-title" asp-for="PageTitle" class="govuk-input">
+                <input type="text" data-testid="content-edit-page-title" asp-for="PageTitle" class="govuk-input">
             </div>
         </div>
 
         @await Html.PartialAsync("~/Features/ContentTemplates/ContentTemplateEdit.cshtml", Model)
 
-        <button id="app-content-edit-save" class="govuk-button" type="submit">Save</button>
-        <a id="app-content-edit-cancel" asp-route="app-route-help-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">
+        <button data-testid="content-edit-save" class="govuk-button" type="submit">Save</button>
+        <a data-testid="content-edit-cancel" asp-route="app-route-help-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">
             Cancel
         </a>
     </form>
