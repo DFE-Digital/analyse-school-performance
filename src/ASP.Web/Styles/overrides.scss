@@ -136,9 +136,13 @@ $app-breakpoint-custom : 700px;
 
 .app-header__navigation-link:hover {
     color: govuk-colour("dark-blue") !important;
-    text-decoration: underline govuk-colour("dark-blue") solid 2px
+    text-decoration: underline govuk-colour("dark-blue") solid 2px;
 }
 
+.app-header__navigation-link:focus {
+    box-shadow: 0 -1px #fd0, 0 5px #0b0c0c;
+    text-decoration: none;
+}
 
 
 .app-phase-banner-container {

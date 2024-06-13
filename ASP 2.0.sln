@@ -36,6 +36,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "non-project files", "non-pr
 		deploy-pipeline.yml = deploy-pipeline.yml
 		README.md = README.md
 		validate-pipeline.yml = validate-pipeline.yml
+		web-build = web-build
+		web-build.bat = web-build.bat
+		web-watch.bat = web-watch.bat
+		web-watch.sh = web-watch.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{57E44EE3-7A80-4F12-BDAA-D622C5D1B4A0}"
@@ -62,7 +66,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.Components", "src\A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.Core", "src\ASP.Web.Core\ASP.Web.Core.csproj", "{83367C58-6C5B-4A30-8A09-E68454244225}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.Web.Core.UnitTests", "test\ASP.Web.Core.UnitTests\ASP.Web.Core.UnitTests.csproj", "{1D288915-50F2-444E-AE96-5BCBFC35D5CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Web.Core.UnitTests", "test\ASP.Web.Core.UnitTests\ASP.Web.Core.UnitTests.csproj", "{1D288915-50F2-444E-AE96-5BCBFC35D5CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

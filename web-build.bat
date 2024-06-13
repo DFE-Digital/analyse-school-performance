@@ -1,0 +1,1 @@
+npm run --prefix src/Asp.Web build-dev
