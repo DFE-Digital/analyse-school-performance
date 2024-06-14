@@ -27,39 +27,33 @@ public class PageNotFoundLoggingMiddleware
     /// <param name="context"></param>
     public async Task InvokeAsync(HttpContext httpContext)
     {
-        try
+        await _next(httpContext);
+
+        if (!httpContext.Request.Path.Equals("/error/", StringComparison.OrdinalIgnoreCase) &&
+            httpContext.Response.StatusCode == (int)HttpStatusCode.NotFound)
         {
-            if (httpContext.Response.StatusCode == (int)HttpStatusCode.NotFound)
+            var scheme = httpContext.Request.Scheme;
+            var host = httpContext.Request.Headers.ContainsKey("X-Forwarded-Host")
+                ? httpContext.Request.Headers["X-Forwarded-Host"].ToString()
+                : httpContext.Request.Host.ToString();
+            var path = httpContext.Request.Path;
+            var queryString = httpContext.Request.QueryString;
+            var url = $"{scheme}://{host}{path}{queryString}";
+
+            var problemDetails = new ProblemDetails()
             {
-                var scheme = httpContext.Request.Scheme;
-                var host = httpContext.Request.Headers.ContainsKey("X-Forwarded-Host")
-                    ? httpContext.Request.Headers["X-Forwarded-Host"].ToString()
-                    : httpContext.Request.Host.ToString();
-                var path = httpContext.Request.Path;
-                var queryString = httpContext.Request.QueryString;
-                var url = $"{scheme}://{host}{path}{queryString}";
+                StatusCode = (int)HttpStatusCode.NotFound,
+                Type = "Error",
+                Title = HttpStatusCode.NotFound.ToString(),
+                Detail = url,
+            };
 
-                var problemDetails = new ProblemDetails()
-                {
-                    StatusCode = (int)HttpStatusCode.NotFound,
-                    Type = "Error",
-                    Title = HttpStatusCode.NotFound.ToString(),
-                    Detail = url,
-                };
+            var tableStorageProblemDetails = new TableStorageProblemDetails(httpContext, HttpStatusCode.NotFound.ToString());
 
-                var tableStorageProblemDetails = new TableStorageProblemDetails(httpContext, HttpStatusCode.NotFound.ToString());
-
-                var result = await _tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails));
-                result.Switch(
-                    success => _logger.LogInformation(success),
-                    failure => _logger.LogError(failure.ToString()));
-            }
-            await _next(httpContext);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Unhandled exception in HTTP pipeline");
-            throw;
+            var result = await _tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails));
+            result.Switch(
+                success => _logger.LogInformation(success),
+                failure => _logger.LogError(failure.ToString()));
         }
     }
 }

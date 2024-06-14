@@ -8,7 +8,7 @@ namespace ASP.Web.Features.ErrorHandling
         {
             services
                 .AddSingleton<ITableStorageProvider, TableStorageProvider>()
-                .AddExceptionHandler<ExceptionHandlerServerError>()
+                .AddExceptionHandler<ExceptionLoggingMiddleware>()
                 .Configure<TableStorageConfiguration>(configuration.GetSection("TableStorage"));
 
             return services;

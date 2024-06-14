@@ -2,7 +2,7 @@
 {
     public static class ApplicationBuilderExtensions
     {
-        internal static IApplicationBuilder UseLogging(this IApplicationBuilder app)
+        internal static IApplicationBuilder UseLoggingMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<PageNotFoundLoggingMiddleware>();
 

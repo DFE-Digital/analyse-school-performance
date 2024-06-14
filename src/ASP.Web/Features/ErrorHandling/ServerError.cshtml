@@ -18,7 +18,14 @@
                 @if (Model.ShowErrorCode)
                 {
                     <p class="govuk-body">
-                        <strong>Error code:</strong> <code>@Model.ErrorCode</code>
+                        <strong>Error code:</strong> <code class="govuk-body">@Model.ErrorCode</code>
+                    </p>
+                }
+
+                @if (Model.ShowErrorMessage)
+                {
+                    <p class="govuk-body" data-testid="error-display-message">
+                        <strong>Error message:</strong> <code class="govuk-body">@Model.ErrorMessage</code>
                     </p>
                 }
             </div>

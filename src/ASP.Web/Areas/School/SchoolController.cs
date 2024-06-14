@@ -21,10 +21,9 @@ namespace ASP.Web.Areas.School
         private readonly IViewContentTemplateUseCase _viewContentUseCase;
         private readonly IHostEnvironment _hostEnvironment;
 
-        public SchoolController(ILogger<SchoolController> logger, IGetEstablishmentDetailsUseCase useCase,
+        public SchoolController(IGetEstablishmentDetailsUseCase useCase,
             IViewContentTemplateUseCase viewContentUseCase, IHostEnvironment hostEnvironment)
         {
-            _logger = logger;
             _useCase = useCase;
             _viewContentUseCase = viewContentUseCase;
             _hostEnvironment = hostEnvironment;

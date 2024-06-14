@@ -13,7 +13,7 @@
         {
             var nonce = (INonceService)context.RequestServices.GetService(typeof(INonceService));
 
-            context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'" + "; script-src " + $"'nonce-{nonce.GetNonce()}'" + "; style-src " + $"'nonce-{nonce.GetNonce()}'");
+            context.Response.Headers.TryAdd("Content-Security-Policy", "default-src 'self'" + "; script-src " + $"'nonce-{nonce.GetNonce()}'" + "; style-src " + $"'nonce-{nonce.GetNonce()}'");
 
             await _next.Invoke(context);
         }
