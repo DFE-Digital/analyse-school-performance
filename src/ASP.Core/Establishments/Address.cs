@@ -4,18 +4,10 @@ namespace ASP.Core.Establishments
 {
     public class Address
     {
-        public string Street { get; }
-        public string Town { get; }
-        public string PostCode { get; }
-
-        public Address(string street, string town, string postCode)
-        {
-            Street = street;
-            Town = town;
-            PostCode = postCode;
-        }
-
-
+        public string Street { get; set; }
+        public string Town { get; set; }
+        public string PostCode { get; set; }
+        
         public override string ToString()
         {
             return StringHelper.ConcatNonEmpties(", ", Street, Town, PostCode);

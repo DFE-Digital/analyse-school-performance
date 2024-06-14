@@ -1,4 +1,6 @@
-﻿using ASP.Core.Establishments;
+﻿using ASP.Core.DTO.Establishment;
+using ASP.Core.Establishments;
+using ASP.Core.Mapper.Establishment;
 using ASP.Core.Results;
 
 namespace ASP.Application.UseCases.Establishments.GetEstablishmentDetails
@@ -13,9 +15,10 @@ namespace ASP.Application.UseCases.Establishments.GetEstablishmentDetails
                 throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public async Task<Result<EstablishmentDetails>> HandleRequest(GetEstablishmentDetailsUseCaseRequest request)
+        public async Task<Result<EstablishmentDetailsDTO>> HandleRequest(GetEstablishmentDetailsUseCaseRequest request)
         {
-            return await _repository.GetEstablishmentDetails(request.ContentTemplateId);
+            return await _repository.GetEstablishmentDetails(request.ContentTemplateId).Map(x => 
+                x.MapToEstablishmentDetailsDTO() );
         }
     }
 }

@@ -1,0 +1,29 @@
+﻿@model ASP.Web.Areas.Shared.OfstedRating.OfstedRatingModel
+
+@if (Model.OfstedRating?.Code != null && Model.OfstedRating?.Code != "99")
+{
+    <span data-testid="school-details-ofsted-code-value" class="app-ofsted-colour-rating app-ofsted-rating-@Model.OfstedRating?.Code">
+        @Model.OfstedRating?.Code
+    </span>
+    <span>
+        <span data-testid="school-details-ofsted-name-value">@Model.OfstedRating?.Name</span><wbr /> |
+        <a href="https://reports.ofsted.gov.uk/inspection-reports/find-inspection-report/provider/ELS/@Model.Urn" target="_blank" class="govuk-link">
+            Ofsted report
+        </a>
+    </span>
+    if (Model.OfstedLastInspectionDate != string.Empty)
+    {
+        <span data-testid="school-details-ofsted-inspection-value" class="app-ofsted-last-inspection">Inspected @Model.OfstedLastInspectionDate</span>
+    }
+}
+else if (Model.OfstedRating?.Code == "99")
+{
+    <span>No data available</span>
+}
+else
+{
+    <p class="app-ofsted-rating-description">
+        <span class="app-ofsted-colour-rating">--</span>
+        No Ofsted assessment published
+    </p>
+}

@@ -1,4 +1,6 @@
-﻿using Azure.Identity;
+﻿using ASP.Application;
+using ASP.Infrastructure;
+using Azure.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariables;
 
@@ -41,6 +43,12 @@ namespace ASP.Web
             return services;
         }
 
+        public static IServiceCollection ConfigureSearch(this IServiceCollection services)
+        {
+            services.ConfigureSearchStrategyFactory();
+            services.ConfigureSearchServices();
+            return services;
+        }
         
         /// <summary>
         /// Configures the Azure Key Vault integration for the application.

@@ -2,60 +2,24 @@
 {
     public class EstablishmentDetails
     {
-        public string Urn { get; }
-        public string Name { get; }
-        public bool? IsPrimary { get; }
-        public bool? IsSecondary { get; }
-        public bool? IsPost16 { get; }
-        public Address Address { get; }
-        public EstablishmentType EstablishmentType { get; }
-        public Gender Gender { get;}
-        public OfstedRating OfstedRating { get; }
-        public DateTime? OfstedLastInspectionDate { get; }
-        public LocalAuthority LocalAuthority { get; }
-        public HeadTeacher HeadTeacher { get;}
-        public AgeRange AgeRange { get; }
-        public ReligiousDenomination ReligiousDenomination { get; }
-        public AdmissionsPolicy AdmissionsPolicy { get;}
-        public ResourcedProvisionType ResourcedProvisionType { get; }
-        public int? NoOfPupils { get;}
-        public bool IsDeleted { get; }
-        public EstablishmentDetails(string urn, 
-            string name, 
-            bool? isPrimary,
-            bool? isSecondary,
-            bool? isPost16,
-            Address address, 
-            EstablishmentType establishmentType,
-            Gender gender,
-            OfstedRating ofstedRating,
-            DateTime? ofstedLastInspectionDate,
-            LocalAuthority localAuthority,
-            HeadTeacher headTeacher,
-            AgeRange ageRange,
-            ReligiousDenomination religiousDenomination,
-            AdmissionsPolicy admissionsPolicy,
-            ResourcedProvisionType resourcedProvisionType,
-            int? noOfPupils, bool isDeleted)
-        {
-            Urn = urn;
-            Name = name;
-            IsPrimary = isPrimary;
-            IsSecondary = isSecondary;
-            IsPost16 = isPost16;
-            Address = address;
-            EstablishmentType = establishmentType;
-            Gender = gender;
-            OfstedRating = ofstedRating;
-            OfstedLastInspectionDate = ofstedLastInspectionDate;
-            LocalAuthority = localAuthority;
-            HeadTeacher = headTeacher;
-            AgeRange = ageRange;
-            ReligiousDenomination = religiousDenomination;
-            AdmissionsPolicy = admissionsPolicy;
-            ResourcedProvisionType = resourcedProvisionType;
-            NoOfPupils = noOfPupils;
-            IsDeleted = isDeleted;
-        }
+        public string Urn { get; set;}
+        public string Name { get; set;}
+        public bool? IsPrimary { get; set;}
+        public bool? IsSecondary { get; set;}
+        public bool? IsPost16 { get; set;}
+        public Address Address { get; set;}
+        public EstablishmentType EstablishmentType { get; set;}
+        public Gender Gender { get; set;}
+        public OfstedRating OfstedRating { get; set;}
+        public DateTime? OfstedLastInspectionDate { get; set;}
+        public LocalAuthority LocalAuthority { get; set;}
+        public HeadTeacher HeadTeacher { get; set;}
+        public AgeRange AgeRange { get; set;}
+        public ReligiousDenomination ReligiousDenomination { get; set;}
+        public AdmissionsPolicy AdmissionsPolicy { get; set;}
+        public ResourcedProvisionType ResourcedProvisionType { get; set;}
+        public int? NoOfPupils { get; set;}
+        public bool IsDeleted { get; set;}
+        public string? Laestab { get; set;}
     }
 }

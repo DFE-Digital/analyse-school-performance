@@ -1,0 +1,30 @@
+﻿@model ASP.Web.Areas.Search.Shared.SearchResultNotFound.SearchResultNotFoundModel
+
+@if (Model.TotalCount == 0)
+{
+    <h1 id="school-search-results-no-results-heading" class="govuk-heading-l school-name-heading">We found no matches for "@Model.SearchTerm"</h1>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+    <p class="govuk-body-s">You can:</p>
+    <p class="govuk-body-s"><a class="govuk-link" href="/search">try searching again</a> using different spelling or words</p>
+    <p class="govuk-body-s">There are some schools that we do not provide performance data for. These include:</p>
+    <ul class="govuk-body-s govuk-list govuk-list--bullet">
+        <li>
+            Schools that are not in England.
+            <a href="https://www.education-ni.gov.uk/services/schools-plus" target="_blank" class="govuk-link">
+                Northern Ireland
+            </a>,
+            <a href="https://www.gov.scot/statistics-and-research/?cat=filter&topics=Education&page=1" target="_blank" class="govuk-link">
+                Scotland
+            </a>
+            and
+            <a href="http://mylocalschool.gov.wales/" target="_blank" class="govuk-link">
+                Wales
+            </a>
+            have their own websites for performance data.
+        </li>
+        <li>
+            Schools of certain types, including independent schools, international schools, hospital schools,
+            alternative provision establishments such as pupil referral units, nursery schools and secure units.
+        </li>
+    </ul>
+}

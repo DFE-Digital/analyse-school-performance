@@ -5,8 +5,8 @@ namespace ASP.Infrastructure.Repositories
 {
     public class ContentTemplateDTO
     {
-        public string id { get; set; } = null!;
-        public string contentId { get; set; } = null!;
+        public string Id { get; set; } = null!;
+        public string ContentId { get; set; } = null!;
         public bool IsPublished { get; set; }
         public string? PageTitle { get; set; } = null!;
         public dynamic PageContent { get; set; } = new GracefulExpandoObject()!;

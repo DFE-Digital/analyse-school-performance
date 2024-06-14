@@ -1,0 +1,34 @@
+@import '/node_modules/govuk-frontend/dist/govuk/settings/_media-queries.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/helpers/_media-queries.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/helpers/_typography.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/settings/_typography-responsive.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/helpers/_font-faces.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/settings/_typography-font.scss';
+
+
+// asp custom search form
+
+.asp-magnify-input {
+  border-right: 0;
+  width: calc(90% - 33px);
+  padding-right: 0;
+}
+
+.asp-magnify-button {
+  width: 10%;
+  margin: 0 0 0 -5px;
+  padding: 0;
+  background-image: url(/assets/public/images/icons/inline-search-button-icon.png);
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: 14px 10px;
+  min-height: 38px;
+  min-width: 42px;
+  max-width: 46px;
+}
+
+.asp-search-label {
+  @include govuk-font(16);
+}
+
+

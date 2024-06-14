@@ -1,0 +1,89 @@
+﻿@using ASP.Web.Areas.Search.Shared.SearchResultNotFound
+@using ASP.Web.Areas.Shared.OfstedRating
+@model ASP.Web.Areas.Search.SearchViewModel
+
+@functions {
+
+    // Function to generate anchor tag with trailing slash
+    string GenerateLinkWithTrailingSlash(string urn)
+    {
+        var url = Url.Action("Index", "school", new { Area = "School", urn = urn }) + "/";
+        return url;
+    }
+
+}
+
+<div class="govuk-width-container govuk-main-wrapper">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @await Html.PartialAsync("~/Areas/Search/Shared/SearchResultNotFound/_SearchResultNotFoundPartial.cshtml", new SearchResultNotFoundModel()
+            {
+                SearchTerm = Model.SearchTerm,
+                TotalCount = Model.TotalCount
+            })
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        @if (Model.TotalCount > 0)
+        {
+            <div class="govuk-grid-column-two-thirds">
+                <h1 id="school-search-results-some-results-heading" class="govuk-heading-l school-name-heading">Search results for "@Model.SearchTerm"</h1>
+                @await Html.PartialAsync("~/Areas/Shared/Pagination/_PaginationPartial.cshtml", Model.PaginationModel)
+                <ul class="govuk-list">
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+                    @foreach (var item in Model.SearchResults)
+                    {
+                        <li>
+                            <div class="search-results-school-name-container">
+                                <h2 class="govuk-heading-m search-results-school-name-heading">
+                                    <a class="govuk-link" href="@GenerateLinkWithTrailingSlash(item.Urn)">
+                                        @item.Name
+                                    </a>
+                                </h2>
+                                <a class="govuk-link search-results-school-tile-arrow" href="@GenerateLinkWithTrailingSlash(item.Urn)">
+                                    <span class="govuk-visually-hidden">More information on @item.Name</span>
+                                </a>
+                            </div>
+                            
+                            <table class="govuk-table search-results-school-table">
+                                <tbody class="govuk-table__body">
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">Address</th>
+                                    <td class="govuk-table__cell">
+                                        @item.Address?.ToString()
+                                    </td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">Education phase</th>
+                                    <td class="govuk-table__cell">@item.PhaseOfEducation</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">Ofsted rating</th>
+                                    <td class="govuk-table__cell">
+                                        @await Html.PartialAsync("~/Areas/Shared/OfstedRating/_OfstedRatingPartial.cshtml", new OfstedRatingModel()
+                                        {
+                                            OfstedRating = item.OfstedRating,
+                                            OfstedLastInspectionDate = item.OfstedLastInspectionDate,
+                                            Urn = item.Urn
+                                        })
+                                    </td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">URN</th>
+                                    <td class="govuk-table__cell">@item.Urn</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">LAESTAB</th>
+                                    <td class="govuk-table__cell">@item.LaEstab</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <hr class="govuk-section-break govuk-section-break--m"/>
+                    }
+                </ul>
+                @await Html.PartialAsync("~/Areas/Shared/Pagination/_PaginationPartial.cshtml", Model.PaginationModel)
+            </div>
+        }
+    </div>
+</div>

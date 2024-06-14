@@ -1,0 +1,74 @@
+﻿@using ASP.Core
+@using ASP.Web.Areas.Search
+@{
+    ViewData["Title"] = "Search";
+}
+
+<div class="govuk-width-container govuk-main-wrapper">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="govuk-error-summary" data-module="govuk-error-summary">
+            <div role="alert">
+                <h2 class="govuk-error-summary__title">
+                    Please correct the following error
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+
+                        @foreach (var entry in ViewData.ModelState)
+                        {
+                            string key = entry.Key;
+                            var errors = entry.Value.Errors;
+
+                            if (key == nameof(SearchParams.SearchTerm) && errors.Count > 0)
+                            {
+                                // Process your errors here
+                                foreach (var error in errors)
+                                {
+                                    <li>
+                                        <a href="#searchTerm">>@error.ErrorMessage</a>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+
+    <h1 id="search-page-heading" class="govuk-heading-l">Search for a school</h1>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            @using (Html.BeginForm("SearchResult", "Search", FormMethod.Get))
+            {
+                var hasError = ViewData.ModelState.ContainsKey(nameof(SearchParams.SearchTerm));
+
+                <h2 class="govuk-heading-s asp-search-heading">School</h2>
+
+                <div class="govuk-form-group">
+
+                    <div asp-validation-group-for="searchTerm" data-testid="searchTerm">
+                        <label for="searchTerm" class="govuk-label asp-search-label">
+                            Enter school name, URN (Unique Reference Number) or
+                            LAESTAB (Local Authority Establishment Number)
+                        </label>
+                        @if (hasError)
+                        {
+                            @Html.ValidationMessage("searchTerm",
+                                Constants.SchoolSearchTermInputValidationMessage,
+                                new { id = "searchTerm-input-error", @class = "govuk-error-message" })
+                        }
+                        <!-- Hidden input to store the page number -->
+                        <input type="hidden" name="page" id="page" value="1"/>
+                        <input type="text" class="govuk-input @(hasError ? "govuk-input--error" : "") govuk-!-width-three-quarters asp-magnify-input" aria-describedby="searchTerm-input-error"
+                               name="searchTerm" id="searchTerm" data-testid="searchTerm-input-box" spellcheck="false"/>
+                        <button id="searchSubmit" type="submit" class="govuk-button asp-magnify-button">
+                            <span class="govuk-visually-hidden">Search</span>
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

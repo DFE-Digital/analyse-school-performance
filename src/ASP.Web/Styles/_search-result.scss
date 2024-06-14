@@ -1,0 +1,48 @@
+﻿.search-results-school-tile-arrow {
+  width: 19px;
+  height: 34px;
+  background-color: white;
+  background-image: url('/assets/public/images/icons/tile-arrow.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin-top: 0;
+  margin-left: 10px;
+}
+
+.search-results-school-name-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-results-school-name-container .search-results-school-name-heading {
+  flex-grow: 1;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-results-school-table {
+  table-layout: fixed;
+  width: 100%;
+}
+.search-results-school-table .govuk-table__header, .search-results-school-table .govuk-table__cell {
+  width: 50%; /* This ensures each column is half the table width */
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.pagination-container-p-text {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  flex-grow: 1;
+}

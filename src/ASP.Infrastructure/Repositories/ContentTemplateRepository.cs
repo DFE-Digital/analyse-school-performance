@@ -22,14 +22,14 @@ namespace ASP.Infrastructure.Repositories
 
         public Task<Result<ContentTemplate>> GetPublishedRevision(string contentTemplateId)
         {
-            return _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.contentId == contentTemplateId && t.IsPublished))
+            return _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.ContentId == contentTemplateId && t.IsPublished))
                 .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find a published revision for content template ""{contentTemplateId}""."))
                 .Map(dtos => dtos.First().ToContentTemplate());
         }
 
         public Task<Result<ContentTemplate>> GetRevision(string contentTemplateId, string revision)
         {
-            return _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.id == revision && t.contentId == contentTemplateId))
+            return _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.Id == revision && t.ContentId == contentTemplateId))
                 .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find revision ""{revision}"" for content template ""{contentTemplateId}""."))
                 .Map(dtos => dtos.First().ToContentTemplate());
         }
@@ -46,8 +46,8 @@ namespace ASP.Infrastructure.Repositories
         public async Task<Result<Done>> Update(string contentTemplateId, string revision, ContentTemplate contentTemplate)
         {
             return await _documentDB.UpsertAsync(ContainerKey, revision, contentTemplateId, new ContentTemplateDTO {
-                id = revision,
-                contentId = contentTemplateId,
+                Id = revision,
+                ContentId = contentTemplateId,
                 PageTitle = contentTemplate.PageTitle,
                 PageContent = contentTemplate.PageContent,
                 Views = (contentTemplate.Views ?? new List<TemplateComponent>())

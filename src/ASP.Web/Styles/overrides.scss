@@ -3,6 +3,7 @@
 @import '/node_modules/govuk-frontend/dist/govuk/helpers/_colour.scss';
 @import '/node_modules/govuk-frontend/dist/govuk/settings/_colours-applied.scss';
 
+
 $app-breakpoint-custom : 700px;
 
 .app-hero {
@@ -304,6 +305,10 @@ $app-breakpoint-custom : 700px;
 .app-ofsted-last-inspection {
     color: $govuk-secondary-text-colour;
     display: block;
+}
+
+.app-sub-navigation {
+    margin-bottom: 40px;
 }
 
 .app-sub-navigation__list {

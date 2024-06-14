@@ -38,7 +38,8 @@ namespace ASP.Web
                 .ConfigureAnalyticsTrackingPreferences()
                 .ConfigureTemplateComponents()
                 .ConfigureLogging()
-                .ConfigureSchoolPages();
+                .ConfigureSchoolPages()
+                .ConfigureSearch();
 
             WebApplication app = builder.Build();
 
