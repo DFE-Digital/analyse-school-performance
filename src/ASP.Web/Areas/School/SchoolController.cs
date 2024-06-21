@@ -32,65 +32,76 @@ namespace ASP.Web.Areas.School
         [HttpGet("{urn}")]
         public async Task<IActionResult> Index(string urn, string? revision)
         {
-           return await EstablishmentDetailsWithTemplate(urn, LANDING_PAGE_CONTENT_TEMPLATE_ID, revision);
+            return await EstablishmentDetailsWithTemplate(urn, LANDING_PAGE_CONTENT_TEMPLATE_ID, revision);
         }
 
         [HttpGet("{urn}/phonics")]
         public async Task<IActionResult> Phonics(string urn)
         {
-            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+            return await EstablishmentDetails(urn, "Phonics").ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("{urn}/key-stage-2")]
         public async Task<IActionResult> KeyStage2(string urn)
         {
-            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+            return await EstablishmentDetails(urn, "Key stage 2").ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("{urn}/key-stage-4")]
         public async Task<IActionResult> KeyStage4(string urn)
         {
-            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+            return await EstablishmentDetails(urn, "Key stage 4").ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("{urn}/mtc")]
         public async Task<IActionResult> Mtc(string urn)
         {
-            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+            return await EstablishmentDetails(urn, "Multiplication table check").ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("{urn}/other-reports")]
         public async Task<IActionResult> OtherReports(string urn)
         {
-            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+            return await EstablishmentDetails(urn, "Other reports").ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("{urn}/qla")]
         public async Task<IActionResult> Qla(string urn)
         {
-            return await EstablishmentDetails(urn).ToActionResult(View, _hostEnvironment);
+            return await EstablishmentDetails(urn, "Question level analysis").ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("{urn}/useful-links")]
         public async Task<IActionResult> UsefulLinks(string urn, string? revision)
         {
-            return await EstablishmentDetailsWithTemplate(urn, USEFUL_LINKS_CONTENT_TEMPLATE_ID, revision);
+            return await EstablishmentDetailsWithTemplate(urn, USEFUL_LINKS_CONTENT_TEMPLATE_ID, revision, "Useful links");
         }
 
-        private async Task<Result<SchoolViewModel>> EstablishmentDetails(string urn)
+        private async Task<Result<SchoolViewModel>> EstablishmentDetails(string urn, string page)
         {
+            var breadcrumbTrail = new BreadcrumbViewModel(page)
+                .AddBreadcrumb("My school", $"/school/{urn}");
+
             return await _useCase.HandleRequest(new GetEstablishmentDetailsUseCaseRequest(urn))
                  .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
-                 .Map(establishmentDetailsModel => new SchoolViewModel() { EstablishmentDetails = establishmentDetailsModel });
+                 .Map(establishmentDetailsModel => new SchoolViewModel()
+                 {
+                     EstablishmentDetails = establishmentDetailsModel,
+                     Breadcrumbs = breadcrumbTrail
+                 });
 
         }
 
-        private async Task<IActionResult> EstablishmentDetailsWithTemplate(string urn, string contentTemplateId, string? revision)
+        private async Task<IActionResult> EstablishmentDetailsWithTemplate(string urn, string contentTemplateId, string? revision, string? page = null)
         {
             var defaultIfNotFound = new ContentTemplateViewModel
             {
                 Views = []
             };
+
+            var breadcrumbTrail = new BreadcrumbViewModel(page)
+                .AddBreadcrumb("My school", $"/school/{urn}");
+
             return await _useCase.HandleRequest(new GetEstablishmentDetailsUseCaseRequest(urn))
                .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
                .Then(async establishmentDetailsModel => await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(contentTemplateId, revision))
@@ -99,7 +110,8 @@ namespace ASP.Web.Areas.School
                    .Map(contentTemplateModel => new SchoolViewModel
                    {
                        EstablishmentDetails = establishmentDetailsModel,
-                       ContentTemplate = contentTemplateModel
+                       ContentTemplate = contentTemplateModel,
+                       Breadcrumbs = breadcrumbTrail
                    }))
                .ToActionResult(View, _hostEnvironment);
         }

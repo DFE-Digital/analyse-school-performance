@@ -4,6 +4,8 @@
 }
 
 <div class="govuk-width-container">
+    @await Html.PartialAsync("~/Shared/_BreadcrumbsPartial.cshtml", Model.Breadcrumbs)
+
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <h1 class="govuk-heading-xl">Phonics</h1>
         @await Html.PartialAsync("~/Areas/School/Shared/_SubMenuNavigationPartial.cshtml")

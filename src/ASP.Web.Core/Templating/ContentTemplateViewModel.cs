@@ -10,6 +10,7 @@ namespace ASP.Web.Core.Templating
         public string PageTitle { get; set; } = "";
         public dynamic PageContent { get; set; } = new GracefulExpandoObject();
         public List<TemplateComponentViewModel> Views { get; set; } = new();
+        public BreadcrumbViewModel? Breadcrumbs { get; set; } = default!;
 
         public static ContentTemplateViewModel FromTemplate(string contentId, string? revision, ContentTemplate template)
         {
@@ -19,7 +20,8 @@ namespace ASP.Web.Core.Templating
                 Revision = revision,
                 PageTitle = template.PageTitle ?? "",
                 PageContent = template.PageContent,
-                Views = (template.Views ?? new List<TemplateComponent>()).Select(TemplateComponentViewModel.FromTemplateView).ToList()
+                Views = (template.Views ?? new List<TemplateComponent>()).Select(TemplateComponentViewModel.FromTemplateView).ToList(),
+                Breadcrumbs = new BreadcrumbViewModel(template.PageTitle ?? "")
             };
         }
     }
