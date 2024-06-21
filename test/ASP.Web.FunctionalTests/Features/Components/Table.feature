@@ -1,5 +1,8 @@
 Feature: Table component
 
+The Table component provides the ability to add tables to content templates.
+
+For more information please view the [technical specification for this component](https://dev.azure.com/dfe-ssp/s192-Analyse-School-Performance%20%28ASP%29/_wiki/wikis/s192-Analyse-School-Performance-%28ASP%29.wiki/14453/Table).
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with a caption
@@ -29,15 +32,15 @@ Scenario: Table content should display html correctly with a caption
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should all have the class "govuk-table__header"
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text     |
-	   | Header A |
-	   | Header B |
+		| Text     |
+		| Header A |
+		| Header B |
 	And the elements "tbody tr" within the component should total 1
 	And the elements "tbody tr td" within the component should all have the class "govuk-table__cell"
 	And the elements "tbody tr td" within the component should have the text contents:
-	   | Text   |
-	   | Cell A |
-	   | Cell B |
+		| Text   |
+		| Cell A |
+		| Cell B |
 
 @Javascript:disabled
 Scenario: Table caption should be hidden when Caption property is null
@@ -105,18 +108,74 @@ Scenario: Table content should display html correctly with headings and rows
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text     |
-	   | Header A |
-	   | Header B |
+		| Text     |
+		| Header A |
+		| Header B |
 	And the elements "tbody tr" within the component should total 2
 	And the elements "tbody tr:nth-child(1) td" within the component should have the text contents:
-	   | Text   |
-	   | Cell A |
-	   | Cell B |
+		| Text   |
+		| Cell A |
+		| Cell B |
 	And the elements "tbody tr:nth-child(2) td" within the component should have the text contents:
-	   | Text   |
-	   | Cell C |
-	   | Cell D |
+		| Text   |
+		| Cell C |
+		| Cell D |
+
+@Javascript:disabled
+Scenario: Table content should display html correctly with headings and rows when using markdown
+	Given a content template contains the component:
+		"""
+		{
+			"ViewId": "Table",
+			"ViewContent": {
+				"Headings": [
+					"Bold Text",
+		                  "Italic Text",
+		                  "Link Text"
+				],
+				"Rows": [
+					[
+						"**bold text**",
+		                "*italic text*"
+					],
+					[
+						"__bold text__",
+		                "_italic text_"
+					],
+					[
+		                "",
+		                "",
+		                "[link text](https://google.com)"
+		            ]
+				]
+			}
+		}
+		"""
+	When I view the component on the page
+	Then there should be no errors
+	And the elements "thead tr" within the component should total 1
+	And the elements "thead tr th" within the component should have the text contents:
+		| Text        |
+		| Bold Text   |
+		| Italic Text |
+		| Link Text   |
+	And the elements "tbody tr" within the component should total 3
+	And the elements "tbody tr:nth-child(1) td" within the component should have the text contents:
+		| Text        |
+		| bold text   |
+		| italic text |
+		|             |
+	And the elements "tbody tr:nth-child(2) td" within the component should have the text contents:
+		| Text        |
+		| bold text   |
+		| italic text |
+		|             |
+	And the elements "tbody tr:nth-child(3) td" within the component should have the text contents:
+		| Text      |
+		|           |
+		|           |
+		| link text |
+
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with more row columns than heading columns
@@ -145,18 +204,18 @@ Scenario: Table content should display html correctly with more row columns than
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text     |
-	   | Header A |
-	   |          |
+		| Text     |
+		| Header A |
+		|          |
 	And the elements "tbody tr" within the component should total 2
 	And the elements "tbody tr:nth-child(1) td" within the component should have the text contents:
-	   | Text   |
-	   | Cell A |
-	   | Cell B |
+		| Text   |
+		| Cell A |
+		| Cell B |
 	And the elements "tbody tr:nth-child(2) td" within the component should have the text contents:
-	   | Text   |
-	   | Cell C |
-	   | Cell D |
+		| Text   |
+		| Cell C |
+		| Cell D |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with more heading columns than rows columns
@@ -182,17 +241,17 @@ Scenario: Table content should display html correctly with more heading columns 
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text  |
-	   | Header A |
-	   | Header B |
-	   | Header C |
+		| Text     |
+		| Header A |
+		| Header B |
+		| Header C |
 	And the elements "tbody tr" within the component should total 1
 	And the elements "tbody tr td" within the component should total 3
 	And the elements "tbody tr td" within the component should have the text contents:
-	   | Text   |
-	   | Cell A |
-	   |        |
-	   |        |
+		| Text   |
+		| Cell A |
+		|        |
+		|        |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with no Rows specified
@@ -212,15 +271,15 @@ Scenario: Table content should display html correctly with no Rows specified
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text     |
-	   | Header A |
-	   | Header B |
+		| Text     |
+		| Header A |
+		| Header B |
 	And the elements "tbody tr" within the component should total 1
 	And the elements "tbody tr td" within the component should total 2
 	And the elements "tbody tr td" within the component should have the text contents:
-	   | Text |
-	   |      |
-	   |      |
+		| Text |
+		|      |
+		|      |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with no Headings specified
@@ -246,18 +305,18 @@ Scenario: Table content should display html correctly with no Headings specified
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text |
-	   |      |
-	   |      |
+		| Text |
+		|      |
+		|      |
 	And the elements "tbody tr" within the component should total 2
 	And the elements "tbody tr:nth-child(1) td" within the component should have the text contents:
-	   | Text   |
-	   | Cell A |
-	   | Cell B |
+		| Text   |
+		| Cell A |
+		| Cell B |
 	And the elements "tbody tr:nth-child(2) td" within the component should have the text contents:
-	   | Text   |
-	   | Cell C |
-	   | Cell D |
+		| Text   |
+		| Cell C |
+		| Cell D |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with empty rows
@@ -281,18 +340,18 @@ Scenario: Table content should display html correctly with empty rows
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text     |
-	   | Header A |
-	   | Header B |
+		| Text     |
+		| Header A |
+		| Header B |
 	And the elements "tbody tr" within the component should total 2
 	And the elements "tbody tr:nth-child(1) td" within the component should have the text contents:
-	   | Text |
-	   |      |
-	   |      |
+		| Text |
+		|      |
+		|      |
 	And the elements "tbody tr:nth-child(2) td" within the component should have the text contents:
-	   | Text |
-	   |      |
-	   |      |
+		| Text |
+		|      |
+		|      |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with empty headings
@@ -317,14 +376,14 @@ Scenario: Table content should display html correctly with empty headings
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text |
-	   |      |
-	   |      |
+		| Text |
+		|      |
+		|      |
 	And the elements "tbody tr" within the component should total 1
 	And the elements "tbody tr td" within the component should have the text contents:
-	   | Text   |
-	   | Cell A |
-	   | Cell B |
+		| Text   |
+		| Cell A |
+		| Cell B |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with Row having null value
@@ -349,14 +408,14 @@ Scenario: Table content should display html correctly with Row having null value
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text     |
-	   | Header A |
-	   | Header B |
+		| Text     |
+		| Header A |
+		| Header B |
 	And the elements "tbody tr" within the component should total 1
 	And the elements "tbody tr td" within the component should have the text contents:
-	   | Text |
-	   |      |
-	   |      |
+		| Text |
+		|      |
+		|      |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with Row as null
@@ -377,14 +436,14 @@ Scenario: Table content should display html correctly with Row as null
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text     |
-	   | Header A |
-	   | Header B |
+		| Text     |
+		| Header A |
+		| Header B |
 	And the elements "tbody tr" within the component should total 1
 	And the elements "tbody tr td" within the component should have the text contents:
-	   | Text |
-	   |      |
-	   |      |
+		| Text |
+		|      |
+		|      |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with Headings as null
@@ -407,14 +466,14 @@ Scenario: Table content should display html correctly with Headings as null
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text |
-	   |      |
-	   |      |
+		| Text |
+		|      |
+		|      |
 	And the elements "tbody tr" within the component should total 1
 	And the elements "tbody tr td" within the component should have the text contents:
-	   | Text   |
-	   | Cell A |
-	   | Cell B |
+		| Text   |
+		| Cell A |
+		| Cell B |
 
 @Javascript:disabled
 Scenario: Table content should display html correctly with Headings having null value
@@ -439,14 +498,14 @@ Scenario: Table content should display html correctly with Headings having null 
 	Then there should be no errors
 	And the elements "thead tr" within the component should total 1
 	And the elements "thead tr th" within the component should have the text contents:
-	   | Text |
-	   |      |
-	   |      |
+		| Text |
+		|      |
+		|      |
 	And the elements "tbody tr" within the component should total 1
 	And the elements "tbody tr td" within the component should have the text contents:
-	   | Text   |
-	   | Cell A |
-	   | Cell B |
+		| Text   |
+		| Cell A |
+		| Cell B |
 
 @Javascript:disabled
 Scenario: Table content should display first column as header when FirstCellAsHeader is true
