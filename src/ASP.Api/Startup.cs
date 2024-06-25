@@ -10,6 +10,8 @@ using ASP.Core.Establishments;
 using Azure.Identity;
 using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariables;
 using ASP.Application.Extensions;
+using ASP.Application;
+using ASP.Infrastructure;
 
 
 namespace ASP.Api
@@ -19,7 +21,9 @@ namespace ASP.Api
         public void Configure(IHostBuilder builder)
         {
             builder
-                .ConfigureFunctionsWebApplication()
+                .ConfigureFunctionsWebApplication(builder => 
+                    builder.UseMiddleware<ExceptionHandlingMiddleware>()
+                )
                 .ConfigureServices(services =>
                 {
                     services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
@@ -29,6 +33,8 @@ namespace ASP.Api
 
                     services.AddCosmosDbDependencies();
                     services.AddUseCases();
+                    services.ConfigureSearchStrategyFactory();
+                    services.ConfigureSearchServices();
                 })
                 .ConfigureAppConfiguration((context, builder) =>
                 {

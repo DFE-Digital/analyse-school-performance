@@ -17,7 +17,7 @@ namespace ASP.Application.UseCases.Establishments.GetEstablishmentDetails
 
         public async Task<Result<EstablishmentDetailsDTO>> HandleRequest(GetEstablishmentDetailsUseCaseRequest request)
         {
-            return await _repository.GetEstablishmentDetails(request.ContentTemplateId).Map(x => 
+            return await _repository.GetEstablishmentDetails(request.Urn).Map(x => 
                 x.MapToEstablishmentDetailsDTO() );
         }
     }

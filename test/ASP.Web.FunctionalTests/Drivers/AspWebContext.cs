@@ -17,6 +17,7 @@ using TechTalk.SpecFlow.Infrastructure;
 using ASP.Test.Web.Areas.ComponentTest;
 using ASP.Web.Features.Cookies;
 using ASP.Test.Web.Areas.ErrorTest;
+using ASP.Application.Extensions;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -191,6 +192,7 @@ namespace ASP.AcceptanceTests.Drivers
                     // Add test implementation of cookie provider to control/inspect cookie state
                     services.RemoveAll<ICookieProvider>();
                     services.Add(new ServiceDescriptor(typeof(ICookieProvider), _cookieProvider));
+
                     // Add test implementation of table storage provider
                     services.RemoveAll<ITableStorageProvider>();
                     services.Add(new ServiceDescriptor(typeof(ITableStorageProvider), _tableStorageProvider));
@@ -201,6 +203,10 @@ namespace ASP.AcceptanceTests.Drivers
                         // in-memory store
                         services.RemoveAll<IDocumentDatabase>();
                         services.AddSingleton<IDocumentDatabase, InMemoryDocumentDatabase>();
+
+                        services.AddUseCases();
+                        services.RemoveAll<IAspApi>();
+                        services.AddScoped<IAspApi, UseCaseReferenceApi>();
                     }
                 });
 

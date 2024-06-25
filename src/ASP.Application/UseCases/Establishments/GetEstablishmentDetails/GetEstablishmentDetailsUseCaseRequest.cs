@@ -2,11 +2,11 @@
 {
     public class GetEstablishmentDetailsUseCaseRequest
     {
-        public string ContentTemplateId { get; set; }
+        public string Urn { get; set; }
 
-        public GetEstablishmentDetailsUseCaseRequest(string contentTemplateId)
+        public GetEstablishmentDetailsUseCaseRequest(string urn)
         {
-            ContentTemplateId = contentTemplateId;
+            Urn = urn;
         }
     }
 }

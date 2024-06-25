@@ -21,31 +21,25 @@ namespace ASP.Test.Web.Areas.ComponentTest
     {
         public const string TEST_COMPONENT_TEMPLATE_ID = "test-component";
 
-        private readonly IViewContentTemplateUseCase _viewContentUseCase;
-        private readonly IUpdateContentTemplateUseCase _updateContentUseCase;
+        private readonly IAspApi _api;
         private readonly ITemplateComponentEditModelFactory _editModelFactory;
         private readonly IHostEnvironment _hostEnvironment;
 
-
         public ComponentTestController(
-            IViewContentTemplateUseCase viewContentUseCase,
-            IUpdateContentTemplateUseCase updateContentUseCase, 
+            IAspApi api,
             ITemplateComponentEditModelFactory editModelFactory, 
             IHostEnvironment hostEnvironment
         )
         {
-            _viewContentUseCase = viewContentUseCase ??
-                throw new ArgumentNullException(nameof(viewContentUseCase));
-            _updateContentUseCase = updateContentUseCase ??
-                throw new ArgumentNullException(nameof(updateContentUseCase));
-            _editModelFactory = editModelFactory;
-            _hostEnvironment = hostEnvironment;
+            _api = api ?? throw new ArgumentNullException(nameof(api));
+            _editModelFactory = editModelFactory ?? throw new ArgumentNullException(nameof(editModelFactory));
+            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
         [HttpGet("view")]
         public new async Task<IActionResult> View()
         {
-            return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
+            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
                 .Map(t => ContentTemplateViewModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, t))
                 .ToActionResult(View, _hostEnvironment);
         }
@@ -53,7 +47,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         [HttpGet("edit")]
         public async Task<IActionResult> Edit()
         {
-            return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
+            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
                 .Map(t => ContentTemplateEditModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, t, _editModelFactory))
                 .ToActionResult(View, _hostEnvironment);
         }
@@ -62,7 +56,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         public async Task<IActionResult> Edit(ContentTemplateEditModel model)
         {
             return await model.ToTemplate()
-                .Then(v => _updateContentUseCase.HandleRequest(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, v)))
+                .Then(v => _api.UpdateContentTemplate(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, v)))
                 .ToActionResult(_ => RedirectToAction(nameof(View)), _hostEnvironment);
         }
     }

@@ -13,14 +13,16 @@ namespace ASP.Web.Areas.Home
     {
         const string CONTENT_TEMPLATE_ID = "home-page";
 
-        private readonly IViewContentTemplateUseCase _viewContentUseCase;
+        private readonly IAspApi _api;
         private readonly IHostEnvironment _hostEnvironment;
 
-        public HomeController(IViewContentTemplateUseCase viewContentUseCase, IHostEnvironment hostEnvironment)
+        public HomeController(
+            IAspApi api,
+            IHostEnvironment hostEnvironment
+        )
         {
-            _viewContentUseCase = viewContentUseCase ??
-                throw new ArgumentNullException(nameof(viewContentUseCase));
-            _hostEnvironment = hostEnvironment;
+            _api = api ?? throw new ArgumentNullException(nameof(api));
+            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
         [HttpGet("/")]
@@ -38,7 +40,7 @@ namespace ASP.Web.Areas.Home
                 Views = []
             };
 
-            return await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID, revision))
+            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID, revision))
                 .Map(template => ContentTemplateViewModel.FromTemplate(CONTENT_TEMPLATE_ID, revision, template))
                 .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
                 .ToActionResult(View, _hostEnvironment);

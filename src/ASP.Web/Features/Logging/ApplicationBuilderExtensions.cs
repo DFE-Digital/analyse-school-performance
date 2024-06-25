@@ -4,7 +4,6 @@
     {
         internal static IApplicationBuilder UseLoggingMiddleware(this IApplicationBuilder app)
         {
-            app.UseMiddleware<PageNotFoundLoggingMiddleware>();
 
             return app;
         }

@@ -20,7 +20,7 @@ public class EstablishmentSearchUseCase : IEstablishmentSearchUseCase
         
         if (searchType == SearchType.Invalid)
         {
-            return Error.Validation($@"Bad request: the parameter ""{nameof(request.SearchTerm)}"" : ""{request.SearchTerm}"" with type ""{searchType}"" is invalid");
+            return Error.Invalid($@"Bad request: the parameter ""{nameof(request.SearchTerm)}"" : ""{request.SearchTerm}"" with type ""{searchType}"" is invalid");
         }
         
         var inputSearchTerm = request.SearchTerm;

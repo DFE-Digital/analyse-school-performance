@@ -15,11 +15,6 @@ namespace ASP.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(documentDB));
         }
 
-        public Task<Result<Done>> DeleteAll()
-        {
-            return _documentDB.DeleteAllAsync(ContainerKey);
-        }
-
         public Task<Result<ContentTemplate>> GetPublishedRevision(string contentTemplateId)
         {
             return _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.ContentId == contentTemplateId && t.IsPublished))

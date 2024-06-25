@@ -20,7 +20,7 @@
             return new UnexpectedError(message);
         }
 
-        public static Error Validation(string message)
+        public static Error Invalid(string message)
         {
             return new ValidationError(message);
         }

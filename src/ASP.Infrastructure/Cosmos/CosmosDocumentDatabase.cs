@@ -146,6 +146,8 @@ namespace ASP.Infrastructure.Cosmos
             try
             {
                 Container containerObject = await _containerProvider.GetContainerAsync(container);
+                var properties = await containerObject.ReadContainerAsync();
+                var partitionKeyPath = properties.Resource.PartitionKeyPath.Split('/').FirstOrDefault(p => p.Trim().Length > 0);
 
                 var items = await _queryHandler.
                     ReadIterableItemsAsync<Dictionary<string, object>>(container, q => q, cancellationToken);
@@ -153,18 +155,10 @@ namespace ASP.Infrastructure.Cosmos
                 foreach (var item in items)
                 {
                     var id = (string)item["id"];
+                    var partitionKey = (string)item[partitionKeyPath];
 
                     var response = await containerObject
-                        .DeleteItemAsync<Dictionary<string, object>>(id, new PartitionKey(id), cancellationToken: cancellationToken);
-
-                    switch(response.StatusCode)
-                    {
-                        case System.Net.HttpStatusCode.NotFound:
-                            return Error.NotFound(response.ToString());
-
-                        default:
-                            return Error.Unexpected(response.ToString());
-                    }
+                        .DeleteItemAsync<Dictionary<string, object>>(id, new PartitionKey(partitionKey), cancellationToken: cancellationToken);
                 }
 
                 return Result.Done;
@@ -173,6 +167,7 @@ namespace ASP.Infrastructure.Cosmos
             {
                 switch (ex.StatusCode)
                 {
+
                     case System.Net.HttpStatusCode.NotFound:
                         return Error.NotFound(ex.Message);
 

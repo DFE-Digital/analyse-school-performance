@@ -8,6 +8,5 @@ namespace ASP.Core.Templating
         Task<Result<ContentTemplate>> GetRevision(string contentTemplateId, string revision);
         Task<Result<ContentTemplate>> GetBaseTemplate(string contentTemplateId);
         Task<Result<Done>> Update(string contentTemplateId, string revision, ContentTemplate contentTemplate);
-        Task<Result<Done>> DeleteAll();
     }
 }

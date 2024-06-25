@@ -4,6 +4,6 @@ namespace ASP.Api
 {
     public abstract class ApiFunction
     {
-        public abstract Task<ApiResult> Run(HttpRequest req);
+        public abstract Task<ApiResult> Run(HttpRequest req, CancellationToken cancellationToken);
     }
 }

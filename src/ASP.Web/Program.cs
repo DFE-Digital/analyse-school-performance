@@ -28,7 +28,6 @@ namespace ASP.Web
                 .ConfigureAreas()
                 .ConfigureFeatures(builder.Configuration)
                 .ConfigureWebComponents()
-                .AddUseCases()
                 .ConfigureErrorHandling(builder.Configuration)
                 .ConfigureContentTemplates()
                 .ConfigureContentSecurityPolicy()
@@ -41,14 +40,24 @@ namespace ASP.Web
                 .ConfigureSchoolPages()
                 .ConfigureSearch();
 
+            builder.Services.AddUseCases();
+            builder.Services.AddScoped<IAspApi, UseCaseReferenceApi>();
+
+            // TODO: Replace API with HTTP implementation when fully working!
+            //builder.Services.AddScoped<IAspApi, HttpApi>();
+
+            //builder.Services.AddOptions<ApiOptions>()
+            //   .Configure<IConfiguration>(
+            //       (settings, configuration) =>
+            //           configuration
+            //               .GetSection(nameof(ApiOptions))
+            //               .Bind(settings));
+
             WebApplication app = builder.Build();
 
             // this must be called before the UseExceptionHandler so that it can pass the correct errors message through to the view
             // see CustomPageNotFoundMiddleware comments for how it works
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseMiddleware<CustomPageNotFoundMiddleware>();
-            }
+            app.UseMiddleware<StatusCodePageLoggingMiddleware>();
 
             // we only want to call exception handling middleware during production or testing the production server error pages
             if (EnvironmentHelper.ShouldUseProductionErrorPage(app.Configuration, app.Environment))
@@ -59,15 +68,6 @@ namespace ASP.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            // a separate check is required because this should only run in production, NOT during testing.
-            // running this during testing causes 404 tests to fail since it redirects to the production error page (with a code)
-            // instead of the development server error pages (with development messages).
-            if (app.Environment.IsProduction())
-            {
-                app.UseStatusCodePagesWithReExecute("/error/", "?statusCode={0}");
-            }
-
 
             if (app.Environment.IsProduction())
             {
@@ -81,7 +81,6 @@ namespace ASP.Web
             app.UseRouting();
             app.UseAuthorization();
             app.UseContentSecurityPolicy(app.Environment);
-            app.UseLoggingMiddleware();
 
             app.MapControllers();
             app.Run();

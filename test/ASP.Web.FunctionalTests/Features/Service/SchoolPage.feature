@@ -390,7 +390,7 @@ Scenario: School page should display page not found page if School URN is invali
     """
     When I navigate to /school/112
     Then I should get a 404 response
-    And the page title should be "Page not found – ASP – GOV.UK | Analyse school performance"
+    And the page title should be "Page not found | Analyse school performance"
     And the element "h1.govuk-heading-l" should have the text content "Page not found"
     And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
     And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."

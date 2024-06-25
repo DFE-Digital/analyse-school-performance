@@ -12,13 +12,16 @@ namespace ASP.Web.Areas.Search;
 [ServiceFilter<TermsOfUseActionFilter>]
 public class SearchController : Controller
 {
-    private readonly IEstablishmentSearchUseCase _establishmentSearchUseCase;
+    private readonly IAspApi _api;
     private readonly IHostEnvironment _hostEnvironment;
 
-    public SearchController(IEstablishmentSearchUseCase establishmentSearchUseCase, IHostEnvironment hostEnvironment)
+    public SearchController(
+        IAspApi api,
+        IHostEnvironment hostEnvironment
+    )
     {
-        _establishmentSearchUseCase = establishmentSearchUseCase;
-        _hostEnvironment = hostEnvironment;
+        _api = api ?? throw new ArgumentNullException(nameof(api));
+        _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
     }
 
     [HttpGet("")]
@@ -31,32 +34,37 @@ public class SearchController : Controller
     [HttpGet("search-result")]
     public async Task<IActionResult> SearchResult(SearchParams searchParams)
     {
-        if (!ModelState.IsValid)
+        try
         {
-            return View("Index");
+            if (!ModelState.IsValid)
+            {
+                return View("Index");
+            }
+
+            var estabSearchRequest = new EstablishmentSearchUseCaseRequest(
+                searchParams.SearchTerm,
+                searchParams.Page
+            );
+
+            var response = await _api.EstablishmentSearch(estabSearchRequest);
+
+            var searchResult = response.GetValueOrDefault(new SearchResult<EstablishmentDetailsSearchResultDTO>());
+
+            if (searchResult.TotalCount == 0)
+            {
+                return ReturnNoResultsResponse(estabSearchRequest, response);
+            }
+
+            if (searchResult.TotalCount == 1)
+            {
+                return RedirectToSchoolDetail(searchResult);
+            }
+
+            return ReturnDefaultSearchResponse(searchParams, estabSearchRequest, response);
+        } catch(Exception ex)
+        {
+            return new ObjectResult(ex.Message) { StatusCode = 500 };
         }
-        
-        var estabSearchRequest = new EstablishmentSearchUseCaseRequest()
-        {
-            SearchTerm = searchParams.SearchTerm,
-            Page = searchParams.Page
-        };
-
-        var response = await _establishmentSearchUseCase.HandleRequest(estabSearchRequest);
-        
-        var searchResult = response.GetValueOrDefault(new SearchResult<EstablishmentDetailsSearchResultDTO>());
-
-        if (searchResult.TotalCount == 0)
-        {
-            return ReturnNoResultsResponse(estabSearchRequest, response);
-        }
-
-        if (searchResult.TotalCount == 1)
-        {
-            return RedirectToSchoolDetail(searchResult);
-        }
-
-        return ReturnDefaultSearchResponse(searchParams, estabSearchRequest, response);
     }
 
     private IActionResult ReturnNoResultsResponse(EstablishmentSearchUseCaseRequest request, 

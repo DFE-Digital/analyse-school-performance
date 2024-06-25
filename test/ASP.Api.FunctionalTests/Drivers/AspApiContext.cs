@@ -57,7 +57,10 @@ namespace ASP.Api.AcceptanceTests.Drivers
                 t => (Func<HttpRequest, Task<ApiResult>>)(async (HttpRequest req) =>
                 {
                     var function = (ApiFunction)_host.Services.GetService(t)!;
-                    return await function.Run(req);
+                    using (var cancellationTokenSource = new CancellationTokenSource())
+                    {
+                        return await function.Run(req, cancellationTokenSource.Token);
+                    }
                 })
             );
         }

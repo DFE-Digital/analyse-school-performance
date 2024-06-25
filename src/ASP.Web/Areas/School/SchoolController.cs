@@ -16,17 +16,16 @@ namespace ASP.Web.Areas.School
         const string LANDING_PAGE_CONTENT_TEMPLATE_ID = "school-landing-page";
         const string USEFUL_LINKS_CONTENT_TEMPLATE_ID = "school-useful-links";
 
-        private readonly ILogger<SchoolController> _logger;
-        private readonly IGetEstablishmentDetailsUseCase _useCase;
-        private readonly IViewContentTemplateUseCase _viewContentUseCase;
+        private readonly IAspApi _api;
         private readonly IHostEnvironment _hostEnvironment;
 
-        public SchoolController(IGetEstablishmentDetailsUseCase useCase,
-            IViewContentTemplateUseCase viewContentUseCase, IHostEnvironment hostEnvironment)
+        public SchoolController(
+            IAspApi api,
+            IHostEnvironment hostEnvironment
+        )
         {
-            _useCase = useCase;
-            _viewContentUseCase = viewContentUseCase;
-            _hostEnvironment = hostEnvironment;
+            _api = api ?? throw new ArgumentNullException(nameof(api));
+            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
         [HttpGet("{urn}")]
@@ -80,9 +79,10 @@ namespace ASP.Web.Areas.School
         private async Task<Result<SchoolViewModel>> EstablishmentDetails(string urn, string page)
         {
             var breadcrumbTrail = new BreadcrumbViewModel(page)
+            
                 .AddBreadcrumb("My school", $"/school/{urn}");
 
-            return await _useCase.HandleRequest(new GetEstablishmentDetailsUseCaseRequest(urn))
+            return await _api.GetEstablishmentDetails(new GetEstablishmentDetailsUseCaseRequest(urn))
                  .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
                  .Map(establishmentDetailsModel => new SchoolViewModel()
                  {
@@ -102,9 +102,9 @@ namespace ASP.Web.Areas.School
             var breadcrumbTrail = new BreadcrumbViewModel(page)
                 .AddBreadcrumb("My school", $"/school/{urn}");
 
-            return await _useCase.HandleRequest(new GetEstablishmentDetailsUseCaseRequest(urn))
+            return await _api.GetEstablishmentDetails(new GetEstablishmentDetailsUseCaseRequest(urn))
                .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
-               .Then(async establishmentDetailsModel => await _viewContentUseCase.HandleRequest(new ViewContentTemplateRequest(contentTemplateId, revision))
+               .Then(async establishmentDetailsModel => await _api.ViewContentTemplate(new ViewContentTemplateRequest(contentTemplateId, revision))
                    .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template))
                    .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
                    .Map(contentTemplateModel => new SchoolViewModel

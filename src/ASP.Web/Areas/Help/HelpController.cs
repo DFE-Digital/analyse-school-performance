@@ -3,7 +3,6 @@ using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Mvc;
 using ASP.Web.Core.Templating;
-using Microsoft.Azure.Cosmos.Linq;
 
 namespace ASP.Web.Areas.Help
 {
@@ -11,21 +10,19 @@ namespace ASP.Web.Areas.Help
     [Route("help")]
     public class HelpController : Controller
     {
-        private readonly IViewContentTemplateUseCase _viewContentUseCase;
-        private readonly IUpdateContentTemplateUseCase _updateContentUseCase;
+        private readonly IAspApi _api;
         private readonly ITemplateComponentEditModelFactory _editModelFactory;
         private readonly IHostEnvironment _hostEnvironment;
 
-        public HelpController(IViewContentTemplateUseCase viewContentUseCase,
-            IUpdateContentTemplateUseCase updateContentUseCase, ITemplateComponentEditModelFactory editModelFactory, 
-            IHostEnvironment hostEnvironment)
+        public HelpController(
+            IAspApi api, 
+            ITemplateComponentEditModelFactory editModelFactory, 
+            IHostEnvironment hostEnvironment
+        )
         {
-            _viewContentUseCase = viewContentUseCase ??
-                throw new ArgumentNullException(nameof(viewContentUseCase));
-            _updateContentUseCase = updateContentUseCase ??
-                throw new ArgumentNullException(nameof(updateContentUseCase));
-            _editModelFactory = editModelFactory;
-            _hostEnvironment = hostEnvironment;
+            _api = api ?? throw new ArgumentNullException(nameof(api));
+            _editModelFactory = editModelFactory ?? throw new ArgumentNullException(nameof(editModelFactory));
+            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
         [HttpGet("{contentId}", Name = "app-route-help-view")]
@@ -34,7 +31,7 @@ namespace ASP.Web.Areas.Help
             string templateId = $"help-{contentId}".ToLower();
             ViewContentTemplateRequest request = new(templateId, revision);
 
-            return await _viewContentUseCase.HandleRequest(request)
+            return await _api.ViewContentTemplate(request)
                 .Map(t => ContentTemplateViewModel.FromTemplate(contentId, revision, t))
                 .ToActionResult(View, _hostEnvironment);
         }
@@ -45,7 +42,7 @@ namespace ASP.Web.Areas.Help
             string templateId = $"help-{contentId}".ToLower();
             ViewContentTemplateRequest request = new(templateId, revision);
 
-            return await _viewContentUseCase.HandleRequest(request)
+            return await _api.ViewContentTemplate(request)
                 .Map(t => ContentTemplateEditModel.FromTemplate(contentId, revision, t, _editModelFactory))
                 .ToActionResult(View, _hostEnvironment);
         }
@@ -56,7 +53,7 @@ namespace ASP.Web.Areas.Help
             string templateId = $"help-{contentId}".ToLower();
 
             return await model.ToTemplate()
-                .Then(t => _updateContentUseCase.HandleRequest(new(templateId, revision, t)))
+                .Then(t => _api.UpdateContentTemplate(new(templateId, revision, t)))
                 .ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId, revision }), _hostEnvironment);
         }
     }

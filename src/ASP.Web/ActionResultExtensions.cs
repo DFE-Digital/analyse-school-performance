@@ -103,8 +103,8 @@ namespace ASP.Web
                         // Development-specific error handling
                         return error switch
                         {
-                            NotFoundError e => new ObjectResult(e.Message) { StatusCode = StatusCodes.Status404NotFound },
-                            _ => new ObjectResult(error.Message) { StatusCode = StatusCodes.Status500InternalServerError }
+                            NotFoundError e => new ObjectResult(e.ToString()) { StatusCode = StatusCodes.Status404NotFound },
+                            _ => new ObjectResult(error.ToString()) { StatusCode = StatusCodes.Status500InternalServerError }
                         };
                     }
                     else

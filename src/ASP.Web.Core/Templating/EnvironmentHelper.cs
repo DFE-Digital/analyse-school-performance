@@ -18,5 +18,10 @@ namespace ASP.Web.Core.Templating
         {
             return environment.IsProduction() || configuration.GetValue("ForceProductionErrorPage", defaultValue: false);
         }
+
+        public static bool ShouldShowErrorMessage(IHostEnvironment environment)
+        {
+            return !environment.IsProduction();
+        }
     }
 }

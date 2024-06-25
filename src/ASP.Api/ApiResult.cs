@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Api
 {
-    public class ApiResult : ObjectResult
+    public class ApiResult : JsonResult
     {
         public ApiResult(int statusCode, string message) 
             : base(message)

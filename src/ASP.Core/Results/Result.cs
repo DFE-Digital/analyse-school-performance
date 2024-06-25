@@ -20,9 +20,9 @@
             return Results.Error.Unexpected(message);
         }
 
-        public static Result<TValue> Validation<TValue>(string message)
+        public static Result<TValue> Invalid<TValue>(string message)
         {
-            return Results.Error.Validation(message);
+            return Results.Error.Invalid(message);
         }
 
         public static Result<TValue> NotAllowed<TValue>(string message)

@@ -17,11 +17,10 @@
                 </ul>
                 @if (Model.ShowErrorCode)
                 {
-                    <p class="govuk-body">
+                    <p class="govuk-body" data-testid="error-display-code">
                         <strong>Error code:</strong> <code class="govuk-body">@Model.ErrorCode</code>
                     </p>
                 }
-
                 @if (Model.ShowErrorMessage)
                 {
                     <p class="govuk-body" data-testid="error-display-message">

@@ -48,7 +48,7 @@ namespace ASP.Infrastructure.TableStorage
                 return Result.Success("Error details added to " + tableClient.Name + " table with error code " + tableStorageEntry.RowKey);
 
             }
-            catch (RequestFailedException exception)
+            catch (Exception exception)
             {
                 return Error.Unexpected(exception.Message);
             }

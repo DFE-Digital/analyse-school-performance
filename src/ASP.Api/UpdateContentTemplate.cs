@@ -18,14 +18,16 @@ namespace ASP.Api
         }
 
         [Function("UpdateContentTemplate")]
-        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req, CancellationToken cancellationToken)
         {
+            _logger.LogInformation(req.Method + " " + req.Path + req.QueryString);
+            
             return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Post])
                 .Then(_ => RequestValidation.RequiredParameter(req, "id")
                 .Then(id => RequestValidation.OptionalParameter(req, "revision")
                 .Then(revision => RequestValidation.RequiredBodyAsync<ContentTemplate>(req)
                 .Then(contentTemplate => _update.HandleRequest(new UpdateContentTemplateRequest(id, revision.ToNullable(), contentTemplate))))))
-                .ToApiResultAsync();
+                .ToApiResultAsync(cancellationToken);
         }
     }
 }

@@ -9,16 +9,11 @@ namespace ASP.Web.Features.ErrorHandling
     {
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("")]
-        public IActionResult Error(int? statusCode = null)
+        public IActionResult Error()
         {
-            // The errorModel is reused for both Error pages. Even though no properties of the model are utilized,
-            // it appears necessary for the view to initialize it with a specific property, particularly for the page not found error page.
-            var errorModel = new ErrorViewModel { ErrorCode = HttpContext.TraceIdentifier };
-
-            if (statusCode.HasValue && statusCode == 404)
-            {
-                return View("~/Features/ErrorHandling/PageNotFoundError.cshtml", errorModel);
-            }
+            var errorModel = new ErrorViewModel { 
+                ErrorCode = HttpContext.TraceIdentifier
+            };
 
             return View("~/Features/ErrorHandling/ServerError.cshtml", errorModel);
         }

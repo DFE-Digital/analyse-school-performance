@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using ASP.Core.Logging;
+using ASP.Core.Results;
 
 namespace ASP.Web.Features.ErrorHandling
 {
@@ -12,7 +13,6 @@ namespace ASP.Web.Features.ErrorHandling
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
             CancellationToken cancellationToken)
         {
-
             var tableStorageProblemDetails = new TableStorageProblemDetails(httpContext, HttpStatusCode.InternalServerError.ToString());
 
             var problemDetails = new ProblemDetails()
@@ -23,10 +23,10 @@ namespace ASP.Web.Features.ErrorHandling
                 Detail = exception.StackTrace,
             };
 
-            var result = await tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails));
-            result.Switch(
-                success => logger.LogInformation(success),
-                failure => logger.LogError(failure.ToString()));
+            await tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails))
+                .Switch(
+                    success => logger.LogInformation(success),
+                    failure => logger.LogError(failure.ToString()));
 
             return false;
         }

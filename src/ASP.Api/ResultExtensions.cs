@@ -4,15 +4,31 @@ namespace ASP.Api
 {
     public static class ResultExtensions
     {
-        public static async Task<ApiResult> ToApiResultAsync<T>(this Task<Result<T>> resultTask) where T : notnull
+        public static async Task<ApiResult> ToApiResultAsync<T>(this Task<Result<T>> resultTask, CancellationToken cancellationToken) where T : notnull
         {
-            var result = await resultTask;
+            try
+            {
+                if(cancellationToken.IsCancellationRequested)
+                {
+                    return new ApiResult(444, "");
+                }
 
-            return result.ToApiResult();
+                var result = await resultTask;
+
+                return result.ToApiResult(cancellationToken);
+            } catch(Exception ex)
+            {
+                return new ApiResult(500, ex.Message);
+            }
         }
 
-        public static ApiResult ToApiResult<T>(this Result<T> result) where T : notnull
+        public static ApiResult ToApiResult<T>(this Result<T> result, CancellationToken cancellationToken) where T : notnull
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return new ApiResult(444, "");
+            }
+
             return result.Match(
                 r => new ApiResult(200, r),
                 r => r switch {

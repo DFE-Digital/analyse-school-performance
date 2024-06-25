@@ -1,12 +1,11 @@
-﻿
-namespace ASP.Core.Templating
+﻿namespace ASP.Core.Templating
 {
     public class ContentTemplate
     {
         public bool IsPublished { get; set; }
-        public string PageTitle { get; }
-        public dynamic PageContent { get; }
-        public List<TemplateComponent> Views { get; }
+        public string PageTitle { get; set; }
+        public dynamic PageContent { get; set; }
+        public List<TemplateComponent> Views { get; set; }
 
         public ContentTemplate(bool isPublished, string pageTitle, dynamic pageContent, List<TemplateComponent> views)
         {

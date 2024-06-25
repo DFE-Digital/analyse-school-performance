@@ -20,13 +20,13 @@ namespace ASP.Core.Helpers
             T? item;
 
             string? error = null;
-                item = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
-                    Error = (object? sender, Newtonsoft.Json.Serialization.ErrorEventArgs args) =>
-                    {
-                        error = args.ErrorContext.Error.Message;
-                        args.ErrorContext.Handled = true;
-                    }
-                });
+            item = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
+                Error = (object? sender, Newtonsoft.Json.Serialization.ErrorEventArgs args) =>
+                {
+                    error = args.ErrorContext.Error.Message;
+                    args.ErrorContext.Handled = true;
+                }
+            });
 
             if(error != null) 
             { 
