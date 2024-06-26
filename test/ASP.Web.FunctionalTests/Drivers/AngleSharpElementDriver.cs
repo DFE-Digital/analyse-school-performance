@@ -1,6 +1,7 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using ASP.Test.Core;
+using TechTalk.SpecFlow.Infrastructure;
 using Xunit.Sdk;
 
 namespace ASP.AcceptanceTests.Drivers
@@ -13,14 +14,16 @@ namespace ASP.AcceptanceTests.Drivers
         private IElement? _element;
         private int _elementCount;
         private AngleSharpWebDriver _web;
+        private ISpecFlowOutputHelper _outputHelper;
 
-        public AngleSharpElementDriver(IElement outerElement, string selector, AngleSharpWebDriver web)
+        public AngleSharpElementDriver(IElement outerElement, string selector, AngleSharpWebDriver web, ISpecFlowOutputHelper outputHelper)
         {
             _outerElement = outerElement;
             _selector = selector;
             _web = web;
             _elementCount = _outerElement.QuerySelectorAll(_selector).Count();
             _element = _outerElement.QuerySelector(_selector);
+            _outputHelper = outputHelper;
         }
 
         private IElement El
@@ -35,7 +38,7 @@ namespace ASP.AcceptanceTests.Drivers
 
         public IElementDriver Element(string selector)
         {
-            return new AngleSharpElementDriver(El, selector, _web);
+            return new AngleSharpElementDriver(El, selector, _web, _outputHelper);
         }
 
         public IElementDriver ElementByLabel(string labelText)
@@ -45,7 +48,7 @@ namespace ASP.AcceptanceTests.Drivers
 
             var fieldSelector = $":scope #{label?.Attributes["for"]?.Value}";
 
-            return new AngleSharpElementDriver(El, fieldSelector, _web);
+            return new AngleSharpElementDriver(El, fieldSelector, _web, _outputHelper);
         }
 
         public IElementsDriver Elements(string selector)
@@ -60,18 +63,30 @@ namespace ASP.AcceptanceTests.Drivers
             return Task.CompletedTask;
         }
 
-        public Task ShouldNotExistAsync(string errorIfExists)
+        public async Task ShouldNotExistAsync(string errorIfExists)
         {
+            if (_element != null)
+            {
+                var pageContent = await _web.PageContentAsync();
+                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+            }
+
             AssertWithMessage.Null(_element, errorIfExists);
 
-            return Task.CompletedTask;
+            return;
         }
 
-        public Task<IElementDriver> ShouldExistAsync(string errorIfNotExists)
+        public async Task<IElementDriver> ShouldExistAsync(string errorIfNotExists)
         {
+            if (_element == null)
+            {
+                var pageContent = await _web.PageContentAsync();
+                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+            }
+
             AssertWithMessage.NotNull(_element, errorIfNotExists);
 
-            return Task.FromResult((IElementDriver) this);
+            return this;
         }
 
         public Task<string> TextContentAsync()

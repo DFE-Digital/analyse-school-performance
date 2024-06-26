@@ -1,6 +1,7 @@
 ﻿using ASP.AcceptanceTests.Drivers;
 using ASP.Test.Core;
 using Microsoft.Playwright;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.AcceptanceTests.Drivers
 {
@@ -9,23 +10,27 @@ namespace ASP.Web.AcceptanceTests.Drivers
     {
         private ILocator _element;
         private IPage _page;
+        private PlaywrightWebDriver _web;
+        private ISpecFlowOutputHelper _outputHelper;
 
-        public PlaywrightElementDriver(ILocator element, IPage page)
+        public PlaywrightElementDriver(ILocator element, IPage page, PlaywrightWebDriver web, ISpecFlowOutputHelper outputHelper)
         {
             _element = element;
             _page = page;
+            _web = web;
+            _outputHelper = outputHelper;
         }
 
         public IElementDriver Element(string selector)
         {
             var element = _element.Locator(selector);
-            return new PlaywrightElementDriver(element, _page);
+            return new PlaywrightElementDriver(element, _page, _web, _outputHelper);
         }
 
         public IElementDriver ElementByLabel(string labelText)
         {
             var element = _element.GetByLabel(labelText);
-            return new PlaywrightElementDriver(element, _page);
+            return new PlaywrightElementDriver(element, _page, _web, _outputHelper);
         }
 
         public IElementsDriver Elements(string selector)
@@ -50,24 +55,22 @@ namespace ASP.Web.AcceptanceTests.Drivers
 
         public async Task ShouldNotExistAsync(string errorIfExists)
         {
-            try
+            var count = await _element.CountAsync();
+            if (count != 0)
             {
-                await Assertions.Expect(_element).Not.ToBeVisibleAsync();
-            }
-            catch (PlaywrightException)
-            {
+                var pageContent = await _web.PageContentAsync();
+                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
                 AssertWithMessage.Fail(errorIfExists);
             }
         }
 
         public async Task<IElementDriver> ShouldExistAsync(string errorIfNotExists)
         {
-            try
+            var count = await _element.CountAsync();
+            if (count == 0)
             {
-                await Assertions.Expect(_element).ToBeVisibleAsync();
-            }
-            catch (PlaywrightException)
-            {
+                var pageContent = await _web.PageContentAsync();
+                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
                 AssertWithMessage.Fail(errorIfNotExists);
             }
 

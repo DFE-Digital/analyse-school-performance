@@ -85,7 +85,7 @@ namespace ASP.AcceptanceTests.Drivers
         {
             await ExpectStatusCode();
 
-            return new AngleSharpElementDriver(LastResponse.DocumentElement, selector, this);
+            return new AngleSharpElementDriver(LastResponse.DocumentElement, selector, this, _outputHelper);
         }
 
         public async Task<IElementDriver> ElementByLabel(string labelText)
@@ -97,7 +97,7 @@ namespace ASP.AcceptanceTests.Drivers
 
             var fieldSelector = $":scope #{label?.Attributes["for"]?.Value}";
 
-            return new AngleSharpElementDriver(LastResponse.DocumentElement, fieldSelector, this);
+            return new AngleSharpElementDriver(LastResponse.DocumentElement, fieldSelector, this, _outputHelper);
         }
 
         public async Task<IElementsDriver> Elements(string selector)

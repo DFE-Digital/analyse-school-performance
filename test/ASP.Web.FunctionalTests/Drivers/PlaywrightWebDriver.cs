@@ -125,7 +125,7 @@ namespace ASP.Web.AcceptanceTests.Drivers
             await ExpectStatusCode();
 
             var element = Page.Locator(selector);
-            return new PlaywrightElementDriver(element, Page);
+            return new PlaywrightElementDriver(element, Page, this, _outputHelper);
         }
 
         public async Task<IElementDriver> ElementByLabel(string labelText)
@@ -133,7 +133,7 @@ namespace ASP.Web.AcceptanceTests.Drivers
             await ExpectStatusCode();
 
             var element = Page.GetByLabel(labelText);
-            return new PlaywrightElementDriver(element, Page);
+            return new PlaywrightElementDriver(element, Page, this, _outputHelper);
         }
 
         public async Task<IElementsDriver> Elements(string selector)

@@ -16,6 +16,7 @@ namespace ASP.Web.Areas.School
     {
         const string LANDING_PAGE_CONTENT_TEMPLATE_ID = "school-landing-page";
         const string USEFUL_LINKS_CONTENT_TEMPLATE_ID = "school-useful-links";
+        const string OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID = "school-other-reports-ofsted";
 
         private readonly IAspApi _api;
         private readonly IHostEnvironment _hostEnvironment;
@@ -60,9 +61,9 @@ namespace ASP.Web.Areas.School
         }
 
         [HttpGet("{urn}/other-reports")]
-        public async Task<IActionResult> OtherReports(string urn)
+        public async Task<IActionResult> OtherReports(string urn, string? revision)
         {
-            return await EstablishmentDetails(urn, "Other reports").ToActionResult(View, _hostEnvironment);
+            return await EstablishmentDetailsWithTemplate(urn, OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision);
         }
 
         [HttpGet("{urn}/qla")]

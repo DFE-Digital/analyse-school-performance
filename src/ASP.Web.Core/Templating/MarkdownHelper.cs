@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -148,5 +150,31 @@ namespace ASP.Web.Core.Templating
 
             return new HtmlString(inputString);
         }
+
+        public string ReplaceInlineVariables(object input, object TextReplacements)
+        {
+            // Convert input to string
+            var inputString = input switch
+            {
+                null => "",
+                string s => s,
+                _ => Convert.ToString(input) ?? ""
+            };
+
+            // Escape HTML
+            inputString = HttpUtility.HtmlEncode(inputString);
+
+            var dict = JObject.FromObject(TextReplacements).ToObject<Dictionary<string, object>>();
+            foreach (var pair in dict!)
+            {
+                string key = pair.Key.ToString();
+                string value = pair.Value.ToString()!;
+                inputString = inputString.Replace(key, value);
+            }
+
+            return inputString;
+
+        }
+
     }
 }

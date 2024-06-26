@@ -21,6 +21,12 @@
         JObject o => JsonHelper.Serialize(o),
         _ => Model.ViewContent.Text.ToString()
     };
+
+    // special case - dynamic replace
+    if (ViewData["TextReplacements"] is not null)
+    {
+        text = @MarkdownHelper.ReplaceInlineVariables(text, ViewData["TextReplacements"]);
+    }
 }
 
 <p id="@Model.ViewContent.Id" class=@(@class)>

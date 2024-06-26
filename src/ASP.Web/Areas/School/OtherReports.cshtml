@@ -1,6 +1,8 @@
-﻿@model ASP.Web.Areas.School.ViewModels.SchoolViewModel
+﻿@using ASP.Web.Accordion
+@model ASP.Web.Areas.School.ViewModels.SchoolViewModel
 @{
     ViewData["Title"] = "Other reports";
+    ViewData["TextReplacements"] = new Dictionary<string, string> { { "{URN}", Model.EstablishmentDetails.Urn } };
 }
 
 <div class="govuk-width-container">
@@ -9,6 +11,73 @@
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <h1 class="govuk-heading-xl">Other reports</h1>
         @await Html.PartialAsync("~/Areas/School/Shared/_SubMenuNavigationPartial.cshtml", Model)
-        <p class="govuk-body">This page is still in progress.</p>
+        <p class="govuk-body">
+            <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+                <asp-accordion Title="Ofsted inspection data summary reports" title-data-test-id="1" body-data-test-id="inspection-data-summary-panel">
+                    @if (Model.ContentTemplate.Views != null)
+                    {
+                        foreach (var view in Model.ContentTemplate.Views)
+                        {
+                            @if (view.ViewId == "Paragraph")
+                            {
+                               @await Html.PartialAsync("~/Components/Paragraph/View.cshtml", view)
+                                ;
+                            }
+                            else if (view.ViewId == "List")
+                            {
+                                @await Html.PartialAsync("~/Components/List/View.cshtml", view)
+                                ;
+                            }
+
+                        }
+                    }
+                </asp-accordion>
+                <asp-accordion Title="School performance summary" title-data-test-id="2" body-data-test-id="summary-report-panel">
+                        <ul class="govuk-list">
+                            <li>
+                                <a class="report-link govuk-link" href="#">School performance summary for 2022/2023</a>
+                            </li>
+                            <li>
+                                <a class="report-link govuk-link" href="#">School performance summary for 2021/2022</a>
+                            </li>
+                            <li>
+                                <a class="report-link govuk-link" href="#">School performance summary for 2020/2021</a>
+                            </li>
+                            <li>
+                                <a class="report-link govuk-link" href="#">School performance summary for 2018/2019</a>
+                            </li>
+                            <li>
+                                <a class="report-link govuk-link" href="#">School performance summary for 2017/2018</a>
+                            </li>
+                            <li>
+                                <a class="report-link govuk-link" href="#">School performance summary for 2016/2017</a>
+                            </li>
+                            <li>
+                                <a class="report-link govuk-link" href="#">School performance summary for 2015/2016</a>
+                            </li>
+                        </ul>
+                </asp-accordion>
+                <asp-accordion Title="Absence and exclusions" title-data-test-id="3" body-data-test-id="absence-exclusions-report-panel">
+                    <ul class="govuk-list">
+                        <li>
+                            <a href="#" class="dont-print report-link govuk-link">Absence</a>
+                        </li>
+                        <li>
+                            <a href="#" class="dont-print report-link govuk-link">Exclusions</a>
+                        </li>
+                    </ul>
+                </asp-accordion>
+                <asp-accordion Title="School characteristics" title-data-test-id="4" body-data-test-id="school-characteristics-report-panel">
+                    <ul class="govuk-list">
+                        <li>
+                            <a id="school-characteristics-trends" href="#" class="dont-print report-link govuk-link">Basic characteristics trends</a>
+                        </li>
+                        <li>
+                            <a id="school-characteristics-by-national-curriculum-year-group" href="#" class="dont-print report-link govuk-link">Basic characteristics by national curriculum year group</a>
+                        </li>
+                    </ul>
+                </asp-accordion>
+            </div>
+        </p>
     </main>
 </div>
