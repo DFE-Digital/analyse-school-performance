@@ -1,9 +1,10 @@
 using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
-using ASP.Web.Features.TermsOfUse;
 using ASP.Core.Results;
 using ASP.Web.Areas.School.ViewModels;
 using ASP.Web.Core.Templating;
+using ASP.Web.Features.TermsOfUse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Areas.School

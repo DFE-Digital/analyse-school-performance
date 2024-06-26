@@ -1,8 +1,9 @@
 using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
 using ASP.Core.Results;
-using ASP.Web.Features.TermsOfUse;
-using Microsoft.AspNetCore.Mvc;
 using ASP.Web.Core.Templating;
+using ASP.Web.Features.TermsOfUse;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Areas.Home
 {

@@ -1,16 +1,18 @@
 using ASP.Application.Extensions;
-using ASP.Web.Features;
 using ASP.Web.Areas;
-using ASP.Web.Components;
 using ASP.Web.Areas.School;
-using ASP.Web.Features.ContentSecurityPolicy;
-using ASP.Web.Features.ErrorHandling;
-using ASP.Web.Features.Logging;
+using ASP.Web.Authentication;
+using ASP.Web.Authorisation;
+using ASP.Web.Components;
 using ASP.Web.Core.Templating;
+using ASP.Web.Features;
 using ASP.Web.Features.AnalyticsTrackingPreferences;
 using ASP.Web.Features.ApplicationServiceVersion;
+using ASP.Web.Features.ContentSecurityPolicy;
 using ASP.Web.Features.ContentTemplates;
 using ASP.Web.Features.Cookies;
+using ASP.Web.Features.ErrorHandling;
+using ASP.Web.Features.Logging;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Features.UrlRewriting;
 
@@ -28,6 +30,8 @@ namespace ASP.Web
                 .ConfigureAreas()
                 .ConfigureFeatures(builder.Configuration)
                 .ConfigureWebComponents()
+                .ConfigureDsiAuthentication(builder.Configuration)
+                .ConfigureAuthorisation(builder.Configuration)
                 .ConfigureErrorHandling(builder.Configuration)
                 .ConfigureContentTemplates()
                 .ConfigureContentSecurityPolicy()
@@ -79,6 +83,7 @@ namespace ASP.Web
             app.UseStaticFiles();
             app.UseUrlRewriteRules();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseContentSecurityPolicy(app.Environment);
 

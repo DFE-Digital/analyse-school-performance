@@ -17,5 +17,11 @@ namespace ASP.Web.Features.ErrorHandling
 
             return View("~/Features/ErrorHandling/ServerError.cshtml", errorModel);
         }
+
+        [HttpGet("accessdenied")]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

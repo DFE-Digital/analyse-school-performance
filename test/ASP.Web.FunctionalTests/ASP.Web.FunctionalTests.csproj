@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\Components\Heading - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\Service\NamedData.feature.cs" />
   </ItemGroup>
 
   <ItemGroup>

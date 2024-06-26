@@ -1,8 +1,13 @@
 ﻿using ASP.Core;
 using ASP.Infrastructure.TableStorage;
 using ASP.Test.Core;
+using ASP.Test.Web.Areas.AuthorisationTest;
+using ASP.Test.Web.Areas.ComponentTest;
+using ASP.Test.Web.Areas.ErrorTest;
 using ASP.Web;
 using ASP.Web.AcceptanceTests.Services;
+using ASP.Web.Features.Cookies;
+using ASP.Web.FunctionalTests.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -54,6 +59,7 @@ namespace ASP.AcceptanceTests.Drivers
         public IDocumentDatabase DocumentDatabase => _factory.DocumentDatabase;
         public TestCookieProvider CookieProvider => _factory.CookieProvider;
         public TestTableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
+        public TestRoleProvider TestRoleProvider => _factory.TestRoleProvider;
 
         public string ServerAddress => _factory.ServerAddress;
 
@@ -63,18 +69,21 @@ namespace ASP.AcceptanceTests.Drivers
             private readonly MemoryStore _store;
             private readonly TestCookieProvider _cookieProvider;
             private readonly TestTableStorageProvider _tableStorageProvider;
+            private readonly TestRoleProvider _testRoleProvider;
 
             private IDocumentDatabase _documentDatabase;
 
             public TestCookieProvider CookieProvider => _cookieProvider;
             public TestTableStorageProvider TableStorageProvider => _tableStorageProvider;
-
+            public TestRoleProvider TestRoleProvider => _testRoleProvider;
 
             public CustomWebApplicationFactory()
             {
                 _store = new MemoryStore();
                 _cookieProvider = new TestCookieProvider();
                 _tableStorageProvider = new TestTableStorageProvider();
+                _testRoleProvider = new TestRoleProvider();
+
                 ClientOptions.AllowAutoRedirect = true;
             }
 
@@ -182,9 +191,20 @@ namespace ASP.AcceptanceTests.Drivers
                     // We can use AddMvcCore() here because it uses IServiceCollection.TryAddEnumerable() behind the scenes which
                     // is idempotent
                     services.AddMvcCore()
-                        .AddApplicationPart(typeof(ComponentTestController).Assembly)
-                        .AddApplicationPart(typeof(ErrorTestController).Assembly)
-                        .AddControllersAsServices();
+                          .AddApplicationPart(typeof(ComponentTestController).Assembly)
+                          .AddControllersAsServices();
+
+                    //Add test authentication.
+                    //This 'Test' authentication scheme will produce an 'IsAuthenticated = true' result
+                    //which is requirement required to access controller actions decorated with the [Authorize] attribute
+                    services.AddAuthentication(options =>
+                    {
+                        options.DefaultAuthenticateScheme = TestAuthenticationHandler.AuthenticationScheme;
+                        options.DefaultScheme = TestAuthenticationHandler.AuthenticationScheme;
+                        options.DefaultChallengeScheme = TestAuthenticationHandler.AuthenticationScheme;
+                    })
+                   .AddScheme<TestAuthenticationHandlerOptions, TestAuthenticationHandler>
+                                         (TestAuthenticationHandler.AuthenticationScheme, options => { });
 
                     // Add in-memory data store
                     services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
@@ -196,6 +216,8 @@ namespace ASP.AcceptanceTests.Drivers
                     // Add test implementation of table storage provider
                     services.RemoveAll<ITableStorageProvider>();
                     services.Add(new ServiceDescriptor(typeof(ITableStorageProvider), _tableStorageProvider));
+                    // Add service that provides Roles for use in authorisation tests
+                    services.Add(new ServiceDescriptor(typeof(TestRoleProvider), _testRoleProvider));
 
                     if (testMode == "Development")
                     {

@@ -31,6 +31,8 @@ namespace ASP.Web.Features.TermsOfUse
             // If the cookie is not set/does not exist, set the cookie to Rejected and redirect
             _cookieProvider?.SetCookie(CookieKeys.AcceptedTermsOfUse, TermsOfUse.Rejected.ToString());
 
+           
+
             RedirectUserToTermsOfUsePage(context);
         }
 
