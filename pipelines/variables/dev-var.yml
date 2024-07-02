@@ -1,6 +1,7 @@
 # File: pipelines/variables/app-dev-var.yml
 # all dev stage pipeline level var should come here.
 variables:
+- group: s192d01-group
 - name: azureSubscription
   value: 's192-analyse-school-performance-development'
 - name: resourceGroupName
