@@ -38,7 +38,7 @@ Scenario: Other reports page should show the accordian component when javascript
 
 @Javascript:enabled
 Scenario: Other reports page should show the accordian component when javascript enabled
-    Given published content template "school-other-reports-ofsted" exists:
+    Given content template "school-other-reports-ofsted" exists:
     """
     {
         "Views": [

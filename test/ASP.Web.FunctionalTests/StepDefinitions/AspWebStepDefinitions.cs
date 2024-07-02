@@ -100,13 +100,13 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal((HttpStatusCode)statusCode, _web.Status);
         }
 
-        [Then(@"The path should match ((?:/.*)+)")]
+        [Then(@"the path should match ""((?:/.*)+)""")]
         public void ThePathShouldMatch(string path)
         {
             Assert.Equal(_web.BaseAddress + path, _web.Path);
         }
 
-        [Then(@"the page title should be ""([^""]*)""")]
+        [Then(@"the page title should be ""(.*)""")]
         public async Task ThenThePageTitleShouldBe(string expected)
         {
             var actual = await _web.PageTitleAsync();

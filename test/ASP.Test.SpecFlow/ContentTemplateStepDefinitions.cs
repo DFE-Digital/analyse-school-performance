@@ -29,7 +29,7 @@ namespace ASP.Test.SpecFlow
         {
         }
 
-        [Given(@"published content template ""([^""]+)"" exists:")]
+        [Given(@"(?:published )?content template ""([^""]+)"" exists:")]
         public async Task GivenContentTemplateExistsMultiline(string id, string data)
         {
             await SetUpPublishedContentTemplate(id, id, data).Switch(
@@ -39,7 +39,7 @@ namespace ASP.Test.SpecFlow
                 e => AssertWithMessage.Fail(e.ToString()));
         }
 
-        [Given(@"published content template with id ""([^""]+)"" and contentId ""([^""]+)"" exists:")]
+        [Given(@"(?:published )?content template with id ""([^""]+)"" and contentId ""([^""]+)"" exists:")]
         public async Task GivenContentTemplateWithIdAndContentIdExistsMultiline(string id, string contentId, string data)
         {
             await SetUpPublishedContentTemplate(id, contentId, data).Switch(
@@ -424,7 +424,7 @@ namespace ASP.Test.SpecFlow
                     return GetPropertyPathValue(restOfPath, value);
                 }
                 return value;
-            }
+            } 
             else
             {
                 Dictionary<string, object>? dict = null;

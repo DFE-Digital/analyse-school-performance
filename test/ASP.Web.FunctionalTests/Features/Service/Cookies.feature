@@ -2,7 +2,7 @@ Feature: Cookies component
 
 @Javascript:disabled
 Scenario: Analytics cookie preference defaults to "Do not use' when cookie choice has not been made
-	Given published content template "help-cookies" exists:
+	Given content template "help-cookies" exists:
 		"""
 		{
 			"Views": [
@@ -17,7 +17,7 @@ Scenario: Analytics cookie preference defaults to "Do not use' when cookie choic
 
 @Javascript:disabled
 Scenario: Analytics cookie preference set to 'Use/Do not use' based on cookie choice
-	 Given published content template "help-cookies" exists:
+	 Given content template "help-cookies" exists:
 		"""
 		{
 			"Views": [
@@ -33,7 +33,7 @@ Scenario: Analytics cookie preference set to 'Use/Do not use' based on cookie ch
 
 @Javascript:disabled
 Scenario: Cookie preference is retained when "Save cookie settings" is clicked
-    Given published content template "help-cookies" exists:
+    Given content template "help-cookies" exists:
 		"""
 		{
 			"Views": [

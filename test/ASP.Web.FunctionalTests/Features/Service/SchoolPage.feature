@@ -2,7 +2,7 @@ Feature: School Page
  
 @Javascript:disabled
 Scenario: School page should contain seven app card container element
-    Given published content template "school-landing-page" exists:
+    Given content template "school-landing-page" exists:
     """
     {
     	"Views": [

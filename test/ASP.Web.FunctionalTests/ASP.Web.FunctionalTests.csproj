@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\Components\Heading - Copy.feature.cs" />
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\Service\NamedData.feature.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.1.2" />
     <PackageReference Include="AngleSharp.Io" Version="1.0.0" />
     <PackageReference Include="AngleSharp.Js" Version="0.15.0" />
@@ -68,6 +63,9 @@
     <Compile Update="Features\Service\HelpPageView.feature.cs">
       <DependentUpon>HelpPageView.feature</DependentUpon>
     </Compile>
+    <Compile Update="Features\Service\TestSteps.feature.cs">
+      <DependentUpon>TestSteps.feature</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -112,6 +110,10 @@
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\Service\HelpPage.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Service\TestSteps.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>

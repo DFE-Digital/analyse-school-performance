@@ -34,75 +34,52 @@ public class SearchController : Controller
     [HttpGet("search-result")]
     public async Task<IActionResult> SearchResult(SearchParams searchParams)
     {
-        try
+        if (!ModelState.IsValid)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Index");
-            }
-
-            var estabSearchRequest = new EstablishmentSearchUseCaseRequest(
-                searchParams.SearchTerm,
-                searchParams.Page,
-                ASP.Core.Constants.SearchResultPageSize
-            );
-
-            var response = await _api.EstablishmentSearch(estabSearchRequest);
-
-            var searchResult = response.GetValueOrDefault(new SearchResult<EstablishmentDetailsSearchResultDTO>());
-
-            if (searchResult.TotalResults == 0)
-            {
-                return ReturnNoResultsResponse(estabSearchRequest, response);
-            }
-
-            if (searchResult.TotalResults == 1)
-            {
-                return RedirectToSchoolDetail(searchResult);
-            }
-
-            return ReturnDefaultSearchResponse(searchParams, estabSearchRequest, response);
+            return View("Index");
         }
-        catch (Exception ex)
+
+        var estabSearchRequest = new EstablishmentSearchUseCaseRequest(
+            searchParams.SearchTerm,
+            searchParams.Page,
+            ASP.Core.Constants.SearchResultPageSize
+        );
+
+        return await _api.EstablishmentSearch(estabSearchRequest)
+            .Map(DefaultViewModel)
+            .DefaultIf(e => e is NotFoundError, NoResultsViewModel(searchParams))
+            .ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
+    }
+
+    private SearchViewModel DefaultViewModel(SearchResult<EstablishmentDetailsSearchResultDTO> result)
+    {
+        return new SearchViewModel {
+            SearchResults = EstablishmentSearchResultsModel.FromEstablishmentDetails(result.Results),
+            PaginationModel = new PaginationModel {
+                TotalCount = result.TotalResults,
+                SearchTerm = result.SearchTerm,
+                CurrentPage = result.Page,
+                ResultCount = result.ResultsPerPage
+            },
+            SearchTerm = result.SearchTerm,
+            TotalCount = result.TotalResults
+        };
+    }
+
+    private SearchViewModel NoResultsViewModel(SearchParams searchParams)
+    {
+        return new SearchViewModel {
+            SearchTerm = searchParams.SearchTerm,
+            TotalCount = 0
+        };
+    }
+
+    private IActionResult RedirectToSchoolLandingPageIfSingleResult(SearchViewModel model) { 
+        if(model.TotalCount == 1)
         {
-            return new ObjectResult(ex.Message) { StatusCode = 500 };
+            return RedirectToAction("Index", "School", new { area = "School", urn = model.SearchResults.FirstOrDefault()!.Urn });
         }
-    }
 
-    private IActionResult ReturnNoResultsResponse(EstablishmentSearchUseCaseRequest request, 
-        Result<SearchResult<EstablishmentDetailsSearchResultDTO>> result)
-    {
-        return result.Map(x =>
-            new SearchViewModel
-            {
-                SearchTerm = request.SearchTerm,
-                TotalCount = x.TotalResults
-            }).ToActionResult(View, _hostEnvironment);
-    }
-
-    private IActionResult RedirectToSchoolDetail(SearchResult<EstablishmentDetailsSearchResultDTO> searchResult)
-    {
-        var result = searchResult.Results.FirstOrDefault();
-        return RedirectToAction("Index", "School", new { area = "School", urn = result!.Urn });
-    }
-
-    private IActionResult ReturnDefaultSearchResponse(SearchParams searchParams,
-        EstablishmentSearchUseCaseRequest request, Result<SearchResult<EstablishmentDetailsSearchResultDTO>> result)
-    {
-        return result.Map(x => new SearchViewModel
-            {
-                SearchResults =
-                    EstablishmentSearchResultsModel.FromEstablishmentDetails(
-                        x.Results),
-                PaginationModel = new PaginationModel
-                {
-                    TotalCount = x.TotalResults,
-                    SearchTerm = request.SearchTerm,
-                    CurrentPage = searchParams.Page,
-                    ResultCount = x.ResultsPerPage
-                },
-                SearchTerm = request.SearchTerm,
-                TotalCount = x.TotalResults
-            }).ToActionResult(View, _hostEnvironment);
+        return View(model);
     }
 }
