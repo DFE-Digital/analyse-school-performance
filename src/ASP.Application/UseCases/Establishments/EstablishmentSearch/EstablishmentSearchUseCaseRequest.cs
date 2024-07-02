@@ -2,12 +2,14 @@
 
 public class EstablishmentSearchUseCaseRequest
 {
-    public EstablishmentSearchUseCaseRequest(string searchTerm, int page)
+    public EstablishmentSearchUseCaseRequest(string searchTerm, int page, int resultsPerPage)
     {
         SearchTerm = searchTerm;
         Page = page;
+        ResultsPerPage = resultsPerPage;
     }
 
     public string SearchTerm { get; set; }
     public int Page { get; set; }
+    public int ResultsPerPage { get; set; }
 }

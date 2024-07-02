@@ -7,38 +7,40 @@
         public bool? IsPrimary { get; }
         public bool? IsSecondary { get; }
         public bool? IsPost16 { get; }
-        public Address Address { get; }
-        public EstablishmentType EstablishmentType { get; }
-        public Gender Gender { get;}
-        public OfstedRating OfstedRating { get; }
+        public Address? Address { get; }
+        public EstablishmentType? EstablishmentType { get; }
+        public Gender? Gender { get;}
+        public OfstedRating? OfstedRating { get; }
         public DateTime? OfstedLastInspectionDate { get; }
-        public LocalAuthority LocalAuthority { get; }
-        public HeadTeacher HeadTeacher { get;}
-        public AgeRange AgeRange { get; }
-        public ReligiousDenomination ReligiousDenomination { get; }
-        public AdmissionsPolicy AdmissionsPolicy { get;}
-        public ResourcedProvisionType ResourcedProvisionType { get; }
+        public LocalAuthority? LocalAuthority { get; }
+        public HeadTeacher? HeadTeacher { get;}
+        public AgeRange? AgeRange { get; }
+        public ReligiousDenomination? ReligiousDenomination { get; }
+        public AdmissionsPolicy? AdmissionsPolicy { get;}
+        public ResourcedProvisionType? ResourcedProvisionType { get; }
         public int? NoOfPupils { get;}
         public bool IsDeleted { get; }
         public string? Laestab { get; }
+        public bool IsVisible { get; set;}
         
         public EstablishmentDetailsDAO(string urn, 
             string name, 
             bool? isPrimary,
             bool? isSecondary,
             bool? isPost16,
-            Address address, 
-            EstablishmentType establishmentType,
-            Gender gender,
-            OfstedRating ofstedRating,
+            Address? address, 
+            EstablishmentType? establishmentType,
+            Gender? gender,
+            OfstedRating? ofstedRating,
             DateTime? ofstedLastInspectionDate,
-            LocalAuthority localAuthority,
-            HeadTeacher headTeacher,
-            AgeRange ageRange,
-            ReligiousDenomination religiousDenomination,
-            AdmissionsPolicy admissionsPolicy,
-            ResourcedProvisionType resourcedProvisionType,
-            int? noOfPupils, bool isDeleted, string? laestab)
+            LocalAuthority? localAuthority,
+            HeadTeacher? headTeacher,
+            AgeRange? ageRange,
+            ReligiousDenomination? religiousDenomination,
+            AdmissionsPolicy? admissionsPolicy,
+            ResourcedProvisionType? resourcedProvisionType,
+            int? noOfPupils, bool isDeleted,
+            string? laestab, bool isVisible)
         {
             Urn = urn;
             Name = name;
@@ -59,6 +61,7 @@
             NoOfPupils = noOfPupils;
             IsDeleted = isDeleted;
             Laestab = laestab;
+            IsVisible = isVisible;
         }
     }
 }

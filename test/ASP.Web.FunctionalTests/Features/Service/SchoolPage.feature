@@ -143,7 +143,7 @@ Scenario: School page should throw page not found if Establishment is deleted
 		"""
     When I navigate to /school/112123
     Then I should get a 404 response
-    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: Establishment 112123 has been deleted."
+    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: The requested establishment with URN "112123" has been deleted."
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
@@ -193,7 +193,7 @@ Scenario: School page should contain a school details disclosure element
             "resourcedProvisionType": {
                 "name": "Not recorded",
             },
-            "urn": "123456",
+            "urn": "123456"
         }
 		"""
     When I navigate to /school/123456
@@ -251,7 +251,7 @@ Scenario: School page should show if values are null
             "ofstedRating": null,
             "religiousDenomination": null,
             "resourcedProvisionType": null,
-            "urn": "123456",
+            "urn": "123456"
         }
 		"""
     When I navigate to /school/123456
@@ -332,7 +332,7 @@ Scenario: School page should show if values are null case 2
             "resourcedProvisionType": {
                 "name": null,
             },
-            "urn": "123456",
+            "urn": "123456"
         }
 		"""
     When I navigate to /school/123456
@@ -372,7 +372,7 @@ Scenario: Details disclosure element text should read 'Show school details' when
 	"""
 	{
         "name": "Hollinswood Primary School",
-        "urn": "123456",
+        "urn": "123456"
     }
 	"""
     When I navigate to /school/123456
@@ -396,3 +396,16 @@ Scenario: School page should display page not found page if School URN is invali
     And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
     And the element "*[data-testid='error-display-message']" should exist
     And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: Could not find the object with id "112" and partition key "112" in container "establishments"."
+
+    @Javascript:disabled
+    Scenario: School page should throw page not found if Establishment is not currently visible
+        Given non visible establishment "112124" exists:
+		"""
+		{
+            "name": "Thursby Primary School",
+            "urn": "112124"
+        }
+		"""
+        When I navigate to /school/112124
+        Then I should get a 404 response
+        Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: The requested establishment with URN "112124" is not currently visible."    

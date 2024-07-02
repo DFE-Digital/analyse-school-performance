@@ -22,18 +22,22 @@ public class EstablishmentSearchUseCase : IEstablishmentSearchUseCase
         {
             return Error.Invalid($@"Bad request: the parameter ""{nameof(request.SearchTerm)}"" : ""{request.SearchTerm}"" with type ""{searchType}"" is invalid");
         }
+
+        var searchStrategy = _establishmentSearchStrategyFactory.CreateStrategy(searchType, request.SearchTerm, request.Page, request.ResultsPerPage);
+
+        var searchResults = await searchStrategy.Execute();
         
-        var inputSearchTerm = request.SearchTerm;
-        
-        if (searchType == SearchType.LocalAuthEstablishment7Digit)
+        var results = searchResults.GetValueOrDefault(new SearchResult<EstablishmentDetailsSearchResultDTO>());
+
+        if (results.TotalResults == 0 && (searchType != SearchType.EstablishmentNameOrLocation && searchType != SearchType.Urn))
+
         {
-            inputSearchTerm = inputSearchTerm.ToLaEstabCodeFormat();
+            searchType = SearchType.EstablishmentNameOrLocation;
+            searchStrategy = _establishmentSearchStrategyFactory.CreateStrategy(searchType, request.SearchTerm,
+                request.Page, request.ResultsPerPage);
+            searchResults = await searchStrategy.Execute();
         }
 
-        var searchStrategy = _establishmentSearchStrategyFactory.CreateStrategy(inputSearchTerm, request.Page);
-
-        var results = await searchStrategy.Execute();
-
-        return results;
+        return searchResults;
     }
 }

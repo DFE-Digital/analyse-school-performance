@@ -7,7 +7,7 @@ Scenario: Key stage 4 page should be accessible when valid urn is provided
             
             "id": "136028",
             "name": "Dagenham Park CofE School",
-            "urn": "136028",
+            "urn": "136028"
         }
 		"""
     When I navigate to /school/136028/key-stage-4

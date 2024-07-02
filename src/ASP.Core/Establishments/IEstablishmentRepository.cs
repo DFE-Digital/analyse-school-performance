@@ -8,8 +8,21 @@ namespace ASP.Core.Establishments
         Task<Result<EstablishmentDetails>> GetEstablishmentDetails(string urn);
         Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails);
 
-        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchLocalAuthEstablishment(string searchTerm,
-            int skip, int take,
+        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCode(
+            string searchTerm, int skip, int take,
+            CancellationToken cancellationToken = default);
+
+        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByEstablishmentNumber(
+            string searchTerm, int skip, int take,
+            CancellationToken cancellationToken = default);
+
+        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>>
+            SearchEstablishmentByLocalAuthEstablishment7DigitCode(
+                string searchTerm, int skip, int take,
+                CancellationToken cancellationToken = default);
+
+        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
+            string searchTerm, int skip, int take,
             CancellationToken cancellationToken = default);
 
         Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentNameOrLocation(

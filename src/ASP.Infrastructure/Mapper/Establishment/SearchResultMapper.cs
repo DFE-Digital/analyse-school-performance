@@ -18,7 +18,8 @@ public static class SearchResultMapper
             OfstedRating = details.OfstedRating.MapToDomainEntityOfstedRating(),
             OfstedLastInspectionDate = details.OfstedLastInspectionDate,
             Laestab = details.Laestab,
-            IsDeleted = details.IsDeleted
+            IsDeleted = details.IsDeleted,
+            IsVisible = details.IsVisible
         };
     }
 

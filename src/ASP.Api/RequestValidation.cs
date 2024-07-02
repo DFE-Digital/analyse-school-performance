@@ -1,6 +1,5 @@
 using ASP.Core.Helpers;
 using ASP.Core.Results;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
 
 namespace ASP.Api
@@ -75,6 +74,55 @@ namespace ASP.Api
 
                 return JsonHelper.DeserializeIgnoringMissingMembers<TBody>(content)
                     .MapError(e => Error.Invalid("The request body is not a JSON object."));
+            }
+        }
+
+        public static int GetNumericParameterOrDefault(Maybe<string> inputValue, int defaultValue)
+        {
+            var stringValue = inputValue.ToNullable();
+
+            // Attempt to parse the parameter, use default value if parsing fails
+            if (int.TryParse(stringValue, out int parsedValue))
+            {
+                return parsedValue;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        public static Result<Maybe<string>> NumericParameter(Maybe<string> maybeValue, string parameterName)
+        {
+            var stringValue = maybeValue.ToNullable();
+            return ValidateNumericParameter(stringValue, parameterName);
+        }
+
+        public static Result<Maybe<string>> NumericParameter(string value, string parameterName)
+        {
+            return ValidateNumericParameter(value, parameterName);
+        }
+
+        private static Result<Maybe<string>> ValidateNumericParameter(string? value, string parameterName)
+        {
+            if (value == null) return Maybe<string>.None;
+
+            if (int.TryParse(value, out int intValue))
+            {
+                if (intValue > 1)
+                {
+                    return Maybe<string>.Some(value);
+                }
+                else
+                {
+                    return Error.Invalid(
+                        $@"Bad request: parameter ""{parameterName}"" should be a whole number greater than 1.");
+                }
+            }
+            else
+            {
+                return Error.Invalid(
+                    $@"Bad request: parameter ""{parameterName}"" should be a whole number greater than 1.");
             }
         }
     }

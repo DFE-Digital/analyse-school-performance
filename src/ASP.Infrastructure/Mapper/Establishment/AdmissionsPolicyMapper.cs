@@ -4,9 +4,9 @@ namespace ASP.Infrastructure.Mapper.Establishment;
 
 public static class AdmissionsPolicyMapper
 {
-    public static Core.Establishments.AdmissionsPolicy MapToDomainEntityAdmissionsPolicy(this AdmissionsPolicy? admissionsPolicy)
+    public static Core.Establishments.AdmissionsPolicy? MapToDomainEntityAdmissionsPolicy(this AdmissionsPolicy? admissionsPolicy)
     {
-        if (admissionsPolicy == null) return new Core.Establishments.AdmissionsPolicy();
+        if (admissionsPolicy == null) return null;  // Return null directly instead of an empty object
         
         return new Core.Establishments.AdmissionsPolicy()
         {
@@ -15,8 +15,10 @@ public static class AdmissionsPolicyMapper
         };
     }
     
-    public static AdmissionsPolicy MapToAdmissionsPolicyDAO(this Core.Establishments.AdmissionsPolicy admissionsPolicy)
+    public static AdmissionsPolicy? MapToAdmissionsPolicyDAO(this Core.Establishments.AdmissionsPolicy? admissionsPolicy)
     {
+        if (admissionsPolicy == null) return null;  // Return null directly instead of an empty object
+
         return new AdmissionsPolicy(admissionsPolicy.Code, admissionsPolicy.Name);
     }
 }

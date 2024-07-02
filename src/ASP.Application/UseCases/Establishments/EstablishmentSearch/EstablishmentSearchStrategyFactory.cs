@@ -1,6 +1,5 @@
 ﻿using ASP.Application.UseCases.Establishments.EstablishmentSearch.Strategy;
 using ASP.Core.Establishments;
-using ASP.Core.Extensions;
 using ASP.Core.Search;
 using ASP.Core.Search.Strategy;
 
@@ -19,21 +18,19 @@ public class EstablishmentSearchStrategyFactory : IEstablishmentSearchStrategyFa
         _searchService = searchService;
     }
 
-    public EstablishmentSearchStrategy CreateStrategy(string searchTerm, int page)
+    public EstablishmentSearchStrategy CreateStrategy(SearchType searchType, string searchTerm, int page, int resultsPerPage)
     {
-        var searchType = searchTerm.ClassifySearchType();
-        
         switch (searchType)
         {
             case SearchType.Urn:
-            return new UrnLookupStrategy(searchTerm, _repository);
+            return new UrnLookupStrategy(_repository, searchTerm, page, resultsPerPage);
             case SearchType.LocalAuthEstablishment:
             case SearchType.LocalAuthEstablishment7Digit:
             case SearchType.LocalAuthEstablishment3Digit:
             case SearchType.LocalAuthEstablishment4Digit:
-                return new LaEstabSearchStrategy(searchTerm, page, _repository);
+                return new LaEstabSearchStrategy(_repository, searchTerm, page, resultsPerPage);
             case SearchType.EstablishmentNameOrLocation:
-                return new EstablishmentNameOrLocationSearchStrategy(searchTerm, page, _searchService);
+                return new EstablishmentNameOrLocationSearchStrategy(_searchService, searchTerm, page, resultsPerPage);
             default:
                 throw new NotSupportedException("Search type not supported.");
         }

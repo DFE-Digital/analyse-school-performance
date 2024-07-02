@@ -219,6 +219,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
             Assert.Equal(expectedValue, @class);
         }
 
+
         [Then(@"the field labelled ""(.+)"" should have the value ""(.*)""")]
         public async Task ThenTheFieldLabelledShouldHaveTheValue(string labelText, string expectedValue)
         {

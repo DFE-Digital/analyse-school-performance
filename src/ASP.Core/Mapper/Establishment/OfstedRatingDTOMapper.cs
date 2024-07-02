@@ -5,13 +5,15 @@ namespace ASP.Core.Mapper.Establishment;
 
 public static class OfstedRatingDTOMapper
 {
-    public static OfstedRatingDTO MapToOfstedRatingDTO(this OfstedRating? ofstedRating)
+    public static OfstedRatingDTO? MapToOfstedRatingDTO(this OfstedRating? ofstedRating,
+        DateTime? lastInspectionDate)
     {
-        if (ofstedRating == null) return new OfstedRatingDTO();
+        if (ofstedRating == null) return null;  // Return null directly instead of an empty OfstedRatingDTO
         return new OfstedRatingDTO()
         {
             Code = ofstedRating.Code,
-            Name = ofstedRating.Name
+            Name = ofstedRating.Name,
+            LastInspected = lastInspectionDate?.ToString("dd MMMM yyyy") ?? null
         };
     }
 }

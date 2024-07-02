@@ -8,14 +8,15 @@ public class EstablishmentNameOrLocationSearchStrategy : EstablishmentSearchStra
 {
     private readonly ISearchService  _searchService;
     
-    public EstablishmentNameOrLocationSearchStrategy(string searchTerm, int page, ISearchService searchService) : base(searchTerm, page)
+    public EstablishmentNameOrLocationSearchStrategy(ISearchService searchService, string searchTerm,
+        int page, int resultsPerPage) : base(searchTerm, page, resultsPerPage)
     {
         _searchService = searchService;
     }
     
     public override async Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> Execute()
     {
-        var results = await _searchService.SearchAsync(SearchTerm, Page);
+        var results = await _searchService.SearchAsync(SearchTerm, Page, ResultsPerPage);
 
         return results;
     }

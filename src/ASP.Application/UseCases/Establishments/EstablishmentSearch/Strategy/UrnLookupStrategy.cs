@@ -10,22 +10,26 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
 {
     private readonly IEstablishmentRepository _repository;
 
-    public UrnLookupStrategy(string searchTerm, IEstablishmentRepository repository) : base(searchTerm)
+    public UrnLookupStrategy(IEstablishmentRepository repository, string searchTerm, int page = 1,
+        int resultsPerPage = Core.Constants.SearchResultPageSize) : base(searchTerm, page, resultsPerPage)
     {
         _repository = repository;
     }
 
     public override async Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> Execute()
     {
-        var results = await _repository.GetEstablishmentDetails(SearchTerm).Map(x => new SearchResult<EstablishmentDetailsSearchResultDTO>
-        {
-            Results = new EstablishmentDetailsSearchResultDTO[]
+        var results = await _repository.GetEstablishmentDetails(SearchTerm)
+            .Map(x => new SearchResult<EstablishmentDetailsSearchResultDTO>
             {
-                x.MapToSearchResult()
-            },
-            ResultCount = 1,
-            TotalCount = 1
-        });
+                Results = new EstablishmentDetailsSearchResultDTO[]
+                {
+                    x.MapToSearchResult()
+                },
+                ResultsPerPage = ResultsPerPage,
+                TotalResults = 1,
+                SearchTerm = SearchTerm,
+                Page = Page
+            });
 
         return results;
     }

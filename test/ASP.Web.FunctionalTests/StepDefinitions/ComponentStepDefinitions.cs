@@ -1,11 +1,11 @@
-﻿using ASP.AcceptanceTests.Drivers;
+﻿using System.Net;
+using ASP.AcceptanceTests.Drivers;
 using ASP.Core.Helpers;
 using ASP.Test.Core;
 using ASP.Test.Web.Areas.ComponentTest;
-using System.Net;
 using TechTalk.SpecFlow.Infrastructure;
 
-namespace ASP.AcceptanceTests.StepDefinitions
+namespace ASP.Web.FunctionalTests.StepDefinitions
 {
     // Step definitions for test scenarios that exercise a specific component in isolation
     [Binding]

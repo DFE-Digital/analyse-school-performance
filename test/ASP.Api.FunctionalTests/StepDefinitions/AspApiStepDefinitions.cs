@@ -100,6 +100,22 @@ namespace ASP.AcceptanceTests.StepDefinitions
                 Assert.Equal(property.Value, actualProperties[property.Key]);
             }
         }
+        
+        [Then($@"the response should be an object containing these properties excluding null:")]
+        public void ThenTheResponseShouldBeAnObjectContainingThesePropertiesExcludingNull(string expectedContent)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            var expectedProperties = JsonConvert.DeserializeObject<Dictionary<string, object>>(expectedContent);
+            var actualProperties = JsonConvert.DeserializeObject<Dictionary<string, object>>(JsonConvert.SerializeObject(_api.LastResponse.Value, settings));
+            foreach(var property in expectedProperties)
+            {
+                Assert.Contains(property.Key, actualProperties.Keys);
+                Assert.Equal(property.Value, actualProperties[property.Key]);
+            }
+        }
 
         private HttpRequest CreateRequest(string method, string? queryString = null)
         {

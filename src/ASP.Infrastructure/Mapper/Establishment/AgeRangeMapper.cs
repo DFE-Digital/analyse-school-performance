@@ -4,9 +4,9 @@ namespace ASP.Infrastructure.Mapper.Establishment;
 
 public static class AgeRangeMapper
 {
-    public static Core.Establishments.AgeRange MapToDomainEntityAgeRange(this AgeRange? ageRange)
+    public static Core.Establishments.AgeRange? MapToDomainEntityAgeRange(this AgeRange? ageRange)
     {
-        if (ageRange == null) return new Core.Establishments.AgeRange();
+        if (ageRange == null) return null;  // Return null directly instead of an empty object
         
         return new Core.Establishments.AgeRange()
         {
@@ -15,8 +15,10 @@ public static class AgeRangeMapper
         };
     }
     
-    public static AgeRange MapToAgeRangeDAO(this Core.Establishments.AgeRange ageRange)
+    public static AgeRange? MapToAgeRangeDAO(this Core.Establishments.AgeRange? ageRange)
     {
+        if (ageRange == null) return null;  // Return null directly instead of an empty object
+        
         return new AgeRange(ageRange.Low, ageRange.High);
     }
 }

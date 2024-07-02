@@ -16,6 +16,12 @@ namespace ASP.Api
         {
             StatusCode = statusCode;
         }
+        
+        public ApiResult(int statusCode, object value, object? serializerSettings) 
+            : base(value, serializerSettings)
+        {
+            StatusCode = statusCode;
+        }
 
         public Dictionary<string, string> Headers { get; } = new Dictionary<string, string>();
 

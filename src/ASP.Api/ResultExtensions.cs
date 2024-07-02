@@ -1,4 +1,5 @@
-﻿using ASP.Core.Results;
+﻿using System.Text.Json;
+using ASP.Core.Results;
 
 namespace ASP.Api
 {
@@ -28,9 +29,14 @@ namespace ASP.Api
             {
                 return new ApiResult(444, "");
             }
+            
+            var settings = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+            };
 
             return result.Match(
-                r => new ApiResult(200, r),
+                r => new ApiResult(200, r, settings),
                 r => r switch {
                     MethodNotAllowedError e => new ApiResult(405, e.ToString()) { Headers = { { "Allow", string.Join(", ", e.AllowedMethods) } } },
                     NotFoundError e => new ApiResult(404, e.ToString()),

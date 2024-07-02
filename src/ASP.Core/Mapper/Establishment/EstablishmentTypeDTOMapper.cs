@@ -5,9 +5,9 @@ namespace ASP.Core.Mapper.Establishment;
 
 public static class EstablishmentTypeDTOMapper
 {
-    public static EstablishmentTypeDTO MapToEstablishmentTypeDTO(this EstablishmentType? establishmentType)
+    public static EstablishmentTypeDTO? MapToEstablishmentTypeDTO(this EstablishmentType? establishmentType)
     {
-        if (establishmentType == null) return new EstablishmentTypeDTO();
+        if (establishmentType == null) return null;  // Return null directly instead of an empty object
         
         return new EstablishmentTypeDTO()
         {

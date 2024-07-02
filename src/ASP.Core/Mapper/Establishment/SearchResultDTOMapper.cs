@@ -1,5 +1,6 @@
 ﻿using ASP.Core.Establishments;
 using ASP.Core.Search;
+using ASP.Core.Utilities;
 using EstablishmentDetailsSearchResultDTO = ASP.Core.Search.EstablishmentDetailsSearchResultDTO;
 
 namespace ASP.Core.Mapper.Establishment;
@@ -13,36 +14,32 @@ public static class SearchResultDTOMapper
         {
             Urn = details.Urn,
             Name = details.Name,
-            IsPrimary = details.IsPrimary,
-            IsSecondary = details.IsSecondary,
-            IsPost16 = details.IsPost16,
+            EducationPhase = EducationPhase.GetPhaseOfEducation(details.IsPrimary,
+                details.IsSecondary, details.IsPost16),
             Address = details.Address.MapToAddressDTO(),
-            OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(),
-            OfstedLastInspectionDate = details.OfstedLastInspectionDate,
-            LaEstab = details.Laestab,
-            IsDeleted = details.IsDeleted
+            OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(details.OfstedLastInspectionDate),
+            LaEstab = details.Laestab
         };
     }
-    
-    public static EstablishmentDetailsSearchResultDTO MapToSearchResultDTO(this EstablishmentDetailsSearchResult details)
+
+    public static EstablishmentDetailsSearchResultDTO MapToSearchResultDTO(
+        this EstablishmentDetailsSearchResult details)
     {
         return new EstablishmentDetailsSearchResultDTO(
         )
         {
             Urn = details.Urn,
             Name = details.Name,
-            IsPrimary = details.IsPrimary,
-            IsSecondary = details.IsSecondary,
-            IsPost16 = details.IsPost16,
             Address = details.Address.MapToAddressDTO(),
-            OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(),
-            OfstedLastInspectionDate = details.OfstedLastInspectionDate,
-            LaEstab = details.Laestab,
-            IsDeleted = details.IsDeleted
+            EducationPhase = EducationPhase.GetPhaseOfEducation(details.IsPrimary,
+                details.IsSecondary, details.IsPost16),
+            OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(details.OfstedLastInspectionDate),
+            LaEstab = details.Laestab
         };
     }
-    
-    public static List<EstablishmentDetailsSearchResultDTO> MapToListOfSearchResultsDTO(this IEnumerable<EstablishmentDetailsSearchResult> detailsList)
+
+    public static List<EstablishmentDetailsSearchResultDTO> MapToListOfSearchResultsDTO(
+        this IEnumerable<EstablishmentDetailsSearchResult> detailsList)
     {
         return detailsList.Select(MapToSearchResultDTO).ToList();
     }

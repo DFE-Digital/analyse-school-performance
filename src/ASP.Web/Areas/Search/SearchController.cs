@@ -43,25 +43,27 @@ public class SearchController : Controller
 
             var estabSearchRequest = new EstablishmentSearchUseCaseRequest(
                 searchParams.SearchTerm,
-                searchParams.Page
+                searchParams.Page,
+                ASP.Core.Constants.SearchResultPageSize
             );
 
             var response = await _api.EstablishmentSearch(estabSearchRequest);
 
             var searchResult = response.GetValueOrDefault(new SearchResult<EstablishmentDetailsSearchResultDTO>());
 
-            if (searchResult.TotalCount == 0)
+            if (searchResult.TotalResults == 0)
             {
                 return ReturnNoResultsResponse(estabSearchRequest, response);
             }
 
-            if (searchResult.TotalCount == 1)
+            if (searchResult.TotalResults == 1)
             {
                 return RedirectToSchoolDetail(searchResult);
             }
 
             return ReturnDefaultSearchResponse(searchParams, estabSearchRequest, response);
-        } catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             return new ObjectResult(ex.Message) { StatusCode = 500 };
         }
@@ -74,7 +76,7 @@ public class SearchController : Controller
             new SearchViewModel
             {
                 SearchTerm = request.SearchTerm,
-                TotalCount = x.TotalCount
+                TotalCount = x.TotalResults
             }).ToActionResult(View, _hostEnvironment);
     }
 
@@ -94,14 +96,13 @@ public class SearchController : Controller
                         x.Results),
                 PaginationModel = new PaginationModel
                 {
-                    TotalCount = x.TotalCount,
+                    TotalCount = x.TotalResults,
                     SearchTerm = request.SearchTerm,
                     CurrentPage = searchParams.Page,
-                    Skip = x.Skip,
-                    ResultCount = x.ResultCount
+                    ResultCount = x.ResultsPerPage
                 },
                 SearchTerm = request.SearchTerm,
-                TotalCount = x.TotalCount
+                TotalCount = x.TotalResults
             }).ToActionResult(View, _hostEnvironment);
     }
 }

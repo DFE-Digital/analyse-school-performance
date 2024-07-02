@@ -7,22 +7,24 @@ public class SearchResultDAO
     public bool? IsPrimary { get; }
     public bool? IsSecondary { get; }
     public bool? IsPost16 { get; }
-    public Address Address { get; }
-    public OfstedRating OfstedRating { get; }
+    public Address? Address { get; }
+    public OfstedRating? OfstedRating { get; }
     public DateTime? OfstedLastInspectionDate { get; }
     public string? Laestab { get; }
     public bool IsDeleted { get; }
+    public bool IsVisible { get; }
 
     public SearchResultDAO(string urn,
         string name,
         bool? isPrimary,
         bool? isSecondary,
         bool? isPost16,
-        Address address,
-        OfstedRating ofstedRating,
+        Address? address,
+        OfstedRating? ofstedRating,
         DateTime? ofstedLastInspectionDate,
         string? laestab,
-        bool isDeleted)
+        bool isDeleted,
+        bool isVisible)
     {
         Urn = urn;
         Name = name;
@@ -34,5 +36,6 @@ public class SearchResultDAO
         OfstedLastInspectionDate = ofstedLastInspectionDate;
         Laestab = laestab;
         IsDeleted = isDeleted;
+        IsVisible = isVisible;
     }
 }

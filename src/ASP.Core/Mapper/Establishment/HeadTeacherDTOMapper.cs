@@ -5,9 +5,9 @@ namespace ASP.Core.Mapper.Establishment;
 
 public static class HeadTeacherDTOMapper
 {
-    public static HeadTeacherDTO MapToHeadTeacherDTO(this HeadTeacher? headTeacher)
+    public static HeadTeacherDTO? MapToHeadTeacherDTO(this HeadTeacher? headTeacher)
     {
-        if (headTeacher == null) return new HeadTeacherDTO();
+        if (headTeacher == null) return null;  // Return null directly instead of an empty object
         return new HeadTeacherDTO()
         {
            FirstName = headTeacher.FirstName,

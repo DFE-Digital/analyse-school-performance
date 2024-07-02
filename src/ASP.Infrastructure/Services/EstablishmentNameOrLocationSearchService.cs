@@ -15,17 +15,20 @@ public class EstablishmentNameOrLocationSearchService : ISearchService
         _establishmentRepository = establishmentRepository;
     }
 
-    public async Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> SearchAsync(string searchTerm, int page)
+    public async Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> SearchAsync(string searchTerm, int page = 1, 
+        int resultsPerPage = Core.Constants.SearchResultPageSize)
     {
-        var (skip, take) = PageHelper.ConstructPagingRequest(page);
+        var (skip, take) = PageHelper.ConstructPagingRequest(page, resultsPerPage);
         
         var result = await _establishmentRepository.SearchEstablishmentNameOrLocation(searchTerm, skip, take);
 
         return result.Map(x => new SearchResult<EstablishmentDetailsSearchResultDTO>()
         {
             Results = x.Results.MapToListOfSearchResultsDTO(),
-            ResultCount = x.ResultCount,
-            TotalCount = x.TotalCount
+            ResultsPerPage = x.ResultsPerPage,
+            TotalResults = x.TotalResults,
+            SearchTerm = x.SearchTerm,
+            Page = page
         });
     }
 }

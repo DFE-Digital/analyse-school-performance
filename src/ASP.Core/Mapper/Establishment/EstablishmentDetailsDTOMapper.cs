@@ -1,5 +1,6 @@
 ﻿using ASP.Core.DTO.Establishment;
 using ASP.Core.Establishments;
+using ASP.Core.Utilities;
 
 namespace ASP.Core.Mapper.Establishment;
 
@@ -12,12 +13,10 @@ public static class EstablishmentDetailsDTOMapper
         {
             Urn = details.Urn,
             Name = details.Name,
-            IsPrimary = details.IsPrimary,
-            IsSecondary = details.IsSecondary,
-            IsPost16 = details.IsPost16,
             Address = details.Address.MapToAddressDTO(),
-            OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(),
-            OfstedLastInspectionDate = details.OfstedLastInspectionDate,
+            EducationPhase = EducationPhase.GetPhaseOfEducation(details.IsPrimary,
+                details.IsSecondary, details.IsPost16),
+            OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(details.OfstedLastInspectionDate),
             ReligiousDenomination = details.ReligiousDenomination.MapToReligiousDenominationDTO(),
             AdmissionsPolicy = details.AdmissionsPolicy.MapToAdmissionsPolicyDTO(),
             LocalAuthority = details.LocalAuthority.MapToLocalAuthorityDTO(),
@@ -27,8 +26,7 @@ public static class EstablishmentDetailsDTOMapper
             Gender = details.Gender.MapToGenderDTO(),
             ResourcedProvisionType = details.ResourcedProvisionType.MapToResourcedProvisionTypeDTO(),
             NoOfPupils = details.NoOfPupils,
-            Laestab = details.Laestab,
-            IsDeleted = details.IsDeleted
+            Laestab = details.Laestab
         };
     }
 }

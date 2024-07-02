@@ -27,7 +27,8 @@ public static class EstablishmentDetailsMapper
             OfstedLastInspectionDate = details.OfstedLastInspectionDate,
             NoOfPupils = details.NoOfPupils,
             Laestab = details.Laestab,
-            IsDeleted = details.IsDeleted
+            IsDeleted = details.IsDeleted,
+            IsVisible = details.IsVisible
         };
     }
 
@@ -43,6 +44,6 @@ public static class EstablishmentDetailsMapper
             details.ReligiousDenomination.MapToReligiousDenominationDAO(),
             details.AdmissionsPolicy.MapToAdmissionsPolicyDAO(),
             details.ResourcedProvisionType.MapToResourcedProvisionTypeDAO(), details.NoOfPupils, details.IsDeleted,
-            details.Laestab);
+            details.Laestab, details.IsVisible);
     }
 }

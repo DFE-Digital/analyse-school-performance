@@ -1,4 +1,5 @@
 ﻿using ASP.Core.Establishments;
+using ASP.Core.Extensions;
 using ASP.Core.Helpers;
 using ASP.Core.Mapper.Establishment;
 using ASP.Core.Results;
@@ -10,22 +11,39 @@ namespace ASP.Application.UseCases.Establishments.EstablishmentSearch.Strategy;
 public class LaEstabSearchStrategy : EstablishmentSearchStrategy
 {
     private readonly IEstablishmentRepository _repository;
-    
-    public LaEstabSearchStrategy(string searchTerm, int page, IEstablishmentRepository repository) : base(searchTerm, page)
+
+    public LaEstabSearchStrategy(IEstablishmentRepository repository,
+        string searchTerm, int page = 1,
+        int resultsPerPage = Core.Constants.SearchResultPageSize) : base(searchTerm, page, resultsPerPage)
     {
         _repository = repository;
     }
-    
+
     public override async Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> Execute()
     {
-        var (skip, take) = PageHelper.ConstructPagingRequest(Page);
-        var result = await _repository.SearchLocalAuthEstablishment(SearchTerm, skip, take);
+        var searchType = SearchTerm.ClassifySearchType();
+        var (skip, take) = PageHelper.ConstructPagingRequest(Page, ResultsPerPage);
 
-        return result.Map(x => new SearchResult<EstablishmentDetailsSearchResultDTO>()
+        Result<SearchResult<EstablishmentDetailsSearchResult>>? result = searchType switch
+        {
+            SearchType.LocalAuthEstablishment => await _repository.SearchEstablishmentByLaCodeOrEstablishmentNumber(
+                SearchTerm, skip, take),
+            SearchType.LocalAuthEstablishment7Digit => await _repository
+                .SearchEstablishmentByLocalAuthEstablishment7DigitCode(SearchTerm, skip, take),
+            SearchType.LocalAuthEstablishment3Digit => await _repository.SearchEstablishmentByLaCode(SearchTerm, skip,
+                take),
+            SearchType.LocalAuthEstablishment4Digit => await _repository.SearchEstablishmentByEstablishmentNumber(
+                SearchTerm, skip, take),
+            _ => null
+        };
+
+        return result!.Map(x => new SearchResult<EstablishmentDetailsSearchResultDTO>()
         {
             Results = x.Results.MapToListOfSearchResultsDTO(),
-            ResultCount = x.ResultCount,
-            TotalCount = x.TotalCount
+            ResultsPerPage = x.ResultsPerPage,
+            TotalResults = x.TotalResults,
+            SearchTerm = SearchTerm,
+            Page = Page
         });
     }
 }

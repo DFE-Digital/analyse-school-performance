@@ -1,11 +1,12 @@
 ﻿using ASP.Core;
+using ASP.Test.SpecFlow;
 using ASP.Test.Web.Areas.ComponentTest;
 using TechTalk.SpecFlow.Infrastructure;
 
-namespace ASP.AcceptanceTests.StepDefinitions
+namespace ASP.Web.FunctionalTests.StepDefinitions
 {
     [Binding]
-    public partial class ComponentContentTemplateStepDefinitions : Test.Acceptance.Core.ContentTemplateStepDefinitions
+    public partial class ComponentContentTemplateStepDefinitions : ContentTemplateStepDefinitions
     {
         public ComponentContentTemplateStepDefinitions(IDocumentDatabase database, ISpecFlowOutputHelper outputHelper, ScenarioContext scenarioContext)
             : base(database, outputHelper, scenarioContext)

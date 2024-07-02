@@ -1,14 +1,14 @@
-﻿using ASP.Core.Helpers;
+﻿using System.Text.RegularExpressions;
+using ASP.Core;
+using ASP.Core.Helpers;
 using ASP.Core.Results;
 using ASP.Test.Core;
 using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit;
-using ASP.Core;
 
-namespace ASP.Test.Acceptance.Core
+namespace ASP.Test.SpecFlow
 {
     [Binding]
     public partial class ContentTemplateStepDefinitions
@@ -63,16 +63,6 @@ namespace ASP.Test.Acceptance.Core
         public async Task GivenUnpublishedContentTemplateWithIdAndContentIdExistsMultiline(string id, string contentId, string data)
         {
             await SetUpUnpublishedContentTemplate(id, contentId, data).Switch(
-                _ =>
-                {
-                },
-                e => AssertWithMessage.Fail(e.ToString()));
-        }
-
-        [Given(@"establishment ""([^""]+)"" exists:")]
-        public async Task GivenEstablishmentExistsMultiline(string id, string data)
-        {
-            await SetUpEstablishment(id, data).Switch(
                 _ =>
                 {
                 },
@@ -399,22 +389,7 @@ namespace ASP.Test.Acceptance.Core
 
             return await _database.UpsertAsync("content", id, contentId, document);
         }
-
-        protected async Task<Result<Done>> SetUpEstablishment(string id, string data)
-        {
-            var document = await _database.GetAsync<Dictionary<string, object>>("establishments", id, id)
-                .GetValueOrDefault(new Dictionary<string, object>());
-
-            var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
-
-            foreach (var d in dataDict)
-            {
-                document[d.Key] = d.Value;
-            }
-
-            return await _database.UpsertAsync("establishments", id, id, document);
-        }
-
+        
         protected string GetPropertyPathValue(string propertyPath, string data)
         {
             var parts = propertyPath.Split('.');

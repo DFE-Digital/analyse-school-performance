@@ -4,9 +4,9 @@ namespace ASP.Infrastructure.Mapper.Establishment;
 
 public static class OfstedRatingMapper
 {
-    public static Core.Establishments.OfstedRating MapToDomainEntityOfstedRating(this OfstedRating? ofstedRating)
+    public static Core.Establishments.OfstedRating? MapToDomainEntityOfstedRating(this OfstedRating? ofstedRating)
     {
-        if (ofstedRating == null) return new Core.Establishments.OfstedRating();
+        if (ofstedRating == null) return null;  // Return null directly instead of an empty object
         return new Core.Establishments.OfstedRating()
         {
             Code = ofstedRating.Code,
@@ -14,8 +14,9 @@ public static class OfstedRatingMapper
         };
     }
     
-    public static OfstedRating MapToOfstedRatingDAO(this Core.Establishments.OfstedRating ofstedRating)
+    public static OfstedRating? MapToOfstedRatingDAO(this Core.Establishments.OfstedRating? ofstedRating)
     {
+        if (ofstedRating == null) return null;  // Return null directly instead of an empty object
         return new OfstedRating(ofstedRating.Code, ofstedRating.Name);
     }
 }

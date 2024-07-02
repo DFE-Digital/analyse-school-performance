@@ -4,9 +4,9 @@ namespace ASP.Infrastructure.Mapper.Establishment;
 
 public static class GenderMapper
 {
-    public static Core.Establishments.Gender MapToDomainEntityGender(this Gender? gender)
+    public static Core.Establishments.Gender? MapToDomainEntityGender(this Gender? gender)
     {
-        if (gender == null) return new Core.Establishments.Gender();
+        if (gender == null) return null;  // Return null directly instead of an empty object
         
         return new Core.Establishments.Gender()
         {
@@ -15,8 +15,9 @@ public static class GenderMapper
         };
     }
     
-    public static Gender MapToGenderDAO(this Core.Establishments.Gender gender)
+    public static Gender? MapToGenderDAO(this Core.Establishments.Gender? gender)
     {
+        if (gender == null) return null;  // Return null directly instead of an empty object
         return new Gender(gender.Code, gender.Name);
     }
 }

@@ -1,19 +1,13 @@
-﻿using ASP.Core.DTO.Establishment;
-using ASP.Core.Establishments;
+﻿using ASP.Core.Establishments;
 
 namespace ASP.Core.Mapper.Establishment;
 
 public static class AddressDTOMapper
 {
-    public static AddressDTO MapToAddressDTO(this Address? address)
+    public static string? MapToAddressDTO(this Address? address)
     {
-        if (address == null) return new AddressDTO();
+        if (address == null) return null;  // Return null directly instead of an empty object
         
-        return new AddressDTO()
-        {
-            Street = address.Street,
-            Town = address.Town,
-            PostCode = address.PostCode
-        };
+        return address.ToString();
     }
 }

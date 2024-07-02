@@ -45,7 +45,8 @@ public class PaginationModel
     }
 
 
-    public int Skip { get; set; }
+    public int Skip  => Math.Max(0, CurrentPage - 1) * PageSize;
+
     public int ResultsStartOffset => Skip + 1;
 
     public int ResultsEndOffset => Skip + ResultCount;
