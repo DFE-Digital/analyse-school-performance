@@ -74,3 +74,7 @@ jobs:
             appType: functionApp
             appName: '$(functionAppName)'
             package: '$(System.ArtifactsDirectory)\files-api\**\api.zip'
+            appSettings: |
+               -RepositoryOptions:EndpointUri $(RepositoryOptions:EndpointUri)
+               -RepositoryOptions:DatabaseId $(RepositoryOptions:DatabaseId)
+               -AspAzureKeyVaultName $(AspAzureKeyVaultName)
