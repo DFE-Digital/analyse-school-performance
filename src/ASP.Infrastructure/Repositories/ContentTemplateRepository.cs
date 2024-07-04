@@ -51,5 +51,11 @@ namespace ASP.Infrastructure.Repositories
             });
         }
 
+        public async Task<Result<List<ContentTemplate>>> GetAllPublishedTemplates()
+        {
+            return await _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.IsPublished))
+                .ErrorIf(dtos => !dtos.Any(), Error.NotFound("Could not find any published revision content templates"))
+                .Map(dtos => dtos.Select(dto => dto.ToContentTemplate()).ToList());
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
     [Binding]
     public sealed partial class AspApiStepDefinitions
     {
-        private const string HTTP_METHOD = @"(GET|POST)";
+        private const string HTTP_METHOD = @"(GET|POST|DELETE)";
         private const string API_ENDPOINT = @"/([^\?]+)";
         private const string QUERY_STRING = @"\?([^ ]*)";
         private const string STATUS_CODE = @"(\d+)";
@@ -117,6 +117,24 @@ namespace ASP.AcceptanceTests.StepDefinitions
             }
         }
 
+        [Then($@"the response should be an array of objects containing these properties:")]
+        public void ThenTheResponseShouldBeAnArrayOfObjectsContainingTheseProperties(string expectedContent)
+        {
+            var expectedPropertiesList = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(expectedContent);
+            var actualPropertiesList = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(JsonConvert.SerializeObject(_api.LastResponse.Value));
+
+            for (int i = 0; i < expectedPropertiesList.Count; i++)
+            {
+                var expectedProperties = expectedPropertiesList[i];
+                var actualProperties = actualPropertiesList[i];
+
+                foreach (var property in expectedProperties)
+                {
+                    Assert.Contains(property.Key, actualProperties.Keys);
+                    Assert.Equal(property.Value, actualProperties[property.Key]);
+                }
+            }
+        }
         private HttpRequest CreateRequest(string method, string? queryString = null)
         {
             var request = new DefaultHttpContext().Request;
