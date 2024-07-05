@@ -22,7 +22,7 @@ public class EstablishmentSearchResultsModel
                 PhaseOfEducation = x.EducationPhase,
                 Address = x.Address,
                 OfstedRating = x.OfstedRating,
-                LaEstab = x.LaEstab ?? "No data available"
+                LaEstab = x.Laestab ?? "No data available"
             }
         ).ToList();
 

@@ -3,6 +3,7 @@ using ASP.Core.Establishments;
 using ASP.Core.Extensions;
 using ASP.Core.Results;
 using ASP.Core.Search;
+using ASP.Core.Search.Suggestions;
 using ASP.Infrastructure.DAO.Establishment;
 using ASP.Infrastructure.Mapper.Establishment;
 
@@ -90,6 +91,37 @@ namespace ASP.Infrastructure.Repositories
         {
             var inputSearchTerm = searchTerm.ToLaEstabCodeFormat();
             return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, skip, take, cancellationToken);
+        }
+
+        public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>>
+            EstablishmentSearchSuggestions(
+                string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default)
+        {
+            return await _documentDB.QueryAsync<SearchSuggestionsResultDAO>(ContainerKey,
+                    q => q.Where(x =>
+                            !x.IsDeleted && x.IsVisible &&
+                            (
+                                x.Name.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                                (x.Address != null && (
+                                    x.Address.Street.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.Address.Town.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.Address.PostCode.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                                )) ||
+                                x.Urn.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                                (x.Laestab != null && (
+                                    x.Laestab.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.Laestab.Replace("/", "").Contains(searchTerm,
+                                        StringComparison.CurrentCultureIgnoreCase)
+                                ))
+                            ))
+                        .OrderBy(x => x.Name), cancellationToken)
+                .ErrorIf(q => !q.Any(), Error.NotFound($@"there were no matches for ""{searchTerm}""."))
+                .Map(x => new SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>
+                {
+                    Suggestions = x.Take(maxSuggestions).MapToEstablishmentSearchSuggestionsResults(),
+                    SearchTerm = searchTerm,
+                    MaxSuggestions = maxSuggestions
+                });
         }
         
         private async Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchLocalAuthEstablishmentCommon(

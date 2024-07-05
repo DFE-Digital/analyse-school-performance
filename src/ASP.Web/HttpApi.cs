@@ -9,6 +9,8 @@ using ASP.Core.Search;
 using ASP.Core.Templating;
 using Microsoft.Extensions.Options;
 using System.Net;
+using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
+using ASP.Core.Search.Suggestions;
 
 namespace ASP.Web
 {
@@ -67,6 +69,19 @@ namespace ASP.Web
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
             return await ApiGet(url, queryString)
                 .Then(JsonHelper.Deserialize<SearchResult<EstablishmentDetailsSearchResultDTO>>);
+        }
+
+        public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>>
+            EstablishmentSearchSuggestions(
+                EstablishmentSearchSuggestionsUseCaseRequest request)
+        {
+            var url = "EstablishmentSearchSuggestions";
+            var queryString = QueryString.Create("searchTerm", request.SearchTerm);
+
+            queryString.Add("maxSuggestions", request.MaxSuggestions.ToString());
+
+            return await ApiGet(url, queryString)
+                .Then(JsonHelper.Deserialize<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>);
         }
 
         private async Task<Result<string>> ApiGet(string url, QueryString queryString)

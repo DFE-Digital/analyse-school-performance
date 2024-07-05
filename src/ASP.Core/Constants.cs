@@ -6,6 +6,8 @@ public static class Constants
 {
     public const int SearchResultPageSize = 50;
     
+    public const int SearchResultMaxSuggestions = 10;
+    
     // Matches exactly six digits
     public static readonly Regex UrnRegex = new Regex(@"^\d{6}$", RegexOptions.Compiled); 
     

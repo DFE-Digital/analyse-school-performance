@@ -18,7 +18,7 @@ public static class SearchResultDTOMapper
                 details.IsSecondary, details.IsPost16),
             Address = details.Address.MapToAddressDTO(),
             OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(details.OfstedLastInspectionDate),
-            LaEstab = details.Laestab
+            Laestab = details.Laestab
         };
     }
 
@@ -34,7 +34,7 @@ public static class SearchResultDTOMapper
             EducationPhase = EducationPhase.GetPhaseOfEducation(details.IsPrimary,
                 details.IsSecondary, details.IsPost16),
             OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(details.OfstedLastInspectionDate),
-            LaEstab = details.Laestab
+            Laestab = details.Laestab
         };
     }
 

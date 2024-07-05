@@ -1,10 +1,12 @@
 ﻿using ASP.Application.UseCases.ContentPage.UpdateContentTemplate;
 using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
+using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Core.DTO.Establishment;
 using ASP.Core.Results;
 using ASP.Core.Search;
+using ASP.Core.Search.Suggestions;
 using ASP.Core.Templating;
 
 namespace ASP.Web
@@ -15,13 +17,18 @@ namespace ASP.Web
         private readonly IUpdateContentTemplateUseCase _updateContentTemplate;
         private readonly IGetEstablishmentDetailsUseCase _getEstablishmentDetails;
         private readonly IEstablishmentSearchUseCase _establishmentSearch;
+        private readonly IEstablishmentSearchSuggestionsUseCase _establishmentSearchSuggestions;
 
-        public UseCaseReferenceApi(IViewContentTemplateUseCase viewContentTemplate, IUpdateContentTemplateUseCase updateContentTemplate, IGetEstablishmentDetailsUseCase getEstablishmentDetails, IEstablishmentSearchUseCase establishmentSearch)
+        public UseCaseReferenceApi(IViewContentTemplateUseCase viewContentTemplate,
+            IUpdateContentTemplateUseCase updateContentTemplate,
+            IGetEstablishmentDetailsUseCase getEstablishmentDetails, IEstablishmentSearchUseCase establishmentSearch,
+            IEstablishmentSearchSuggestionsUseCase establishmentSearchSuggestions)
         {
             _viewContentTemplate = viewContentTemplate;
             _updateContentTemplate = updateContentTemplate;
             _getEstablishmentDetails = getEstablishmentDetails;
             _establishmentSearch = establishmentSearch;
+            _establishmentSearchSuggestions = establishmentSearchSuggestions;
         }
 
         public Task<Result<ContentTemplate>> ViewContentTemplate(ViewContentTemplateRequest request)
@@ -42,6 +49,12 @@ namespace ASP.Web
         public Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> EstablishmentSearch(EstablishmentSearchUseCaseRequest request)
         {
             return _establishmentSearch.HandleRequest(request);
+        }
+
+        public Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>> EstablishmentSearchSuggestions(
+            EstablishmentSearchSuggestionsUseCaseRequest request)
+        {
+            return _establishmentSearchSuggestions.HandleRequest(request);
         }
     }
 }

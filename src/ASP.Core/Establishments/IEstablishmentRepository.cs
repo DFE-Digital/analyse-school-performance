@@ -1,5 +1,6 @@
 ﻿using ASP.Core.Results;
 using ASP.Core.Search;
+using ASP.Core.Search.Suggestions;
 
 namespace ASP.Core.Establishments
 {
@@ -28,5 +29,9 @@ namespace ASP.Core.Establishments
         Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentNameOrLocation(
             string searchTerm, int skip, int take,
             CancellationToken cancellationToken = default);
+
+        Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>>
+            EstablishmentSearchSuggestions(
+                string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default);
     }
 }

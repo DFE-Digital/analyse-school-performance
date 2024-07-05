@@ -10,7 +10,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
     {
         private const string HTTP_METHOD = @"(GET|POST|DELETE)";
         private const string API_ENDPOINT = @"/([^\?]+)";
-        private const string QUERY_STRING = @"\?([^ ]*)";
+        private const string QUERY_STRING = @"\?(.+)"; // to match the entire query string including spaces.
         private const string STATUS_CODE = @"(\d+)";
         private const string RESPONSE_MESSAGE = @"""(.+)""";
         private const string HTTP_HEADER = @"""([^:""]+): ([^:""]+)""";

@@ -9,5 +9,5 @@ public class EstablishmentDetailsSearchResultDTO
     public string? EducationPhase { get; set; }
     public string? Address { get; set; }
     public OfstedRatingDTO? OfstedRating { get; set; }
-    public string? LaEstab { get; set; }
+    public string? Laestab { get; set; }
 }
