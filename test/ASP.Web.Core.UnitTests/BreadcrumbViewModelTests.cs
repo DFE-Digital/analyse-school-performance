@@ -15,13 +15,13 @@ namespace ASP.Web.Core.UnitTests
         }
 
         [Fact]
-        public void Constructor_WhenNull_SetsCurrentPageTitleToEmptyString()
+        public void Constructor_WhenNull_SetsCurrentPageTitleToNull()
         {
             string? title = null;
 
             var viewModel = new BreadcrumbViewModel(title);
 
-            Assert.Equal(string.Empty, viewModel.CurrentPageTitle);
+            Assert.Null(viewModel.CurrentPageTitle);
         }
 
         [Fact]

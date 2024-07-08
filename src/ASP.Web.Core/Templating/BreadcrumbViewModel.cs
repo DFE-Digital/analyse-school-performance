@@ -3,12 +3,12 @@
     public class BreadcrumbViewModel
     {
         public List<BreadcrumbItem> Breadcrumbs { get; set; }
-        public string CurrentPageTitle { get; set; }
+        public string? CurrentPageTitle { get; set; }
 
         public BreadcrumbViewModel(string? currentPage)
         {
             Breadcrumbs = new List<BreadcrumbItem>();
-            CurrentPageTitle = currentPage ?? string.Empty;
+            CurrentPageTitle = currentPage;
         }
 
         public BreadcrumbViewModel AddBreadcrumb(string title, string url)

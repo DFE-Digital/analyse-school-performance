@@ -63,7 +63,7 @@ namespace ASP.Web.Areas.School
         [HttpGet("{urn}/other-reports")]
         public async Task<IActionResult> OtherReports(string urn, string? revision)
         {
-            return await EstablishmentDetailsWithTemplate(urn, OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision);
+            return await EstablishmentDetailsWithTemplate(urn, OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision, "Other reports");
         }
 
         [HttpGet("{urn}/qla")]
