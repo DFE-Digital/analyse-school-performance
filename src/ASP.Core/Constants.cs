@@ -24,6 +24,9 @@ public static class Constants
     public static readonly Regex LaEstab7DigitRegex = new Regex(@"^\d{7}$", RegexOptions.Compiled);
 
     public const string SchoolSearchTermInputValidationMessage =
-        "Please enter a search term such as a school name, URN or LAESTAB to start a search";
+        "Please enter a search term such as a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)";
+
+    public const string SchoolSearchTermShortValidationMessage =
+       "Enter school name, address or reference number";
 
 }

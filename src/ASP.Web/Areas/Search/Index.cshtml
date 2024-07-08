@@ -7,34 +7,24 @@
 <div class="govuk-width-container govuk-main-wrapper">
     @if (!ViewData.ModelState.IsValid)
     {
-        <div class="govuk-error-summary" data-module="govuk-error-summary">
-            <div role="alert">
-                <h2 class="govuk-error-summary__title">
-                    Please correct the following error
-                </h2>
-                <div class="govuk-error-summary__body">
-                    <ul class="govuk-list govuk-error-summary__list">
+        <asp-error-summary>
+            @foreach (var entry in ViewData.ModelState)
+            {
+                string key = entry.Key;
+                var errors = entry.Value.Errors;
 
-                        @foreach (var entry in ViewData.ModelState)
-                        {
-                            string key = entry.Key;
-                            var errors = entry.Value.Errors;
-
-                            if (key == nameof(SearchParams.SearchTerm) && errors.Count > 0)
-                            {
-                                // Process your errors here
-                                foreach (var error in errors)
-                                {
-                                    <li>
-                                        <a href="#searchTerm">>@error.ErrorMessage</a>
-                                    </li>
-                                }
-                            }
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
+                if (key == nameof(SearchParams.SearchTerm) && errors.Count > 0)
+                {
+                    // Process your errors here
+                    foreach (var error in errors)
+                    {
+                        <li>
+                            <a href="#searchTerm" data-testid=@key>@error.ErrorMessage</a>
+                        </li>
+                    }
+                }
+            }
+        </asp-error-summary>
     }
 
     <h1 id="search-page-heading" class="govuk-heading-l">Search for a school</h1>
@@ -46,13 +36,14 @@
 
                 <h2 class="govuk-heading-s asp-search-heading">School</h2>
 
-                <div class="govuk-form-group">
+                <div class="govuk-form-group @(hasError ? "govuk-form-group--error": "")">
 
                     <div asp-validation-group-for="searchTerm" data-testid="searchTerm">
                         <label for="searchTerm" class="govuk-label asp-search-label">
-                            Enter school name, URN (Unique Reference Number) or
+                            Enter school  name, address, URN (Unique Reference Number) or
                             LAESTAB (Local Authority Establishment Number)
                         </label>
+         
                         @if (hasError)
                         {
                             @Html.ValidationMessage("searchTerm",

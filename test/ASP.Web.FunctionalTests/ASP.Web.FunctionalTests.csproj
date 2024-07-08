@@ -63,6 +63,9 @@
     <Compile Update="Features\Service\HelpPageView.feature.cs">
       <DependentUpon>HelpPageView.feature</DependentUpon>
     </Compile>
+    <Compile Update="Features\Service\Search.feature.cs">
+      <DependentUpon>Search.feature</DependentUpon>
+    </Compile>
     <Compile Update="Features\Service\TestSteps.feature.cs">
       <DependentUpon>TestSteps.feature</DependentUpon>
     </Compile>
@@ -110,6 +113,10 @@
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\Service\HelpPage.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Service\Search.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>

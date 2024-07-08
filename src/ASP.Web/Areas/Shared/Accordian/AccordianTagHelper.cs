@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace ASP.Web.Accordion
+namespace ASP.Web.Areas.Shared.Accordian
 {
     [HtmlTargetElement("asp-accordion")]
     public class AccordionTagHelper : TagHelper
