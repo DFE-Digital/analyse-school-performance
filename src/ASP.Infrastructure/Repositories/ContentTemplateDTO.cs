@@ -1,12 +1,16 @@
 ﻿using ASP.Core.Templating;
 using MR;
+using Newtonsoft.Json;
 
 namespace ASP.Infrastructure.Repositories
 {
     public class ContentTemplateDTO
     {
+        [JsonProperty("id")]
         public string Id { get; set; } = null!;
+        [JsonProperty("contentId")]
         public string ContentId { get; set; } = null!;
+        [JsonProperty("isPublished")]
         public bool IsPublished { get; set; }
         public string? PageTitle { get; set; } = null!;
         public dynamic PageContent { get; set; } = new GracefulExpandoObject()!;

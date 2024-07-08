@@ -129,7 +129,7 @@ Scenario: Should create unpublished content template if it doesn't exist
 	And content template with id "test-content" and contentId "test-content" should match:
 	"""
 	{
-		"IsPublished": false,
+		"isPublished": false,
 		"PageTitle": "Test title"
 	}
 	"""
@@ -152,14 +152,14 @@ Scenario: Should create revision if it doesn't exist
 	And content template with id "test-content" and contentId "test-content" should match:
 	"""
 	{
-		"IsPublished": false,
+		"isPublished": false,
 		"PageTitle": "Test title"
 	}
 	"""
 	And content template with id "revision1" and contentId "test-content" should match:
 	"""
 	{
-		"IsPublished": false,
+		"isPublished": false,
 		"PageTitle": "Updated test title"
 	}
 	"""
@@ -182,7 +182,7 @@ Scenario: Should update unpublished content template
 	And content template with id "test-content" and contentId "test-content" should match:
 	"""
 	{
-		"IsPublished": false,
+		"isPublished": false,
 		"PageTitle": "Updated title"
 	}
 	"""
@@ -205,7 +205,7 @@ Scenario: Should update unpublished content template using revision parameter
 	And content template with id "test-content" and contentId "test-content" should match:
 	"""
 	{
-		"IsPublished": false,
+		"isPublished": false,
 		"PageTitle": "Updated test title"
 	}
 	"""
@@ -234,19 +234,19 @@ Scenario: Should update unpublished revision
 	And content template with id "test-content" and contentId "test-content" should match:
 	"""
 	{
-		"IsPublished": true,
+		"isPublished": true,
 		"PageTitle": "Test title"
 	}
 	"""
 	And content template with id "revision1" and contentId "test-content" should match:
 	"""
 	{
-		"IsPublished": false,
+		"isPublished": false,
 		"PageTitle": "Updated test title (revised)"
 	}
 	"""
 
-Scenario: Should ignore IsPublished property when updating
+Scenario: Should ignore isPublished property when updating
 	Given published content template with id "test-content" and contentId "test-content" exists:
 	"""
 	{
@@ -262,7 +262,7 @@ Scenario: Should ignore IsPublished property when updating
 	When I send a POST request to /UpdateContentTemplate?id=test-content&revision=revision1 with content:
 	"""
 	{
-		"IsPublished": true,
+		"isPublished": true,
 		"PageTitle": "Updated test title (revised)"
 	}
 	"""
@@ -270,14 +270,14 @@ Scenario: Should ignore IsPublished property when updating
 	And content template with id "test-content" and contentId "test-content" should match:
 	"""
 	{
-		"IsPublished": true,
+		"isPublished": true,
 		"PageTitle": "Test title"
 	}
 	"""
 	And content template with id "revision1" and contentId "test-content" should match:
 	"""
 	{
-		"IsPublished": false,
+		"isPublished": false,
 		"PageTitle": "Updated test title (revised)"
 	}
 	"""

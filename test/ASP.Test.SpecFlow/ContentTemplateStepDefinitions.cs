@@ -367,7 +367,7 @@ namespace ASP.Test.SpecFlow
             }
             document["id"] = id;
             document["contentId"] = contentId;
-            document["IsPublished"] = true;
+            document["isPublished"] = true;
 
             return await _database.UpsertAsync("content", id, contentId, document);
         }
@@ -385,7 +385,7 @@ namespace ASP.Test.SpecFlow
             }
             document["id"] = id;
             document["contentId"] = contentId;
-            document["IsPublished"] = false;
+            document["isPublished"] = false;
 
             return await _database.UpsertAsync("content", id, contentId, document);
         }
