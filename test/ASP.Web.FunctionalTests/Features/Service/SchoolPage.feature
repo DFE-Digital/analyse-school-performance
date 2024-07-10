@@ -126,7 +126,7 @@ Scenario: School page should be accessible when provided urn
 	Then the element "h1.govuk-heading-xl" should have the text content "My school" 
     Then the element "h1.govuk-heading-l" should have the outer HTML:
        """
-       <h1 class="govuk-heading-l"> Hollinswood Primary School
+       <h1 data-testid="school-page-school-name" class="govuk-heading-l"> Hollinswood Primary School
             <span style="font-weight:400;">(URN: 123456)</span>
         </h1>
        """

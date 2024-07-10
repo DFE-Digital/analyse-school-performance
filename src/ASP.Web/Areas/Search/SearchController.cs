@@ -2,6 +2,7 @@
 using ASP.Core.Results;
 using ASP.Core.Search;
 using ASP.Web.Areas.Shared.Pagination;
+using ASP.Web.Core.Templating;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,29 +54,39 @@ public class SearchController : Controller
 
     private SearchViewModel DefaultViewModel(SearchResult<EstablishmentDetailsSearchResultDTO> result)
     {
-        return new SearchViewModel {
+        var breadcrumbTrail = new BreadcrumbViewModel($"Search results for {result.SearchTerm}").AddBreadcrumb("Search", "/search");
+
+        return new SearchViewModel
+        {
             SearchResults = EstablishmentSearchResultsModel.FromEstablishmentDetails(result.Results),
-            PaginationModel = new PaginationModel {
+            PaginationModel = new PaginationModel
+            {
                 TotalCount = result.TotalResults,
                 SearchTerm = result.SearchTerm,
                 CurrentPage = result.Page,
                 ResultCount = result.ResultsPerPage
             },
             SearchTerm = result.SearchTerm,
-            TotalCount = result.TotalResults
+            TotalCount = result.TotalResults,
+            Breadcrumbs = breadcrumbTrail
         };
     }
 
     private SearchViewModel NoResultsViewModel(SearchParams searchParams)
     {
-        return new SearchViewModel {
+        var breadcrumbTrail = new BreadcrumbViewModel($"We found no matches for {searchParams.SearchTerm}").AddBreadcrumb("Search", "/search");
+
+        return new SearchViewModel
+        {
             SearchTerm = searchParams.SearchTerm,
-            TotalCount = 0
+            TotalCount = 0,
+            Breadcrumbs = breadcrumbTrail
         };
     }
 
-    private IActionResult RedirectToSchoolLandingPageIfSingleResult(SearchViewModel model) { 
-        if(model.TotalCount == 1)
+    private IActionResult RedirectToSchoolLandingPageIfSingleResult(SearchViewModel model)
+    {
+        if (model.TotalCount == 1)
         {
             return RedirectToAction("Index", "School", new { area = "School", urn = model.SearchResults.FirstOrDefault()!.Urn });
         }

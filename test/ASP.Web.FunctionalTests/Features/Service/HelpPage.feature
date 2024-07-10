@@ -137,8 +137,8 @@ Scenario: Page should show a breadcrumb trail
 	"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	And the element "#app-breadcrumb-home" should have the href "/"
-    And the element "#app-breadcrumb-current-page" should have the text content "Current page"
+	And the element "[data-testid="breadcrumb-home"]" should have the href "/"
+    And the element "[data-testid="breadcrumb-current-page"]" should have the text content "Current page"
 
 @Javascript:disabled
 Scenario: Edit button should link to edit page

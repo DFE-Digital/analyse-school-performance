@@ -4,7 +4,6 @@ using ASP.Core.Results;
 using ASP.Web.Areas.School.ViewModels;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features.TermsOfUse;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Areas.School
@@ -81,7 +80,7 @@ namespace ASP.Web.Areas.School
         private async Task<Result<SchoolViewModel>> EstablishmentDetails(string urn, string page)
         {
             var breadcrumbTrail = new BreadcrumbViewModel(page)
-            
+
                 .AddBreadcrumb("My school", $"/school/{urn}");
 
             return await _api.GetEstablishmentDetails(new GetEstablishmentDetailsUseCaseRequest(urn))
