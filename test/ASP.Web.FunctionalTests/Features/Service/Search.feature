@@ -1,5 +1,66 @@
 Feature: Search Page
 
+@Javascript:disabled
+Scenario: Page title should show correct text when search returns results
+    Given establishment "111111" exists:
+    """
+    {
+      "urn": "111111",
+      "name": "Some Primary School",
+      "address": {
+            "street": "13 The Street",
+            "town": "SomeTown",
+            "postCode": "B1 1AA"
+        }
+    }
+    """
+    And establishment "222222" exists:
+    """
+    {
+      "urn": "222222",
+      "name": "Some Other Primary School",
+      "address": {
+            "street": "13 The Road",
+            "town": "Tring",
+            "postCode": "B1 1AA"
+        }
+    }
+    """
+    When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Primary"
+	And I click the button "#searchSubmit"
+    Then the page title should be "Search results for Primary | Analyse school performance"
+
+@Javascript:disabled
+Scenario: Page title should show correct text when search returns no results
+    Given establishment "111111" exists:
+    """
+    {
+      "urn": "111111",
+      "name": "Some Primary School",
+      "address": {
+            "street": "13 The Street",
+            "town": "SomeTown",
+            "postCode": "B1 1AA"
+        }
+    }
+    """
+    And establishment "222222" exists:
+    """
+    {
+      "urn": "222222",
+      "name": "Some Other Primary School",
+      "address": {
+            "street": "13 The Road",
+            "town": "Tring",
+            "postCode": "B1 1AA"
+        }
+    }
+    """
+    When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Secondary"
+	And I click the button "#searchSubmit"
+    Then the page title should be "We found no matching results for Secondary | Analyse school performance"
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns results
