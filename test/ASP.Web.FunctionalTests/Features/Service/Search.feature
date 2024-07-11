@@ -29,7 +29,7 @@ Scenario: Page title should show correct text when search returns results
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Primary"
 	And I click the button "#searchSubmit"
-    Then the page title should be "Search results for Primary | Analyse school performance"
+    Then the page title should be "Search results for "Primary" | Analyse school performance"
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns no results
@@ -60,7 +60,7 @@ Scenario: Page title should show correct text when search returns no results
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Secondary"
 	And I click the button "#searchSubmit"
-    Then the page title should be "We found no matching results for Secondary | Analyse school performance"
+    Then the page title should be "We found no matching results for "Secondary" | Analyse school performance"
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns results
@@ -93,7 +93,7 @@ Scenario: Page should show a breadcrumb trail when search returns results
 	And I click the button "#searchSubmit"
     Then the element "[data-testid='breadcrumb-home']" should have the href "/"
     And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
-    And the element "[data-testid='breadcrumb-current-page']" should have the text content "Search results for Primary"
+    And the element "[data-testid='breadcrumb-current-page']" should have the text content "Search results for "Primary""
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns no results
@@ -126,7 +126,7 @@ Scenario: Page should show a breadcrumb trail when search returns no results
 	And I click the button "#searchSubmit"
     Then the element "[data-testid='breadcrumb-home']" should have the href "/"
     And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
-    And the element "[data-testid='breadcrumb-current-page']" should have the text content "We found no matches for Secondary"
+    And the element "[data-testid='breadcrumb-current-page']" should have the text content "We found no matches for "Secondary""
  
 @Javascript:disabled
 Scenario: Search Term Validation

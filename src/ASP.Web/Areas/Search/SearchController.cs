@@ -54,7 +54,7 @@ public class SearchController : Controller
 
     private SearchViewModel DefaultViewModel(SearchResult<EstablishmentDetailsSearchResultDTO> result)
     {
-        var breadcrumbTrail = new BreadcrumbViewModel($"Search results for {result.SearchTerm}").AddBreadcrumb("Search", "/search");
+        var breadcrumbTrail = new BreadcrumbViewModel($"Search results for \"{result.SearchTerm}\"").AddBreadcrumb("Search", "/search");
 
         return new SearchViewModel
         {
@@ -74,7 +74,7 @@ public class SearchController : Controller
 
     private SearchViewModel NoResultsViewModel(SearchParams searchParams)
     {
-        var breadcrumbTrail = new BreadcrumbViewModel($"We found no matches for {searchParams.SearchTerm}").AddBreadcrumb("Search", "/search");
+        var breadcrumbTrail = new BreadcrumbViewModel($"We found no matches for \"{searchParams.SearchTerm}\"").AddBreadcrumb("Search", "/search");
 
         return new SearchViewModel
         {

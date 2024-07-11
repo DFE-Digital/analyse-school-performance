@@ -2,7 +2,7 @@
 @using ASP.Web.Areas.Shared.OfstedRating
 @model ASP.Web.Areas.Search.SearchViewModel
 @{
-    ViewData["Title"] = Model.TotalCount == 0 ? $"We found no matching results for {Model.SearchTerm}" : $"Search results for {Model.SearchTerm}";
+    ViewData["Title"] = Model.TotalCount == 0 ? $"We found no matching results for \"{Model.SearchTerm}\"" : $"Search results for \"{Model.SearchTerm}\"";
 }
 @functions {
 
