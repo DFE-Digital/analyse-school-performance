@@ -49,5 +49,5 @@ public class PaginationModel
 
     public int ResultsStartOffset => Skip + 1;
 
-    public int ResultsEndOffset => Skip + ResultCount;
+    public int ResultsEndOffset => Skip + ResultCount > TotalCount ? TotalCount : Skip + ResultCount;
 }

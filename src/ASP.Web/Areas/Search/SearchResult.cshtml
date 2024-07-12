@@ -35,7 +35,7 @@
         {
             <div class="govuk-grid-column-two-thirds">
                 <h1 id="school-search-results-some-results-heading" class="govuk-heading-l school-name-heading">Search results for "@Model.SearchTerm"</h1>
-                @await Html.PartialAsync("~/Areas/Shared/Pagination/_PaginationPartial.cshtml", Model.PaginationModel)
+                <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Header")) />
                 <ul class="govuk-list">
                     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
                     @foreach (var item in Model.SearchResults)
@@ -43,7 +43,7 @@
                         <li>
                             <div class="search-results-school-name-container">
                                 <h2 class="govuk-heading-m search-results-school-name-heading">
-                                    <a data-testid="school-search-results-name-@counter" class="govuk-link" href="@GenerateLinkWithTrailingSlash(item.Urn)">
+                                    <a class="govuk-link" data-testid="school-search-results-name-@counter" href="@GenerateLinkWithTrailingSlash(item.Urn)">
                                         @item.Name
                                     </a>
                                 </h2>
@@ -56,13 +56,13 @@
                                 <tbody class="govuk-table__body">
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">Address</th>
-                                    <td data-testid="school-search-results-address-@counter" class="govuk-table__cell">
+                                    <td class="govuk-table__cell" data-testid="school-search-results-address-@counter">
                                         @item.Address?.ToString()
                                     </td>
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">Education phase</th>
-                                        <td data-testid="school-search-results-phase-@counter" class="govuk-table__cell">@item.PhaseOfEducation</td>
+                                    <td class="govuk-table__cell" data-testid="school-search-results-phase-@counter">@item.PhaseOfEducation</td>
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">Ofsted rating</th>
@@ -76,11 +76,11 @@
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">URN</th>
-                                    <td data-testid="school-search-results-urn-@counter" class="govuk-table__cell">@item.Urn</td>
+                                        <td class="govuk-table__cell" data-testid="school-search-results-urn-@counter">@item.Urn</td>
                                 </tr>
                                 <tr class="govuk-table__row">
                                     <th scope="row" class="govuk-table__header">LAESTAB</th>
-                                        <td data-testid="school-search-results-laestab-@counter" class="govuk-table__cell">@item.LaEstab</td>
+                                    <td data-testid="school-search-results-laestab-@counter" class="govuk-table__cell">@item.LaEstab</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -89,7 +89,7 @@
                         counter++;
                     }
                 </ul>
-                @await Html.PartialAsync("~/Areas/Shared/Pagination/_PaginationPartial.cshtml", Model.PaginationModel)
+                <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Footer")) />
             </div>
         }
     </div>

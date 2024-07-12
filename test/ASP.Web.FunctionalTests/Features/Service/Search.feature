@@ -772,3 +772,69 @@ Examples:
 | 1       | 111111 | School A | 2 Good \| Ofsted report Inspected 22 March 2013 |
 | 2       | 222222 | School B | No data available                               |
 | 3       | 333333 | School C | -- No Ofsted assessment published               |
+
+@Javascript:disabled
+Scenario: Pagination in Search Validation
+ Given 251 establishments exist with properties:
+ | urn    |     name         |
+ | (100000 + n)   | Primary School (100000 + n)         |
+ When I navigate to /search/search-result/?page=1&searchTerm=primary
+ Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 50 of 251 schools or colleges"
+ And the element "*[data-testid='PageLinks-Header-1']" should have the href "/search/search-result?searchTerm=primary&page=1"
+ And the element "*[data-testid='PageLinks-Header-2']" should have the href "/search/search-result?searchTerm=primary&page=2"
+ And the element "*[data-testid='PageLinks-Header-3']" should have the href "/search/search-result?searchTerm=primary&page=3"
+ And the element "*[data-testid='PageLinks-Header-4']" should have the href "/search/search-result?searchTerm=primary&page=4"
+ And the element "*[data-testid='PageLinks-Header-5']" should have the href "/search/search-result?searchTerm=primary&page=5"
+ And the element "*[data-testid='PageLinks-Header-Next']" should have the href "/search/search-result?searchTerm=primary&page=2"
+ And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100001"
+ And the element "*[data-testid='school-search-results-name-2']" should have the text content "Primary School 100002"
+ And the element "*[data-testid='school-search-results-name-3']" should have the text content "Primary School 100003"
+ And the element "*[data-testid='school-search-results-name-4']" should have the text content "Primary School 100004"
+ And the element "*[data-testid='school-search-results-name-5']" should have the text content "Primary School 100005"
+ And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100001"
+ And the element "*[data-testid='school-search-results-urn-2']" should have the text content "100002"
+ And the element "*[data-testid='school-search-results-urn-3']" should have the text content "100003"
+ And the element "*[data-testid='school-search-results-urn-4']" should have the text content "100004"
+ And the element "*[data-testid='school-search-results-urn-5']" should have the text content "100005"
+
+
+ 
+@Javascript:enabled
+Scenario: Pagination in Search Validation 2
+ Given 251 establishments exist with properties:
+ | urn    |     name         |
+ | (100000 + n)   | Primary School (100000 + n)         |
+ When I navigate to /search/search-result/?page=1&searchTerm=primary
+ And I click the button "*[data-testid='PageLinks-Header-3']"
+ Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 101 - 150 of 251 schools or colleges"
+ And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/search-result?searchTerm=primary&page=2"
+ And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/search-result?searchTerm=primary&page=1"
+ And the elements "*[data-testid='PageLinks-Header-2']" should all have the href "/search/search-result?searchTerm=primary&page=2"
+ And the elements "*[data-testid='PageLinks-Header-3']" should all have the href "/search/search-result?searchTerm=primary&page=3"
+ And the elements "*[data-testid='PageLinks-Header-4']" should all have the href "/search/search-result?searchTerm=primary&page=4"
+ And the elements "*[data-testid='PageLinks-Header-5']" should all have the href "/search/search-result?searchTerm=primary&page=5"
+ And the elements "*[data-testid='PageLinks-Header-Next']" should all have the href "/search/search-result?searchTerm=primary&page=4"
+ And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100101"
+ And the element "*[data-testid='school-search-results-name-2']" should have the text content "Primary School 100102"
+ And the element "*[data-testid='school-search-results-name-3']" should have the text content "Primary School 100103"
+ And the element "*[data-testid='school-search-results-name-4']" should have the text content "Primary School 100104"
+ And the element "*[data-testid='school-search-results-name-5']" should have the text content "Primary School 100105"
+ And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100101"
+ And the element "*[data-testid='school-search-results-urn-2']" should have the text content "100102"
+ And the element "*[data-testid='school-search-results-urn-3']" should have the text content "100103"
+ And the element "*[data-testid='school-search-results-urn-4']" should have the text content "100104"
+ And the element "*[data-testid='school-search-results-urn-5']" should have the text content "100105"
+
+ 
+@Javascript:enabled
+Scenario: Pagination in Search Validation 3
+ Given 51 establishments exist with properties:
+ | urn    |     name         |
+ | (100000 + n)   | Primary School (100000 + n)         |
+ When I navigate to /search/search-result/?page=1&searchTerm=primary
+ And I click the button "*[data-testid='PageLinks-Header-2']"
+ Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 51 - 51 of 51 schools or colleges"
+ And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/search-result?searchTerm=primary&page=1"
+ And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/search-result?searchTerm=primary&page=1"
+ And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100051"
+ And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100051"

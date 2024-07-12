@@ -1,41 +1,41 @@
-@model ASP.Web.Areas.Shared.Pagination.PaginationModel
+@model (ASP.Web.Areas.Shared.Pagination.PaginationModel pagination, string place)
 
-<div class="govuk-body pagination-container">
-    <p class="govuk-body pagination-container-p-text">
-        Showing @Model.ResultsStartOffset - @Model.ResultsEndOffset
-        of <span class="govuk-!-font-weight-bold">@Model.TotalCount</span> schools or colleges
+<div class="govuk-body">
+    <p class="govuk-body pagination-container-p-text" data-testid="NumberOfPages-@Model.place">
+        Showing @Model.pagination.ResultsStartOffset - @Model.pagination.ResultsEndOffset
+        of <span class="govuk-!-font-weight-bold">@Model.pagination.TotalCount</span> schools or colleges
     </p>
     <nav class="govuk-pagination" aria-label="Pagination">
-        @if (Model.ShowPreviousLink)
+        @if (Model.pagination.ShowPreviousLink)
         {
             <div class="govuk-pagination__prev">
-                <a class="govuk-link govuk-pagination__link" href="@Url.Action("SearchResult", new { searchTerm = Model.SearchTerm, page = Model.CurrentPage - 1 })" rel="prev" aria-label="Previous page">
+                <a class="govuk-link govuk-pagination__link" data-testid="PageLinks-@(Model.place)-Prev" href="@Url.Action("SearchResult", new { searchTerm = Model.pagination.SearchTerm, page = Model.pagination.CurrentPage - 1 })" rel="prev" aria-label="Previous page">
                     <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
                         <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
                     </svg>
                     <span class="govuk-pagination__link-title">
-                        Previous<span class="govuk-visually-hidden"> page</span>
+                        Prev<span class="govuk-visually-hidden"> page</span>
                     </span>
                 </a>
             </div>
         }
 
         <ul class="govuk-pagination__list">
-            @foreach (var page in Model.PageLinks)
+            @foreach (var page in Model.pagination.PageLinks)
             {
-                <li class="govuk-pagination__item @(page == Model.CurrentPage ? "govuk-pagination__item--current" : "")">
-                    <a class="govuk-link govuk-pagination__link" href="@Url.Action("SearchResult", new { searchTerm = Model.SearchTerm, page })"
-                       aria-label="Page @(page)" @(page == Model.CurrentPage ? "aria-current=\"page\"" : "")>
+                <li class="govuk-pagination__item @(page == Model.pagination.CurrentPage ? "govuk-pagination__item--current" : "")">
+                    <a class="govuk-link govuk-pagination__link" data-testid="PageLinks-@(Model.place)-@(page)" href="@Url.Action("SearchResult", new { searchTerm = Model.pagination.SearchTerm, page })"
+                       aria-label="Page @(page)" @(page == Model.pagination.CurrentPage ? "aria-current=\"page\"" : "")>
                         @(page)
                     </a>
                 </li>
             }
         </ul>
 
-        @if (Model.ShowNextLink)
+        @if (Model.pagination.ShowNextLink)
         {
             <div class="govuk-pagination__next">
-                <a class="govuk-link govuk-pagination__link" href="@Url.Action("SearchResult", new { searchTerm = Model.SearchTerm, page = Model.CurrentPage + 1 })" rel="next" aria-label="Next page">
+                <a class="govuk-link govuk-pagination__link" data-testid="PageLinks-@(Model.place)-Next" href="@Url.Action("SearchResult", new { searchTerm = Model.pagination.SearchTerm, page = Model.pagination.CurrentPage + 1 })" rel="next" aria-label="Next page">
                     <span class="govuk-pagination__link-title">
                         Next<span class="govuk-visually-hidden"> page</span>
                     </span>

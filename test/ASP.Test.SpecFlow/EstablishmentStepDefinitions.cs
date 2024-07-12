@@ -5,17 +5,22 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ASP.Test.SpecFlow;
 
 [Binding]
 public partial class EstablishmentStepDefinitions
 {
-    private static readonly Regex _sumContainingN = new Regex(@"^\(([0-9]+) \+ n\)$", RegexOptions.Compiled);
-    private static readonly List<(Regex, string)> _stringContainingN = [
-        (new Regex(@"^(n) ", RegexOptions.Compiled), "{0} "),
-        (new Regex(@" (n) ", RegexOptions.Compiled), " {0} "),
-        (new Regex(@" (n)$", RegexOptions.Compiled), " {0}")
+    private static readonly List<(Regex, string)> _stringRegexPattern = [
+        
+        (new Regex(@"^(?<Alpha>[\s\S]*)\((?<number>[0-9]+) \+ (?<replace>n)\)", RegexOptions.Compiled), "{0}"), // (1000 + n) or School (1000 + n)
+        (new Regex(@"^(?<Alpha>[\s\S]*) (?<replace>n)$", RegexOptions.Compiled), " {0}"), // School n
+        (new Regex(@"^(?<Alpha>[\s\S]+) (?<replace>n) (?<Beta>[\s\S]+)$", RegexOptions.Compiled), " {0} "), //School n Test
+        (new Regex(@"^(?<Alpha>[\s\S]+) \((?<number>[0-9]+) \+ (?<replace>n)\) (?<beta>[\s\S]+)$", RegexOptions.Compiled), " {0} "), //School (1000 + n) Test
+        (new Regex(@"^(?<replace>n) (?<Alpha>[\s\S]+)$", RegexOptions.Compiled), "{0} "), // n School
+        (new Regex(@"^(?<replace>n)$", RegexOptions.Compiled), "{0}") // n
+        
     ];
 
     private readonly ScenarioContext _scenarioContext;
@@ -82,17 +87,34 @@ public partial class EstablishmentStepDefinitions
 
     private object ReplaceNInPropertyValue(string value, int n)
     {
-        var numericMatch = _sumContainingN.Match(value);
-        if (numericMatch.Success && int.TryParse(numericMatch.Groups[1].Value, out int baseNumber))
+        foreach (var (regex, replacement) in _stringRegexPattern)
         {
-            return (baseNumber + n).ToString();
+            value = regex.Replace(value, match =>
+            {
+                var construct = "";
+                for(var inc=1; inc <= match.Groups.Count-1; inc++)
+                {
+                    if (match.Groups[inc].Name == "number" && match.Groups[inc+1].Name == "replace")
+                    {
+                        if (int.TryParse(match.Groups[inc].Value, out int basenumber1))
+                        {
+                            construct = construct + (basenumber1+n);
+                        }
+                        inc++;
+                    }
+                    else if (match.Groups[inc].Name == "replace")
+                    {
+                       construct = construct + string.Format(replacement, n);    
+                    }
+                    else if(match.Groups[inc].Name == "Alpha" || match.Groups[inc].Name == "Beta")
+                    {
+                        construct = construct + match.Groups[inc].Value;
+                    }
+                    
+                }
+                return construct;
+            });
         }
-
-        foreach (var (regex, replacement) in _stringContainingN)
-        {
-            value = regex.Replace(value, string.Format(replacement, n));
-        }
-
         return value;
     }
 

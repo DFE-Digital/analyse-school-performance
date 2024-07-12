@@ -274,8 +274,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
                 _ => throw new NotImplementedException("We shouldn't have got here")
             };
 
-            var classes = await elements.AttributeValuesAsync("class");
-            Assert.All(classes, c => Assert.Equal(expectedValue, c));
+            Assert.All(value, c => Assert.Equal(expectedValue, c));
         }
 
         private string ResolveVariable(string variableName)
