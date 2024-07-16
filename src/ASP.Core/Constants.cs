@@ -29,4 +29,7 @@ public static class Constants
     public const string SchoolSearchTermShortValidationMessage =
        "Enter school name, address or reference number";
 
+    public const string SchoolSearchFormSearchTermInputLabel =
+        "Enter school name, address, URN (Unique Reference Number) or\n LAESTAB (Local Authority Establishment Number)";
+
 }

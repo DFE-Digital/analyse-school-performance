@@ -14,6 +14,6 @@ Scenario: Example creating multiple establishments
     When I navigate to /search/
     And I update the textbox "#searchTerm" to have the value "primary"
     And I click the button "#searchSubmit"
-    Then the path should match "/search/search-result/?page=1&searchTerm=primary"
+    Then the path should match "/search/search-result/?suggestionUrn=&page=1&searchTerm=primary"
     #And the page title should be "We found no matches for "primary" | Analyse school performance"
     And the element "h1" should have the text content "We found no matches for "primary""

@@ -400,3 +400,23 @@ $app-breakpoint-custom : 700px;
     text-underline-offset: 0.1578em;
     -webkit-font-smoothing: antialiased;
 }
+
+/* Show the JavaScript-enabled version by default */
+.js-enabled {
+    display: block;
+}
+
+/* Hide the JavaScript-disabled version by default */
+.js-disabled {
+    display: none;
+}
+
+/* Hide the JavaScript-enabled version when JavaScript is disabled */
+body:not(.js-enabled) .js-enabled {
+    display: none;
+}
+
+/* Show the JavaScript-disabled version when JavaScript is disabled */
+body:not(.js-enabled) .js-disabled {
+    display: block;
+}

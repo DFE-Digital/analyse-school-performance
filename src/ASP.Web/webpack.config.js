@@ -54,6 +54,7 @@ const javaScriptConfig = {
         govuk: path.resolve(__dirname, 'scripts/govuk.js'),
         alpine: path.resolve(__dirname, 'scripts/alpine.js'),
         components: path.resolve(__dirname, 'scripts/components.js'),
+        autocomplete: path.resolve(__dirname, 'scripts/autocomplete.js')
     },
     output: {
         path: path.resolve(__dirname, 'wwwroot/assets/js'),

@@ -114,11 +114,12 @@ namespace ASP.Infrastructure.Repositories
                                         StringComparison.CurrentCultureIgnoreCase)
                                 ))
                             ))
-                        .OrderBy(x => x.Name), cancellationToken)
+                        .OrderBy(x => x.Name)
+                        .Take(maxSuggestions), cancellationToken)
                 .ErrorIf(q => !q.Any(), Error.NotFound($@"there were no matches for ""{searchTerm}""."))
                 .Map(x => new SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>
                 {
-                    Suggestions = x.Take(maxSuggestions).MapToEstablishmentSearchSuggestionsResults(),
+                    Suggestions = x.MapToEstablishmentSearchSuggestionsResults(),
                     SearchTerm = searchTerm,
                     MaxSuggestions = maxSuggestions
                 });
