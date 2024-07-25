@@ -7,6 +7,9 @@ using System.Net.Http.Headers;
 using System.Net;
 using System.Diagnostics.CodeAnalysis;
 using TechTalk.SpecFlow.Infrastructure;
+using Microsoft.AspNetCore.Http;
+using System.Web;
+using Newtonsoft.Json;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -143,12 +146,37 @@ namespace ASP.AcceptanceTests.Drivers
             return (IHtmlDocument)document;
         }
 
-        private async Task ExpectStatusCode()
+        public async Task ExpectStatusCode()
         {
             if ((int)Status != 200)
             {
                 var pageContent = await PageContentAsync();
-                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+                if (pageContent.StartsWith("<!DOCTYPE html>"))
+                {
+                    var errorMessageElement = LastResponse.DocumentElement.QuerySelector(@"[data-testid=""error-display-message""]");
+                    var errorMessage = errorMessageElement?.TextContent?
+                        .Trim()
+                        .Replace("\\u0022", "\"")
+                        .Replace("\\r", "\r")
+                        .Replace("\\n", "\n") 
+                        ?? "(none)";
+
+                    _outputHelper.WriteLine($"Error message: {errorMessage}");
+
+                    var stackTraceElement = LastResponse.DocumentElement.QuerySelector(@"[data-testid=""error-display-stack-trace""]");
+                    var stackTrace = stackTraceElement?.TextContent?
+                        .Trim()
+                        .Replace("\\u0022", "\"")
+                        .Replace("\\r", "\r")
+                        .Replace("\\n", "\n")
+                        ?? "(none)";
+
+                    _outputHelper.WriteLine($"Stack trace: {stackTrace}");
+                }
+                else
+                {
+                    _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+                }
             }
 
             AssertWithMessage.Equal(ExpectedStatusCode, (int)Status, $"Expected response status to be {ExpectedStatusCode} but was {(int)Status}.");

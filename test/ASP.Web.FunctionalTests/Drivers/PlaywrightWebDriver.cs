@@ -144,12 +144,37 @@ namespace ASP.Web.AcceptanceTests.Drivers
             return new PlaywrightElementsDriver(elements, Page);
         }
 
-        private async Task ExpectStatusCode()
+        public async Task ExpectStatusCode()
         {
             if ((int)Status != 200)
             {
                 var pageContent = await PageContentAsync();
-                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+                if (pageContent.StartsWith("<!DOCTYPE html>"))
+                {
+                    var errorMessageElement = Page.Locator(@"[data-testid=""error-display-message""]");
+                    var errorMessage = (await errorMessageElement.TextContentAsync())?
+                        .Trim()
+                        .Replace("\\u0022", "\"")
+                        .Replace("\\r", "\r")
+                        .Replace("\\n", "\n")
+                        ?? "(none)";
+
+                    _outputHelper.WriteLine($"Error message: {errorMessage}");
+
+                    var stackTraceElement = Page.Locator(@"[data-testid=""error-stack-trace""]");
+                    var stackTrace = (await stackTraceElement.TextContentAsync())?
+                        .Trim()
+                        .Replace("\\u0022", "\"")
+                        .Replace("\\r", "\r")
+                        .Replace("\\n", "\n")
+                        ?? "(none)";
+
+                    _outputHelper.WriteLine($"Stack trace: {stackTrace}");
+                }
+                else
+                {
+                    _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+                }
             }
 
             AssertWithMessage.Equal(ExpectedStatusCode, (int)Status, $"Expected response status to be {ExpectedStatusCode} but was {(int)Status}.");

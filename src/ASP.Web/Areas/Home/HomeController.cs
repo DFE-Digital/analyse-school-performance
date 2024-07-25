@@ -1,8 +1,8 @@
-using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
+using ASP.Application;
+using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features.TermsOfUse;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Areas.Home
@@ -14,11 +14,11 @@ namespace ASP.Web.Areas.Home
     {
         const string CONTENT_TEMPLATE_ID = "home-page";
 
-        private readonly IAspApi _api;
+        private readonly IAspApiClient _api;
         private readonly IHostEnvironment _hostEnvironment;
 
         public HomeController(
-            IAspApi api,
+            IAspApiClient api,
             IHostEnvironment hostEnvironment
         )
         {

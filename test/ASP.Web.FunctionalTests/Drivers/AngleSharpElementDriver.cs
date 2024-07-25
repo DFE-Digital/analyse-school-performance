@@ -56,9 +56,9 @@ namespace ASP.AcceptanceTests.Drivers
             return new AngleSharpElementsDriver(El, selector, _web);
         }
 
-        public Task ShouldHaveCountAsync(int count, Func<int, string> errorIfIncorrectCount)
+        public Task ShouldHaveCountAsync(int count, Func<int, int, string> errorIfIncorrectCount)
         {
-            AssertWithMessage.Equal(count, _elementCount, errorIfIncorrectCount(count));
+            AssertWithMessage.Equal(count, _elementCount, errorIfIncorrectCount(count, _elementCount));
 
             return Task.CompletedTask;
         }

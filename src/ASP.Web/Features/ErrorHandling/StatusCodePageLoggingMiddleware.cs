@@ -1,4 +1,5 @@
-﻿using ASP.Core.Logging;
+﻿using ASP.Core.Helpers;
+using ASP.Core.Logging;
 using ASP.Core.Results;
 using ASP.Infrastructure.TableStorage;
 using ASP.Web.Core.Templating;
@@ -84,7 +85,9 @@ namespace ASP.Web.Features.ErrorHandling
                 if (context.Request.Path.Equals("/error/", StringComparison.OrdinalIgnoreCase) ||
                     (string)(context.Request.RouteValues["controller"] ?? "") == "Error" ||
                     context.Response.StatusCode == (int)HttpStatusCode.OK ||
-                    context.Response.StatusCode == (int)HttpStatusCode.NotModified)
+                    context.Response.StatusCode == (int)HttpStatusCode.NotModified ||
+                    context.Response.StatusCode == (int)HttpStatusCode.MovedPermanently ||
+                    context.Response.StatusCode == (int)HttpStatusCode.Redirect)
                 {
                     // Copies all contents of the memoryStream to the response body, ensuring that the response sent to the client
                     // includes any modifications or inspections performed by downstream middleware.
@@ -93,7 +96,12 @@ namespace ASP.Web.Features.ErrorHandling
                 }
 
                 // Assume by this point that the response body is the error message
-                var errorMessage = await memoryStreamReader.ReadToEndAsync();
+                string body = await memoryStreamReader.ReadToEndAsync();
+                (string errorMessage, string? stackTrace) = context.Response.StatusCode switch {
+                    500 => JsonHelper.DeserializeNotNull<UnexpectedError>(body)
+                        .Match(e => (e.Message, e.StackTrace), _ => (body, null)),
+                    _ => (body, null)
+                };
 
                 var scheme = context.Request.Scheme;
                 var host = context.Request.Headers.ContainsKey("X-Forwarded-Host")
@@ -125,6 +133,7 @@ namespace ASP.Web.Features.ErrorHandling
                 if (EnvironmentHelper.ShouldShowErrorMessage(_hostEnvironment))
                 {
                     errorViewModel.ErrorMessage = errorMessage;
+                    errorViewModel.StackTrace = stackTrace;
                 };
 
                 var view = context.Response.StatusCode == (int)HttpStatusCode.NotFound

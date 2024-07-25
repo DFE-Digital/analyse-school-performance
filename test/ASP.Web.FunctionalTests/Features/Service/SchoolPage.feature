@@ -75,8 +75,7 @@ Scenario: School page should contain seven app card container element
     And establishment "123456" exists:
     """
     {
-        "name": "Hollinswood Primary School",
-        "urn": "123456"
+        "name": "Hollinswood Primary School"
     }
     """
     When I navigate to /school/123456/
@@ -116,8 +115,7 @@ Scenario: School page should be accessible when provided urn
   Given establishment "123456" exists:
 		"""
 		{
-            "name": "Hollinswood Primary School",
-            "urn": "123456"
+            "name": "Hollinswood Primary School"
         }
 		"""
     When I navigate to /school/123456
@@ -133,17 +131,15 @@ Scenario: School page should be accessible when provided urn
 
 @Javascript:disabled
 Scenario: School page should throw page not found if Establishment is deleted
-  Given establishment "112123" exists:
+  Given deleted establishment "112123" exists:
 		"""
 		{
-            "name": "Thursby Primary School",
-            "urn": "112123",
-            "isDeleted": true
+            "name": "Thursby Primary School"
         }
 		"""
     When I navigate to /school/112123
     Then I should get a 404 response
-    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: The requested establishment with URN "112123" has been deleted."
+    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: The requested establishment with URN "112123" has been deleted."
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
@@ -176,7 +172,6 @@ Scenario: School page should contain a school details disclosure element
                 "firstName": "Kath",
                 "lastName": "Osborne"
             },
-            "id": "123456",
             "localAuthority": {
                 "name": "Telford and Wrekin",
             },
@@ -192,8 +187,7 @@ Scenario: School page should contain a school details disclosure element
             },
             "resourcedProvisionType": {
                 "name": "Not recorded",
-            },
-            "urn": "123456"
+            }
         }
 		"""
     When I navigate to /school/123456
@@ -201,7 +195,7 @@ Scenario: School page should contain a school details disclosure element
     And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
     And the element "*[data-testid='school-page-details-state-open']" should have the text content "Hide"
     And the element "*[data-testid='school-details-address-key']" should have the text content "Address"
-    And the element "*[data-testid='school-details-address-value']" should have the text content "Dale Acre Way, Telford, TF3 2EP"
+    And the element "*[data-testid='school-details-address-value']" should have the text content "Dale Acre Way, Telford TF3 2EP"
     And the element "*[data-testid='school-details-school-type-key']" should have the text content "School type"
     And the element "*[data-testid='school-details-school-type-value']" should have the text content "Community school"
     And the element "*[data-testid='school-details-education-key']" should have the text content "Education phase"
@@ -243,15 +237,13 @@ Scenario: School page should show if values are null
             "establishmentType": null,
             "gender": null,
             "headteacher": null,
-            "id": "123456",
             "localAuthority": null,
             "name": "Hollinswood Primary School",
             "noOfPupils": null,
             "ofstedLastInspectionDate": null,
             "ofstedRating": null,
             "religiousDenomination": null,
-            "resourcedProvisionType": null,
-            "urn": "123456"
+            "resourcedProvisionType": null
         }
 		"""
     When I navigate to /school/123456
@@ -315,7 +307,6 @@ Scenario: School page should show if values are null case 2
                 "firstName": null,
                 "lastName": null
             },
-            "id": "123456",
             "localAuthority": {
                 "name": null,
             },
@@ -331,8 +322,7 @@ Scenario: School page should show if values are null case 2
             },
             "resourcedProvisionType": {
                 "name": null,
-            },
-            "urn": "123456"
+            }
         }
 		"""
     When I navigate to /school/123456
@@ -371,8 +361,7 @@ Scenario: Details disclosure element text should read 'Show school details' when
     Given establishment "123456" exists:
 	"""
 	{
-        "name": "Hollinswood Primary School",
-        "urn": "123456"
+        "name": "Hollinswood Primary School"
     }
 	"""
     When I navigate to /school/123456
@@ -383,9 +372,7 @@ Scenario: School page should display page not found page if School URN is invali
     Given establishment "112123" exists:
     """
     {
-        "name": "Thursby Primary School",
-        "urn": "112123",
-        "isDeleted": false
+        "name": "Thursby Primary School"
     }
     """
     When I navigate to /school/112
@@ -395,17 +382,16 @@ Scenario: School page should display page not found page if School URN is invali
     And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
     And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
     And the element "*[data-testid='error-display-message']" should exist
-    And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: Could not find the object with id "112" and partition key "112" in container "establishments"."
+    And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: Could not find the object with id "112" and partition key "112" in container "establishments"."
 
     @Javascript:disabled
     Scenario: School page should throw page not found if Establishment is not currently visible
         Given non visible establishment "112124" exists:
 		"""
 		{
-            "name": "Thursby Primary School",
-            "urn": "112124"
+            "name": "Thursby Primary School"
         }
 		"""
         When I navigate to /school/112124
         Then I should get a 404 response
-        Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: The requested establishment with URN "112124" is not currently visible."    
+        Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: The requested establishment with URN "112124" is not currently visible."

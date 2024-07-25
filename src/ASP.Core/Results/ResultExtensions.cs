@@ -30,6 +30,20 @@
             return await result.MapError(mapFunction);
         }
 
+        public static async Task<Result<TValue>> MapErrorMessage<TValue>(this Task<Result<TValue>> resultTask, Func<string, string> mapFunction)
+        {
+            var result = await resultTask;
+
+            return result.MapErrorMessage(mapFunction);
+        }
+
+        public static async Task<Result<TValue>> MapErrorMessage<TValue>(this Task<Result<TValue>> resultTask, Func<string, Task<string>> mapFunction)
+        {
+            var result = await resultTask;
+
+            return await result.MapErrorMessage(mapFunction);
+        }
+
         public static async Task<Result<TNextValue>> Then<TValue, TNextValue>(this Task<Result<TValue>> resultTask, Func<TValue, Result<TNextValue>> onSuccess)
         {
             var result = await resultTask;
@@ -70,6 +84,34 @@
             var result = await resultTask;
 
             await result.Switch(onSuccess, onError);
+        }
+
+        public static async Task<Result<TValue>> OnSuccess<TValue>(this Task<Result<TValue>> resultTask, Action<TValue> onSuccess)
+        {
+            var result = await resultTask;
+
+            return result.OnSuccess(onSuccess);
+        }
+
+        public static async Task<Result<TValue>> OnSuccess<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, Task> onSuccess)
+        {
+            var result = await resultTask;
+
+            return await result.OnSuccess(onSuccess);
+        }
+
+        public static async Task<Result<TValue>> OnError<TValue>(this Task<Result<TValue>> resultTask, Action<Error> onError)
+        {
+            var result = await resultTask;
+
+            return result.OnError(onError);
+        }
+
+        public static async Task<Result<TValue>> OnError<TValue>(this Task<Result<TValue>> resultTask, Func<Error, Task> onError)
+        {
+            var result = await resultTask;
+
+            return await result.OnError(onError);
         }
 
         public static async Task<TValue> GetValueOrDefault<TValue>(this Task<Result<TValue>> resultTask, TValue defaultValue)

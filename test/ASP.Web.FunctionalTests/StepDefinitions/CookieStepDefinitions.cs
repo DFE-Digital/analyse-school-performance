@@ -29,11 +29,11 @@ namespace ASP.AcceptanceTests.StepDefinitions
         }
 
         [Then(@"the cookie ""(.*)"" should be set to ""(.*)""")]
-        public void ThenTheCookieShouldBeSetTo(string key, string value)
+        public void ThenTheCookieShouldBeSetTo(string key, string expectedValue)
         {
-            var cookieValue = _web.CookieProvider.GetCookie(key);
+            var actualValue = _web.CookieProvider.GetCookie(key);
 
-            Assert.Equal(cookieValue, value);
+            Assert.Equal(expectedValue, actualValue);
         }
 
         [When(@"the cookie ""(.*)"" has been set to ""(.*)""")]

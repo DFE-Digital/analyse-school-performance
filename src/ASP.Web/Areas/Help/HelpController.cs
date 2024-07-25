@@ -1,8 +1,8 @@
-﻿using ASP.Application.UseCases.ContentPage.UpdateContentTemplate;
-using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
-using ASP.Core.Results;
+﻿using ASP.Core.Results;
 using Microsoft.AspNetCore.Mvc;
 using ASP.Web.Core.Templating;
+using ASP.Application;
+using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 
 namespace ASP.Web.Areas.Help
 {
@@ -10,12 +10,12 @@ namespace ASP.Web.Areas.Help
     [Route("help")]
     public class HelpController : Controller
     {
-        private readonly IAspApi _api;
+        private readonly IAspApiClient _api;
         private readonly ITemplateComponentEditModelFactory _editModelFactory;
         private readonly IHostEnvironment _hostEnvironment;
 
         public HelpController(
-            IAspApi api, 
+            IAspApiClient api, 
             ITemplateComponentEditModelFactory editModelFactory, 
             IHostEnvironment hostEnvironment
         )

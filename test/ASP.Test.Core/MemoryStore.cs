@@ -55,7 +55,7 @@ namespace ASP.Test.Core
         public Result<TItem> Get<TItem>(string container, string id, string partitionKeyValue) where TItem : class
         {
             return Get(container, id, partitionKeyValue)
-                .Then(JsonHelper.DeserializeIgnoringMissingMembers<TItem>);
+                .Then(item => JsonHelper.DeserializeNotNull<TItem>(item, ignoreMissingMembers: true));
         }
 
         public Result<IEnumerable<string>> GetAll(string container)
@@ -74,7 +74,9 @@ namespace ASP.Test.Core
         {
             var result = GetAll(container);
 
-            return result.Then(r => r.Select(JsonHelper.DeserializeIgnoringMissingMembers<TItem>).Combine());
+            return result.Then(items => items
+                .Select(item => JsonHelper.DeserializeNotNull<TItem>(item, ignoreMissingMembers: true))
+                .Combine());
         }
     }
 }

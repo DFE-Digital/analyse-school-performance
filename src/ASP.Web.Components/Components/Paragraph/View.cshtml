@@ -8,6 +8,11 @@
     var @class = Model.ViewContent.IsLarge switch {
         true => "govuk-body-l",
         "true" => "govuk-body-l",
+        JValue v => (v.Value switch {
+            true => "govuk-body-l",
+            "true" => "govuk-body-l",
+            _ => "govuk-body"
+        }),
         _ => "govuk-body"
     };
 
@@ -19,6 +24,14 @@
         double d => JsonHelper.Serialize(d),
         JArray a => JsonHelper.Serialize(a),
         JObject o => JsonHelper.Serialize(o),
+        JValue v => (v.Value switch {
+            null => "Paragraph text",
+            string s when !string.IsNullOrWhiteSpace(s) => s,
+            string s when string.IsNullOrWhiteSpace(s) => "Paragraph text",
+            bool b => JsonHelper.Serialize(b),
+            double d => JsonHelper.Serialize(d),
+            _ => Model.ViewContent.Text.ToString()
+        }),
         _ => Model.ViewContent.Text.ToString()
     };
 

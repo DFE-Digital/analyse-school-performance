@@ -33,6 +33,7 @@
 		<ProjectReference Include="..\ASP.Application\ASP.Application.csproj" />
 		<ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
 		<ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
+		<ProjectReference Include="..\ASP.Infrastructure.Api\ASP.Infrastructure.Api.csproj" />
 		<ProjectReference Include="..\ASP.Web.Components\ASP.Web.Components.csproj" />
 		<ProjectReference Include="..\ASP.Web.Core\ASP.Web.Core.csproj" />
 	</ItemGroup>

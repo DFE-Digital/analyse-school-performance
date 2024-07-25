@@ -88,14 +88,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         public async Task ThenThereShouldBeNoErrors()
         {
             _web.ExpectedStatusCode = 200;
-
-            if ((int)_web.Status != 200)
-            {
-                var pageContent = await _web.PageContentAsync();
-                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
-            }
-
-            Assert.Equal(HttpStatusCode.OK, _web.Status);
+            await _web.ExpectStatusCode();
         }
 
         [Then(@"the component should exist")]
@@ -367,8 +360,8 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
 
             var actualValue = await field.ValueAsync();
 
-            var normalizedExpected = JsonHelper.Serialize(JsonHelper.Deserialize<object>(expectedValue));
-            var normalizedActual = JsonHelper.Serialize(JsonHelper.Deserialize<object>(actualValue));
+            var normalizedExpected = JsonHelper.Serialize(JsonHelper.DeserializeOrNull<object>(expectedValue));
+            var normalizedActual = JsonHelper.Serialize(JsonHelper.DeserializeOrNull<object>(actualValue));
             Assert.Equal(normalizedExpected, normalizedActual);
         }
 
@@ -416,7 +409,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var element = component.Element($":scope {selector}");
-            await element.ShouldHaveCountAsync(1, actual => $@"Found {actual} elements within the component with the selector ""{selector}"".");
+            await element.ShouldHaveCountAsync(1, (expected, actual) => $@"Found {actual} elements within the component with the selector ""{selector}"", expected {expected}.");
             await element.ShouldExistAsync($@"Could not find an element within the component with the selector ""{selector}"".");
 
             return element;

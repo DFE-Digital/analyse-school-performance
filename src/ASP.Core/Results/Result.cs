@@ -15,9 +15,9 @@
             return Results.Error.NotFound(message);
         }
 
-        public static Result<TValue> Unexpected<TValue>(string message)
+        public static Result<TValue> Unexpected<TValue>(string message, string? stackTrace)
         {
-            return Results.Error.Unexpected(message);
+            return Results.Error.Unexpected(message, stackTrace);
         }
 
         public static Result<TValue> Invalid<TValue>(string message)
@@ -135,6 +135,49 @@
         /// <param name="mapFunction">Asynchronous function to convert the error if the current result is an <c>ErrorResult</c></param>
         /// <returns>The task object representing the asynchronous operation returning a <c>Result&lt;<typeparamref name="TValue"/>&gt;</c></returns>
         public abstract Task<Result<TValue>> MapError(Func<Error, Task<Error>> mapFunction);
+
+        /// <summary>
+        /// If the current result is an <c>ErrorResult</c>, uses the map function provided to change the error message,
+        /// keeping the error type the same. Otherwise returns the current result unchanged. For example:
+        /// <example>
+        /// <code>
+        /// Func&lt;string, string&gt; changeErrorMessage = msg => "ERROR: " + msg;
+        ///
+        /// var a = Result.Success(3)
+        ///     .MapErrorMessage(changeErrorMessage);
+        ///     
+        /// var b = Result.NotFound&lt;int&gt;("Not found")
+        ///     .MapErrorMessage(changeErrorMessage);
+        /// </code>
+        /// results in <c>a</c> having the value <c>3</c> and <c>b</c> having the error <c>NotFoundError</c>: <c>"ERROR: Not found"</c>.
+        /// </example>
+        /// </summary>
+        /// <param name="mapFunction">Function to convert the error message if the current result is an <c>ErrorResult</c></param>
+        /// <returns>A result object of type <c>Result&lt;<typeparamref name="TValue"/>&gt;</c></returns>
+        public abstract Result<TValue> MapErrorMessage(Func<string, string> mapFunction);
+
+        /// If the current result is an <c>ErrorResult</c>, asynchronously uses the map function provided to change the error message,
+        /// keeping the error type the same. Otherwise returns the current result unchanged. For example:
+        /// <example>
+        /// <code>
+        /// async Task&lt;Error&gt; wait1SecThenChangeErrorMessage(string msg) 
+        /// { 
+        ///     await Task.Delay(1000); 
+        ///     return "ERROR: " + msg; 
+        /// }
+        /// 
+        /// var a = await Result.Success(3)
+        ///     .MapError(wait1SecThenChangeErrorMessage);
+        ///     
+        /// var b = await Result.NotFound&lt;int&gt;("Not found")
+        ///     .MapError(wait1SecThenChangeErrorMessage);
+        /// </code>
+        /// results in <c>a</c> having the value <c>3</c> and <c>b</c> having the error <c>NotFoundError</c>: <c>"ERROR: Not found"</c>.
+        /// </example>
+        /// </summary>
+        /// <param name="mapFunction">Asynchronous function to convert the error if the current result is an <c>ErrorResult</c></param>
+        /// <returns>The task object representing the asynchronous operation returning a <c>Result&lt;<typeparamref name="TValue"/>&gt;</c></returns>
+        public abstract Task<Result<TValue>> MapErrorMessage(Func<string, Task<string>> mapFunction);
 
         /// <summary>
         /// Converts the current result from a <c>Result&lt;<typeparamref name="TValue"/>&gt;</c> to a <c>Result&lt;<typeparamref name="TNextValue"/>&gt;</c>, 
@@ -410,6 +453,126 @@
         public abstract Task Switch(Func<TValue, Task> onSuccess, Func<Error, Task> onError);
 
         /// <summary>
+        /// Carries out an action if the current result is a success, by way of the <paramref name="onSuccess"/> function. 
+        /// This is useful if the success state of the result needs to be handled directly by the application (such as at an 
+        /// application boundary.)
+        /// For example:
+        /// <example>
+        /// <code>
+        /// void handleResult(Result&lt;double&gt; result) => result.OnSuccess(
+        ///     value => Console.WriteLine(value)
+        /// );
+        ///    
+        /// handleResult(Result.Success(2.0));
+        ///      
+        /// handleResult(Result.NotFound&lt;double&gt;("Not found"));
+        /// </code>
+        /// results in the following being written to the console: 
+        /// <code>
+        /// 2.0
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="onSuccess">Action to execute if current result is a <c>SuccessResult</c></param>
+        public abstract Result<TValue> OnSuccess(Action<TValue> onSuccess);
+
+        /// <summary>
+        /// Carries out an action if the current result is a success, by way of the <paramref name="onSuccess"/> function. 
+        /// This is useful if the success state of the result needs to be handled directly by the application (such as at an
+        /// application boundary.) 
+        /// For example:
+        /// <example>
+        /// <code>
+        /// async Task waitThenHandleResult(int delayMs, Result&lt;double&gt; result) => await result.OnSuccess(
+        ///     async value => { 
+        ///         await Task.Delay(delayMs); 
+        ///         Console.WriteLine(value); 
+        ///     }
+        /// );
+        ///    
+        /// await waitThenHandleResult(200, Result.Success(2.0));
+        ///      
+        /// await waitThenHandleResult(100, Result.NotFound&lt;double&gt;("Not found"));
+        /// </code>
+        /// results in the following being written to the console: 
+        /// <code>
+        /// 2.0
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="onSuccess">Asynchronous action to execute if current result is a <c>SuccessResult</c></param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public abstract Task<Result<TValue>> OnSuccess(Func<TValue, Task> onSuccess);
+
+        /// <summary>
+        /// Carries out an action if the current result is an error, by way of the <paramref name="onError"/> function. 
+        /// This is useful if the error state of the result needs to be handled directly by the application (such as at an 
+        /// application boundary.)
+        /// For example:
+        /// <example>
+        /// <code>
+        /// void handleResult(Result&lt;double&gt; result) => result.OnError(
+        ///     error => {
+        ///         if(error is NotFoundError) {
+        ///             Console.WriteLine(error.Message);
+        ///         } else {
+        ///             throw new ApplicationException("An error occurred: " + error.Message);
+        ///         }
+        ///     }
+        /// );
+        ///    
+        /// handleResult(Result.Success(2.0));
+        ///      
+        /// handleResult(Result.NotFound&lt;double&gt;("Not found"));
+        ///
+        /// handleResult(Result.Unexpected&lt;double&gt;("Unexpected"));
+        /// </code>
+        /// results in the following being written to the console: 
+        /// <code>
+        /// Not found
+        /// </code>
+        /// and then an <c>ApplicationException</c> being thrown with message <c>"An error occurred: Unexpected"</c>
+        /// </example>
+        /// </summary>
+        /// <param name="onError">Action to execute if current result is an <c>ErrorResult</c></param>
+        public abstract Result<TValue> OnError(Action<Error> onError);
+
+        /// <summary>
+        /// Carries out an action if the current result is an error, by way of the <paramref name="onError"/> function. 
+        /// This is useful if the error state of the result needs to be handled directly by the application (such as at an 
+        /// application boundary.)
+        /// For example:
+        /// <example>
+        /// <code>
+        /// async Task waitThenHandleResult(int delayMs, Result&lt;double&gt; result) => await result.OnError(
+        ///     async error => {
+        ///         await Task.Delay(delayMs); 
+        ///         if(error is NotFoundError) {
+        ///             Console.WriteLine(error.Message);
+        ///         } else {
+        ///             throw new ApplicationException("An error occurred: " + error.Message);
+        ///         }
+        ///     }
+        /// );
+        ///    
+        /// await waitThenHandleResult(200, Result.Success(2.0));
+        ///      
+        /// await waitThenHandleResult(100, Result.NotFound&lt;double&gt;("Not found"));
+        ///
+        /// await waitThenHandleResult(300, handleResult(Result.Unexpected&lt;double&gt;("Unexpected"));
+        /// </code>
+        /// results in the following being written to the console: 
+        /// <code>
+        /// Not found
+        /// </code>
+        /// and then an <c>ApplicationException</c> being thrown with message <c>"An error occurred: Unexpected"</c>
+        /// </example>
+        /// </summary>
+        /// <param name="onError">Asynchronous action to execute if current result is an <c>ErrorResult</c></param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public abstract Task<Result<TValue>> OnError(Func<Error, Task> onError);
+
+        /// <summary>
         /// Gets the value of the current result if it is a <c>SuccessResult</c>, or the <paramref name="defaultValue"/> provided
         /// if it is an <c>ErrorResult</c>
         /// For example:
@@ -564,6 +727,7 @@
         /// <param name="onError">Function to use if the current result is an <c>ErrorResult</c></param>
         /// <returns>A result object of type <c>Result&lt;<typeparamref name="TNextValue"/>&gt;</c></returns>
         public abstract Result<TNextValue> Convert<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess, Func<Error, Result<TNextValue>> onError);
+
 
         public static implicit operator Result<TValue>(TValue value)
         {

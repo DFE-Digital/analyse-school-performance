@@ -26,15 +26,16 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ASP.Api\ASP.Api.csproj" />
     <ProjectReference Include="..\..\src\ASP.Core\ASP.Core.csproj" />
+    <ProjectReference Include="..\..\src\ASP.Infrastructure.Api\ASP.Infrastructure.Api.csproj" />
     <ProjectReference Include="..\ASP.Test.SpecFlow\ASP.Test.SpecFlow.csproj" />
     <ProjectReference Include="..\ASP.Test.Core\ASP.Test.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.Test.json">
+    <None Update="apisettings.Test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="appsettings.Test.local.json">
+    <None Update="apisettings.Test.local.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="xunit.runner.json">

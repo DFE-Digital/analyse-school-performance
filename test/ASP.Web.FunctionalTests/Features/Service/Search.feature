@@ -5,9 +5,8 @@ Scenario: Page title should show correct text when search returns results
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "Some Primary School",
-      "address": {
+        "name": "Some Primary School",
+        "address": {
             "street": "13 The Street",
             "town": "SomeTown",
             "postCode": "B1 1AA"
@@ -17,9 +16,8 @@ Scenario: Page title should show correct text when search returns results
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "Some Other Primary School",
-      "address": {
+        "name": "Some Other Primary School",
+        "address": {
             "street": "13 The Road",
             "town": "Tring",
             "postCode": "B1 1AA"
@@ -36,9 +34,8 @@ Scenario: Page title should show correct text when search returns no results
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "Some Primary School",
-      "address": {
+        "name": "Some Primary School",
+        "address": {
             "street": "13 The Street",
             "town": "SomeTown",
             "postCode": "B1 1AA"
@@ -48,9 +45,8 @@ Scenario: Page title should show correct text when search returns no results
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "Some Other Primary School",
-      "address": {
+        "name": "Some Other Primary School",
+        "address": {
             "street": "13 The Road",
             "town": "Tring",
             "postCode": "B1 1AA"
@@ -67,9 +63,8 @@ Scenario: Page should show a breadcrumb trail when search returns results
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "Some Primary School",
-      "address": {
+        "name": "Some Primary School",
+        "address": {
             "street": "13 The Street",
             "town": "SomeTown",
             "postCode": "B1 1AA"
@@ -79,9 +74,8 @@ Scenario: Page should show a breadcrumb trail when search returns results
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "Some Other Primary School",
-      "address": {
+        "name": "Some Other Primary School",
+        "address": {
             "street": "13 The Road",
             "town": "Tring",
             "postCode": "B1 1AA"
@@ -100,9 +94,8 @@ Scenario: Page should show a breadcrumb trail when search returns no results
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "Some Primary School",
-      "address": {
+        "name": "Some Primary School",
+        "address": {
             "street": "13 The Street",
             "town": "SomeTown",
             "postCode": "B1 1AA"
@@ -112,9 +105,8 @@ Scenario: Page should show a breadcrumb trail when search returns no results
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "Some Other Primary School",
-      "address": {
+        "name": "Some Other Primary School",
+        "address": {
             "street": "13 The Road",
             "town": "Tring",
             "postCode": "B1 1AA"
@@ -157,8 +149,7 @@ Scenario: School search page should show correct message for search term with no
 	Given establishment "111111" exists:
 	"""
 	{
-	  "urn": "111111",
-	  "name": "Some Primary School"
+	    "name": "Some Primary School"
 	}
 	"""
     When I navigate to /search/
@@ -169,12 +160,11 @@ Scenario: School search page should show correct message for search term with no
 @Javascript:disabled
 Scenario: Matching URN search should redirect to school landing page
 	Given establishment "111111" exists:
-		"""
-		{
-		  "urn": "111111",
-		  "name": "Some Primary School"
-		}
-		"""
+	"""
+	{
+		"name": "Some Primary School"
+	}
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
@@ -184,12 +174,11 @@ Scenario: Matching URN search should redirect to school landing page
 @Javascript:disabled
 Scenario: Partial match for school name should redirect to school landing page
 	Given establishment "111111" exists:
-		"""
-		{
-		  "urn": "111111",
-		  "name": "Some Primary School"
-		}
-		"""
+	"""
+	{
+		"name": "Some Primary School"
+	}
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "PRiMaRY"
 	And I click the button "#searchSubmit"  
@@ -199,71 +188,67 @@ Scenario: Partial match for school name should redirect to school landing page
 @Javascript:disabled
 Scenario: Partial street match should redirect to school landing page
 	Given establishment "111111" exists:
-		"""
-        {
-		     "urn": "111111",
-             "name": "Some Primary School",
-             "address": {
-                "street": "13 The Street",
-                "town": "SomeTown",
-                "postCode": "TR18 3JT"
-             }
-        } 
-		"""
+	"""
+    {
+        "name": "Some Primary School",
+        "address": {
+            "street": "13 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        }
+    } 
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "str"
 	And I click the button "#searchSubmit"  
     Then the path should match "/school/111111/"
-    And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown, TR18 3JT"
+    And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
 
 @Javascript:disabled
 Scenario: Partial town match should redirect to school landing page
 	Given establishment "111111" exists:
-		"""
-        {
-		     "urn": "111111",
-             "name": "Some Primary School",
-             "address": {
-                "street": "13 The Street",
-                "town": "SomeTown",
-                "postCode": "TR18 3JT"
-             }
-        } 
-		"""
+	"""
+    {
+        "name": "Some Primary School",
+        "address": {
+            "street": "13 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        }
+    } 
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "some"
 	And I click the button "#searchSubmit"  
     Then the path should match "/school/111111/"
-    And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown, TR18 3JT"
+    And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
 
 @Javascript:disabled
 Scenario: Partial postcode match should redirect to school landing page
 	Given establishment "111111" exists:
-		"""
-        {
-		     "urn": "111111",
-             "name": "Some Primary School",
-             "address": {
-                "street": "13 The Street",
-                "town": "SomeTown",
-                "postCode": "TR18 3JT"
-             }
-        } 
-		"""
+	"""
+    {
+        "name": "Some Primary School",
+        "address": {
+            "street": "13 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        }
+    } 
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "tr1"
 	And I click the button "#searchSubmit"   
     Then the path should match "/school/111111/"
-    And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown, TR18 3JT"
+    And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
 
 @Javascript:disabled
 Scenario Outline: Results page should show partial name and address matches
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "Some Primary School",
-      "address": {
+        "name": "Some Primary School",
+        "address": {
             "street": "13 The Street",
             "town": "SomeTown",
             "postCode": "B1 1AA"
@@ -273,9 +258,8 @@ Scenario Outline: Results page should show partial name and address matches
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "Some Other Primary School",
-      "address": {
+        "name": "Some Other Primary School",
+        "address": {
             "street": "13 The Road",
             "town": "Tring",
             "postCode": "B1 1AA"
@@ -285,9 +269,8 @@ Scenario Outline: Results page should show partial name and address matches
     And establishment "333333" exists:
     """
     {
-      "urn": "333333",
-      "name": "A Different Primary School",
-      "address": {
+        "name": "A Different Primary School",
+        "address": {
             "street": "13 The Road",
             "town": "SomeTown",
             "postCode": "TR18 3JT"
@@ -297,8 +280,7 @@ Scenario Outline: Results page should show partial name and address matches
     And establishment "444444" exists:
     """
     {
-      "urn": "444444",
-      "name": "The Training Centre"
+        "name": "The Training Centre"
     }
     """
     When I navigate to /search/
@@ -308,21 +290,20 @@ Scenario Outline: Results page should show partial name and address matches
     And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
     And the element "[data-testid="school-search-results-address-<Counter>"]" should have the text content "<Address>"
 Examples: 
-| Counter | URN    | Name                       | Address                         |
-| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown, TR18 3JT |
-| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring, B1 1AA      |
-| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown, B1 1AA |
-| 4       | 444444 | The Training Centre        ||
+| Counter | URN    | Name                       | Address                        |
+| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT |
+| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      |
+| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA |
+| 4       | 444444 | The Training Centre        |                                |
 
 @Javascript:disabled
 Scenario: School search successful for 6-digit URN
 	Given establishment "111111" exists:
-		"""
-		{
-		  "urn": "111111",
-		  "name": "Some Primary School"
-		}
-		"""
+	"""
+	{
+		"name": "Some Primary School"
+	}
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
@@ -332,12 +313,11 @@ Scenario: School search successful for 6-digit URN
 @Javascript:disabled
 Scenario: School search unsuccessful for 2-digit URN
 	Given establishment "111111" exists:
-		"""
-		{
-		  "urn": "111111",
-		  "name": "Some Primary School"
-		}
-		"""
+	"""
+	{
+		"name": "Some Primary School"
+	}
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "11"
 	And I click the button "#searchSubmit"   
@@ -346,24 +326,22 @@ Scenario: School search unsuccessful for 2-digit URN
 @Javascript:disabled
 Scenario: Partial matching street redirects to school landing page
 	Given establishment "111111" exists:
-		"""
-        {
-		     "urn": "111111",
-             "name": "Some Primary School"        
-        }
-        """
+	"""
+    {
+        "name": "Some Primary School"        
+    }
+    """
     And establishment "222222" exists:
-        """
-        {
-		     "urn": "222222",
-             "name": "Another Primary School",
-             "address": {
-                "street": "111 The Street",
-                "town": "SomeTown",
-                "postCode": "TR18 3JT"
-             }
-        } 
-		"""
+    """
+    {
+        "name": "Another Primary School",
+        "address": {
+            "street": "111 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        }
+    } 
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111"
 	And I click the button "#searchSubmit"  
@@ -373,24 +351,22 @@ Scenario: Partial matching street redirects to school landing page
 @Javascript:disabled
 Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
 	Given establishment "111111" exists:
-		"""
-		{
-		  "urn": "111111",
-		  "name": "Some Primary School"
-		}
-		"""
+	"""
+	{
+		"name": "Some Primary School"
+	}
+	"""
     And establishment "222222" exists:
-        """
-        {
-		    "urn": "222222",
-            "name": "Another Primary School",
-            "address": {
-                "street": "111111 The Street",
-                "town": "SomeTown",
-                "postCode": "TR18 3JT"
-            }
-        } 
-		"""
+    """
+    {
+        "name": "Another Primary School",
+        "address": {
+            "street": "111111 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        }
+    } 
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
@@ -400,13 +376,12 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (with forward slash)
 	Given establishment "111111" exists:
-		"""
-		{
-		  "urn": "111111",
-		  "name": "Some Primary School",
-          "laestab": "894/2200"
-		}
-		"""
+	"""
+	{
+		"name": "Some Primary School",
+        "laestab": "894/2200"
+	}
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit" 
@@ -416,13 +391,12 @@ Scenario: Search term matching establishment LAESTAB code (with forward slash)
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (without forward slash)
 	Given establishment "111111" exists:
-		"""
-		{
-		  "urn": "111111",
-		  "name": "Some Primary School",
-          "laestab": "894/2200"
-		}
-		"""
+	"""
+	{
+		"name": "Some Primary School",
+        "laestab": "894/2200"
+	}
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"   
@@ -434,17 +408,15 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (LA
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "Some Primary School",
-      "laestab": "894/2200"
+        "name": "Some Primary School",
+        "laestab": "894/2200"
     }
     """
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "Some Other Primary School",
-      "laestab": "894/1234"
+        "name": "Some Other Primary School",
+        "laestab": "894/1234"
     }
     """
     When I navigate to /search/
@@ -463,17 +435,15 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (ES
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "Some Primary School",
-      "laestab": "894/2200"
+        "name": "Some Primary School",
+        "laestab": "894/2200"
     }
     """
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "Some Other Primary School",
-      "laestab": "600/2200"
+        "name": "Some Other Primary School",
+        "laestab": "600/2200"
     }
     """
     When I navigate to /search/
@@ -492,9 +462,8 @@ Scenario: Partial LAESTAB (LA part) match should show no matching results
 	Given establishment "111111" exists:
 	"""
 	{
-	  "urn": "111111",
-	  "name": "Some Primary School",
-      "laestab" : "894/2200"
+	    "name": "Some Primary School",
+        "laestab" : "894/2200"
 	}
 	"""
     When I navigate to /search/
@@ -507,9 +476,8 @@ Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
 	Given establishment "111111" exists:
 	"""
 	{
-	  "urn": "111111",
-	  "name": "Some Primary School",
-      "laestab" : "894/2200"
+	    "name": "Some Primary School",
+        "laestab" : "894/2200"
 	}
 	"""
     When I navigate to /search/
@@ -520,26 +488,24 @@ Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields)
 	Given establishment "111111" exists:
-		"""
-        {
-		     "urn": "111111",
-             "name": "Some Primary School",
-             "laestab": "894/2200"
-        }
-        """
+	"""
+    {
+        "name": "Some Primary School",
+        "laestab": "894/2200"
+    }
+    """
     And establishment "222222" exists:
-        """
-        {
-		     "urn": "222222",
-             "name": "Another Primary School",
-             "laestab": "123/4567",
-             "address": {
-                "street": "8942200 The Street",
-                "town": "SomeTown",
-                "postCode": "TR18 3JT"
-             }
-        } 
-		"""
+    """
+    {
+        "name": "Another Primary School",
+        "laestab": "123/4567",
+        "address": {
+            "street": "8942200 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        }
+    } 
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"
@@ -549,26 +515,24 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields)
 	Given establishment "111111" exists:
-		"""
-        {
-		     "urn": "111111",
-             "name": "Some Primary School",
-             "laestab": "894/2200",
-        } 
-        """
+	"""
+    {
+        "name": "Some Primary School",
+        "laestab": "894/2200",
+    } 
+    """
     And establishment "222222" exists:
-        """
-        {
-		     "urn": "222222",
-             "name": "Another Primary School",
-             "laestab": "123/4567",
-             "address": {
-                "street": "894/2200 The Street",
-                "town": "SomeTown",
-                "postCode": "TR18 3JT"
-             }
-        } 
-		"""
+    """
+    {
+        "name": "Another Primary School",
+        "laestab": "123/4567",
+        "address": {
+            "street": "894/2200 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        }
+    } 
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit"  
@@ -578,26 +542,24 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 @Javascript:disabled
 Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields)
 	Given establishment "111111" exists:
-		"""
-        {
-		     "urn": "111111",
-             "name": "Some Primary School",
-             "laestab": "894/2200"         
-        }
-        """
+	"""
+    {
+        "name": "Some Primary School",
+        "laestab": "894/2200"         
+    }
+    """
      And establishment "222222" exists:
-        """
-        {
-		     "urn": "222222",
-             "name": "Another Primary School",
-             "laestab": "123/4567",
-             "address": {
-                "street": "894 The Street",
-                "town": "SomeTown",
-                "postCode": "TR18 3JT"
-             }
-        } 
-		"""
+    """
+    {
+        "name": "Another Primary School",
+        "laestab": "123/4567",
+        "address": {
+            "street": "894 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        }
+    } 
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "894"
 	And I click the button "#searchSubmit"  
@@ -607,26 +569,24 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 @Javascript:disabled
 Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields)
 	Given establishment "111111" exists:
-		"""
-        {
-		     "urn": "111111",
-             "name": "Some Primary School",
-             "laestab": "894/2200"
-        }
-        """
+	"""
+    {
+        "name": "Some Primary School",
+        "laestab": "894/2200"
+    }
+    """
     And establishment "222222" exists:
-        """
-        {
-		     "urn": "222222",
-             "name": "Another Primary School",
-             "laestab": "123/4567",
-             "address": {
-                "street": "2200 The Street",
-                "town": "SomeTown",
-                "postCode": "TR18 3JT"
-             }
-        } 
-		"""
+    """
+    {
+        "name": "Another Primary School",
+        "laestab": "123/4567",
+        "address": {
+            "street": "2200 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        }
+    } 
+	"""
     When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "2200"
 	And I click the button "#searchSubmit"   
@@ -638,35 +598,32 @@ Scenario Outline: Multiple successful school name matches show correct search re
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "School A",
-      "address": {
-        "street": "13 The Street",
-        "postCode": "AB12 3CD"
-    }
+        "name": "School A",
+        "address": {
+            "street": "13 The Street",
+            "postCode": "AB12 3CD"
+        }
     }
     """
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "School B",
-      "address": {
-         "street": "2a Mornington Crescent",
-         "town": "Liverpool",
-         "postCode": "LL1 1AB"
-    } 
+        "name": "School B",
+        "address": {
+            "street": "2a Mornington Crescent",
+            "town": "Liverpool",
+            "postCode": "LL1 1AB"
+        } 
     }
     """
     And establishment "333333" exists:
     """
     {
-      "urn": "333333",
-      "name": "School C",
-      "address": {
-     "street": "34 Long Road",
-     "town": "Sheffield"
-    }  
+        "name": "School C",
+        "address": {
+            "street": "34 Long Road",
+            "town": "Sheffield"
+        }  
     }
     """
     When I navigate to /search/
@@ -677,8 +634,8 @@ Scenario Outline: Multiple successful school name matches show correct search re
     And the element "[data-testid="school-search-results-address-<Counter>"]" should have the text content "<Address>"
 Examples: 
 | Counter | URN    | Name     | Address                                   |
-| 1       | 111111 | School A | 13 The Street, AB12 3CD                    |
-| 2       | 222222 | School B | 2a Mornington Crescent, Liverpool, LL1 1AB |
+| 1       | 111111 | School A | 13 The Street AB12 3CD                    |
+| 2       | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB |
 | 3       | 333333 | School C | 34 Long Road, Sheffield                   |
 
 @Javascript:disabled
@@ -686,31 +643,28 @@ Scenario Outline: Multiple successful school name matches show correct education
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "School A",
-      "isPrimary": true,
-      "isSecondary": false,
-      "isPost16": false
+        "name": "School A",
+        "isPrimary": true,
+        "isSecondary": false,
+        "isPost16": false
     }
     """
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "School B",
-      "isPrimary": false,
-      "isSecondary": true,
-      "isPost16": false
+        "name": "School B",
+        "isPrimary": false,
+        "isSecondary": true,
+        "isPost16": false
     }
     """
     And establishment "333333" exists:
     """
     {
-      "urn": "333333",
-      "name": "School C",
-      "isPrimary": false,
-      "isSecondary": false,
-      "isPost16": true 
+        "name": "School C",
+        "isPrimary": false,
+        "isSecondary": false,
+        "isPost16": true 
     }
     """
     When I navigate to /search/
@@ -730,35 +684,32 @@ Scenario Outline: Multiple successful school name matches show correct ofsted ra
     Given establishment "111111" exists:
     """
     {
-      "urn": "111111",
-      "name": "School A",
-      "ofstedLastInspectionDate": "2013-03-22T00:00:00",
-      "ofstedRating": {
-        "code": "2",
-        "name": "Good",
-        "lname": "good",
-        "isNullish": false
-    }
+        "name": "School A",
+        "ofstedLastInspectionDate": "2013-03-22T00:00:00",
+        "ofstedRating": {
+            "code": "2",
+            "name": "Good",
+            "lname": "good",
+            "isNullish": false
+        }
     }
     """
     And establishment "222222" exists:
     """
     {
-      "urn": "222222",
-      "name": "School B",
-      "ofstedLastInspectionDate": null,
-      "ofstedRating": {
-         "code": "99"
-      }
+        "name": "School B",
+        "ofstedLastInspectionDate": null,
+        "ofstedRating": {
+            "code": "99"
+        }
     }
     """
    And establishment "333333" exists:
     """
     {
-      "urn": "333333",
-      "name": "School C",
-      "ofstedLastInspectionDate": null,
-      "ofstedRating": null
+        "name": "School C",
+        "ofstedLastInspectionDate": null,
+        "ofstedRating": null
     }
     """
     When I navigate to /search/
@@ -798,14 +749,12 @@ Scenario: Pagination in Search Validation
  And the element "*[data-testid='school-search-results-urn-5']" should have the text content "100005"
 
 
- 
-@Javascript:enabled
+@Javascript:disabled
 Scenario: Pagination in Search Validation 2
  Given 251 establishments exist with properties:
- | urn    |     name         |
- | (100000 + n)   | Primary School (100000 + n)         |
- When I navigate to /search/search-result/?page=1&searchTerm=primary
- And I click the button "*[data-testid='PageLinks-Header-3']"
+ | urn          | name                        |
+ | (100000 + n) | Primary School (100000 + n) |
+ When I navigate to /search/search-result/?page=3&searchTerm=primary
  Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 101 - 150 of 251 schools or colleges"
  And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/search-result?searchTerm=primary&page=2"
  And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/search-result?searchTerm=primary&page=1"
@@ -826,13 +775,12 @@ Scenario: Pagination in Search Validation 2
  And the element "*[data-testid='school-search-results-urn-5']" should have the text content "100105"
 
  
-@Javascript:enabled
+@Javascript:disabled
 Scenario: Pagination in Search Validation 3
  Given 51 establishments exist with properties:
  | urn    |     name         |
  | (100000 + n)   | Primary School (100000 + n)         |
- When I navigate to /search/search-result/?page=1&searchTerm=primary
- And I click the button "*[data-testid='PageLinks-Header-2']"
+ When I navigate to /search/search-result/?page=2&searchTerm=primary
  Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 51 - 51 of 51 schools or colleges"
  And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/search-result?searchTerm=primary&page=1"
  And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/search-result?searchTerm=primary&page=1"

@@ -1,5 +1,7 @@
-﻿using ASP.Core;
+﻿using ASP.Application;
+using ASP.Core;
 using ASP.Infrastructure.TableStorage;
+using ASP.Infrastructure.Api;
 using ASP.Test.Core;
 using ASP.Test.Web.Areas.AuthorisationTest;
 using ASP.Test.Web.Areas.ComponentTest;
@@ -19,10 +21,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using TechTalk.SpecFlow.Infrastructure;
-using ASP.Test.Web.Areas.ComponentTest;
-using ASP.Web.Features.Cookies;
-using ASP.Test.Web.Areas.ErrorTest;
-using ASP.Application.Extensions;
 
 namespace ASP.AcceptanceTests.Drivers
 {
@@ -225,10 +223,6 @@ namespace ASP.AcceptanceTests.Drivers
                         // in-memory store
                         services.RemoveAll<IDocumentDatabase>();
                         services.AddSingleton<IDocumentDatabase, InMemoryDocumentDatabase>();
-
-                        services.AddUseCases();
-                        services.RemoveAll<IAspApi>();
-                        services.AddScoped<IAspApi, UseCaseReferenceApi>();
                     }
                 });
 

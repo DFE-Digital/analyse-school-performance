@@ -3,12 +3,18 @@ using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using ASP.Core.Logging;
 using ASP.Core.Results;
+using Microsoft.Extensions.Options;
 
 namespace ASP.Web.Features.ErrorHandling
 {
-    public class ExceptionLoggingMiddleware(ITableStorageProvider tableStorageProvider,
-        ILogger<ExceptionLoggingMiddleware> logger) : IExceptionHandler
+    public class ExceptionLoggingMiddleware(
+        ITableStorageProvider tableStorageProvider,
+        ILogger<ExceptionLoggingMiddleware> logger,
+        IOptions<ErrorHandlingOptions> options
+    ) : IExceptionHandler
     {
+        private readonly ErrorHandlingOptions _options = (options ?? throw new ArgumentNullException(nameof(options)))
+            .Value;
 
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
             CancellationToken cancellationToken)
@@ -22,6 +28,11 @@ namespace ASP.Web.Features.ErrorHandling
                 Title = exception.Message,
                 Detail = exception.StackTrace,
             };
+
+            if (_options.ShowStackTrace)
+            {
+                httpContext.Items["Exception"] = exception;
+            }
 
             await tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails))
                 .Switch(

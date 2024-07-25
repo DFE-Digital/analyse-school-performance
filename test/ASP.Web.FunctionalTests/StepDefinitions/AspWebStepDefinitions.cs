@@ -90,19 +90,13 @@ namespace ASP.AcceptanceTests.StepDefinitions
         public async Task ThenIShouldGetAResponse(int statusCode)
         {
             _web.ExpectedStatusCode = statusCode;
-
-            if ((int)_web.Status != 200)
-            {
-                var pageContent = await _web.PageContentAsync();
-                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
-            }
-
-            Assert.Equal((HttpStatusCode)statusCode, _web.Status);
+            await _web.ExpectStatusCode();
         }
 
         [Then(@"the path should match ""((?:/.*)+)""")]
-        public void ThePathShouldMatch(string path)
+        public async Task ThePathShouldMatch(string path)
         {
+            await _web.ExpectStatusCode();
             Assert.Equal(_web.BaseAddress + path, _web.Path);
         }
 

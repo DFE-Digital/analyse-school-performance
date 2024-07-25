@@ -15,5 +15,16 @@ namespace ASP.Api
             Method = method;
             AllowedMethods = allowedMethods;
         }
+
+        public override Error MapMessage(Func<string, string> mapFunction)
+        {
+            return new MethodNotAllowedError(mapFunction(Message), AllowedMethods);
+        }
+
+        public override async Task<Error> MapMessage(Func<string, Task<string>> mapFunction)
+        {
+            var message = await mapFunction(Message);
+            return new MethodNotAllowedError(message, AllowedMethods);
+        }
     }
 }

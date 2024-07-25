@@ -2,6 +2,16 @@
 
 @{
     ViewData["Title"] = "Home";
+    var heroDescription = Model.PageContent?.HeroDescription switch
+    {
+        null => "Service description goes here...",
+        Newtonsoft.Json.Linq.JValue v => v.Value switch
+        {
+            null => "Service description goes here...",
+            _ => Model.PageContent?.HeroDescription
+        },
+        _ => Model.PageContent?.HeroDescription
+    };
 }
 
 <section class="app-hero" id="app-hero">
@@ -12,7 +22,7 @@
                     Analyse school performance
                 </h1>
                 <p class="govuk-body-l">
-                    @(Model.PageContent?.HeroDescription is not null ? Model.PageContent.HeroDescription : "Service description goes here...")
+                    @heroDescription
                 </p>
             </div>
         </div>

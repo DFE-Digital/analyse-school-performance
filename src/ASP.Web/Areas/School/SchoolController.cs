@@ -1,4 +1,5 @@
-using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
+using ASP.Application;
+using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Core.Results;
 using ASP.Web.Areas.School.ViewModels;
@@ -17,11 +18,11 @@ namespace ASP.Web.Areas.School
         const string USEFUL_LINKS_CONTENT_TEMPLATE_ID = "school-useful-links";
         const string OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID = "school-other-reports-ofsted";
 
-        private readonly IAspApi _api;
+        private readonly IAspApiClient _api;
         private readonly IHostEnvironment _hostEnvironment;
 
         public SchoolController(
-            IAspApi api,
+            IAspApiClient api,
             IHostEnvironment hostEnvironment
         )
         {
@@ -83,7 +84,7 @@ namespace ASP.Web.Areas.School
 
                 .AddBreadcrumb("My school", $"/school/{urn}");
 
-            return await _api.GetEstablishmentDetails(new GetEstablishmentDetailsUseCaseRequest(urn))
+            return await _api.GetEstablishmentDetails(new GetEstablishmentDetailsRequest(urn))
                  .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
                  .Map(establishmentDetailsModel => new SchoolViewModel()
                  {
@@ -103,7 +104,7 @@ namespace ASP.Web.Areas.School
             var breadcrumbTrail = new BreadcrumbViewModel(page)
                 .AddBreadcrumb("My school", $"/school/{urn}");
 
-            return await _api.GetEstablishmentDetails(new GetEstablishmentDetailsUseCaseRequest(urn))
+            return await _api.GetEstablishmentDetails(new GetEstablishmentDetailsRequest(urn))
                .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
                .Then(async establishmentDetailsModel => await _api.ViewContentTemplate(new ViewContentTemplateRequest(contentTemplateId, revision))
                    .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template))

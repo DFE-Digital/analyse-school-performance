@@ -50,7 +50,7 @@ namespace ASP.Infrastructure.TableStorage
             }
             catch (Exception exception)
             {
-                return Error.Unexpected(exception.Message);
+                return Error.Unexpected(exception.Message, exception.StackTrace);
             }
         }
 

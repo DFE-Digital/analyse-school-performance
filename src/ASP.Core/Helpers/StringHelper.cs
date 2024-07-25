@@ -12,5 +12,21 @@
         {
             return string.Join(separator, values.Where(x => x is not null && !string.IsNullOrEmpty(x.ToString())));
         }
+
+        /// <summary>
+        /// Removes the given text from the start of a string, if present
+        /// </summary>
+        /// <param name="textToRemove">Text to remove from the target string</param>
+        /// <param name="value">Target string to remove text from</param>
+        /// <returns>The original string with the given text removed from the start</returns>
+        public static string RemoveFromStart(string textToRemove, string value)
+        {
+            if (!value.StartsWith(textToRemove))
+            {
+                return value;
+            }
+
+            return value.Substring(textToRemove.Length);
+        }
     }
 }

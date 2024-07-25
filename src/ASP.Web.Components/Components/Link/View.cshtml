@@ -1,10 +1,23 @@
-﻿@model TemplateComponentViewModel
+﻿@using Newtonsoft.Json.Linq
+@model TemplateComponentViewModel
 @inject AttributeHelper AttributeHelper
 
 @if (Model.ViewContent.Size is not null)
 {
+    var url = Model.ViewContent.Url switch {
+        null => null,
+        JValue v => v.Value switch
+        {
+            null => null,
+            string s => s,
+            _ => v.ToString()
+        },
+        string s => s,
+        _ => Model.ViewContent.Url.ToString()
+    };
+
     <p id="@Model.ViewContent.Id" class=@($"govuk-body-{Model.ViewContent.Size}")>
-        <a href="@Model.ViewContent.Url" class="govuk-link" target="@AttributeHelper.SetTargetAttribute(Model.ViewContent.Url)">
+        <a href="@Model.ViewContent.Url" class="govuk-link" target="@AttributeHelper.SetTargetAttribute(url)">
             @Model.ViewContent.Text
         </a>
     </p>

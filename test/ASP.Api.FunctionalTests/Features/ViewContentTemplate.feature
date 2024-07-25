@@ -2,42 +2,42 @@
 
 Scenario: Should not accept POST method 
 	Given no content template exists
-	When I send a POST request to /ViewContentTemplate?id=test-content
+	When I send a POST request to /api/ViewContentTemplate?id=test-content
 	Then I should get a 405 response
 	And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
 	And the response should include the header "Allow: GET"
 
 Scenario: Should return BadRequest (400) response if id parameter is missing 
 	Given no content template exists
-	When I send a GET request to /ViewContentTemplate
+	When I send a GET request to /api/ViewContentTemplate
 	Then I should get a 400 response
 	And the response should be the message "Invalid: The parameter "id" is missing."
 
 Scenario: Should return BadRequest (400) response if id parameter is duplicated
 	Given no content template exists
-	When I send a GET request to /ViewContentTemplate?id=x&id=y
+	When I send a GET request to /api/ViewContentTemplate?id=x&id=y
 	Then I should get a 400 response
 	And the response should be the message "Invalid: The parameter "id" is duplicated."
 
 Scenario: Should return BadRequest (400) response if id parameter is empty string 
 	Given no content template exists
-	When I send a GET request to /ViewContentTemplate?id=
+	When I send a GET request to /api/ViewContentTemplate?id=
 	Then I should get a 400 response
 	And the response should be the message "Invalid: The parameter "id" should not be empty."
 
 Scenario: Should return BadRequest (400) response if revision parameter is empty string 
-	When I send a GET request to /ViewContentTemplate?id=xyz&revision=
+	When I send a GET request to /api/ViewContentTemplate?id=xyz&revision=
 	Then I should get a 400 response
 	And the response should be the message "Invalid: The parameter "revision" should not be empty."
 
 Scenario: Should return BadRequest (400) response if revision parameter is duplicated
-	When I send a GET request to /ViewContentTemplate?id=xyz&revision=1&revision=2
+	When I send a GET request to /api/ViewContentTemplate?id=xyz&revision=1&revision=2
 	Then I should get a 400 response
 	And the response should be the message "Invalid: The parameter "revision" is duplicated."
 
 Scenario: Should return NotFound (404) response if content template doesn't exist 
 	Given no content template exists
-	When I send a GET request to /ViewContentTemplate?id=test-content
+	When I send a GET request to /api/ViewContentTemplate?id=test-content
 	Then I should get a 404 response
 	And the response should be the message "Not found: Could not find content template "test-content"."
 
@@ -48,7 +48,7 @@ Scenario: Should return NotFound (404) response if content template exists but i
 	  "PageTitle": "Test title"
 	}
 	"""
-	When I send a GET request to /ViewContentTemplate?id=test-content
+	When I send a GET request to /api/ViewContentTemplate?id=test-content
 	Then I should get a 404 response
 	And the response should be the message "Not found: Could not find a published revision for content template "test-content"."
 
@@ -59,7 +59,7 @@ Scenario: Should return NotFound (404) response if revision does not exist
 	  "PageTitle": "Test title"
 	}
 	"""
-	When I send a GET request to /ViewContentTemplate?id=test-content&revision=revision1
+	When I send a GET request to /api/ViewContentTemplate?id=test-content&revision=revision1
 	Then I should get a 404 response
 	And the response should be the message "Not found: Could not find revision "revision1" for content template "test-content"."
 
@@ -70,7 +70,7 @@ Scenario: Should return NotFound (404) when content template does not exist, eve
 		"PageTitle": "Test title"
 	}
 	"""
-	When I send a GET request to /ViewContentTemplate?id=test-content&revision=revision1
+	When I send a GET request to /api/ViewContentTemplate?id=test-content&revision=revision1
 	Then I should get a 404 response
 	And the response should be the message "Not found: Could not find content template "test-content"."
 
@@ -81,7 +81,7 @@ Scenario: Should return template object if content template exists and is publis
 			"PageTitle": "Test title"
 		}
 		"""
-	When I send a GET request to /ViewContentTemplate?id=test-content
+	When I send a GET request to /api/ViewContentTemplate?id=test-content
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 		"""
@@ -97,7 +97,7 @@ Scenario: Should return template object if unpublished content template exists a
 	  "PageTitle": "Test title"
 	}
 	"""
-	When I send a GET request to /ViewContentTemplate?id=test-content&revision=test-content
+	When I send a GET request to /api/ViewContentTemplate?id=test-content&revision=test-content
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -119,7 +119,7 @@ Scenario: Should return template object if revision exists
 	  "PageTitle": "Test title (revised)"
 	}
 	"""
-	When I send a GET request to /ViewContentTemplate?id=test-content&revision=revision1
+	When I send a GET request to /api/ViewContentTemplate?id=test-content&revision=revision1
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -141,7 +141,7 @@ Scenario: Should return template object for published revision
 	  "PageTitle": "Test title (revised)"
 	}
 	"""
-	When I send a GET request to /ViewContentTemplate?id=test-content
+	When I send a GET request to /api/ViewContentTemplate?id=test-content
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""

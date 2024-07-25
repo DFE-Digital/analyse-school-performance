@@ -102,6 +102,12 @@ Examples:
 
 @Javascript:disabled
 Scenario: Should redirect to the correct referrer
+    Given establishment "136028" exists:
+        """
+        {
+            "name": "Some Primary School"
+        }
+        """
 	Given content template "help-accept-terms-of-use" exists:
 		"""
 		{

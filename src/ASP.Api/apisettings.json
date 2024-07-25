@@ -1,0 +1,29 @@
+{
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft.AspNetCore": "Warning"
+        }
+    },
+    "AllowedHosts": "*",
+    "RepositoryOptions": {
+        "EndpointUri": null,
+        "PrimaryKey": null,
+        "DatabaseId": null,
+        "Containers": [
+            {
+                "content": {
+                    "ContainerName": "content",
+                    "PartitionKey": "/contentId"
+                },
+                "establishments": {
+                    "ContainerName": "establishments",
+                    "PartitionKey": "/urn"
+                }
+            }
+        ]
+    },
+    "ErrorHandlingOptions": {
+        "ShowStackTrace": true
+    }
+}

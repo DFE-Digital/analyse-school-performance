@@ -7,7 +7,7 @@
         IElementDriver ElementByLabel(string labelText);
         IElementsDriver Elements(string selector);
 
-        Task ShouldHaveCountAsync(int count, Func<int, string> errorIfIncorrectCount);
+        Task ShouldHaveCountAsync(int count, Func<int, int, string> errorIfIncorrectCount);
         Task ShouldNotExistAsync(string errorIfExists);
         Task<IElementDriver> ShouldExistAsync(string errorIfNotExists);
         Task<string> TextContentAsync();

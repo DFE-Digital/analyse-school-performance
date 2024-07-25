@@ -1,5 +1,6 @@
-﻿using ASP.Application.UseCases.ContentPage.UpdateContentTemplate;
-using ASP.Application.UseCases.ContentPage.ViewContentTemplate;
+﻿using ASP.Application;
+using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
+using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Core.Results;
 using ASP.Web;
 using ASP.Web.Core.Templating;
@@ -21,12 +22,12 @@ namespace ASP.Test.Web.Areas.ComponentTest
     {
         public const string TEST_COMPONENT_TEMPLATE_ID = "test-component";
 
-        private readonly IAspApi _api;
+        private readonly IAspApiClient _api;
         private readonly ITemplateComponentEditModelFactory _editModelFactory;
         private readonly IHostEnvironment _hostEnvironment;
 
         public ComponentTestController(
-            IAspApi api,
+            IAspApiClient api,
             ITemplateComponentEditModelFactory editModelFactory, 
             IHostEnvironment hostEnvironment
         )

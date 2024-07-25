@@ -8,5 +8,7 @@ namespace ASP.Web.Features.ErrorHandling
         public bool ShowErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
         public string? ErrorCode { get; set; }
         public bool ShowErrorCode => !string.IsNullOrEmpty(ErrorCode);
+        public string? StackTrace { get; set; }
+        public bool ShowStackTrace => !string.IsNullOrEmpty(StackTrace);
     }
 }

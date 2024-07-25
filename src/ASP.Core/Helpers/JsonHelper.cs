@@ -5,22 +5,30 @@ namespace ASP.Core.Helpers
 {
     public static class JsonHelper
     {
-        public static string Serialize(object obj)
+        public static string Serialize(object? obj)
         {
-            return JsonConvert.SerializeObject(obj);
+            return obj switch {
+                null => "null",
+                _ => JsonConvert.SerializeObject(obj)
+            };
         }
 
-        public static string SerializeIndented(object obj)
+        public static string SerializeIndented(object? obj)
         {
-            return JsonConvert.SerializeObject(obj, Formatting.Indented);
+            return obj switch {
+                null => "null",
+                _ => JsonConvert.SerializeObject(obj, Formatting.Indented)
+            };
         }
 
-        public static Result<T> Deserialize<T>(string json)
+        public static Result<T?> DeserializeOrNull<T>(string json, bool ignoreNullValues = false, bool ignoreMissingMembers = false) where T : notnull
         {
             T? item;
 
             string? error = null;
             item = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
+                NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
+                MissingMemberHandling = ignoreMissingMembers ? MissingMemberHandling.Ignore : MissingMemberHandling.Error,
                 Error = (object? sender, Newtonsoft.Json.Serialization.ErrorEventArgs args) =>
                 {
                     error = args.ErrorContext.Error.Message;
@@ -30,24 +38,20 @@ namespace ASP.Core.Helpers
 
             if(error != null) 
             { 
-                return Error.Unexpected($"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}");
+                return Error.Unexpected($"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}", null);
             }
 
-            if (item == null)
-            {
-                return Error.Unexpected($"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
-            }
-
-            return item!;
+            return item;
         }
 
-        public static Result<T> DeserializeIgnoringMissingMembers<T>(string json)
+        public static Result<T> DeserializeNotNull<T>(string json, bool ignoreNullValues = false, bool ignoreMissingMembers = false) where T : notnull
         {
             T? item;
 
             string? error = null;
             item = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
-                MissingMemberHandling = MissingMemberHandling.Ignore,
+                NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
+                MissingMemberHandling = ignoreMissingMembers ? MissingMemberHandling.Ignore : MissingMemberHandling.Error,
                 Error = (object? sender, Newtonsoft.Json.Serialization.ErrorEventArgs args) =>
                 {
                     error = args.ErrorContext.Error.Message;
@@ -57,16 +61,20 @@ namespace ASP.Core.Helpers
 
             if (error != null)
             {
-                return Error.Unexpected($"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}");
+                return Error.Unexpected($"Error occurred deserializing object of type {typeof(T)}: {error}. Object: {Environment.NewLine}{json}", null);
             }
-            
+
             if (item == null)
             {
-                return Error.Unexpected($"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}");
+                return Error.Unexpected($"Item deserialized to null when deserializing type {typeof(T)}, serialized value: {Environment.NewLine}{json}", null);
             }
 
-            return item!;
+            return item;
         }
 
+        public static string Normalize(string json)
+        {
+            return JsonConvert.SerializeObject(JsonConvert.DeserializeObject<object>(json));
+        }
     }
 }

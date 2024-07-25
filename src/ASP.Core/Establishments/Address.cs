@@ -10,7 +10,7 @@ namespace ASP.Core.Establishments
         
         public override string ToString()
         {
-            return StringHelper.ConcatNonEmpties(", ", Street, Town, PostCode);
+            return StringHelper.ConcatNonEmpties(" ", StringHelper.ConcatNonEmpties(", ", Street, Town), PostCode);
         }
     }
 }

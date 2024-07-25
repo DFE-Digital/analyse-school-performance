@@ -2,14 +2,11 @@ Feature: Mtc
 @Javascript:disabled
 Scenario: Mtc page should be accessible when valid urn is provided
     Given establishment "136028" exists:
-		"""
-		{
-            
-            "id": "136028",
-            "name": "Dagenham Park CofE School",
-            "urn": "136028"
-        }
-		"""
+	"""
+	{
+        "name": "Dagenham Park CofE School",
+    }
+	"""
     When I navigate to /school/136028/mtc
     Then I should get a 200 response
     And the element "h1.govuk-heading-xl" should have the text content "Multiplication table check"

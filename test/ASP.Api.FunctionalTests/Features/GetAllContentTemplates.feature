@@ -14,7 +14,7 @@ Scenario: Should only return published content templates
 			"PageTitle": "test two"
 		}
 		""" 
-	When I send a GET request to /GetAllContentTemplates
+	When I send a GET request to /api/GetAllContentTemplates
 	Then I should get a 200 response
 	And the response should be an array of objects containing these properties:
 		"""
@@ -38,7 +38,7 @@ Scenario: Should return multiple template objects if content templates exists
 			"PageTitle": "test two"
 		}
 		""" 
-	When I send a GET request to /GetAllContentTemplates
+	When I send a GET request to /api/GetAllContentTemplates
 	Then I should get a 200 response
 	And the response should be an array of objects containing these properties:
 		"""
@@ -54,7 +54,7 @@ Scenario: Should return multiple template objects if content templates exists
 
 Scenario: Should only accept GET method 
 	Given no content template exists
-	When I send a <method> request to /GetAllContentTemplates
+	When I send a <method> request to /api/GetAllContentTemplates
 	Then I should get a 405 response
 
 Examples: 
@@ -64,7 +64,7 @@ Examples:
 
 Scenario: Should return NotFound (404) response if no published content templates exist 
 	Given no content template exists
-	When I send a GET request to /GetAllContentTemplates
+	When I send a GET request to /api/GetAllContentTemplates
 	Then I should get a 404 response
 	And the response should be the message "Not found: Could not find any published revision content templates"
 
@@ -75,6 +75,6 @@ Scenario: Should return NotFound (404) response if only unpublished content temp
 			"PageTitle": "test two"
 		}
 		""" 
-	When I send a GET request to /GetAllContentTemplates
+	When I send a GET request to /api/GetAllContentTemplates
 	Then I should get a 404 response
 	And the response should be the message "Not found: Could not find any published revision content templates"

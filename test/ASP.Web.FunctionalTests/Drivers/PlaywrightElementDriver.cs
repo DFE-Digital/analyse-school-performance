@@ -39,7 +39,7 @@ namespace ASP.Web.AcceptanceTests.Drivers
             return new PlaywrightElementsDriver(elements, _page);
         }
 
-        public async Task ShouldHaveCountAsync(int count, Func<int, string> errorIfIncorrectCount)
+        public async Task ShouldHaveCountAsync(int count, Func<int, int, string> errorIfIncorrectCount)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace ASP.Web.AcceptanceTests.Drivers
             {
                 var actual = await _element.CountAsync();
 
-                AssertWithMessage.Fail(errorIfIncorrectCount(actual));
+                AssertWithMessage.Fail(errorIfIncorrectCount(count, actual));
             }
         }
 

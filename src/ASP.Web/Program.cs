@@ -1,4 +1,5 @@
-using ASP.Application.Extensions;
+using ASP.Api;
+using ASP.Infrastructure.Api;
 using ASP.Web.Areas;
 using ASP.Web.Areas.School;
 using ASP.Web.Authentication;
@@ -44,18 +45,14 @@ namespace ASP.Web
                 .ConfigureSchoolPages()
                 .ConfigureSearch();
 
-            builder.Services.AddUseCases();
-            builder.Services.AddScoped<IAspApi, UseCaseReferenceApi>();
+            builder.Services.ConfigureInProcessApi();
 
-            // TODO: Replace API with HTTP implementation when fully working!
-            //builder.Services.AddScoped<IAspApi, HttpApi>();
-
-            //builder.Services.AddOptions<ApiOptions>()
-            //   .Configure<IConfiguration>(
-            //       (settings, configuration) =>
-            //           configuration
-            //               .GetSection(nameof(ApiOptions))
-            //               .Bind(settings));
+            builder.Services.AddOptions<Features.ErrorHandling.ErrorHandlingOptions>()
+               .Configure<IConfiguration>(
+                   (settings, configuration) =>
+                       configuration
+                           .GetSection(nameof(Features.ErrorHandling.ErrorHandlingOptions))
+                           .Bind(settings));
 
             WebApplication app = builder.Build();
 

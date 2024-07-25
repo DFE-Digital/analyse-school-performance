@@ -9,10 +9,8 @@ using ASP.Core.Templating;
 using ASP.Core.Establishments;
 using Azure.Identity;
 using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariables;
-using ASP.Application.Extensions;
 using ASP.Application;
 using ASP.Infrastructure;
-
 
 namespace ASP.Api
 {
@@ -21,7 +19,7 @@ namespace ASP.Api
         public void Configure(IHostBuilder builder)
         {
             builder
-                .ConfigureFunctionsWebApplication(builder => 
+                .ConfigureFunctionsWebApplication(builder =>
                     builder.UseMiddleware<ExceptionHandlingMiddleware>()
                 )
                 .ConfigureServices(services =>
@@ -35,14 +33,21 @@ namespace ASP.Api
                     services.AddUseCases();
                     services.ConfigureSearchStrategyFactory();
                     services.ConfigureSearchServices();
+
+                    services.AddOptions<ErrorHandlingOptions>()
+                       .Configure<IConfiguration>(
+                           (settings, configuration) =>
+                               configuration
+                                   .GetSection(nameof(ErrorHandlingOptions))
+                                   .Bind(settings));
                 })
                 .ConfigureAppConfiguration((context, builder) =>
                 {
                     builder.AddJsonFile(Path.Combine(
-                            context.HostingEnvironment.ContentRootPath, "appsettings.json"),
+                            context.HostingEnvironment.ContentRootPath, "apisettings.json"),
                             optional: false)
                         .AddJsonFile(Path.Combine(
-                            context.HostingEnvironment.ContentRootPath, "appsettings.local.json"),
+                            context.HostingEnvironment.ContentRootPath, "apisettings.local.json"),
                             optional: true)
                         .AddEnvironmentVariables();
                     

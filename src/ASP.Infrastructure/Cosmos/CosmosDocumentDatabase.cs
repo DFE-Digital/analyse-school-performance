@@ -42,13 +42,13 @@ namespace ASP.Infrastructure.Cosmos
 
                     default:
                         _logger.LogCritical(ex.Message);
-                        return Error.Unexpected(ex.Message);
+                        return Error.Unexpected(ex.Message, ex.StackTrace);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Unexpected(ex.Message);
+                return Error.Unexpected(ex.Message, ex.StackTrace);
             }
         }
 
@@ -69,13 +69,13 @@ namespace ASP.Infrastructure.Cosmos
 
                     default:
                         _logger.LogCritical(ex.Message);
-                        return Error.Unexpected(ex.Message);
+                        return Error.Unexpected(ex.Message, ex.StackTrace);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Unexpected(ex.Message);
+                return Error.Unexpected(ex.Message, ex.StackTrace);
             }
         }
 
@@ -100,13 +100,13 @@ namespace ASP.Infrastructure.Cosmos
 
                     default:
                         _logger.LogCritical(ex.Message);
-                        return Error.Unexpected(ex.Message);
+                        return Error.Unexpected(ex.Message, ex.StackTrace);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Unexpected(ex.Message);
+                return Error.Unexpected(ex.Message, ex.StackTrace);
             }
         }
 
@@ -131,13 +131,13 @@ namespace ASP.Infrastructure.Cosmos
 
                     default:
                         _logger.LogCritical(ex.Message);
-                        return Error.Unexpected(ex.Message);
+                        return Error.Unexpected(ex.Message, ex.StackTrace);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Unexpected(ex.Message);
+                return Error.Unexpected(ex.Message, ex.StackTrace);
             }
         }
 
@@ -173,13 +173,13 @@ namespace ASP.Infrastructure.Cosmos
 
                     default:
                         _logger.LogCritical(ex.Message);
-                        return Error.Unexpected(ex.Message);
+                        return Error.Unexpected(ex.Message, ex.StackTrace);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return Error.Unexpected(ex.Message);
+                return Error.Unexpected(ex.Message, ex.StackTrace);
             }
         }
     }

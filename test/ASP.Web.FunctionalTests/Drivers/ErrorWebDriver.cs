@@ -66,5 +66,10 @@ namespace ASP.AcceptanceTests.Drivers
         {
             throw new XunitException(ExceptionMessage);
         }
+
+        public Task ExpectStatusCode()
+        {
+            throw new XunitException(ExceptionMessage);
+        }
     }
 }

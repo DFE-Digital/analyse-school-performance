@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ASP.Test.SpecFlow;
 
@@ -45,17 +44,22 @@ public partial class EstablishmentStepDefinitions
     [Given(@"visible establishment ""([^""]+)"" exists:")]
     public async Task GivenVisibleEstablishmentExistsMultiline(string id, string data)
     {
-        await SetUpEstablishment(id, data, true).Switch(
-            _ => { },
-            e => AssertWithMessage.Fail(e.ToString()));
+        await SetUpEstablishment(id, data, true)
+            .OnError(e => AssertWithMessage.Fail(e.ToString()));
     }
 
     [Given(@"non visible establishment ""([^""]+)"" exists:")]
     public async Task GivenEstablishmentExistsMultiline(string id, string data)
     {
-        await SetUpEstablishment(id, data, false).Switch(
-            _ => { },
-            e => AssertWithMessage.Fail(e.ToString()));
+        await SetUpEstablishment(id, data, false)
+            .OnError(e => AssertWithMessage.Fail(e.ToString()));
+    }
+
+    [Given(@"deleted establishment ""([^""]+)"" exists:")]
+    public async Task GivenDeletedEstablishmentExistsMultiline(string id, string data)
+    {
+        await SetUpEstablishment(id, data, false, true)
+            .OnError(e => AssertWithMessage.Fail(e.ToString()));
     }
 
     [Given(@"([0-9]+) establishments exist with properties:")]
@@ -118,14 +122,14 @@ public partial class EstablishmentStepDefinitions
         return value;
     }
 
-    protected Task<Result<Done>> SetUpEstablishment(string id, string data, bool isVisible = true)
+    protected Task<Result<Done>> SetUpEstablishment(string id, string data, bool isVisible = true, bool isDeleted = false)
     {
         var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
 
-        return SetUpEstablishment(id, dataDict!, isVisible);
+        return SetUpEstablishment(id, dataDict!, isVisible, isDeleted);
     }
 
-    protected async Task<Result<Done>> SetUpEstablishment(string id, Dictionary<string, object> data, bool isVisible = true)
+    protected async Task<Result<Done>> SetUpEstablishment(string id, Dictionary<string, object> data, bool isVisible = true, bool isDeleted = false)
     {
         var document = await _database.GetAsync<Dictionary<string, object>>("establishments", id, id)
             .GetValueOrDefault(new Dictionary<string, object>());
@@ -135,7 +139,9 @@ public partial class EstablishmentStepDefinitions
             document[d.Key] = d.Value;
         }
         document["id"] = id;
+        document["urn"] = id;
         document["isVisible"] = isVisible;
+        document["isDeleted"] = isDeleted;
 
         return await _database.UpsertAsync("establishments", id, id, document);
     }

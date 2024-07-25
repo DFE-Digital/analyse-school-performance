@@ -22,7 +22,7 @@ namespace ASP.Web.Core.Templating
                 Views = Views.Select(v => v.ToTemplate().Match(t => t, e => new object())).ToList()
             });
 
-            return JsonHelper.DeserializeIgnoringMissingMembers<ContentTemplate>(serialized);
+            return JsonHelper.DeserializeNotNull<ContentTemplate>(serialized, ignoreMissingMembers: true);
         }
 
         public static ContentTemplateEditModel FromTemplate(string contentId, string? revision, ContentTemplate template, ITemplateComponentEditModelFactory editModelFactory)

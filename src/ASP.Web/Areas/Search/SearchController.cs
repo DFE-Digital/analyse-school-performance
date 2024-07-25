@@ -1,4 +1,5 @@
-﻿using ASP.Application.UseCases.Establishments.EstablishmentSearch;
+﻿using ASP.Application;
+using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Core;
 using ASP.Core.Results;
@@ -15,11 +16,11 @@ namespace ASP.Web.Areas.Search;
 [ServiceFilter<TermsOfUseActionFilter>]
 public class SearchController : Controller
 {
-    private readonly IAspApi _api;
+    private readonly IAspApiClient _api;
     private readonly IHostEnvironment _hostEnvironment;
 
     public SearchController(
-        IAspApi api,
+        IAspApiClient api,
         IHostEnvironment hostEnvironment
     )
     {
@@ -42,7 +43,7 @@ public class SearchController : Controller
             return View("Index");
         }
 
-        var estabSearchSuggestions = new EstablishmentSearchSuggestionsUseCaseRequest(
+        var estabSearchSuggestions = new EstablishmentSearchSuggestionsRequest(
             searchParams.SuggestionSearchTerm
         );
 
@@ -77,7 +78,7 @@ public class SearchController : Controller
             return View("Index");
         }
 
-        var estabSearchRequest = new EstablishmentSearchUseCaseRequest(
+        var estabSearchRequest = new EstablishmentSearchRequest(
             searchParams.SearchTerm,
             searchParams.Page,
             Constants.SearchResultPageSize

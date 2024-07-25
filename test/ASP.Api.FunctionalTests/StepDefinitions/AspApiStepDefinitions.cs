@@ -1,5 +1,6 @@
 using ASP.Api.AcceptanceTests.Drivers;
-using Microsoft.AspNetCore.Http;
+using ASP.Infrastructure.Api;
+using ASP.Test.SpecFlow;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow.Infrastructure;
 
@@ -9,7 +10,7 @@ namespace ASP.AcceptanceTests.StepDefinitions
     public sealed partial class AspApiStepDefinitions
     {
         private const string HTTP_METHOD = @"(GET|POST|DELETE)";
-        private const string API_ENDPOINT = @"/([^\?]+)";
+        private const string API_ENDPOINT = @"(/api/[^\?]+)";
         private const string QUERY_STRING = @"\?(.+)"; // to match the entire query string including spaces.
         private const string STATUS_CODE = @"(\d+)";
         private const string RESPONSE_MESSAGE = @"""(.+)""";
@@ -27,39 +28,33 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}")]
         public async Task WhenISendARequest(string method, string function)
         {
-            var request = CreateRequest(method);
+            var request = new TransportLayerRequest { Method = method, Path = function };
 
-            await _api.Run(function, request);
+            await _api.Run(request);
         }
 
         [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING}")]
         public async Task WhenISendARequest(string method, string function, string queryString)
         {
-            var request = CreateRequest(method, queryString);
+            var request = new TransportLayerRequest { Method = method, Path = function, QueryString = "?" + queryString };
 
-            await _api.Run(function, request);
+            await _api.Run(request);
         }
 
         [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT} with content:")]
         public async Task WhenISendARequestWithContent(string method, string function, string content)
         {
-            var request = CreateRequest(method);
+            var request = new TransportLayerRequest { Method = method, Path = function, Body = content };
 
-            using (new RequestBodyWriter(request, content))
-            {
-                await _api.Run(function, request);
-            }
+            await _api.Run(request);
         }
 
         [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING} with content:")]
         public async Task WhenISendARequestWithContent(string method, string function, string queryString, string content)
         {
-            var request = CreateRequest(method, queryString);
+            var request = new TransportLayerRequest { Method = method, Path = function, QueryString = "?" + queryString, Body = content };
 
-            using (new RequestBodyWriter(request, content))
-            {
-                await _api.Run(function, request);
-            }
+            await _api.Run(request);
         }
 
         [Then($@"I should get a {STATUS_CODE} response")]
@@ -71,14 +66,14 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then($@"the response should be the message {RESPONSE_MESSAGE}")]
         public void ThenTheResponseShouldBeTheMessage(string message)
         {
-            Assert.Equal(message, _api.LastResponse.Value);
+            Assert.Equal(message, _api.LastResponse.Body);
         }
 
         [Then($@"the response should include the header {HTTP_HEADER}")]
         public void ThenTheResponseShouldIncludeTheHeader(string name, string value)
         {
-            Assert.Contains(name, _api.LastRequest.HttpContext.Response.Headers.Keys);
-            var header = _api.LastRequest.HttpContext.Response.Headers[name];
+            Assert.Contains(name, _api.LastResponse.Headers.Keys);
+            var header = _api.LastResponse.Headers[name];
 
             Assert.Equal(value, header);
         }
@@ -86,88 +81,25 @@ namespace ASP.AcceptanceTests.StepDefinitions
         [Then($@"the response should be an object with these exact properties:")]
         public void ThenTheResponseShouldBeAnObjectWithTheseExactProperties(string expectedContent)
         {
-            Assert.Equal(JsonConvert.SerializeObject(JsonConvert.DeserializeObject<object>(expectedContent)), JsonConvert.SerializeObject(_api.LastResponse.Value));
+            Assert.Equal(JsonConvert.SerializeObject(JsonConvert.DeserializeObject<object>(expectedContent)), _api.LastResponse.Body);
         }
 
         [Then($@"the response should be an object containing these properties:")]
         public void ThenTheResponseShouldBeAnObjectContainingTheseProperties(string expectedContent)
         {
-            var expectedProperties = JsonConvert.DeserializeObject<Dictionary<string, object>>(expectedContent);
-            var actualProperties = JsonConvert.DeserializeObject<Dictionary<string, object>>(JsonConvert.SerializeObject(_api.LastResponse.Value));
-            foreach(var property in expectedProperties)
-            {
-                Assert.Contains(property.Key, actualProperties.Keys);
-                Assert.Equal(property.Value, actualProperties[property.Key]);
-            }
+            AssertObjects.MatchProperties(expectedContent, _api.LastResponse?.Body ?? "");
         }
         
         [Then($@"the response should be an object containing these properties excluding null:")]
         public void ThenTheResponseShouldBeAnObjectContainingThesePropertiesExcludingNull(string expectedContent)
         {
-            var settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            };
-            var expectedProperties = JsonConvert.DeserializeObject<Dictionary<string, object>>(expectedContent);
-            var actualProperties = JsonConvert.DeserializeObject<Dictionary<string, object>>(JsonConvert.SerializeObject(_api.LastResponse.Value, settings));
-            foreach(var property in expectedProperties)
-            {
-                Assert.Contains(property.Key, actualProperties.Keys);
-                Assert.Equal(property.Value, actualProperties[property.Key]);
-            }
+            AssertObjects.MatchPropertiesExcludingNullValues(expectedContent, _api.LastResponse?.Body ?? "");
         }
-
+        
         [Then($@"the response should be an array of objects containing these properties:")]
         public void ThenTheResponseShouldBeAnArrayOfObjectsContainingTheseProperties(string expectedContent)
         {
-            var expectedPropertiesList = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(expectedContent);
-            var actualPropertiesList = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(JsonConvert.SerializeObject(_api.LastResponse.Value));
-
-            for (int i = 0; i < expectedPropertiesList.Count; i++)
-            {
-                var expectedProperties = expectedPropertiesList[i];
-                var actualProperties = actualPropertiesList[i];
-
-                foreach (var property in expectedProperties)
-                {
-                    Assert.Contains(property.Key, actualProperties.Keys);
-                    Assert.Equal(property.Value, actualProperties[property.Key]);
-                }
-            }
-        }
-        private HttpRequest CreateRequest(string method, string? queryString = null)
-        {
-            var request = new DefaultHttpContext().Request;
-            request.Method = method;
-            
-            if (queryString != null)
-            {
-                request.QueryString = new QueryString("?" + queryString);
-            }
-
-            return request;
-        }
-
-        private class RequestBodyWriter : IDisposable
-        {
-            private readonly Stream _stream;
-            private readonly StreamWriter _writer;
-
-            public RequestBodyWriter(HttpRequest request, string body)
-            {
-                _stream = new MemoryStream();
-                _writer = new StreamWriter(_stream);
-                _writer.Write(body);
-                _writer.Flush();
-                _stream.Position = 0;
-                request.Body = _stream;
-            }
-
-            public void Dispose()
-            {
-                _writer.Dispose();
-                _stream.Dispose();
-            }
+            AssertObjects.MatchPropertiesExcludingNullValues(expectedContent, _api.LastResponse?.Body ?? "");
         }
     }
 }

@@ -1,19 +1,15 @@
 ﻿using ASP.Core;
+using ASP.Infrastructure.Api;
 using ASP.Test.Core;
+using BoDi;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
-using Newtonsoft.Json;
-using System.Reflection;
 using TechTalk.SpecFlow.Infrastructure;
-using Xunit.Sdk;
 
 namespace ASP.Api.AcceptanceTests.Drivers
 {
@@ -21,51 +17,30 @@ namespace ASP.Api.AcceptanceTests.Drivers
     {
         private static readonly MemoryStore _store = new MemoryStore();
         private static readonly IHost _host;
+        private static readonly ITransportLayer _transport;
 
         private readonly ISpecFlowOutputHelper _outputHelper;
 
         private IDocumentDatabase? _documentDatabase = null;
-
-        private HttpRequest? _lastRequest = null;
-        private ApiResult? _lastResponse = null;
-        private static readonly Dictionary<string, Func<HttpRequest, Task<ApiResult>>> _functions;
-        private static readonly List<Type> _functionTypes;
+        private TransportLayerRequest? _lastRequest = null;
+        private TransportLayerResponse? _lastResponse = null;
 
         static AspApiContext()
         {
-            var functionType = typeof(ApiFunction);
-            _functionTypes = functionType.Assembly.GetTypes()
-                .Where(t => t != functionType && t.IsAssignableTo(functionType))
-                .ToList();
 
             var builder = new HostBuilder();
             new Startup().Configure(builder);
             Configure(builder);
             _host = builder.Build();
-
-            _functions = _functionTypes.ToDictionary(
-                t =>
-                {
-                    var runMethod = t.GetMethod("Run")
-                        ?? throw new XunitException($@"Function ""{t.Name}"" does not have a Run method");
-
-                    var functionAttribute = runMethod.GetCustomAttribute<FunctionAttribute>()
-                        ?? throw new XunitException($@"Function ""{t.Name}"" does not have a FunctionAttribute on its Run method");
-
-                    return functionAttribute.Name;
-                },
-                t => (Func<HttpRequest, Task<ApiResult>>)(async (HttpRequest req) =>
-                {
-                    var function = (ApiFunction)_host.Services.GetService(t)!;
-                    using (var cancellationTokenSource = new CancellationTokenSource())
-                    {
-                        return await function.Run(req, cancellationTokenSource.Token);
-                    }
-                })
-            );
+            _transport = new InProcessTransportLayer(_host.Services);
         }
 
-        public HttpRequest LastRequest
+        public AspApiContext(ISpecFlowOutputHelper outputHelper)
+        {
+            _outputHelper = outputHelper;
+        }
+
+        public TransportLayerRequest LastRequest
         {
             get
             {
@@ -78,7 +53,7 @@ namespace ASP.Api.AcceptanceTests.Drivers
             }
         }
 
-        public ApiResult LastResponse
+        public TransportLayerResponse LastResponse
         {
             get
             {
@@ -88,7 +63,7 @@ namespace ASP.Api.AcceptanceTests.Drivers
                 }
 
                 _outputHelper.WriteLine("Response content:");
-                _outputHelper.WriteLine(JsonConvert.SerializeObject(_lastResponse, Formatting.Indented));
+                _outputHelper.WriteLine(_lastResponse.Body);
 
                 return _lastResponse!;
             }
@@ -111,22 +86,10 @@ namespace ASP.Api.AcceptanceTests.Drivers
             }
         }
 
-        public AspApiContext(ISpecFlowOutputHelper outputHelper)
+        public async Task Run(TransportLayerRequest request)
         {
-            _outputHelper = outputHelper;
-        }
-
-        public async Task Run(string function, HttpRequest request)
-        {
-            Func<HttpRequest, Task<ApiResult>> func =
-                _functions.TryGetValue(function, out var runMethod)
-                    ? runMethod
-                    : _ => Task.FromResult(new ApiResult(404, $"Function {function} not found."));
-
             _lastRequest = request;
-            _lastResponse = await func(request);
-            request.HttpContext.RequestServices = new ApiServiceProvider();
-            await _lastResponse.ExecuteResultAsync(new ActionContext { HttpContext = request.HttpContext });
+            _lastResponse = await _transport.ExecuteRequest(request);
         }
 
         private static void Configure(IHostBuilder builder)
@@ -136,15 +99,12 @@ namespace ASP.Api.AcceptanceTests.Drivers
 
             builder.ConfigureServices(services =>
             {
-                foreach (var functionType in _functionTypes)
-                {
-                    services.AddSingleton(functionType);
-                }
-
-                services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
+                services.ConfigureInProcessApi();
 
                 if (testMode == "Development")
                 {
+                    services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
+
                     services.RemoveAll<IDocumentDatabase>();
                     services.AddSingleton<IDocumentDatabase, InMemoryDocumentDatabase>();
                 }
@@ -154,34 +114,13 @@ namespace ASP.Api.AcceptanceTests.Drivers
             {
                 var config = configure
                     .SetBasePath(path)
-                    .AddJsonFile("appsettings.Test.json", false);
+                    .AddJsonFile("apisettings.Test.json", false);
 
                 if (testMode == "Integration")
                 {
-                    config.AddJsonFile("appsettings.Test.local.json", true);
+                    config.AddJsonFile("apisettings.Test.local.json", true);
                 }
             });
-        }
-
-        private class ApiServiceProvider : IServiceProvider
-        {
-            public object? GetService(Type serviceType)
-            {
-                if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IActionResultExecutor<>))
-                {
-                    return Activator.CreateInstance(typeof(ActionResultExecutor<>).MakeGenericType(serviceType.GenericTypeArguments[0]));
-                }
-
-                throw new NotImplementedException();
-            }
-        }
-
-        private class ActionResultExecutor<T> : IActionResultExecutor<T> where T : IActionResult
-        {
-            public Task ExecuteAsync(ActionContext context, T result)
-            {
-                return Task.CompletedTask;
-            }
         }
     }
 }

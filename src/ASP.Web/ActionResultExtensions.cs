@@ -1,4 +1,5 @@
-﻿using ASP.Core.Results;
+﻿using ASP.Core.Helpers;
+using ASP.Core.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web
@@ -60,6 +61,8 @@ namespace ASP.Web
                 // Development-specific error handling
                 return error switch {
                     NotFoundError e => new ObjectResult(e.ToString()) { StatusCode = StatusCodes.Status404NotFound },
+                    NotAllowedError e => new ObjectResult(e.ToString()) { StatusCode = StatusCodes.Status403Forbidden },
+                    UnexpectedError e => new ObjectResult(JsonHelper.Serialize(e)) { StatusCode = StatusCodes.Status500InternalServerError },
                     _ => new ObjectResult(error.ToString()) { StatusCode = StatusCodes.Status500InternalServerError }
                 };
             }
@@ -72,7 +75,8 @@ namespace ASP.Web
                 // Ensure that our `ToActionResult` method does not write to the response body directly for non-dev environments.
                 // Instead, it should only set the status code.
                 return error switch {
-                    NotFoundError e => new StatusCodeResult(StatusCodes.Status404NotFound),
+                    NotFoundError => new StatusCodeResult(StatusCodes.Status404NotFound),
+                    NotAllowedError => new StatusCodeResult(StatusCodes.Status403Forbidden),
                     _ => new StatusCodeResult(StatusCodes.Status500InternalServerError)
                 };
             }

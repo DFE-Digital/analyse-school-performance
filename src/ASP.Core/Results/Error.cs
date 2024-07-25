@@ -4,6 +4,7 @@
     {
         public abstract string ErrorType { get; }
         public string Message { get; }
+        public string MessagePrefix => $"{ErrorType}: ";
 
         public Error(string message)
         {
@@ -15,9 +16,9 @@
             return new NotFoundError(message);
         }
 
-        public static Error Unexpected(string message)
+        public static Error Unexpected(string message, string? stackTrace)
         {
-            return new UnexpectedError(message);
+            return new UnexpectedError(message, stackTrace);
         }
 
         public static Error Invalid(string message)
@@ -30,6 +31,10 @@
             return new NotAllowedError(message);
         }
 
-        public override string ToString() => $"{ErrorType}: {Message}";
+        public override string ToString() => $"{MessagePrefix}{Message}";
+
+        public abstract Error MapMessage(Func<string, string> mapFunction);
+
+        public abstract Task<Error> MapMessage(Func<string, Task<string>> mapFunction);
     }
 }

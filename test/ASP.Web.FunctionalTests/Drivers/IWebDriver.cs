@@ -16,5 +16,6 @@ namespace ASP.AcceptanceTests.Drivers
         Task<IElementDriver> Element(string selector);
         Task<IElementDriver> ElementByLabel(string labelText);
         Task<IElementsDriver> Elements(string selector);
+        Task ExpectStatusCode();
     }
 }

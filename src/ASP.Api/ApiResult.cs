@@ -1,26 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ASP.Core.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Api
 {
-    public class ApiResult : JsonResult
+    public class ApiResult : ContentResult
     {
-        public ApiResult(int statusCode, string message) 
-            : base(message)
+        public object Value { get; }
+
+        public ApiResult(int statusCode, string message)
         {
             StatusCode = statusCode;
+            Value = message;
+            Content = message;
+            ContentType = "text/plain";
         }
 
-        public ApiResult(int statusCode, object value) 
-            : base(value)
+        public ApiResult(int statusCode, object value)
         {
             StatusCode = statusCode;
-        }
-        
-        public ApiResult(int statusCode, object value, object? serializerSettings) 
-            : base(value, serializerSettings)
-        {
-            StatusCode = statusCode;
+            Value = value;
+            Content = JsonHelper.Serialize(value);
+            ContentType = "application/json";
         }
 
         public Dictionary<string, string> Headers { get; } = new Dictionary<string, string>();

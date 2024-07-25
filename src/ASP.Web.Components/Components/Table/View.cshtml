@@ -1,39 +1,66 @@
-﻿@model TemplateComponentViewModel
+﻿@using Newtonsoft.Json.Linq
+
+@model TemplateComponentViewModel
 @inject MarkdownHelper MarkdownHelper
 
 @{
-    Model.ViewContent.Headings ??= new List<string>();
-    Model.ViewContent.Rows ??= new List<List<string>> { new List<string>() };
-    
-    bool firstCellAsHeader = Model.ViewContent.FirstCellAsHeader as bool? ?? false;
+    var headings = Model.ViewContent.Headings switch {
+        List<string> l => l,
+        JArray a => a.ToObject<List<string>>(),
+        _ => new List<string>()
+    };
 
-    int maxCellCount = Model.ViewContent.Headings.Count;
-    foreach (var row in Model.ViewContent.Rows)
+    var rows = Model.ViewContent.Rows switch {
+        List<List<string>> ll => ll,
+        JArray a => a.ToObject<List<List<string>>>(),
+        _ => new List<List<string>> { new List<string>() }
+    };
+
+    bool firstCellAsHeader = Model.ViewContent.FirstCellAsHeader switch {
+        true => true,
+        JValue v => (v.Value switch {
+            true => true,
+            _ => false
+        }),
+        _ => false
+    };
+
+    int maxCellCount = headings.Count;
+    foreach (var row in rows)
     {
         maxCellCount = Math.Max(maxCellCount, row.Count);
     }
+
+    var caption = Model.ViewContent.Caption switch {
+        string s => s,
+        JValue v => (v.Value switch {
+            string s => s,
+            _ => null
+        }),
+        _ => null
+    };
 }
 
 
 <table class="govuk-table" id="@Model.ViewContent.Id">
-    @if (!string.IsNullOrWhiteSpace(Model.ViewContent.Caption))
+    @if (!string.IsNullOrWhiteSpace(caption))
     {
-        <caption class="govuk-table__caption govuk-table__caption--m">@Model.ViewContent.Caption</caption>
+        <caption class="govuk-table__caption govuk-table__caption--m">@caption</caption>
     }
     <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-            @foreach (var heading in Model.ViewContent.Headings)
+            @foreach (var heading in headings)
             {
                 <th scope="col" class="govuk-table__header">@heading</th>
             }
-            @for (int i = Model.ViewContent.Headings.Count; i < maxCellCount; i++)
+            @for (int i = headings.Count; i < maxCellCount; i++)
             {
                 <th scope="col" class="govuk-table__header"></th>
             }
         </tr>
     </thead>
     <tbody class="govuk-table__body">
-        @foreach (var row in Model.ViewContent.Rows)
+        @foreach (var row in rows)
         {
             <tr class="govuk-table__row">
                 @for (int j = 0; j < row.Count; j++)

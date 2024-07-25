@@ -8,5 +8,16 @@
             : base(message)
         {
         }
+
+        public override Error MapMessage(Func<string, string> mapFunction)
+        {
+            return new NotAllowedError(mapFunction(Message));
+        }
+
+        public override async Task<Error> MapMessage(Func<string, Task<string>> mapFunction)
+        {
+            var message = await mapFunction(Message);
+            return new NotAllowedError(message);
+        }
     }
 }

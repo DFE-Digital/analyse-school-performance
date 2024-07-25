@@ -1,15 +1,12 @@
 Feature: OtherReports
 @Javascript:disabled
 Scenario: Other reports page should be accessible when valid urn is provided
-     Given establishment "136028" exists:
-		"""
-		{
-            
-            "id": "136028",
-            "name": "Dagenham Park CofE School",
-            "urn": "136028"
-        }
-		"""
+    Given establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
     When I navigate to /school/136028/other-reports
     Then I should get a 200 response
     And the element "h1.govuk-heading-xl" should have the text content "Other reports"
@@ -20,15 +17,12 @@ Scenario: Other reports page should be accessible when valid urn is provided
 
 @Javascript:disabled
 Scenario: Other reports page should show the accordian component when javascript disabled
-     Given establishment "136028" exists:
-		"""
-		{
-            
-            "id": "136028",
-            "name": "Dagenham Park CofE School",
-            "urn": "136028",
-        }
-		"""
+    Given establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
     When I navigate to /school/136028/other-reports
     Then I should get a 200 response
     And the element "*[data-testid='accordion-default-heading-1']" should have the text content "Ofsted inspection data summary reports"
@@ -56,10 +50,7 @@ Scenario: Other reports page should show the accordian component when javascript
     And establishment "136028" exists:
 	"""
 	{
-            
-        "id": "136028",
-        "name": "Dagenham Park CofE School",
-        "urn": "136028",
+        "name": "Dagenham Park CofE School"
     }
 	"""
     When I navigate to /school/136028/other-reports

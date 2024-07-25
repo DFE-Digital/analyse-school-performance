@@ -17,10 +17,14 @@ namespace ASP.Web.Core.Templating
 
         public TemplateComponentEditModel(TemplateComponent contentTemplate, ITemplateComponentEditModelFactory editModelFactory)
         {
-            IDictionary<string, object> viewContent = contentTemplate.ViewContent ?? new Dictionary<string, object>();
-            IList<TemplateComponent> childViews = contentTemplate.ChildViews ?? new List<TemplateComponent>();
 
             ViewId = contentTemplate.ViewId;
+
+            IDictionary<string, object> viewContent = contentTemplate.ViewContent switch {
+                JObject o => o.ToObject<Dictionary<string, object>>() ?? new Dictionary<string, object>(),
+                IDictionary<string, object> d => d,
+                _ => new Dictionary<string, object>()
+            };
             ViewContent = viewContent.ToDictionary(c => c.Key, c =>
                 c.Value switch
                 {
@@ -33,6 +37,8 @@ namespace ASP.Web.Core.Templating
                     JObject o => JsonHelper.SerializeIndented(o),
                     _ => c.Value.ToString() ?? ""
                 });
+            
+            IList<TemplateComponent> childViews = contentTemplate.ChildViews ?? new List<TemplateComponent>();
             ChildViews = childViews.Select(editModelFactory.CreateTemplateComponentEditModel).ToList();
 
             InitializeTypes();
@@ -85,7 +91,7 @@ namespace ASP.Web.Core.Templating
                 ChildViews = ChildViews.Select(v => v.ToTemplate().Match(t => t, e => new object())).ToList()
             });
 
-            return JsonHelper.DeserializeIgnoringMissingMembers<TemplateComponent>(serialized);
+            return JsonHelper.DeserializeNotNull<TemplateComponent>(serialized, ignoreMissingMembers: true);
         }
 
         private void InitializeTypes()
@@ -130,7 +136,7 @@ namespace ASP.Web.Core.Templating
                 ViewContentPropertyType.Bool => bool.TryParse(value, out var b) ? b : false,
                 ViewContentPropertyType.Double => double.TryParse(value, out var d) ? d : 0.0,
                 ViewContentPropertyType.Long => long.TryParse(value, out var l) ? l : 0,
-                _ => JsonHelper.Deserialize<object>(value).Match(v => v, e => null!)
+                _ => JsonHelper.DeserializeOrNull<object>(value).Match(v => v, e => null)
             };
         }
 

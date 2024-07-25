@@ -1,5 +1,6 @@
 using ASP.Core.Helpers;
 using ASP.Core.Results;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
 
 namespace ASP.Api
@@ -40,7 +41,7 @@ namespace ASP.Api
             return stringValue;
         }
 
-        public static Result<Maybe<string>> OptionalParameter(HttpRequest req, string parameterName)
+        public static Result<string?> OptionalParameter(HttpRequest req, string parameterName)
         {
             var value = req.Query[parameterName];
 
@@ -51,7 +52,7 @@ namespace ASP.Api
 
             if (value.Count == 0)
             {
-                return Maybe<string>.None;
+                return Result.Success<string?>(null);
             }
 
             var stringValue = value.ToString();
@@ -61,10 +62,10 @@ namespace ASP.Api
                 return Error.Invalid($@"The parameter ""{parameterName}"" should not be empty.");
             }
 
-            return Maybe<string>.Some(stringValue);
+            return stringValue;
         }
 
-        public static async Task<Result<TBody>> RequiredBodyAsync<TBody>(HttpRequest req)
+        public static async Task<Result<TBody>> RequiredBodyAsync<TBody>(HttpRequest req) where TBody : notnull
         {
             using (var sr = new StreamReader(req.Body))
             {
@@ -72,57 +73,32 @@ namespace ASP.Api
                 if (content.Length == 0)
                     return Error.Invalid("The request body is missing.");
 
-                return JsonHelper.DeserializeIgnoringMissingMembers<TBody>(content)
+                return JsonHelper.DeserializeNotNull<TBody>(content, ignoreMissingMembers: true)
                     .MapError(e => Error.Invalid("The request body is not a JSON object."));
             }
         }
 
-        public static int GetNumericParameterOrDefault(Maybe<string> inputValue, int defaultValue)
+        public static Result<int?> NumericParameter(string? value, string parameterName)
         {
-            var stringValue = inputValue.ToNullable();
-
-            // Attempt to parse the parameter, use default value if parsing fails
-            if (int.TryParse(stringValue, out int parsedValue))
+            if(value is null)
             {
-                return parsedValue;
+                return Result.Success<int?>(null);
             }
-            else
-            {
-                return defaultValue;
-            }
-        }
-
-        public static Result<Maybe<string>> NumericParameter(Maybe<string> maybeValue, string parameterName)
-        {
-            var stringValue = maybeValue.ToNullable();
-            return ValidateNumericParameter(stringValue, parameterName);
-        }
-
-        public static Result<Maybe<string>> NumericParameter(string value, string parameterName)
-        {
-            return ValidateNumericParameter(value, parameterName);
-        }
-
-        private static Result<Maybe<string>> ValidateNumericParameter(string? value, string parameterName)
-        {
-            if (value == null) return Maybe<string>.None;
 
             if (int.TryParse(value, out int intValue))
             {
-                if (intValue > 1)
+                if (intValue >= 1)
                 {
-                    return Maybe<string>.Some(value);
+                    return intValue;
                 }
                 else
                 {
-                    return Error.Invalid(
-                        $@"Bad request: parameter ""{parameterName}"" should be a whole number greater than 1.");
+                    return Error.Invalid($@"Bad request: parameter ""{parameterName}"" should be a whole number greater than or equal to 1.");
                 }
             }
             else
             {
-                return Error.Invalid(
-                    $@"Bad request: parameter ""{parameterName}"" should be a whole number greater than 1.");
+                return Error.Invalid($@"Bad request: parameter ""{parameterName}"" should be a whole number greater than or equal to 1.");
             }
         }
     }

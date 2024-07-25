@@ -1,25 +1,25 @@
 Feature: Establishment Search
 
   Scenario: Should not accept POST method
-    When I send a POST request to /EstablishmentSearch
+    When I send a POST request to /api/EstablishmentSearch
     Then I should get a 405 response
     And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
     And the response should include the header "Allow: GET"
 
   Scenario: Should return BadRequest (400) response if searchTerm parameter is missing
-    When I send a GET request to /EstablishmentSearch
+    When I send a GET request to /api/EstablishmentSearch
     Then I should get a 400 response
     And the response should be the message "Invalid: The parameter "searchTerm" is missing."
 
   Scenario: Should return BadRequest (400) response if searchTerm parameter is empty string
-    When I send a GET request to /EstablishmentSearch?searchTerm=
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=
     Then I should get a 400 response
     And the response should be the message "Invalid: The parameter "searchTerm" should not be empty."
 
-  Scenario Outline: Should return BadRequest (400) response if page parameter is not a whole number greater than 1
-    When I send a GET request to /EstablishmentSearch?searchTerm=x&page=<page>
+  Scenario Outline: Should return BadRequest (400) response if page parameter is not a whole number greater than or equal to 1
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=x&page=<page>
     Then I should get a 400 response
-    And the response should be the message "Invalid: Bad request: parameter "page" should be a whole number greater than 1."
+    And the response should be the message "Invalid: Bad request: parameter "page" should be a whole number greater than or equal to 1."
 
     Examples:
       | page |
@@ -29,9 +29,9 @@ Feature: Establishment Search
       | -1   |
 
   Scenario Outline: Should return BadRequest (400) response if resultsPerPage parameter is not a whole number greater than 1
-    When I send a GET request to /EstablishmentSearch?searchTerm=x&resultsPerPage=<resultsPerPage>
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=x&resultsPerPage=<resultsPerPage>
     Then I should get a 400 response
-    And the response should be the message "Invalid: Bad request: parameter "resultsPerPage" should be a whole number greater than 1."
+    And the response should be the message "Invalid: Bad request: parameter "resultsPerPage" should be a whole number greater than or equal to 1."
 
     Examples:
       | resultsPerPage |
@@ -43,73 +43,87 @@ Feature: Establishment Search
 
   Scenario: Should return NotFound (404) response if no matches found for the searchTerm
     Given no establishments exist
-    When I send a GET request to /EstablishmentSearch?searchTerm=x
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=x
     Then I should get a 404 response
     And the response should be the message "Not found: there were no matches for "x"."
 
   Scenario: Should return NotFound (404) response if there were no relevant matches for the given searchTerm
-    Given  establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School"
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=secondary
+    Given establishment "111111" exists: 
+    """
+    {
+        "name": "Some Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=secondary
     Then I should get a 404 response
     And the response should be the message "Not found: there were no matches for "secondary"."
 
   Scenario: Should return a NotFound (404) response if the requested establishment has been deleted for the given searchTerm
-    Given establishment "222222" exists: 
-           """
-            {
-              "Urn": "222222",
-              "IsDeleted": true,
-              "Name": "Some Primary School"
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=222222
+    Given deleted establishment "222222" exists: 
+    """
+    {
+        "name": "Some Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=222222
     Then I should get a 404 response
     And the response should be the message "Not found: The requested establishment with URN "222222" has been deleted."
 
   Scenario: Should return a NotFound (404) response if the requested establishment is not currently visible for the given searchTerm
     Given non visible establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School"
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "name": "Some Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 404 response
     And the response should be the message "Not found: The requested establishment with URN "111111" is not currently visible."
 
+    Scenario: Should not return 400 response if page = 1
+    Given establishment "111111" exists: 
+    """
+    {
+        "name": "Some Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111&page=1
+    Then I should get a 200 response
+    
+    Scenario: Should not return 400 response if resultsPerPage = 1
+    Given establishment "111111" exists: 
+    """
+    {
+        "name": "Some Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111&resultsPerPage=1
+    Then I should get a 200 response
+
   Scenario Outline: Should return 200 response with search results when matches are found for the given searchTerm
     Given establishment "111111" exists: 
-             """
-              {
-                "Urn": "111111",
-                "Name": "Some Primary School"
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=<searchTerm>
+    """
+    {
+        "name": "Some Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=<searchTerm>
     Then I should get a 200 response
     And the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "<searchTerm>",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111",
-                      "Name": "Some Primary School"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "<searchTerm>",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111",
+                "Name": "Some Primary School"
+            }
+        ]
+    }
+    """
 
     Examples:
       | searchTerm |
@@ -118,36 +132,34 @@ Feature: Establishment Search
 
   Scenario Outline: Should return 200 response with search results when searchTerm matching establishment street, town and postcode partially
     Given establishment "111111" exists: 
-             """
-              {
-                 "Urn": "111111", 
-                 "Name": "Some Primary School",
-                  "Address": {
-                        "Street": "13 The Street",
-                        "Town": "SomeTown",
-                        "PostCode": "TR18 3JT"
-                    } 
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=<searchTerm>
+    """
+    {
+        "name": "Some Primary School",
+        "address": {
+            "street": "13 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        } 
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=<searchTerm>
     Then I should get a 200 response
     And the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "<searchTerm>",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111",
-                      "Name": "Some Primary School",
-                      "Address": "13 The Street, SomeTown, TR18 3JT"
-                  }
-              ]
-          }
-    
-        """
+    """
+        {
+            "SearchTerm": "<searchTerm>",
+            "TotalResults": 1,
+            "ResultsPerPage": 50,
+            "Page": 1,
+            "Results": [
+                {
+                    "Urn": "111111",
+                    "Name": "Some Primary School",
+                    "Address": "13 The Street, SomeTown TR18 3JT"
+                }
+            ]
+        }
+    """
 
     Examples:
       | searchTerm |
@@ -157,228 +169,213 @@ Feature: Establishment Search
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment name and address partially
     Given establishment "111111" exists: 
-             """
-              {
-                 "Urn": "111111", 
-                 "Name": "Some Primary School",
-                 "Address": {
-                        "Street": "13 The Street",
-                        "Town": "SomeTown",
-                        "PostCode": "B1 1AA"
-                 } 
-              }
-             """
+    """
+    {
+        "name": "Some Primary School",
+        "address": {
+            "street": "13 The Street",
+            "town": "SomeTown",
+            "postCode": "B1 1AA"
+        } 
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Name": "Some Other Primary School",
-                 "Address": {
-                        "Street": "13 The Road",
-                        "Town": "Tring",
-                        "PostCode": "B1 1AA"
-                    } 
-              }
-             """
+    """
+    {
+        "name": "Some Other Primary School",
+        "address": {
+            "street": "13 The Road",
+            "town": "Tring",
+            "postCode": "B1 1AA"
+        } 
+    }
+    """
     And establishment "333333" exists: 
-             """
-              {
-                 "Urn": "333333", 
-                 "Name": "A Different Primary School",
-                  "Address": {
-                        "Street": "13 The Road",
-                        "Town": "SomeTown",
-                        "PostCode": "TR18 1AA"
-                    } 
-              }
-             """
+    """
+    {
+        "name": "A Different Primary School",
+        "address": {
+            "street": "13 The Road",
+            "town": "SomeTown",
+            "postCode": "TR18 1AA"
+        } 
+    }
+    """
     And establishment "444444" exists: 
-             """
-              {
-                 "Urn": "444444",
-                 "Name": "The Training Center"
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=tr
+    """
+    {
+        "name": "The Training Center"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=tr
     Then I should get a 200 response
     And the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "tr",
-              "TotalResults": 4,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                   {
-                       "Urn": "333333", 
-                       "Name": "A Different Primary School",
-                       "Address": "13 The Street, SomeTown, TR18 1AA"
-                   },
-                   {
-                      "Urn": "222222", 
-                      "Name": "Some Other Primary School",
-                      "Address": "13 The Road, Tring, B1 1AA"
-                  },
-                  {
-                    "Urn": "111111", 
-                    "Name": "Some Primary School",
-                    "Address": "13 The Street, SomeTown, B1 1AA"
-                  },
-                  {
-                    "Urn": "444444", 
-                    "Name": "The Training Center"
-                  }
-              ]
-          }
-
-        """
+    """
+    {
+        "SearchTerm": "tr",
+        "TotalResults": 4,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "333333", 
+                "Name": "A Different Primary School",
+                "Address": "13 The Road, SomeTown TR18 1AA"
+            },
+            {
+                "Urn": "222222", 
+                "Name": "Some Other Primary School",
+                "Address": "13 The Road, Tring B1 1AA"
+            },
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "Address": "13 The Street, SomeTown B1 1AA"
+            },
+            {
+                "Urn": "444444", 
+                "Name": "The Training Center"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment URN
     Given  establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School"
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "Urn": "111111",
+        "name": "Some Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 200 response
     And the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "111111",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111",
-                      "Name": "Some Primary School"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "111111",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111",
+                "Name": "Some Primary School"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return a NotFound (404) response if no relevant matches are found for the establishment URN based on the given searchTerm
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School"
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=11
+    """
+    {
+        "name": "Some Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=11
     Then I should get a 404 response
     And the response should be the message "Not found: there were no matches for "11"."
 
   Scenario: Should return 200 response with search results when searchTerm matches partially with the address street name
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School"
-            }
-           """
+    """
+    {
+        "name": "Some Primary School"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Name": "A Different Primary School",
-                  "Address": {
-                        "Street": "111 The Street",
-                        "Town": "SomeTown",
-                        "PostCode": "TR18 3JT"
-                    } 
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=11
+    """
+    {
+        "name": "A Different Primary School",
+        "address": {
+            "street": "111 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        } 
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=11
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "11",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "222222", 
-                      "Name": "Some Primary School",
-                      "Address": "111 The Street, SomeTown, TR18 3JT"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "11",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "222222", 
+                "Name": "A Different Primary School",
+                "Address": "111 The Street, SomeTown TR18 3JT"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return 200 response with search results when searchTerm is 6 digit number treat it as an exact URN search
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School"
-            }
-           """
+    """
+    {
+        "name": "Some Primary School"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Name": "A Different Primary School",
-                  "Address": {
-                        "Street": "111111 The Street",
-                        "Town": "SomeTown",
-                        "PostCode": "TR18 3JT"
-                    } 
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "name": "A Different Primary School",
+        "address": {
+            "street": "111111 The Street",
+            "town": "SomeTown",
+            "postCode": "TR18 3JT"
+        } 
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "111111",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "111111",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School"
+            }
+        ]
+    }
+    """
 
   Scenario Outline: Should return 200 response with search results when searchTerm matching establishment LAESTAB code (with and without forward slash)
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "Laestab": "894/2200",
-            }
-            """
-    When I send a GET request to /EstablishmentSearch?searchTerm=<searchTerm>
+    """
+    {
+        "name": "Some Primary School",
+        "laestab": "894/2200",
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=<searchTerm>
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "<searchTerm>",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "Laestab": "894/2200"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "<searchTerm>",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "Laestab": "894/2200"
+            }
+        ]
+    }
+    """
 
     Examples:
       | searchTerm |
@@ -387,98 +384,92 @@ Feature: Establishment Search
 
   Scenario: Should return 200 response with search results when searchTerm matches with LAESTAB 3 digit code partially
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Laestab": "894/2200",
-              "Name": "Some Primary School"
-            }
-           """
+    """
+    {
+        "laestab": "894/2200",
+        "name": "Some Primary School"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Laestab": "894/1234",
-                 "Name": "Some Other Primary School"
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=894
+    """
+    {
+        "laestab": "894/1234",
+        "name": "Some Other Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=894
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "894",
-              "TotalResults": 2,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  { 
-                      "Urn": "111111", 
-                      "Laestab": "894/2200",
-                      "Name": "Some Primary School" 
-                  },
-                  { 
-                      "Urn": "222222", 
-                      "Laestab": "894/1234",
-                      "Name": "Some Other Primary School" 
-                  }
-              ]
-          }    
+    """
+        {
+            "SearchTerm": "894",
+            "TotalResults": 2,
+            "ResultsPerPage": 50,
+            "Page": 1,
+            "Results": [
+                { 
+                    "Urn": "222222", 
+                    "Laestab": "894/1234",
+                    "Name": "Some Other Primary School" 
+                },
+                { 
+                    "Urn": "111111", 
+                    "Laestab": "894/2200",
+                    "Name": "Some Primary School" 
+                }
+            ]
+        }    
     
-        """
+    """
 
   Scenario: Should return 200 response with search results when searchTerm matches with LAESTAB 4 digit code partially
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Laestab": "894/2200",
-              "Name": "Some Primary School"
-            }
-           """
+    """
+    {
+        "laestab": "894/2200",
+        "name": "Some Primary School"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Laestab": "123/2200",
-                 "Name": "Some Other Primary School"
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=2200
+    """
+    {
+        "laestab": "123/2200",
+        "name": "Some Other Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=2200
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "2200",
-              "TotalResults": 2,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  { 
-                      "Urn": "111111", 
-                      "Laestab": "894/2200",
-                      "Name": "Some Primary School" 
-                  },
-                  { 
-                      "Urn": "222222", 
-                      "Laestab": "123/2200",
-                      "Name": "Some Other Primary School" 
-                  }
-              ]
-          }    
-    
-        """
+    """
+    {
+        "SearchTerm": "2200",
+        "TotalResults": 2,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "222222", 
+                "Laestab": "123/2200",
+                "Name": "Some Other Primary School" 
+            },
+            {
+                "Urn": "111111", 
+                "Laestab": "894/2200",
+                "Name": "Some Primary School" 
+            }
+        ]
+    }    
+    """
 
   Scenario Outline: Should return NotFound (404) response if there were no relevant matches for the given searchTerm associated with a LAESTAB code
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Laestab": "894/2200",
-              "Name": "Some Primary School"
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=<searchTerm>
+    """
+    {
+        "laestab": "894/2200",
+        "name": "Some Primary School"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=<searchTerm>
     Then I should get a 404 response
     And the response should be the message "Not found: there were no matches for "<searchTerm>"."
 
@@ -489,565 +480,521 @@ Feature: Establishment Search
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment 7 digits LAESTAB code ignoring other matching fields
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "Laestab": "894/2200"
-            }
-            """
+    """
+    {
+        "laestab": "894/2200",
+        "name": "Some Primary School",
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Name": "Some Other Primary School",
-                 "Address": {
-                    "Street": "8942200 The Street",
-                    "Town": "SomeTown", 
-                    "PostCode": "TR18 3JT"
-                  }  
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=8942200
+    """
+    {
+        "name": "Some Other Primary School",
+        "address": {
+            "street": "8942200 The Street",
+            "town": "SomeTown", 
+            "postCode": "TR18 3JT"
+        }
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=8942200
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "8942200",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "Laestab": "894/2200"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "8942200",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "Laestab": "894/2200"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment 7 digits LAESTAB code with forward slash ignoring other matching fields
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "Laestab": "894/2200"
-            }
-            """
+    """
+    {
+        "name": "Some Primary School",
+        "laestab": "894/2200"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222",
-                 "Name": "Some other Primary School",
-                 "Address": {
-                    "Street": "894/2200 The Street",
-                    "Town": "SomeTown", 
-                    "PostCode": "TR18 3JT"
-                  }  
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=894/2200
+    """
+    {
+        "name": "Some other Primary School",
+        "address": {
+            "street": "894/2200 The Street",
+            "town": "SomeTown", 
+            "postCode": "TR18 3JT"
+        }  
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=894/2200
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "894/2200",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "Laestab": "894/2200"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "894/2200",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "Laestab": "894/2200"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment 3 digits LAESTAB code ignoring other matching fields
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "Laestab": "894/2200"
-            }
-            """
+    """
+    {
+        "name": "Some Primary School",
+        "laestab": "894/2200"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222",
-                 "Name": "Some other Primary School",
-                 "Address": {
-                    "Street": "894 The Street",
-                    "Town": "SomeTown", 
-                    "PostCode": "TR18 3JT"
-                  }  
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=894
+    """
+    {
+        "name": "Some other Primary School",
+        "address": {
+            "street": "894 The Street",
+            "town": "SomeTown", 
+            "postCode": "TR18 3JT"
+        }  
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=894
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "894",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "Laestab": "894/2200"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "894",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "Laestab": "894/2200"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment 4 digits LAESTAB code ignoring other matching fields
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "Laestab": "894/2200"
-            }
-            """
+    """
+    {
+        "name": "Some Primary School",
+        "laestab": "894/2200"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222",
-                 "Name": "Some other Primary School",
-                 "Address": {
-                    "Street": "2200 The Street",
-                    "Town": "SomeTown", 
-                    "PostCode": "TR18 3JT"
-                  }  
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=2200
+    """
+    {
+        "name": "Some other Primary School",
+        "address": {
+            "street": "2200 The Street",
+            "town": "SomeTown", 
+            "postCode": "TR18 3JT"
+        }  
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=2200
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "2200",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "Laestab": "894/2200"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "2200",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "Laestab": "894/2200"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Primary School 111111"
-            }
-           """
+    """
+    {
+        "name": "Primary School 111111"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Name": "Primary School 222222"
-              }
-             """
+    """
+    {
+        "name": "Primary School 222222"
+    }
+    """
     And establishment "333333" exists: 
-             """
-              {
-                 "Urn": "333333", 
-                 "Name": "Primary School 333333"
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=primary
+    """
+    {
+        "name": "Primary School 333333"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=primary
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "primary",
-              "TotalResults": 3,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                    "Urn": "111111",
-                    "Name": "Primary School 111111"
-                  },
-                  {
-                     "Urn": "222222", 
-                     "Name": "Primary School 222222"
-                  },
-                  {
-                     "Urn": "333333", 
-                     "Name": "Primary School 333333"
-                  }
-              ]
-          }    
-    
-        """
+    """
+    {
+        "SearchTerm": "primary",
+        "TotalResults": 3,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+            "Urn": "111111",
+            "Name": "Primary School 111111"
+            },
+            {
+                "Urn": "222222", 
+                "Name": "Primary School 222222"
+            },
+            {
+                "Urn": "333333", 
+                "Name": "Primary School 333333"
+            }
+        ]
+    }    
+    """
 
   Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm and resultsPerPage
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Primary School 111111"
-            }
-           """
+    """
+    {
+        "name": "Primary School 111111"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Name": "Primary School 222222"
-              }
-             """
+    """
+    {
+        "name": "Primary School 222222"
+    }
+    """
     And establishment "333333" exists: 
-             """
-              {
-                 "Urn": "333333", 
-                 "Name": "Primary School 333333"
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=primary&resultsPerPage=2
+    """
+    {
+        "name": "Primary School 333333"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=primary&resultsPerPage=2
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "primary",
-              "TotalResults": 3,
-              "ResultsPerPage": 2,
-              "Page": 1,
-              "Results": [
-                  {
-                    "Urn": "111111",
-                    "Name": "Primary School 111111"
-                  },
-                  {
-                     "Urn": "222222", 
-                     "Name": "Primary School 222222"
-                  }
-              ]
-          }    
-    
-        """
+    """
+    {
+        "SearchTerm": "primary",
+        "TotalResults": 3,
+        "ResultsPerPage": 2,
+        "Page": 1,
+        "Results": [
+            {
+            "Urn": "111111",
+            "Name": "Primary School 111111"
+            },
+            {
+                "Urn": "222222", 
+                "Name": "Primary School 222222"
+            }
+        ]
+    }    
+    """
 
   Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm, resultsPerPage and page
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Primary School 111111"
-            }
-           """
+    """
+    {
+        "name": "Primary School 111111"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Name": "Primary School 222222"
-              }
-             """
+    """
+    {
+        "name": "Primary School 222222"
+    }
+    """
     And establishment "333333" exists: 
-             """
-              {
-                 "Urn": "333333", 
-                 "Name": "Primary School 333333"
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=primary&resultsPerPage=2&page=2
+    """
+    {
+        "name": "Primary School 333333"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=primary&resultsPerPage=2&page=2
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "primary",
-              "TotalResults": 3,
-              "ResultsPerPage": 2,
-              "Page": 2,
-              "Results": [
-                 {
-                    "Urn": "333333", 
-                    "Name": "Primary School 333333"
-                 }
-              ]
-          }    
-    
-        """
+    """
+    {
+        "SearchTerm": "primary",
+        "TotalResults": 3,
+        "ResultsPerPage": 2,
+        "Page": 2,
+        "Results": [
+            {
+            "Urn": "333333", 
+            "Name": "Primary School 333333"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return a 200 response with expected pagination and no results for the given searchTerm, resultsPerPage, and page
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Primary School 111111"
-            }
-           """
+    """
+    {
+        "name": "Primary School 111111"
+    }
+    """
     And establishment "222222" exists: 
-             """
-              {
-                 "Urn": "222222", 
-                 "Name": "Primary School 222222"
-              }
-             """
+    """
+    {
+        "name": "Primary School 222222"
+    }
+    """
     And establishment "333333" exists: 
-             """
-              {
-                 "Urn": "333333", 
-                 "Name": "Primary School 333333"
-              }
-             """
-    When I send a GET request to /EstablishmentSearch?searchTerm=primary&resultsPerPage=2&page=3
+    """
+    {
+        "name": "Primary School 333333"
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=primary&resultsPerPage=2&page=3
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-         {
-              "SearchTerm": "primary",
-              "TotalResults": 3,
-              "ResultsPerPage": 2,
-              "Page": 3,
-              "Results": [
-                
-              ]
-          }   
-    
-        """
+    """
+    {
+        "SearchTerm": "primary",
+        "TotalResults": 3,
+        "ResultsPerPage": 2,
+        "Page": 3,
+        "Results": [
+        ]
+    }
+    """
 
   Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street, town and postcode
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "Address": {
-                 "Street": "13 The Street",
-                 "Town": "SomeTown",
-                 "PostCode": "AB12 3CD"
-              } 
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "name": "Some Primary School",
+        "address": {
+            "street": "13 The Street",
+            "town": "SomeTown",
+            "postCode": "AB12 3CD"
+        } 
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "111111",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "Address": "13 The Street, SomeTown AB12 3CD"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "111111",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "Address": "13 The Street, SomeTown AB12 3CD"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street and postcode
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "Address": {
-                 "Street": "13 The Street",
-                 "PostCode": "AB12 3CD"
-              } 
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "name": "Some Primary School",
+        "address": {
+            "street": "13 The Street",
+            "postCode": "AB12 3CD"
+        } 
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "111111",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "Address": "13 The Street AB12 3CD"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "111111",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "Address": "13 The Street AB12 3CD"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street and town
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "Address": {
-                 "Street": "13 The Street",
-                  "Town": "SomeTown"
-              } 
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "name": "Some Primary School",
+        "address": {
+            "street": "13 The Street",
+            "town": "SomeTown"
+        } 
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "111111",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "Address": "13 The Street SomeTown"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "111111",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "Address": "13 The Street, SomeTown"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isPrimary equal true
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "IsPost16": false,
-              "IsPrimary": true,
-              "IsSecondary": false
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "name": "Some Primary School",
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": false
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "111111",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "EducationPhase": "Primary"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "111111",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "EducationPhase": "Primary"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isSecondary equal true
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "IsPost16": false,
-              "IsPrimary": false,
-              "IsSecondary": true
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "name": "Some Primary School",
+        "isPost16": false,
+        "isPrimary": false,
+        "isSecondary": true
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "111111",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "EducationPhase": "Secondary"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "111111",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "EducationPhase": "Secondary"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isPost16 equal true
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "IsPost16": true,
-              "IsPrimary": false,
-              "IsSecondary": false
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "name": "Some Primary School",
+        "isPost16": true,
+        "isPrimary": false,
+        "isSecondary": false
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "111111",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                      "EducationPhase": "16 to 18"
-                  }
-              ]
-          }
-    
-        """
+    """
+    {
+        "SearchTerm": "111111",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "EducationPhase": "16 to 18"
+            }
+        ]
+    }
+    """
 
   Scenario: Should return a 200 response with search results and a computed ofstedRating field when the searchTerm matches the URN
     Given establishment "111111" exists: 
-           """
-            {
-              "Urn": "111111",
-              "Name": "Some Primary School",
-              "OfstedLastInspectionDate": "2013-03-22T00:00:00",
-              "OfstedRating": {
-                "Code": "2",
-                "Name": "Good"
-               }
-            }
-           """
-    When I send a GET request to /EstablishmentSearch?searchTerm=111111
+    """
+    {
+        "name": "Some Primary School",
+        "ofstedLastInspectionDate": "2013-03-22T00:00:00",
+        "ofstedRating": {
+            "code": "2",
+            "name": "Good"
+        }
+    }
+    """
+    When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 200 response
     And  the response should be an object containing these properties excluding null:
-        """
-          {
-              "SearchTerm": "111111",
-              "TotalResults": 1,
-              "ResultsPerPage": 50,
-              "Page": 1,
-              "Results": [
-                  {
-                      "Urn": "111111", 
-                      "Name": "Some Primary School",
-                       "OfstedRating": {
-                        "Code": "2",
-                        "Name": "Good",
-                        "LastInspected": "22 March 2013"
-                      }
-                  }
-              ]
-          }
-    
-        """   
-    
+    """
+    {
+        "SearchTerm": "111111",
+        "TotalResults": 1,
+        "ResultsPerPage": 50,
+        "Page": 1,
+        "Results": [
+            {
+                "Urn": "111111", 
+                "Name": "Some Primary School",
+                "OfstedRating": {
+                "Code": "2",
+                "Name": "Good",
+                "LastInspected": "22 March 2013"
+                }
+            }
+        ]
+    }
+    """

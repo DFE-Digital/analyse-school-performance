@@ -45,6 +45,16 @@
             return Task.FromResult((Result<TValue>)this);
         }
 
+        public override Result<TValue> MapErrorMessage(Func<string, string> mapFunction)
+        {
+            return this;
+        }
+
+        public override Task<Result<TValue>> MapErrorMessage(Func<string, Task<string>> mapFunction)
+        {
+            return Task.FromResult((Result<TValue>)this);
+        }
+
         public override TNextValue Match<TNextValue>(Func<TValue, TNextValue> onSuccess, Func<Error, TNextValue> onError)
         {
             return onSuccess(Value);
@@ -63,6 +73,28 @@
         public override Task Switch(Func<TValue, Task> onSuccess, Func<Error, Task> onError)
         {
             return onSuccess(Value);
+        }
+
+        public override Result<TValue> OnSuccess(Action<TValue> onSuccess)
+        {
+            onSuccess(Value);
+            return this;
+        }
+
+        public override async Task<Result<TValue>> OnSuccess(Func<TValue, Task> onSuccess)
+        {
+            await onSuccess(Value);
+            return this;
+        }
+
+        public override Result<TValue> OnError(Action<Error> onError)
+        {
+            return this;
+        }
+
+        public override Task<Result<TValue>> OnError(Func<Error, Task> onError)
+        {
+            return Task.FromResult((Result<TValue>)this);
         }
 
         public override TValue GetValueOrDefault(TValue defaultValue)
