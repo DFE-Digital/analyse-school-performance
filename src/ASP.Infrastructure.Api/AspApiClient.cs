@@ -5,6 +5,7 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
+using ASP.Application.UseCases.LocalAuthority;
 using ASP.Core.DTO.Establishment;
 using ASP.Core.Helpers;
 using ASP.Core.Results;
@@ -123,6 +124,14 @@ namespace ASP.Infrastructure.Api
 
             return await ApiGet(url, queryString)
                 .Then(response => JsonHelper.DeserializeNotNull<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>(response));
+        }
+        
+        public async Task<Result<ASP.Core.DTO.LocalAuthority.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request)
+        {
+            var url = "/api/GetLocalAuthority";
+            var queryString = QueryString.Create("code", request.Code);
+            return await ApiGet(url, queryString)
+                .Then(response => JsonHelper.DeserializeNotNull<ASP.Core.DTO.LocalAuthority.LocalAuthorityDTO>(response));
         }
 
         private async Task<Result<string>> ApiGet(string url, QueryString? queryString)

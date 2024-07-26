@@ -6,6 +6,7 @@ using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Application.UseCases.Downloads.LaDownloads;
+using ASP.Application.UseCases.LocalAuthority;
 using ASP.Core.Search.Strategy;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +23,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEstablishmentSearchSuggestions, EstablishmentSearchSuggestions>();
         services.AddScoped<IGetAllContentTemplates, GetAllContentTemplates>();
         services.AddScoped<IGetLaDownloadsUseCase, GetLaDownloadsUseCase>();
+        services.AddScoped<IGetLocalAuthorityUseCase, GetLocalAuthorityUseCase>();
 
         return services;
     }

@@ -1,11 +1,7 @@
-﻿using ASP.Application;
-using ASP.Core;
+﻿using ASP.Core;
 using ASP.Infrastructure.TableStorage;
-using ASP.Infrastructure.Api;
 using ASP.Test.Core;
-using ASP.Test.Web.Areas.AuthorisationTest;
 using ASP.Test.Web.Areas.ComponentTest;
-using ASP.Test.Web.Areas.ErrorTest;
 using ASP.Web;
 using ASP.Web.AcceptanceTests.Services;
 using ASP.Web.Features.Cookies;

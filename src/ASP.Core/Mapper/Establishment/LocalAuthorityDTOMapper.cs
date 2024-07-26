@@ -1,11 +1,10 @@
 ﻿using ASP.Core.DTO.Establishment;
-using ASP.Core.Establishments;
 
 namespace ASP.Core.Mapper.Establishment;
 
 public static class LocalAuthorityDTOMapper
 {
-    public static LocalAuthorityDTO? MapToLocalAuthorityDTO(this LocalAuthority? localAuthority)
+    public static LocalAuthorityDTO? MapToLocalAuthorityDTO(this ASP.Core.Establishments.LocalAuthority? localAuthority)
     {
         if (localAuthority == null) return null;  // Return null directly instead of an empty object
         return new LocalAuthorityDTO()

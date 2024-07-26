@@ -10,6 +10,7 @@ using ASP.Core.Establishments;
 using Azure.Identity;
 using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariables;
 using ASP.Application;
+using ASP.Core.LocalAuthority;
 using ASP.Infrastructure;
 
 namespace ASP.Api
@@ -26,6 +27,7 @@ namespace ASP.Api
                 {
                     services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
                     services.AddScoped<IEstablishmentRepository, EstablishmentRepository>();
+                    services.AddScoped<ILocalAuthorityRepository, LocalAuthorityRepository>();
                     services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
                     services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
 

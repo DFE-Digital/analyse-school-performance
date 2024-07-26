@@ -3,6 +3,7 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
+using ASP.Application.UseCases.LocalAuthority;
 using ASP.Core.DTO.Establishment;
 using ASP.Core.Results;
 using ASP.Core.Search;
@@ -19,5 +20,6 @@ namespace ASP.Application
         Task<Result<EstablishmentDetailsDTO>> GetEstablishmentDetails(GetEstablishmentDetailsRequest request);
         Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> EstablishmentSearch(EstablishmentSearchRequest request);
         Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request);
+        Task<Result<ASP.Core.DTO.LocalAuthority.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request);
     }
 }

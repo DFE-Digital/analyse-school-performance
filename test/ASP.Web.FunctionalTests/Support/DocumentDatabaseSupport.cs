@@ -26,6 +26,7 @@ namespace ASP.AcceptanceTests.Support
         {
             await _web.DocumentDatabase.DeleteAllAsync("content");
             await _web.DocumentDatabase.DeleteAllAsync("establishments");
+            await _web.DocumentDatabase.DeleteAllAsync("local-authorities");
         }
     }
 }

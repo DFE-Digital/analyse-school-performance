@@ -1,6 +1,7 @@
 using ASP.Api;
 using ASP.Infrastructure.Api;
 using ASP.Web.Areas;
+using ASP.Web.Areas.LocalAuthority;
 using ASP.Web.Areas.School;
 using ASP.Web.Authentication;
 using ASP.Web.Authorisation;
@@ -43,6 +44,7 @@ namespace ASP.Web
                 .ConfigureTemplateComponents()
                 .ConfigureLogging()
                 .ConfigureSchoolPages()
+                .ConfigureLocalAuthorityPages()
                 .ConfigureSearch();
 
             builder.Services.ConfigureInProcessApi();

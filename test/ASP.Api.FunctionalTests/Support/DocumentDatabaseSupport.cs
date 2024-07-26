@@ -26,6 +26,7 @@ namespace ASP.Api.FunctionalTests.Support
         {
             await _api.DocumentDatabase.DeleteAllAsync("content");
             await _api.DocumentDatabase.DeleteAllAsync("establishments");
+            await _api.DocumentDatabase.DeleteAllAsync("local-authorities");
         }
     }
 }

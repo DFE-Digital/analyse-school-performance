@@ -1,10 +1,8 @@
-﻿using ASP.Infrastructure.DAO.Establishment;
-
-namespace ASP.Infrastructure.Mapper.Establishment;
+﻿namespace ASP.Infrastructure.Mapper.Establishment;
 
 public static class LocalAuthorityMapper
 {
-    public static Core.Establishments.LocalAuthority? MapToDomainEntityLocalAuthority(this LocalAuthority? localAuthority)
+    public static Core.Establishments.LocalAuthority? MapToDomainEntityLocalAuthority(this DAO.Establishment.LocalAuthority? localAuthority)
     {
         if (localAuthority == null) return null;  // Return null directly instead of an empty object
         return new Core.Establishments.LocalAuthority()
@@ -14,9 +12,9 @@ public static class LocalAuthorityMapper
         };
     }
     
-    public static LocalAuthority? MapToLocalAuthorityDAO(this Core.Establishments.LocalAuthority? localAuthority)
+    public static DAO.Establishment.LocalAuthority? MapToLocalAuthorityDAO(this Core.Establishments.LocalAuthority? localAuthority)
     {
         if (localAuthority == null) return null;  // Return null directly instead of an empty object
-        return new LocalAuthority(localAuthority.Code, localAuthority.Name);
+        return new DAO.Establishment.LocalAuthority(localAuthority.Code, localAuthority.Name);
     }
 }
