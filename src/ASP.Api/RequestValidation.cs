@@ -1,6 +1,5 @@
 using ASP.Core.Helpers;
 using ASP.Core.Results;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
 
 namespace ASP.Api
@@ -100,6 +99,27 @@ namespace ASP.Api
             {
                 return Error.Invalid($@"Bad request: parameter ""{parameterName}"" should be a whole number greater than or equal to 1.");
             }
+        }
+
+        public static Result<string> RequiresParameterLengthToMatch(string value, string parameterName, int requiredLength)
+        {
+            if (value.Length != requiredLength)
+            {
+                return Error.Invalid($@"The parameter ""{parameterName}"" must be exactly {requiredLength} characters long.");
+            }
+
+            return value;
+        }
+
+
+        public static Result<string> RequiresParameterToBeDigits(string value, string parameterName)
+        {
+            if (!value.All(char.IsDigit))
+            {
+                return Error.Invalid($@"The parameter ""{parameterName}"" must contain only digits.");
+            }
+
+            return value;
         }
     }
 }
