@@ -153,19 +153,22 @@ namespace ASP.Web.Features.Authentication
                             var dsiPublicApiClient = context.HttpContext.RequestServices.GetService<IDsiApiClient>();
 
                             //userAccess contains the Role information needed to construct a set of Claims for use in the service
-                            var userAccess = await dsiPublicApiClient!.GetUserAccess(dsiConfiguration[DsiConstants.DsiServiceId]!, organisation?.Id!, authenticatedUserInfo.UserId);
-                            if (userAccess == null)
+                            var userAccessResult = await dsiPublicApiClient!.GetUserAccess(dsiConfiguration[DsiConstants.DsiServiceId]!, organisation?.Id!, authenticatedUserInfo.UserId);
+
+                            var userAccess = userAccessResult.GetValueOrDefault(new UserAccess());
+                            if (!userAccess.Roles.Any())
                             {
                                 return; //User has no roles;
                             }
+
+                            var claims = new List<Claim>();
                             
-                            var claims = new List<Claim>
+                            claims.AddRange(new []
                             {
-                                //Create a claim using the logged in user's Role 
-                                new(ClaimTypes.Role, userAccess.Roles!.First().Code!),
-                                new(CustomClaimTypes.UniqueReferenceNumber, organisation.UniqueReferenceNumber),
-                                new(CustomClaimTypes.EstablishmentNumber, organisation.EstablishmentNumber),
-                            };
+                                new Claim(ClaimTypes.Role, userAccess.Roles.First().Code),
+                                new Claim(CustomClaimTypes.UniqueReferenceNumber, organisation.UniqueReferenceNumber),
+                                new Claim(CustomClaimTypes.EstablishmentNumber, organisation.EstablishmentNumber)
+                            });
 
                             //A Role is Claim with Type Role
                             //A user may have more than one Role

@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using ASP.Core.Authorisation;
+﻿using ASP.Core.Authorisation;
 using ASP.Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
