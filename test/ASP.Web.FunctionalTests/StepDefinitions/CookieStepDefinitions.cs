@@ -1,7 +1,7 @@
-﻿using ASP.AcceptanceTests.Drivers;
+﻿using ASP.Web.FunctionalTests.Drivers;
 using TechTalk.SpecFlow.Infrastructure;
 
-namespace ASP.AcceptanceTests.StepDefinitions
+namespace ASP.Web.FunctionalTests.StepDefinitions
 {
     // Step definitions that deal with cookies using the TestCookieProvider to set/inspect cookie values
     [Binding]

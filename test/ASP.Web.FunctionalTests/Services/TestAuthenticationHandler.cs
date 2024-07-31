@@ -1,5 +1,4 @@
-﻿using ASP.Web.AcceptanceTests.Services;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
@@ -9,7 +8,7 @@ namespace ASP.Web.FunctionalTests.Services
 {
     public class TestAuthenticationHandler : AuthenticationHandler<TestAuthenticationHandlerOptions>
     {
-        private readonly List<Claim> _roles;
+        private readonly List<Claim> _claims;
 
         public const string AuthenticationScheme = "Test";
 
@@ -17,14 +16,14 @@ namespace ASP.Web.FunctionalTests.Services
             IOptionsMonitor<TestAuthenticationHandlerOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
-            TestRoleProvider testRoleProvider) : base(options, logger, encoder)
+            TestClaimsProvider testClaimsProvider) : base(options, logger, encoder)
         {
-            _roles = testRoleProvider.GetRoles();
+            _claims = testClaimsProvider.GetClaims();
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var identity = new ClaimsIdentity(_roles, AuthenticationScheme);
+            var identity = new ClaimsIdentity(_claims, AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, AuthenticationScheme);
 

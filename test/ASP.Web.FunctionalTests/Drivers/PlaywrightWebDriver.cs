@@ -1,11 +1,10 @@
-﻿using ASP.AcceptanceTests.Drivers;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using ASP.Test.Core;
 using Microsoft.Playwright;
-using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using TechTalk.SpecFlow.Infrastructure;
 
-namespace ASP.Web.AcceptanceTests.Drivers
+namespace ASP.Web.FunctionalTests.Drivers
 {
     // Web driver that uses Playwright to execute Javascript in a real web browser. Javascript support in AngleSharp
     // is very limited so in order to make sure any components that use Javascript are properly tested we need to use

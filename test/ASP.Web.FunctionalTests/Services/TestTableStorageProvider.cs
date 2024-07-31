@@ -1,7 +1,7 @@
 ﻿using ASP.Core.Results;
 using ASP.Infrastructure.TableStorage;
 
-namespace ASP.Web.AcceptanceTests.Services
+namespace ASP.Web.FunctionalTests.Services
 {
     public class TestTableStorageProvider : ITableStorageProvider
     {

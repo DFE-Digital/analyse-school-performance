@@ -2,8 +2,6 @@
 using ASP.Infrastructure.TableStorage;
 using ASP.Test.Core;
 using ASP.Test.Web.Areas.ComponentTest;
-using ASP.Web;
-using ASP.Web.AcceptanceTests.Services;
 using ASP.Web.Features.Cookies;
 using ASP.Web.FunctionalTests.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -18,7 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using TechTalk.SpecFlow.Infrastructure;
 
-namespace ASP.AcceptanceTests.Drivers
+namespace ASP.Web.FunctionalTests.Drivers
 {
     // Context for tests to access the ASP web application running in a test host using ASP.NET Core WebApplicationFactory.
     // Overrides services wired up in Program.cs with test implementations such as in-memory data store and test cookie provider.
@@ -53,7 +51,7 @@ namespace ASP.AcceptanceTests.Drivers
         public IDocumentDatabase DocumentDatabase => _factory.DocumentDatabase;
         public TestCookieProvider CookieProvider => _factory.CookieProvider;
         public TestTableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
-        public TestRoleProvider TestRoleProvider => _factory.TestRoleProvider;
+        public TestClaimsProvider TestClaimsProvider => _factory.TestClaimsProvider;
 
         public string ServerAddress => _factory.ServerAddress;
 
@@ -63,20 +61,20 @@ namespace ASP.AcceptanceTests.Drivers
             private readonly MemoryStore _store;
             private readonly TestCookieProvider _cookieProvider;
             private readonly TestTableStorageProvider _tableStorageProvider;
-            private readonly TestRoleProvider _testRoleProvider;
+            private readonly TestClaimsProvider _testClaimsProvider;
 
             private IDocumentDatabase _documentDatabase;
 
             public TestCookieProvider CookieProvider => _cookieProvider;
             public TestTableStorageProvider TableStorageProvider => _tableStorageProvider;
-            public TestRoleProvider TestRoleProvider => _testRoleProvider;
+            public TestClaimsProvider TestClaimsProvider => _testClaimsProvider;
 
             public CustomWebApplicationFactory()
             {
                 _store = new MemoryStore();
                 _cookieProvider = new TestCookieProvider();
                 _tableStorageProvider = new TestTableStorageProvider();
-                _testRoleProvider = new TestRoleProvider();
+                _testClaimsProvider = new TestClaimsProvider();
 
                 ClientOptions.AllowAutoRedirect = true;
             }
@@ -199,6 +197,10 @@ namespace ASP.AcceptanceTests.Drivers
                     })
                    .AddScheme<TestAuthenticationHandlerOptions, TestAuthenticationHandler>
                                          (TestAuthenticationHandler.AuthenticationScheme, options => { });
+                    services.AddAuthorization(options =>
+                    {
+                        TestPolicy.AddPolicies(options);
+                    });
 
                     // Add in-memory data store
                     services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
@@ -211,7 +213,7 @@ namespace ASP.AcceptanceTests.Drivers
                     services.RemoveAll<ITableStorageProvider>();
                     services.Add(new ServiceDescriptor(typeof(ITableStorageProvider), _tableStorageProvider));
                     // Add service that provides Roles for use in authorisation tests
-                    services.Add(new ServiceDescriptor(typeof(TestRoleProvider), _testRoleProvider));
+                    services.Add(new ServiceDescriptor(typeof(TestClaimsProvider), _testClaimsProvider));
 
                     if (testMode == "Development")
                     {

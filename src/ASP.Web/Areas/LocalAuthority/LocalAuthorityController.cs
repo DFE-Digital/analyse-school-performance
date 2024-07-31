@@ -3,11 +3,14 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.LocalAuthority;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
+using ASP.Web.Features.Authorisation;
 using ASP.Web.Features.TermsOfUse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Areas.LocalAuthority
 {
+    [Authorize(Policy = Policy.LocalAuthorityAccessPolicy)]
     [Area("LocalAuthority")]
     [Route("my-local-authority")]
     [ServiceFilter<TermsOfUseActionFilter>]

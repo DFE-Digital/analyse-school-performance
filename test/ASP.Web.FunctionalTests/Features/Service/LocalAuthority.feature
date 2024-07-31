@@ -2,7 +2,8 @@
 
     @Javascript:disabled
     Scenario: my local authority page should be accessible when valid code is provided
-        Given localAuthority "301" exists:
+        Given I am a user with the RAISE_LA_Named role for EstablishmentNumber 301
+        And localAuthority "301" exists:
         """
         {
                   "Name": "Test Name",
@@ -21,7 +22,8 @@
     @Javascript:disabled
     Scenario: my local authority page cards should be populated from the "la-landing-page" content template
 
-        Given localAuthority "301" exists:
+        Given I am a user with the RAISE_LA_Anon role for EstablishmentNumber 301
+        And localAuthority "301" exists:
         """
         {
                   "Name": "Test Name",
@@ -45,8 +47,9 @@
         And the elements "#app-card-container .app-card" should total 1
 
     @Javascript:disabled
-    Scenario: my local authority page cards should be populated correctly
-        Given content template "la-landing-page" exists:
+    Scenario: my local authority page cards should be populated correctly for a non-LA user with access to La
+        Given I am a user with the RAISE_Super_User role for EstablishmentNumber 302
+        And content template "la-landing-page" exists:
         """
         {
         	"Views": [
@@ -73,3 +76,11 @@
         Then the element "#app-card-la-download h2 a" should have the href "la-download"
         And the element "#app-card-la-download h2 a" should have the text content "Download data"
         And the element "#app-card-la-download p" should have the text content "Download data for Analyse school performance and Key to success."
+
+    @Javascript:disabled
+    Scenario: A non-LA user should not be able to access the 'My Local Authority' page. Instead, they should see a 403 Access Denied page.
+        Given I am a user with the RAISE_MAT_Named role
+        When I navigate to /my-local-authority/301
+        Then I should get a 403 response
+        And the page title should be "Access denied | Analyse school performance"
+        And the element "h1.govuk-heading-l" should have the text content "Access denied"

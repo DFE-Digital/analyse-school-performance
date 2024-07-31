@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace ASP.AcceptanceTests.Drivers
+namespace ASP.Web.FunctionalTests.Drivers
 {
     // Interface for tests to interact with a test web browser (either virtual or real)
     public interface IWebDriver

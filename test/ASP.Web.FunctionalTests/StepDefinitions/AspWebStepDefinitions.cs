@@ -1,9 +1,8 @@
-using ASP.AcceptanceTests.Drivers;
 using ASP.Test.Core;
-using System.Net;
+using ASP.Web.FunctionalTests.Drivers;
 using TechTalk.SpecFlow.Infrastructure;
 
-namespace ASP.AcceptanceTests.StepDefinitions
+namespace ASP.Web.FunctionalTests.StepDefinitions
 {
     // Step definitions for test scenarios that interact with the ASP web application
     [Binding]

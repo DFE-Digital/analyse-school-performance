@@ -1,8 +1,7 @@
-﻿using ASP.AcceptanceTests.Drivers;
-using ASP.Web.AcceptanceTests.Drivers;
+﻿using ASP.Web.FunctionalTests.Drivers;
 using BoDi;
 
-namespace ASP.AcceptanceTests.Support
+namespace ASP.Web.FunctionalTests.Support
 {
     // Any tests that interact with the AspWebContext (virtual ASP web application) must have either the
     // @Javascript:enabled or @Javascript:disabled attribute set in order to know which web driver to use

@@ -1,10 +1,9 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using ASP.Test.Core;
-using System.Xml.Linq;
 using Xunit.Sdk;
 
-namespace ASP.AcceptanceTests.Drivers
+namespace ASP.Web.FunctionalTests.Drivers
 {
     // Driver for tests to interact with a group of elements on the page using AngleSharp (see AngleSharpWebDriver)
     public class AngleSharpElementsDriver : IElementsDriver

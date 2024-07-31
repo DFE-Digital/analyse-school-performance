@@ -1,6 +1,6 @@
 ﻿using ASP.Web.Features.Cookies;
 
-namespace ASP.Web.AcceptanceTests.Services
+namespace ASP.Web.FunctionalTests.Services
 {
     public class TestCookieProvider : ICookieProvider
     {

@@ -1,4 +1,4 @@
-﻿namespace ASP.AcceptanceTests.Drivers
+﻿namespace ASP.Web.FunctionalTests.Drivers
 {
     // Interface for tests to interact with a group of elements on the page
     public interface IElementsDriver

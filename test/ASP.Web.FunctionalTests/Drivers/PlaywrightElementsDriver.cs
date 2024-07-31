@@ -1,9 +1,7 @@
-﻿using AngleSharp.Dom;
-using ASP.AcceptanceTests.Drivers;
-using ASP.Test.Core;
+﻿using ASP.Test.Core;
 using Microsoft.Playwright;
 
-namespace ASP.Web.AcceptanceTests.Drivers
+namespace ASP.Web.FunctionalTests.Drivers
 {
     // Driver for tests to interact with a group of elements on the page using Playwright (see PlaywrightWebDriver)
     internal class PlaywrightElementsDriver : IElementsDriver

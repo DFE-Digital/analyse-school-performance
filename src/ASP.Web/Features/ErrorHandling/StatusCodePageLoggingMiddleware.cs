@@ -134,14 +134,25 @@ namespace ASP.Web.Features.ErrorHandling
                 {
                     errorViewModel.ErrorMessage = errorMessage;
                     errorViewModel.StackTrace = stackTrace;
-                };
+                }
 
-                var view = context.Response.StatusCode == (int)HttpStatusCode.NotFound
-                    ? "~/Features/ErrorHandling/PageNotFoundError.cshtml"
-                    : "~/Features/ErrorHandling/ServerError.cshtml";
+                var view = GetErrorView(context.Response.StatusCode);
 
                 context.Response.ContentType = "text/html";
                 await context.RenderViewAsync(view, errorViewModel);
+            }
+        }
+        
+        private string GetErrorView(int statusCode)
+        {
+            switch (statusCode)
+            {
+                case (int)HttpStatusCode.NotFound:
+                    return "~/Features/ErrorHandling/PageNotFoundError.cshtml";
+                case (int)HttpStatusCode.Forbidden:
+                    return "~/Features/ErrorHandling/AccessDenied.cshtml";
+                default:
+                    return "~/Features/ErrorHandling/ServerError.cshtml";
             }
         }
     }

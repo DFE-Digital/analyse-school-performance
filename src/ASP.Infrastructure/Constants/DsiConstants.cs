@@ -25,7 +25,7 @@
         public const string DsiScopeOpenId = "openid";
         public const string DsiScopeEmail = "email";
         public const string DsiScopeProfile = "profile";
-        public const string DsiScopeOrganisationId = "organisationid";
+        public const string DsiScopeOrganisation = "organisation";
 
         public const string DsiCallbackPath = "DsiCallbackPath";
         public const string DsiSignedOutCallbackPath = "DsiSignedOutCallbackPath";

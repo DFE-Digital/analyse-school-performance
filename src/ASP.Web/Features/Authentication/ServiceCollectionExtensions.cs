@@ -1,13 +1,13 @@
-﻿using ASP.Infrastructure.Constants;
+﻿using System.Security.Claims;
+using ASP.Core.Authorisation;
+using ASP.Infrastructure.Constants;
 using ASP.Infrastructure.Dsi.DsiApiClient;
 using ASP.Infrastructure.Dsi.Models;
-using ASP.Web.Features.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using System.Security.Claims;
 
-namespace ASP.Web.Authentication
+namespace ASP.Web.Features.Authentication
 {
     public static class ServiceCollectionExtensions
     {
@@ -54,11 +54,12 @@ namespace ASP.Web.Authentication
                 options.ClientSecret = dsiConfiguration[DsiConstants.DsiOidcClientSecret];
                 options.ResponseType = OpenIdConnectResponseType.Code;
                 options.RequireHttpsMetadata = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
                 options.Scope.Clear();
                 options.Scope.Add(DsiConstants.DsiScopeOpenId);
                 options.Scope.Add(DsiConstants.DsiScopeEmail);
                 options.Scope.Add(DsiConstants.DsiScopeProfile);
-                options.Scope.Add(DsiConstants.DsiScopeOrganisationId);
+                options.Scope.Add(DsiConstants.DsiScopeOrganisation);
 
                 //Save the authentication information in the cookie.
                 //This information is known as the authentication ticket
@@ -127,8 +128,6 @@ namespace ASP.Web.Authentication
                     {
                         if (context.Principal?.Identity?.IsAuthenticated == true)
                         {
-                            var claims = new List<Claim>();
-
                             //These two properties refer to cookie behaviour.
                             //If 'IsPersistent = true' and an 'ExpiresUtc' is set then the cookie will be removed from the
                             //browser once 'ExpiresUtc' is reached
@@ -159,9 +158,14 @@ namespace ASP.Web.Authentication
                             {
                                 return; //User has no roles;
                             }
-
-                            //extract the 'ASP DfE Named' role from the API response
-                            claims.AddRange(userAccess.Roles!.Select(role => new Claim(ClaimTypes.Role, role.Name!)));
+                            
+                            var claims = new List<Claim>
+                            {
+                                //Create a claim using the logged in user's Role 
+                                new(ClaimTypes.Role, userAccess.Roles!.First().Code!),
+                                new(CustomClaimTypes.UniqueReferenceNumber, organisation.UniqueReferenceNumber),
+                                new(CustomClaimTypes.EstablishmentNumber, organisation.EstablishmentNumber),
+                            };
 
                             //A Role is Claim with Type Role
                             //A user may have more than one Role

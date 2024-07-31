@@ -4,7 +4,7 @@ using ASP.Test.Core;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit.Sdk;
 
-namespace ASP.AcceptanceTests.Drivers
+namespace ASP.Web.FunctionalTests.Drivers
 {
     // Driver for tests to interact with an element on the page using AngleSharp (see AngleSharpWebDriver)
     public class AngleSharpElementDriver : IElementDriver

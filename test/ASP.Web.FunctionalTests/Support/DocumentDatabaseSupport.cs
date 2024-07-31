@@ -1,7 +1,7 @@
-﻿using ASP.AcceptanceTests.Drivers;
+﻿using ASP.Web.FunctionalTests.Drivers;
 using BoDi;
 
-namespace ASP.AcceptanceTests.Support
+namespace ASP.Web.FunctionalTests.Support
 {
     [Binding]
     public class DocumentDatabaseSupport

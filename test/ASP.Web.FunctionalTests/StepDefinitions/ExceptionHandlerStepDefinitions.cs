@@ -1,7 +1,7 @@
-﻿using ASP.AcceptanceTests.Drivers;
-using System.Net;
+﻿using System.Net;
+using ASP.Web.FunctionalTests.Drivers;
 
-namespace ASP.AcceptanceTests.StepDefinitions
+namespace ASP.Web.FunctionalTests.StepDefinitions
 {
     [Binding]
     public class ExceptionHandlerStepDefinitions

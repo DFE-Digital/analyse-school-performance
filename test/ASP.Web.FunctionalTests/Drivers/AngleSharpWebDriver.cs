@@ -1,17 +1,14 @@
-﻿using AngleSharp.Dom;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Net.Http.Headers;
+using AngleSharp;
+using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Io.Network;
-using AngleSharp;
 using ASP.Test.Core;
-using System.Net.Http.Headers;
-using System.Net;
-using System.Diagnostics.CodeAnalysis;
 using TechTalk.SpecFlow.Infrastructure;
-using Microsoft.AspNetCore.Http;
-using System.Web;
-using Newtonsoft.Json;
 
-namespace ASP.AcceptanceTests.Drivers
+namespace ASP.Web.FunctionalTests.Drivers
 {
     // Web driver that uses AngleSharp to interact with the HTML DOM of the web application pages. 
     // This is much faster than using a browser automation tool such as Playwright or Selenium,

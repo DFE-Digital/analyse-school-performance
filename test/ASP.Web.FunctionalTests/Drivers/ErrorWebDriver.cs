@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Xunit.Sdk;
 
-namespace ASP.AcceptanceTests.Drivers
+namespace ASP.Web.FunctionalTests.Drivers
 {
     // This is the default web driver, which will be used for any test that uses StepDefinitions that interact with the
     // AspWebContext (virtual ASP web application) but does not have either the @Javascript:enabled or @Javascript:disabled

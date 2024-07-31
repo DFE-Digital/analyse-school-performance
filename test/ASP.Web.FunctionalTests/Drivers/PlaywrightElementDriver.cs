@@ -1,9 +1,8 @@
-﻿using ASP.AcceptanceTests.Drivers;
-using ASP.Test.Core;
+﻿using ASP.Test.Core;
 using Microsoft.Playwright;
 using TechTalk.SpecFlow.Infrastructure;
 
-namespace ASP.Web.AcceptanceTests.Drivers
+namespace ASP.Web.FunctionalTests.Drivers
 {
     // Driver for tests to interact with an element on the page using Playwright (see PlaywrightWebDriver)
     internal class PlaywrightElementDriver : IElementDriver
