@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ASP.Core.Authorisation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.Web.FunctionalTests.Services;
 
@@ -12,7 +13,7 @@ public static class TestPolicy
         {
             policy.RequireAssertion(context =>
                 context.User.HasClaim(c =>
-                    c.Type == System.Security.Claims.ClaimTypes.Role && c.Value == TestRole.DfeNamed));
+                    c.Type == System.Security.Claims.ClaimTypes.Role && c.Value == Roles.DfeNamed));
         });
     }
 }

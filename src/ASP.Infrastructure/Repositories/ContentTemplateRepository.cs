@@ -18,14 +18,14 @@ namespace ASP.Infrastructure.Repositories
         public Task<Result<ContentTemplate>> GetPublishedRevision(string contentTemplateId)
         {
             return _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.ContentId == contentTemplateId && t.IsPublished))
-                .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find a published revision for content template ""{contentTemplateId}""."))
+                .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find a published revision for Content Template ""{contentTemplateId}""."))
                 .Map(dtos => dtos.First().ToContentTemplate());
         }
 
         public Task<Result<ContentTemplate>> GetRevision(string contentTemplateId, string revision)
         {
             return _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.Id == revision && t.ContentId == contentTemplateId))
-                .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find revision ""{revision}"" for content template ""{contentTemplateId}""."))
+                .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find revision ""{revision}"" for Content Template ""{contentTemplateId}""."))
                 .Map(dtos => dtos.First().ToContentTemplate());
         }
 
@@ -33,7 +33,7 @@ namespace ASP.Infrastructure.Repositories
         {
             return _documentDB.GetAsync<ContentTemplateDTO>(ContainerKey, contentTemplateId, contentTemplateId)
                 .MapError(e => e is NotFoundError
-                    ? Error.NotFound($@"Could not find content template ""{contentTemplateId}"".")
+                    ? Error.NotFound($@"Could not find Content Template ""{contentTemplateId}"".")
                     : e)
                 .Map(dto => dto.ToContentTemplate());
         }
@@ -54,7 +54,7 @@ namespace ASP.Infrastructure.Repositories
         public async Task<Result<List<ContentTemplate>>> GetAllPublishedTemplates()
         {
             return await _documentDB.QueryAsync<ContentTemplateDTO>(ContainerKey, q => q.Where(t => t.IsPublished))
-                .ErrorIf(dtos => !dtos.Any(), Error.NotFound("Could not find any published revision content templates"))
+                .ErrorIf(dtos => !dtos.Any(), Error.NotFound("Could not find any published Content Templates"))
                 .Map(dtos => dtos.Select(dto => dto.ToContentTemplate()).ToList());
         }
     }

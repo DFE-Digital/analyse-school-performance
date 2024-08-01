@@ -43,7 +43,7 @@ namespace ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate
 
         public async Task<Result<Done>> HandleRequest(UpdateContentTemplateRequest request)
         {
-            var notAllowedError = Error.NotAllowed("Only unpublished content template revisions can be updated.");
+            var notAllowedError = Error.NotAllowed("Only unpublished Content Template revisions can be updated.");
 
             if (request.Revision == null)
             {

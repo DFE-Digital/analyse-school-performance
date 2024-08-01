@@ -1,7 +1,7 @@
 Feature: OtherReports
 @Javascript:disabled
 Scenario: Other reports page should be accessible when valid urn is provided
-    Given establishment "136028" exists:
+    Given Establishment "136028" exists:
 	"""
 	{
         "name": "Dagenham Park CofE School"
@@ -17,7 +17,7 @@ Scenario: Other reports page should be accessible when valid urn is provided
 
 @Javascript:disabled
 Scenario: Other reports page should show the accordian component when javascript disabled
-    Given establishment "136028" exists:
+    Given Establishment "136028" exists:
 	"""
 	{
         "name": "Dagenham Park CofE School"
@@ -32,7 +32,7 @@ Scenario: Other reports page should show the accordian component when javascript
 
 @Javascript:enabled
 Scenario: Other reports page should show the accordian component when javascript enabled
-    Given content template "school-other-reports-ofsted" exists:
+    Given Content Template "school-other-reports-ofsted" exists:
     """
     {
         "Views": [
@@ -47,7 +47,7 @@ Scenario: Other reports page should show the accordian component when javascript
         ]
     }
     """
-    And establishment "136028" exists:
+    And Establishment "136028" exists:
 	"""
 	{
         "name": "Dagenham Park CofE School"

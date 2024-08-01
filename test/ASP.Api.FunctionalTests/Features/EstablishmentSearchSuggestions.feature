@@ -29,13 +29,13 @@ Feature: Establishment Search Suggestions
           | -1             |
 
     Scenario: Should return NotFound (404) response if no matches found for the searchTerm
-        Given no establishments exist
+        Given no Establishments exist
         When I send a GET request to /api/EstablishmentSearchSuggestions?searchTerm=x
         Then I should get a 404 response
         And the response should be the message "Not found: there were no matches for "x"."
 
     Scenario: Should return NotFound (404) response if there were no relevant matches for the given searchTerm
-        Given establishment "111111" exists:
+        Given Establishment "111111" exists:
         """
         {
             "name": "Some Primary School"
@@ -46,7 +46,7 @@ Feature: Establishment Search Suggestions
         And the response should be the message "Not found: there were no matches for "secondary"."
 
     Scenario: Should return a NotFound (404) response if the requested establishment has been deleted for the given searchTerm
-        Given deleted establishment "222222" exists:
+        Given deleted Establishment "222222" exists:
         """
         {
             "name": "Some Primary School"
@@ -57,7 +57,7 @@ Feature: Establishment Search Suggestions
         And the response should be the message "Not found: The requested establishment with URN "222222" has been deleted."
 
     Scenario: Should return a NotFound (404) response if the requested establishment is not currently visible for the given searchTerm
-        Given non visible establishment "111111" exists:
+        Given non-visible Establishment "111111" exists:
         """
         {
             "name": "Some Primary School"
@@ -68,7 +68,7 @@ Feature: Establishment Search Suggestions
         And the response should be the message "Not found: The requested establishment with URN "111111" is not currently visible."
 
     Scenario: Should not return 400 response if maxSuggestions = 1
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School"
@@ -78,7 +78,7 @@ Feature: Establishment Search Suggestions
     Then I should get a 200 response
 
     Scenario Outline: Should return 200 response with search results when matches are found for the given searchTerm
-        Given establishment "987654" exists:
+        Given Establishment "987654" exists:
         """
         {
             "laestab": "123/4567",
@@ -115,28 +115,28 @@ Feature: Establishment Search Suggestions
           | 56         |
 
     Scenario: Should return a 200 response with search suggestions results and results are sorted alphabetically for the given searchTerm
-        Given establishment "111111" exists:
+        Given Establishment "111111" exists:
         """
         {
             "laestab": "123/1111",
             "name": "Primary School C"
         }
         """
-        And establishment "222222" exists:
+        And Establishment "222222" exists:
         """
         {
             "laestab": "123/2222",
             "name": "Primary School D"
         }
         """
-        And establishment "333333" exists:
+        And Establishment "333333" exists:
         """
         {
             "laestab": "123/3333",
             "name": "Primary School B"
         }
         """
-        And establishment "444444" exists:
+        And Establishment "444444" exists:
         """
         {
             "laestab": "123/4444",
@@ -176,28 +176,28 @@ Feature: Establishment Search Suggestions
         """
 
     Scenario: Should return a 200 response with search suggestion results that are sorted alphabetically, up to the maximum number of suggestions specified for the given search term
-        Given establishment "111111" exists:
+        Given Establishment "111111" exists:
         """
         {
             "laestab": "123/1111",
             "name": "Primary School C"
         }
         """
-        And establishment "222222" exists:
+        And Establishment "222222" exists:
         """
         {
             "laestab": "123/2222",
             "name": "Primary School B"
         }
         """
-        And establishment "333333" exists:
+        And Establishment "333333" exists:
         """
         {
             "laestab": "123/3333",
             "name": "Primary School A"
         }
         """
-        And establishment "444444" exists:
+        And Establishment "444444" exists:
         """
         {
             "laestab": "123/4444",

@@ -1,13 +1,13 @@
 Feature: UsefulLinks
 @Javascript:disabled
 Scenario: Useful links page should be accessible when valid urn is provided and check the provided text description is visible
-    Given establishment "136028" exists:
+    Given Establishment "136028" exists:
 	"""
 	{
         "name": "Dagenham Park CofE School"
     }
 	"""
-    And content template "school-useful-links" exists:
+    And Content Template "school-useful-links" exists:
     """
     {
         "Views": [

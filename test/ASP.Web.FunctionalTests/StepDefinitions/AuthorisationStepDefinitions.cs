@@ -1,4 +1,5 @@
-﻿using ASP.Web.FunctionalTests.Drivers;
+﻿using ASP.Core.Authorisation;
+using ASP.Web.FunctionalTests.Drivers;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
@@ -18,56 +19,89 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             _web.TestClaimsProvider.ClearClaims();
         }
         
-        [Given(@"I am a user with (.+) roles")]
-        public void GivenIAmAUserWithTheRoles(string roles)
-        {
-            var splitRoles = roles.Split(new string[] { "and" }, StringSplitOptions.TrimEntries);
-
-            foreach (var role in splitRoles)
-            {
-                _web.TestClaimsProvider.SetRole(role);
-            }
-        }
-        
-        [Given(@"I am a user with the (.+) role")]
+        [Given($@"I am an? (DfE Named|DfE Unnamed|Super Admin|Ofsted) user")]
         public void GivenIAmAUserWithTheRole(string role)
         {
-            _web.TestClaimsProvider.SetRole(role);
-        }
-        
-        [Given(@"I am a user with the (.+) role for (EstablishmentNumber|Uid|Urn) (.+)")]
-        public void GivenIAmAUserWithTheRoleFor(string role, string identifierType, string identifierValue)
-        {
-            switch (identifierType)
+            switch (role)
             {
-                case "EstablishmentNumber":
-                    SetupUserWithEstablishmentNumber(role, identifierValue);
+                case "DfE Named":
+                    _web.TestClaimsProvider.SetRole(Roles.DfeNamed);
                     break;
-                case "Uid":
-                    SetupUserWithUid(role, identifierValue);
+                case "DfE Unnamed":
+                    _web.TestClaimsProvider.SetRole(Roles.DfeUnnamed);
                     break;
-                case "Urn":
-                    SetupUserWithUrn(role, identifierValue);
+                case "Super Admin":
+                    _web.TestClaimsProvider.SetRole(Roles.SuperUser);
+                    break;
+                case "Ofsted":
+                    _web.TestClaimsProvider.SetRole(Roles.OfstedUnnamed);
                     break;
                 default:
-                    throw new ArgumentException($"Unknown identifier type: {identifierType}");
+                    throw new ArgumentException($"Unknown role: {role}");
             }
         }
         
-        private void SetupUserWithEstablishmentNumber(string role, string establishmentNumber)
+        [Given($@"I am an? (LA Named|LA Unnamed|MAT Named|MAT Unnamed|MAT Governor|School Named|School Unnamed|School Governor|Diocese Named|Diocese Unnamed) user for (Local Authority|Multi-Academy Trust|Diocese|Establishment) ""(.+)""")]
+        public void GivenIAmAUserWithTheRoleFor(string role, string identifierType, string identifierValue)
+        {
+            switch (role)
+            {
+                case "LA Named":
+                    SetupLAUser(Roles.LaNamed, identifierValue);
+                    break;
+                case "LA Unnamed":
+                    SetupLAUser(Roles.LaUnnamed, identifierValue);
+                    break;
+                case "MAT Named":
+                    SetupMatUser(Roles.MatNamed, identifierValue);
+                    break;
+                case "MAT Unnamed":
+                    SetupMatUser(Roles.MatUnnamed, identifierValue);
+                    break;
+                case "MAT Governor":
+                    SetupMatUser(Roles.MatGovernor, identifierValue);
+                    break;
+                case "School Named":
+                    SetupEstablishmentUser(Roles.SchoolNamed, identifierValue);
+                    break;
+                case "School Unnamed":
+                    SetupEstablishmentUser(Roles.SchoolUnnamed, identifierValue);
+                    break;
+                case "School Governor":
+                    SetupEstablishmentUser(Roles.SchoolGovernor, identifierValue);
+                    break;
+                case "Diocese Named":
+                    SetupDioceseUser(Roles.DioceseNamed, identifierValue);
+                    break;
+                case "Diocese Unnamed":
+                    SetupDioceseUser(Roles.DioceseUnnamed, identifierValue);
+                    break;
+                default:
+                    throw new ArgumentException($"Unknown role: {role}");
+            }
+        }
+        
+        private void SetupLAUser(string role, string laCode)
         {
             _web.TestClaimsProvider.SetCategory("002", "Local Authority");
-            _web.TestClaimsProvider.SetEstablishmentNumber(establishmentNumber);
+            _web.TestClaimsProvider.SetEstablishmentNumber(laCode);
             _web.TestClaimsProvider.SetRole(role);
         }
-        
-        private void SetupUserWithUid(string role, string uid)
+
+        private void SetupDioceseUser(string role, string dioceseName)
         {
-            _web.TestClaimsProvider.SetUid(uid);
+            _web.TestClaimsProvider.SetCategory("008", "Other Stakeholders");
+            _web.TestClaimsProvider.SetOrganisationName(dioceseName);
+            _web.TestClaimsProvider.SetRole(role);
+        }
+
+        private void SetupMatUser(string role, string matId)
+        {
+            _web.TestClaimsProvider.SetUid(matId);
             _web.TestClaimsProvider.SetRole(role);
         }
         
-        private void SetupUserWithUrn(string role, string urn)
+        private void SetupEstablishmentUser(string role, string urn)
         {
             _web.TestClaimsProvider.SetUrn(urn);
             _web.TestClaimsProvider.SetRole(role);

@@ -7,4 +7,5 @@ public static class CustomClaimTypes
     public const string EstablishmentNumber = "estblishmentnumber";
     public const string UniqueReferenceNumber = "uniquereferencenumber";
     public const string UniqueIdentifier = "uniqueidentifier";
+    public const string OrganisationName = "organisationname";
 }

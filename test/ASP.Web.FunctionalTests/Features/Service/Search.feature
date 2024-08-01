@@ -2,7 +2,7 @@ Feature: Search Page
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns results
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "Some Primary School",
@@ -13,7 +13,7 @@ Scenario: Page title should show correct text when search returns results
         }
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Some Other Primary School",
@@ -31,7 +31,7 @@ Scenario: Page title should show correct text when search returns results
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns no results
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "Some Primary School",
@@ -42,7 +42,7 @@ Scenario: Page title should show correct text when search returns no results
         }
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Some Other Primary School",
@@ -60,7 +60,7 @@ Scenario: Page title should show correct text when search returns no results
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns results
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "Some Primary School",
@@ -71,7 +71,7 @@ Scenario: Page should show a breadcrumb trail when search returns results
         }
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Some Other Primary School",
@@ -91,7 +91,7 @@ Scenario: Page should show a breadcrumb trail when search returns results
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns no results
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "Some Primary School",
@@ -102,7 +102,7 @@ Scenario: Page should show a breadcrumb trail when search returns no results
         }
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Some Other Primary School",
@@ -138,7 +138,7 @@ Scenario: Errors in Search Term Validation
 
 @Javascript:disabled
 Scenario: School search page should show correct message when there is no data
-	Given no establishments exist
+	Given no Establishments exist
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "primary"
 	And I click the button "#searchSubmit"
@@ -146,7 +146,7 @@ Scenario: School search page should show correct message when there is no data
 
 @Javascript:disabled
 Scenario: School search page should show correct message for search term with no matches
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 	    "name": "Some Primary School"
@@ -159,7 +159,7 @@ Scenario: School search page should show correct message for search term with no
 
 @Javascript:disabled
 Scenario: Matching URN search should redirect to school landing page
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 		"name": "Some Primary School"
@@ -173,7 +173,7 @@ Scenario: Matching URN search should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial match for school name should redirect to school landing page
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 		"name": "Some Primary School"
@@ -187,7 +187,7 @@ Scenario: Partial match for school name should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial street match should redirect to school landing page
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
     {
         "name": "Some Primary School",
@@ -206,7 +206,7 @@ Scenario: Partial street match should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial town match should redirect to school landing page
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
     {
         "name": "Some Primary School",
@@ -225,7 +225,7 @@ Scenario: Partial town match should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial postcode match should redirect to school landing page
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
     {
         "name": "Some Primary School",
@@ -244,7 +244,7 @@ Scenario: Partial postcode match should redirect to school landing page
 
 @Javascript:disabled
 Scenario Outline: Results page should show partial name and address matches
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "Some Primary School",
@@ -255,7 +255,7 @@ Scenario Outline: Results page should show partial name and address matches
         }
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Some Other Primary School",
@@ -266,7 +266,7 @@ Scenario Outline: Results page should show partial name and address matches
         }
     }
     """
-    And establishment "333333" exists:
+    And Establishment "333333" exists:
     """
     {
         "name": "A Different Primary School",
@@ -277,7 +277,7 @@ Scenario Outline: Results page should show partial name and address matches
         }
     }
     """
-    And establishment "444444" exists:
+    And Establishment "444444" exists:
     """
     {
         "name": "The Training Centre"
@@ -298,7 +298,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: School search successful for 6-digit URN
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 		"name": "Some Primary School"
@@ -312,7 +312,7 @@ Scenario: School search successful for 6-digit URN
 
 @Javascript:disabled
 Scenario: School search unsuccessful for 2-digit URN
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 		"name": "Some Primary School"
@@ -325,13 +325,13 @@ Scenario: School search unsuccessful for 2-digit URN
 
 @Javascript:disabled
 Scenario: Partial matching street redirects to school landing page
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
     {
         "name": "Some Primary School"        
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Another Primary School",
@@ -350,13 +350,13 @@ Scenario: Partial matching street redirects to school landing page
 
 @Javascript:disabled
 Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 		"name": "Some Primary School"
 	}
 	"""
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Another Primary School",
@@ -375,7 +375,7 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (with forward slash)
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 		"name": "Some Primary School",
@@ -390,7 +390,7 @@ Scenario: Search term matching establishment LAESTAB code (with forward slash)
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (without forward slash)
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 		"name": "Some Primary School",
@@ -405,14 +405,14 @@ Scenario: Search term matching establishment LAESTAB code (without forward slash
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (LA part)
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "Some Primary School",
         "laestab": "894/2200"
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Some Other Primary School",
@@ -432,14 +432,14 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (ESTAB part)
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "Some Primary School",
         "laestab": "894/2200"
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Some Other Primary School",
@@ -459,7 +459,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Partial LAESTAB (LA part) match should show no matching results
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 	    "name": "Some Primary School",
@@ -473,7 +473,7 @@ Scenario: Partial LAESTAB (LA part) match should show no matching results
 
 @Javascript:disabled
 Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
 	{
 	    "name": "Some Primary School",
@@ -487,14 +487,14 @@ Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields)
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
     {
         "name": "Some Primary School",
         "laestab": "894/2200"
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Another Primary School",
@@ -514,14 +514,14 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields)
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
     {
         "name": "Some Primary School",
         "laestab": "894/2200",
     } 
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Another Primary School",
@@ -541,14 +541,14 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 
 @Javascript:disabled
 Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields)
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
     {
         "name": "Some Primary School",
         "laestab": "894/2200"         
     }
     """
-     And establishment "222222" exists:
+     And Establishment "222222" exists:
     """
     {
         "name": "Another Primary School",
@@ -568,14 +568,14 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 
 @Javascript:disabled
 Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields)
-	Given establishment "111111" exists:
+	Given Establishment "111111" exists:
 	"""
     {
         "name": "Some Primary School",
         "laestab": "894/2200"
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "Another Primary School",
@@ -595,7 +595,7 @@ Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code sea
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct search results
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "School A",
@@ -605,7 +605,7 @@ Scenario Outline: Multiple successful school name matches show correct search re
         }
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "School B",
@@ -616,7 +616,7 @@ Scenario Outline: Multiple successful school name matches show correct search re
         } 
     }
     """
-    And establishment "333333" exists:
+    And Establishment "333333" exists:
     """
     {
         "name": "School C",
@@ -640,7 +640,7 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct education phase in search results
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "School A",
@@ -649,7 +649,7 @@ Scenario Outline: Multiple successful school name matches show correct education
         "isPost16": false
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "School B",
@@ -658,7 +658,7 @@ Scenario Outline: Multiple successful school name matches show correct education
         "isPost16": false
     }
     """
-    And establishment "333333" exists:
+    And Establishment "333333" exists:
     """
     {
         "name": "School C",
@@ -681,7 +681,7 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct ofsted rating in search results
-    Given establishment "111111" exists:
+    Given Establishment "111111" exists:
     """
     {
         "name": "School A",
@@ -694,7 +694,7 @@ Scenario Outline: Multiple successful school name matches show correct ofsted ra
         }
     }
     """
-    And establishment "222222" exists:
+    And Establishment "222222" exists:
     """
     {
         "name": "School B",
@@ -704,7 +704,7 @@ Scenario Outline: Multiple successful school name matches show correct ofsted ra
         }
     }
     """
-   And establishment "333333" exists:
+   And Establishment "333333" exists:
     """
     {
         "name": "School C",
@@ -726,7 +726,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation
- Given 251 establishments exist with properties:
+ Given 251 Establishments exist with properties:
  | urn    |     name         |
  | (100000 + n)   | Primary School (100000 + n)         |
  When I navigate to /search/search-result/?page=1&searchTerm=primary
@@ -751,7 +751,7 @@ Scenario: Pagination in Search Validation
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation 2
- Given 251 establishments exist with properties:
+ Given 251 Establishments exist with properties:
  | urn          | name                        |
  | (100000 + n) | Primary School (100000 + n) |
  When I navigate to /search/search-result/?page=3&searchTerm=primary
@@ -777,7 +777,7 @@ Scenario: Pagination in Search Validation 2
  
 @Javascript:disabled
 Scenario: Pagination in Search Validation 3
- Given 51 establishments exist with properties:
+ Given 51 Establishments exist with properties:
  | urn    |     name         |
  | (100000 + n)   | Primary School (100000 + n)         |
  When I navigate to /search/search-result/?page=2&searchTerm=primary

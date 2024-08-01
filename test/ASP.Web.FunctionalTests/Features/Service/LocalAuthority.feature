@@ -2,13 +2,13 @@
 
     @Javascript:disabled
     Scenario: my local authority page should be accessible when valid code is provided
-        Given I am a user with the RAISE_LA_Named role for EstablishmentNumber 301
-        And localAuthority "301" exists:
+        Given I am a LA Named user for Local Authority "301"
+        And Local Authority "301" exists:
         """
         {
-                  "Name": "Test Name",
-                  "Code": "301"
-              }
+            "Name": "Test Name",
+            "Code": "301"
+        }
         """
         When I navigate to /my-local-authority/301
         Then I should get a 200 response
@@ -21,17 +21,16 @@
 
     @Javascript:disabled
     Scenario: my local authority page cards should be populated from the "la-landing-page" content template
-
-        Given I am a user with the RAISE_LA_Anon role for EstablishmentNumber 301
-        And localAuthority "301" exists:
+        Given I am a LA Unnamed user for Local Authority "301"
+        And Local Authority "301" exists:
         """
         {
-                  "Name": "Test Name",
-                  "Code": "301"
-              }
+            "Name": "Test Name",
+            "Code": "301"
+        }
         """
 
-        And content template "la-landing-page" exists:
+        And Content Template "la-landing-page" exists:
         """
         {
         	"Views": [
@@ -48,28 +47,28 @@
 
     @Javascript:disabled
     Scenario: my local authority page cards should be populated correctly for a non-LA user with access to La
-        Given I am a user with the RAISE_Super_User role for EstablishmentNumber 302
-        And content template "la-landing-page" exists:
+        Given I am a Super Admin user
+        And Content Template "la-landing-page" exists:
         """
         {
         	"Views": [
-        		    {
-                          "ViewId": "Card",
-                          "ViewContent": {
-                              "Id": "app-card-la-download",
-                              "Title": "Download data",
-                              "LinkUrl": "la-download",
-                              "Text": "Download data for Analyse school performance and Key to success."
-                          }
-                      }
+        		{
+                    "ViewId": "Card",
+                    "ViewContent": {
+                        "Id": "app-card-la-download",
+                        "Title": "Download data",
+                        "LinkUrl": "la-download",
+                        "Text": "Download data for Analyse school performance and Key to success."
+                    }
+                }
         	]
         }
         """
-        And localAuthority "302" exists:
+        And Local Authority "302" exists:
         """
         {
-                  "Name": "Test Name",
-                  "Code": "302"
+            "Name": "Test Name",
+            "Code": "302"
         }
         """
         When I navigate to /my-local-authority/302
@@ -79,7 +78,7 @@
 
     @Javascript:disabled
     Scenario: A non-LA user should not be able to access the 'My Local Authority' page. Instead, they should see a 403 Access Denied page.
-        Given I am a user with the RAISE_MAT_Named role
+        Given I am a MAT Named user for Multi-Academy Trust "1234"
         When I navigate to /my-local-authority/301
         Then I should get a 403 response
         And the page title should be "Access denied | Analyse school performance"

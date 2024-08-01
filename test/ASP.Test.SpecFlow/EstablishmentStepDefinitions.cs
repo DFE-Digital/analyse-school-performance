@@ -35,34 +35,34 @@ public partial class EstablishmentStepDefinitions
     }
 
 
-    [Given(@"no establishments exist")]
+    [Given(@"no Establishments exist")]
     public void GivenNoEstablishmentsExists()
     {
     }
 
-    [Given(@"establishment ""([^""]+)"" exists:")]
-    [Given(@"visible establishment ""([^""]+)"" exists:")]
+    [Given(@"Establishment ""([^""]+)"" exists:")]
+    [Given(@"visible Establishment ""([^""]+)"" exists:")]
     public async Task GivenVisibleEstablishmentExistsMultiline(string id, string data)
     {
         await SetUpEstablishment(id, data, true)
             .OnError(e => AssertWithMessage.Fail(e.ToString()));
     }
 
-    [Given(@"non visible establishment ""([^""]+)"" exists:")]
+    [Given(@"non-visible Establishment ""([^""]+)"" exists:")]
     public async Task GivenEstablishmentExistsMultiline(string id, string data)
     {
         await SetUpEstablishment(id, data, false)
             .OnError(e => AssertWithMessage.Fail(e.ToString()));
     }
 
-    [Given(@"deleted establishment ""([^""]+)"" exists:")]
+    [Given(@"deleted Establishment ""([^""]+)"" exists:")]
     public async Task GivenDeletedEstablishmentExistsMultiline(string id, string data)
     {
         await SetUpEstablishment(id, data, false, true)
             .OnError(e => AssertWithMessage.Fail(e.ToString()));
     }
 
-    [Given(@"([0-9]+) establishments exist with properties:")]
+    [Given(@"([0-9]+) Establishments exist with properties:")]
     public async Task GivenEstablishmentsExistWithProperties(int noOfEstablishments, Table properties)
     {
         for (var n = 1; n <= noOfEstablishments; n++)

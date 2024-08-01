@@ -6,14 +6,14 @@ Scenario: Help should not have a top-level page
 	Then I should get a 404 response
 
 @Javascript:disabled
-Scenario: Page should not be found if content template doesn't exist 
-	Given no content template exists
+Scenario: Page should not be found if Content Template doesn't exist 
+	Given no Content Templates exist
 	When I navigate to /help/test
 	Then I should get a 404 response
 
 @Javascript:disabled
-Scenario: Page should not be found if content template doesn't exist (even if revision does exist)
-	Given published content template with id "revision1" and contentId "help-test" exists:
+Scenario: Page should not be found if Content Template doesn't exist (even if revision does exist)
+	Given published Content Template with id "revision1" and contentId "help-test" exists:
 	"""
 	{
 		"PageTitle": "Test title"
@@ -23,8 +23,8 @@ Scenario: Page should not be found if content template doesn't exist (even if re
 	Then I should get a 404 response
 
 @Javascript:disabled
-Scenario: Page should not be found if content template exists but is unpublished
-	Given unpublished content template with id "help-test" and contentId "help-test" exists:
+Scenario: Page should not be found if Content Template exists but is unpublished
+	Given unpublished Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
 	  "PageTitle": "Test title"
@@ -35,7 +35,7 @@ Scenario: Page should not be found if content template exists but is unpublished
 
 @Javascript:disabled
 Scenario: Page should not be found if revision doesn't exist
-	Given published content template with id "help-test" and contentId "help-test" exists:
+	Given published Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
 	  "PageTitle": "Test title"
@@ -45,8 +45,8 @@ Scenario: Page should not be found if revision doesn't exist
 	Then I should get a 404 response
 
 @Javascript:disabled
-Scenario: Page should be visible if content template exists and is published
-	Given published content template "help-test" exists:
+Scenario: Page should be visible if Content Template exists and is published
+	Given published Content Template "help-test" exists:
 	"""
 	{
 		"PageTitle": "Test title"
@@ -57,8 +57,8 @@ Scenario: Page should be visible if content template exists and is published
 	And the element "[data-testid="content-page-title"]" should have the text content "Test title"
 
 @Javascript:disabled
-Scenario: Page should be visible if unpublished content template exists and revision is specified
-	Given unpublished content template with id "help-test" and contentId "help-test" exists:
+Scenario: Page should be visible if unpublished Content Template exists and revision is specified
+	Given unpublished Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
 	  "PageTitle": "Test title"
@@ -70,13 +70,13 @@ Scenario: Page should be visible if unpublished content template exists and revi
 
 @Javascript:disabled
 Scenario: Page should be visible if revision exists but is unpublished
-	Given published content template with id "help-test" and contentId "help-test" exists:
+	Given published Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
 	  "PageTitle": "Test title"
 	}
 	"""
-	And unpublished content template with id "revision1" and contentId "help-test" exists:
+	And unpublished Content Template with id "revision1" and contentId "help-test" exists:
 	"""
 	{
 	  "PageTitle": "Test title (revised)"
@@ -88,13 +88,13 @@ Scenario: Page should be visible if revision exists but is unpublished
 
 @Javascript:disabled
 Scenario: Page should display published revision
-	Given unpublished content template with id "help-test" and contentId "help-test" exists:
+	Given unpublished Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
 	  "PageTitle": "Test title"
 	}
 	"""
-	And published content template with id "revision1" and contentId "help-test" exists:
+	And published Content Template with id "revision1" and contentId "help-test" exists:
 	"""
 	{
 	  "PageTitle": "Test title (revised)"
@@ -106,7 +106,7 @@ Scenario: Page should display published revision
 
 @Javascript:disabled
 Scenario: Page should not error if ViewContent is null
-	Given published content template "help-test" exists:
+	Given published Content Template "help-test" exists:
 	"""
 	{
 		"ViewContent": null
@@ -117,7 +117,7 @@ Scenario: Page should not error if ViewContent is null
 
 @Javascript:disabled
 Scenario: Page should not error if Views is null
-	Given published content template "help-test" exists:
+	Given published Content Template "help-test" exists:
 	"""
 	{
 		"Views": null
@@ -128,7 +128,7 @@ Scenario: Page should not error if Views is null
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail
-	Given published content template "help-test" exists:
+	Given published Content Template "help-test" exists:
 	"""
 	{   
 		"PageTitle" : "Current page", 
@@ -142,7 +142,7 @@ Scenario: Page should show a breadcrumb trail
 
 @Javascript:disabled
 Scenario: Edit button should link to edit page
-	Given published content template "help-test" exists:
+	Given published Content Template "help-test" exists:
 	"""
 	{
 	}

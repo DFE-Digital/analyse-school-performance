@@ -2,13 +2,13 @@ Feature: GetAllContentTemplates
 
 
 Scenario: Should only return published content templates
-	Given published content template "test-content-one" exists:
+	Given published Content Template "test-content-one" exists:
 		"""
 		{
 			"PageTitle": "test one"
 		}
 		"""
-	And unpublished content template "test-content-two" exists:
+	And unpublished Content Template "test-content-two" exists:
 		"""
 		{
 			"PageTitle": "test two"
@@ -26,13 +26,13 @@ Scenario: Should only return published content templates
 		"""
 
 Scenario: Should return multiple template objects if content templates exists
-	Given published content template "test-content-one" exists:
+	Given published Content Template "test-content-one" exists:
 		"""
 		{
 			"PageTitle": "test one"
 		}
 		"""
-	And published content template "test-content-two" exists:
+	And published Content Template "test-content-two" exists:
 		"""
 		{
 			"PageTitle": "test two"
@@ -53,7 +53,7 @@ Scenario: Should return multiple template objects if content templates exists
 		"""
 
 Scenario: Should only accept GET method 
-	Given no content template exists
+	Given no Content Templates exist
 	When I send a <method> request to /api/GetAllContentTemplates
 	Then I should get a 405 response
 
@@ -62,14 +62,14 @@ Examples:
 	| POST   |
 	| DELETE |
 
-Scenario: Should return NotFound (404) response if no published content templates exist 
-	Given no content template exists
+Scenario: Should return NotFound (404) response if no published Content Templates exist 
+	Given no Content Templates exist
 	When I send a GET request to /api/GetAllContentTemplates
 	Then I should get a 404 response
-	And the response should be the message "Not found: Could not find any published revision content templates"
+	And the response should be the message "Not found: Could not find any published Content Templates"
 
-Scenario: Should return NotFound (404) response if only unpublished content templates exist 
-	And unpublished content template "test-content-two" exists:
+Scenario: Should return NotFound (404) response if only unpublished Content Templates exist 
+	And unpublished Content Template "test-content-two" exists:
 		"""
 		{
 			"PageTitle": "test two"
@@ -77,4 +77,4 @@ Scenario: Should return NotFound (404) response if only unpublished content temp
 		""" 
 	When I send a GET request to /api/GetAllContentTemplates
 	Then I should get a 404 response
-	And the response should be the message "Not found: Could not find any published revision content templates"
+	And the response should be the message "Not found: Could not find any published Content Templates"

@@ -2,7 +2,7 @@ Feature: School Page
  
 @Javascript:disabled
 Scenario: School page should contain seven app card container element
-    Given content template "school-landing-page" exists:
+    Given Content Template "school-landing-page" exists:
     """
     {
     	"Views": [
@@ -72,7 +72,7 @@ Scenario: School page should contain seven app card container element
       ]
     }
     """
-    And establishment "123456" exists:
+    And Establishment "123456" exists:
     """
     {
         "name": "Hollinswood Primary School"
@@ -112,7 +112,7 @@ Scenario: School page should contain seven app card container element
 
 @Javascript:disabled
 Scenario: School page should be accessible when provided urn
-  Given establishment "123456" exists:
+  Given Establishment "123456" exists:
 		"""
 		{
             "name": "Hollinswood Primary School"
@@ -131,7 +131,7 @@ Scenario: School page should be accessible when provided urn
 
 @Javascript:disabled
 Scenario: School page should throw page not found if Establishment is deleted
-  Given deleted establishment "112123" exists:
+  Given deleted Establishment "112123" exists:
 		"""
 		{
             "name": "Thursby Primary School"
@@ -143,7 +143,7 @@ Scenario: School page should throw page not found if Establishment is deleted
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
-    Given establishment "123456" exists:
+    Given Establishment "123456" exists:
 		"""
 		{
             "isPost16": false,
@@ -225,7 +225,7 @@ Scenario: School page should contain a school details disclosure element
 
 @Javascript:disabled
 Scenario: School page should show if values are null
-    Given establishment "123456" exists:
+    Given Establishment "123456" exists:
 		"""
 		{
             "isPost16": null,
@@ -278,7 +278,7 @@ Scenario: School page should show if values are null
 
 @Javascript:disabled
 Scenario: School page should show if values are null case 2
-    Given establishment "123456" exists:
+    Given Establishment "123456" exists:
 		"""
 		{
             "isPost16": null,
@@ -358,7 +358,7 @@ Scenario: School page should show if values are null case 2
 
 @Javascript:disabled
 Scenario: Details disclosure element text should read 'Show school details' when closed
-    Given establishment "123456" exists:
+    Given Establishment "123456" exists:
 	"""
 	{
         "name": "Hollinswood Primary School"
@@ -369,7 +369,7 @@ Scenario: Details disclosure element text should read 'Show school details' when
   
 @Javascript:disabled
 Scenario: School page should display page not found page if School URN is invalid
-    Given establishment "112123" exists:
+    Given Establishment "112123" exists:
     """
     {
         "name": "Thursby Primary School"
@@ -386,7 +386,7 @@ Scenario: School page should display page not found page if School URN is invali
 
     @Javascript:disabled
     Scenario: School page should throw page not found if Establishment is not currently visible
-        Given non visible establishment "112124" exists:
+        Given non-visible Establishment "112124" exists:
 		"""
 		{
             "name": "Thursby Primary School"

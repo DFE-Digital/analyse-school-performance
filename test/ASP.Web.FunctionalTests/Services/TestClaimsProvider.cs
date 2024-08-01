@@ -33,6 +33,11 @@ public class TestClaimsProvider
         _claims.Add(new Claim(CustomClaimTypes.EstablishmentNumber, establishmentNumber));
     }
 
+    public void SetOrganisationName(string organisationName)
+    {
+        _claims.Add(new Claim(CustomClaimTypes.OrganisationName, organisationName));
+    }
+
     public void SetRole(string role)
     {
         _claims.Add(new Claim(ClaimTypes.Role, role));

@@ -42,13 +42,13 @@ Feature: Establishment Search
 
 
   Scenario: Should return NotFound (404) response if no matches found for the searchTerm
-    Given no establishments exist
+    Given no Establishments exist
     When I send a GET request to /api/EstablishmentSearch?searchTerm=x
     Then I should get a 404 response
     And the response should be the message "Not found: there were no matches for "x"."
 
   Scenario: Should return NotFound (404) response if there were no relevant matches for the given searchTerm
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School"
@@ -59,7 +59,7 @@ Feature: Establishment Search
     And the response should be the message "Not found: there were no matches for "secondary"."
 
   Scenario: Should return a NotFound (404) response if the requested establishment has been deleted for the given searchTerm
-    Given deleted establishment "222222" exists: 
+    Given deleted Establishment "222222" exists: 
     """
     {
         "name": "Some Primary School"
@@ -70,7 +70,7 @@ Feature: Establishment Search
     And the response should be the message "Not found: The requested establishment with URN "222222" has been deleted."
 
   Scenario: Should return a NotFound (404) response if the requested establishment is not currently visible for the given searchTerm
-    Given non visible establishment "111111" exists: 
+    Given non-visible Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School"
@@ -81,7 +81,7 @@ Feature: Establishment Search
     And the response should be the message "Not found: The requested establishment with URN "111111" is not currently visible."
 
     Scenario: Should not return 400 response if page = 1
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School"
@@ -91,7 +91,7 @@ Feature: Establishment Search
     Then I should get a 200 response
     
     Scenario: Should not return 400 response if resultsPerPage = 1
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School"
@@ -101,7 +101,7 @@ Feature: Establishment Search
     Then I should get a 200 response
 
   Scenario Outline: Should return 200 response with search results when matches are found for the given searchTerm
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School"
@@ -131,7 +131,7 @@ Feature: Establishment Search
       | PRiMaRY    |
 
   Scenario Outline: Should return 200 response with search results when searchTerm matching establishment street, town and postcode partially
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
@@ -168,7 +168,7 @@ Feature: Establishment Search
       | tr1        |
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment name and address partially
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
@@ -179,7 +179,7 @@ Feature: Establishment Search
         } 
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "Some Other Primary School",
@@ -190,7 +190,7 @@ Feature: Establishment Search
         } 
     }
     """
-    And establishment "333333" exists: 
+    And Establishment "333333" exists: 
     """
     {
         "name": "A Different Primary School",
@@ -201,7 +201,7 @@ Feature: Establishment Search
         } 
     }
     """
-    And establishment "444444" exists: 
+    And Establishment "444444" exists: 
     """
     {
         "name": "The Training Center"
@@ -241,7 +241,7 @@ Feature: Establishment Search
     """
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment URN
-    Given  establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "Urn": "111111",
@@ -267,7 +267,7 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a NotFound (404) response if no relevant matches are found for the establishment URN based on the given searchTerm
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School"
@@ -278,13 +278,13 @@ Feature: Establishment Search
     And the response should be the message "Not found: there were no matches for "11"."
 
   Scenario: Should return 200 response with search results when searchTerm matches partially with the address street name
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "A Different Primary School",
@@ -315,13 +315,13 @@ Feature: Establishment Search
     """
 
   Scenario: Should return 200 response with search results when searchTerm is 6 digit number treat it as an exact URN search
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "A Different Primary School",
@@ -351,7 +351,7 @@ Feature: Establishment Search
     """
 
   Scenario Outline: Should return 200 response with search results when searchTerm matching establishment LAESTAB code (with and without forward slash)
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
@@ -383,14 +383,14 @@ Feature: Establishment Search
       | 8942200    |
 
   Scenario: Should return 200 response with search results when searchTerm matches with LAESTAB 3 digit code partially
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "laestab": "894/2200",
         "name": "Some Primary School"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "laestab": "894/1234",
@@ -423,14 +423,14 @@ Feature: Establishment Search
     """
 
   Scenario: Should return 200 response with search results when searchTerm matches with LAESTAB 4 digit code partially
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "laestab": "894/2200",
         "name": "Some Primary School"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "laestab": "123/2200",
@@ -462,7 +462,7 @@ Feature: Establishment Search
     """
 
   Scenario Outline: Should return NotFound (404) response if there were no relevant matches for the given searchTerm associated with a LAESTAB code
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "laestab": "894/2200",
@@ -479,14 +479,14 @@ Feature: Establishment Search
       | 22         |
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment 7 digits LAESTAB code ignoring other matching fields
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "laestab": "894/2200",
         "name": "Some Primary School",
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "Some Other Primary School",
@@ -517,14 +517,14 @@ Feature: Establishment Search
     """
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment 7 digits LAESTAB code with forward slash ignoring other matching fields
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
         "laestab": "894/2200"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "Some other Primary School",
@@ -555,14 +555,14 @@ Feature: Establishment Search
     """
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment 3 digits LAESTAB code ignoring other matching fields
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
         "laestab": "894/2200"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "Some other Primary School",
@@ -593,14 +593,14 @@ Feature: Establishment Search
     """
 
   Scenario: Should return 200 response with search results when searchTerm matching establishment 4 digits LAESTAB code ignoring other matching fields
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
         "laestab": "894/2200"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "Some other Primary School",
@@ -631,19 +631,19 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Primary School 111111"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "Primary School 222222"
     }
     """
-    And establishment "333333" exists: 
+    And Establishment "333333" exists: 
     """
     {
         "name": "Primary School 333333"
@@ -676,19 +676,19 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm and resultsPerPage
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Primary School 111111"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "Primary School 222222"
     }
     """
-    And establishment "333333" exists: 
+    And Establishment "333333" exists: 
     """
     {
         "name": "Primary School 333333"
@@ -717,19 +717,19 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm, resultsPerPage and page
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Primary School 111111"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "Primary School 222222"
     }
     """
-    And establishment "333333" exists: 
+    And Establishment "333333" exists: 
     """
     {
         "name": "Primary School 333333"
@@ -754,19 +754,19 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with expected pagination and no results for the given searchTerm, resultsPerPage, and page
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Primary School 111111"
     }
     """
-    And establishment "222222" exists: 
+    And Establishment "222222" exists: 
     """
     {
         "name": "Primary School 222222"
     }
     """
-    And establishment "333333" exists: 
+    And Establishment "333333" exists: 
     """
     {
         "name": "Primary School 333333"
@@ -787,7 +787,7 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street, town and postcode
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
@@ -818,7 +818,7 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street and postcode
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
@@ -848,7 +848,7 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street and town
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
@@ -878,7 +878,7 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isPrimary equal true
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
@@ -907,7 +907,7 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isSecondary equal true
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
@@ -936,7 +936,7 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isPost16 equal true
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",
@@ -965,7 +965,7 @@ Feature: Establishment Search
     """
 
   Scenario: Should return a 200 response with search results and a computed ofstedRating field when the searchTerm matches the URN
-    Given establishment "111111" exists: 
+    Given Establishment "111111" exists: 
     """
     {
         "name": "Some Primary School",

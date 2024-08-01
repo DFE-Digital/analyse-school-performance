@@ -22,12 +22,12 @@ public partial class LocalAuthorityStepDefinitions
         _outputHelper = outputHelper;
     }
     
-    [Given(@"no local authority exists")]
+    [Given(@"no Local Authorities exist")]
     public void GivenNoLocalAuthorityExists()
     {
     }
     
-    [Given(@"localAuthority ""([^""]+)"" exists:")]
+    [Given(@"Local Authority ""([^""]+)"" exists:")]
     public async Task GivenLocalAuthorityExistsMultiline(string id, string data)
     {
         await SetUpLocalAuthority(id, data).Switch(

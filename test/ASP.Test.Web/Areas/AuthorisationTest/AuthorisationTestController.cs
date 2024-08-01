@@ -1,3 +1,4 @@
+using ASP.Core.Authorisation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ namespace ASP.Test.Web.Areas.AuthorisationTest
         [HttpGet("get-named-data-by-claim")]
         public ActionResult GetNamedDataByClaim()
         {
-            return User.Claims.Any(x => x.Value == "ASP DfE Named")
+            return User.Claims.Any(x => x.Value == Roles.DfeNamed)
                 ? Content("<p>Named data visible</p>", "text/html")
                 : Content("<p>Named data not visible</p>", "text/html");
         }
