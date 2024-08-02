@@ -46,7 +46,7 @@ public static class Roles
         TrainingUnnamed
     ];
 
-    public static readonly string[] WithSearch =
+    public static readonly string[] AccessToSearch =
     [
         DfeUnnamed,
         DfeNamed,
@@ -61,7 +61,13 @@ public static class Roles
         SuperUser
     ];
 
-    public static readonly string[] MySchools =
+    public static readonly string[] AccessToMySchool =
+    [
+        SchoolNamed,
+        SchoolUnnamed
+    ];
+
+    public static readonly string[] AccessToMySchools =
     [
         LaUnnamed,
         LaNamed,
@@ -71,7 +77,13 @@ public static class Roles
         DioceseUnnamed,
         DioceseNamed,
     ];
-    
+
+    public static readonly string[] AccessToMyLa =
+    [
+        LaUnnamed,
+        LaNamed
+    ];
+
     public static readonly string[] AccessToAllLas =
     [
         DfeUnnamed,

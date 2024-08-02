@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace ASP.Web.Features.Authorisation
 {
-    [HtmlTargetElement("*", Attributes = "authorisation-policy")]
+    [HtmlTargetElement(Attributes = "authorisation-policy")]
     public class AuthorisationTagHelper : TagHelper
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -18,18 +18,17 @@ namespace ASP.Web.Features.Authorisation
         }
 
         [HtmlAttributeName("authorisation-policy")]
-        public string? PolicyName { get; set; }
+        public string Policy { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            await base.ProcessAsync(context, output);
-
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext != null)
             {
                 //To view content where the 'authorisation-policy' attribute is used, you need to be signed in
                 //with DSI and have the correct Role(s) assigned to you
-                var check = (await _authorizationService.AuthorizeAsync(httpContext.User, PolicyName)).Succeeded;
+
+                var check = (await _authorizationService.AuthorizeAsync(httpContext.User, Policy)).Succeeded;
 
                 if (!check)
                 {

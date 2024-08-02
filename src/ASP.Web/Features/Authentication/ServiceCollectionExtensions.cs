@@ -6,6 +6,7 @@ using ASP.Infrastructure.Dsi.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Security.Claims;
 
 namespace ASP.Web.Features.Authentication
 {
@@ -151,7 +152,7 @@ namespace ASP.Web.Features.Authentication
                             };
 
                             var dsiPublicApiClient = context.HttpContext.RequestServices.GetService<IDsiApiClient>();
-
+            
                             //userAccess contains the Role information needed to construct a set of Claims for use in the service
                             var userAccessResult = await dsiPublicApiClient!.GetUserAccess(dsiConfiguration[DsiConstants.DsiServiceId]!, organisation?.Id!, authenticatedUserInfo.UserId);
 

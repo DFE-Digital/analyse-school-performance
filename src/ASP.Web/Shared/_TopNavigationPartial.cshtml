@@ -1,14 +1,16 @@
-﻿<nav class="govuk-header__navigation app-header__navigation" id="header-navigation" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
+﻿@using ASP.Web.Features.Authorisation
+
+<nav class="govuk-header__navigation app-header__navigation" id="header-navigation" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
     <div class="govuk-width-container">
         <ul id="navigation" class="govuk-header__navigation-list app-header__navigation-list">
-            <partial name="_TopNavigationItemPartial" model=@(("Home", "/", "home")) />
-            <partial name="_TopNavigationItemPartial" model=@(("My local authority", "/my-local-authority/001", "my-local-authority")) />
-            <partial name="_TopNavigationItemPartial" model=@(("Search", "/search", "search")) />
-            <partial name="_TopNavigationItemPartial" model=@(("My school", "/school/136028", "my-school")) />
-            <partial name="_TopNavigationItemPartial" model=@(("Download data", "/download", "download")) />
-            <partial name="_TopNavigationItemPartial" model=@(("Site news", "/news", "news")) />
-            <partial name="_TopNavigationItemPartial" model=@(("Release timetable", "/help/release-timetable", "release-timetable")) />
-            <partial name="_TopNavigationItemPartial" model=@(("Guidance", "/help/guidance", "guidance")) />
+            <partial name="_TopNavigationItemPartial" model=@(("Home", "/", "home", Policy.Any)) />
+            <partial name="_TopNavigationItemPartial" model=@(("My local authority", "/my-local-authority/001", "my-local-authority", Policy.AccessToMyLa)) />
+            <partial name="_TopNavigationItemPartial" model=@(("My schools", "/my-schools", "my-schools", Policy.AccessToMySchools)) /> 
+            <partial name="_TopNavigationItemPartial" model=@(("My school", "/school/136028", "my-school", Policy.AccessToMySchool)) />
+            <partial name="_TopNavigationItemPartial" model=@(("Search", "/search", "search", Policy.AccessToSearch)) />
+            <partial name="_TopNavigationItemPartial" model=@(("Site news", "/news", "news", Policy.Any)) />
+            <partial name="_TopNavigationItemPartial" model=@(("Release timetable", "/help/release-timetable", "release-timetable", Policy.Any)) />
+            <partial name="_TopNavigationItemPartial" model=@(("Guidance", "/help/guidance", "guidance", Policy.Any)) />
         </ul>
     </div>
 </nav>

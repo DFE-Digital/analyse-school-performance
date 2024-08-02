@@ -1,6 +1,6 @@
 Feature: UsefulLinks
 @Javascript:disabled
-Scenario: Useful links page should be accessible when valid urn is provided and check the provided text description is visible
+Scenario Outline: Useful links page should be accessible when valid urn is provided and check the provided text description is visible
     Given Establishment "136028" exists:
 	"""
 	{
@@ -23,6 +23,7 @@ Scenario: Useful links page should be accessible when valid urn is provided and 
          ]
     }
     """
+    And I am a <Role> user
     When I navigate to /school/136028/useful-links
     Then I should get a 200 response
     And the element "h1.govuk-heading-xl" should have the text content "Useful links"
@@ -31,4 +32,8 @@ Scenario: Useful links page should be accessible when valid urn is provided and 
     And the element "*[data-testid='useful-links-navigation']" should have the text content "Useful links"
     And the element "*[data-testid='useful-links-navigation']" should have the attribute "aria-current" set to "page"
     And the element "*[id='department-for-education']" should have the text content "department-for-education"
+Examples: 
+	| Role           |
+	| School Named   |
+	| School Unnamed |
 

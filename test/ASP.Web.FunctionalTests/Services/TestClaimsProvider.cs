@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using ASP.Core.Authorisation;
+﻿using ASP.Core.Authorisation;
+using System.Security.Claims;
 
 namespace ASP.Web.FunctionalTests.Services;
 

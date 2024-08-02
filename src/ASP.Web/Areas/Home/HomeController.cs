@@ -3,6 +3,7 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features.TermsOfUse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Areas.Home
@@ -26,6 +27,7 @@ namespace ASP.Web.Areas.Home
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
+        [Authorize]
         [HttpGet("/")]
         [HttpGet("")]
         [HttpGet("index")]

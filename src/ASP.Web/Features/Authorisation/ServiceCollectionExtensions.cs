@@ -12,10 +12,10 @@ namespace ASP.Web.Features.Authorisation
                                                              IConfiguration configuration)
         {
             services.AddAuthorization(Policy.AddPolicies);
-            
+
             services.AddScoped<IAuthorizationHandler, LaUserAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, AccessToAllLasAuthorizationHandler>();
-            
+
             services
                 .AddScoped<ISecurityKeyProvider, SymmetricSecurityKeyProvider>()
                 .AddScoped<IDsiApiClient, DsiApiClient>();

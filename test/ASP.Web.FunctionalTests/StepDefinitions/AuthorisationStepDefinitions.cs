@@ -19,7 +19,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             _web.TestClaimsProvider.ClearClaims();
         }
         
-        [Given($@"I am an? (DfE Named|DfE Unnamed|Super Admin|Ofsted) user")]
+        [Given($@"I am an? (DfE Named|DfE Unnamed|Super Admin|Ofsted|LA Named|LA Unnamed|MAT Named|MAT Unnamed|School Named|School Unnamed|Diocese Named|Diocese Unnamed|MAT Governor|School Governor) user")]
         public void GivenIAmAUserWithTheRole(string role)
         {
             switch (role)
@@ -36,11 +36,41 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
                 case "Ofsted":
                     _web.TestClaimsProvider.SetRole(Roles.OfstedUnnamed);
                     break;
+                case "LA Named":
+                    _web.TestClaimsProvider.SetRole(Roles.LaNamed);
+                    break;
+                case "LA Unnamed":
+                    _web.TestClaimsProvider.SetRole(Roles.LaUnnamed);
+                    break;
+                case "MAT Named":
+                    _web.TestClaimsProvider.SetRole(Roles.MatNamed);
+                    break;
+                case "MAT Unnamed":
+                    _web.TestClaimsProvider.SetRole(Roles.MatUnnamed);
+                    break;
+                case "School Named":
+                    _web.TestClaimsProvider.SetRole(Roles.SchoolNamed);
+                    break;
+                case "School Unnamed":
+                    _web.TestClaimsProvider.SetRole(Roles.SchoolUnnamed);
+                    break;
+                case "Diocese Named":
+                    _web.TestClaimsProvider.SetRole(Roles.DioceseNamed);
+                    break;
+                case "Diocese Unnamed":
+                    _web.TestClaimsProvider.SetRole(Roles.DioceseUnnamed);
+                    break;
+                case "MAT Governor":
+                    _web.TestClaimsProvider.SetRole(Roles.MatGovernor);
+                    break;
+                case "School Governor":
+                    _web.TestClaimsProvider.SetRole(Roles.SchoolGovernor);
+                    break;
                 default:
                     throw new ArgumentException($"Unknown role: {role}");
             }
         }
-        
+
         [Given($@"I am an? (LA Named|LA Unnamed|MAT Named|MAT Unnamed|MAT Governor|School Named|School Unnamed|School Governor|Diocese Named|Diocese Unnamed) user for (Local Authority|Multi-Academy Trust|Diocese|Establishment) ""(.+)""")]
         public void GivenIAmAUserWithTheRoleFor(string role, string identifierType, string identifierValue)
         {
@@ -80,7 +110,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
                     throw new ArgumentException($"Unknown role: {role}");
             }
         }
-        
+
         private void SetupLAUser(string role, string laCode)
         {
             _web.TestClaimsProvider.SetCategory("002", "Local Authority");

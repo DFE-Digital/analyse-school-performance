@@ -1,12 +1,13 @@
 Feature: OtherReports
 @Javascript:disabled
-Scenario: Other reports page should be accessible when valid urn is provided
+Scenario Outline: Other reports page should be accessible when valid urn is provided
     Given Establishment "136028" exists:
 	"""
 	{
         "name": "Dagenham Park CofE School"
     }
 	"""
+    And I am a <Role> user
     When I navigate to /school/136028/other-reports
     Then I should get a 200 response
     And the element "h1.govuk-heading-xl" should have the text content "Other reports"
@@ -14,6 +15,11 @@ Scenario: Other reports page should be accessible when valid urn is provided
     And the element "*[data-testid='my-school-navigation']" should have the class "govuk-header__navigation-item app-header__navigation-item app-header__navigation-item--current"
     And the element "*[data-testid='other-reports-navigation']" should have the text content "Other reports"
     And the element "*[data-testid='other-reports-navigation']" should have the attribute "aria-current" set to "page"
+Examples: 
+	| Role           |
+	| School Named   |
+	| School Unnamed |
+
 
 @Javascript:disabled
 Scenario: Other reports page should show the accordian component when javascript disabled
