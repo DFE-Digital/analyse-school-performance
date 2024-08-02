@@ -19,31 +19,19 @@ public class LaEstabSearchStrategy : EstablishmentSearchStrategy
         _repository = repository;
     }
 
-    public override async Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> Execute()
+    public override async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> Execute()
     {
         var searchType = SearchTerm.ClassifySearchType();
-        var (skip, take) = PageHelper.ConstructPagingRequest(Page, ResultsPerPage);
 
-        Result<SearchResult<EstablishmentDetailsSearchResult>>? result = searchType switch
+        Result<SearchResultsPage<EstablishmentDetailsSearchResult>> result = searchType switch
         {
-            SearchType.LocalAuthEstablishment => await _repository.SearchEstablishmentByLaCodeOrEstablishmentNumber(
-                SearchTerm, skip, take),
-            SearchType.LocalAuthEstablishment7Digit => await _repository
-                .SearchEstablishmentByLocalAuthEstablishment7DigitCode(SearchTerm, skip, take),
-            SearchType.LocalAuthEstablishment3Digit => await _repository.SearchEstablishmentByLaCode(SearchTerm, skip,
-                take),
-            SearchType.LocalAuthEstablishment4Digit => await _repository.SearchEstablishmentByEstablishmentNumber(
-                SearchTerm, skip, take),
-            _ => null
+            SearchType.LocalAuthEstablishment => await _repository.SearchEstablishmentByLaCodeOrEstablishmentNumber(SearchTerm, Page, ResultsPerPage),
+            SearchType.LocalAuthEstablishment7Digit => await _repository.SearchEstablishmentByLocalAuthEstablishment7DigitCode(SearchTerm, Page, ResultsPerPage),
+            SearchType.LocalAuthEstablishment3Digit => await _repository.SearchEstablishmentByLaCode(SearchTerm, Page, ResultsPerPage),
+            SearchType.LocalAuthEstablishment4Digit => await _repository.SearchEstablishmentByEstablishmentNumber(SearchTerm, Page, ResultsPerPage),
+            _ => throw new InvalidOperationException($@"Invalid SearchType: ""{searchType}"".")
         };
 
-        return result!.Map(x => new SearchResult<EstablishmentDetailsSearchResultDTO>()
-        {
-            Results = x.Results.MapToListOfSearchResultsDTO(),
-            ResultsPerPage = x.ResultsPerPage,
-            TotalResults = x.TotalResults,
-            SearchTerm = SearchTerm,
-            Page = Page
-        });
+        return result.Map(results => results.Map(r => r.MapToSearchResultDTO()));
     }
 }

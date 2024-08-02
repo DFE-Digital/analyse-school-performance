@@ -9,25 +9,25 @@ namespace ASP.Core.Establishments
         Task<Result<EstablishmentDetails>> GetEstablishmentDetails(string urn);
         Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails);
 
-        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCode(
-            string searchTerm, int skip, int take,
+        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCode(
+            string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByEstablishmentNumber(
-            string searchTerm, int skip, int take,
+        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByEstablishmentNumber(
+            string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>>
+        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>>
             SearchEstablishmentByLocalAuthEstablishment7DigitCode(
-                string searchTerm, int skip, int take,
+                string searchTerm, int page, int resultsPerPage,
                 CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
-            string searchTerm, int skip, int take,
+        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
+            string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentNameOrLocation(
-            string searchTerm, int skip, int take,
+        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentNameOrLocation(
+            string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
         Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>>

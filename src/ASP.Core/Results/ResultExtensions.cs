@@ -135,6 +135,20 @@
             return result.DefaultIf(predicate, defaultValue);
         }
 
+        public static async Task<Result<TValue>> IfErrorThen<TValue>(this Task<Result<TValue>> resultTask, Func<Error, bool> predicate, Func<Result<TValue>> onError)
+        {
+            var result = await resultTask;
+
+            return result.IfErrorThen(predicate, onError);
+        }
+
+        public static async Task<Result<TValue>> IfErrorThen<TValue>(this Task<Result<TValue>> resultTask, Func<Error, bool> predicate, Func<Task<Result<TValue>>> onError)
+        {
+            var result = await resultTask;
+
+            return await result.IfErrorThen(predicate, onError);
+        }
+
         public static async Task<Result<TValue>> ErrorIf<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, bool> predicate, Error error)
         {
             var result = await resultTask;
@@ -175,6 +189,13 @@
             var result = await resultTask;
 
             return result.Convert(onSuccess, onError);
+        }
+
+        public static async Task<Result<TNextValue>> Convert<TValue, TNextValue>(this Task<Result<TValue>> resultTask, Func<TValue, Task<Result<TNextValue>>> onSuccess, Func<Error, Task<Result<TNextValue>>> onError)
+        {
+            var result = await resultTask;
+
+            return await result.Convert(onSuccess, onError);
         }
 
         public static Result<TValue> ToResult<TValue>(this TValue value)

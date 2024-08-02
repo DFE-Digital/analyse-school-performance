@@ -90,7 +90,7 @@ public class SearchController : Controller
             .ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
     }
 
-    private SearchViewModel DefaultViewModel(SearchResult<EstablishmentDetailsSearchResultDTO> result)
+    private SearchViewModel DefaultViewModel(SearchResultsPage<EstablishmentDetailsSearchResultDTO> result)
     {
         var breadcrumbTrail = new BreadcrumbViewModel($"Search results for \"{result.SearchTerm}\"").AddBreadcrumb("Search", "/search");
 

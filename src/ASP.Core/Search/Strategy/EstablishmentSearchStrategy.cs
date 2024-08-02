@@ -15,5 +15,5 @@ public abstract class EstablishmentSearchStrategy : IEstablishmentSearchStrategy
         ResultsPerPage = resultsPerPage;
     }
 
-    public abstract Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> Execute();
+    public abstract Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> Execute();
 }

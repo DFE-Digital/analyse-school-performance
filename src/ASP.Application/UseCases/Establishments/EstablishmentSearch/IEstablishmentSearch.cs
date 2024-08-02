@@ -4,7 +4,7 @@ using DfE.Data.ComponentLibrary.CleanArchitecture.CleanArchitecture.Application.
 
 namespace ASP.Application.UseCases.Establishments.EstablishmentSearch
 {
-    public interface IEstablishmentSearch : IUseCase<EstablishmentSearchRequest, Result<SearchResult<EstablishmentDetailsSearchResultDTO>>>
+    public interface IEstablishmentSearch : IUseCase<EstablishmentSearchRequest, Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>>
     {
     }
 }

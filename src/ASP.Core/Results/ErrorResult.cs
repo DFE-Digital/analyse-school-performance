@@ -118,9 +118,34 @@
             return this;
         }
 
+        public override Result<TValue> IfErrorThen(Func<Error, bool> predicate, Func<Result<TValue>> onError)
+        {
+            if(predicate(Error))
+            {
+                return onError();
+            }
+
+            return this;
+        }
+
+        public override async Task<Result<TValue>> IfErrorThen(Func<Error, bool> predicate, Func<Task<Result<TValue>>> onError)
+        {
+            if (predicate(Error))
+            {
+                return await onError();
+            }
+
+            return this;
+        }
+
         public override Result<TNextValue> Convert<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess, Func<Error, Result<TNextValue>> onError)
         {
             return onError(Error);
+        }
+
+        public override async Task<Result<TNextValue>> Convert<TNextValue>(Func<TValue, Task<Result<TNextValue>>> onSuccess, Func<Error, Task<Result<TNextValue>>> onError)
+        {
+            return await onError(Error);
         }
     }
 }

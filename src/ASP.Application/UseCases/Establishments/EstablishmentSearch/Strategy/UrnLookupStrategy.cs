@@ -16,21 +16,16 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
         _repository = repository;
     }
 
-    public override async Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> Execute()
+    public override async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> Execute()
     {
-        var results = await _repository.GetEstablishmentDetails(SearchTerm)
-            .Map(x => new SearchResult<EstablishmentDetailsSearchResultDTO>
-            {
-                Results = new EstablishmentDetailsSearchResultDTO[]
-                {
-                    x.MapToSearchResult()
-                },
-                ResultsPerPage = ResultsPerPage,
-                TotalResults = 1,
-                SearchTerm = SearchTerm,
-                Page = Page
-            });
+        var result = await _repository.GetEstablishmentDetails(SearchTerm);
 
-        return results;
+        return result.Map(establishment => new SearchResultsPage<EstablishmentDetailsSearchResultDTO>(
+            SearchTerm,
+            Page,
+            ResultsPerPage,
+            totalResults: 1,
+            [establishment.MapToSearchResult()]
+        ));
     }
 }

@@ -18,7 +18,7 @@ namespace ASP.Application
         Task<Result<Done>> UpdateContentTemplate(UpdateContentTemplateRequest request);
         Task<Result<List<ContentTemplate>>> GetAllContentTemplates();
         Task<Result<EstablishmentDetailsDTO>> GetEstablishmentDetails(GetEstablishmentDetailsRequest request);
-        Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> EstablishmentSearch(EstablishmentSearchRequest request);
+        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> EstablishmentSearch(EstablishmentSearchRequest request);
         Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request);
         Task<Result<ASP.Core.DTO.LocalAuthority.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request);
     }

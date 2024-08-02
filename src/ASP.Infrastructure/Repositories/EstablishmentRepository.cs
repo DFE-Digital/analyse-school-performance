@@ -1,6 +1,7 @@
 ﻿using ASP.Core;
 using ASP.Core.Establishments;
 using ASP.Core.Extensions;
+using ASP.Core.Helpers;
 using ASP.Core.Results;
 using ASP.Core.Search;
 using ASP.Core.Search.Suggestions;
@@ -36,66 +37,72 @@ namespace ASP.Infrastructure.Repositories
                 establishmentDetailsDao);
         }
 
-        public async Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentNameOrLocation(
-            string searchTerm, int skip, int take,
+        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentNameOrLocation(
+            string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
-            return await _documentDB.QueryAsyncPaged<SearchResultDAO>(ContainerKey,
-                    q => q.Where(x =>
-                        !x.IsDeleted && x.IsVisible &&
-                        (
+            return await _documentDB.QueryPagedAsync<SearchResultDAO>(
+                    ContainerKey,
+                    q => q.Where(x => !x.IsDeleted && x.IsVisible && (
                             x.Name.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
                             (x.Address != null && (
                                 x.Address.Street.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
                                 x.Address.Town.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
                                 x.Address.PostCode.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
                             ))
-                        )).OrderBy(x => x.Name), skip, take,
+                        )).OrderBy(x => x.Name),
+                    page,
+                    resultsPerPage,
                     cancellationToken)
-                .ErrorIf(q => q.TotalCount == 0, Error.NotFound($@"there were no matches for ""{searchTerm}""."))
-                .Map(x => new SearchResult<EstablishmentDetailsSearchResult>
-                {
-                    Results = x.Items.MapToEstablishmentDetailsSearchResults(),
-                    SearchTerm = searchTerm,
-                    TotalResults = x.TotalCount,
-                    ResultsPerPage = take
-                });
+                .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no matches for ""{searchTerm}""."))
+                .Map(results => new SearchResultsPage<EstablishmentDetailsSearchResult>(searchTerm, results.Map(r => r.MapToEstablishmentDetailsSearchResult())));
         }
         
-        public async Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCode(
-            string searchTerm, int skip, int take,
+        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCode(
+            string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
             var inputSearchTerm = searchTerm + "/";
-            return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, skip, take, cancellationToken);
+
+            return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
         
-        public async Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByEstablishmentNumber(
-            string searchTerm, int skip, int take,
+        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByEstablishmentNumber(
+            string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
             var inputSearchTerm = "/" + searchTerm;
-            return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, skip, take, cancellationToken);
+
+            return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
         
-        public async Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
-            string searchTerm, int skip, int take,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
+            string searchTerm, 
+            int page, 
+            int resultsPerPage,
+            CancellationToken cancellationToken = default
+        )
         {
-            return await SearchLocalAuthEstablishmentCommon(searchTerm, skip, take, cancellationToken);
+            return await SearchLocalAuthEstablishmentCommon(searchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
         
-        public async Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLocalAuthEstablishment7DigitCode(
-            string searchTerm, int skip, int take,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLocalAuthEstablishment7DigitCode(
+            string searchTerm, 
+            int page, 
+            int resultsPerPage,
+            CancellationToken cancellationToken = default
+        )
         {
             var inputSearchTerm = searchTerm.ToLaEstabCodeFormat();
-            return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, skip, take, cancellationToken);
+
+            return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>>
-            EstablishmentSearchSuggestions(
-                string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default)
+        public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>> EstablishmentSearchSuggestions(
+            string searchTerm, 
+            int maxSuggestions, 
+            CancellationToken cancellationToken = default
+        )
         {
             return await _documentDB.QueryAsync<SearchSuggestionsResultDAO>(ContainerKey,
                     q => q.Where(x =>
@@ -125,24 +132,26 @@ namespace ASP.Infrastructure.Repositories
                 });
         }
         
-        private async Task<Result<SearchResult<EstablishmentDetailsSearchResult>>> SearchLocalAuthEstablishmentCommon(
-            string searchTerm, int skip, int take,
-            CancellationToken cancellationToken = default)
+        private async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchLocalAuthEstablishmentCommon(
+            string searchTerm, 
+            string originalSearchTerm,
+            int page, 
+            int resultsPerPage,
+            CancellationToken cancellationToken = default
+        )
         {
-            return await _documentDB.QueryAsyncPaged<SearchResultDAO>(ContainerKey,
+            return await _documentDB.QueryPagedAsync<SearchResultDAO>(
+                    ContainerKey,
                     q => q.Where(x =>
                             !x.IsDeleted && x.IsVisible &&
                             x.Laestab != null && // Ensure Laestab is not null before calling Contains
-                            x.Laestab.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase))
-                        .OrderBy(x => x.Name), skip, take, cancellationToken)
-                .ErrorIf(q => q.TotalCount == 0, Error.NotFound($@"there were no matches for ""{searchTerm}""."))
-                .Map(x => new SearchResult<EstablishmentDetailsSearchResult>
-                {
-                    Results = x.Items.MapToEstablishmentDetailsSearchResults(),
-                    SearchTerm = searchTerm,
-                    TotalResults = x.TotalCount,
-                    ResultsPerPage = take
-                });
+                            x.Laestab.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                         ).OrderBy(x => x.Name), 
+                    page, 
+                    resultsPerPage, 
+                    cancellationToken)
+                .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no matches for ""{originalSearchTerm}""."))
+                .Map(results => new SearchResultsPage<EstablishmentDetailsSearchResult>(originalSearchTerm, results.Map(r => r.MapToEstablishmentDetailsSearchResult())));
         }
     }
 }

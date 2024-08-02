@@ -644,6 +644,9 @@
         /// <returns>A result object of type <c>Result&lt;<typeparamref name="TValue"/>&gt;</c></returns>
         public abstract Result<TValue> ErrorIf(Func<TValue, bool> predicate, Error error);
 
+        public abstract Result<TValue> IfErrorThen(Func<Error, bool> predicate, Func<Result<TValue>> onError);
+        public abstract Task<Result<TValue>> IfErrorThen(Func<Error, bool> predicate, Func<Task<Result<TValue>>> onError);
+
         /// <summary>
         /// Combines the current result with another result using the <paramref name="combineFunction"/> provided to create a new value from the values of both results if both are <c>SuccessResult</c>s.
         /// </summary>
@@ -728,6 +731,15 @@
         /// <returns>A result object of type <c>Result&lt;<typeparamref name="TNextValue"/>&gt;</c></returns>
         public abstract Result<TNextValue> Convert<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess, Func<Error, Result<TNextValue>> onError);
 
+        /// <summary>
+        /// Converts the current result into a result of type <c>Result&lt;<typeparamref name="TNextValue"/>&gt;</c>, using the provided <c>onSuccess</c> function if the current result is a 
+        /// <c>SuccessResult</c>, otherwise using the provided <c>onError</c> function.
+        /// </summary>
+        /// <typeparam name="TNextValue">Type of the value of the new result</typeparam>
+        /// <param name="onSuccess">Function to use if the current result is a <c>SuccessResult</c></param>
+        /// <param name="onError">Function to use if the current result is an <c>ErrorResult</c></param>
+        /// <returns>The task object representing the asynchronous operation</returns>
+        public abstract Task<Result<TNextValue>> Convert<TNextValue>(Func<TValue, Task<Result<TNextValue>>> onSuccess, Func<Error, Task<Result<TNextValue>>> onError);
 
         public static implicit operator Result<TValue>(TValue value)
         {

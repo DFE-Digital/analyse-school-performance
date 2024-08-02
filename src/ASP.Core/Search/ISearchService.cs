@@ -12,5 +12,5 @@ public interface ISearchService
     /// <param name="resultsPerPage"></param>
     /// <returns>A task that represents the asynchronous operation.
     /// The task result contains a SearchResult object with the list of search results, results count and the total count</returns>
-    Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> SearchAsync(string searchTerm, int page = 1, int resultsPerPage = 50);
+    Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> SearchAsync(string searchTerm, int page = 1, int resultsPerPage = 50);
 }

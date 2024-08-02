@@ -311,7 +311,7 @@ Scenario: School search successful for 6-digit URN
     And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
-Scenario: School search unsuccessful for 2-digit URN
+Scenario Outline: School search with less than 6 digits does not match on URN
 	Given Establishment "111111" exists:
 	"""
 	{
@@ -319,16 +319,23 @@ Scenario: School search unsuccessful for 2-digit URN
 	}
 	"""
     When I navigate to /search/
-	And I update the textbox "#searchTerm" to have the value "11"
+	And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"   
-    Then the element "h1" should have the text content "We found no matches for "11""
+    Then the element "h1" should have the text content "We found no matches for "<SearchTerm>""
+Examples: 
+| SearchTerm |
+| 1          |
+| 11         |
+| 111        |
+| 1111       |
+| 11111      |
 
 @Javascript:disabled
-Scenario: Partial matching street redirects to school landing page
+Scenario Outline: School search with less than 6 digits matches on school address
 	Given Establishment "111111" exists:
 	"""
     {
-        "name": "Some Primary School"        
+        "name": "Some Primary School"
     }
     """
     And Establishment "222222" exists:
@@ -336,17 +343,24 @@ Scenario: Partial matching street redirects to school landing page
     {
         "name": "Another Primary School",
         "address": {
-            "street": "111 The Street",
+            "street": "<SearchTerm> The Street",
             "town": "SomeTown",
             "postCode": "TR18 3JT"
         }
     } 
 	"""
     When I navigate to /search/
-	And I update the textbox "#searchTerm" to have the value "111"
+	And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"  
     Then the path should match "/school/222222/"
     And the element "[data-testid="school-page-school-name"]" should have the text content "Another Primary School (URN: 222222)"
+Examples: 
+| SearchTerm |
+| 1          |
+| 11         |
+| 111        |
+| 1111       |
+| 11111      |
 
 @Javascript:disabled
 Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
@@ -677,7 +691,7 @@ Examples:
 | Counter | URN    | Name     | Education phase |
 | 1       | 111111 | School A | Primary         |
 | 2       | 222222 | School B | Secondary       |
-| 3       | 333333 | School C | 16 to 18         |
+| 3       | 333333 | School C | 16 to 18        |
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct ofsted rating in search results
@@ -727,8 +741,8 @@ Examples:
 @Javascript:disabled
 Scenario: Pagination in Search Validation
  Given 251 Establishments exist with properties:
- | urn    |     name         |
- | (100000 + n)   | Primary School (100000 + n)         |
+ | urn          | name                        |
+ | (100000 + n) | Primary School (100000 + n) |
  When I navigate to /search/search-result/?page=1&searchTerm=primary
  Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 50 of 251 schools or colleges"
  And the element "*[data-testid='PageLinks-Header-1']" should have the href "/search/search-result?searchTerm=primary&page=1"
@@ -778,8 +792,8 @@ Scenario: Pagination in Search Validation 2
 @Javascript:disabled
 Scenario: Pagination in Search Validation 3
  Given 51 Establishments exist with properties:
- | urn    |     name         |
- | (100000 + n)   | Primary School (100000 + n)         |
+ | urn          | name                        |
+ | (100000 + n) | Primary School (100000 + n) |
  When I navigate to /search/search-result/?page=2&searchTerm=primary
  Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 51 - 51 of 51 schools or colleges"
  And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/search-result?searchTerm=primary&page=1"

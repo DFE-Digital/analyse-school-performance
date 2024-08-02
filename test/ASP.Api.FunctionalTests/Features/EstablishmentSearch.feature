@@ -67,7 +67,7 @@ Feature: Establishment Search
     """
     When I send a GET request to /api/EstablishmentSearch?searchTerm=222222
     Then I should get a 404 response
-    And the response should be the message "Not found: The requested establishment with URN "222222" has been deleted."
+    And the response should be the message "Not found: there were no matches for "222222"."
 
   Scenario: Should return a NotFound (404) response if the requested establishment is not currently visible for the given searchTerm
     Given non-visible Establishment "111111" exists: 
@@ -78,7 +78,7 @@ Feature: Establishment Search
     """
     When I send a GET request to /api/EstablishmentSearch?searchTerm=111111
     Then I should get a 404 response
-    And the response should be the message "Not found: The requested establishment with URN "111111" is not currently visible."
+    And the response should be the message "Not found: there were no matches for "111111"."
 
     Scenario: Should not return 400 response if page = 1
     Given Establishment "111111" exists: 

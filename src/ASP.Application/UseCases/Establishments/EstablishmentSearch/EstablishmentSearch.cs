@@ -14,7 +14,7 @@ public class EstablishmentSearch : IEstablishmentSearch
         _establishmentSearchStrategyFactory = establishmentSearchStrategyFactory;
     }
 
-    public async Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> HandleRequest(EstablishmentSearchRequest request)
+    public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> HandleRequest(EstablishmentSearchRequest request)
     {
         var searchType = request.SearchTerm.ClassifySearchType();
         var page = request.Page ?? 1;
@@ -25,21 +25,26 @@ public class EstablishmentSearch : IEstablishmentSearch
             return Error.Invalid($@"Bad request: the parameter ""{nameof(request.SearchTerm)}"" : ""{request.SearchTerm}"" with type ""{searchType}"" is invalid");
         }
 
-        var searchStrategy = _establishmentSearchStrategyFactory.CreateStrategy(searchType, request.SearchTerm, page, resultsPerPage);
+        var initialStrategy = _establishmentSearchStrategyFactory.CreateStrategy(
+            searchType, 
+            request.SearchTerm, 
+            page, 
+            resultsPerPage
+        );
 
-        var searchResults = await searchStrategy.Execute();
-        
-        var results = searchResults.GetValueOrDefault(new SearchResult<EstablishmentDetailsSearchResultDTO>());
+        // Backup search strategy if the initial strategy fails (e.g. if it's a 3-digit code we'll do an LA
+        // lookup but if we don't find a matching LA then we need to do a full search on name/address)
+        var backupStrategy = _establishmentSearchStrategyFactory.CreateStrategy(
+            SearchType.EstablishmentNameOrLocation,
+            request.SearchTerm,
+            page,
+            resultsPerPage
+        );
 
-        if (results.TotalResults == 0 && (searchType != SearchType.EstablishmentNameOrLocation && searchType != SearchType.Urn))
-
-        {
-            searchType = SearchType.EstablishmentNameOrLocation;
-            searchStrategy = _establishmentSearchStrategyFactory.CreateStrategy(searchType, request.SearchTerm,
-                page, resultsPerPage);
-            searchResults = await searchStrategy.Execute();
-        }
-
-        return searchResults;
+        return await initialStrategy.Execute()
+            .IfErrorThen(
+                e => e is NotFoundError && searchType != SearchType.EstablishmentNameOrLocation,
+                backupStrategy.Execute
+            );
     }
 }

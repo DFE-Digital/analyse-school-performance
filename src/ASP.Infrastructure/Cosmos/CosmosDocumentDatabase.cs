@@ -26,8 +26,12 @@ namespace ASP.Infrastructure.Cosmos
                 throw new ArgumentNullException(nameof(queryHandler));
         }
 
-        public async Task<Result<TItem>> GetAsync<TItem>(string container, string id,
-            string partitionKeyValue, CancellationToken cancellationToken = default) where TItem : class
+        public async Task<Result<TItem>> GetAsync<TItem>(
+            string container, 
+            string id,
+            string partitionKeyValue, 
+            CancellationToken cancellationToken = default
+        ) where TItem : class
         {
             try
             {
@@ -52,12 +56,15 @@ namespace ASP.Infrastructure.Cosmos
             }
         }
 
-        public async Task<Result<IEnumerable<TItem>>> QueryAsync<TItem>(string container, Func<IQueryable<TItem>, 
-            IQueryable<TItem>> query, CancellationToken cancellationToken = default) where TItem : class
+        public async Task<Result<IEnumerable<TItem>>> QueryAsync<TItem>(
+            string container, 
+            Func<IQueryable<TItem>, IQueryable<TItem>> query, 
+            CancellationToken cancellationToken = default
+        ) where TItem : class
         {
             try
             {
-                var result = await _queryHandler.ReadIterableItemsAsync<TItem>(container, query, cancellationToken);
+                var result = await _queryHandler.ReadIterableItemsAsync(container, query, cancellationToken);
                 return Result.Success(result);
             }
             catch (CosmosException ex)
@@ -79,16 +86,19 @@ namespace ASP.Infrastructure.Cosmos
             }
         }
 
-        public async Task<Result<PagedEnumerable<TItem>>> QueryAsyncPaged<TItem>(string container,
+        public async Task<Result<ResultsPage<TItem>>> QueryPagedAsync<TItem>(
+            string container,
             Func<IQueryable<TItem>, IQueryable<TItem>> query,
-            int skip, int take, CancellationToken cancellationToken = default) where TItem : class
+            int page, 
+            int itemsPerPage, 
+            CancellationToken cancellationToken = default
+        ) where TItem : class
         {
             try
             {
-                var result = await _queryHandler.ReadPagedIterableItemsAsync<TItem>(container,
-                    query, skip, take, cancellationToken);
+                var result = await _queryHandler.ReadPagedItemsAsync(container, query, page, itemsPerPage, cancellationToken);
 
-                return Result.Success(new PagedEnumerable<TItem>(result.Items, result.TotalCount));
+                return Result.Success(result);
             }
             catch (CosmosException ex)
             {
@@ -110,8 +120,13 @@ namespace ASP.Infrastructure.Cosmos
             }
         }
 
-        public async Task<Result<Done>> UpsertAsync<TItem>(string container, string id, 
-            string partitionKeyValue, TItem item, CancellationToken cancellationToken = default) where TItem : class
+        public async Task<Result<Done>> UpsertAsync<TItem>(
+            string container, 
+            string id, 
+            string partitionKeyValue, 
+            TItem item, 
+            CancellationToken cancellationToken = default
+        ) where TItem : class
         {
             try
             {
@@ -141,7 +156,10 @@ namespace ASP.Infrastructure.Cosmos
             }
         }
 
-        public async Task<Result<Done>> DeleteAllAsync(string container, CancellationToken cancellationToken = default)
+        public async Task<Result<Done>> DeleteAllAsync(
+            string container, 
+            CancellationToken cancellationToken = default
+        )
         {
             try
             {

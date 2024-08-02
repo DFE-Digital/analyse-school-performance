@@ -14,7 +14,7 @@ public class EstablishmentNameOrLocationSearchStrategy : EstablishmentSearchStra
         _searchService = searchService;
     }
     
-    public override async Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> Execute()
+    public override async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> Execute()
     {
         var results = await _searchService.SearchAsync(SearchTerm, Page, ResultsPerPage);
 

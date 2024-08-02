@@ -4,5 +4,5 @@ namespace ASP.Core.Search.Strategy;
 
 public interface IEstablishmentSearchStrategy
 {
-    Task<Result<SearchResult<EstablishmentDetailsSearchResultDTO>>> Execute();
+    Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> Execute();
 }
