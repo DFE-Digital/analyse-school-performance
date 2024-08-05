@@ -16,7 +16,12 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <a data-testid="content-edit" asp-route="app-route-help-edit" asp-route-contentId="@Model.ContentId" asp-route-revision="@Model.Revision" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+            <a data-testid="content-edit" 
+                asp-route="app-route-help-edit" 
+                asp-route-contentId="@Model.ContentId" 
+                asp-route-revision="@Model.Revision" 
+                authorisation-policy="@Policy.AccessToEditPages"
+                role="button" draggable="false" class="govuk-button" data-module="govuk-button">
                 Edit this page
             </a>
 

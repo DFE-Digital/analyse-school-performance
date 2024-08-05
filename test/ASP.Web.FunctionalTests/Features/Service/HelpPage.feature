@@ -19,6 +19,7 @@ Scenario: Page should not be found if Content Template doesn't exist (even if re
 		"PageTitle": "Test title"
 	}
 	"""
+	And I am a Super Admin user
 	When I navigate to /help/test/edit?revision=revision1
 	Then I should get a 404 response
 
@@ -140,14 +141,46 @@ Scenario: Page should show a breadcrumb trail
 	And the element "[data-testid="breadcrumb-home"]" should have the href "/"
     And the element "[data-testid="breadcrumb-current-page"]" should have the text content "Current page"
 
+
 @Javascript:disabled
-Scenario: Edit button should link to edit page
+Scenario: Edit button should show when user has admin role
 	Given published Content Template "help-test" exists:
 	"""
 	{
 	}
 	"""
+	And I am a <Role> user
 	When I navigate to /help/test
 	Then I should get a 200 response
 	And the element "[data-testid="content-edit"]" should have the text content "Edit this page"
 	And the element "[data-testid="content-edit"]" should have the href "/help/test/edit"
+Examples: 
+	| Role        |
+	| Super Admin |
+
+
+@Javascript:disabled
+Scenario: Edit button should not show when user does not have admin role
+	Given published Content Template "help-test" exists:
+	"""
+	{
+	}
+	"""
+	And I am a <Role> user
+    When I navigate to /
+	Then the element "[data-testid="content-edit"]" should not exist
+Examples: 
+	| Role            |
+	| DfE Named       |
+	| DfE Unnamed     |
+	| Super Admin     |
+	| Ofsted          |
+	| MAT Named       |
+	| MAT Unnamed     |
+	| School Named    |
+	| School Unnamed  |
+	| Diocese Named   |
+	| Diocese Unnamed |
+	| MAT Governor    |
+	| School Governor |
+

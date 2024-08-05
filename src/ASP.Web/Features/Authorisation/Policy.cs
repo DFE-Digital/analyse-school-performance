@@ -7,15 +7,12 @@ namespace ASP.Web.Features.Authorisation;
 public static class Policy
 {
     public const string LocalAuthorityAccessPolicy = "LocalAuthorityAccessPolicy";
-
     public const string Any = "Any";
-
     public const string AccessToMyLa = "AccessToMyLa";
-
     public const string AccessToSearch = "AccessToSearch";
-
     public const string AccessToMySchool = "AccessToMySchool";
     public const string AccessToMySchools = "AccessToMySchools";
+    public const string AccessToEditPages = "AccessToEditPages";
 
     public static void AddPolicies(AuthorizationOptions options)
     {
@@ -41,5 +38,8 @@ public static class Policy
 
         options.AddPolicy(LocalAuthorityAccessPolicy, policy =>
             policy.Requirements.Add(new LocalAuthorityRequirement()));
+
+        options.AddPolicy(AccessToEditPages, policy =>
+            policy.RequireRole(Roles.AccessToEditPages));
     }
 }

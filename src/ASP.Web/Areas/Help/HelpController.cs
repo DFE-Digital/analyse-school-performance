@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using ASP.Web.Core.Templating;
 using ASP.Application;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
+using Microsoft.AspNetCore.Authorization;
+using ASP.Web.Features.Authorisation;
 
 namespace ASP.Web.Areas.Help
 {
@@ -36,6 +38,8 @@ namespace ASP.Web.Areas.Help
                 .ToActionResult(View, _hostEnvironment);
         }
 
+
+        [Authorize(Policy = Policy.AccessToEditPages)]
         [HttpGet("{contentId}/edit", Name = "app-route-help-edit")]
         public async Task<IActionResult> EditPage(string contentId, string? revision)
         {
@@ -47,6 +51,7 @@ namespace ASP.Web.Areas.Help
                 .ToActionResult(View, _hostEnvironment);
         }
 
+        [Authorize(Policy = Policy.AccessToEditPages)]
         [HttpPost("{contentId}/edit")]
         public async Task<IActionResult> EditPage(string contentId, string revision, ContentTemplateEditModel model)
         {

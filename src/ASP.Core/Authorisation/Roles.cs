@@ -91,4 +91,9 @@ public static class Roles
         OfstedUnnamed,
         SuperUser,
     ];
+
+    public static readonly string[] AccessToEditPages =
+    [
+        SuperUser
+    ];
 }
