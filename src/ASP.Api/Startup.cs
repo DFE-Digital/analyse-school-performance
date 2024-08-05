@@ -10,8 +10,10 @@ using ASP.Core.Establishments;
 using Azure.Identity;
 using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariables;
 using ASP.Application;
-using ASP.Core.LocalAuthority;
+using ASP.Core.LocalAuthorities;
 using ASP.Infrastructure;
+using ASP.Infrastructure.Establishments;
+using ASP.Infrastructure.LocalAuthorities;
 
 namespace ASP.Api
 {

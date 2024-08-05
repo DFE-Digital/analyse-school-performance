@@ -1,4 +1,4 @@
-﻿using ASP.Core.DTO.Establishment;
+﻿using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Core.Results;
 using DfE.Data.ComponentLibrary.CleanArchitecture.CleanArchitecture.Application.UseCase;
 

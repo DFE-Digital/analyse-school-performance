@@ -1,4 +1,4 @@
-﻿using ASP.Core.DTO.Establishment;
+﻿using ASP.Application.UseCases.Establishments.DTO;
 
 namespace ASP.Web.Areas.Shared.OfstedRating;
 

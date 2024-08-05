@@ -1,5 +1,5 @@
 ﻿using ASP.Core.Establishments;
-using ASP.Infrastructure.Repositories;
+using ASP.Infrastructure.Establishments;
 
 namespace ASP.Web.Areas.School
 {

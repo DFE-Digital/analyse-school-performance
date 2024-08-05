@@ -5,17 +5,17 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
-using ASP.Application.UseCases.LocalAuthority;
-using ASP.Core.DTO.Establishment;
+using ASP.Core.Establishments.Search;
+using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Helpers;
 using ASP.Core.Results;
-using ASP.Core.Search;
-using ASP.Core.Search.Suggestions;
 using ASP.Core.Templating;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net;
+using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 
 namespace ASP.Infrastructure.Api
 {
@@ -126,12 +126,12 @@ namespace ASP.Infrastructure.Api
                 .Then(response => JsonHelper.DeserializeNotNull<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>(response));
         }
         
-        public async Task<Result<ASP.Core.DTO.LocalAuthority.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request)
+        public async Task<Result<Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request)
         {
             var url = "/api/GetLocalAuthority";
             var queryString = QueryString.Create("code", request.Code);
             return await ApiGet(url, queryString)
-                .Then(response => JsonHelper.DeserializeNotNull<ASP.Core.DTO.LocalAuthority.LocalAuthorityDTO>(response));
+                .Then(response => JsonHelper.DeserializeNotNull<Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>(response));
         }
 
         private async Task<Result<string>> ApiGet(string url, QueryString? queryString)

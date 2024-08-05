@@ -1,12 +1,11 @@
 ﻿using System.Security.Claims;
 using ASP.Core.Authorisation;
-using ASP.Infrastructure.Constants;
+using ASP.Infrastructure.Dsi;
 using ASP.Infrastructure.Dsi.DsiApiClient;
 using ASP.Infrastructure.Dsi.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using System.Security.Claims;
 
 namespace ASP.Web.Features.Authentication
 {

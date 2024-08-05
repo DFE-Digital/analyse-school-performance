@@ -1,5 +1,5 @@
-﻿using ASP.Core.LocalAuthority;
-using ASP.Infrastructure.Repositories;
+﻿using ASP.Core.LocalAuthorities;
+using ASP.Infrastructure.LocalAuthorities;
 
 namespace ASP.Web.Areas.LocalAuthority
 {

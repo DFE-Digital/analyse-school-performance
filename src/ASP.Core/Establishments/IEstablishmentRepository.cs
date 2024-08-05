@@ -1,6 +1,6 @@
-﻿using ASP.Core.Results;
-using ASP.Core.Search;
-using ASP.Core.Search.Suggestions;
+﻿using ASP.Core.Establishments.Search;
+using ASP.Core.Establishments.SearchSuggestions;
+using ASP.Core.Results;
 
 namespace ASP.Core.Establishments
 {

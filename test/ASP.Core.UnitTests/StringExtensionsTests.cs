@@ -1,5 +1,5 @@
-﻿using ASP.Core.Extensions;
-using ASP.Core.Search;
+﻿using ASP.Core.Establishments.Search;
+using ASP.Core.Extensions;
 using Xunit;
 
 namespace ASP.Core.UnitTests;

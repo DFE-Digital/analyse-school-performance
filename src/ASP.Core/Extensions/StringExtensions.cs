@@ -1,4 +1,4 @@
-﻿using ASP.Core.Search;
+﻿using ASP.Core.Establishments.Search;
 
 namespace ASP.Core.Extensions;
 

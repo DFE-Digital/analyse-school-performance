@@ -1,6 +1,6 @@
 ﻿using ASP.Application;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
-using ASP.Application.UseCases.LocalAuthority;
+using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features.Authorisation;

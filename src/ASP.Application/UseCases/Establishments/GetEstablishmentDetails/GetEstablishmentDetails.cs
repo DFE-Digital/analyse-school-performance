@@ -1,7 +1,7 @@
-﻿using ASP.Core.DTO.Establishment;
-using ASP.Core.Establishments;
-using ASP.Core.Mapper.Establishment;
+﻿using ASP.Core.Establishments;
 using ASP.Core.Results;
+using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.Establishments.DTO.Mapper;
 
 namespace ASP.Application.UseCases.Establishments.GetEstablishmentDetails
 {

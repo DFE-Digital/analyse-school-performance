@@ -1,7 +1,8 @@
-﻿using ASP.Core.Extensions;
+﻿using ASP.Core.Establishments.Search;
+using ASP.Core.Extensions;
 using ASP.Core.Results;
-using ASP.Core.Search;
-using ASP.Core.Search.Strategy;
+using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.Establishments.DTO.Mapper;
 
 namespace ASP.Application.UseCases.Establishments.EstablishmentSearch;
 
@@ -45,6 +46,7 @@ public class EstablishmentSearch : IEstablishmentSearch
             .IfErrorThen(
                 e => e is NotFoundError && searchType != SearchType.EstablishmentNameOrLocation,
                 backupStrategy.Execute
-            );
+            )
+            .Map(results => results.Map(r => r.MapToSearchResultDTO()));
     }
 }

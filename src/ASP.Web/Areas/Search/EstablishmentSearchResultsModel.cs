@@ -1,5 +1,4 @@
-﻿using ASP.Core.DTO.Establishment;
-using ASP.Core.Search;
+﻿using ASP.Application.UseCases.Establishments.DTO;
 
 namespace ASP.Web.Areas.Search;
 

@@ -6,10 +6,10 @@ using ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
-using ASP.Application.UseCases.Downloads.LaDownloads;
-using ASP.Application.UseCases.LocalAuthority;
-using ASP.Core.Search.Strategy;
 using Microsoft.Extensions.DependencyInjection;
+using ASP.Core.Establishments.Search;
+using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
+using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
 
 namespace ASP.Application;
 
@@ -23,9 +23,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEstablishmentSearch, EstablishmentSearch>();
         services.AddScoped<IEstablishmentSearchSuggestions, EstablishmentSearchSuggestions>();
         services.AddScoped<IGetAllContentTemplates, GetAllContentTemplates>();
-        services.AddScoped<IGetLaDownloadsUseCase, GetLaDownloadsUseCase>();
-        services.AddScoped<IGetLocalAuthorityUseCase, GetLocalAuthorityUseCase>();
-        services.AddScoped<IGetAvailableSchoolDownloadsUseCase, GetAvailableSchoolDownloadsUseCase>();
+        services.AddScoped<IGetAvailableLADownloads, GetAvailableLADownloads>();
+        services.AddScoped<IGetLocalAuthority, GetLocalAuthority>();
+        services.AddScoped<IGetAvailableSchoolDownloads, GetAvailableSchoolDownloads>();
 
         return services;
     }

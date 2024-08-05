@@ -42,9 +42,9 @@ Scenario Outline: Should return 200 response with school download data
         """
         {
             "Urn": "123456",
-            "DownloadItems": [
+            "Downloads": [
                 {
-                    "Id": "kts-phonics-pupil-123456-2022-final",
+                    "Id": "kts-123456-phonics-2022-final-pupil",
                     "Name": "Phonics pupil data",
                     "DownloadSource": "Key to success",
                     "Year": "2022",
@@ -52,7 +52,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Final"
                 },
                 {
-                    "Id": "kts-phonics-pupil-123456-2023-final",
+                    "Id": "kts-123456-phonics-2023-final-pupil",
                     "Name": "Phonics pupil data",
                     "DownloadSource": "Key to success",
                     "Year": "2023",
@@ -60,7 +60,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Final"
                 },
                 {
-                    "Id": "kts-phonics-pupil-123456-2024-provisional",
+                    "Id": "kts-123456-phonics-2024-provisional-pupil",
                     "Name": "Phonics pupil data",
                     "DownloadSource": "Key to success",
                     "Year": "2024",
@@ -68,7 +68,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Provisional"
                 },
                 {
-                    "Id": "asp-phonics-pupil-123456-2024-revised",
+                    "Id": "asp-123456-phonics-2024-revised-pupil",
                     "Name": "Phonics pupil data",
                     "DownloadSource": "Analyse school performance",
                     "Year": "2024",
@@ -76,7 +76,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Revised"
                 },
                 {
-                    "Id": "kts-ks2-school-123456-2022-final",
+                    "Id": "kts-123456-ks2-2022-final-school",
                     "Name": "Key stage 2 school data",
                     "DownloadSource": "Key to success",
                     "Year": "2022",
@@ -84,7 +84,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Final"
                 },
                 {
-                    "Id": "kts-ks2-school-123456-2023-final",
+                    "Id": "kts-123456-ks2-2023-final-school",
                     "Name": "Key stage 2 school data",
                     "DownloadSource": "Key to success",
                     "Year": "2023",
@@ -92,7 +92,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Final"
                 },
                 {
-                    "Id": "kts-ks2-school-123456-2024-revised",
+                    "Id": "kts-123456-ks2-2024-revised-school",
                     "Name": "Key stage 2 school data",
                     "DownloadSource": "Key to success",
                     "Year": "2024",
@@ -100,7 +100,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Revised"
                 },
                 {
-                    "Id": "asp-ks2-school-123456-2022-provisional",
+                    "Id": "asp-123456-ks2-2022-provisional-school",
                     "Name": "Key stage 2 school data",
                     "DownloadSource": "Analyse school performance",
                     "Year": "2022",
@@ -108,7 +108,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Provisional"
                 },
                 {
-                    "Id": "asp-ks2-school-123456-2023-provisional",
+                    "Id": "asp-123456-ks2-2023-provisional-school",
                     "Name": "Key stage 2 school data",
                     "DownloadSource": "Analyse school performance",
                     "Year": "2023",
@@ -116,7 +116,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Provisional"
                 },
                 {
-                    "Id": "kts-ks4-pupil-123456-2022-final",
+                    "Id": "kts-123456-ks4-2022-final-pupil",
                     "Name": "Key stage 4 pupil data",
                     "DownloadSource": "Key to success",
                     "Year": "2022",
@@ -124,7 +124,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Final"
                 },
                 {
-                    "Id": "kts-ks4-pupil-123456-2023-revised",
+                    "Id": "kts-123456-ks4-2023-revised-pupil",
                     "Name": "Key stage 4 pupil data",
                     "DownloadSource": "Key to success",
                     "Year": "2023",
@@ -132,7 +132,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Revised"
                 },
                 {
-                    "Id": "asp-ks4-pupil-123456-2022-final",
+                    "Id": "asp-123456-ks4-2022-final-pupil",
                     "Name": "Key stage 4 pupil data",
                     "DownloadSource": "Analyse school performance",
                     "Year": "2022",
@@ -140,7 +140,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Final"
                 },
                 {
-                    "Id": "asp-ks4-pupil-123456-2023-final",
+                    "Id": "asp-123456-ks4-2023-final-pupil",
                     "Name": "Key stage 4 pupil data",
                     "DownloadSource": "Analyse school performance",
                     "Year": "2023",
@@ -148,7 +148,7 @@ Scenario Outline: Should return 200 response with school download data
                     "ReleaseVersion": "Final"
                 },
                 {
-                    "Id": "asp-ks4-pupil-123456-2024-provisional",
+                    "Id": "asp-123456-ks4-2024-provisional-pupil",
                     "Name": "Key stage 4 pupil data",
                     "DownloadSource": "Analyse school performance",
                     "Year": "2024",

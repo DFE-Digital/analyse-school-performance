@@ -1,5 +1,4 @@
 ﻿using ASP.Core.Results;
-using Azure;
 using Azure.Data.Tables;
 using Azure.Identity;
 using Microsoft.Extensions.Hosting;

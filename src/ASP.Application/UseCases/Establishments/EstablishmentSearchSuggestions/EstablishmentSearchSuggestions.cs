@@ -1,9 +1,10 @@
 ﻿using ASP.Core.Establishments;
+using ASP.Core.Establishments.Search;
+using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Extensions;
-using ASP.Core.Mapper.Establishment;
 using ASP.Core.Results;
-using ASP.Core.Search;
-using ASP.Core.Search.Suggestions;
+using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.Establishments.DTO.Mapper;
 
 namespace ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 

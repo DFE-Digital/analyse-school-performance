@@ -5,6 +5,7 @@ using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb;
 using ASP.Web.Core.Templating;
 using ASP.Core.Templating;
 using ASP.Core.Establishments;
+using ASP.Infrastructure.Establishments;
 
 namespace ASP.Web.Features.ContentTemplates
 {

@@ -9,12 +9,12 @@ namespace ASP.Api.Functions
     public class GetAvailableSchoolDownloads : ApiFunction
     {
         private readonly ILogger _logger;
-        private readonly IGetAvailableSchoolDownloadsUseCase _useCase;
+        private readonly IGetAvailableSchoolDownloads _useCase;
         private readonly ErrorHandlingOptions _options;
 
         public GetAvailableSchoolDownloads(
             ILoggerFactory loggerFactory, 
-            IGetAvailableSchoolDownloadsUseCase useCase,
+            IGetAvailableSchoolDownloads useCase,
             IOptions<ErrorHandlingOptions> options)
         {
             _logger = loggerFactory.CreateLogger<GetAvailableSchoolDownloads>();

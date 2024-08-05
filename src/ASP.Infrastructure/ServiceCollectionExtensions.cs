@@ -1,5 +1,5 @@
-﻿using ASP.Core.Search;
-using ASP.Infrastructure.Services;
+﻿using ASP.Core.Establishments.Search;
+using ASP.Infrastructure.Establishments;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ASP.Infrastructure;

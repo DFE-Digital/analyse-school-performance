@@ -3,12 +3,12 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
-using ASP.Application.UseCases.LocalAuthority;
-using ASP.Core.DTO.Establishment;
+using ASP.Core.Establishments.Search;
+using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Results;
-using ASP.Core.Search;
-using ASP.Core.Search.Suggestions;
 using ASP.Core.Templating;
+using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 
 namespace ASP.Application
 {
@@ -20,6 +20,6 @@ namespace ASP.Application
         Task<Result<EstablishmentDetailsDTO>> GetEstablishmentDetails(GetEstablishmentDetailsRequest request);
         Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> EstablishmentSearch(EstablishmentSearchRequest request);
         Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request);
-        Task<Result<ASP.Core.DTO.LocalAuthority.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request);
+        Task<Result<UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request);
     }
 }

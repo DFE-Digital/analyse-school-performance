@@ -1,4 +1,4 @@
-﻿using ASP.Application.UseCases.LocalAuthority;
+﻿using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -9,11 +9,11 @@ namespace ASP.Api.Functions;
 public class GetLocalAuthority : ApiFunction
 {
     private readonly ILogger _logger;
-    private readonly IGetLocalAuthorityUseCase _useCase;
+    private readonly IGetLocalAuthority _useCase;
     private readonly ErrorHandlingOptions _options;
 
     public GetLocalAuthority(ILoggerFactory loggerFactory,
-        IGetLocalAuthorityUseCase useCase,
+        IGetLocalAuthority useCase,
         IOptions<ErrorHandlingOptions> options)
     {
         _logger = loggerFactory.CreateLogger<GetLocalAuthority>();

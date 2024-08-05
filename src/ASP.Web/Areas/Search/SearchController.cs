@@ -1,9 +1,10 @@
 ﻿using ASP.Application;
+using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Core;
+using ASP.Core.Establishments.Search;
 using ASP.Core.Results;
-using ASP.Core.Search;
 using ASP.Web.Areas.Shared.Pagination;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features.TermsOfUse;

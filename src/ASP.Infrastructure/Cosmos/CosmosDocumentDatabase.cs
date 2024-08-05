@@ -165,18 +165,36 @@ namespace ASP.Infrastructure.Cosmos
             {
                 Container containerObject = await _containerProvider.GetContainerAsync(container);
                 var properties = await containerObject.ReadContainerAsync();
-                var partitionKeyPath = properties.Resource.PartitionKeyPath.Split('/').FirstOrDefault(p => p.Trim().Length > 0);
+                var partitionKeyPath = properties.Resource.PartitionKeyPath.Split('/').FirstOrDefault(p => p.Trim().Length > 0) ?? "";
 
-                var items = await _queryHandler.
-                    ReadIterableItemsAsync<Dictionary<string, object>>(container, q => q, cancellationToken);
+                if(partitionKeyPath.Length == 0)
+                {
+                    return Result.Unexpected<Done>($@"Invalid partition key ""{properties.Resource.PartitionKeyPath}"" defined on container ""{container}"".", null);
+                }
+
+                var items = await _queryHandler.ReadIterableItemsAsync<Dictionary<string, object>>(container, q => q, cancellationToken);
 
                 foreach (var item in items)
                 {
-                    var id = (string)item["id"];
-                    var partitionKey = (string)item[partitionKeyPath];
-
-                    var response = await containerObject
-                        .DeleteItemAsync<Dictionary<string, object>>(id, new PartitionKey(partitionKey), cancellationToken: cancellationToken);
+                    if (item.TryGetValue("id", out var idObj) && idObj is string id)
+                    {
+                        if (item.TryGetValue(partitionKeyPath, out var partitionKeyObj) && partitionKeyObj is string partitionKey)
+                        {
+                            await containerObject.DeleteItemAsync<Dictionary<string, object>>(
+                                id,
+                                new PartitionKey(partitionKey),
+                                cancellationToken: cancellationToken
+                            );
+                        }
+                        else
+                        {
+                            return Result.Unexpected<Done>($@"Expected object to have a string property named ""{partitionKeyPath}"".", null);
+                        }
+                    }
+                    else
+                    {
+                        return Result.Unexpected<Done>($@"Expected object to have a string property named ""id"".", null);
+                    }
                 }
 
                 return Result.Done;
