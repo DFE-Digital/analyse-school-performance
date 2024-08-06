@@ -6,15 +6,14 @@ public static class SearchSuggestionsResultMapper
 {
     public static EstablishmentSearchSuggestionsResult MapToEstablishmentSearchSuggestionsResult(this SearchSuggestionsResultDAO details)
     {
-        return new EstablishmentSearchSuggestionsResult()
-        {
-            Urn = details.Urn,
-            Name = details.Name,
-            Address = details.Address.MapToDomainEntityAddress(),
-            Laestab = details.Laestab,
-            IsDeleted = details.IsDeleted,
-            IsVisible = details.IsVisible
-        };
+        return new EstablishmentSearchSuggestionsResult(
+            details.Urn,
+            details.Name,
+            details.Address.MapToDomainEntityAddress(),
+            details.Laestab,
+            details.IsDeleted,
+            details.IsVisible
+        );
     }
 
     public static List<EstablishmentSearchSuggestionsResult> MapToEstablishmentSearchSuggestionsResults(

@@ -6,17 +6,19 @@ public static class AgeRangeMapper
     {
         if (ageRange == null) return null;  // Return null directly instead of an empty object
 
-        return new Core.Establishments.AgeRange()
-        {
-            High = ageRange.High,
-            Low = ageRange.Low
-        };
+        return new Core.Establishments.AgeRange(
+            ageRange.Low,
+            ageRange.High
+        );
     }
 
     public static AgeRangeDAO? MapToAgeRangeDAO(this Core.Establishments.AgeRange? ageRange)
     {
         if (ageRange == null) return null;  // Return null directly instead of an empty object
 
-        return new AgeRangeDAO(ageRange.Low, ageRange.High);
+        return new AgeRangeDAO(
+            ageRange.Low, 
+            ageRange.High
+        );
     }
 }

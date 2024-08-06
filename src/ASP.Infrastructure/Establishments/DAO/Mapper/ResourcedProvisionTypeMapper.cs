@@ -6,17 +6,19 @@ public static class ResourcedProvisionTypeMapper
     {
         if (resourcedProvisionType == null) return null;  // Return null directly instead of an empty object
 
-        return new Core.Establishments.ResourcedProvisionType()
-        {
-            Code = resourcedProvisionType.Code,
-            Name = resourcedProvisionType.Name
-        };
+        return new Core.Establishments.ResourcedProvisionType(
+            resourcedProvisionType.Code,
+            resourcedProvisionType.Name
+        );
     }
 
     public static ResourcedProvisionTypeDAO? MapToResourcedProvisionTypeDAO(this Core.Establishments.ResourcedProvisionType? resourcedProvisionType)
     {
         if (resourcedProvisionType == null) return null;  // Return null directly instead of an empty object
 
-        return new ResourcedProvisionTypeDAO(resourcedProvisionType.Code, resourcedProvisionType.Name);
+        return new ResourcedProvisionTypeDAO(
+            resourcedProvisionType.Code, 
+            resourcedProvisionType.Name
+        );
     }
 }

@@ -6,16 +6,19 @@ public static class EstablishmentTypeMapper
     {
         if (establishmentType == null) return null;  // Return null directly instead of an empty object
 
-        return new Core.Establishments.EstablishmentType()
-        {
-            Code = establishmentType.Code,
-            Name = establishmentType.Name
-        };
+        return new Core.Establishments.EstablishmentType(
+            establishmentType.Code,
+            establishmentType.Name
+        );
     }
 
     public static EstablishmentTypeDAO? MapToEstablishmentTypeDAO(this Core.Establishments.EstablishmentType? establishmentType)
     {
         if (establishmentType == null) return null;  // Return null directly instead of an empty object
-        return new EstablishmentTypeDAO(establishmentType.Code, establishmentType.Name);
+
+        return new EstablishmentTypeDAO(
+            establishmentType.Code, 
+            establishmentType.Name
+        );
     }
 }

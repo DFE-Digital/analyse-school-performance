@@ -6,17 +6,21 @@ public static class AddressMapper
     {
         if (address == null) return null;  // Return null directly instead of an empty object
 
-        return new Core.Establishments.Address()
-        {
-            Street = address.Street,
-            Town = address.Town,
-            PostCode = address.PostCode
-        };
+        return new Core.Establishments.Address(
+            address.Street,
+            address.Town,
+            address.PostCode
+        );
     }
 
     public static AddressDAO? MapToAddressDAO(this Core.Establishments.Address? address)
     {
         if (address == null) return null;  // Return null directly instead of an empty object
-        return new AddressDAO(address.Street, address.Town, address.PostCode);
+
+        return new AddressDAO(
+            address.Street, 
+            address.Town, 
+            address.PostCode
+        );
     }
 }

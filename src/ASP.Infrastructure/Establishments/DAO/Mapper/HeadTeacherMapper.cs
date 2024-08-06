@@ -6,19 +6,23 @@ public static class HeadTeacherMapper
     {
         if (headTeacher == null) return null;  // Return null directly instead of an empty object
 
-        return new Core.Establishments.HeadTeacher()
-        {
-            FirstName = headTeacher.FirstName,
-            LastName = headTeacher.LastName,
-            PreferredJobTitle = headTeacher.PreferredJobTitle,
-            Title = headTeacher.Title
-        };
+        return new Core.Establishments.HeadTeacher(
+            headTeacher.Title,
+            headTeacher.FirstName,
+            headTeacher.LastName,
+            headTeacher.PreferredJobTitle
+        );
     }
 
     public static HeadTeacherDAO? MapToHeadTeacherDAO(this Core.Establishments.HeadTeacher? headTeacher)
     {
         if (headTeacher == null) return null;  // Return null directly instead of an empty object
 
-        return new HeadTeacherDAO(headTeacher.Title, headTeacher.FirstName, headTeacher.LastName, headTeacher.PreferredJobTitle);
+        return new HeadTeacherDAO(
+            headTeacher.Title, 
+            headTeacher.FirstName, 
+            headTeacher.LastName, 
+            headTeacher.PreferredJobTitle
+        );
     }
 }

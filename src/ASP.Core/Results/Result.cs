@@ -38,7 +38,7 @@
 
     /// <summary>
     /// Represents the result of an operation that could fail. Derived classes represent the possible outcomes: <c>SuccessResult&lt;TValue&gt;</c> indicates
-    /// the operation was successful and contains the value of the result of type <typeparamref name="TValue"></typeparam>. <c>ErrorResult&lt;TValue&gt;</c>
+    /// the operation was successful and contains the value of the result of type <typeparamref name="TValue"></typeparamref>. <c>ErrorResult&lt;TValue&gt;</c>
     /// indicates an error and contains an <c>Error</c> object
     /// </summary>
     /// <typeparam name="TValue">Type of the successful result of the operation</typeparam>
@@ -156,6 +156,7 @@
         /// <returns>A result object of type <c>Result&lt;<typeparamref name="TValue"/>&gt;</c></returns>
         public abstract Result<TValue> MapErrorMessage(Func<string, string> mapFunction);
 
+        /// <summary>
         /// If the current result is an <c>ErrorResult</c>, asynchronously uses the map function provided to change the error message,
         /// keeping the error type the same. Otherwise returns the current result unchanged. For example:
         /// <example>
@@ -636,7 +637,6 @@
         /// </code>
         /// results in <c>a</c> being a <c>SuccessResult</c> with value <c>2</c> and <c>b</c> being an <c>ErrorResult</c> with error <c>UnexpectedError</c>: <c>"Value was greater than 10!"</c>.
         /// </example>
-        /// </summary>
         /// </summary>
         /// <param name="predicate">Predicate which should evaluates to true if the current result is a <c>SuccessResult</c> and should be converted to an 
         /// <c>ErrorResult</c> using the provided <paramref name="error"/></param>

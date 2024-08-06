@@ -6,16 +6,19 @@ public static class GenderMapper
     {
         if (gender == null) return null;  // Return null directly instead of an empty object
 
-        return new Core.Establishments.Gender()
-        {
-            Code = gender.Code,
-            Name = gender.Name
-        };
+        return new Core.Establishments.Gender(
+            gender.Code,
+            gender.Name
+        );
     }
 
     public static GenderDAO? MapToGenderDAO(this Core.Establishments.Gender? gender)
     {
         if (gender == null) return null;  // Return null directly instead of an empty object
-        return new GenderDAO(gender.Code, gender.Name);
+
+        return new GenderDAO(
+            gender.Code, 
+            gender.Name
+        );
     }
 }

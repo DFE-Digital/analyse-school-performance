@@ -2,7 +2,13 @@
 {
     public class LocalAuthority
     {
-        public int Code { get; set;}
-        public string Name { get; set;}
+        public int Code { get; }
+        public string Name { get; }
+
+        public LocalAuthority(int code, string name)
+        {
+            Code = code;
+            Name = name;
+        }
     }
 }

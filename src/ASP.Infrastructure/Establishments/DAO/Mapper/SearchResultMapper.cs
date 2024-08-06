@@ -6,24 +6,22 @@ public static class SearchResultMapper
 {
     public static EstablishmentDetailsSearchResult MapToEstablishmentDetailsSearchResult(this SearchResultDAO details)
     {
-        return new EstablishmentDetailsSearchResult()
-        {
-            Urn = details.Urn,
-            Name = details.Name,
-            IsPrimary = details.IsPrimary,
-            IsSecondary = details.IsSecondary,
-            IsPost16 = details.IsPost16,
-            Address = details.Address.MapToDomainEntityAddress(),
-            OfstedRating = details.OfstedRating.MapToDomainEntityOfstedRating(),
-            OfstedLastInspectionDate = details.OfstedLastInspectionDate,
-            Laestab = details.Laestab,
-            IsDeleted = details.IsDeleted,
-            IsVisible = details.IsVisible
-        };
+        return new EstablishmentDetailsSearchResult(
+            details.Urn,
+            details.Name,
+            details.IsPrimary,
+            details.IsSecondary,
+            details.IsPost16,
+            details.Address.MapToDomainEntityAddress(),
+            details.OfstedRating.MapToDomainEntityOfstedRating(),
+            details.OfstedLastInspectionDate,
+            details.Laestab,
+            details.IsDeleted,
+            details.IsVisible
+        );
     }
 
-    public static List<EstablishmentDetailsSearchResult> MapToEstablishmentDetailsSearchResults(
-        this IEnumerable<SearchResultDAO> detailsList)
+    public static List<EstablishmentDetailsSearchResult> MapToEstablishmentDetailsSearchResults(this IEnumerable<SearchResultDAO> detailsList)
     {
         return detailsList.Select(MapToEstablishmentDetailsSearchResult).ToList();
     }
