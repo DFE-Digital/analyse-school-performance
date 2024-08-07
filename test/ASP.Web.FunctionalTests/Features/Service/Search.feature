@@ -2,127 +2,131 @@ Feature: Search Page
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns results
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "Some Primary School",
-        "address": {
-            "street": "13 The Street",
-            "town": "SomeTown",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Some Other Primary School",
-        "address": {
-            "street": "13 The Road",
-            "town": "Tring",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    When I navigate to /search/
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "Tring",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Primary"
 	And I click the button "#searchSubmit"
-    Then the page title should be "Search results for "Primary" | Analyse school performance"
+	Then the path should be /search/search-result/?page=1&searchTerm=Primary
+	And the page title should be "Search results for "Primary" | Analyse school performance"
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns no results
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "Some Primary School",
-        "address": {
-            "street": "13 The Street",
-            "town": "SomeTown",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Some Other Primary School",
-        "address": {
-            "street": "13 The Road",
-            "town": "Tring",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    When I navigate to /search/
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "Tring",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Secondary"
 	And I click the button "#searchSubmit"
-    Then the page title should be "We found no matching results for "Secondary" | Analyse school performance"
+	Then the path should be /search/search-result/?page=1&searchTerm=Secondary
+	And the page title should be "We found no matching results for "Secondary" | Analyse school performance"
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns results
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "Some Primary School",
-        "address": {
-            "street": "13 The Street",
-            "town": "SomeTown",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Some Other Primary School",
-        "address": {
-            "street": "13 The Road",
-            "town": "Tring",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    When I navigate to /search/
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "Tring",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Primary"
 	And I click the button "#searchSubmit"
-    Then the element "[data-testid='breadcrumb-home']" should have the href "/"
-    And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
-    And the element "[data-testid='breadcrumb-current-page']" should have the text content "Search results for "Primary""
+	Then the path should be /search/search-result/?page=1&searchTerm=Primary
+	And the element "[data-testid='breadcrumb-home']" should have the href "/"
+	And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
+	And the element "[data-testid='breadcrumb-current-page']" should have the text content "Search results for "Primary""
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns no results
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "Some Primary School",
-        "address": {
-            "street": "13 The Street",
-            "town": "SomeTown",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Some Other Primary School",
-        "address": {
-            "street": "13 The Road",
-            "town": "Tring",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    When I navigate to /search/
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "Tring",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Secondary"
 	And I click the button "#searchSubmit"
-    Then the element "[data-testid='breadcrumb-home']" should have the href "/"
-    And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
-    And the element "[data-testid='breadcrumb-current-page']" should have the text content "We found no matches for "Secondary""
+	Then the path should be /search/search-result/?page=1&searchTerm=Secondary
+	And the element "[data-testid='breadcrumb-home']" should have the href "/"
+	And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
+	And the element "[data-testid='breadcrumb-current-page']" should have the text content "We found no matches for "Secondary""
  
 @Javascript:disabled
 Scenario: Search Term Validation
-    When I navigate to /search/
+	When I navigate to /search/
 	Then I should get a 200 response
 	And the page title should be "Search | Analyse school performance"
 	And the element "h1.govuk-heading-l" should have the text content "Search for a school"
@@ -130,10 +134,11 @@ Scenario: Search Term Validation
 
 @Javascript:disabled
 Scenario: Errors in Search Term Validation
-    When I navigate to /search/
+	When I navigate to /search/
 	And I click the button "#searchSubmit"
-	Then the element "#searchTerm-input-error" should have the text content "Please enter a search term such as a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
-    And the element "h2.govuk-error-summary__title" should have the text content "Please correct the following error(s)."
+	Then the path should be /search/search-result/?page=1&searchTerm=
+	And the element "#searchTerm-input-error" should have the text content "Please enter a search term such as a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+	And the element "h2.govuk-error-summary__title" should have the text content "Please correct the following error(s)."
 	And the element "*[data-testid='searchTerm']" should have the text content "Enter school name, address or reference number"
 
 @Javascript:disabled
@@ -142,20 +147,22 @@ Scenario: School search page should show correct message when there is no data
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "primary"
 	And I click the button "#searchSubmit"
-    Then the element "h1" should have the text content "We found no matches for "primary""
+	Then the path should be /search/search-result/?page=1&searchTerm=primary
+	And the element "h1" should have the text content "We found no matches for "primary""
 
 @Javascript:disabled
 Scenario: School search page should show correct message for search term with no matches
 	Given Establishment "111111" exists:
 	"""
 	{
-	    "name": "Some Primary School"
+		"name": "Some Primary School"
 	}
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "secondary"
 	And I click the button "#searchSubmit"
-    Then the element "h1" should have the text content "We found no matches for "secondary""
+	Then the path should be /search/search-result/?page=1&searchTerm=secondary
+	And the element "h1" should have the text content "We found no matches for "secondary""
 
 @Javascript:disabled
 Scenario: Matching URN search should redirect to school landing page
@@ -165,11 +172,11 @@ Scenario: Matching URN search should redirect to school landing page
 		"name": "Some Primary School"
 	}
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario: Partial match for school name should redirect to school landing page
@@ -179,116 +186,117 @@ Scenario: Partial match for school name should redirect to school landing page
 		"name": "Some Primary School"
 	}
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "PRiMaRY"
 	And I click the button "#searchSubmit"  
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario: Partial street match should redirect to school landing page
 	Given Establishment "111111" exists:
 	"""
-    {
-        "name": "Some Primary School",
-        "address": {
-            "street": "13 The Street",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    } 
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	} 
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "str"
 	And I click the button "#searchSubmit"  
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
 
 @Javascript:disabled
 Scenario: Partial town match should redirect to school landing page
 	Given Establishment "111111" exists:
 	"""
-    {
-        "name": "Some Primary School",
-        "address": {
-            "street": "13 The Street",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    } 
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	} 
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "some"
 	And I click the button "#searchSubmit"  
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
 
 @Javascript:disabled
 Scenario: Partial postcode match should redirect to school landing page
 	Given Establishment "111111" exists:
 	"""
-    {
-        "name": "Some Primary School",
-        "address": {
-            "street": "13 The Street",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    } 
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	} 
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "tr1"
 	And I click the button "#searchSubmit"   
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
 
 @Javascript:disabled
 Scenario Outline: Results page should show partial name and address matches
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "Some Primary School",
-        "address": {
-            "street": "13 The Street",
-            "town": "SomeTown",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Some Other Primary School",
-        "address": {
-            "street": "13 The Road",
-            "town": "Tring",
-            "postCode": "B1 1AA"
-        }
-    }
-    """
-    And Establishment "333333" exists:
-    """
-    {
-        "name": "A Different Primary School",
-        "address": {
-            "street": "13 The Road",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    }
-    """
-    And Establishment "444444" exists:
-    """
-    {
-        "name": "The Training Centre"
-    }
-    """
-    When I navigate to /search/
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "Tring",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	And Establishment "333333" exists:
+	"""
+	{
+		"name": "A Different Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	}
+	"""
+	And Establishment "444444" exists:
+	"""
+	{
+		"name": "The Training Centre"
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "tr"
 	And I click the button "#searchSubmit"
-    Then the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
-    And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
-    And the element "[data-testid="school-search-results-address-<Counter>"]" should have the text content "<Address>"
+	Then the path should be /search/search-result/?page=1&searchTerm=tr
+	And the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-search-results-address-<Counter>"]" should have the text content "<Address>"
 Examples: 
 | Counter | URN    | Name                       | Address                        |
 | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT |
@@ -304,11 +312,11 @@ Scenario: School search successful for 6-digit URN
 		"name": "Some Primary School"
 	}
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario Outline: School search with less than 6 digits does not match on URN
@@ -318,10 +326,11 @@ Scenario Outline: School search with less than 6 digits does not match on URN
 		"name": "Some Primary School"
 	}
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"   
-    Then the element "h1" should have the text content "We found no matches for "<SearchTerm>""
+	Then the path should be /search/search-result/?page=1&searchTerm=<SearchTerm>
+	And the element "h1" should have the text content "We found no matches for "<SearchTerm>""
 Examples: 
 | SearchTerm |
 | 1          |
@@ -334,26 +343,26 @@ Examples:
 Scenario Outline: School search with less than 6 digits matches on school address
 	Given Establishment "111111" exists:
 	"""
-    {
-        "name": "Some Primary School"
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Another Primary School",
-        "address": {
-            "street": "<SearchTerm> The Street",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    } 
+	{
+		"name": "Some Primary School"
+	}
 	"""
-    When I navigate to /search/
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Another Primary School",
+		"address": {
+			"street": "<SearchTerm> The Street",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	} 
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"  
-    Then the path should match "/school/222222/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Another Primary School (URN: 222222)"
+	Then the path should be /school/222222/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Another Primary School (URN: 222222)"
 Examples: 
 | SearchTerm |
 | 1          |
@@ -370,22 +379,22 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
 		"name": "Some Primary School"
 	}
 	"""
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Another Primary School",
-        "address": {
-            "street": "111111 The Street",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    } 
+	And Establishment "222222" exists:
 	"""
-    When I navigate to /search/
+	{
+		"name": "Another Primary School",
+		"address": {
+			"street": "111111 The Street",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	} 
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (with forward slash)
@@ -393,14 +402,14 @@ Scenario: Search term matching establishment LAESTAB code (with forward slash)
 	"""
 	{
 		"name": "Some Primary School",
-        "laestab": "894/2200"
+		"laestab": "894/2200"
 	}
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit" 
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (without forward slash)
@@ -408,244 +417,249 @@ Scenario: Search term matching establishment LAESTAB code (without forward slash
 	"""
 	{
 		"name": "Some Primary School",
-        "laestab": "894/2200"
+		"laestab": "894/2200"
 	}
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"   
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (LA part)
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "Some Primary School",
-        "laestab": "894/2200"
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Some Other Primary School",
-        "laestab": "894/1234"
-    }
-    """
-    When I navigate to /search/
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"laestab": "894/2200"
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"laestab": "894/1234"
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "894"
 	And I click the button "#searchSubmit"
-    Then the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
-    And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
-    And the element "[data-testid="school-search-results-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	Then the path should be /search/search-result/?page=1&searchTerm=894
+	And the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-search-results-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 Examples: 
-| Counter | URN      | LAESTAB     | Name                      |
-| 2       | 111111   | 894/2200    | Some Primary School       |
-| 1       | 222222   | 894/1234    | Some Other Primary School |
+| Counter | URN    | LAESTAB  | Name                      |
+| 2       | 111111 | 894/2200 | Some Primary School       |
+| 1       | 222222 | 894/1234 | Some Other Primary School |
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (ESTAB part)
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "Some Primary School",
-        "laestab": "894/2200"
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Some Other Primary School",
-        "laestab": "600/2200"
-    }
-    """
-    When I navigate to /search/
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"laestab": "894/2200"
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"laestab": "600/2200"
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "2200"
 	And I click the button "#searchSubmit"
-    Then the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
-    And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
-    And the element "[data-testid="school-search-results-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	Then the path should be /search/search-result/?page=1&searchTerm=2200
+	And the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-search-results-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 Examples: 
-| Counter | URN      | LAESTAB     | Name                      |
-| 2       | 111111   | 894/2200    | Some Primary School       |
-| 1       | 222222   | 600/2200    | Some Other Primary School |
+| Counter | URN    | LAESTAB  | Name                      |
+| 2       | 111111 | 894/2200 | Some Primary School       |
+| 1       | 222222 | 600/2200 | Some Other Primary School |
 
 @Javascript:disabled
 Scenario: Partial LAESTAB (LA part) match should show no matching results
 	Given Establishment "111111" exists:
 	"""
 	{
-	    "name": "Some Primary School",
-        "laestab" : "894/2200"
+		"name": "Some Primary School",
+		"laestab" : "894/2200"
 	}
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "89"
 	And I click the button "#searchSubmit"
-    Then the element "h1" should have the text content "We found no matches for "89""
+	Then the path should be /search/search-result/?page=1&searchTerm=89
+	And the element "h1" should have the text content "We found no matches for "89""
 
 @Javascript:disabled
 Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
 	Given Establishment "111111" exists:
 	"""
 	{
-	    "name": "Some Primary School",
-        "laestab" : "894/2200"
+		"name": "Some Primary School",
+		"laestab" : "894/2200"
 	}
 	"""
-    When I navigate to /search/
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "22"
 	And I click the button "#searchSubmit"
-    Then the element "h1" should have the text content "We found no matches for "22""
+	Then the path should be /search/search-result/?page=1&searchTerm=22
+	And the element "h1" should have the text content "We found no matches for "22""
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields)
 	Given Establishment "111111" exists:
 	"""
-    {
-        "name": "Some Primary School",
-        "laestab": "894/2200"
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Another Primary School",
-        "laestab": "123/4567",
-        "address": {
-            "street": "8942200 The Street",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    } 
+	{
+		"name": "Some Primary School",
+		"laestab": "894/2200"
+	}
 	"""
-    When I navigate to /search/
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Another Primary School",
+		"laestab": "123/4567",
+		"address": {
+			"street": "8942200 The Street",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	} 
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields)
 	Given Establishment "111111" exists:
 	"""
-    {
-        "name": "Some Primary School",
-        "laestab": "894/2200",
-    } 
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Another Primary School",
-        "laestab": "123/4567",
-        "address": {
-            "street": "894/2200 The Street",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    } 
+	{
+		"name": "Some Primary School",
+		"laestab": "894/2200",
+	} 
 	"""
-    When I navigate to /search/
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Another Primary School",
+		"laestab": "123/4567",
+		"address": {
+			"street": "894/2200 The Street",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	} 
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit"  
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields)
 	Given Establishment "111111" exists:
 	"""
-    {
-        "name": "Some Primary School",
-        "laestab": "894/2200"         
-    }
-    """
-     And Establishment "222222" exists:
-    """
-    {
-        "name": "Another Primary School",
-        "laestab": "123/4567",
-        "address": {
-            "street": "894 The Street",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    } 
+	{
+		"name": "Some Primary School",
+		"laestab": "894/2200"		 
+	}
 	"""
-    When I navigate to /search/
+	 And Establishment "222222" exists:
+	"""
+	{
+		"name": "Another Primary School",
+		"laestab": "123/4567",
+		"address": {
+			"street": "894 The Street",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	} 
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "894"
 	And I click the button "#searchSubmit"  
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields)
 	Given Establishment "111111" exists:
 	"""
-    {
-        "name": "Some Primary School",
-        "laestab": "894/2200"
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Another Primary School",
-        "laestab": "123/4567",
-        "address": {
-            "street": "2200 The Street",
-            "town": "SomeTown",
-            "postCode": "TR18 3JT"
-        }
-    } 
+	{
+		"name": "Some Primary School",
+		"laestab": "894/2200"
+	}
 	"""
-    When I navigate to /search/
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Another Primary School",
+		"laestab": "123/4567",
+		"address": {
+			"street": "2200 The Street",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		}
+	} 
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "2200"
 	And I click the button "#searchSubmit"   
-    Then the path should match "/school/111111/"
-    And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	Then the path should be /school/111111/
+	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct search results
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "School A",
-        "address": {
-            "street": "13 The Street",
-            "postCode": "AB12 3CD"
-        }
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "School B",
-        "address": {
-            "street": "2a Mornington Crescent",
-            "town": "Liverpool",
-            "postCode": "LL1 1AB"
-        } 
-    }
-    """
-    And Establishment "333333" exists:
-    """
-    {
-        "name": "School C",
-        "address": {
-            "street": "34 Long Road",
-            "town": "Sheffield"
-        }  
-    }
-    """
-    When I navigate to /search/
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "School A",
+		"address": {
+			"street": "13 The Street",
+			"postCode": "AB12 3CD"
+		}
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "School B",
+		"address": {
+			"street": "2a Mornington Crescent",
+			"town": "Liverpool",
+			"postCode": "LL1 1AB"
+		} 
+	}
+	"""
+	And Establishment "333333" exists:
+	"""
+	{
+		"name": "School C",
+		"address": {
+			"street": "34 Long Road",
+			"town": "Sheffield"
+		}  
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "School"
 	And I click the button "#searchSubmit"
-    Then the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
-    And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
-    And the element "[data-testid="school-search-results-address-<Counter>"]" should have the text content "<Address>"
+	Then the path should be /search/search-result/?page=1&searchTerm=School
+	And the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-search-results-address-<Counter>"]" should have the text content "<Address>"
 Examples: 
 | Counter | URN    | Name     | Address                                   |
 | 1       | 111111 | School A | 13 The Street AB12 3CD                    |
@@ -654,39 +668,40 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct education phase in search results
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "School A",
-        "isPrimary": true,
-        "isSecondary": false,
-        "isPost16": false
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "School B",
-        "isPrimary": false,
-        "isSecondary": true,
-        "isPost16": false
-    }
-    """
-    And Establishment "333333" exists:
-    """
-    {
-        "name": "School C",
-        "isPrimary": false,
-        "isSecondary": false,
-        "isPost16": true 
-    }
-    """
-    When I navigate to /search/
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "School A",
+		"isPrimary": true,
+		"isSecondary": false,
+		"isPost16": false
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "School B",
+		"isPrimary": false,
+		"isSecondary": true,
+		"isPost16": false
+	}
+	"""
+	And Establishment "333333" exists:
+	"""
+	{
+		"name": "School C",
+		"isPrimary": false,
+		"isSecondary": false,
+		"isPost16": true 
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "School"
 	And I click the button "#searchSubmit"
-    Then the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
-    And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
-    And the element "[data-testid="school-search-results-phase-<Counter>"]" should have the text content "<Education phase>"
+	Then the path should be /search/search-result/?page=1&searchTerm=School
+	And the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-search-results-phase-<Counter>"]" should have the text content "<Education phase>"
 Examples: 
 | Counter | URN    | Name     | Education phase |
 | 1       | 111111 | School A | Primary         |
@@ -695,43 +710,44 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct ofsted rating in search results
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "School A",
-        "ofstedLastInspectionDate": "2013-03-22T00:00:00",
-        "ofstedRating": {
-            "code": "2",
-            "name": "Good",
-            "lname": "good",
-            "isNullish": false
-        }
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "School B",
-        "ofstedLastInspectionDate": null,
-        "ofstedRating": {
-            "code": "99"
-        }
-    }
-    """
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "School A",
+		"ofstedLastInspectionDate": "2013-03-22T00:00:00",
+		"ofstedRating": {
+			"code": "2",
+			"name": "Good",
+			"lname": "good",
+			"isNullish": false
+		}
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "School B",
+		"ofstedLastInspectionDate": null,
+		"ofstedRating": {
+			"code": "99"
+		}
+	}
+	"""
    And Establishment "333333" exists:
-    """
-    {
-        "name": "School C",
-        "ofstedLastInspectionDate": null,
-        "ofstedRating": null
-    }
-    """
-    When I navigate to /search/
+	"""
+	{
+		"name": "School C",
+		"ofstedLastInspectionDate": null,
+		"ofstedRating": null
+	}
+	"""
+	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "School"
 	And I click the button "#searchSubmit"
-    Then the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
-    And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
-    And the element "[data-testid="school-search-results-ofstedrating-<Counter>"]" should have the text content "<Ofsted rating>"
+	Then the path should be /search/search-result/?page=1&searchTerm=School
+	Then the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-search-results-ofstedrating-<Counter>"]" should have the text content "<Ofsted rating>"
 Examples: 
 | Counter | URN    | Name     | Ofsted rating                                   |
 | 1       | 111111 | School A | 2 Good \| Ofsted report Inspected 22 March 2013 |
@@ -740,63 +756,62 @@ Examples:
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation
- Given 251 Establishments exist with properties:
- | urn          | name                        |
- | (100000 + n) | Primary School (100000 + n) |
- When I navigate to /search/search-result/?page=1&searchTerm=primary
- Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 50 of 251 schools or colleges"
- And the element "*[data-testid='PageLinks-Header-1']" should have the href "/search/search-result?searchTerm=primary&page=1"
- And the element "*[data-testid='PageLinks-Header-2']" should have the href "/search/search-result?searchTerm=primary&page=2"
- And the element "*[data-testid='PageLinks-Header-3']" should have the href "/search/search-result?searchTerm=primary&page=3"
- And the element "*[data-testid='PageLinks-Header-4']" should have the href "/search/search-result?searchTerm=primary&page=4"
- And the element "*[data-testid='PageLinks-Header-5']" should have the href "/search/search-result?searchTerm=primary&page=5"
- And the element "*[data-testid='PageLinks-Header-Next']" should have the href "/search/search-result?searchTerm=primary&page=2"
- And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100001"
- And the element "*[data-testid='school-search-results-name-2']" should have the text content "Primary School 100002"
- And the element "*[data-testid='school-search-results-name-3']" should have the text content "Primary School 100003"
- And the element "*[data-testid='school-search-results-name-4']" should have the text content "Primary School 100004"
- And the element "*[data-testid='school-search-results-name-5']" should have the text content "Primary School 100005"
- And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100001"
- And the element "*[data-testid='school-search-results-urn-2']" should have the text content "100002"
- And the element "*[data-testid='school-search-results-urn-3']" should have the text content "100003"
- And the element "*[data-testid='school-search-results-urn-4']" should have the text content "100004"
- And the element "*[data-testid='school-search-results-urn-5']" should have the text content "100005"
-
+	Given 251 Establishments exist with properties:
+	| urn		  | name						|
+	| (100000 + n) | Primary School (100000 + n) |
+	When I navigate to /search/search-result/?page=1&searchTerm=primary
+	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 50 of 251 schools or colleges"
+	And the element "*[data-testid='PageLinks-Header-1']" should have the href "/search/search-result?searchTerm=primary&page=1"
+	And the element "*[data-testid='PageLinks-Header-2']" should have the href "/search/search-result?searchTerm=primary&page=2"
+	And the element "*[data-testid='PageLinks-Header-3']" should have the href "/search/search-result?searchTerm=primary&page=3"
+	And the element "*[data-testid='PageLinks-Header-4']" should have the href "/search/search-result?searchTerm=primary&page=4"
+	And the element "*[data-testid='PageLinks-Header-5']" should have the href "/search/search-result?searchTerm=primary&page=5"
+	And the element "*[data-testid='PageLinks-Header-Next']" should have the href "/search/search-result?searchTerm=primary&page=2"
+	And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-search-results-name-2']" should have the text content "Primary School 100002"
+	And the element "*[data-testid='school-search-results-name-3']" should have the text content "Primary School 100003"
+	And the element "*[data-testid='school-search-results-name-4']" should have the text content "Primary School 100004"
+	And the element "*[data-testid='school-search-results-name-5']" should have the text content "Primary School 100005"
+	And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100001"
+	And the element "*[data-testid='school-search-results-urn-2']" should have the text content "100002"
+	And the element "*[data-testid='school-search-results-urn-3']" should have the text content "100003"
+	And the element "*[data-testid='school-search-results-urn-4']" should have the text content "100004"
+	And the element "*[data-testid='school-search-results-urn-5']" should have the text content "100005"
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation 2
- Given 251 Establishments exist with properties:
- | urn          | name                        |
- | (100000 + n) | Primary School (100000 + n) |
- When I navigate to /search/search-result/?page=3&searchTerm=primary
- Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 101 - 150 of 251 schools or colleges"
- And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/search-result?searchTerm=primary&page=2"
- And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/search-result?searchTerm=primary&page=1"
- And the elements "*[data-testid='PageLinks-Header-2']" should all have the href "/search/search-result?searchTerm=primary&page=2"
- And the elements "*[data-testid='PageLinks-Header-3']" should all have the href "/search/search-result?searchTerm=primary&page=3"
- And the elements "*[data-testid='PageLinks-Header-4']" should all have the href "/search/search-result?searchTerm=primary&page=4"
- And the elements "*[data-testid='PageLinks-Header-5']" should all have the href "/search/search-result?searchTerm=primary&page=5"
- And the elements "*[data-testid='PageLinks-Header-Next']" should all have the href "/search/search-result?searchTerm=primary&page=4"
- And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100101"
- And the element "*[data-testid='school-search-results-name-2']" should have the text content "Primary School 100102"
- And the element "*[data-testid='school-search-results-name-3']" should have the text content "Primary School 100103"
- And the element "*[data-testid='school-search-results-name-4']" should have the text content "Primary School 100104"
- And the element "*[data-testid='school-search-results-name-5']" should have the text content "Primary School 100105"
- And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100101"
- And the element "*[data-testid='school-search-results-urn-2']" should have the text content "100102"
- And the element "*[data-testid='school-search-results-urn-3']" should have the text content "100103"
- And the element "*[data-testid='school-search-results-urn-4']" should have the text content "100104"
- And the element "*[data-testid='school-search-results-urn-5']" should have the text content "100105"
+	Given 251 Establishments exist with properties:
+	| urn		  | name						|
+	| (100000 + n) | Primary School (100000 + n) |
+	When I navigate to /search/search-result/?page=3&searchTerm=primary
+	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 101 - 150 of 251 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/search-result?searchTerm=primary&page=2"
+	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/search-result?searchTerm=primary&page=1"
+	And the elements "*[data-testid='PageLinks-Header-2']" should all have the href "/search/search-result?searchTerm=primary&page=2"
+	And the elements "*[data-testid='PageLinks-Header-3']" should all have the href "/search/search-result?searchTerm=primary&page=3"
+	And the elements "*[data-testid='PageLinks-Header-4']" should all have the href "/search/search-result?searchTerm=primary&page=4"
+	And the elements "*[data-testid='PageLinks-Header-5']" should all have the href "/search/search-result?searchTerm=primary&page=5"
+	And the elements "*[data-testid='PageLinks-Header-Next']" should all have the href "/search/search-result?searchTerm=primary&page=4"
+	And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100101"
+	And the element "*[data-testid='school-search-results-name-2']" should have the text content "Primary School 100102"
+	And the element "*[data-testid='school-search-results-name-3']" should have the text content "Primary School 100103"
+	And the element "*[data-testid='school-search-results-name-4']" should have the text content "Primary School 100104"
+	And the element "*[data-testid='school-search-results-name-5']" should have the text content "Primary School 100105"
+	And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100101"
+	And the element "*[data-testid='school-search-results-urn-2']" should have the text content "100102"
+	And the element "*[data-testid='school-search-results-urn-3']" should have the text content "100103"
+	And the element "*[data-testid='school-search-results-urn-4']" should have the text content "100104"
+	And the element "*[data-testid='school-search-results-urn-5']" should have the text content "100105"
 
  
 @Javascript:disabled
 Scenario: Pagination in Search Validation 3
- Given 51 Establishments exist with properties:
- | urn          | name                        |
- | (100000 + n) | Primary School (100000 + n) |
- When I navigate to /search/search-result/?page=2&searchTerm=primary
- Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 51 - 51 of 51 schools or colleges"
- And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/search-result?searchTerm=primary&page=1"
- And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/search-result?searchTerm=primary&page=1"
- And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100051"
- And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100051"
+	Given 51 Establishments exist with properties:
+	| urn		  | name						|
+	| (100000 + n) | Primary School (100000 + n) |
+	When I navigate to /search/search-result/?page=2&searchTerm=primary
+	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 51 - 51 of 51 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/search-result?searchTerm=primary&page=1"
+	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/search-result?searchTerm=primary&page=1"
+	And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100051"
+	And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100051"

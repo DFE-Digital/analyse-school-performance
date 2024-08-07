@@ -27,71 +27,69 @@
     <h1 id="search-page-heading" class="govuk-heading-l">Search for a school</h1>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
-            <form asp-controller="Search" asp-action="SearchResult" method="get" id="school-search-form">
-                @{
-                    var hasSearchTermError = ViewData.ModelState.ContainsKey(nameof(SearchParams.SearchTerm))
-                                             && ViewData.ModelState[nameof(SearchParams.SearchTerm)]?.Errors.Count > 0;
-                    var hasSearchTermAutoCompleteError = ViewData.ModelState.ContainsKey(nameof(SearchParams.SuggestionSearchTerm))
-                                                         && ViewData.ModelState[nameof(SearchParams.SuggestionSearchTerm)]?.Errors.Count > 0;
-                }
-                <h2 class="govuk-heading-s asp-search-heading">School</h2>
+            @{
+                var hasSearchTermError = ViewData.ModelState.ContainsKey(nameof(SearchParams.SearchTerm))
+                                            && ViewData.ModelState[nameof(SearchParams.SearchTerm)]?.Errors.Count > 0;
+                var hasSearchTermAutoCompleteError = ViewData.ModelState.ContainsKey(nameof(SearchParams.SuggestionSearchTerm))
+                                                        && ViewData.ModelState[nameof(SearchParams.SuggestionSearchTerm)]?.Errors.Count > 0;
+            }
+            <h2 class="govuk-heading-s asp-search-heading">School</h2>
 
-                <!--used when javascript enabled-->
-                <div class="js-enabled">
-                    <div class="govuk-form-group @(hasSearchTermAutoCompleteError ? "govuk-form-group--error" : "")">
-                        <div asp-validation-group-for="suggestionSearchTerm" data-testid="suggestionSearchTermValidationGroup">
+            <!--used when javascript enabled-->
+            <form class="js-enabled" asp-controller="Search" asp-action="SearchResult" method="get">
+                <div class="govuk-form-group @(hasSearchTermAutoCompleteError ? "govuk-form-group--error" : "")">
+                    <div asp-validation-group-for="suggestionSearchTerm" data-testid="suggestionSearchTermValidationGroup">
 
-                            <label for="suggestionSearchTerm" class="govuk-label govuk-body">
-                                @Constants.SchoolSearchFormSearchTermInputLabel
-                            </label>
-
-                            @if (hasSearchTermAutoCompleteError)
-                            {
-                                <span id="searchTerm-autocomplete--input-error" class="govuk-error-message">
-                                    @Constants.SchoolSearchTermInputValidationMessage
-                                </span>
-                            }
-
-                            <div class="search-input-container">
-                                <input type="hidden" id="suggestionUrn" name="suggestionUrn"/>
-                                <div id="suggestionSearchTerm" data-suggest-url="/search/search-suggestions"
-                                     class="@(hasSearchTermAutoCompleteError ? "search-input--error" : "") govuk-!-width-three-quarters"
-                                     aria-describedby="searchTerm-input-error">
-                                </div>
-                                <button id="searchSubmit-autocomplete" type="submit" class="govuk-button asp-magnify-button">
-                                    <span class="govuk-visually-hidden">Search</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--used when javascript disabled-->
-                <div class="js-disabled">
-                    <div class="govuk-form-group @(hasSearchTermError ? "govuk-form-group--error" : "")">
-
-                        <label for="searchTerm" class="govuk-label govuk-body">
+                        <label for="suggestionSearchTerm" class="govuk-label govuk-body">
                             @Constants.SchoolSearchFormSearchTermInputLabel
                         </label>
 
-                        <div asp-validation-group-for="searchTerm" data-testid="searchTermValidationGroup">
+                        @if (hasSearchTermAutoCompleteError)
+                        {
+                            <span id="searchTerm-autocomplete--input-error" class="govuk-error-message">
+                                @Constants.SchoolSearchTermInputValidationMessage
+                            </span>
+                        }
 
-                            @if (hasSearchTermError)
-                            {
-                                <span id="searchTerm-input-error" class="govuk-error-message">
-                                    @Constants.SchoolSearchTermInputValidationMessage
-                                </span>
-                            }
-
-                            <div class="search-input-container">
-                                <input type="hidden" name="page" id="page" value="1"/>
-                                <input type="text" class="govuk-input @(hasSearchTermError ? "govuk-input--error" : "")
-                                       govuk-!-width-three-quarters" aria-describedby="searchTerm-input-error"
-                                       name="searchTerm" id="searchTerm" data-testid="searchTerm-input-box" spellcheck="false"/>
-                                <button id="searchSubmit" type="submit" class="govuk-button asp-magnify-button">
-                                    <span class="govuk-visually-hidden">Search</span>
-                                </button>
+                        <div class="search-input-container">
+                            <input type="hidden" id="suggestionUrn" name="suggestionUrn" />
+                            <div id="suggestionSearchTerm" data-suggest-url="/search/search-suggestions"
+                                    class="@(hasSearchTermAutoCompleteError ? "search-input--error" : "") govuk-!-width-three-quarters"
+                                    aria-describedby="searchTerm-input-error">
                             </div>
+                            <button id="searchSubmit-autocomplete" type="submit" class="govuk-button asp-magnify-button">
+                                <span class="govuk-visually-hidden">Search</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!--used when javascript disabled-->
+            <form class="js-disabled" asp-controller="Search" asp-action="SearchResult" method="get">
+                <div class="govuk-form-group @(hasSearchTermError ? "govuk-form-group--error" : "")">
+
+                    <label for="searchTerm" class="govuk-label govuk-body">
+                        @Constants.SchoolSearchFormSearchTermInputLabel
+                    </label>
+
+                    <div asp-validation-group-for="searchTerm" data-testid="searchTermValidationGroup">
+
+                        @if (hasSearchTermError)
+                        {
+                            <span id="searchTerm-input-error" class="govuk-error-message">
+                                @Constants.SchoolSearchTermInputValidationMessage
+                            </span>
+                        }
+
+                        <div class="search-input-container">
+                            <input type="hidden" name="page" id="page" value="1"/>
+                            <input type="text" class="govuk-input @(hasSearchTermError ? "govuk-input--error" : "")
+                                    govuk-!-width-three-quarters" aria-describedby="searchTerm-input-error"
+                                    name="searchTerm" id="searchTerm" data-testid="searchTerm-input-box" spellcheck="false"/>
+                            <button id="searchSubmit" type="submit" class="govuk-button asp-magnify-button">
+                                <span class="govuk-visually-hidden">Search</span>
+                            </button>
                         </div>
                     </div>
                 </div>

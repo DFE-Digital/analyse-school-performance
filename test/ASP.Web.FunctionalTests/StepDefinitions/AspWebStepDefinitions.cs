@@ -92,8 +92,8 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             await _web.ExpectStatusCode();
         }
 
-        [Then(@"the path should match ""((?:/.*)+)""")]
-        public async Task ThePathShouldMatch(string path)
+        [Then(@"the path should be ((?:/.*)+)")]
+        public async Task ThePathShouldBe(string path)
         {
             await _web.ExpectStatusCode();
             Assert.Equal(_web.BaseAddress + path, _web.Path);

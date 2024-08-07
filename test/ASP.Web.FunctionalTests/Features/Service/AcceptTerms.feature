@@ -14,7 +14,7 @@ Scenario: Continue button exists on terms of use page
 		"""
 	Given I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should match "<Path>"
+	Then the path should be <Path>
 	When I click the button "#app-accept-terms-button"
 	Then the cookie "AcceptedTermsOfUse" should be set to "Accepted"
 Examples:
@@ -26,7 +26,7 @@ Examples:
 Scenario: Should not be redirected to accept terms when Accepted terms cookie is set to Accepted
 	Given I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should match "<Path>"
+	Then the path should be <Path>
 Examples:
 	| Path           |
 	| /              |
@@ -49,7 +49,7 @@ Scenario: Should get redirected to Accept terms when Accepted terms cookie is se
 	Given the cookie "AcceptedTermsOfUse" has been set to "Rejected"
 	And I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should match "<ExpectedPath>"
+	Then the path should be <ExpectedPath>
 	Then the element "#app-accept-terms-button" should exist
 Examples:
 	| Path | ExpectedPath               |
@@ -71,7 +71,7 @@ Scenario: Should set referral url when Accepted terms cookie is set to Rejected
 	Given the cookie "AcceptedTermsOfUse" has been set to "Rejected"
 	And I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should match "<ExpectedPath>"
+	Then the path should be <ExpectedPath>
 	Then the element "#app-accept-terms-button" should exist
 Examples:
 	| Path           | ExpectedPath                                       |
@@ -121,10 +121,10 @@ Scenario: Should redirect to the correct referrer
 	Given the cookie "AcceptedTermsOfUse" has been set to "Rejected"
 	And I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should match "<ExpectedPath>"
+	Then the path should be <ExpectedPath>
 	Then the element "#app-accept-terms-button" should exist
 	When I click the button "#app-accept-terms-button"
-	Then the path should match "<Path>"
+	Then the path should be <Path>
 
 Examples:
 	| Path            | ExpectedPath                                       |

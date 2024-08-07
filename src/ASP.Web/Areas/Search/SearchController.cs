@@ -45,7 +45,7 @@ public class SearchController : Controller
         }
 
         var estabSearchSuggestions = new EstablishmentSearchSuggestionsRequest(
-            searchParams.SuggestionSearchTerm
+            searchParams.SuggestionSearchTerm ?? ""
         );
 
         return await _api.EstablishmentSearchSuggestions(estabSearchSuggestions).ToActionResult(Json, _hostEnvironment);
@@ -117,7 +117,7 @@ public class SearchController : Controller
 
         return new SearchViewModel
         {
-            SearchTerm = searchParams.SearchTerm,
+            SearchTerm = searchParams.SearchTerm ?? "",
             TotalCount = 0,
             Breadcrumbs = breadcrumbTrail
         };

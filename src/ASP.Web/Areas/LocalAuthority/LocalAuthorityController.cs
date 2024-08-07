@@ -50,12 +50,11 @@ namespace ASP.Web.Areas.LocalAuthority
                     .ViewContentTemplate(new ViewContentTemplateRequest(contentTemplateId, null))
                     .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, null, template))
                     .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
-                    .Map(contentTemplateModel => new LocalAuthorityViewModel
-                    {
-                        Name = localAuthority.Name,
-                        ContentTemplate = contentTemplateModel,
-                        Breadcrumbs = breadcrumbTrail
-                    }))
+                    .Map(contentTemplateModel => new LocalAuthorityViewModel(
+                        localAuthority.Name,
+                        contentTemplateModel,
+                        breadcrumbTrail
+                    )))
                 .ToActionResult(View, _hostEnvironment);
         }
     }

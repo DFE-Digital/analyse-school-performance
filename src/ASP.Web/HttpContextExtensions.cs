@@ -8,11 +8,10 @@ namespace ASP.Web;
 
 public static class HttpContextExtensions
 {
-   
     /// <summary>
     /// This extension method enables an HttpContext to asynchronously render a view with a specified model. 
     /// It retrieves necessary services from the context, constructs a ViewResult with the provided model and view name, 
-    /// and then executes it using an IActionResultExecutor<ViewResult>, effectively generating the view's output.
+    /// and then executes it using an IActionResultExecutor&lt;ViewResult&gt;, effectively generating the view's output.
     /// 
     /// It is utilized in the CustomPageNotFoundMiddleware.cs file as follows:
     /// 

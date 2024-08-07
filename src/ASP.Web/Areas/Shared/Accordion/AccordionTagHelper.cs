@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace ASP.Web.Areas.Shared.Accordian
+namespace ASP.Web.Areas.Shared.Accordion
 {
     [HtmlTargetElement("asp-accordion")]
     public class AccordionTagHelper : TagHelper
     {
-        public string Title { get; set; }
-        public string TitleDataTestId { get; set; }
-        public string BodyDataTestId { get; set; }
+        public string? Title { get; set; }
+        public string? TitleDataTestId { get; set; }
+        public string? BodyDataTestId { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context,
                                                     TagHelperOutput output)
         {

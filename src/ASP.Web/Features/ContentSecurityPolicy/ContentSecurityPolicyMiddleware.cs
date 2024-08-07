@@ -11,7 +11,11 @@
 
         public async Task Invoke(HttpContext context)
         {
-            var nonce = (INonceService)context.RequestServices.GetService(typeof(INonceService));
+            var nonce = context.RequestServices.GetService<INonceService>();
+            if(nonce is null)
+            {
+                return;
+            }
 
             context.Response.Headers.TryAdd("Content-Security-Policy", "default-src 'self'" + "; script-src " + $"'nonce-{nonce.GetNonce()}'" + "; style-src " + $"'nonce-{nonce.GetNonce()}'");
 

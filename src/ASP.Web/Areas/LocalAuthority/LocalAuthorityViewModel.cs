@@ -4,7 +4,14 @@ namespace ASP.Web.Areas.LocalAuthority;
 
 public class LocalAuthorityViewModel
 {
-    public string Name { get; set; }
-    public ContentTemplateViewModel ContentTemplate { get; set; } = default!;
-    public BreadcrumbViewModel? Breadcrumbs { get; set; } = default!;
+    public string Name { get; }
+    public ContentTemplateViewModel ContentTemplate { get; }
+    public BreadcrumbViewModel Breadcrumbs { get; }
+
+    public LocalAuthorityViewModel(string name, ContentTemplateViewModel contentTemplate, BreadcrumbViewModel breadcrumbs)
+    {
+        Name = name;
+        ContentTemplate = contentTemplate;
+        Breadcrumbs = breadcrumbs;
+    }
 }

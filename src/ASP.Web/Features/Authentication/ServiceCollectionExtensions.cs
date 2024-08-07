@@ -140,44 +140,51 @@ namespace ASP.Web.Features.Authentication
                             var principal = context.Principal;
 
                             var organisation = principal.GetOrganisation();
-                            if (organisation is null)
+                            if (organisation == null)
                             {
                                 context.Fail("User is not in an organisation");
                             }
-
-                            var authenticatedUserInfo = new AuthenticatedUserInfo()
+                            else
                             {
-                                UserId = principal.GetUserId()
-                            };
+                                var authenticatedUserInfo = new AuthenticatedUserInfo() {
+                                    UserId = principal.GetUserId()
+                                };
 
-                            var dsiPublicApiClient = context.HttpContext.RequestServices.GetService<IDsiApiClient>();
-            
-                            //userAccess contains the Role information needed to construct a set of Claims for use in the service
-                            var userAccessResult = await dsiPublicApiClient!.GetUserAccess(dsiConfiguration[DsiConstants.DsiServiceId]!, organisation?.Id!, authenticatedUserInfo.UserId);
+                                var dsiPublicApiClient = context.HttpContext.RequestServices.GetService<IDsiApiClient>();
 
-                            var userAccess = userAccessResult.GetValueOrDefault(new UserAccess());
-                            if (!userAccess.Roles.Any())
-                            {
-                                return; //User has no roles;
+                                //userAccess contains the Role information needed to construct a set of Claims for use in the service
+                                var userAccessResult = await dsiPublicApiClient!.GetUserAccess(dsiConfiguration[DsiConstants.DsiServiceId]!, organisation.Id!, authenticatedUserInfo.UserId);
+
+                                var userAccess = userAccessResult.GetValueOrDefault(new UserAccess());
+                                if (!userAccess.Roles.Any())
+                                {
+                                    context.Fail("User has no roles");
+                                }
+                                else
+                                {
+                                    //A Role is Claim with Type Role
+                                    //A user may have more than one Role
+                                    //Individual Claims would need to be added for each one.
+                                    var claims = new List<Claim> {
+                                        new Claim(ClaimTypes.Role, userAccess.Roles.First().Code)
+                                    };
+
+                                    if (organisation.UniqueReferenceNumber != null)
+                                    {
+                                        claims.Add(new Claim(CustomClaimTypes.UniqueReferenceNumber, organisation.UniqueReferenceNumber));
+                                    }
+
+                                    if (organisation.EstablishmentNumber != null)
+                                    {
+                                        claims.Add(new Claim(CustomClaimTypes.UniqueReferenceNumber, organisation.EstablishmentNumber));
+                                    }
+
+                                    //Create a new ClaimsPrincipal containing the Claims of the logged in user taken from the API
+                                    //This overrides the Principal that is created from the id_token that's sent as part of the authentication process.
+                                    //The original Claim information in that Principal may need to be retained.
+                                    context.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, DsiConstants.AuthenticationMethod));
+                                }
                             }
-
-                            var claims = new List<Claim>();
-                            
-                            claims.AddRange(new []
-                            {
-                                new Claim(ClaimTypes.Role, userAccess.Roles.First().Code),
-                                new Claim(CustomClaimTypes.UniqueReferenceNumber, organisation.UniqueReferenceNumber),
-                                new Claim(CustomClaimTypes.EstablishmentNumber, organisation.EstablishmentNumber)
-                            });
-
-                            //A Role is Claim with Type Role
-                            //A user may have more than one Role
-                            //Individual Claims would need to be added for each one.
-
-                            //Create a new ClaimsPrincipal containing the Claims of the logged in user taken from the API
-                            //This overrides the Principal that is created from the id_token that's sent as part of the authentication process.
-                            //The original Claim information in that Principal may need to be retained.
-                            context.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, DsiConstants.AuthenticationMethod));
                         }
                     }
                 };

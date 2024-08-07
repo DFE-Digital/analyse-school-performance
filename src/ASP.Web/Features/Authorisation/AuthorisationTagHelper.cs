@@ -18,22 +18,29 @@ namespace ASP.Web.Features.Authorisation
         }
 
         [HtmlAttributeName("authorisation-policy")]
-        public string Policy { get; set; }
+        public string? Policy { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext != null)
+            if (Policy == null)
             {
-                //To view content where the 'authorisation-policy' attribute is used, you need to be signed in
-                //with DSI and have the correct Role(s) assigned to you
+                return;
+            }
 
-                var check = (await _authorizationService.AuthorizeAsync(httpContext.User, Policy)).Succeeded;
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext == null)
+            {
+                return;
+            }
 
-                if (!check)
-                {
-                    output.SuppressOutput();
-                }
+            //To view content where the 'authorisation-policy' attribute is used, you need to be signed in
+            //with DSI and have the correct Role(s) assigned to you
+
+            var check = (await _authorizationService.AuthorizeAsync(httpContext.User, Policy)).Succeeded;
+
+            if (!check)
+            {
+                output.SuppressOutput();
             }
         }
     }
