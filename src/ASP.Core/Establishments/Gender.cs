@@ -2,10 +2,10 @@
 {
     public class Gender
     {
-        public int Code { get; }
+        public string Code { get; }
         public string Name { get; }
 
-        public Gender(int code, string name)
+        public Gender(string code, string name)
         {
             Code = code;
             Name = name;

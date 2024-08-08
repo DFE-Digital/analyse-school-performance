@@ -2,10 +2,10 @@
 {
     public class AdmissionsPolicy
     {
-        public int Code { get; set;}
+        public string Code { get; set;}
         public string Name { get; set;}
 
-        public AdmissionsPolicy(int code, string name)
+        public AdmissionsPolicy(string code, string name)
         {
             Code = code;
             Name = name;

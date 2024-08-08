@@ -2,10 +2,10 @@
 {
     public class ReligiousDenomination
     {
-        public int Code { get; }
+        public string Code { get; }
         public string Name { get; }
 
-        public ReligiousDenomination(int code, string name)
+        public ReligiousDenomination(string code, string name)
         {
             Code = code;
             Name = name;

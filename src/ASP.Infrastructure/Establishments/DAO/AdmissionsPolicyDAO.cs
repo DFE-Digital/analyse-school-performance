@@ -2,10 +2,10 @@
 {
     public class AdmissionsPolicyDAO
     {
-        public int Code { get; }
+        public string Code { get; }
         public string Name { get; }
 
-        public AdmissionsPolicyDAO(int code, string name)
+        public AdmissionsPolicyDAO(string code, string name)
         {
             Code = code;
             Name = name;

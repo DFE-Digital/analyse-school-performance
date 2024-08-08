@@ -2,10 +2,10 @@
 {
     public class MultiAcademyTrustDAO
     {
-        public int Uid { get; }
+        public string Uid { get; }
         public string Name { get; }
 
-        public MultiAcademyTrustDAO(int uid, string name)
+        public MultiAcademyTrustDAO(string uid, string name)
         {
             Uid = uid;
             Name = name;

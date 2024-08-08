@@ -2,10 +2,10 @@
 {
     public class LocalAuthority
     {
-        public int Code { get; }
+        public string Code { get; }
         public string Name { get; }
 
-        public LocalAuthority(int code, string name)
+        public LocalAuthority(string code, string name)
         {
             Code = code;
             Name = name;

@@ -2,10 +2,10 @@
 {
     public class LocalAuthorityDAO
     {
-        public int Code { get; }
+        public string Code { get; }
         public string Name { get; }
 
-        public LocalAuthorityDAO(int code, string name)
+        public LocalAuthorityDAO(string code, string name)
         {
             Code = code;
             Name = name;
