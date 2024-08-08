@@ -53,7 +53,14 @@ namespace ASP.Web.FunctionalTests.Drivers
                 }).Wait();
             }
 
-            _page!.Response += (object? sender, IResponse e) => this.ExpectedStatusCode = 200;
+            _page!.Response += (object? sender, IResponse e) =>
+            {
+                if (e.Request.ResourceType == "document")
+                {
+                    ExpectedStatusCode = 200;
+                    _lastResponse = e;
+                }
+            };
         }
 
         // Clear down the static resources after the test run

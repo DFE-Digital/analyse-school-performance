@@ -5,9 +5,18 @@ namespace ASP.Web.Areas.Search;
 
 public class SearchViewModel
 {
-    public List<EstablishmentSearchResultsModel> SearchResults { get; set; } = new List<EstablishmentSearchResultsModel>();
-    public PaginationModel PaginationModel { get; set; } = new PaginationModel();
-    public string SearchTerm { get; set; } = string.Empty;
-    public int TotalCount { get; set; }
-    public BreadcrumbViewModel? Breadcrumbs { get; set; } = default!;
+    public List<EstablishmentSearchResultsModel> SearchResults { get; }
+    public PaginationModel? PaginationModel { get; }
+    public string SearchTerm { get; }
+    public int TotalCount { get; }
+    public BreadcrumbViewModel Breadcrumbs { get; }
+
+    public SearchViewModel(List<EstablishmentSearchResultsModel> searchResults, PaginationModel? paginationModel, string searchTerm, int totalCount, BreadcrumbViewModel breadcrumbs)
+    {
+        SearchResults = searchResults;
+        PaginationModel = paginationModel;
+        SearchTerm = searchTerm;
+        TotalCount = totalCount;
+        Breadcrumbs = breadcrumbs;
+    }
 }

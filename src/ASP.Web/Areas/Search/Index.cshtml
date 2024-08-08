@@ -2,6 +2,9 @@
 @using ASP.Web.Areas.Search
 @{
     ViewData["Title"] = "Search";
+
+    var hasSearchTermError = ViewData.ModelState.ContainsKey(nameof(SearchParams.Search))
+                                && ViewData.ModelState[nameof(SearchParams.Search)]?.Errors.Count > 0;
 }
 
 <div class="govuk-width-container govuk-main-wrapper">
@@ -10,14 +13,13 @@
         <asp-error-summary>
             @{
                 var searchTermError = ViewData.ModelState
-                    .FirstOrDefault(x => x.Key == nameof(SearchParams.SearchTerm) || x.Key == nameof(SearchParams.SuggestionSearchTerm))
+                    .FirstOrDefault(x => x.Key == nameof(SearchParams.Search))
                     .Value?.Errors.FirstOrDefault();
 
                 if (searchTermError != null)
                 {
                     <li>
-                        <a href="#suggestionSearchTerm" data-testid="suggestionSearchTerm" class="js-enabled">@searchTermError.ErrorMessage</a>
-                        <a href="#searchTerm" data-testid="searchTerm" class="js-disabled">@searchTermError.ErrorMessage</a>
+                        <a href="#searchTerm" data-testid="searchTerm">@searchTermError.ErrorMessage</a>
                     </li>
                 }
             }
@@ -27,46 +29,10 @@
     <h1 id="search-page-heading" class="govuk-heading-l">Search for a school</h1>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
-            @{
-                var hasSearchTermError = ViewData.ModelState.ContainsKey(nameof(SearchParams.SearchTerm))
-                                            && ViewData.ModelState[nameof(SearchParams.SearchTerm)]?.Errors.Count > 0;
-                var hasSearchTermAutoCompleteError = ViewData.ModelState.ContainsKey(nameof(SearchParams.SuggestionSearchTerm))
-                                                        && ViewData.ModelState[nameof(SearchParams.SuggestionSearchTerm)]?.Errors.Count > 0;
-            }
             <h2 class="govuk-heading-s asp-search-heading">School</h2>
 
-            <!--used when javascript enabled-->
-            <form class="js-enabled" asp-controller="Search" asp-action="SearchResult" method="get">
-                <div class="govuk-form-group @(hasSearchTermAutoCompleteError ? "govuk-form-group--error" : "")">
-                    <div asp-validation-group-for="suggestionSearchTerm" data-testid="suggestionSearchTermValidationGroup">
-
-                        <label for="suggestionSearchTerm" class="govuk-label govuk-body">
-                            @Constants.SchoolSearchFormSearchTermInputLabel
-                        </label>
-
-                        @if (hasSearchTermAutoCompleteError)
-                        {
-                            <span id="searchTerm-autocomplete--input-error" class="govuk-error-message">
-                                @Constants.SchoolSearchTermInputValidationMessage
-                            </span>
-                        }
-
-                        <div class="search-input-container">
-                            <input type="hidden" id="suggestionUrn" name="suggestionUrn" />
-                            <div id="suggestionSearchTerm" data-suggest-url="/search/search-suggestions"
-                                    class="@(hasSearchTermAutoCompleteError ? "search-input--error" : "") govuk-!-width-three-quarters"
-                                    aria-describedby="searchTerm-input-error">
-                            </div>
-                            <button id="searchSubmit-autocomplete" type="submit" class="govuk-button asp-magnify-button">
-                                <span class="govuk-visually-hidden">Search</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-            <!--used when javascript disabled-->
-            <form class="js-disabled" asp-controller="Search" asp-action="SearchResult" method="get">
+            <input type="hidden" id="suggestionUrn" name="suggestionUrn" />
+            <form id="searchForm" asp-controller="Search" asp-action="Index" method="get">
                 <div class="govuk-form-group @(hasSearchTermError ? "govuk-form-group--error" : "")">
 
                     <label for="searchTerm" class="govuk-label govuk-body">
@@ -83,11 +49,15 @@
                         }
 
                         <div class="search-input-container">
-                            <input type="hidden" name="page" id="page" value="1"/>
-                            <input type="text" class="govuk-input @(hasSearchTermError ? "govuk-input--error" : "")
-                                    govuk-!-width-three-quarters" aria-describedby="searchTerm-input-error"
-                                    name="searchTerm" id="searchTerm" data-testid="searchTerm-input-box" spellcheck="false"/>
-                            <button id="searchSubmit" type="submit" class="govuk-button asp-magnify-button">
+                            <div id="suggestionSearchTermContainer" data-suggest-url="/search/suggestions"
+                                 class="js-enabled govuk-!-width-three-quarters @(hasSearchTermError ? "search-input--error" : "")"
+                                 aria-describedby="searchTerm-input-error">
+                            </div>
+                            <input type="text" id="searchTerm"
+                                   class="js-disabled govuk-input govuk-!-width-three-quarters @(hasSearchTermError ? "govuk-input--error" : "")"
+                                   aria-describedby="searchTerm-input-error"
+                                   name="search" spellcheck="false"/>
+                            <button id="searchSubmit" type="submit" class="govuk-button app-search-button">
                                 <span class="govuk-visually-hidden">Search</span>
                             </button>
                         </div>

@@ -1,8 +1,10 @@
 import accessibleAutocomplete from 'accessible-autocomplete'
 
 export default class AutoComplete {
-    constructor(targetInputElementName, inputTemplate, suggestionTemplate, setHiddenField,
+    constructor(containerId, targetInputElementId, targetInputElementName, inputTemplate, suggestionTemplate, setHiddenField,
                 queryParameter, resultDataProperty, searchRegenerateDelay = 500, minLength = 2) {
+        this.containerId = containerId;
+        this.targetInputElementId = targetInputElementId;
         this.targetInputElementName = targetInputElementName;
         this.inputTemplate = inputTemplate;
         this.suggestionTemplate = suggestionTemplate;
@@ -38,35 +40,35 @@ export default class AutoComplete {
             headers: new Headers({"Content-Type": "application/json"}),
             signal: controller.signal
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                populateResults(data[this.resultDataProperty]);
-            })
-            .catch(error => {
-                if (error.name !== 'AbortError') {
-                    console.error('Error fetching search data:', error);
-                }
-            });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            populateResults(data[this.resultDataProperty]);
+        })
+        .catch(error => {
+            if (error.name !== 'AbortError') {
+                console.error('Error fetching search data:', error);
+            }
+        });
     }
     
     bindAutoSuggest() {
-        const inputElement = document.querySelector(`#${this.targetInputElementName}`);
-        const suggestUrl = encodeURI(inputElement.dataset.suggestUrl);
+        const container = document.querySelector(`#${this.containerId}`);
+        const suggestUrl = encodeURI(container.dataset.suggestUrl);
 
         accessibleAutocomplete({
-            element: inputElement,
-            id: this.targetInputElementName,
+            element: container,
+            id: this.targetInputElementId,
             name: this.targetInputElementName,
             minLength: this.minLength,
             source: this.debounce((query, populateResults) => this.search(query, populateResults, suggestUrl), this.searchRegenerateDelay),
             templates: {
                 inputValue: this.inputTemplate,
-                suggestion: value => this.suggestionTemplate(value, document.querySelector(`#${this.targetInputElementName} #${this.targetInputElementName}`).value)
+                suggestion: value => this.suggestionTemplate(value, document.querySelector(`#${this.containerId} #${this.targetInputElementId}`).value)
             },
             onConfirm: value => this.setHiddenField(value),
             displayMenu: 'overlay',

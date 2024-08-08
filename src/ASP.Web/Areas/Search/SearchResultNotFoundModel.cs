@@ -1,4 +1,4 @@
-﻿namespace ASP.Web.Areas.Search.Shared.SearchResultNotFound;
+﻿namespace ASP.Web.Areas.Search;
 
 public class SearchResultNotFoundModel
 {

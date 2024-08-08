@@ -31,13 +31,41 @@ public class SearchController : Controller
     }
 
     [HttpGet("")]
-    [HttpGet("index")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index(SearchParams searchParams)
     {
-        return View();
+        if (Request.Query.Keys.Any(k => k.Equals(nameof(searchParams.Search), StringComparison.InvariantCultureIgnoreCase)))
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index");
+            }
+
+            // Check if the final SearchTerm is empty
+            if (string.IsNullOrEmpty(searchParams.Search))
+            {
+                // Add error for both autocomplete and non-JS fields
+                ModelState.AddModelError(nameof(searchParams.Search), Constants.SchoolSearchTermShortValidationMessage);
+                return View("Index");
+            }
+
+            var estabSearchRequest = new EstablishmentSearchRequest(
+                searchParams.Search,
+            new Scope(ScopeType.All,
+                string.Empty),
+                searchParams.Page,
+                Constants.SearchResultPageSize
+            );
+
+            return await _api.EstablishmentSearch(estabSearchRequest)
+                .Map(DefaultViewModel)
+                .DefaultIf(e => e is NotFoundError, NoResultsViewModel(searchParams))
+                .ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
+        }
+
+        return View("Index");
     }
 
-    [HttpGet("search-suggestions")]
+    [HttpGet("suggestions")]
     public async Task<IActionResult> SearchSuggestions(SearchParams searchParams)
     {
         if (!ModelState.IsValid)
@@ -46,84 +74,43 @@ public class SearchController : Controller
         }
 
         var estabSearchSuggestions = new EstablishmentSearchSuggestionsRequest(
-            searchParams.SuggestionSearchTerm ?? ""
+            searchParams.Search ?? ""
         );
 
         return await _api.EstablishmentSearchSuggestions(estabSearchSuggestions).ToActionResult(Json, _hostEnvironment);
-    }
-
-    [HttpGet("search-result")]
-    public async Task<IActionResult> SearchResult(SearchParams searchParams)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View("Index");
-        }
-
-        if (!string.IsNullOrEmpty(searchParams.SuggestionSearchTerm))
-        {
-            searchParams.SearchTerm = searchParams.SuggestionSearchTerm;
-        }
-
-        if (!string.IsNullOrEmpty(searchParams.SuggestionUrn))
-        {
-            searchParams.SearchTerm = searchParams.SuggestionUrn;
-        }
-
-        // Check if the final SearchTerm is empty
-        if (string.IsNullOrEmpty(searchParams.SearchTerm))
-        {
-            // Add error for both autocomplete and non-JS fields
-            ModelState.AddModelError(nameof(searchParams.SuggestionSearchTerm),
-                Constants.SchoolSearchTermShortValidationMessage);
-            ModelState.AddModelError(nameof(searchParams.SearchTerm), Constants.SchoolSearchTermShortValidationMessage);
-            return View("Index");
-        }
-
-        var estabSearchRequest = new EstablishmentSearchRequest(
-            searchParams.SearchTerm,
-            new Scope(ScopeType.All,
-                string.Empty),
-            searchParams.Page,
-            Constants.SearchResultPageSize
-        );
-
-        return await _api.EstablishmentSearch(estabSearchRequest)
-            .Map(DefaultViewModel)
-            .DefaultIf(e => e is NotFoundError, NoResultsViewModel(searchParams))
-            .ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
     }
 
     private SearchViewModel DefaultViewModel(SearchResultsPage<EstablishmentDetailsSearchResultDTO> result)
     {
         var breadcrumbTrail = new BreadcrumbViewModel($"Search results for \"{result.SearchTerm}\"").AddBreadcrumb("Search", "/search");
 
-        return new SearchViewModel
-        {
-            SearchResults = EstablishmentSearchResultsModel.FromEstablishmentDetails(result.Results),
-            PaginationModel = new PaginationModel
-            {
-                TotalCount = result.TotalResults,
-                SearchTerm = result.SearchTerm,
-                CurrentPage = result.Page,
-                ResultCount = result.ResultsPerPage
-            },
-            SearchTerm = result.SearchTerm,
-            TotalCount = result.TotalResults,
-            Breadcrumbs = breadcrumbTrail
-        };
+        return new SearchViewModel(
+            EstablishmentSearchResultsModel.FromEstablishmentDetails(result.Results),
+            new PaginationModel(
+                Url.Action("Index", new { search = result.SearchTerm }) ?? "", 
+                result.Page, 
+                result.TotalResults, 
+                result.ResultsPerPage,
+                "school or college",
+                "schools or colleges"
+            ),
+            result.SearchTerm,
+            result.TotalResults,
+            breadcrumbTrail
+        );
     }
 
     private SearchViewModel NoResultsViewModel(SearchParams searchParams)
     {
-        var breadcrumbTrail = new BreadcrumbViewModel($"We found no matches for \"{searchParams.SearchTerm}\"").AddBreadcrumb("Search", "/search");
+        var breadcrumbTrail = new BreadcrumbViewModel($"We found no matches for \"{searchParams.Search}\"").AddBreadcrumb("Search", "/search");
 
-        return new SearchViewModel
-        {
-            SearchTerm = searchParams.SearchTerm ?? "",
-            TotalCount = 0,
-            Breadcrumbs = breadcrumbTrail
-        };
+        return new SearchViewModel(
+            new List<EstablishmentSearchResultsModel>(),
+            null,
+            searchParams.Search ?? "",
+            0,
+            breadcrumbTrail
+        );
     }
 
     private IActionResult RedirectToSchoolLandingPageIfSingleResult(SearchViewModel model)
@@ -134,6 +121,6 @@ public class SearchController : Controller
                 new { area = "School", urn = model.SearchResults.FirstOrDefault()!.Urn });
         }
 
-        return View(model);
+        return View("SearchResults", model);
     }
 }

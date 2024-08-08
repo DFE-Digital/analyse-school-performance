@@ -153,7 +153,7 @@ Scenario: Edit button should show when user has admin role
 	When I navigate to /help/test
 	Then I should get a 200 response
 	And the element "[data-testid="content-edit"]" should have the text content "Edit this page"
-	And the element "[data-testid="content-edit"]" should have the href "/help/test/edit"
+	And the element "[data-testid="content-edit"]" should have the href "/help/test/edit/"
 Examples: 
 	| Role        |
 	| Super Admin |

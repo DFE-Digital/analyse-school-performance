@@ -9,30 +9,28 @@
 // asp custom search form
 
 .search-input-container {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
-.search-input--error .autocomplete__input {
-  border-color: #d4351c;
+input.search-input--error, .search-input--error .autocomplete__input {
+    border-color: #d4351c;
 }
 
-.asp-magnify-button {
-  width: 10%;
-  margin: 0 0 0 -1px;
-  padding: 0;
-  background-image: url(/assets/public/images/icons/inline-search-button-icon.png);
-  background-size: 15px;
-  background-repeat: no-repeat;
-  background-position: center;
-  min-height: 38px;
-  min-width: 42px;
-  max-width: 46px;
-  height: 2.4rem;
+.app-search-button {
+    margin: -2px 0 0 0;
+    padding: 0;
+    background-image: url(/assets/public/images/icons/inline-search-button-icon.png);
+    background-size: 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 38px;
+    min-width: 42px;
+    max-width: 46px;
 }
 
-#suggestionSearchTerm .autocomplete__option {
-  font-family: "GDS Transport", arial, sans-serif;
+.search-input-container .autocomplete__option {
+    font-family: "GDS Transport", arial, sans-serif;
 }
 
 
