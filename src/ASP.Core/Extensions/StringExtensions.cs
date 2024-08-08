@@ -41,4 +41,13 @@ public static class StringExtensions
         //  3-digit code, a slash, then a 4-digit code
         return $"{input.Substring(0, 3)}/{input.Substring(3)}";
     }
+    
+    public static string ReplacePrefix(this string input, string oldPrefix, string newPrefix)
+    {
+        ArgumentNullException.ThrowIfNull(input);
+        ArgumentNullException.ThrowIfNull(oldPrefix);
+        ArgumentNullException.ThrowIfNull(newPrefix);
+
+        return input.Replace(oldPrefix, newPrefix);
+    } 
 }

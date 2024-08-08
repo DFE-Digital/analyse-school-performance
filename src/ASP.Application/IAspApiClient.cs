@@ -9,6 +9,7 @@ using ASP.Core.Results;
 using ASP.Core.Templating;
 using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
+using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 
 namespace ASP.Application
 {
@@ -21,5 +22,6 @@ namespace ASP.Application
         Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> EstablishmentSearch(EstablishmentSearchRequest request);
         Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request);
         Task<Result<UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request);
+        Task<Result<UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>> GetMultiAcademyTrust(GetMultiAcademyTrustRequest request);
     }
 }

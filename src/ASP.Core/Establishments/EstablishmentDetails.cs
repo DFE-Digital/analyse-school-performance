@@ -19,11 +19,15 @@
         public AdmissionsPolicy? AdmissionsPolicy { get; }
         public ResourcedProvisionType? ResourcedProvisionType { get; }
         public int? NoOfPupils { get; }
-        public bool IsDeleted { get; }
         public string? Laestab { get; }
-        public bool IsVisible { get; }
 
-        public EstablishmentDetails(string urn, string name, bool? isPrimary, bool? isSecondary, bool? isPost16, Address? address, EstablishmentType? establishmentType, Gender? gender, OfstedRating? ofstedRating, DateTime? ofstedLastInspectionDate, LocalAuthority? localAuthority, HeadTeacher? headTeacher, AgeRange? ageRange, ReligiousDenomination? religiousDenomination, AdmissionsPolicy? admissionsPolicy, ResourcedProvisionType? resourcedProvisionType, int? noOfPupils, bool isDeleted, string? laestab, bool isVisible)
+        public EstablishmentDetails(string urn, string name, bool? isPrimary, bool? isSecondary, 
+            bool? isPost16, Address? address, EstablishmentType? establishmentType, 
+            Gender? gender, OfstedRating? ofstedRating, DateTime? ofstedLastInspectionDate,
+            LocalAuthority? localAuthority, HeadTeacher? headTeacher, AgeRange? ageRange, 
+            ReligiousDenomination? religiousDenomination, AdmissionsPolicy? admissionsPolicy,
+            ResourcedProvisionType? resourcedProvisionType,
+            int? noOfPupils, string? laestab)
         {
             Urn = urn;
             Name = name;
@@ -42,9 +46,7 @@
             AdmissionsPolicy = admissionsPolicy;
             ResourcedProvisionType = resourcedProvisionType;
             NoOfPupils = noOfPupils;
-            IsDeleted = isDeleted;
             Laestab = laestab;
-            IsVisible = isVisible;
         }
     }
 }

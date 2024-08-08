@@ -2,5 +2,5 @@
 
 public interface IEstablishmentSearchStrategyFactory
 {
-    EstablishmentSearchStrategy CreateStrategy(SearchType searchType, string searchTerm, int page, int resultsPerPage);
+    EstablishmentSearchStrategy CreateStrategy(Scope scope, SearchType searchType, string searchTerm, int page, int resultsPerPage);
 }

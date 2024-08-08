@@ -58,4 +58,13 @@
     </SpecFlowFeatureFiles>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Features\GetMultiAcademyTrust.feature.cs">
+      <DependentUpon>GetMultiAcademyTrust.feature</DependentUpon>
+      <AutoGen>true</AutoGen>
+      <DesignTime>true</DesignTime>
+      <Visible>true</Visible>
+    </Compile>
+  </ItemGroup>
+
 </Project>

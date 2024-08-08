@@ -19,6 +19,14 @@
                 "establishments": {
                     "ContainerName": "establishments",
                     "PartitionKey": "/urn"
+                },
+                "local-authorities": {
+                    "ContainerName": "local-authorities",
+                    "PartitionKey": "/code"
+                },
+                "multi-academy-trusts": {
+                    "ContainerName": "multi-academy-trusts",
+                    "PartitionKey": "/id"
                 }
             }
         ]

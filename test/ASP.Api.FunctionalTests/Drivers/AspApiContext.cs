@@ -1,17 +1,14 @@
 ﻿using ASP.Core;
 using ASP.Infrastructure.Api;
 using ASP.Test.Core;
-using BoDi;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using TechTalk.SpecFlow.Infrastructure;
 
-namespace ASP.Api.AcceptanceTests.Drivers
+namespace ASP.Api.FunctionalTests.Drivers
 {
     public class AspApiContext
     {

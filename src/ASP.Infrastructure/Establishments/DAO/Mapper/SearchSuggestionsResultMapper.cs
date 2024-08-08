@@ -4,7 +4,7 @@ namespace ASP.Infrastructure.Establishments.DAO.Mapper;
 
 public static class SearchSuggestionsResultMapper
 {
-    public static EstablishmentSearchSuggestionsResult MapToEstablishmentSearchSuggestionsResult(this SearchSuggestionsResultDAO details)
+    public static EstablishmentSearchSuggestionsResult MapToEstablishmentSearchSuggestionsResult(this EstablishmentDAO details)
     {
         return new EstablishmentSearchSuggestionsResult(
             details.Urn,
@@ -17,7 +17,7 @@ public static class SearchSuggestionsResultMapper
     }
 
     public static List<EstablishmentSearchSuggestionsResult> MapToEstablishmentSearchSuggestionsResults(
-        this IEnumerable<SearchSuggestionsResultDAO> detailsList)
+        this IEnumerable<EstablishmentDAO> detailsList)
     {
         return detailsList.Select(MapToEstablishmentSearchSuggestionsResult).ToList();
     }

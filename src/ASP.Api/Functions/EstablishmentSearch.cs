@@ -1,4 +1,5 @@
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
+using ASP.Core.Establishments;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -34,12 +35,17 @@ namespace ASP.Api.Functions
 
             return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
                 .Then(_ => RequestValidation.RequiredParameter(req, "searchTerm")
-                    .Then(searchTerm => RequestValidation.OptionalParameter(req, "page")
-                        .Then(page => RequestValidation.NumericParameter(page, "page"))
-                        .Then(page => RequestValidation.OptionalParameter(req, "resultsPerPage")
-                            .Then(resultsPerPage => RequestValidation.NumericParameter(resultsPerPage, "resultsPerPage"))
-                            .Then(resultsPerPage => _useCase.HandleRequest(
-                                new EstablishmentSearchRequest(searchTerm, page, resultsPerPage))))))
+                    .Then(searchTerm => RequestValidation.RequiredParameter<ScopeType>(req, "scope")
+                        .Then(scope => RequestValidation
+                            .RequiredParameterIf(req, "scopeIdentifier", scope == ScopeType.All)
+                            .Then(scopeIdentifier => RequestValidation.OptionalParameter(req, "page")
+                                .Then(page => RequestValidation.NumericParameter(page, "page"))
+                                .Then(page => RequestValidation.OptionalParameter(req, "resultsPerPage")
+                                    .Then(resultsPerPage =>
+                                        RequestValidation.NumericParameter(resultsPerPage, "resultsPerPage"))
+                                    .Then(resultsPerPage => _useCase.HandleRequest(
+                                        new EstablishmentSearchRequest(searchTerm, new Scope(scope,
+                                            scopeIdentifier), page, resultsPerPage))))))))
                 .ToApiResultAsync(_options, cancellationToken);
         }
     }

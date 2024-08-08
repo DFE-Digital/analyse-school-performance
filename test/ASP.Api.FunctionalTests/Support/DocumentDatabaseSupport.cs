@@ -1,4 +1,4 @@
-﻿using ASP.Api.AcceptanceTests.Drivers;
+﻿using ASP.Api.FunctionalTests.Drivers;
 using BoDi;
 
 namespace ASP.Api.FunctionalTests.Support
@@ -27,6 +27,7 @@ namespace ASP.Api.FunctionalTests.Support
             await _api.DocumentDatabase.DeleteAllAsync("content");
             await _api.DocumentDatabase.DeleteAllAsync("establishments");
             await _api.DocumentDatabase.DeleteAllAsync("local-authorities");
+            await _api.DocumentDatabase.DeleteAllAsync("multi-academy-trusts");
         }
     }
 }

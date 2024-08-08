@@ -22,7 +22,7 @@ public static class SearchResultDTOMapper
     }
 
     public static EstablishmentDetailsSearchResultDTO MapToSearchResultDTO(
-        this EstablishmentDetailsSearchResult details)
+        this EstablishmentListItem details)
     {
         return new EstablishmentDetailsSearchResultDTO(
         )
@@ -38,7 +38,7 @@ public static class SearchResultDTOMapper
     }
 
     public static List<EstablishmentDetailsSearchResultDTO> MapToListOfSearchResultsDTO(
-        this IEnumerable<EstablishmentDetailsSearchResult> detailsList)
+        this IEnumerable<EstablishmentListItem> detailsList)
     {
         return detailsList.Select(MapToSearchResultDTO).ToList();
     }

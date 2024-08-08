@@ -1,4 +1,5 @@
-﻿using ASP.Core.Helpers;
+﻿using ASP.Core.Extensions;
+using ASP.Core.Helpers;
 using ASP.Core.Results;
 
 namespace ASP.Api
@@ -35,7 +36,7 @@ namespace ASP.Api
                 r => r switch {
                     MethodNotAllowedError e => new ApiResult(405, e.ToString()) { Headers = { { "Allow", string.Join(", ", e.AllowedMethods) } } },
                     NotFoundError e => new ApiResult(404, e.ToString()),
-                    ValidationError e => new ApiResult(400, e.ToString()),
+                    ValidationError e => new ApiResult(400, e.ToString().ReplacePrefix("Invalid: ", "Bad request: ")),
                     UnexpectedError e => new ApiResult(500, JsonHelper.Serialize(options.ShowStackTrace ? e : Error.Unexpected(e.Message, null))),
                     NotAllowedError e => new ApiResult(403, e.ToString()),
                     _ => new ApiResult(500, $@"Unhandled error type ""{r.GetType().FullName}"".")

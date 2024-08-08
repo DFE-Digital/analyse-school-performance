@@ -1,6 +1,6 @@
 ﻿namespace ASP.Core.Establishments.Search
 {
-    public class EstablishmentDetailsSearchResult
+    public class EstablishmentListItem
     {
         public string Urn { get; }
         public string Name { get; }
@@ -11,10 +11,15 @@
         public OfstedRating? OfstedRating { get; }
         public DateTime? OfstedLastInspectionDate { get; }
         public string? Laestab { get; }
-        public bool IsDeleted { get; }
-        public bool IsVisible { get; }
 
-        public EstablishmentDetailsSearchResult(string urn, string name, bool? isPrimary, bool? isSecondary, bool? isPost16, Address? address, OfstedRating? ofstedRating, DateTime? ofstedLastInspectionDate, string? laestab, bool isDeleted, bool isVisible)
+        public EstablishmentListItem(
+            string urn,
+            string name,
+            bool? isPrimary, bool? isSecondary,
+            bool? isPost16, Address? address,
+            OfstedRating? ofstedRating,
+            DateTime? ofstedLastInspectionDate,
+            string? laestab)
         {
             Urn = urn;
             Name = name;
@@ -25,8 +30,6 @@
             OfstedRating = ofstedRating;
             OfstedLastInspectionDate = ofstedLastInspectionDate;
             Laestab = laestab;
-            IsDeleted = isDeleted;
-            IsVisible = isVisible;
         }
     }
 }

@@ -4,5 +4,5 @@ namespace ASP.Core.Establishments.Search;
 
 public interface IEstablishmentSearchStrategy
 {
-    Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> Execute();
+    Task<Result<SearchResultsPage<EstablishmentListItem>>> Execute();
 }

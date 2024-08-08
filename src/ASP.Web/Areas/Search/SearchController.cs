@@ -3,6 +3,7 @@ using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Core;
+using ASP.Core.Establishments;
 using ASP.Core.Establishments.Search;
 using ASP.Core.Results;
 using ASP.Web.Areas.Shared.Pagination;
@@ -81,6 +82,8 @@ public class SearchController : Controller
 
         var estabSearchRequest = new EstablishmentSearchRequest(
             searchParams.SearchTerm,
+            new Scope(ScopeType.All,
+                string.Empty),
             searchParams.Page,
             Constants.SearchResultPageSize
         );

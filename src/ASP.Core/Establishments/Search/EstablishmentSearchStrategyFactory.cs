@@ -16,19 +16,19 @@ public class EstablishmentSearchStrategyFactory : IEstablishmentSearchStrategyFa
         _searchService = searchService;
     }
 
-    public EstablishmentSearchStrategy CreateStrategy(SearchType searchType, string searchTerm, int page, int resultsPerPage)
+    public EstablishmentSearchStrategy CreateStrategy(Scope scope, SearchType searchType, string searchTerm, int page, int resultsPerPage)
     {
         switch (searchType)
         {
             case SearchType.Urn:
-            return new UrnLookupStrategy(_repository, searchTerm, page, resultsPerPage);
+            return new UrnLookupStrategy(_repository, scope, searchTerm, page, resultsPerPage);
             case SearchType.LocalAuthEstablishment:
             case SearchType.LocalAuthEstablishment7Digit:
             case SearchType.LocalAuthEstablishment3Digit:
             case SearchType.LocalAuthEstablishment4Digit:
-                return new LaEstabSearchStrategy(_repository, searchTerm, page, resultsPerPage);
+                return new LaEstabSearchStrategy(_repository, scope, searchTerm, page, resultsPerPage);
             case SearchType.EstablishmentNameOrLocation:
-                return new EstablishmentNameOrLocationSearchStrategy(_searchService, searchTerm, page, resultsPerPage);
+                return new EstablishmentNameOrLocationSearchStrategy(_searchService, scope, searchTerm, page, resultsPerPage);
             default:
                 throw new NotSupportedException("Search type not supported.");
         }

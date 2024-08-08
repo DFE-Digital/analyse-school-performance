@@ -6,15 +6,15 @@ public class EstablishmentNameOrLocationSearchStrategy : EstablishmentSearchStra
 {
     private readonly ISearchService _searchService;
 
-    public EstablishmentNameOrLocationSearchStrategy(ISearchService searchService, string searchTerm,
-        int page, int resultsPerPage) : base(searchTerm, page, resultsPerPage)
+    public EstablishmentNameOrLocationSearchStrategy(ISearchService searchService, Scope scope, string searchTerm,
+        int page, int resultsPerPage) : base(scope, searchTerm, page, resultsPerPage)
     {
         _searchService = searchService;
     }
 
-    public override async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> Execute()
+    public override async Task<Result<SearchResultsPage<EstablishmentListItem>>> Execute()
     {
-        var results = await _searchService.SearchAsync(SearchTerm, Page, ResultsPerPage);
+        var results = await _searchService.SearchAsync(Scope, SearchTerm, Page, ResultsPerPage);
 
         return results;
     }

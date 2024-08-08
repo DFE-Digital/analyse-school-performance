@@ -9,17 +9,17 @@ Feature: Establishment Search Suggestions
     Scenario: Should return BadRequest (400) response if searchTerm parameter is missing
         When I send a GET request to /api/EstablishmentSearchSuggestions
         Then I should get a 400 response
-        And the response should be the message "Invalid: The parameter "searchTerm" is missing."
+        And the response should be the message "Bad request: The parameter "searchTerm" is missing."
 
     Scenario: Should return BadRequest (400) response if searchTerm parameter is empty string
         When I send a GET request to /api/EstablishmentSearchSuggestions?searchTerm=
         Then I should get a 400 response
-        And the response should be the message "Invalid: The parameter "searchTerm" should not be empty."
+        And the response should be the message "Bad request: The parameter "searchTerm" should not be empty."
 
     Scenario Outline: Should return BadRequest (400) response if page parameter is not a whole number greater than 1
         When I send a GET request to /api/EstablishmentSearchSuggestions?searchTerm=x&maxSuggestions=<maxSuggestions>
         Then I should get a 400 response
-        And the response should be the message "Invalid: Bad request: parameter "maxSuggestions" should be a whole number greater than or equal to 1."
+        And the response should be the message "Bad request: The parameter "maxSuggestions" should be a whole number greater than or equal to 1."
 
         Examples:
           | maxSuggestions |

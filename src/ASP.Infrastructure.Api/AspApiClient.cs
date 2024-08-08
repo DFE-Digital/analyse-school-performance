@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using System.Net;
 using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
+using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 
 namespace ASP.Infrastructure.Api
 {
@@ -96,21 +97,29 @@ namespace ASP.Infrastructure.Api
                 .Then(response => JsonHelper.DeserializeNotNull<EstablishmentDetailsDTO>(response));
         }
 
-        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> EstablishmentSearch(EstablishmentSearchRequest request)
+        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> EstablishmentSearch(
+            EstablishmentSearchRequest request)
         {
             var url = "/api/EstablishmentSearch";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
+
+            queryString = queryString.Add("scope", request.Scope.ScopeType.ToString());
+
+            queryString = queryString.Add("scopeIdentifier", request.Scope.ScopeIdentifier);
+
             if (request.Page != null)
             {
                 queryString = queryString.Add("page", request.Page.ToString() ?? "");
             }
+
             if (request.ResultsPerPage != null)
             {
                 queryString = queryString.Add("resultsPerPage", request.ResultsPerPage.ToString() ?? "");
             }
 
             return await ApiGet(url, queryString)
-                .Then(response => JsonHelper.DeserializeNotNull<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>(response));
+                .Then(response =>
+                    JsonHelper.DeserializeNotNull<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>(response));
         }
 
         public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request)
@@ -132,6 +141,14 @@ namespace ASP.Infrastructure.Api
             var queryString = QueryString.Create("code", request.Code);
             return await ApiGet(url, queryString)
                 .Then(response => JsonHelper.DeserializeNotNull<Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>(response));
+        }
+        
+        public async  Task<Result<Application.UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>> GetMultiAcademyTrust(GetMultiAcademyTrustRequest request)
+        {
+            var url = "/api/GetMultiAcademyTrust";
+            var queryString = QueryString.Create("id", request.Id);
+            return await ApiGet(url, queryString)
+                .Then(response => JsonHelper.DeserializeNotNull<Application.UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>(response));
         }
 
         private async Task<Result<string>> ApiGet(string url, QueryString? queryString)

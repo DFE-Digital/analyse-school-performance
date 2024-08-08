@@ -9,25 +9,26 @@ namespace ASP.Core.Establishments
         Task<Result<EstablishmentDetails>> GetEstablishmentDetails(string urn);
         Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails);
 
-        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCode(
-            string searchTerm, int page, int resultsPerPage,
+        Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchEstablishmentByLaCode(
+            Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByEstablishmentNumber(
-            string searchTerm, int page, int resultsPerPage,
+        Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchEstablishmentByEstablishmentNumber(
+            Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>>
+        Task<Result<SearchResultsPage<EstablishmentListItem>>>
             SearchEstablishmentByLocalAuthEstablishment7DigitCode(
-                string searchTerm, int page, int resultsPerPage,
+                Scope scope, string searchTerm, int page, int resultsPerPage,
                 CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
-            string searchTerm, int page, int resultsPerPage,
+        Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
+            Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentNameOrLocation(
-            string searchTerm, int page, int resultsPerPage,
+        Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchEstablishmentNameOrLocation(
+            Scope scope, string searchTerm, 
+            int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
         Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>>

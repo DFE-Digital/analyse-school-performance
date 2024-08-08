@@ -9,12 +9,12 @@ Feature: GetAvailableLADownloads
  Scenario: Should return BadRequest (400) response if searchTerm parameter is missing
     When I send a GET request to /api/GetAvailableLADownloads
     Then I should get a 400 response
-    And the response should be the message "Invalid: The parameter "laCode" is missing."
+    And the response should be the message "Bad request: The parameter "laCode" is missing."
 
 Scenario: Should return BadRequest (400) response if searchTerm parameter is empty string
     When I send a GET request to /api/GetAvailableLADownloads?laCode=
     Then I should get a 400 response
-    And the response should be the message "Invalid: The parameter "laCode" should not be empty."
+    And the response should be the message "Bad request: The parameter "laCode" should not be empty."
 
 Scenario Outline: Should return 200 response with laCode reports response
     When I send a GET request to /api/GetAvailableLADownloads?laCode=123

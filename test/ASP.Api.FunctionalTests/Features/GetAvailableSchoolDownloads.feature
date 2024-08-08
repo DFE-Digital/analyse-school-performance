@@ -3,12 +3,12 @@
  Scenario: Should return BadRequest (400) response if school URN parameter is missing
     When I send a GET request to /api/GetAvailableSchoolDownloads
     Then I should get a 400 response
-    And the response should be the message "Invalid: The parameter "urn" is missing."
+    And the response should be the message "Bad request: The parameter "urn" is missing."
 
  Scenario: Should return BadRequest (400) response if school URN parameter is not 6 characters
     When I send a GET request to /api/GetAvailableSchoolDownloads?urn=<urn>
     Then I should get a 400 response
-    And the response should be the message "Invalid: The parameter "urn" must be exactly 6 characters long."
+    And the response should be the message "Bad request: The parameter "urn" must be exactly 6 characters long."
 
 Examples: 
     | urn     |
@@ -18,7 +18,7 @@ Examples:
  Scenario: Should return BadRequest (400) response if school URN parameter is not all digits
     When I send a GET request to /api/GetAvailableSchoolDownloads?urn=<urn>
     Then I should get a 400 response
-    And the response should be the message "Invalid: The parameter "urn" must contain only digits."
+    And the response should be the message "Bad request: The parameter "urn" must contain only digits."
 
 Examples: 
     | urn    |

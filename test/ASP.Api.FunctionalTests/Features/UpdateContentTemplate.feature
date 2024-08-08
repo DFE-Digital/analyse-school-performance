@@ -12,42 +12,42 @@ Scenario: Should return BadRequest (400) response if id parameter is missing
 	Given no Content Templates exist
 	When I send a POST request to /api/UpdateContentTemplate
 	Then I should get a 400 response
-	And the response should be the message "Invalid: The parameter "id" is missing."
+	And the response should be the message "Bad request: The parameter "id" is missing."
 
 
 Scenario: Should return BadRequest (400) response if id parameter is duplicated
 	Given no Content Templates exist
 	When I send a POST request to /api/UpdateContentTemplate?id=x&id=y
 	Then I should get a 400 response
-	And the response should be the message "Invalid: The parameter "id" is duplicated."
+	And the response should be the message "Bad request: The parameter "id" is duplicated."
 
 
 Scenario: Should return BadRequest (400) response if id parameter is empty string 
 	Given no Content Templates exist
 	When I send a POST request to /api/UpdateContentTemplate?id=
 	Then I should get a 400 response
-	And the response should be the message "Invalid: The parameter "id" should not be empty."
+	And the response should be the message "Bad request: The parameter "id" should not be empty."
 
 
 Scenario: Should return BadRequest (400) response if revision parameter is empty string 
 	Given no Content Templates exist
 	When I send a POST request to /api/UpdateContentTemplate?id=xyz&revision=
 	Then I should get a 400 response
-	And the response should be the message "Invalid: The parameter "revision" should not be empty."
+	And the response should be the message "Bad request: The parameter "revision" should not be empty."
 
 
 Scenario: Should return BadRequest (400) response if revision parameter is duplicated
 	Given no Content Templates exist
 	When I send a POST request to /api/UpdateContentTemplate?id=xyz&revision=1&revision=2
 	Then I should get a 400 response
-	And the response should be the message "Invalid: The parameter "revision" is duplicated."
+	And the response should be the message "Bad request: The parameter "revision" is duplicated."
 
 
 Scenario: Should return BadRequest (400) response if request body is missing 
 	Given no Content Templates exist
 	When I send a POST request to /api/UpdateContentTemplate?id=test-content
 	Then I should get a 400 response
-	And the response should be the message "Invalid: The request body is missing."
+	And the response should be the message "Bad request: The request body is missing."
 
 
 Scenario: Should return BadRequest (400) response if request body is not an object 
@@ -57,7 +57,7 @@ Scenario: Should return BadRequest (400) response if request body is not an obje
 	Hello
 	"""
 	Then I should get a 400 response
-	And the response should be the message "Invalid: The request body is not a JSON object."
+	And the response should be the message "Bad request: The request body is not a JSON object."
 
 
 Scenario: Should return NotFound (404) when updating a revision of a Content Template that doesn't exist

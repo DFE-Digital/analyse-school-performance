@@ -1,10 +1,10 @@
-using ASP.Api.AcceptanceTests.Drivers;
+using ASP.Api.FunctionalTests.Drivers;
 using ASP.Infrastructure.Api;
 using ASP.Test.SpecFlow;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow.Infrastructure;
 
-namespace ASP.AcceptanceTests.StepDefinitions
+namespace ASP.Api.FunctionalTests.StepDefinitions
 {
     [Binding]
     public sealed partial class AspApiStepDefinitions

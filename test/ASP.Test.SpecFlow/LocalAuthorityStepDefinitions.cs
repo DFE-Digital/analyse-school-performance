@@ -51,6 +51,7 @@ public partial class LocalAuthorityStepDefinitions
             document[d.Key] = d.Value;
         }
         document["id"] = id;
+        document["code"] = id;
 
         return await _database.UpsertAsync("local-authorities", id, id, document);
     }

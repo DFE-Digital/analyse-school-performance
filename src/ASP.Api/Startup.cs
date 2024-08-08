@@ -11,6 +11,7 @@ using Azure.Identity;
 using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariables;
 using ASP.Application;
 using ASP.Core.LocalAuthorities;
+using ASP.Core.MultiAcademyTrusts;
 using ASP.Infrastructure;
 using ASP.Infrastructure.Establishments;
 using ASP.Infrastructure.LocalAuthorities;
@@ -30,6 +31,7 @@ namespace ASP.Api
                     services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
                     services.AddScoped<IEstablishmentRepository, EstablishmentRepository>();
                     services.AddScoped<ILocalAuthorityRepository, LocalAuthorityRepository>();
+                    services.AddScoped<IMultiAcademyTrustRepository, MultiAcademyTrustRepository>();
                     services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
                     services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
 

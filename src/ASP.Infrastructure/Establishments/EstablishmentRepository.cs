@@ -22,7 +22,7 @@ namespace ASP.Infrastructure.Establishments
 
         public Task<Result<EstablishmentDetails>> GetEstablishmentDetails(string urn)
         {
-            return _documentDB.GetAsync<EstablishmentDetailsDAO>(ContainerKey, urn, urn)
+            return _documentDB.GetAsync<EstablishmentDAO>(ContainerKey, urn, urn)
                 .ErrorIf(estab => estab.IsDeleted, Error.NotFound($@"The requested establishment with URN ""{urn}"" has been deleted."))
                 .ErrorIf(estab => !estab.IsVisible, Error.NotFound($@"The requested establishment with URN ""{urn}"" is not currently visible."))
                 .Map(dto => dto.MapToEstablishmentDetails());
@@ -30,62 +30,56 @@ namespace ASP.Infrastructure.Establishments
 
         public Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails)
         {
-            var establishmentDetailsDao = establishmentDetails.MapToEstablishmentDetailsDAO();
-
-            return _documentDB.UpsertAsync(ContainerKey, contentId, establishmentDetailsDao.Urn,
-                establishmentDetailsDao);
+            return _documentDB.UpsertAsync(ContainerKey, contentId, establishmentDetails.Urn,
+                establishmentDetails);
         }
 
-        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentNameOrLocation(
-            string searchTerm, int page, int resultsPerPage,
+        public async Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchEstablishmentNameOrLocation(
+            Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
-            return await _documentDB.QueryPagedAsync<SearchResultDAO>(
+            return await _documentDB.QueryPagedAsync<EstablishmentDAO>(
                     ContainerKey,
-                    q => q.Where(x => !x.IsDeleted && x.IsVisible && (
-                            x.Name.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-                            x.Address != null && (
-                                x.Address.Street.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-                                x.Address.Town.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-                                x.Address.PostCode.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
-                            )
-                        )).OrderBy(x => x.Name),
+                    ApplyScopeAndSearchQuery(scope, searchTerm),
                     page,
                     resultsPerPage,
                     cancellationToken)
-                .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no matches for ""{searchTerm}""."))
-                .Map(results => new SearchResultsPage<EstablishmentDetailsSearchResult>(searchTerm, results.Map(r => r.MapToEstablishmentDetailsSearchResult())));
+                .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no matches for ""{searchTerm}"" within the given scope."))
+                .Map(results => new SearchResultsPage<EstablishmentListItem>(searchTerm, scope.ScopeType.ToString(),
+                    scope.ScopeIdentifier, results.Map(r => r.MapToEstablishmentListItem())));
         }
 
-        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCode(
-            string searchTerm, int page, int resultsPerPage,
+        public async Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchEstablishmentByLaCode(
+            Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
             var inputSearchTerm = searchTerm + "/";
 
-            return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
+            return await SearchByLaestabCommon(scope, inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByEstablishmentNumber(
-            string searchTerm, int page, int resultsPerPage,
+        public async Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchEstablishmentByEstablishmentNumber(
+            Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
             var inputSearchTerm = "/" + searchTerm;
 
-            return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
+            return await SearchByLaestabCommon(scope, inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
+        public async Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
+            Scope scope,
             string searchTerm,
             int page,
             int resultsPerPage,
             CancellationToken cancellationToken = default
         )
         {
-            return await SearchLocalAuthEstablishmentCommon(searchTerm, searchTerm, page, resultsPerPage, cancellationToken);
+            return await SearchByLaestabCommon(scope, searchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchEstablishmentByLocalAuthEstablishment7DigitCode(
+        public async Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchEstablishmentByLocalAuthEstablishment7DigitCode(
+            Scope scope,
             string searchTerm,
             int page,
             int resultsPerPage,
@@ -94,7 +88,7 @@ namespace ASP.Infrastructure.Establishments
         {
             var inputSearchTerm = searchTerm.ToLaEstabCodeFormat();
 
-            return await SearchLocalAuthEstablishmentCommon(inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
+            return await SearchByLaestabCommon(scope, inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
         public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>> EstablishmentSearchSuggestions(
@@ -103,7 +97,7 @@ namespace ASP.Infrastructure.Establishments
             CancellationToken cancellationToken = default
         )
         {
-            return await _documentDB.QueryAsync<SearchSuggestionsResultDAO>(ContainerKey,
+            return await _documentDB.QueryAsync<EstablishmentDAO>(ContainerKey,
                     q => q.Where(x =>
                             !x.IsDeleted && x.IsVisible &&
                             (
@@ -131,7 +125,8 @@ namespace ASP.Infrastructure.Establishments
                 });
         }
 
-        private async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchLocalAuthEstablishmentCommon(
+        private async Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchByLaestabCommon(
+            Scope scope,
             string searchTerm,
             string originalSearchTerm,
             int page,
@@ -139,18 +134,65 @@ namespace ASP.Infrastructure.Establishments
             CancellationToken cancellationToken = default
         )
         {
-            return await _documentDB.QueryPagedAsync<SearchResultDAO>(
+            return await _documentDB.QueryPagedAsync<EstablishmentDAO>(
                     ContainerKey,
-                    q => q.Where(x =>
-                            !x.IsDeleted && x.IsVisible &&
-                            x.Laestab != null && // Ensure Laestab is not null before calling Contains
-                            x.Laestab.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
-                         ).OrderBy(x => x.Name),
+                    ApplyScopeAndSearchQuery(scope, searchTerm, true),
                     page,
                     resultsPerPage,
                     cancellationToken)
                 .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no matches for ""{originalSearchTerm}""."))
-                .Map(results => new SearchResultsPage<EstablishmentDetailsSearchResult>(originalSearchTerm, results.Map(r => r.MapToEstablishmentDetailsSearchResult())));
+                .Map(results => new SearchResultsPage<EstablishmentListItem>(originalSearchTerm, scope.ScopeType.ToString(),
+                    scope.ScopeIdentifier, results.Map(r => r.MapToEstablishmentListItem())));
         }
+
+        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>> ScopeWhere(Scope scope) =>
+            scope.ScopeType switch
+            {
+                ScopeType.All => q => q,
+                ScopeType.LA => q => q.Where(x =>
+                    x.LocalAuthority != null && (x.LocalAuthority.Code.ToString() == scope.ScopeIdentifier)),
+                ScopeType.MAT => q => q.Where(x =>
+                    x.MultiAcademyTrust != null && (x.MultiAcademyTrust.Uid.ToString() == scope.ScopeIdentifier)),
+                ScopeType.Diocese => q => q.Where(x => x.Diocese != null && (x.Diocese.Name == scope.ScopeIdentifier)),
+                _ => throw new ArgumentOutOfRangeException(nameof(scope))
+            };
+
+        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>> SearchEstablishmentNameOrLocationWhere(
+            string searchTerm) =>
+            q => q.Where(x =>
+                !x.IsDeleted && x.IsVisible && (
+                    x.Name.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                    x.Address != null && (
+                        x.Address.Street.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                        x.Address.Town.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                        x.Address.PostCode.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                    )));
+        
+        
+        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>> SearchLocalAuthEstablishmentCommonWhere(
+            string searchTerm) =>
+            q => q.Where(x =>
+                !x.IsDeleted && x.IsVisible &&
+                x.Laestab != null && // Ensure Laestab is not null before calling Contains
+                x.Laestab.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+            );
+
+        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>> ApplyScopeAndSearchQuery(Scope scope,
+            string searchTerm, bool isLocalAuthEstablishmentCommon = false)
+        {
+            return queryable =>
+            {
+                // Apply scope filter
+                var scopedQuery = ScopeWhere(scope)(queryable);
+                
+                // apply other filter
+                scopedQuery = isLocalAuthEstablishmentCommon
+                    ? SearchLocalAuthEstablishmentCommonWhere(searchTerm)(scopedQuery)
+                    : SearchEstablishmentNameOrLocationWhere(searchTerm)(scopedQuery);
+
+                return scopedQuery.OrderBy(x => x.Name);
+            };
+        }
+
     }
 }

@@ -14,19 +14,19 @@
         Given no Local Authorities exist
         When I send a GET request to /api/GetLocalAuthority
         Then I should get a 400 response
-        And the response should be the message "Invalid: The parameter "code" is missing."
+        And the response should be the message "Bad request: The parameter "code" is missing."
 
     Scenario: Should return BadRequest (400) response if code parameter is duplicated
         Given no Local Authorities exist
         When I send a GET request to /api/GetLocalAuthority?code=x&code=y
         Then I should get a 400 response
-        And the response should be the message "Invalid: The parameter "code" is duplicated."
+        And the response should be the message "Bad request: The parameter "code" is duplicated."
 
     Scenario: Should return BadRequest (400) response if code parameter is empty string
         Given no Local Authorities exist
         When I send a GET request to /api/GetLocalAuthority?code=
         Then I should get a 400 response
-        And the response should be the message "Invalid: The parameter "code" should not be empty."
+        And the response should be the message "Bad request: The parameter "code" should not be empty."
 
     Scenario: Should return NotFound (404) response if local authority doesn't exist
         Given no Local Authorities exist

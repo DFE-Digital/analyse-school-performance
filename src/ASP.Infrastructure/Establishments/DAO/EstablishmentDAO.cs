@@ -1,6 +1,6 @@
 ﻿namespace ASP.Infrastructure.Establishments.DAO
 {
-    public class EstablishmentDetailsDAO
+    public class EstablishmentDAO
     {
         public string Urn { get; }
         public string Name { get; }
@@ -18,12 +18,14 @@
         public ReligiousDenominationDAO? ReligiousDenomination { get; }
         public AdmissionsPolicyDAO? AdmissionsPolicy { get; }
         public ResourcedProvisionTypeDAO? ResourcedProvisionType { get; }
+        public DioceseDAO? Diocese { get; }
+        public MultiAcademyTrustDAO? MultiAcademyTrust { get; }
         public int? NoOfPupils { get; }
         public bool IsDeleted { get; }
         public string? Laestab { get; }
         public bool IsVisible { get; set; }
 
-        public EstablishmentDetailsDAO(string urn,
+        public EstablishmentDAO(string urn,
             string name,
             bool? isPrimary,
             bool? isSecondary,
@@ -39,6 +41,8 @@
             ReligiousDenominationDAO? religiousDenomination,
             AdmissionsPolicyDAO? admissionsPolicy,
             ResourcedProvisionTypeDAO? resourcedProvisionType,
+            DioceseDAO? diocese,
+            MultiAcademyTrustDAO? multiAcademyTrust,
             int? noOfPupils, bool isDeleted,
             string? laestab, bool isVisible)
         {
@@ -58,6 +62,8 @@
             ReligiousDenomination = religiousDenomination;
             AdmissionsPolicy = admissionsPolicy;
             ResourcedProvisionType = resourcedProvisionType;
+            Diocese = diocese;
+            MultiAcademyTrust = multiAcademyTrust;
             NoOfPupils = noOfPupils;
             IsDeleted = isDeleted;
             Laestab = laestab;

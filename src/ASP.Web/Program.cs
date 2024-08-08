@@ -1,3 +1,4 @@
+using ASP.Infrastructure;
 using ASP.Infrastructure.Api;
 using ASP.Web.Areas;
 using ASP.Web.Areas.LocalAuthority;
@@ -44,6 +45,7 @@ namespace ASP.Web
                 .ConfigureLogging()
                 .ConfigureSchoolPages()
                 .ConfigureLocalAuthorityPages()
+                .ConfigureMultiAcademyTrustServices()
                 .ConfigureSearch();
 
             builder.Services.ConfigureInProcessApi();

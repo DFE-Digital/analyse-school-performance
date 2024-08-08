@@ -13,10 +13,10 @@ public class EstablishmentNameOrLocationSearchService : ISearchService
         _establishmentRepository = establishmentRepository;
     }
 
-    public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResult>>> SearchAsync(string searchTerm, int page = 1,
+    public async Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchAsync(Scope scope, string searchTerm, int page = 1,
         int resultsPerPage = Core.Constants.SearchResultPageSize)
     {
-        var result = await _establishmentRepository.SearchEstablishmentNameOrLocation(searchTerm, page, resultsPerPage);
+        var result = await _establishmentRepository.SearchEstablishmentNameOrLocation(scope, searchTerm, page, resultsPerPage);
 
         return result;
     }

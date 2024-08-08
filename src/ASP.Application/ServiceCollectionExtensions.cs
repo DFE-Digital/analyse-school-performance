@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ASP.Core.Establishments.Search;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
+using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 
 namespace ASP.Application;
 
@@ -26,6 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGetAvailableLADownloads, GetAvailableLADownloads>();
         services.AddScoped<IGetLocalAuthority, GetLocalAuthority>();
         services.AddScoped<IGetAvailableSchoolDownloads, GetAvailableSchoolDownloads>();
+        services.AddScoped<IGetMultiAcademyTrust, GetMultiAcademyTrust>();
 
         return services;
     }
