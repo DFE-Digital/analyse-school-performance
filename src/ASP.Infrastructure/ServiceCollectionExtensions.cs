@@ -1,7 +1,7 @@
 ﻿using ASP.Core.Establishments.Search;
 using ASP.Core.MultiAcademyTrusts;
 using ASP.Infrastructure.Establishments;
-using ASP.Infrastructure.LocalAuthorities;
+using ASP.Infrastructure.MultiAcademyTrusts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ASP.Infrastructure;

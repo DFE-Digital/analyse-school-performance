@@ -12,13 +12,13 @@ namespace ASP.Application.UseCases.Establishments.GetEstablishmentDetails
         public GetEstablishmentDetails(IEstablishmentRepository pageContentRepository)
         {
             _repository = pageContentRepository ??
-                throw new ArgumentNullException(nameof(pageContentRepository));
+                          throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
         public async Task<Result<EstablishmentDetailsDTO>> HandleRequest(GetEstablishmentDetailsRequest request)
         {
-            return await _repository.GetEstablishmentDetails(request.Urn).Map(x => 
-                x.MapToEstablishmentDetailsDTO() );
+            return await _repository.GetEstablishmentDetails(request.Urn).Map(x =>
+                x.MapToEstablishmentDetailsDTO());
         }
     }
 }

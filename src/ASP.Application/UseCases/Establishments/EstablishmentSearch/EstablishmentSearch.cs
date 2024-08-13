@@ -1,23 +1,26 @@
-﻿using ASP.Core.Establishments.Search;
+﻿using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.Establishments.DTO.Mapper;
+using ASP.Core.Establishments.Search;
 using ASP.Core.Extensions;
 using ASP.Core.Results;
-using ASP.Application.UseCases.Establishments.DTO;
-using ASP.Application.UseCases.Establishments.DTO.Mapper;
-using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
-using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 using ASP.Core.Establishments;
+using ASP.Core.LocalAuthorities;
+using ASP.Core.MultiAcademyTrusts;
 
 namespace ASP.Application.UseCases.Establishments.EstablishmentSearch;
 
 public class EstablishmentSearch : IEstablishmentSearch
 {
     private readonly IEstablishmentSearchStrategyFactory _establishmentSearchStrategyFactory;
-    private readonly IAspApiClient _api;
+    private readonly ILocalAuthorityRepository _localAuthorityRepository;
+    private readonly IMultiAcademyTrustRepository _multiAcademyTrustRepository;
 
     public EstablishmentSearch(IEstablishmentSearchStrategyFactory establishmentSearchStrategyFactory,
-        IAspApiClient api)
+        ILocalAuthorityRepository localAuthorityRepository,
+        IMultiAcademyTrustRepository multiAcademyTrustRepository)
     {
-        _api = api;
+        _localAuthorityRepository = localAuthorityRepository;
+        _multiAcademyTrustRepository = multiAcademyTrustRepository;
         _establishmentSearchStrategyFactory = establishmentSearchStrategyFactory;
     }
 
@@ -34,15 +37,10 @@ public class EstablishmentSearch : IEstablishmentSearch
                 $@"The parameter ""{nameof(request.SearchTerm)}"" : ""{request.SearchTerm}"" with type ""{searchType}"" is invalid");
         }
 
-        var validateScopeError = await ValidateScope(request);
-
-        if (validateScopeError != null)
-        {
-            return validateScopeError;
-        }
+        var scope = new Scope(request.ScopeType, request.ScopeIdentifier);
 
         var initialStrategy = _establishmentSearchStrategyFactory.CreateStrategy(
-            request.Scope,
+            scope,
             searchType,
             request.SearchTerm,
             page,
@@ -52,61 +50,19 @@ public class EstablishmentSearch : IEstablishmentSearch
         // Backup search strategy if the initial strategy fails (e.g. if it's a 3-digit code we'll do an LA
         // lookup but if we don't find a matching LA then we need to do a full search on name/address)
         var backupStrategy = _establishmentSearchStrategyFactory.CreateStrategy(
-            request.Scope,
+            scope,
             SearchType.EstablishmentNameOrLocation,
             request.SearchTerm,
             page,
             resultsPerPage
         );
 
-        var result = await initialStrategy.Execute()
+        return await scope
+            .Validate(_localAuthorityRepository, _multiAcademyTrustRepository)
+            .Then(async x => await initialStrategy.Execute())
             .IfErrorThen(
                 e => e is NotFoundError && searchType != SearchType.EstablishmentNameOrLocation,
                 backupStrategy.Execute
-            )
-            .Map(results => results.Map(r => r.MapToSearchResultDTO()));
-
-        return result;
-    }
-
-    private async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>?> ValidateScope(
-        EstablishmentSearchRequest request)
-    {
-        if (request.Scope.ScopeType == ScopeType.LA)
-        {
-            var laScopeInvalidError =
-                Error.Invalid($@"Local Authority with code ""{request.Scope.ScopeIdentifier}"" does not exist.");
-
-            // Validate Scope Identifier
-            var localAuthority = await _api.GetLocalAuthority(
-                new GetLocalAuthorityRequest(request.Scope.ScopeIdentifier)).MapError(e => e is NotFoundError
-                ? laScopeInvalidError
-                : e).GetValueOrDefault(new ASP.Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO("", ""));
-
-            if (string.IsNullOrEmpty(localAuthority.Code))
-            {
-                return laScopeInvalidError;
-            }
-        }
-
-        if (request.Scope.ScopeType == ScopeType.MAT)
-        {
-            var matScopeInvalidError =
-                Error.Invalid($@"Multi-Academy Trust with UID ""{request.Scope.ScopeIdentifier}"" does not exist.");
-
-            // Validate Scope Identifier
-            var mat = await _api.GetMultiAcademyTrust(
-                new GetMultiAcademyTrustRequest(request.Scope.ScopeIdentifier)).MapError(e => e is NotFoundError
-                ? matScopeInvalidError
-                : e).GetValueOrDefault(
-                new ASP.Application.UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO("", ""));
-
-            if (string.IsNullOrEmpty(mat.Id))
-            {
-                return matScopeInvalidError;
-            }
-        }
-
-        return null;
+            ).Map(results => results.Map(r => r.MapToSearchResultDTO()));
     }
 }

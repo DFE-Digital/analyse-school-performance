@@ -15,6 +15,7 @@ using ASP.Core.MultiAcademyTrusts;
 using ASP.Infrastructure;
 using ASP.Infrastructure.Establishments;
 using ASP.Infrastructure.LocalAuthorities;
+using ASP.Infrastructure.MultiAcademyTrusts;
 
 namespace ASP.Api
 {

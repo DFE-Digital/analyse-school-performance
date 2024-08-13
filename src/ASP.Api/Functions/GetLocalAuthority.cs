@@ -21,9 +21,10 @@ public class GetLocalAuthority : ApiFunction
         _options = (options ?? throw new ArgumentNullException(nameof(options)))
             .Value;
     }
-    
+
     [Function("GetLocalAuthority")]
-    public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req, CancellationToken cancellationToken)
+    public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req,
+        CancellationToken cancellationToken)
     {
         _logger.LogInformation(req.Method + " " + req.Path + req.QueryString);
 

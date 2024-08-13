@@ -18,7 +18,7 @@ namespace ASP.Core.Establishments
             CancellationToken cancellationToken = default);
 
         Task<Result<SearchResultsPage<EstablishmentListItem>>>
-            SearchEstablishmentByLocalAuthEstablishment7DigitCode(
+            SearchEstablishmentByLaestab7DigitCode(
                 Scope scope, string searchTerm, int page, int resultsPerPage,
                 CancellationToken cancellationToken = default);
 
@@ -33,6 +33,7 @@ namespace ASP.Core.Establishments
 
         Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>>
             EstablishmentSearchSuggestions(
-                string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default);
+                Scope scope, string searchTerm, 
+                int maxSuggestions, CancellationToken cancellationToken = default);
     }
 }

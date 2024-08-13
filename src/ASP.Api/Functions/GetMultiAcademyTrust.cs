@@ -21,7 +21,7 @@ public class GetMultiAcademyTrust : ApiFunction
         _options = (options ?? throw new ArgumentNullException(nameof(options)))
             .Value;
     }
-    
+
     [Function("GetMultiAcademyTrust")]
     public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req,
         CancellationToken cancellationToken)

@@ -103,9 +103,8 @@ namespace ASP.Infrastructure.Api
             var url = "/api/EstablishmentSearch";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
 
-            queryString = queryString.Add("scope", request.Scope.ScopeType.ToString());
-
-            queryString = queryString.Add("scopeIdentifier", request.Scope.ScopeIdentifier);
+            queryString = queryString.Add("scope", request.ScopeType.ToString())
+                .Add("scopeIdentifier", request.ScopeIdentifier);
 
             if (request.Page != null)
             {
@@ -122,17 +121,24 @@ namespace ASP.Infrastructure.Api
                     JsonHelper.DeserializeNotNull<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>(response));
         }
 
-        public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request)
+        public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>>
+            EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request)
         {
             var url = "/api/EstablishmentSearchSuggestions";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
+
+            queryString = queryString.Add("scope", request.ScopeType.ToString())
+                .Add("scopeIdentifier", request.ScopeIdentifier);
+
             if (request.MaxSuggestions != null)
             {
                 queryString = queryString.Add("maxSuggestions", request.MaxSuggestions.ToString() ?? "");
             }
 
             return await ApiGet(url, queryString)
-                .Then(response => JsonHelper.DeserializeNotNull<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>(response));
+                .Then(response =>
+                    JsonHelper.DeserializeNotNull<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>(
+                        response));
         }
         
         public async Task<Result<Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request)

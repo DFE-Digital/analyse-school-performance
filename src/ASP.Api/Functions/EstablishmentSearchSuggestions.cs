@@ -1,4 +1,5 @@
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
+using ASP.Core.Establishments;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -34,10 +35,16 @@ namespace ASP.Api.Functions
 
             return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
                 .Then(_ => RequestValidation.RequiredParameter(req, "searchTerm")
-                    .Then(searchTerm => RequestValidation.OptionalParameter(req, "maxSuggestions")
-                        .Then(maxSuggestions => RequestValidation.NumericParameter(maxSuggestions, "maxSuggestions"))
-                        .Then(maxSuggestions => _useCase.HandleRequest(
-                            new EstablishmentSearchSuggestionsRequest(searchTerm, maxSuggestions)))))
+                    .Then(searchTerm => RequestValidation.RequiredParameter<ScopeType>(req, "scope")
+                        .Then(scope => RequestValidation
+                            .RequiredParameterIf(req, "scopeIdentifier", scope == ScopeType.All)
+                            .Then(scopeIdentifier => RequestValidation.OptionalParameter(req, "maxSuggestions")
+                                .Then(maxSuggestions =>
+                                    RequestValidation.NumericParameter(maxSuggestions, "maxSuggestions"))
+                                .Then(maxSuggestions => _useCase.HandleRequest(
+                                        new EstablishmentSearchSuggestionsRequest(searchTerm, scope,
+                                            scopeIdentifier, maxSuggestions))
+                                  )))))
                 .ToApiResultAsync(_options, cancellationToken);
         }
     }

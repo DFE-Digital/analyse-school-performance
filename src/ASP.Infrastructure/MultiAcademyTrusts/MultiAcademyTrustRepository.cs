@@ -4,7 +4,7 @@ using ASP.Core.Results;
 using ASP.Infrastructure.MultiAcademyTrusts.DAO;
 using ASP.Infrastructure.MultiAcademyTrusts.DAO.Mapper;
 
-namespace ASP.Infrastructure.LocalAuthorities;
+namespace ASP.Infrastructure.MultiAcademyTrusts;
 
 public class MultiAcademyTrustRepository : IMultiAcademyTrustRepository
 {

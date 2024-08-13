@@ -1,5 +1,4 @@
 ﻿using ASP.Core.Establishments;
-using ASP.Core.Establishments.Search;
 using ASP.Core.Utilities;
 
 namespace ASP.Application.UseCases.Establishments.DTO.Mapper;

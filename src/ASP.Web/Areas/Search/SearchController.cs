@@ -50,8 +50,8 @@ public class SearchController : Controller
 
             var estabSearchRequest = new EstablishmentSearchRequest(
                 searchParams.Search,
-            new Scope(ScopeType.All,
-                string.Empty),
+                ScopeType.All,
+                string.Empty,
                 searchParams.Page,
                 Constants.SearchResultPageSize
             );
@@ -74,7 +74,9 @@ public class SearchController : Controller
         }
 
         var estabSearchSuggestions = new EstablishmentSearchSuggestionsRequest(
-            searchParams.Search ?? ""
+            searchParams.Search ?? "",
+            ScopeType.All,
+            string.Empty
         );
 
         return await _api.EstablishmentSearchSuggestions(estabSearchSuggestions).ToActionResult(Json, _hostEnvironment);

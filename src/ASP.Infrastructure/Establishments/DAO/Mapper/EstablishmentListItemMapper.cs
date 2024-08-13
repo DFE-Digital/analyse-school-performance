@@ -1,4 +1,4 @@
-﻿using ASP.Core.Establishments.Search;
+﻿using ASP.Core.Establishments;
 
 namespace ASP.Infrastructure.Establishments.DAO.Mapper;
 

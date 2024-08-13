@@ -44,8 +44,8 @@ namespace ASP.Api.Functions
                                     .Then(resultsPerPage =>
                                         RequestValidation.NumericParameter(resultsPerPage, "resultsPerPage"))
                                     .Then(resultsPerPage => _useCase.HandleRequest(
-                                        new EstablishmentSearchRequest(searchTerm, new Scope(scope,
-                                            scopeIdentifier), page, resultsPerPage))))))))
+                                        new EstablishmentSearchRequest(searchTerm, scope,
+                                            scopeIdentifier, page, resultsPerPage))))))))
                 .ToApiResultAsync(_options, cancellationToken);
         }
     }

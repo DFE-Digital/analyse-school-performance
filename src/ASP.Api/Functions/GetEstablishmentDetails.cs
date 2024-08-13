@@ -25,13 +25,15 @@ namespace ASP.Api.Functions
         }
 
         [Function("GetEstablishmentDetails")]
-        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req, CancellationToken cancellationToken)
+        public override async Task<ApiResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req,
+            CancellationToken cancellationToken)
         {
             _logger.LogInformation(req.Method + " " + req.Path + req.QueryString);
 
             return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
                 .Then(_ => RequestValidation.RequiredParameter(req, "urn")
-                .Then(urn => _useCase.HandleRequest(new GetEstablishmentDetailsRequest(urn))))
+                    .Then(urn => _useCase.HandleRequest(new GetEstablishmentDetailsRequest(urn))))
                 .ToApiResultAsync(_options, cancellationToken);
         }
     }

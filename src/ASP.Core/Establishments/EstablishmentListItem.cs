@@ -1,4 +1,4 @@
-﻿namespace ASP.Core.Establishments.Search
+﻿namespace ASP.Core.Establishments
 {
     public class EstablishmentListItem
     {
