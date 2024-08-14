@@ -61,7 +61,7 @@ jobs:
               -RepositoryOptions:DatabaseId $(RepositoryOptions:DatabaseId) 
               -RepositoryOptions:EndpointUri $(RepositoryOptions:EndpointUri) 
               -TableStorage:ManagedIdentityClientId $(TableStorage:ManagedIdentityClientId) 
-              -TableStorage:StorageAccountName $(TableStorage:StorageAccountName) 
+              -TableStorage:StorageAccountName $(TableStorage:StorageAccountName)
               -TableStorage:TableName $(TableStorage:TableName)
               -ASPNETCORE_ENVIRONMENT $(ASPNETCORE_ENVIRONMENT) 
               -APPINSIGHTS_INSTRUMENTATIONKEY $(APPINSIGHTS_INSTRUMENTATIONKEY) 
