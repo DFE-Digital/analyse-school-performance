@@ -65,7 +65,7 @@ jobs:
               -TableStorage:TableName $(TableStorage:TableName)
               -ASPNETCORE_ENVIRONMENT $(ASPNETCORE_ENVIRONMENT) 
               -APPINSIGHTS_INSTRUMENTATIONKEY $(APPINSIGHTS_INSTRUMENTATIONKEY) 
-              -APPLICATIONINSIGHTS_CONNECTION_STRING $(APPLICATIONINSIGHTS_CONNECTION_STRING)
+              -APPLICATIONINSIGHTS_CONNECTION_STRING $(APPLICATIONINSIGHTS_CONNECTION_STRING) 
 
         - task: AzureFunctionApp@2
           displayName: 'Azure Function App Deploy: $(functionAppName)'
