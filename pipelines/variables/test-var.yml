@@ -1,0 +1,14 @@
+# File: pipelines/variables/test-var.yml
+# all test stage pipeline level var should come here.
+variables:
+- group: s192t01-group
+- name: azureSubscription
+  value: 's192-analyse-school-performance-test'
+- name: resourceGroupName
+  value: s192t01-test
+- name: appServiceName
+  value: s192t01-app-test-01
+- name: functionAppName
+  value: s192t01-func-test-01
+
+  

@@ -133,3 +133,20 @@ stages:
       variableFile: variables/dev-var.yml
       azureSubscriptionName: s192d.azdo-deployment
       azureSubscriptionId: '212193cd-152c-4621-97d1-85cb63f025b4'
+
+- stage: 'DeployTest'
+  displayName: 'Deploy Test stage '
+  dependsOn: 'DeployDev'
+  jobs: 
+  - template: 'pipelines/deployment-stage.yml'
+    parameters:
+      name: 'DeployTest'
+      displayName: 'Deploy Test stage'
+      dependsOn: 'DeployDev'
+      jobName: 'Deploy'
+      jobDisplayName: 'Deploy Test '
+      envName: Test
+      vmImageName: $(vmImageName)
+      variableFile: variables/test-var.yml
+      azureSubscriptionName: s192t.azdo-deployment
+      azureSubscriptionId: '2b154ece-99e6-497e-852d-ad69b9aecd61'

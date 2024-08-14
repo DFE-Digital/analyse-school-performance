@@ -41,7 +41,7 @@ jobs:
         - task: AzureRmWebAppDeployment@4
           displayName: 'Azure App Service Deploy: $(appServiceName)'
           inputs:
-            azureSubscription: 's192d.azdo-deployment'
+            azureSubscription: ${{parameters.azureSubscriptionName}}
             WebAppName: '$(appServiceName)'
             packageForLinux: '$(System.ArtifactsDirectory)\files-web\**\ASP.Web.zip'
             AppSettings: |
@@ -62,7 +62,7 @@ jobs:
               -RepositoryOptions:EndpointUri $(RepositoryOptions:EndpointUri) 
               -TableStorage:ManagedIdentityClientId $(TableStorage:ManagedIdentityClientId) 
               -TableStorage:StorageAccountName $(TableStorage:StorageAccountName) 
-              -TableStorage:TableName $(TableStorage:TableName) 
+              -TableStorage:TableName $(TableStorage:TableName)
               -ASPNETCORE_ENVIRONMENT $(ASPNETCORE_ENVIRONMENT) 
               -APPINSIGHTS_INSTRUMENTATIONKEY $(APPINSIGHTS_INSTRUMENTATIONKEY) 
               -APPLICATIONINSIGHTS_CONNECTION_STRING $(APPLICATIONINSIGHTS_CONNECTION_STRING)
@@ -70,8 +70,8 @@ jobs:
         - task: AzureFunctionApp@2
           displayName: 'Azure Function App Deploy: $(functionAppName)'
           inputs:
-            connectedServiceNameARM: 's192d.azdo-deployment'
+            connectedServiceNameARM: ${{parameters.azureSubscriptionName}}
             appType: functionApp
             appName: '$(functionAppName)'
             package: '$(System.ArtifactsDirectory)\files-api\**\api.zip'
-            appSettings: '-RepositoryOptions:EndpointUri $(RepositoryOptions:EndpointUri) -RepositoryOptions:DatabaseId $(RepositoryOptions:DatabaseId) -AspAzureKeyVaultName $(AspAzureKeyVaultName)'
+            appSettings: '-RepositoryOptions:EndpointUri $(RepositoryOptions:EndpointUri) -RepositoryOptions:DatabaseId $(RepositoryOptions:DatabaseId) -AspAzureKeyVaultName $(AspAzureKeyVaultName) -AzureWebJobsStorage__accountName $(StorageAccountName)'

@@ -1,4 +1,4 @@
-# File: pipelines/variables/app-dev-var.yml
+# File: pipelines/variables/dev-var.yml
 # all dev stage pipeline level var should come here.
 variables:
 - group: s192d01-group
