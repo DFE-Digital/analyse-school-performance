@@ -80,8 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 urnElement.value = "";
             });
         }, 0);
-    } else {
-        console.error('AutoComplete container not found');
     }
 
     const form = document.getElementById('searchForm');
@@ -111,7 +109,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 input.value = urnElement.value;
             }
         }
-    } else {
-        console.error('Search form not found');
     }
 }); 
