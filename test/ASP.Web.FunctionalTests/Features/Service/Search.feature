@@ -1631,3 +1631,40 @@ Scenario: Pagination in Search Validation 3 (JS)
 	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=primary&page=1"
 	And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100051"
 	And the element "*[data-testid='school-search-results-urn-1']" should have the text content "100051"
+	
+@Javascript:disabled
+Scenario Outline: The PageNo parameter should handle invalid values with a default value of 1
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "Tring",
+			"postCode": "B1 1AA"
+		}
+	}
+	"""
+	When I navigate to /search/?search=Primary&page=<page>
+	Then the page title should be "Search results for "Primary" | Analyse school performance"
+	And the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=Primary&page=1"
+  
+Examples:
+  | page |
+  | y    |
+  | 1.5  |
+  | 0    |
+  | -1   |
+ 

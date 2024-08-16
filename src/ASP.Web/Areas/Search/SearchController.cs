@@ -39,6 +39,17 @@ public class SearchController : Controller
             {
                 return View("Index");
             }
+            
+            // Initialize the page number to 1 by default
+            var pageNumber = 1;
+
+            // Try to parse the 'Page' property from 'searchParams' as an integer
+            // If parsing is successful and the parsed value is greater than or equal to 1,
+            // assign the parsed value to 'pageNumber'
+            if (int.TryParse(searchParams.Page, out int intValue) && intValue >= 1)
+            {
+                pageNumber = intValue;
+            }
 
             // Check if the final SearchTerm is empty
             if (string.IsNullOrEmpty(searchParams.Search))
@@ -52,7 +63,7 @@ public class SearchController : Controller
                 searchParams.Search,
                 ScopeType.All,
                 string.Empty,
-                searchParams.Page,
+                pageNumber,
                 Constants.SearchResultPageSize
             );
 
