@@ -52,6 +52,7 @@ export default class AutoComplete {
         .catch(error => {
             if (error.name !== 'AbortError') {
                 console.error('Error fetching search data:', error);
+                populateResults([]);
             }
         });
     }

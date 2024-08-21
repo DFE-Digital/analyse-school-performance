@@ -4,33 +4,42 @@ import AutoComplete from '../../../scripts/autocomplete.js'
 const escapeRegExChars = (str) => str ? str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") : '';
 
 /**
- * Generates a regular expression for flexible text matching based on the input query.
+ * Generates a flexible regular expression based on the input query.
  *
  * @param {string} query - The search query to convert into a regex pattern.
- * @returns {RegExp} A case-insensitive global regex for matching the query.
- *
- * This function:
- * 1. Handles empty queries by returning an empty regex.
- * 2. Splits the query into separate patterns (words).
- * 3. For each pattern:
- *    - Splits it into individual characters.
- *    - Escapes special regex characters.
- *    - Allows optional forward slashes between characters.
- * 4. Combines patterns with OR operator (|).
- * 5. Creates a case-insensitive global regex from the final pattern.
- *
- * The resulting regex can match variations of the query with optional
- * forward slashes between characters, useful for flexible text highlighting.
+ * @returns {RegExp|null} A case-insensitive global regex for matching the query, or null if query is invalid.
  */
 const getRegex = (query) => {
-    if (!query) return new RegExp('');
-    const patterns = query.split(' ');
-    const escapedPatterns = patterns.map(pattern => {
-        const characters = pattern.split('');
-        const escapeCharacters= characters.map(escapeRegExChars);
-        return escapeCharacters.join("\\/?");
-    });
-    const regexStr = `(${escapedPatterns.join('|')})`;
+    // Return null if query is empty or less than 2 characters
+    if (!query || query.length < 2) return null;
+
+    // Create a flexible query pattern from the input query string
+    const flexibleQuery = query.split('').map(char => {
+        // Escape special regex characters in the current character
+        const escapedChar = escapeRegExChars(char);
+
+        if (/\d/.test(char)) {
+            // For digits:
+            // - Keep the digit as is
+            // - Allow an optional forward slash after the digit
+            // This handles cases like LAESTAB numbers (e.g., "123" can match "1/2/3")
+            return `${escapedChar}\\/?`;
+        } else {
+            // For non-digits:
+            // - Keep the character as is
+            // - Allow an optional space or tab after the character
+            // - Allow an optional forward slash after the space/tab or directly after the character
+            // This provides flexibility in matching (e.g., "ab" can match "a b", "a/b", "a /b", etc.)
+            return `${escapedChar}[ \\t]?\\/?`;
+        }
+    }).join('');
+
+    // Wrap the flexible query in parentheses to create a capturing group
+    const regexStr = `(${flexibleQuery})`;
+
+    // Create and return a RegExp object:
+    // - 'i' flag for case-insensitive matching
+    // - 'g' flag for global matching (find all occurrences)
     return new RegExp(regexStr, 'ig');
 };
 
@@ -46,10 +55,16 @@ export const nameInputTemplate = value => {
 };
 
 export const nameSuggestionTemplate = (value, query) => {
-    if (!value || !value.name) return "";
+    if (!value || !value.name || !query || query.length < 2) return "";
     const regex = getRegex(query);
-    const suggestionTemplate = `${value.name}<br> Address:${value.address} <br>URN:${value.urn}, LAESTAB:${value.laestab}`
-    return highlightText(`${suggestionTemplate}`, regex);
+    if (!regex) return "";
+
+    const name = highlightText(value.name, regex);
+    const address = highlightText(value.address, regex);
+    const urn = highlightText(value.urn, regex);
+    const laestab = highlightText(value.laestab, regex);
+
+    return `${name}<br> Address:${address} <br>URN:${urn}, LAESTAB:${laestab}`;
 };
 
 export const setSchoolHiddenField = value => {
@@ -101,8 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const url = new URL(window.location);
                 url.searchParams.set(input.name, urnElement.value);
                 window.location = url;
-            }
-            else {
+            } else {
                 // URLSearchParams isn't supported, just update the search box value to the selected URN, this will cause the
                 // search box to display the URN visibly while the form is being submitted but this will only happen on old
                 // browsers.
