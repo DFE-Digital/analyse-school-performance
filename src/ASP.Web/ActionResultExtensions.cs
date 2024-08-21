@@ -1,5 +1,6 @@
 ﻿using ASP.Core.Helpers;
 using ASP.Core.Results;
+using ASP.Web.Core.Templating;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web
@@ -55,11 +56,10 @@ namespace ASP.Web
 
         private static IActionResult HandleError(Error error, IHostEnvironment hostEnvironment)
         {
-            // Check if the application is in development mode
-            if (hostEnvironment.IsDevelopment())
+            if (EnvironmentHelper.IsLocalDevelopment(hostEnvironment) || hostEnvironment.IsDevelopment())
             {
-                // Development-specific error handling
-                return error switch {
+                return error switch
+                {
                     NotFoundError e => new ObjectResult(e.ToString()) { StatusCode = StatusCodes.Status404NotFound },
                     NotAllowedError e => new ObjectResult(e.ToString()) { StatusCode = StatusCodes.Status403Forbidden },
                     UnexpectedError e => new ObjectResult(JsonHelper.Serialize(e)) { StatusCode = StatusCodes.Status500InternalServerError },
@@ -74,7 +74,8 @@ namespace ASP.Web
                 // `UseStatusCodePagesWithReExecute` will not trigger if the response body has already started to be written.
                 // Ensure that our `ToActionResult` method does not write to the response body directly for non-dev environments.
                 // Instead, it should only set the status code.
-                return error switch {
+                return error switch
+                {
                     NotFoundError => new StatusCodeResult(StatusCodes.Status404NotFound),
                     NotAllowedError => new StatusCodeResult(StatusCodes.Status403Forbidden),
                     _ => new StatusCodeResult(StatusCodes.Status500InternalServerError)

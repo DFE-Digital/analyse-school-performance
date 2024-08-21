@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
+    <ProjectReference Include="..\ASP.Web.Core\ASP.Web.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

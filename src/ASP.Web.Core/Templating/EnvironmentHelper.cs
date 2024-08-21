@@ -23,5 +23,17 @@ namespace ASP.Web.Core.Templating
         {
             return !environment.IsProduction();
         }
+
+        /// <summary>
+        /// This method checks if the current environment name matches the "Local" environment.
+        /// </summary>
+        /// <param name="environment">The <see cref="IHostEnvironment"/> representing the current hosting environment.</param>
+        /// <returns>
+        /// <c>true</c> if the current environment is set to "Local"; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsLocalDevelopment(IHostEnvironment environment)
+        {
+            return environment.IsEnvironment("Local");
+        }
     }
 }
