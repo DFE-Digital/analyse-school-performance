@@ -22,7 +22,7 @@ namespace ASP.Web.Features.Authentication
         {
             if (!(User?.Identity?.IsAuthenticated ?? false))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new { area = "Home" });
             }
 
             return SignOut(

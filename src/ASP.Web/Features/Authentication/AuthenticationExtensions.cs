@@ -111,7 +111,7 @@ namespace ASP.Web.Features.Authentication
                         if (isSpuriousAuthCbRequest)
                         {
                             context.HandleResponse();
-                            context.Response.Redirect("/error/forbidden");
+                            context.Response.Redirect("/error/forbidden/");
                         }
 
                         return Task.CompletedTask;
@@ -150,7 +150,10 @@ namespace ASP.Web.Features.Authentication
                             var organisation = principal.GetOrganisation();
                             if (organisation == null)
                             {
-                                context.Fail("User is not in an organisation");
+                                // Just return here, we don't want to throw an exception if the user doesn't have an organisation
+                                // as they won't then be able to sign out and select a different user (at least on Dev as it will show
+                                // the Developer Exception page which doesn't have a sign out link)
+                                return;
                             }
                             else
                             {
@@ -166,7 +169,10 @@ namespace ASP.Web.Features.Authentication
                                 var userAccess = userAccessResult.GetValueOrDefault(new UserAccess());
                                 if (!userAccess.Roles.Any())
                                 {
-                                    context.Fail("User has no roles");
+                                    // Just return here, we don't want to throw an exception if the user doesn't have an organisation
+                                    // as they won't then be able to sign out and select a different user (at least on Dev as it will show
+                                    // the Developer Exception page which doesn't have a sign out link)
+                                    return;
                                 }
                                 else
                                 {
