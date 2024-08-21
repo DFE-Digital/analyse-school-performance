@@ -50,12 +50,11 @@ namespace ASP.Test.Core
             CancellationToken cancellationToken = default
         ) where TItem : class
         {
-            var (skip, take) = PageHelper.ConstructPagingRequest(page, itemsPerPage);
-
             var result = _memoryStore.GetAll<TItem>(container)
                 .Map(all => {
                     var items = query(all.AsQueryable()).ToList();
-                    return new ResultsPage<TItem>(page, itemsPerPage, items.Count, items.Skip(skip).Take(take));
+                    var (skip, take, validPage) = PageHelper.ConstructPagingRequest(items.Count, page, itemsPerPage);
+                    return new ResultsPage<TItem>(validPage, itemsPerPage, items.Count, items.Skip(skip).Take(take));
                 });
  
             return Task.FromResult(result);

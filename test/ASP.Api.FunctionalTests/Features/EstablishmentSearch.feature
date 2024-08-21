@@ -779,7 +779,7 @@ Feature: Establishment Search
             "SearchTerm": "primary",
             "TotalResults": 3,
             "ResultsPerPage": 2,
-            "Page": 3,
+            "Page": 2,
             "Results": [
             ]
         }

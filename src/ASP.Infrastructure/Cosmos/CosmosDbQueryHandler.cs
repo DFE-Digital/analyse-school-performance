@@ -65,9 +65,10 @@ namespace ASP.Infrastructure.Cosmos
  
             var queryable = query(container.GetItemLinqQueryable<TItem>(false, null, new QueryRequestOptions { },
                 new CosmosLinqSerializerOptions { PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase }));
-            var count = await queryable.CountAsync(cancellationToken);
+            
+            var totalCount = await queryable.CountAsync(cancellationToken);
 
-            var (skip, take) = PageHelper.ConstructPagingRequest(page, itemsPerPage);
+            var (skip, take, validPage) = PageHelper.ConstructPagingRequest(totalCount, page, itemsPerPage);
 
             var feedIterator = queryable.Skip(skip).Take(take).ToFeedIterator();
  
@@ -85,7 +86,7 @@ namespace ASP.Infrastructure.Cosmos
                 }
             }
  
-            return new ResultsPage<TItem>(page, itemsPerPage, count, items);
+            return new ResultsPage<TItem>(validPage, itemsPerPage, totalCount, items);
         }
         
         private static async Task<IEnumerable<TItem>> ReadIterableItemsAsync<TItem>(

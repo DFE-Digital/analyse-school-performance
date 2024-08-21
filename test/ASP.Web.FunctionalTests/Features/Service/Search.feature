@@ -1671,3 +1671,14 @@ Examples:
   | 0    |
   | -1   |
  
+@Javascript:disabled
+Scenario: The PageNo parameter number greater than the total number of pages, the last page of results should be shown
+	Given 26 Establishments exist with properties:
+	  | urn          | name                        |
+	  | (100000 + n) | Primary School (100000 + n) |
+	When I navigate to /search/?page=50&search=Primary
+	Then the page title should be "Search results for "Primary" | Analyse school performance"
+	And the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 26 of 26 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=Primary&page=1"
+	And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-search-results-name-26']" should have the text content "Primary School 100026"

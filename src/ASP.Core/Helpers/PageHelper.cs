@@ -2,13 +2,17 @@
 
 public static class PageHelper
 {
-    public static (int Skip, int Take) ConstructPagingRequest(int page, 
+    public static (int Skip, int Take, int ValidPage) ConstructPagingRequest(int totalCount, int page, 
         int itemsPerSearchPage = Constants.SearchResultPageSize)
     {
-        int skip = Math.Max(0, page - 1) * itemsPerSearchPage;
-        int take = itemsPerSearchPage;
+        // Calculate the total number of pages
+        var totalPages = (int)Math.Ceiling((double)totalCount / itemsPerSearchPage);
+        // Adjust the requested page to be within the valid range
+        var validPage = Math.Max(1, Math.Min(totalPages, page));
+        var skip = Math.Max(0, validPage - 1) * itemsPerSearchPage;
+        var take = itemsPerSearchPage;
 
-        return (skip, take);
+        return (skip, take, validPage);
     }
 
 }
