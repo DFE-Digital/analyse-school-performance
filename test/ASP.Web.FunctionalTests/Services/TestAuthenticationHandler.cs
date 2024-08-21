@@ -23,6 +23,11 @@ namespace ASP.Web.FunctionalTests.Services
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
+            if (!_claims.Any())
+            {
+                return Task.FromResult(AuthenticateResult.NoResult());
+            }
+
             var identity = new ClaimsIdentity(_claims, AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, AuthenticationScheme);

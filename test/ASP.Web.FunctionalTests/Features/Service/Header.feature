@@ -2,11 +2,11 @@
 
 @Javascript:disabled
 Scenario: Header should contain user account and sign in links
+	Given I am a School Named user called "Jimmy Jones"
 	When I navigate to /
 	Then the element "#header-link-service-name" should have the text content "Analyse school performance"
-	# Commenting out until implemented
-	# And the element "#header-link-account-name" should have the text content "Account name"
-	# And the element "#header-link-sign-in" should have the text content "Sign in"
+	And the element "#header-link-account-name" should have the text content "Jimmy Jones (School Named)"
+	And the element "#header-link-sign-out" should have the text content "Sign out"
 
 @Javascript:disabled
 Scenario Outline: Any user can view the Home link
@@ -19,7 +19,7 @@ Examples:
 	| DfE Named       |
 	| DfE Unnamed     |
 	| Super Admin     |
-	| Ofsted          |
+	| Ofsted Unnamed  |
 	| LA Named        |
 	| LA Unnamed      |
     | MAT Named       |
@@ -54,7 +54,7 @@ Examples:
 	| DfE Named       |
 	| DfE Unnamed     |
 	| Super Admin     |
-	| Ofsted          |
+	| Ofsted Unnamed  |
 	| MAT Named       |
 	| MAT Unnamed     |
 	| School Named    |
@@ -76,7 +76,7 @@ Examples:
 	| DfE Named       |
 	| DfE Unnamed     |
 	| Super Admin     |
-	| Ofsted          |
+	| Ofsted Unnamed  |
 	| LA Named        |
 	| LA Unnamed      |
 	| MAT Named       |
@@ -120,7 +120,7 @@ Examples:
 	| DfE Named       |
 	| DfE Unnamed     |
 	| Super Admin     |
-	| Ofsted          |
+	| Ofsted Unnamed  |
 	| LA Named        |
 	| LA Unnamed      |
 	| MAT Named       |
@@ -161,7 +161,7 @@ Examples:
 	| School Named    |
 	| School Governor |
 	| Super Admin     |
-	| Ofsted          |
+	| Ofsted Unnamed  |
 
 
 @Javascript:disabled
@@ -175,7 +175,7 @@ Examples:
 	| DfE Named       |
 	| DfE Unnamed     |
 	| Super Admin     |
-	| Ofsted          |
+	| Ofsted Unnamed  |
 	| LA Named        |
 	| LA Unnamed      |
     | MAT Named       |
@@ -199,7 +199,7 @@ Examples:
 	| DfE Named       |
 	| DfE Unnamed     |
 	| Super Admin     |
-	| Ofsted          |
+	| Ofsted Unnamed  |
 	| LA Named        |
 	| LA Unnamed      |
     | MAT Named       |
@@ -223,7 +223,7 @@ Examples:
 	| DfE Named       |
 	| DfE Unnamed     |
 	| Super Admin     |
-	| Ofsted          |
+	| Ofsted Unnamed  |
 	| LA Named        |
 	| LA Unnamed      |
     | MAT Named       |

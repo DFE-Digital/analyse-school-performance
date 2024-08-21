@@ -1,4 +1,8 @@
 Feature: OtherReports
+
+Background:
+	Given I am a logged-in user
+
 @Javascript:disabled
 Scenario Outline: Other reports page should be accessible when valid urn is provided
     Given Establishment "136028" exists:

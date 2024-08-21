@@ -1,5 +1,8 @@
 ﻿Feature: Home page
 
+Background:
+	Given I am a logged-in user
+
 @Javascript:disabled
 Scenario Outline: Home page should be accessible from multiple paths
 	When I navigate to <Path>

@@ -1,9 +1,7 @@
 ﻿@using ASP.Web.Features.AnalyticsTrackingPreferences
-@{
-    var preferences = ViewData["AnalyticsTrackingPreferences"] as TrackingPreferencesModel;
-}
+@model TrackingPreferencesModel
 
-@if (preferences?.AnalyticsTracking == AnalyticsTracking.NotSet)
+@if (Model.AnalyticsTracking == AnalyticsTracking.NotSet)
 {
     <div id="app-cookie-banner" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
         <div class="govuk-cookie-banner__message govuk-width-container">
@@ -31,7 +29,7 @@
         </div>
     </div>
 }
-@if (preferences?.AnalyticsTrackingConfirmation == AnalyticsTrackingConfirmation.ShowBanner)
+@if (Model.AnalyticsTrackingConfirmation == AnalyticsTrackingConfirmation.ShowBanner)
 {
     <div id="app-cookie-confirmation-banner" class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Analyse school performance">
         <div class="govuk-cookie-banner__message govuk-width-container">
@@ -39,7 +37,7 @@
                 <div class="govuk-grid-column-two-thirds">
                     <div class="govuk-cookie-banner__content">
                         <p id="app-cookie-confirmation-banner-message" class="govuk-body">
-                            You have @(preferences.AnalyticsTracking == AnalyticsTracking.Accepted ? "accepted" : "rejected") additional cookies.
+                            You have @(Model.AnalyticsTracking == AnalyticsTracking.Accepted ? "accepted" : "rejected") additional cookies.
                             You can
                             <a class="govuk-link" href="/help/cookies">change your cookie settings</a>
                             at any time.

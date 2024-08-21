@@ -1,7 +1,7 @@
 ﻿Feature: LocalAuthority
 
     @Javascript:disabled
-    Scenario: my local authority page should be accessible when valid code is provided
+    Scenario: My local authority page should be accessible when valid code is provided
         Given I am a LA Named user for Local Authority "301"
         And Local Authority "301" exists:
         """
@@ -20,7 +20,7 @@
         And the element "[data-testid='breadcrumb-current-page']" should have the text content "My local authority"
 
     @Javascript:disabled
-    Scenario: my local authority page cards should be populated from the "la-landing-page" content template
+    Scenario: My local authority page cards should be populated from the "la-landing-page" content template
         Given I am a LA Unnamed user for Local Authority "301"
         And Local Authority "301" exists:
         """
@@ -35,7 +35,7 @@
         {
         	"Views": [
         		 {
-                          "ViewId": "Card"
+                     "ViewId": "Card"
                  }
         	]
         }
@@ -46,7 +46,7 @@
         And the elements "#app-card-container .app-card" should total 1
 
     @Javascript:disabled
-    Scenario: my local authority page cards should be populated correctly for a non-LA user with access to La
+    Scenario: My local authority page cards should be populated correctly for a non-LA user with access to La
         Given I am a Super Admin user
         And Content Template "la-landing-page" exists:
         """

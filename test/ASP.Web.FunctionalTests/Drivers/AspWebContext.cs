@@ -182,21 +182,26 @@ namespace ASP.Web.FunctionalTests.Drivers
                     // Add component test controller and views from ASP.Test.Web for isolated testing of components
                     // We can use AddMvcCore() here because it uses IServiceCollection.TryAddEnumerable() behind the scenes which
                     // is idempotent
-                    services.AddMvcCore()
-                          .AddApplicationPart(typeof(ComponentTestController).Assembly)
-                          .AddControllersAsServices();
+                    services
+                        .AddMvcCore()
+                        .AddApplicationPart(typeof(ComponentTestController).Assembly)
+                        .AddControllersAsServices();
 
                     //Add test authentication.
                     //This 'Test' authentication scheme will produce an 'IsAuthenticated = true' result
                     //which is requirement required to access controller actions decorated with the [Authorize] attribute
-                    services.AddAuthentication(options =>
-                    {
-                        options.DefaultAuthenticateScheme = TestAuthenticationHandler.AuthenticationScheme;
-                        options.DefaultScheme = TestAuthenticationHandler.AuthenticationScheme;
-                        options.DefaultChallengeScheme = TestAuthenticationHandler.AuthenticationScheme;
-                    })
-                   .AddScheme<TestAuthenticationHandlerOptions, TestAuthenticationHandler>
-                                         (TestAuthenticationHandler.AuthenticationScheme, options => { });
+                    services
+                        .AddAuthentication(options =>
+                        {
+                            options.DefaultAuthenticateScheme = TestAuthenticationHandler.AuthenticationScheme;
+                            options.DefaultScheme = TestAuthenticationHandler.AuthenticationScheme;
+                            options.DefaultChallengeScheme = TestAuthenticationHandler.AuthenticationScheme;
+                        })
+                        .AddScheme<TestAuthenticationHandlerOptions, TestAuthenticationHandler>(
+                            TestAuthenticationHandler.AuthenticationScheme, 
+                            options => { }
+                        );
+
                     services.AddAuthorization(options =>
                     {
                         TestPolicy.AddPolicies(options);
@@ -212,7 +217,7 @@ namespace ASP.Web.FunctionalTests.Drivers
                     // Add test implementation of table storage provider
                     services.RemoveAll<ITableStorageProvider>();
                     services.Add(new ServiceDescriptor(typeof(ITableStorageProvider), _tableStorageProvider));
-                    // Add service that provides Roles for use in authorisation tests
+                    // Add service that provides Roles for use in authorization tests
                     services.Add(new ServiceDescriptor(typeof(TestClaimsProvider), _testClaimsProvider));
 
                     if (testMode == "Development")

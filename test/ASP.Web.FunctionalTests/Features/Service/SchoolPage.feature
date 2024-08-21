@@ -1,4 +1,7 @@
 Feature: School Page
+
+Background:
+	Given I am a logged-in user
  
 @Javascript:disabled
 Scenario: School page should contain seven app card container element

@@ -3,6 +3,8 @@ using ASP.Core.Logging;
 using ASP.Core.Results;
 using ASP.Infrastructure.TableStorage;
 using ASP.Web.Core.Templating;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace ASP.Web.Features.ErrorHandling
@@ -13,18 +15,22 @@ namespace ASP.Web.Features.ErrorHandling
         private readonly RequestDelegate _next;
         private readonly IHostEnvironment _hostEnvironment;
         private readonly ITableStorageProvider _tableStorageProvider;
+        private readonly ErrorHandlingOptions _options;
 
         public StatusCodePageLoggingMiddleware(
             ILogger<StatusCodePageLoggingMiddleware> logger, 
             RequestDelegate next, 
             IHostEnvironment hostEnvironment, 
-            ITableStorageProvider tableStorageProvider
+            ITableStorageProvider tableStorageProvider,
+            IOptions<ErrorHandlingOptions> options
         )
         {
             _logger = logger;
             _next = next;
             _hostEnvironment = hostEnvironment;
             _tableStorageProvider = tableStorageProvider;
+            _options = (options ?? throw new ArgumentNullException(nameof(options)))
+                .Value;
         }
 
         /// <summary>
@@ -45,8 +51,9 @@ namespace ASP.Web.Features.ErrorHandling
         /// <param name="context"></param>
         public async Task InvokeAsync(HttpContext context)
         {
+            string body = "";
             using (var memoryStream = new MemoryStream())
-            using(var memoryStreamReader = new StreamReader(memoryStream))
+            using (var memoryStreamReader = new StreamReader(memoryStream))
             {
                 var originalBodyStream = context.Response.Body;
 
@@ -64,7 +71,9 @@ namespace ASP.Web.Features.ErrorHandling
                 // Prepare the custom error response directly here
                 context.Response.Body = originalBodyStream;
 
-                if(context.Response.StatusCode == (int)HttpStatusCode.InternalServerError) {
+                // Handle Developer Exception page
+                if (context.Response.StatusCode == (int)HttpStatusCode.InternalServerError)
+                {
                     // Getting the first line of the response body to check
                     var firstLine = await memoryStreamReader.ReadLineAsync();
 
@@ -82,7 +91,8 @@ namespace ASP.Web.Features.ErrorHandling
                     }
                 }
 
-                if (context.Request.Path.Equals("/error/", StringComparison.OrdinalIgnoreCase) ||
+                // Handle non-error responses
+                if (context.Request.Path.StartsWithSegments("/error/", StringComparison.OrdinalIgnoreCase) ||
                     (string)(context.Request.RouteValues["controller"] ?? "") == "Error" ||
                     context.Response.StatusCode == (int)HttpStatusCode.OK ||
                     context.Response.StatusCode == (int)HttpStatusCode.NotModified ||
@@ -95,65 +105,69 @@ namespace ASP.Web.Features.ErrorHandling
                     return;
                 }
 
-                // Assume by this point that the response body is the error message
-                string body = await memoryStreamReader.ReadToEndAsync();
-                (string errorMessage, string? stackTrace) = context.Response.StatusCode switch {
-                    500 => JsonHelper.DeserializeNotNull<UnexpectedError>(body)
-                        .Match(e => (e.Message, e.StackTrace), _ => (body, null)),
-                    _ => (body, null)
-                };
+                body = await memoryStreamReader.ReadToEndAsync();
+            }
 
-                var scheme = context.Request.Scheme;
-                var host = context.Request.Headers.ContainsKey("X-Forwarded-Host")
-                    ? context.Request.Headers["X-Forwarded-Host"].ToString()
-                    : context.Request.Host.ToString();
-                var path = context.Request.Path;
-                var queryString = context.Request.QueryString;
-                var url = $"{scheme}://{host}{path}{queryString}";
+            (string errorMessage, string? stackTrace) = context.Response.StatusCode switch {
+                500 => JsonHelper.DeserializeNotNull<UnexpectedError>(body)
+                    .Match(e => (e.Message, e.StackTrace), _ => (body, null)),
+                _ => (body, null)
+            };
 
-                var problemDetails = new ProblemDetails {
-                    StatusCode = context.Response.StatusCode,
-                    Type = context.Response.StatusCode.ToString(),
-                    Title = errorMessage,
-                    Detail = url,
-                };
+            var scheme = context.Request.Scheme;
+            var host = context.Request.Headers.ContainsKey("X-Forwarded-Host")
+                ? context.Request.Headers["X-Forwarded-Host"].ToString()
+                : context.Request.Host.ToString();
+            var path = context.Request.Path;
+            var queryString = context.Request.QueryString;
+            var url = $"{scheme}://{host}{path}{queryString}";
 
-                var tableStorageProblemDetails = new TableStorageProblemDetails(context, context.Response.StatusCode.ToString());
+            var problemDetails = new ProblemDetails {
+                StatusCode = context.Response.StatusCode,
+                Type = context.Response.StatusCode.ToString(),
+                Title = errorMessage,
+                Detail = url,
+            };
 
-                await _tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails))
-                    .Switch(
-                        success => _logger.LogInformation(success),
-                        failure => _logger.LogError(failure.ToString())
-                    );
+            var tableStorageProblemDetails = new TableStorageProblemDetails(context, context.Response.StatusCode.ToString());
 
-                var errorViewModel = new ErrorViewModel {
-                    ErrorCode = context.TraceIdentifier
-                };
+            await _tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails))
+                .Switch(
+                    success => _logger.LogInformation(success),
+                    failure => _logger.LogError(failure.ToString())
+                );
 
-                if (EnvironmentHelper.ShouldShowErrorMessage(_hostEnvironment))
+            if (EnvironmentHelper.ShouldShowErrorMessage(_hostEnvironment))
+            { 
+                context.Items["ErrorMessage"] = errorMessage;
+                if (_options.ShowStackTrace)
                 {
-                    errorViewModel.ErrorMessage = errorMessage;
-                    errorViewModel.StackTrace = stackTrace;
+                    context.Items["StackTrace"] = stackTrace;
                 }
-
-                var view = GetErrorView(context.Response.StatusCode);
-
-                context.Response.ContentType = "text/html";
-                await context.RenderViewAsync(view, errorViewModel);
             }
-        }
-        
-        private string GetErrorView(int statusCode)
-        {
-            switch (statusCode)
+
+            // Continue execution with the ErrorController
+            context.Request.Path = context.Response.StatusCode switch {
+                (int)HttpStatusCode.NotFound => "/error/pagenotfound/",
+                (int)HttpStatusCode.Forbidden => "/error/accessdenied/",
+                _ => "/error/servererror/"
+            };
+            context.Request.QueryString = new QueryString();
+
+            // Reset content type and route values that were set from the initial pass
+            context.Response.ContentType = null;
+            context.SetEndpoint(endpoint: null);
+            var routeValuesFeature = context.Features.Get<IRouteValuesFeature>();
+            if (routeValuesFeature != null)
             {
-                case (int)HttpStatusCode.NotFound:
-                    return "~/Features/ErrorHandling/PageNotFoundError.cshtml";
-                case (int)HttpStatusCode.Forbidden:
-                    return "~/Features/ErrorHandling/AccessDenied.cshtml";
-                default:
-                    return "~/Features/ErrorHandling/ServerError.cshtml";
+                routeValuesFeature.RouteValues = null!;
             }
+
+            await _next(context);
+
+            // Reset back to original path
+            context.Request.QueryString = queryString;
+            context.Request.Path = path;
         }
     }
 }

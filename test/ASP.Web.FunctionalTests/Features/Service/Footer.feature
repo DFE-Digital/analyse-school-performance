@@ -1,5 +1,8 @@
 Feature: Page footer
 
+Background:
+	Given I am a logged-in user
+
 @Javascript:disabled
 Scenario: Footer should display Contact link
 	When I navigate to /

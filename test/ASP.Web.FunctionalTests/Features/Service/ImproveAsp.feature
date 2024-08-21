@@ -1,5 +1,8 @@
 ﻿Feature: Improve ASP details
 
+Background:
+	Given I am a logged-in user
+
 @Javascript:disabled
 Scenario: Improve ASP details reveal should contain three external links
 	When I navigate to /

@@ -1,5 +1,8 @@
 Feature: Search Page
 
+Background:
+	Given I am a logged-in user
+
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns results
 	Given Establishment "111111" exists:

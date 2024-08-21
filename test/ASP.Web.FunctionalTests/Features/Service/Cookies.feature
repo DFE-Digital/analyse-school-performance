@@ -1,5 +1,8 @@
 Feature: Cookies component
 
+Background:
+	Given I am a logged-in user
+
 @Javascript:disabled
 Scenario: Analytics cookie preference defaults to "Do not use' when cookie choice has not been made
 	Given Content Template "help-cookies" exists:

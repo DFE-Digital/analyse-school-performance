@@ -37,7 +37,7 @@ namespace ASP.Api
                     services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
 
                     services.AddCosmosDbDependencies();
-                    services.AddUseCases();
+                    services.RegisterUseCases();
                     services.ConfigureSearchStrategyFactory();
                     services.ConfigureSearchServices();
 

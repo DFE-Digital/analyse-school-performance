@@ -4,6 +4,7 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Core.Results;
 using ASP.Web;
 using ASP.Web.Core.Templating;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 
@@ -18,6 +19,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
     // keeping application and test code separate
     [Area("ComponentTest")]
     [Route("component-test")]
+    [AllowAnonymous]
     public class ComponentTestController : Controller
     {
         public const string TEST_COMPONENT_TEMPLATE_ID = "test-component";

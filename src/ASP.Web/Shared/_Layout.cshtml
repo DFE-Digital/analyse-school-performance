@@ -1,6 +1,9 @@
 @using ASP.Web.Features.AnalyticsTrackingPreferences
+@using System.Security.Claims
+
 @{
-    var preferences = ViewData["AnalyticsTrackingPreferences"] as TrackingPreferencesModel;
+    TrackingPreferencesModel preferences = ViewData["AnalyticsTrackingPreferences"] as TrackingPreferencesModel 
+        ?? new TrackingPreferencesModel();
 }
 
 <!DOCTYPE html>
@@ -20,7 +23,7 @@
     <link rel="stylesheet" href="/assets/css/app.css" add-nonce="true" />
     <link rel="stylesheet" href="/assets/css/components.css" add-nonce="true" />
 
-    @if (preferences?.AnalyticsTracking == AnalyticsTracking.Accepted)
+    @if (preferences.AnalyticsTracking == AnalyticsTracking.Accepted)
     {
         //Add analytics tracking
         <script id="app-analytics-tracking-code"></script>
@@ -33,7 +36,7 @@
         document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
     </script>
 
-    <partial name="~/Features/AnalyticsTrackingPreferences/_CookieBannerPartial.cshtml" />
+    <partial name="~/Features/AnalyticsTrackingPreferences/_CookieBannerPartial.cshtml" model="preferences" />
 
     <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
     <header class="govuk-header app-header" role="banner" data-module="govuk-header">
@@ -60,16 +63,17 @@
                 </a>
             </div>
 
-            <!-- Hide until implemented
             <div class="app-header__content-account-signin">
-                <a id="header-link-account-name" href="#" class="govuk-header__link app-header__link-username">
-                    Account name
+                <a id="header-link-account-name" href="@ViewData["UserProfileUrl"]" class="govuk-header__link app-header__link-username">
+                    @ViewData["UserName"]
+                    @if(ViewData["UserRole"] != null) {
+                        <span>(@ViewData["UserRole"])</span>
+                    }
                 </a>
-                <a id="header-link-sign-in" href="#" class="govuk-header__link app-header__link-signin">
-                    Sign in
+                <a id="header-link-sign-out" asp-controller="Account" asp-action="Logout" class="govuk-header__link app-header__link-signout">
+                    Sign out
                 </a>
             </div>
-            -->
 
             <button type="button" class="govuk-header__menu-button app-header__menu-button govuk-js-header-toggle" aria-controls="navigation" hidden>Menu</button>
         </div>

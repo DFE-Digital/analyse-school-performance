@@ -32,9 +32,9 @@ namespace ASP.Infrastructure.Dsi.DsiApiClientProvider
 
             string encodedDsiAccessToken = CreateEncodedDsiAccessToken();
 
-            string dsiAuthorisationUrl = _dsiPublicApiConfiguration.DsiApiAuthorisationUrl!.TrimEnd('/');
+            string dsiAuthorizationUrl = _dsiPublicApiConfiguration.DsiApiAuthorizationUrl!.TrimEnd('/');
 
-            _httpClient.BaseAddress = new Uri(dsiAuthorisationUrl);
+            _httpClient.BaseAddress = new Uri(dsiAuthorizationUrl);
 
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(TokenMediaType));

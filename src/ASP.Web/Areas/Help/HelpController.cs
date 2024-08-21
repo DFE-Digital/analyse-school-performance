@@ -4,7 +4,7 @@ using ASP.Web.Core.Templating;
 using ASP.Application;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using Microsoft.AspNetCore.Authorization;
-using ASP.Web.Features.Authorisation;
+using ASP.Web.Features.Authorization;
 
 namespace ASP.Web.Areas.Help
 {

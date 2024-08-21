@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Test.Web.Areas.ErrorTest
 {
@@ -9,6 +10,7 @@ namespace ASP.Test.Web.Areas.ErrorTest
     //
     [Area("ErrorTest")]
     [Route("error-test")]
+    [AllowAnonymous]
     public class ErrorTestController : Controller
     {
         [HttpGet("throw-exception")]

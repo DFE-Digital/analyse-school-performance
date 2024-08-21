@@ -1,5 +1,8 @@
 Feature: Phase feedback banner
 
+Background:
+	Given I am a logged-in user
+
 @Javascript:disabled
 Scenario: Phase feedback banner text should contain an external link
 	When I navigate to /

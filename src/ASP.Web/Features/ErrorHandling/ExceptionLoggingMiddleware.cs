@@ -29,15 +29,26 @@ namespace ASP.Web.Features.ErrorHandling
                 Detail = exception.StackTrace,
             };
 
-            if (_options.ShowStackTrace)
-            {
-                httpContext.Items["Exception"] = exception;
-            }
-
             await tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails))
                 .Switch(
                     success => logger.LogInformation(success),
                     failure => logger.LogError(failure.ToString()));
+
+            string errorMessage = exception.Message;
+            string? stackTrace = exception.StackTrace;
+
+            while (exception.InnerException != null)
+            {
+                exception = exception.InnerException;
+                errorMessage += " " + exception.Message;
+                stackTrace += " " + exception.StackTrace;
+            }
+
+            httpContext.Items["ErrorMessage"] = errorMessage;
+            if (_options.ShowStackTrace)
+            {
+                httpContext.Items["StackTrace"] = stackTrace;
+            }
 
             return false;
         }

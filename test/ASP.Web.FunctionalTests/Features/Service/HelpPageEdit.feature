@@ -1,5 +1,44 @@
 ﻿Feature: Help page (edit)
 
+@Javascript:disabled
+Scenario: Edit button should show when user has admin role
+	Given published Content Template "help-test" exists:
+	"""
+	{
+	}
+	"""
+	And I am a <Role> user
+	When I navigate to /help/test
+	Then I should get a 200 response
+	And the element "[data-testid="content-edit"]" should have the text content "Edit this page"
+	And the element "[data-testid="content-edit"]" should have the href "/help/test/edit/"
+Examples: 
+	| Role        |
+	| Super Admin |
+
+@Javascript:disabled
+Scenario: Edit button should not show when user does not have admin role
+	Given published Content Template "help-test" exists:
+	"""
+	{
+	}
+	"""
+	And I am a <Role> user
+    When I navigate to /help/test
+	Then the element "[data-testid="content-edit"]" should not exist
+Examples: 
+	| Role            |
+	| DfE Named       |
+	| DfE Unnamed     |
+	| Ofsted Unnamed  |
+	| MAT Named       |
+	| MAT Unnamed     |
+	| School Named    |
+	| School Unnamed  |
+	| Diocese Named   |
+	| Diocese Unnamed |
+	| MAT Governor    |
+	| School Governor |
 
 @Javascript:disabled
 Scenario: A admin user should be able to access the 'edit' page.
@@ -246,7 +285,7 @@ Examples:
 	| Role            |
 	| DfE Named       |
 	| DfE Unnamed     |
-	| Ofsted          |
+	| Ofsted Unnamed  |
 	| MAT Named       |
 	| MAT Unnamed     |
 	| School Named    |

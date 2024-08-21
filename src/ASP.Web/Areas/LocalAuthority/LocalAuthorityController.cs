@@ -3,7 +3,7 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
-using ASP.Web.Features.Authorisation;
+using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

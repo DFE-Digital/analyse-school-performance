@@ -1,14 +1,14 @@
-using ASP.Core.Authorisation;
+using ASP.Core.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ASP.Test.Web.Areas.AuthorisationTest
+namespace ASP.Test.Web.Areas.AuthorizationTest
 {
-    [Area("AuthorisationTest")]
+    [Area("AuthorizationTest")]
     [Route("named-data")]
-    public class AuthorisationTestController : Controller
+    public class AuthorizationTestController : Controller
     {
-        public AuthorisationTestController()
+        public AuthorizationTestController()
         {
         }
 
@@ -23,7 +23,7 @@ namespace ASP.Test.Web.Areas.AuthorisationTest
         [HttpGet("get-named-data-by-claim")]
         public ActionResult GetNamedDataByClaim()
         {
-            return User.Claims.Any(x => x.Value == Roles.DfeNamed)
+            return User.HasRole(Role.DfeNamed)
                 ? Content("<p>Named data visible</p>", "text/html")
                 : Content("<p>Named data not visible</p>", "text/html");
         }

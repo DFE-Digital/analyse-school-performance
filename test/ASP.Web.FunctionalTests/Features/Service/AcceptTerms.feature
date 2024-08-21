@@ -1,20 +1,23 @@
 Feature: Accept terms
 
+Background:
+	Given I am a logged-in user
+
 @Javascript:disabled
 Scenario: Continue button exists on terms of use page
 	Given Content Template "help-accept-terms-of-use" exists:
-		"""
-		{
-			"Views": [
-				{
-					"ViewId": "AcceptTerms",
-				}
-			]
-		}
-		"""
-	Given I navigate to <Path>
+	"""
+	{
+		"Views": [
+			{
+				"ViewId": "AcceptTerms",
+			}
+		]
+	}
+	"""
+	When I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should be <Path>
+	And the path should be <Path>
 	When I click the button "#app-accept-terms-button"
 	Then the cookie "AcceptedTermsOfUse" should be set to "Accepted"
 Examples:
@@ -24,9 +27,9 @@ Examples:
 
 @Javascript:disabled
 Scenario: Should not be redirected to accept terms when Accepted terms cookie is set to Accepted
-	Given I navigate to <Path>
+	When I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should be <Path>
+	And the path should be <Path>
 Examples:
 	| Path           |
 	| /              |
@@ -35,22 +38,36 @@ Examples:
 
 
 @Javascript:disabled
+Scenario: Should not be redirected to accept terms when page not found
+	When I navigate to /non-existent-page
+	Then I should get a 404 response
+	And the path should be /non-existent-page/
+
+
+@Javascript:disabled
+Scenario: Should not be redirected to accept terms on server error
+	When the application throws an exception
+	Then I should get a 500 response
+	And the path should be /error-test/throw-exception/
+
+
+@Javascript:disabled
 Scenario: Should get redirected to Accept terms when Accepted terms cookie is set to Rejected
 	Given Content Template "help-accept-terms-of-use" exists:
-		"""
-		{
-			"Views": [
-				{
-					"ViewId": "AcceptTerms",
-				}
-			]
-		}
-		"""
-	Given the cookie "AcceptedTermsOfUse" has been set to "Rejected"
-	And I navigate to <Path>
+	"""
+	{
+		"Views": [
+			{
+				"ViewId": "AcceptTerms",
+			}
+		]
+	}
+	"""
+	And the cookie "AcceptedTermsOfUse" has been set to "Rejected"
+	When I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should be <ExpectedPath>
-	Then the element "#app-accept-terms-button" should exist
+	And the path should be <ExpectedPath>
+	And the element "#app-accept-terms-button" should exist
 Examples:
 	| Path | ExpectedPath               |
 	| /    | /help/accept-terms-of-use/ |
@@ -59,22 +76,22 @@ Examples:
 @Javascript:disabled
 Scenario: Should set referral url when Accepted terms cookie is set to Rejected
 	Given Content Template "help-accept-terms-of-use" exists:
-		"""
-		{
-			"Views": [
-				{
-					"ViewId": "AcceptTerms",
-				}
-			]
-		}
-		"""
-	Given the cookie "AcceptedTermsOfUse" has been set to "Rejected"
-	And I navigate to <Path>
+	"""
+	{
+		"Views": [
+			{
+				"ViewId": "AcceptTerms",
+			}
+		]
+	}
+	"""
+	And the cookie "AcceptedTermsOfUse" has been set to "Rejected"
+	When I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should be <ExpectedPath>
-	Then the element "#app-accept-terms-button" should exist
+	And the path should be <ExpectedPath>
+	And the element "#app-accept-terms-button" should exist
 Examples:
-	| Path           | ExpectedPath                                       |
+	| Path           | ExpectedPath                                        |
 	| /school/136028 | /help/accept-terms-of-use/?referrer=/school/136028/ |
 	| /download      | /help/accept-terms-of-use/?referrer=/download/      |
 	| /news          | /help/accept-terms-of-use/?referrer=/news/          |
@@ -83,18 +100,18 @@ Examples:
 @Javascript:disabled
 Scenario: Clicking Continue should set terms of use cookie to Accepted
 	Given Content Template "help-accept-terms-of-use" exists:
-		"""
-		{
-			"Views": [
-				{
-					"ViewId": "AcceptTerms",
-				}
-			]
-		}
-		"""
-	Given the cookie "AcceptedTermsOfUse" has been set to "Rejected"
-	Given I navigate to <Path>
-	When I click the button "#app-accept-terms-button"
+	"""
+	{
+		"Views": [
+			{
+				"ViewId": "AcceptTerms",
+			}
+		]
+	}
+	"""
+	And the cookie "AcceptedTermsOfUse" has been set to "Rejected"
+	When I navigate to <Path>
+	And I click the button "#app-accept-terms-button"
 	Then the cookie "AcceptedTermsOfUse" should be set to "Accepted"
 Examples:
 	| Path                      |
@@ -102,32 +119,31 @@ Examples:
 
 @Javascript:disabled
 Scenario: Should redirect to the correct referrer
-    Given Establishment "136028" exists:
-        """
-        {
-            "name": "Some Primary School"
-        }
-        """
-	Given Content Template "help-accept-terms-of-use" exists:
-		"""
-		{
-			"Views": [
-				{
-					"ViewId": "AcceptTerms",
-				}
-			]
-		}
-		"""
-	Given the cookie "AcceptedTermsOfUse" has been set to "Rejected"
-	And I navigate to <Path>
+	Given Establishment "136028" exists:
+	"""
+	{
+		"name": "Some Primary School"
+	}
+	"""
+	And Content Template "help-accept-terms-of-use" exists:
+	"""
+	{
+		"Views": [
+			{
+				"ViewId": "AcceptTerms",
+			}
+		]
+	}
+	"""
+	And the cookie "AcceptedTermsOfUse" has been set to "Rejected"
+	When I navigate to <Path>
 	Then I should get a 200 response
-	Then the path should be <ExpectedPath>
-	Then the element "#app-accept-terms-button" should exist
+	And the path should be <ExpectedPath>
+	And the element "#app-accept-terms-button" should exist
 	When I click the button "#app-accept-terms-button"
 	Then the path should be <Path>
-
 Examples:
-	| Path            | ExpectedPath                                       |
+	| Path            | ExpectedPath                                        |
 	| /school/136028/ | /help/accept-terms-of-use/?referrer=/school/136028/ |
 	| /download/      | /help/accept-terms-of-use/?referrer=/download/      |
 	| /news/          | /help/accept-terms-of-use/?referrer=/news/          |

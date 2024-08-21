@@ -1,14 +1,18 @@
-﻿using ASP.Core.Authorisation;
+﻿using ASP.Core.Authorization;
 using ASP.Web.FunctionalTests.Drivers;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
     [Binding]
-    public class AuthorisationStepDefinitions
+    public class AuthorizationStepDefinitions
     {
+        private const string ScopedRoles = "LA Named|LA Unnamed|MAT Named|MAT Unnamed|MAT Governor|School Named|School Unnamed|School Governor|Diocese Named|Diocese Unnamed";
+        private const string UnscopedRoles = "DfE Named|DfE Unnamed|Super Admin|Ofsted Unnamed";
+        private const string AllRoles = $"{UnscopedRoles}|{ScopedRoles}";
+
         private readonly AspWebContext _web;
 
-        public AuthorisationStepDefinitions(AspWebContext web)
+        public AuthorizationStepDefinitions(AspWebContext web)
         {
             _web = web;
         }
@@ -18,123 +22,114 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         {
             _web.TestClaimsProvider.ClearClaims();
         }
-        
-        [Given($@"I am an? (DfE Named|DfE Unnamed|Super Admin|Ofsted|LA Named|LA Unnamed|MAT Named|MAT Unnamed|School Named|School Unnamed|Diocese Named|Diocese Unnamed|MAT Governor|School Governor) user")]
-        public void GivenIAmAUserWithTheRole(string role)
+
+        [Given($@"I am a logged-in user")]
+        public void GivenIAmALoggedInUser()
         {
-            switch (role)
+            _web.TestClaimsProvider.ClearClaims();
+            _web.TestClaimsProvider.SetRole(Role.SchoolUnnamed);
+        }
+
+        [Given($@"I am a logged-in user called ""(.+) (.+)""")]
+        public void GivenIAmALoggedInUserCalled(string firstName, string lastName)
+        {
+            _web.TestClaimsProvider.ClearClaims();
+            _web.TestClaimsProvider.SetRole(Role.SchoolUnnamed);
+            _web.TestClaimsProvider.SetName(firstName, lastName);
+        }
+
+        [Given($@"I am an? ({AllRoles}) user")]
+        public void GivenIAmAUserWithTheRole(string roleName)
+        {
+            _web.TestClaimsProvider.ClearClaims();
+            var role = Role.FromName(roleName);
+
+            if(role is null)
             {
-                case "DfE Named":
-                    _web.TestClaimsProvider.SetRole(Roles.DfeNamed);
-                    break;
-                case "DfE Unnamed":
-                    _web.TestClaimsProvider.SetRole(Roles.DfeUnnamed);
-                    break;
-                case "Super Admin":
-                    _web.TestClaimsProvider.SetRole(Roles.SuperUser);
-                    break;
-                case "Ofsted":
-                    _web.TestClaimsProvider.SetRole(Roles.OfstedUnnamed);
-                    break;
+                throw new ArgumentException($"Unknown role: {roleName}");
+            }
+
+            _web.TestClaimsProvider.SetRole(role);
+        }
+
+        [Given($@"I am an? ({AllRoles}) user called ""(.+) (.+)""")]
+        public void GivenIAmAUserWithTheRoleCalled(string roleName, string firstName, string lastName)
+        {
+            _web.TestClaimsProvider.ClearClaims();
+            var role = Role.FromName(roleName);
+
+            if (role is null)
+            {
+                throw new ArgumentException($"Unknown role: {roleName}");
+            }
+
+            _web.TestClaimsProvider.SetRole(role);
+            _web.TestClaimsProvider.SetName(firstName, lastName);
+        }
+
+        [Given($@"I am an? ({ScopedRoles}) user for (Local Authority|Multi-Academy Trust|Diocese|Establishment) ""(.+)""")]
+        public void GivenIAmAUserWithTheRoleFor(string roleName, string identifierType, string identifierValue)
+        {
+            var role = Role.FromName(roleName);
+
+            if (role is null)
+            {
+                throw new ArgumentException($"Unknown role: {roleName}");
+            }
+
+            switch (roleName)
+            {
                 case "LA Named":
-                    _web.TestClaimsProvider.SetRole(Roles.LaNamed);
-                    break;
                 case "LA Unnamed":
-                    _web.TestClaimsProvider.SetRole(Roles.LaUnnamed);
+                    SetupLAUser(role, identifierValue);
                     break;
                 case "MAT Named":
-                    _web.TestClaimsProvider.SetRole(Roles.MatNamed);
-                    break;
                 case "MAT Unnamed":
-                    _web.TestClaimsProvider.SetRole(Roles.MatUnnamed);
+                case "MAT Governor":
+                    SetupMatUser(role, identifierValue);
                     break;
                 case "School Named":
-                    _web.TestClaimsProvider.SetRole(Roles.SchoolNamed);
-                    break;
                 case "School Unnamed":
-                    _web.TestClaimsProvider.SetRole(Roles.SchoolUnnamed);
+                case "School Governor":
+                    SetupEstablishmentUser(role, identifierValue);
                     break;
                 case "Diocese Named":
-                    _web.TestClaimsProvider.SetRole(Roles.DioceseNamed);
-                    break;
                 case "Diocese Unnamed":
-                    _web.TestClaimsProvider.SetRole(Roles.DioceseUnnamed);
-                    break;
-                case "MAT Governor":
-                    _web.TestClaimsProvider.SetRole(Roles.MatGovernor);
-                    break;
-                case "School Governor":
-                    _web.TestClaimsProvider.SetRole(Roles.SchoolGovernor);
+                    SetupDioceseUser(role, identifierValue);
                     break;
                 default:
-                    throw new ArgumentException($"Unknown role: {role}");
+                    break;
             }
         }
 
-        [Given($@"I am an? (LA Named|LA Unnamed|MAT Named|MAT Unnamed|MAT Governor|School Named|School Unnamed|School Governor|Diocese Named|Diocese Unnamed) user for (Local Authority|Multi-Academy Trust|Diocese|Establishment) ""(.+)""")]
-        public void GivenIAmAUserWithTheRoleFor(string role, string identifierType, string identifierValue)
+        private void SetupLAUser(Role role, string laCode)
         {
-            switch (role)
-            {
-                case "LA Named":
-                    SetupLAUser(Roles.LaNamed, identifierValue);
-                    break;
-                case "LA Unnamed":
-                    SetupLAUser(Roles.LaUnnamed, identifierValue);
-                    break;
-                case "MAT Named":
-                    SetupMatUser(Roles.MatNamed, identifierValue);
-                    break;
-                case "MAT Unnamed":
-                    SetupMatUser(Roles.MatUnnamed, identifierValue);
-                    break;
-                case "MAT Governor":
-                    SetupMatUser(Roles.MatGovernor, identifierValue);
-                    break;
-                case "School Named":
-                    SetupEstablishmentUser(Roles.SchoolNamed, identifierValue);
-                    break;
-                case "School Unnamed":
-                    SetupEstablishmentUser(Roles.SchoolUnnamed, identifierValue);
-                    break;
-                case "School Governor":
-                    SetupEstablishmentUser(Roles.SchoolGovernor, identifierValue);
-                    break;
-                case "Diocese Named":
-                    SetupDioceseUser(Roles.DioceseNamed, identifierValue);
-                    break;
-                case "Diocese Unnamed":
-                    SetupDioceseUser(Roles.DioceseUnnamed, identifierValue);
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown role: {role}");
-            }
-        }
-
-        private void SetupLAUser(string role, string laCode)
-        {
+            _web.TestClaimsProvider.ClearClaims();
+            _web.TestClaimsProvider.SetRole(role);
             _web.TestClaimsProvider.SetCategory("002", "Local Authority");
             _web.TestClaimsProvider.SetEstablishmentNumber(laCode);
-            _web.TestClaimsProvider.SetRole(role);
         }
 
-        private void SetupDioceseUser(string role, string dioceseName)
+        private void SetupDioceseUser(Role role, string dioceseName)
         {
+            _web.TestClaimsProvider.ClearClaims();
+            _web.TestClaimsProvider.SetRole(role);
             _web.TestClaimsProvider.SetCategory("008", "Other Stakeholders");
             _web.TestClaimsProvider.SetOrganisationName(dioceseName);
-            _web.TestClaimsProvider.SetRole(role);
         }
 
-        private void SetupMatUser(string role, string matId)
+        private void SetupMatUser(Role role, string matId)
         {
-            _web.TestClaimsProvider.SetUid(matId);
+            _web.TestClaimsProvider.ClearClaims();
             _web.TestClaimsProvider.SetRole(role);
+            _web.TestClaimsProvider.SetUid(matId);
         }
         
-        private void SetupEstablishmentUser(string role, string urn)
+        private void SetupEstablishmentUser(Role role, string urn)
         {
-            _web.TestClaimsProvider.SetUrn(urn);
+            _web.TestClaimsProvider.ClearClaims();
             _web.TestClaimsProvider.SetRole(role);
+            _web.TestClaimsProvider.SetUrn(urn);
         }
     }
 }

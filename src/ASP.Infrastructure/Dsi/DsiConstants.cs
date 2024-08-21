@@ -7,7 +7,7 @@
 
         public const string DsiApiClientId = "DsiApiClientId";
         public const string DsiApiClientSecret = "DsiApiClientSecret";
-        public const string DsiApiAuthorisationUrl = "DsiApiAuthorisationUrl";
+        public const string DsiApiAuthorizationUrl = "DsiApiAuthorizationUrl";
         public const string DsiApiAudience = "DsiApiAudience";
 
         //DSI Authentication configuration
@@ -21,6 +21,7 @@
         public const string DsiIssuer = "DsiIssuer";
         public const string DsiMetadataAddress = "DsiMetadataAddress";
         public const string DsiServiceId = "DsiServiceId";
+        public const string DsiProfileUrl = "DsiProfileUrl";
 
         public const string DsiScopeOpenId = "openid";
         public const string DsiScopeEmail = "email";

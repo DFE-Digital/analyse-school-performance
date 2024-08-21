@@ -1,4 +1,4 @@
-﻿using ASP.Core.Authorisation;
+﻿using ASP.Core.Authorization;
 using System.Security.Claims;
 
 namespace ASP.Web.FunctionalTests.Services;
@@ -38,14 +38,19 @@ public class TestClaimsProvider
         _claims.Add(new Claim(CustomClaimTypes.OrganisationName, organisationName));
     }
 
-    public void SetRole(string role)
+    public void SetRole(Role role)
     {
-        _claims.Add(new Claim(ClaimTypes.Role, role));
+        _claims.Add(new Claim(ClaimTypes.Role, role.Code));
     }
 
     public void ClearClaims()
     {
         _claims.Clear();
-        _claims.Add(new Claim(ClaimTypes.Role, ""));
+    }
+
+    internal void SetName(string firstName, string lastName)
+    {
+        _claims.Add(new Claim(ClaimTypes.GivenName, firstName));
+        _claims.Add(new Claim(ClaimTypes.Surname, lastName));
     }
 }

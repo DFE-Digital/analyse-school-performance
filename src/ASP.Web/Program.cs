@@ -1,15 +1,12 @@
-using ASP.Infrastructure;
 using ASP.Infrastructure.Api;
-using ASP.Web.Areas;
-using ASP.Web.Areas.LocalAuthority;
-using ASP.Web.Areas.School;
+using ASP.Web.Areas.Search;
 using ASP.Web.Components;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features;
 using ASP.Web.Features.AnalyticsTrackingPreferences;
 using ASP.Web.Features.ApplicationServiceVersion;
 using ASP.Web.Features.Authentication;
-using ASP.Web.Features.Authorisation;
+using ASP.Web.Features.Authorization;
 using ASP.Web.Features.ContentSecurityPolicy;
 using ASP.Web.Features.ContentTemplates;
 using ASP.Web.Features.Cookies;
@@ -27,13 +24,15 @@ namespace ASP.Web
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             builder.Services
-                .ConfigureApp(builder.Configuration)
-                .ConfigureAppEnvironment(builder.Configuration)
-                .ConfigureAreas()
-                .ConfigureFeatures(builder.Configuration)
+                .ConfigureSettings(builder.Configuration)
+                .ConfigureRouting()
+                .ConfigureFeatures()
+
+                .ConfigureViews()
+                
                 .ConfigureWebComponents()
                 .ConfigureDsiAuthentication(builder.Configuration)
-                .ConfigureAuthorisation(builder.Configuration)
+                .ConfigureAuthorization(builder.Configuration)
                 .ConfigureErrorHandling(builder.Configuration)
                 .ConfigureContentTemplates()
                 .ConfigureContentSecurityPolicy()
@@ -43,18 +42,17 @@ namespace ASP.Web
                 .ConfigureAnalyticsTrackingPreferences()
                 .ConfigureTemplateComponents()
                 .ConfigureLogging()
-                .ConfigureSchoolPages()
-                .ConfigureLocalAuthorityPages()
-                .ConfigureMultiAcademyTrustServices()
+
+                .ConfigureRepositories()
                 .ConfigureSearch();
 
             builder.Services.ConfigureInProcessApi();
 
-            builder.Services.AddOptions<Features.ErrorHandling.ErrorHandlingOptions>()
+            builder.Services.AddOptions<ErrorHandlingOptions>()
                .Configure<IConfiguration>(
                    (settings, configuration) =>
                        configuration
-                           .GetSection(nameof(Features.ErrorHandling.ErrorHandlingOptions))
+                           .GetSection(nameof(ErrorHandlingOptions))
                            .Bind(settings));
 
             WebApplication app = builder.Build();
@@ -66,7 +64,7 @@ namespace ASP.Web
             // we only want to call exception handling middleware during production or testing the production server error pages
             if (EnvironmentHelper.ShouldUseProductionErrorPage(app.Configuration, app.Environment))
             {
-                app.UseExceptionHandler("/error/");
+                app.UseExceptionHandler("/error/servererror/");
             }
             else
             {
@@ -83,6 +81,7 @@ namespace ASP.Web
             app.UseStaticFiles();
             app.UseUrlRewriteRules();
             app.UseRouting();
+            app.UseCookieContentSecurityPolicy();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseContentSecurityPolicy(app.Environment);
