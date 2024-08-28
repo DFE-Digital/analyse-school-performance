@@ -1,6 +1,6 @@
 ﻿using ASP.Core.Helpers;
 using ASP.Core.Results;
-using ASP.Web.Core.Templating;
+using ASP.Web.Core.Environment;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web
@@ -56,7 +56,7 @@ namespace ASP.Web
 
         private static IActionResult HandleError(Error error, IHostEnvironment hostEnvironment)
         {
-            if (EnvironmentHelper.IsLocalDevelopment(hostEnvironment) || hostEnvironment.IsDevelopment())
+            if (hostEnvironment.IsLocalDevelopment() || hostEnvironment.IsDevelopment())
             {
                 return error switch
                 {

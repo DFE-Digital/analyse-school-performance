@@ -1,5 +1,6 @@
 ﻿using ASP.Core.Authorization;
 using ASP.Infrastructure.Dsi;
+using ASP.Web.Core.Environment;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
@@ -30,7 +31,7 @@ namespace ASP.Web.Features.Authentication
                 controller.ViewData["UserProfileUrl"] = dsiConfiguration[DsiConstants.DsiProfileUrl];
                 controller.ViewData["UserName"] = $"{firstName} {lastName}";
 
-                if (_hostEnvironment.IsDevelopment())
+                if (_hostEnvironment.IsLocalDevelopment() || _hostEnvironment.IsDevelopment() || _hostEnvironment.IsTest())
                 {
                     controller.ViewData["UserRole"] = user.Role();
                 }

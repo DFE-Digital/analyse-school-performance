@@ -1,5 +1,5 @@
 ﻿using ASP.Core.Results;
-using ASP.Web.Core.Templating;
+using ASP.Web.Core.Environment;
 using Azure.Data.Tables;
 using Azure.Identity;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +20,7 @@ namespace ASP.Infrastructure.TableStorage
 
             // We want to use Azure credentials for everything BUT local development.
             // For local development, we want to use the connection string for the _tableServiceClient.
-            if (EnvironmentHelper.IsLocalDevelopment(hostEnvironment))
+            if (hostEnvironment.IsLocalDevelopment())
             {
                 _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
             }

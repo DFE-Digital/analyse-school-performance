@@ -1,4 +1,4 @@
-﻿using ASP.Web.Core.Templating;
+﻿using ASP.Web.Core.Environment;
 using Microsoft.AspNetCore.CookiePolicy;
 
 namespace ASP.Web.Features.ContentSecurityPolicy
@@ -14,7 +14,7 @@ namespace ASP.Web.Features.ContentSecurityPolicy
 
         public static IApplicationBuilder UseContentSecurityPolicy(this IApplicationBuilder app, IWebHostEnvironment environment)
         {
-            if (!(environment.IsDevelopment() || EnvironmentHelper.IsLocalDevelopment(environment)))
+            if (!(environment.IsDevelopment() || environment.IsLocalDevelopment()))
             {
                 //not used in dev
                 app.UseMiddleware<ContentSecurityPolicyMiddleware>();

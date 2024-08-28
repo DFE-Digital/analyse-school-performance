@@ -2,7 +2,7 @@
 using ASP.Core.Logging;
 using ASP.Core.Results;
 using ASP.Infrastructure.TableStorage;
-using ASP.Web.Core.Templating;
+using ASP.Web.Core.Environment;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Options;
 using System.Net;
@@ -137,7 +137,7 @@ namespace ASP.Web.Features.ErrorHandling
                     failure => _logger.LogError(failure.ToString())
                 );
 
-            if (EnvironmentHelper.ShouldShowErrorMessage(_hostEnvironment))
+            if (_hostEnvironment.ShouldShowErrorMessage())
             { 
                 context.Items["ErrorMessage"] = errorMessage;
                 if (_options.ShowStackTrace)

@@ -1,6 +1,7 @@
 using ASP.Infrastructure.Api;
 using ASP.Web.Areas.Search;
 using ASP.Web.Components;
+using ASP.Web.Core.Environment;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features;
 using ASP.Web.Features.AnalyticsTrackingPreferences;
@@ -62,7 +63,7 @@ namespace ASP.Web
             app.UseMiddleware<StatusCodePageLoggingMiddleware>();
 
             // we only want to call exception handling middleware during production or testing the production server error pages
-            if (EnvironmentHelper.ShouldUseProductionErrorPage(app.Configuration, app.Environment))
+            if (app.Environment.ShouldUseProductionErrorPage(app.Configuration))
             {
                 app.UseExceptionHandler("/error/servererror/");
             }
