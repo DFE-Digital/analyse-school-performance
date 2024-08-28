@@ -119,7 +119,14 @@ $app-breakpoint-custom : 700px;
 .app-header__navigation-item--current,
 .app-header__navigation-item--current:last-child {
     @include govuk-media-query(desktop) {
-         border-bottom: 4px solid govuk-colour("blue");
+        border-bottom: 4px solid govuk-colour("blue");
+    }
+}
+
+.app-header__navigation-item--not-selected,
+.app-header__navigation-item--not-selected:last-child {
+    @include govuk-media-query(desktop) {
+        border-bottom: 4px solid govuk-colour("light-grey");
     }
 }
 
