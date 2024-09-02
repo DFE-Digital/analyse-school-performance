@@ -17,5 +17,6 @@ namespace ASP.Web.FunctionalTests.Drivers
         Task<IElementDriver> ElementByLabel(string labelText);
         Task<IElementsDriver> Elements(string selector);
         Task ExpectStatusCode();
+        Task WaitForSelectorAsync(string selector, string errorIfNotExists);
     }
 }

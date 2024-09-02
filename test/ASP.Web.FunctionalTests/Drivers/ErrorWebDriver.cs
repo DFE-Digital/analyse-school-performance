@@ -71,5 +71,10 @@ namespace ASP.Web.FunctionalTests.Drivers
         {
             throw new XunitException(ExceptionMessage);
         }
+        
+        public Task WaitForSelectorAsync(string selector, string errorIfNotExists)
+        {
+            throw new XunitException(ExceptionMessage);
+        }
     }
 }

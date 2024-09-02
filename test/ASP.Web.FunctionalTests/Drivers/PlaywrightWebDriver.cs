@@ -149,6 +149,28 @@ namespace ASP.Web.FunctionalTests.Drivers
             var elements = Page.Locator(selector);
             return new PlaywrightElementsDriver(elements, Page);
         }
+        
+        public async Task WaitForSelectorAsync(string selector, string errorIfNotExists)
+        {
+            try
+            {
+                await Page.WaitForSelectorAsync(selector);
+            }
+            catch (TimeoutException ex)
+            {
+                _outputHelper.WriteLine($"TimeoutException occurred while waiting for selector: {selector}");
+                _outputHelper.WriteLine($"Error message: {ex.Message}");
+                AssertWithMessage.Fail(errorIfNotExists);
+            }
+            catch (Exception ex)
+            {
+                _outputHelper.WriteLine($"Unexpected exception occurred while waiting for selector: {selector}");
+                _outputHelper.WriteLine($"Exception type: {ex.GetType().Name}");
+                _outputHelper.WriteLine($"Error message: {ex.Message}");
+                _outputHelper.WriteLine($"Stack trace: {ex.StackTrace}");
+                AssertWithMessage.Fail(errorIfNotExists);
+            }
+        }
 
         public async Task ExpectStatusCode()
         {

@@ -269,7 +269,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
 
             Assert.All(value, c => Assert.Equal(expectedValue, c));
         }
-
+        
         private string ResolveVariable(string variableName)
         {
             if (!_scenarioContext.ContainsKey(variableName))

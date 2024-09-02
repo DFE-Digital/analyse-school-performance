@@ -1682,3 +1682,204 @@ Scenario: The PageNo parameter number greater than the total number of pages, th
 	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=Primary&page=1"
 	And the element "*[data-testid='school-search-results-name-1']" should have the text content "Primary School 100001"
 	And the element "*[data-testid='school-search-results-name-26']" should have the text content "Primary School 100026"
+
+@Javascript:enabled
+Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "B1 1AA"
+		},
+	    "laestab": "894/2200"
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "Tring",
+			"postCode": "B1 1AA"
+		},
+	    "laestab": "894/2201"
+	}
+	"""
+	And Establishment "333333" exists:
+	"""
+	{
+		"name": "A Different Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		},
+	    "laestab": "894/2202"
+	}
+	"""
+	And Establishment "444444" exists:
+	"""
+	{
+		"name": "Some Secondary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		},
+	    "laestab": "894/2203"
+	}
+	"""
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "primary"
+	Then the autocomplete results should appear
+	Then there should be 3 autocomplete items
+	Then the elements ".autocomplete__option strong" should have the text contents:
+	  | Highlighted Values |
+	  | Primary            |
+	  | Primary            |
+	  | Primary            |
+	Then the elements ".autocomplete__option" should have the text contents:
+	  | Autocomplete Items                                                                             |
+	  | A Different Primary School Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
+	  | Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201       |
+	  | Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200        |
+   
+@Javascript:enabled
+Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting Name and Address
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "B1 1AA"
+		},
+	    "laestab": "894/2200"
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "Tring",
+			"postCode": "B1 1AA"
+		},
+	    "laestab": "894/2201"
+	}
+	"""
+	And Establishment "333333" exists:
+	"""
+	{
+		"name": "A Different Primary School Centre",
+		"address": {
+			"street": "13 The Road",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		},
+	    "laestab": "894/2202"
+	}
+	"""
+	And Establishment "444444" exists:
+	"""
+	{
+		"name": "Some Secondary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		},
+	    "laestab": "894/2203"
+	}
+	"""
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "tr"
+	Then the autocomplete results should appear
+	Then there should be 4 autocomplete items
+	Then the elements ".autocomplete__option strong" should have the text contents: 
+	  | Highlighted Values |
+	  | tr                 |
+	  | TR                 |
+	  | Tr                 |
+	  | tr                 |
+	  | TR                 |
+	Then the elements ".autocomplete__option" should have the text contents:
+	  | Autocomplete Items                                                                                    |
+	  | A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
+	  | Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201              |
+	  | Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200               |
+	  | Some Secondary School Address:13 The Road, SomeTown TR18 3JT URN:444444, LAESTAB:894/2203             |
+   
+@Javascript:enabled
+Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting URN and LaEstab
+	Given Establishment "111111" exists:
+	"""
+	{
+		"name": "Some Primary School",
+		"address": {
+			"street": "13 The Street",
+			"town": "SomeTown",
+			"postCode": "B1 1AA"
+		},
+	    "laestab": "894/2200"
+	}
+	"""
+	And Establishment "222222" exists:
+	"""
+	{
+		"name": "Some Other Primary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "Tring",
+			"postCode": "B1 1AA"
+		},
+	    "laestab": "894/2201"
+	}
+	"""
+	And Establishment "333333" exists:
+	"""
+	{
+		"name": "A Different Primary School Centre",
+		"address": {
+			"street": "13 The Road",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		},
+	    "laestab": "894/2202"
+	}
+	"""
+	And Establishment "444442" exists:
+	"""
+	{
+		"name": "Some Secondary School",
+		"address": {
+			"street": "13 The Road",
+			"town": "SomeTown",
+			"postCode": "TR18 3JT"
+		},
+	    "laestab": "894/2203"
+	}
+	"""
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "42"
+	Then the autocomplete results should appear
+	Then there should be 4 autocomplete items
+	Then the elements ".autocomplete__option strong" should have the text contents: 
+	  | Highlighted Values |
+	  | 4/2                |
+	  | 4/2                |
+	  | 4/2                |
+	  | 42                 |
+	  | 4/2                |
+	Then the elements ".autocomplete__option" should have the text contents:
+	  | Autocomplete Items                                                                                    |
+	  | A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
+	  | Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201              |
+	  | Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200               |
+	  | Some Secondary School Address:13 The Road, SomeTown TR18 3JT URN:444442, LAESTAB:894/2203             |

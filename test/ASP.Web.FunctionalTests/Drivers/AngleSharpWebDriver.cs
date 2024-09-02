@@ -178,5 +178,10 @@ namespace ASP.Web.FunctionalTests.Drivers
 
             AssertWithMessage.Equal(ExpectedStatusCode, (int)Status, $"Expected response status to be {ExpectedStatusCode} but was {(int)Status}.");
         }
+
+        public Task WaitForSelectorAsync(string selector, string errorIfNotExists)
+        {
+            return Task.CompletedTask;
+        }
     }
 }
