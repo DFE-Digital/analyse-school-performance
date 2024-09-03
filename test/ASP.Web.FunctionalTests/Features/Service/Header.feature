@@ -164,29 +164,6 @@ Examples:
 	| Ofsted Unnamed  |
 
 
-@Javascript:disabled
-Scenario Outline: Any user can view the Site news link
-	Given I am a <Role> user
-    When I navigate to /
-	Then the element "#header-navigation-link-news" should have the text content "Site news"
-	And  the element "#header-navigation-link-news" should have the href "/news"
-Examples: 
-	| Role            |
-	| DfE Named       |
-	| DfE Unnamed     |
-	| Super Admin     |
-	| Ofsted Unnamed  |
-	| LA Named        |
-	| LA Unnamed      |
-    | MAT Named       |
-	| MAT Unnamed     |
-	| School Named    |
-	| School Unnamed  |
-	| Diocese Named   |
-	| Diocese Unnamed |
-	| MAT Governor    |
-	| School Governor |
-
 
 @Javascript:disabled
 Scenario Outline: Any user can view the Release timetable link

@@ -34,8 +34,6 @@ Examples:
 	| Path           |
 	| /              |
 	| /download/     |
-	| /news/         |
-
 
 @Javascript:disabled
 Scenario: Should not be redirected to accept terms when page not found
@@ -94,7 +92,6 @@ Examples:
 	| Path           | ExpectedPath                                        |
 	| /school/136028 | /help/accept-terms-of-use/?referrer=/school/136028/ |
 	| /download      | /help/accept-terms-of-use/?referrer=/download/      |
-	| /news          | /help/accept-terms-of-use/?referrer=/news/          |
 
 
 @Javascript:disabled
@@ -146,4 +143,3 @@ Examples:
 	| Path            | ExpectedPath                                        |
 	| /school/136028/ | /help/accept-terms-of-use/?referrer=/school/136028/ |
 	| /download/      | /help/accept-terms-of-use/?referrer=/download/      |
-	| /news/          | /help/accept-terms-of-use/?referrer=/news/          |

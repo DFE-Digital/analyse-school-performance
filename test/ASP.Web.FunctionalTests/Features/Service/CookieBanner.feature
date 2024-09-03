@@ -10,7 +10,6 @@ Scenario Outline: Cookie banner should exist when cookie preference has not been
 Examples:
 | Path       |
 | /          |
-| /news/     |
 | /download/ |
 
 
