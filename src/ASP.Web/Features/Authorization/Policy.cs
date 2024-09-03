@@ -12,6 +12,10 @@ public static class Policy
     public const string AccessToSearch = "AccessToSearch";
     public const string AccessToMySchool = "AccessToMySchool";
     public const string AccessToMySchools = "AccessToMySchools";
+    public const string AccessToMyLaSchools = "AccessToMyLaSchools";
+    public const string AccessToMyMatSchools = "AccessToMyMatSchools";
+    public const string AccessToMyDioceseSchools = "AccessToMyDioceseSchools";
+    public const string AccessToGuidance = "AccessToGuidance";
     public const string AccessToEditPages = "AccessToEditPages";
 
     public static void AddPolicies(AuthorizationOptions options)
@@ -23,6 +27,9 @@ public static class Policy
         options.AddPolicy(AccessToMySchool, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMySchool)));
 
         options.AddPolicy(AccessToMySchools, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMySchools)));
+        options.AddPolicy(AccessToMyLaSchools, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMyLaSchools)));
+        options.AddPolicy(AccessToMyMatSchools, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMyMatSchools)));
+        options.AddPolicy(AccessToMyDioceseSchools, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMyDioceseSchools)));
 
         options.AddPolicy(AccessToMyLa, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMyLa)));
 

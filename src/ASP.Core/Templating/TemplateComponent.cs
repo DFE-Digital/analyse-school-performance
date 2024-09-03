@@ -1,7 +1,7 @@
 ﻿namespace ASP.Core.Templating
 {
     public sealed class TemplateComponent
-    {
+    { 
         public string ViewId { get; }
         public dynamic ViewContent { get; }
         public dynamic ViewModel { get; }

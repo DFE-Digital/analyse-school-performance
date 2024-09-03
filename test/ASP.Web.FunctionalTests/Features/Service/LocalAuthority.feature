@@ -29,18 +29,19 @@
             "Code": "301"
         }
         """
-
         And Content Template "la-landing-page" exists:
         """
         {
         	"Views": [
         		 {
-                     "ViewId": "Card"
+                     "ViewId": "Card",
+                     "ViewContent": {
+					    "AuthorizationPolicy": "Any"
+                     }
                  }
         	]
         }
         """
-
         When I navigate to /my-local-authority/301
         Then the element "#app-card-container" class should contain "app-grid-container-three-column"
         And the elements "#app-card-container .app-card" should total 1
@@ -55,6 +56,7 @@
         		{
                     "ViewId": "Card",
                     "ViewContent": {
+                        "AuthorizationPolicy": "Any",
                         "Id": "app-card-la-download",
                         "Title": "Download data",
                         "LinkUrl": "la-download",

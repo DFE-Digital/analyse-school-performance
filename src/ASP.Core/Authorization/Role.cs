@@ -18,9 +18,13 @@ public sealed class Role
     public bool HasAccessToSearch => AccessToSearch.Contains(this);
     public bool HasAccessToMySchool => AccessToMySchool.Contains(this);
     public bool HasAccessToMySchools => AccessToMySchools.Contains(this);
+    public bool HasAccessToMyLaSchools => AccessToMyLaSchools.Contains(this);
+    public bool HasAccessToMyMatSchools => AccessToMyMatSchools.Contains(this);
+    public bool HasAccessToMyDioceseSchools => AccessToMyDioceseSchools.Contains(this);
     public bool HasAccessToMyLa => AccessToMyLa.Contains(this);
     public bool HasAccessToAllLas => AccessToAllLas.Contains(this);
     public bool HasAccessToEditPages => AccessToEditPages.Contains(this);
+    public bool HasAccessToGuidance => AccessToGuidance.Contains(this);
     public bool IsLaUser => AccessToMyLa.Contains(this);
     public bool IsAny => true;
 
@@ -136,6 +140,25 @@ public sealed class Role
         DioceseNamed,
     ];
 
+    public static readonly RoleCollection AccessToMyLaSchools =
+    [
+        LaUnnamed,
+        LaNamed,
+    ];
+
+    public static readonly RoleCollection AccessToMyMatSchools =
+    [
+        MatUnnamed,
+        MatNamed,
+        MatGovernor,
+    ];
+
+    public static readonly RoleCollection AccessToMyDioceseSchools =
+    [
+        DioceseUnnamed,
+        DioceseNamed,
+    ];
+
     public static readonly RoleCollection AccessToMyLa =
     [
         LaUnnamed,
@@ -149,6 +172,18 @@ public sealed class Role
         OfstedUnnamed,
         SuperUser,
     ];
+
+    public static readonly RoleCollection AccessToGuidance =
+    [
+        SchoolNamed,
+        SchoolUnnamed,
+        MatUnnamed,
+        MatNamed,
+        MatGovernor,
+        DioceseUnnamed,
+        DioceseNamed
+    ];
+
 
     public static readonly RoleCollection AccessToEditPages =
     [

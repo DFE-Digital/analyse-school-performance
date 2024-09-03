@@ -62,8 +62,8 @@ namespace ASP.Infrastructure.Api
             {
                 queryString = queryString.Add("revision", request.Revision);
             }
-
-            return await ApiGet(url, queryString)
+            
+             return await ApiGet(url, queryString)
                 .Then(response => JsonHelper.DeserializeNotNull<ContentTemplate>(response));
         }
 

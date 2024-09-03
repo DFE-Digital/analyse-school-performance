@@ -26,7 +26,7 @@ Examples:
 
 
 @Javascript:disabled
-Scenario: Other reports page should show the accordian component when javascript disabled
+Scenario: Other reports page should show the accordion component when javascript disabled
     Given Establishment "136028" exists:
 	"""
 	{
@@ -41,7 +41,7 @@ Scenario: Other reports page should show the accordian component when javascript
     And the element "*[data-testid='accordion-default-heading-4']" should have the text content "School characteristics"
 
 @Javascript:enabled
-Scenario: Other reports page should show the accordian component when javascript enabled
+Scenario: Other reports page should show the accordion component when javascript enabled
     Given Content Template "school-other-reports-ofsted" exists:
     """
     {

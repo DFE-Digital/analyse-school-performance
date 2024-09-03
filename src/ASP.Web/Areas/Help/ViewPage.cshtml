@@ -17,15 +17,14 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <span authorization-policy="@Policy.AccessToEditPages">
-                <a data-testid="content-edit" 
-                    asp-route="app-route-help-edit" 
-                    asp-route-contentId="@Model.ContentId" 
-                    asp-route-revision="@Model.Revision" 
-                    role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+                <a data-testid="content-edit"
+                   asp-route="app-route-help-edit"
+                   asp-route-contentId="@Model.ContentId"
+                   asp-route-revision="@Model.Revision"
+                   role="button" draggable="false" class="govuk-button" data-module="govuk-button">
                     Edit this page
                 </a>
             </span>
-
             @await Html.PartialAsync("~/Features/ContentTemplates/ContentTemplateView.cshtml", Model)
         </div>
     </div>

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace ASP.Web.Features.Authorization
+namespace ASP.Web.Core.Authorization
 {
     [HtmlTargetElement(Attributes = "authorization-policy")]
     public class AuthorizationTagHelper : TagHelper
@@ -18,11 +19,11 @@ namespace ASP.Web.Features.Authorization
         }
 
         [HtmlAttributeName("authorization-policy")]
-        public string? Policy { get; set; }
+        public string? Policy { get; set; } = null!;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if (Policy == null)
+            if (String.IsNullOrEmpty(Policy))
             {
                 return;
             }

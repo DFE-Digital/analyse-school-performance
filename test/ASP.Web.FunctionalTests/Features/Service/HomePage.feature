@@ -21,14 +21,23 @@ Scenario: Home page cards should be populated from the "home-page" content templ
 		"""
 		{
 			"Views": [
-				 {
-                    "ViewId": "Card"
+				  {
+                    "ViewId": "Card",
+					"ViewContent": {
+					    "AuthorisationPolicy": "Any",
+                     }
                   },
                   {
                     "ViewId": "Card",
+                    "ViewContent": {
+					    "AuthorisationPolicy": "Any",
+                     }
                   },
                   {
                     "ViewId": "Card",
+					"ViewContent": {
+					    "AuthorisationPolicy": "Any",
+                     }
                   }
 			]
 		}
@@ -46,6 +55,7 @@ Scenario: Home page cards should be populated correctly
 				    {
                     "ViewId": "Card",
                     "ViewContent": {
+					    "AuthorisationPolicy": "Any",
                         "Id": "Id1",
                         "Title": "Title1",
                         "LinkUrl": "/link1/",
@@ -55,6 +65,7 @@ Scenario: Home page cards should be populated correctly
                     {
                     "ViewId": "Card",
                     "ViewContent": {
+					    "AuthorisationPolicy": "Any",
                         "Id": "Id2",
                         "Title": "Title2",
                         "LinkUrl": "/link2/",
@@ -64,6 +75,7 @@ Scenario: Home page cards should be populated correctly
                     {
                     "ViewId": "Card",
                     "ViewContent": {
+					    "AuthorisationPolicy": "Any",
                         "Id": "Id3",
                         "Title": "Title3",
                         "LinkUrl": "/link3/",
