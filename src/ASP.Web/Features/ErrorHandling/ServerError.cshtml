@@ -17,20 +17,20 @@
                 </ul>
                 @if (Model.ShowErrorCode)
                 {
-                    <p class="govuk-body">
-                        <strong>Error code:</strong> <code class="govuk-body" data-testid="error-display-code">@Model.ErrorCode</code>
+                    <p class="govuk-body" data-testid="error-display-code">
+                        <strong>Error code:</strong> <code class="govuk-body">@Model.ErrorCode</code>
                     </p>
                 }
                 @if (Model.ShowErrorMessage)
                 {
-                    <p class="govuk-body">
-                        <strong>Error message:</strong> <code class="govuk-body" data-testid="error-display-message">@Model.ErrorMessage</code>
+                    <p class="govuk-body" data-testid="error-display-message">
+                        <strong>Error message:</strong> <code class="govuk-body">@Model.ErrorMessage</code>
                     </p>
                 }
                 @if (Model.ShowStackTrace)
                 {
-                    <p class="govuk-body">
-                        <strong>Stack trace:</strong> <code class="govuk-body" data-testid="error-display-stack-trace">@Model.StackTrace</code>
+                    <p class="govuk-body" data-testid="error-display-stack-trace">
+                        <strong>Stack trace:</strong> <code class="govuk-body">@Model.StackTrace</code>
                     </p>
                 }
             </div>

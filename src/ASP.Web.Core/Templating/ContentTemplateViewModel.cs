@@ -1,4 +1,5 @@
 ﻿using ASP.Core.Templating;
+using ASP.Web.Core.BreadcrumbTrail;
 using MR;
 
 namespace ASP.Web.Core.Templating
@@ -10,7 +11,7 @@ namespace ASP.Web.Core.Templating
         public string PageTitle { get; set; } = "";
         public dynamic PageContent { get; set; } = new GracefulExpandoObject();
         public List<TemplateComponentViewModel> Views { get; set; } = new();
-        public BreadcrumbViewModel? Breadcrumbs { get; set; } = default!;
+        public BreadcrumbTrailViewModel? Breadcrumbs { get; set; } = default!;
 
         public static ContentTemplateViewModel FromTemplate(string contentId, string? revision, ContentTemplate template)
         {
@@ -21,7 +22,7 @@ namespace ASP.Web.Core.Templating
                 PageTitle = template.PageTitle ?? "",
                 PageContent = template.PageContent,
                 Views = (template.Views ?? new List<TemplateComponent>()).Select(TemplateComponentViewModel.FromTemplateView).ToList(),
-                Breadcrumbs = new BreadcrumbViewModel(template.PageTitle ?? "")
+                Breadcrumbs = new BreadcrumbTrailViewModel(!string.IsNullOrWhiteSpace(template.PageTitle) ? template.PageTitle : "Missing page title")
             };
         }
     }

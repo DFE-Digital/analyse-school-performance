@@ -1,7 +1,12 @@
-﻿@model (string Name, string Path, string Id)
+﻿@using ASP.Web.Shared
+@model NavigationItemViewModel
 
-<li class="app-sub-navigation__item">
-    <a class="app-sub-navigation__link" data-testid="@Model.Id-navigation" aria-current="@(Context.Request.Path.StartsWithSegments(Model.Path)? "page": "")" href="@Model.Path">
+@{
+    var current = Model.IsCurrent ? "page" : "";
+}
+
+<li data-testid="app-sub-navigation-item-@Model.Id" class="app-sub-navigation__item" authorization-policy=@Model.Policy>
+    <a class="app-sub-navigation__link" aria-current=@current href=@Model.Path>
         @Model.Name
     </a>
 </li>

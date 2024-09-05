@@ -63,8 +63,17 @@
     <Compile Update="Features\Service\HelpPageView.feature.cs">
       <DependentUpon>HelpPageView.feature</DependentUpon>
     </Compile>
-    <Compile Update="Features\Service\Search.feature.cs">
-      <DependentUpon>Search.feature</DependentUpon>
+    <Compile Update="Features\Service\MyLocalAuthorityPage.feature.cs">
+      <Visible>true</Visible>
+      <DependentUpon>MyLocalAuthorityPage.feature</DependentUpon>
+      <DesignTime>true</DesignTime>
+      <AutoGen>true</AutoGen>
+    </Compile>
+    <Compile Update="Features\Service\MySchoolPage.feature.cs">
+      <DependentUpon>MySchoolPage.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Service\SearchPage.feature.cs">
+      <DependentUpon>SearchPage.feature</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -113,7 +122,15 @@
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Features\Service\Search.feature">
+    <SpecFlowFeatureFiles Update="Features\Service\MyLocalAuthorityPage.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Service\MySchoolPage.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Service\SearchPage.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>

@@ -111,7 +111,7 @@ namespace ASP.Web.Features.Authentication
                         if (isSpuriousAuthCbRequest)
                         {
                             context.HandleResponse();
-                            context.Response.Redirect("/error/forbidden/");
+                            context.Response.Redirect("/error/accessdenied/");
                         }
 
                         return Task.CompletedTask;

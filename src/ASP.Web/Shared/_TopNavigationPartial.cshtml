@@ -1,15 +1,17 @@
-﻿@using ASP.Web.Features.Authorization
+@using ASP.Web.Features.Authorization
+@using ASP.Web.Shared
+@model PathString
 
 <nav class="govuk-header__navigation app-header__navigation" id="header-navigation" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
     <div class="govuk-width-container">
         <ul id="navigation" class="govuk-header__navigation-list app-header__navigation-list">
-            <partial name="_TopNavigationItemPartial" model=@(("Home", "/", "home", Policy.Any)) />
-            <partial name="_TopNavigationItemPartial" model=@(("My local authority", "/my-local-authority/001", "my-local-authority", Policy.AccessToMyLa)) />
-            <partial name="_TopNavigationItemPartial" model=@(("My schools", "/my-schools", "my-schools", Policy.AccessToMySchools)) /> 
-            <partial name="_TopNavigationItemPartial" model=@(("My school", "/school/136028", "my-school", Policy.AccessToMySchool)) />
-            <partial name="_TopNavigationItemPartial" model=@(("Search", "/search", "search", Policy.AccessToSearch)) />
-            <partial name="_TopNavigationItemPartial" model=@(("Release timetable", "/help/release-timetable", "release-timetable", Policy.Any)) />
-            <partial name="_TopNavigationItemPartial" model=@(("Guidance", "/help/guidance", "guidance", Policy.Any)) />
+            <partial name="_TopNavigationItemPartial" model=@(new NavigationItemViewModel("home", "Home", "/", Model)) />
+            <partial name="_TopNavigationItemPartial" model=@(new NavigationItemViewModel("my-local-authority", "My local authority", "/my-local-authority/", Model, Policy.AccessToMyLocalAuthority)) />
+            <partial name="_TopNavigationItemPartial" model=@(new NavigationItemViewModel("my-schools", "My schools", "/my-schools/", Model, Policy.AccessToMySchools)) />
+            <partial name="_TopNavigationItemPartial" model=@(new NavigationItemViewModel("my-school", "My school", "/my-school/", Model, Policy.AccessToMySchool)) />
+            <partial name="_TopNavigationItemPartial" model=@(new NavigationItemViewModel("search", "Search", "/search/", Model, Policy.AccessToSearch)) />
+            <partial name="_TopNavigationItemPartial" model=@(new NavigationItemViewModel("release-timetable", "Release timetable", "/help/release-timetable/", Model)) />
+            <partial name="_TopNavigationItemPartial" model=@(new NavigationItemViewModel("guidance", "Guidance", "/help/guidance/", Model)) />
         </ul>
     </div>
 </nav>

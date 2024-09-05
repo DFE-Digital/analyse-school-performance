@@ -9,11 +9,28 @@ Scenario: Header should contain user account and sign in links
 	And the element "#header-link-sign-out" should have the text content "Sign out"
 
 @Javascript:disabled
+Scenario: Navigation item should be selected if current page is equal to or sub-path of item path
+	Given I am a School Named user for Establishment "123456"
+	And Establishment "123456" exists:
+	"""
+	{
+    }
+	"""
+	When I navigate to <Path>
+    Then the element "[data-testid='app-header-navigation-item-home']" class should contain "app-header__navigation-item--<HomeClass>"
+    And the element "[data-testid='app-header-navigation-item-my-school']" class should contain "app-header__navigation-item--<MySchoolClass>"
+Examples: 
+	| Path                      | HomeClass    | MySchoolClass |
+	| /                         | current      | not-selected  |
+	| /my-school/               | not-selected | current       |
+	| /my-school/other-reports/ | not-selected | current       |
+
+@Javascript:disabled
 Scenario Outline: Any user can view the Home link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-home" should have the text content "Home"
-	And  the element "#header-navigation-link-home" should have the href "/"
+	Then the element "[data-testid="app-header-navigation-item-home"]" should have the text content "Home"
+	And  the element "[data-testid="app-header-navigation-item-home"] a" should have the href "/"
 Examples: 
 	| Role            |
 	| DfE Named       |
@@ -36,8 +53,8 @@ Examples:
 Scenario Outline: LA users can view the My local authority link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-my-local-authority" should have the text content "My local authority"
-	And  the element "#header-navigation-link-my-local-authority" should have the href "/my-local-authority/001"
+	Then the element "[data-testid="app-header-navigation-item-my-local-authority"]" should have the text content "My local authority"
+	And  the element "[data-testid="app-header-navigation-item-my-local-authority"] a" should have the href "/my-local-authority/"
 Examples: 
 	| Role       | 
 	| LA Named   |
@@ -48,7 +65,7 @@ Examples:
 Scenario Outline: Non LA users cannot view the My local authority link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-my-local-authority" should not exist
+	Then the element "[data-testid="app-header-navigation-item-my-local-authority"]" should not exist
 Examples: 
 	| Role            |
 	| DfE Named       |
@@ -69,8 +86,8 @@ Examples:
 Scenario Outline: Users who can search can view the Search link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-search" should have the text content "Search"
-	And  the element "#header-navigation-link-search" should have the href "/search"
+	Then the element "[data-testid="app-header-navigation-item-search"]" should have the text content "Search"
+	And  the element "[data-testid="app-header-navigation-item-search"] a" should have the href "/search/"
 Examples: 
 	| Role            |
 	| DfE Named       |
@@ -90,7 +107,7 @@ Examples:
 Scenario Outline: Users who cannot search cannot view the Search link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-search" should not exist
+	Then the element "[data-testid="app-header-navigation-item-search"]" should not exist
 Examples: 
 	| Role            |
 	| School Unnamed  |
@@ -102,8 +119,8 @@ Examples:
 Scenario Outline: Users with access to My school can view the My school link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-my-school" should have the text content "My school"
-	And  the element "#header-navigation-link-my-school" should have the href "/school/136028"
+	Then the element "[data-testid="app-header-navigation-item-my-school"]" should have the text content "My school"
+	And  the element "[data-testid="app-header-navigation-item-my-school"] a" should have the href "/my-school/"
 Examples: 
 	| Role           |
 	| School Unnamed |
@@ -114,7 +131,7 @@ Examples:
 Scenario Outline: Users without access to My school cannot view the My school link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-my-school" should not exist
+	Then the element "[data-testid="app-header-navigation-item-my-school"]" should not exist
 Examples: 
 	| Role            |
 	| DfE Named       |
@@ -135,8 +152,8 @@ Examples:
 Scenario Outline: Users with access to My schools can view the My schools link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-my-schools" should have the text content "My schools"
-	And  the element "#header-navigation-link-my-schools" should have the href "/my-schools"
+	Then the element "[data-testid="app-header-navigation-item-my-schools"]" should have the text content "My schools"
+	And  the element "[data-testid="app-header-navigation-item-my-schools"] a" should have the href "/my-schools/"
 Examples: 
 	| Role            |
 	| LA Named        |
@@ -152,7 +169,7 @@ Examples:
 Scenario Outline: Users without access to My schools cannot view the My schools link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-my-schools" should not exist
+	Then the element "[data-testid="app-header-navigation-item-my-schools"]" should not exist
 Examples: 
 	| Role            |
 	| DfE Named       |
@@ -169,8 +186,8 @@ Examples:
 Scenario Outline: Any user can view the Release timetable link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-release-timetable" should have the text content "Release timetable"
-	And  the element "#header-navigation-link-release-timetable" should have the href "/help/release-timetable"
+	Then the element "[data-testid="app-header-navigation-item-release-timetable"]" should have the text content "Release timetable"
+	And  the element "[data-testid="app-header-navigation-item-release-timetable"] a" should have the href "/help/release-timetable/"
 Examples: 
 	| Role            |
 	| DfE Named       |
@@ -193,8 +210,8 @@ Examples:
 Scenario Outline: Any user can view the Guidance link
 	Given I am a <Role> user
     When I navigate to /
-	Then the element "#header-navigation-link-guidance" should have the text content "Guidance"
-	And  the element "#header-navigation-link-guidance" should have the href "/help/guidance"
+	Then the element "[data-testid="app-header-navigation-item-guidance"]" should have the text content "Guidance"
+	And  the element "[data-testid="app-header-navigation-item-guidance"] a" should have the href "/help/guidance/"
 Examples: 
 	| Role            |
 	| DfE Named       |

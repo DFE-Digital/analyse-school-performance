@@ -1,33 +1,51 @@
-﻿using ASP.Web.Core.Templating;
+﻿using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Core.UnitTests
 {
     public class BreadcrumbViewModelTests
     {
         [Fact]
+        public void Constructor_WhenNullOrWhitespace_Throws()
+        {
+            Assert.Throws<ArgumentNullException>(() => new BreadcrumbTrailViewModel(null!));
+            Assert.Throws<ArgumentException>(() => new BreadcrumbTrailViewModel(""));
+            Assert.Throws<ArgumentException>(() => new BreadcrumbTrailViewModel("   "));
+        }
+        
+        [Fact]
         public void Constructor_SetsCurrentPageTitle()
         {
             var expectedTitle = "Home";
             
-            var viewModel = new BreadcrumbViewModel(expectedTitle);
+            var viewModel = new BreadcrumbTrailViewModel(expectedTitle);
 
             Assert.Equal(expectedTitle, viewModel.CurrentPageTitle);
         }
 
         [Fact]
-        public void Constructor_WhenNull_SetsCurrentPageTitleToNull()
+        public void AddBreadcrumb_WhenTitleNullOrWhitespace_Throws()
         {
-            string? title = null;
+            var viewModel = new BreadcrumbTrailViewModel("test");
 
-            var viewModel = new BreadcrumbViewModel(title);
+            Assert.Throws<ArgumentNullException>(() => viewModel.AddBreadcrumb(null!, "href"));
+            Assert.Throws<ArgumentException>(() => viewModel.AddBreadcrumb("", "href"));
+            Assert.Throws<ArgumentException>(() => viewModel.AddBreadcrumb("   ", "href"));
+        }
 
-            Assert.Null(viewModel.CurrentPageTitle);
+        [Fact]
+        public void AddBreadcrumb_WhenUrlNullOrWhitespace_Throws()
+        {
+            var viewModel = new BreadcrumbTrailViewModel("test");
+
+            Assert.Throws<ArgumentNullException>(() => viewModel.AddBreadcrumb("title", null!));
+            Assert.Throws<ArgumentException>(() => viewModel.AddBreadcrumb("title", ""));
+            Assert.Throws<ArgumentException>(() => viewModel.AddBreadcrumb("title", "   "));
         }
 
         [Fact]
         public void AddBreadcrumb_AddsBreadcrumbItem()
         {
-            var viewModel = new BreadcrumbViewModel("Page");
+            var viewModel = new BreadcrumbTrailViewModel("Page");
             var breadcrumbTitle = "Home";
             var breadcrumbUrl = "/home";
 
@@ -41,7 +59,7 @@ namespace ASP.Web.Core.UnitTests
         [Fact]
         public void AddBreadcrumb_ReturnsSameInstance()
         {
-            var viewModel = new BreadcrumbViewModel("Page");
+            var viewModel = new BreadcrumbTrailViewModel("Page");
             var breadcrumbTitle = "Home";
             var breadcrumbUrl = "/home";
 
@@ -53,7 +71,7 @@ namespace ASP.Web.Core.UnitTests
         [Fact]
         public void AddBreadcrumb_AddsMultipleBreadcrumbItems()
         {
-            var viewModel = new BreadcrumbViewModel("Page");
+            var viewModel = new BreadcrumbTrailViewModel("Page");
 
             viewModel.AddBreadcrumb("Home", "/home")
                      .AddBreadcrumb("About", "/about");
@@ -68,23 +86,11 @@ namespace ASP.Web.Core.UnitTests
         [Fact]
         public void Breadcrumbs_InitialState_IsEmpty()
         {
-            var viewModel = new BreadcrumbViewModel("Page");
+            var viewModel = new BreadcrumbTrailViewModel("Page");
 
             List<BreadcrumbItem> breadcrumbs = viewModel.Breadcrumbs;
 
             Assert.Empty(breadcrumbs);
-        }
-
-        [Fact]
-        public void AddBreadcrumb_HandlesEmptyTitleAndUrl()
-        {
-            var viewModel = new BreadcrumbViewModel("Page");
-
-            viewModel.AddBreadcrumb(string.Empty, string.Empty);
-
-            Assert.Single(viewModel.Breadcrumbs);
-            Assert.Equal(string.Empty, viewModel.Breadcrumbs[0].Title);
-            Assert.Equal(string.Empty, viewModel.Breadcrumbs[0].Url);
         }
 
         [Fact]

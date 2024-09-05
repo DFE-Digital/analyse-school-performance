@@ -32,14 +32,13 @@
         Given no Local Authorities exist
         When I send a GET request to /api/GetLocalAuthority?code=123
         Then I should get a 404 response
-        And the response should be the message "Not found: Could not find local authority with code "123"."
+        And the response should be the message "Not found: Could not find Local Authority with code "123"."
 
     Scenario: Should return local authority object if code exists
         Given Local Authority "321" exists:
         """
         {
-            "Name": "Test name",
-            "Code": "321"
+            "Name": "Test name"
         }
         """
         When I send a GET request to /api/GetLocalAuthority?code=321

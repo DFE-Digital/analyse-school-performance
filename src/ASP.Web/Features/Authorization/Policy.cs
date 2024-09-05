@@ -1,42 +1,56 @@
-﻿using ASP.Core.Authorization;
-using ASP.Web.Features.Authorization.LocalAuthority;
+using ASP.Core.Authorization;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.Web.Features.Authorization;
 
 public static class Policy
 {
-    public const string LocalAuthorityAccessPolicy = "LocalAuthorityAccessPolicy";
     public const string Any = "Any";
-    public const string AccessToMyLa = "AccessToMyLa";
     public const string AccessToSearch = "AccessToSearch";
+    public const string AccessToMyLocalAuthority = "AccessToMyLocalAuthority";
     public const string AccessToMySchool = "AccessToMySchool";
     public const string AccessToMySchools = "AccessToMySchools";
     public const string AccessToMyLaSchools = "AccessToMyLaSchools";
     public const string AccessToMyMatSchools = "AccessToMyMatSchools";
+    public const string AccessToAllSchools = "AccessToAllSchools";
+    public const string AccessToAllLocalAuthorities = "AccessToAllLocalAuthorities";
     public const string AccessToMyDioceseSchools = "AccessToMyDioceseSchools";
     public const string AccessToGuidance = "AccessToGuidance";
     public const string AccessToEditPages = "AccessToEditPages";
 
     public static void AddPolicies(AuthorizationOptions options)
     {
-        options.AddPolicy(Any, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.IsAny)));
+        options.AddPolicy(Any, policy =>
+            policy.RequireRole(Role.Any));
 
-        options.AddPolicy(AccessToSearch, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToSearch)));
+        options.AddPolicy(AccessToSearch, policy => 
+            policy.RequireRole(Role.AccessToSearch));
 
-        options.AddPolicy(AccessToMySchool, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMySchool)));
+        options.AddPolicy(AccessToMySchool, policy => 
+            policy.RequireRole(Role.AccessToMySchool));
 
-        options.AddPolicy(AccessToMySchools, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMySchools)));
-        options.AddPolicy(AccessToMyLaSchools, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMyLaSchools)));
-        options.AddPolicy(AccessToMyMatSchools, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMyMatSchools)));
-        options.AddPolicy(AccessToMyDioceseSchools, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMyDioceseSchools)));
+        options.AddPolicy(AccessToMySchools, policy => 
+            policy.RequireRole(Role.AccessToMySchools));
+            
+        options.AddPolicy(AccessToMyLaSchools, policy => 
+            policy.RequireRole(Role.AccessToMyLaSchools));
+            
+        options.AddPolicy(AccessToMyMatSchools, policy => 
+            policy.RequireRole(Role.AccessToMyMatSchools));
+            
+        options.AddPolicy(AccessToMyDioceseSchools, policy => 
+            policy.RequireRole(Role.AccessToMyDioceseSchools));
 
-        options.AddPolicy(AccessToMyLa, policy => policy.RequireAssertion(context => context.User.HasRole(r => r.HasAccessToMyLa)));
+        options.AddPolicy(AccessToAllSchools, policy =>
+            policy.RequireRole(Role.AccessToAllSchools));
 
-        options.AddPolicy(LocalAuthorityAccessPolicy, policy =>
-            policy.Requirements.Add(new LocalAuthorityRequirement()));
+        options.AddPolicy(AccessToMyLocalAuthority, policy =>
+            policy.RequireRole(Role.AccessToMyLocalAuthority));
 
-        options.AddPolicy(AccessToEditPages, policy =>
+        options.AddPolicy(AccessToAllLocalAuthorities, policy =>
+            policy.RequireRole(Role.AccessToAllLocalAuthorities));
+
+        options.AddPolicy(AccessToEditPages, policy => 
             policy.RequireRole(Role.AccessToEditPages));
 
         // Add fallback policy for all routes, requiring the user to be authenticated

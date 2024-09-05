@@ -1,7 +1,7 @@
-Feature: Search Page
+Feature: Search page
 
 Background:
-	Given I am a logged-in user
+	Given I am a DfE Named user
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns results

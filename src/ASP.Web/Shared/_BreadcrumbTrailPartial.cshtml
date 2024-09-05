@@ -1,4 +1,5 @@
-﻿@model BreadcrumbViewModel
+﻿@using ASP.Web.Core.BreadcrumbTrail
+@model BreadcrumbTrailViewModel
 
 <div class="govuk-breadcrumbs govuk-breadcrumbs--collapse-on-mobile">
     <ol class="govuk-breadcrumbs__list">
@@ -15,12 +16,9 @@
             </li>
         }
 
-        @if(!string.IsNullOrEmpty(Model.CurrentPageTitle))
-        {
-            <li data-testid="breadcrumb-current-page" class="govuk-breadcrumbs__list-item" aria-current="page">
-                @Model.CurrentPageTitle
-            </li>
-        }
+        <li data-testid="breadcrumb-current-page" class="govuk-breadcrumbs__list-item" aria-current="page">
+            @Model.CurrentPageTitle
+        </li>
         
     </ol>
 </div>

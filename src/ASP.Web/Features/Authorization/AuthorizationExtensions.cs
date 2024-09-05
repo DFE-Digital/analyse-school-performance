@@ -1,8 +1,6 @@
 ﻿using ASP.Infrastructure.Dsi;
 using ASP.Infrastructure.Dsi.DsiApiClient;
 using ASP.Infrastructure.Dsi.DsiApiClientProvider;
-using ASP.Web.Features.Authorization.LocalAuthority;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.Web.Features.Authorization
 {
@@ -13,8 +11,6 @@ namespace ASP.Web.Features.Authorization
             services.AddAuthorization(Policy.AddPolicies);
 
             services
-                .AddScoped<IAuthorizationHandler, LaUserAuthorizationHandler>()
-                .AddScoped<IAuthorizationHandler, AccessToAllLasAuthorizationHandler>()
                 .AddScoped<ISecurityKeyProvider, SymmetricSecurityKeyProvider>()
                 .AddScoped<IDsiApiClient, DsiApiClient>();
 

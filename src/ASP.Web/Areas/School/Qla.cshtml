@@ -4,7 +4,7 @@
 }
 
 <div class="govuk-width-container">
-    @await Html.PartialAsync("~/Shared/_BreadcrumbsPartial.cshtml", Model.Breadcrumbs)
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
 
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <h1 class="govuk-heading-xl">Question level analysis</h1>

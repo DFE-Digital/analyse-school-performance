@@ -23,8 +23,11 @@ namespace ASP.Infrastructure.Establishments
         public Task<Result<EstablishmentDetails>> GetEstablishmentDetails(string urn)
         {
             return _documentDB.GetAsync<EstablishmentDAO>(ContainerKey, urn, urn)
-                .ErrorIf(estab => estab.IsDeleted, Error.NotFound($@"The requested establishment with URN ""{urn}"" has been deleted."))
-                .ErrorIf(estab => !estab.IsVisible, Error.NotFound($@"The requested establishment with URN ""{urn}"" is not currently visible."))
+                .MapError(e => e is NotFoundError
+                    ? Error.NotFound($@"Could not find Establishment with URN ""{urn}"".")
+                    : e)
+                .ErrorIf(estab => estab.IsDeleted, Error.NotFound($@"Establishment with URN ""{urn}"" has been deleted."))
+                .ErrorIf(estab => !estab.IsVisible, Error.NotFound($@"Establishment with URN ""{urn}"" is not currently visible."))
                 .Map(dto => dto.MapToEstablishmentDetails());
         }
 

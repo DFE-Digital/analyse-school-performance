@@ -1,8 +1,65 @@
-Feature: School Page
-
-Background:
-	Given I am a logged-in user
+Feature: Generic School page
  
+@Javascript:disabled
+Scenario: A user with no access to all Schools should not be able to access the generic 'School' page. Instead, they should see a 403 Access Denied page.
+    Given I am a MAT Named user for Multi-Academy Trust "1234"
+    When I navigate to /school/123456/
+    Then I should get a 403 response
+    And the page title should be "Access denied | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Access denied"
+
+@Javascript:disabled
+Scenario: A School user should not be able to access the generic 'School' page, even if it's for their own School. Instead, they should see a 403 Access Denied page.
+    Given I am a School Named user for Establishment "123456"
+    When I navigate to /school/123456/
+    Then I should get a 403 response
+    And the page title should be "Access denied | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Access denied"
+
+@Javascript:disabled
+Scenario: School page should throw page not found if Establishment is not currently visible
+    Given non-visible Establishment "111111" exists:
+	"""
+	{
+        "name": "Thursby Primary School"
+    }
+	"""
+    And I am a DfE Named user
+    When I navigate to /school/111111
+    Then I should get a 404 response
+    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: Establishment with URN "111111" is not currently visible."
+
+@Javascript:disabled
+Scenario: School page should throw page not found if Establishment is deleted
+    Given deleted Establishment "111111" exists:
+	"""
+	{
+        "name": "Thursby Primary School"
+    }
+	"""
+    And I am a DfE Named user
+    When I navigate to /school/111111/
+    Then I should get a 404 response
+    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: Establishment with URN "111111" has been deleted."
+
+@Javascript:disabled
+Scenario: School page should display page not found page if School URN is invalid
+    Given Establishment "111111" exists:
+    """
+    {
+        "name": "Thursby Primary School"
+    }
+    """
+    And I am a DfE Named user
+    When I navigate to /school/222222/
+    Then I should get a 404 response
+    And the page title should be "Page not found | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Page not found"
+    And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
+    And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
+    And the element "*[data-testid='error-display-message']" should exist
+    And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: Could not find Establishment with URN "222222"."
+
 @Javascript:disabled
 Scenario: School page should contain seven app card container element
     Given Content Template "school-landing-page" exists:
@@ -81,6 +138,7 @@ Scenario: School page should contain seven app card container element
         "name": "Hollinswood Primary School"
     }
     """
+    And I am a DfE Named user
     When I navigate to /school/123456/
     Then the element "#app-card-container" class should contain "app-grid-container-four-column"
     And the elements "#app-card-container .app-card" should total 7
@@ -121,28 +179,17 @@ Scenario: School page should be accessible when provided urn
             "name": "Hollinswood Primary School"
         }
 		"""
-    When I navigate to /school/123456
+    And I am a DfE Named user
+    When I navigate to /school/123456/
 	Then I should get a 200 response
-	Then the page title should be "My school | Analyse school performance"
-	Then the element "h1.govuk-heading-xl" should have the text content "My school" 
+	Then the page title should be "Hollinswood Primary School | Analyse school performance"
+	Then the element "h1.govuk-heading-xl" should have the text content "Hollinswood Primary School" 
     Then the element "h1.govuk-heading-l" should have the outer HTML:
        """
        <h1 data-testid="school-page-school-name" class="govuk-heading-l"> Hollinswood Primary School
             <span style="font-weight:400;">(URN: 123456)</span>
         </h1>
        """
-
-@Javascript:disabled
-Scenario: School page should throw page not found if Establishment is deleted
-  Given deleted Establishment "112123" exists:
-		"""
-		{
-            "name": "Thursby Primary School"
-        }
-		"""
-    When I navigate to /school/112123
-    Then I should get a 404 response
-    Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: The requested establishment with URN "112123" has been deleted."
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
@@ -193,7 +240,8 @@ Scenario: School page should contain a school details disclosure element
             }
         }
 		"""
-    When I navigate to /school/123456
+    And I am a DfE Named user
+    When I navigate to /school/123456/
     Then I should get a 200 response
     And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
     And the element "*[data-testid='school-page-details-state-open']" should have the text content "Hide"
@@ -249,7 +297,8 @@ Scenario: School page should show if values are null
             "resourcedProvisionType": null
         }
 		"""
-    When I navigate to /school/123456
+    And I am a DfE Named user
+    When I navigate to /school/123456/
     Then I should get a 200 response
     And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
     And the element "*[data-testid='school-page-details-state-open']" should have the text content "Hide"
@@ -328,7 +377,8 @@ Scenario: School page should show if values are null case 2
             }
         }
 		"""
-    When I navigate to /school/123456
+    And I am a DfE Named user
+    When I navigate to /school/123456/
     Then I should get a 200 response
     And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
     And the element "*[data-testid='school-page-details-state-open']" should have the text content "Hide"
@@ -367,34 +417,6 @@ Scenario: Details disclosure element text should read 'Show school details' when
         "name": "Hollinswood Primary School"
     }
 	"""
-    When I navigate to /school/123456
+    And I am a DfE Named user
+    When I navigate to /school/123456/
     Then the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
-  
-@Javascript:disabled
-Scenario: School page should display page not found page if School URN is invalid
-    Given Establishment "112123" exists:
-    """
-    {
-        "name": "Thursby Primary School"
-    }
-    """
-    When I navigate to /school/112
-    Then I should get a 404 response
-    And the page title should be "Page not found | Analyse school performance"
-    And the element "h1.govuk-heading-l" should have the text content "Page not found"
-    And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
-    And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
-    And the element "*[data-testid='error-display-message']" should exist
-    And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: Could not find the object with id "112" and partition key "112" in container "establishments"."
-
-    @Javascript:disabled
-    Scenario: School page should throw page not found if Establishment is not currently visible
-        Given non-visible Establishment "112124" exists:
-		"""
-		{
-            "name": "Thursby Primary School"
-        }
-		"""
-        When I navigate to /school/112124
-        Then I should get a 404 response
-        Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: The requested establishment with URN "112124" is not currently visible."

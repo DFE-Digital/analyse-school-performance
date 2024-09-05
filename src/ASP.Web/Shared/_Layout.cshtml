@@ -78,7 +78,7 @@
             <button type="button" class="govuk-header__menu-button app-header__menu-button govuk-js-header-toggle" aria-controls="navigation" hidden>Menu</button>
         </div>
 
-        <partial name="_TopNavigationPartial" />
+        <partial name="_TopNavigationPartial" model=@Context.Request.Path />
     </header>
 
     <partial name="_PhaseBannerPartial" />

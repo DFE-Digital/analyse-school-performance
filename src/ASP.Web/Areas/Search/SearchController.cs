@@ -7,7 +7,7 @@ using ASP.Core.Establishments;
 using ASP.Core.Establishments.Search;
 using ASP.Core.Results;
 using ASP.Web.Areas.Shared.Pagination;
-using ASP.Web.Core.Templating;
+using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Mvc;
 
@@ -95,7 +95,7 @@ public class SearchController : Controller
 
     private SearchViewModel DefaultViewModel(SearchResultsPage<EstablishmentDetailsSearchResultDTO> result)
     {
-        var breadcrumbTrail = new BreadcrumbViewModel($"Search results for \"{result.SearchTerm}\"").AddBreadcrumb("Search", "/search");
+        var breadcrumbTrail = new BreadcrumbTrailViewModel($"Search results for \"{result.SearchTerm}\"").AddBreadcrumb("Search", "/search");
 
         return new SearchViewModel(
             EstablishmentSearchResultsModel.FromEstablishmentDetails(result.Results),
@@ -115,7 +115,7 @@ public class SearchController : Controller
 
     private SearchViewModel NoResultsViewModel(SearchParams searchParams)
     {
-        var breadcrumbTrail = new BreadcrumbViewModel($"We found no matches for \"{searchParams.Search}\"").AddBreadcrumb("Search", "/search");
+        var breadcrumbTrail = new BreadcrumbTrailViewModel($"We found no matches for \"{searchParams.Search}\"").AddBreadcrumb("Search", "/search");
 
         return new SearchViewModel(
             new List<EstablishmentSearchResultsModel>(),
@@ -130,7 +130,7 @@ public class SearchController : Controller
     {
         if (model.TotalCount == 1)
         {
-            return RedirectToAction("Index", "School",
+            return RedirectToAction("Index", "GenericSchool",
                 new { area = "School", urn = model.SearchResults.FirstOrDefault()!.Urn });
         }
 

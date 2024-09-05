@@ -48,6 +48,10 @@
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\GetEstablishmentDetails.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\UpdateContentTemplate.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
@@ -59,6 +63,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Features\GetEstablishmentDetails.feature.cs">
+      <Visible>true</Visible>
+      <DependentUpon>GetEstablishmentDetails.feature</DependentUpon>
+      <DesignTime>true</DesignTime>
+      <AutoGen>true</AutoGen>
+    </Compile>
     <Compile Update="Features\GetMultiAcademyTrust.feature.cs">
       <DependentUpon>GetMultiAcademyTrust.feature</DependentUpon>
       <AutoGen>true</AutoGen>

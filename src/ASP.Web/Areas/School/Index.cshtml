@@ -1,11 +1,11 @@
 ﻿@using ASP.Web.Areas.Shared.OfstedRating
 @model ASP.Web.Areas.School.ViewModels.SchoolViewModel
 @{
-    ViewData["Title"] = "My school";
+    ViewData["Title"] = Model.Title;
 }
 
 <div class="govuk-width-container govuk-main-wrapper">
-    <h1 class="govuk-heading-xl">My school</h1>
+    <h1 class="govuk-heading-xl">@Model.Title</h1>
     <div>
         <h1 data-testid="school-page-school-name" class="govuk-heading-l">
             @Model.EstablishmentDetails.Name

@@ -5,12 +5,17 @@ Background:
 
 @Javascript:disabled
 Scenario Outline: Cookie banner should exist when cookie preference has not been set
-	Given I navigate to <Path>
+	Given Content Template "help-test" exists:
+	"""
+	{
+	}
+	"""
+	When I navigate to <Path>
 	Then the element "#app-cookie-banner" should exist
 Examples:
-| Path       |
-| /          |
-| /download/ |
+| Path        |
+| /           |
+| /help/test/ |
 
 
 @Javascript:disabled

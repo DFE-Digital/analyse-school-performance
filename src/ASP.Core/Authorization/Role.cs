@@ -21,12 +21,14 @@ public sealed class Role
     public bool HasAccessToMyLaSchools => AccessToMyLaSchools.Contains(this);
     public bool HasAccessToMyMatSchools => AccessToMyMatSchools.Contains(this);
     public bool HasAccessToMyDioceseSchools => AccessToMyDioceseSchools.Contains(this);
-    public bool HasAccessToMyLa => AccessToMyLa.Contains(this);
-    public bool HasAccessToAllLas => AccessToAllLas.Contains(this);
+    public bool HasAccessToMyLocalAuthority => AccessToMyLocalAuthority.Contains(this);
+    public bool HasAccessToAllSchools => AccessToAllSchools.Contains(this);
+    public bool HasAccessToAllLocalAuthoritiess => AccessToAllLocalAuthorities.Contains(this);
     public bool HasAccessToEditPages => AccessToEditPages.Contains(this);
     public bool HasAccessToGuidance => AccessToGuidance.Contains(this);
-    public bool IsLaUser => AccessToMyLa.Contains(this);
-    public bool IsAny => true;
+    public bool IsLaUser => AccessToMyLocalAuthority.Contains(this);
+    public bool IsSchoolUser => AccessToMySchool.Contains(this);
+    public bool IsAny => All.Contains(this);
 
     public override bool Equals(object? obj)
     {
@@ -88,6 +90,8 @@ public sealed class Role
     public static readonly Role SuperUser = new("RAISE_Super_User", "Super Admin", true);
 
     public static readonly Role TrainingUnnamed = new("RAISE_Training_Anon", "Training Unnamed", false);
+
+    public static RoleCollection Any => All;
 
     public static readonly RoleCollection All =
     [
@@ -159,13 +163,21 @@ public sealed class Role
         DioceseNamed,
     ];
 
-    public static readonly RoleCollection AccessToMyLa =
+    public static readonly RoleCollection AccessToMyLocalAuthority =
     [
         LaUnnamed,
         LaNamed
     ];
 
-    public static readonly RoleCollection AccessToAllLas =
+    public static readonly RoleCollection AccessToAllLocalAuthorities =
+    [
+        DfeUnnamed,
+        DfeNamed,
+        OfstedUnnamed,
+        SuperUser,
+    ];
+
+    public static readonly RoleCollection AccessToAllSchools =
     [
         DfeUnnamed,
         DfeNamed,

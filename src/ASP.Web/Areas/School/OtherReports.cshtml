@@ -5,7 +5,7 @@
 }
 
 <div class="govuk-width-container">
-    @await Html.PartialAsync("~/Shared/_BreadcrumbsPartial.cshtml", Model.Breadcrumbs)
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
 
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <h1 class="govuk-heading-xl">Other reports</h1>
@@ -19,13 +19,11 @@
                         {
                             @if (view.ViewId == "Paragraph")
                             {
-                               @await Html.PartialAsync("~/Components/Paragraph/View.cshtml", view)
-                                ;
+                               @await Html.PartialAsync("~/Components/Paragraph/View.cshtml", view);
                             }
                             else if (view.ViewId == "List")
                             {
-                                @await Html.PartialAsync("~/Components/List/View.cshtml", view)
-                                ;
+                                @await Html.PartialAsync("~/Components/List/View.cshtml", view);
                             }
 
                         }
