@@ -1,20 +1,20 @@
 ﻿Feature: Generic Local authority page
 
 @Javascript:disabled
-Scenario: A user with no access to all Local Authorities should not be able to access the generic 'Local authority' page. Instead, they should see a 403 Access Denied page.
+Scenario: A user with no access to all Local Authorities should not be able to access the generic 'Local authority' page. Instead, they should see a 403 Access not allowed page.
     Given I am a MAT Named user for Multi-Academy Trust "1234"
     When I navigate to /local-authority/301/
     Then I should get a 403 response
-    And the page title should be "Access denied | Analyse school performance"
-    And the element "h1.govuk-heading-l" should have the text content "Access denied"
+    And the page title should be "Access not allowed | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
-Scenario: An LA user should not be able to access the generic 'Local authority' page, even if it's for their own LA. Instead, they should see a 403 Access Denied page.
+Scenario: An LA user should not be able to access the generic 'Local authority' page, even if it's for their own LA. Instead, they should see a 403 Access not allowed page.
     Given I am a LA Named user for Local Authority "301"
     When I navigate to /local-authority/301/
     Then I should get a 403 response
-    And the page title should be "Access denied | Analyse school performance"
-    And the element "h1.govuk-heading-l" should have the text content "Access denied"
+    And the page title should be "Access not allowed | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
 Scenario: Local authority page should not be found when invalid code is provided

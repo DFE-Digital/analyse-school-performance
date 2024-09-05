@@ -1,20 +1,20 @@
 Feature: My school page
 
 @Javascript:disabled
-Scenario: A non-School user should not be able to access the 'My school' page. Instead, they should see a 403 Access Denied page.
+Scenario: A non-School user should not be able to access the 'My school' page. Instead, they should see a 403 Access not allowed page.
     Given I am a MAT Named user for Multi-Academy Trust "1234"
     When I navigate to /my-school/
     Then I should get a 403 response
-    And the page title should be "Access denied | Analyse school performance"
-    And the element "h1.govuk-heading-l" should have the text content "Access denied"
+    And the page title should be "Access not allowed | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
-Scenario: A user with access to all schools should not be able to access the 'My school' page. Instead, they should see a 403 Access Denied page.
+Scenario: A user with access to all schools should not be able to access the 'My school' page. Instead, they should see a 403 Access not allowed page.
     Given I am a DfE Named user
     When I navigate to /my-school/
     Then I should get a 403 response
-    And the page title should be "Access denied | Analyse school performance"
-    And the element "h1.govuk-heading-l" should have the text content "Access denied"
+    And the page title should be "Access not allowed | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
 Scenario: School page should throw page not found if Establishment is not visible

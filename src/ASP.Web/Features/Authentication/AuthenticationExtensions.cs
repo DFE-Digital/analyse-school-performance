@@ -45,7 +45,7 @@ namespace ASP.Web.Features.Authentication
                 //is reached
                 options.SlidingExpiration = true;
 
-                //This is the high level access denied check
+                //This is the high level Access not allowed check
                 //If you try to access a controller action that's protected with a Policy that you do not
                 //have access rights to then you will be redirected to the 'accessdenied' page
                 options.AccessDeniedPath = new PathString(DsiConstants.AccessDeniedRoute);

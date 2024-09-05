@@ -275,12 +275,12 @@ Scenario: Editing a published revision should create a new revision
 
 		
 @Javascript:disabled
-Scenario: A non-admin user should not be able to access the 'edit' page. Instead, they should see a 403 Access Denied page.
+Scenario: A non-admin user should not be able to access the 'edit' page. Instead, they should see a 403 Access not allowed page.
         And I am a <Role> user
         When I navigate to /help/test/edit
         Then I should get a 403 response
-        And the page title should be "Access denied | Analyse school performance"
-        And the element "h1.govuk-heading-l" should have the text content "Access denied"
+        And the page title should be "Access not allowed | Analyse school performance"
+        And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 Examples: 
 	| Role            |
 	| DfE Named       |

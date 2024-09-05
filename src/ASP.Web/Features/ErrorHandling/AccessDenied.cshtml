@@ -1,14 +1,31 @@
 @using ASP.Web.Features.ErrorHandling
 @model ErrorViewModel
 @{
-    ViewData["Title"] = "Access denied";
+    ViewData["Title"] = "Access not allowed";
 }
 
 <div class="govuk-width-container">
     <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <h1 class="govuk-heading-l">Access denied</h1>
+                <h1 class="govuk-heading-l">Access not allowed</h1>
+                <p class="govuk-body">You do not have permission to visit this part of the service. You can:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>use the back button and try another link</li>
+                    <li>contact an approver at your organisation</li>
+                </ul>
+                @if (Model.ShowErrorCode)
+                {
+                    <p class="govuk-body" data-testid="error-display-code">
+                        <strong>Error code:</strong> <code class="govuk-body">@Model.ErrorCode</code>
+                    </p>
+                }
+                @if (Model.ShowErrorMessage)
+                {
+                    <p class="govuk-body" data-testid="error-display-message">
+                        <strong>Error message:</strong> <code class="govuk-body">@Model.ErrorMessage</code>
+                    </p>
+                }
             </div>
         </div>
     </main>

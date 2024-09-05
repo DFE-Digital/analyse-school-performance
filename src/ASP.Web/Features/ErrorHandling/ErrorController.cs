@@ -64,7 +64,11 @@ namespace ASP.Web.Features.ErrorHandling
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult AccessDenied()
         {
-            return View();
+            var errorModel = new ErrorViewModel {
+                ErrorCode = HttpContext.TraceIdentifier
+            };
+
+            return View(errorModel);
         }
     }
 }

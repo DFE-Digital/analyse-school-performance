@@ -1,20 +1,20 @@
 Feature: Generic School page
  
 @Javascript:disabled
-Scenario: A user with no access to all Schools should not be able to access the generic 'School' page. Instead, they should see a 403 Access Denied page.
+Scenario: A user with no access to all Schools should not be able to access the generic 'School' page. Instead, they should see a 403 Access not allowed page.
     Given I am a MAT Named user for Multi-Academy Trust "1234"
     When I navigate to /school/123456/
     Then I should get a 403 response
-    And the page title should be "Access denied | Analyse school performance"
-    And the element "h1.govuk-heading-l" should have the text content "Access denied"
+    And the page title should be "Access not allowed | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
-Scenario: A School user should not be able to access the generic 'School' page, even if it's for their own School. Instead, they should see a 403 Access Denied page.
+Scenario: A School user should not be able to access the generic 'School' page, even if it's for their own School. Instead, they should see a 403 Access not allowed page.
     Given I am a School Named user for Establishment "123456"
     When I navigate to /school/123456/
     Then I should get a 403 response
-    And the page title should be "Access denied | Analyse school performance"
-    And the element "h1.govuk-heading-l" should have the text content "Access denied"
+    And the page title should be "Access not allowed | Analyse school performance"
+    And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
 Scenario: School page should throw page not found if Establishment is not currently visible
