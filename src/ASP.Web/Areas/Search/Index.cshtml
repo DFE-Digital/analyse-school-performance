@@ -4,7 +4,7 @@
     ViewData["Title"] = "Search";
 
     var hasSearchTermError = ViewData.ModelState.ContainsKey(nameof(SearchParams.Search))
-                                && ViewData.ModelState[nameof(SearchParams.Search)]?.Errors.Count > 0;
+                             && ViewData.ModelState[nameof(SearchParams.Search)]?.Errors.Count > 0;
 }
 
 <div class="govuk-width-container govuk-main-wrapper">
@@ -27,13 +27,13 @@
     }
 
     <h1 id="search-page-heading" class="govuk-heading-l">Search for a school</h1>
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row" x-data="searchSuggestions">
         <div class="govuk-grid-column-one-half">
             <h2 class="govuk-heading-s asp-search-heading">School</h2>
 
-            <input type="hidden" id="suggestionUrn" name="suggestionUrn" />
-            <form id="searchForm" asp-controller="Search" asp-action="Index" method="get">
-                <div class="govuk-form-group @(hasSearchTermError ? "govuk-form-group--error" : "")">
+            <input type="hidden" id="suggestionUrn" name="suggestionUrn" x-model="suggestionUrn" />
+            <form id="searchForm" asp-controller="Search" asp-action="Index" method="get" x-on:submit="handleSubmit">
+                <div class="govuk-form-group">
 
                     <label for="searchTerm" class="govuk-label govuk-body">
                         @Constants.SchoolSearchFormSearchTermInputLabel
@@ -47,14 +47,13 @@
                                 @Constants.SchoolSearchTermInputValidationMessage
                             </span>
                         }
-
                         <div class="search-input-container">
                             <div id="suggestionSearchTermContainer" data-suggest-url="/search/suggestions"
                                  class="js-enabled govuk-!-width-three-quarters @(hasSearchTermError ? "search-input--error" : "")"
                                  aria-describedby="searchTerm-input-error">
                             </div>
                             <input type="text" id="searchTerm"
-                                   class="js-disabled govuk-input govuk-!-width-three-quarters @(hasSearchTermError ? "govuk-input--error" : "")"
+                                   class="js-disabled govuk-input govuk-!-width-three-quarters @(hasSearchTermError ? "search-input--error" : "")"
                                    aria-describedby="searchTerm-input-error"
                                    name="search" spellcheck="false"/>
                             <button id="searchSubmit" type="submit" class="govuk-button app-search-button">
