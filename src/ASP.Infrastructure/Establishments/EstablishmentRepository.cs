@@ -91,26 +91,52 @@ namespace ASP.Infrastructure.Establishments
         {
             var inputSearchTerm = searchTerm.ToLaEstabCodeFormat();
 
-            return await SearchByLaestabCommon(scope, inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
+            return await SearchByLaestabCommon(scope, inputSearchTerm, searchTerm, page, resultsPerPage,
+                cancellationToken);
         }
 
-        public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>> 
-            EstablishmentSearchSuggestions(
-            Scope scope,
-            string searchTerm,
-            int maxSuggestions,
-            CancellationToken cancellationToken = default
-        )
+        public async Task<Result<List<EstablishmentSearchSuggestionsResult>>> GetEstablishmentSearchSuggestions(Scope scope, string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default)
         {
-            return await _documentDB.QueryAsync<EstablishmentDAO>(ContainerKey,
-                    ApplyScopeAndSearchSuggestionsQuery(scope, searchTerm, maxSuggestions), cancellationToken)
-                .ErrorIf(q => !q.Any(), Error.NotFound($@"there were no matches for ""{searchTerm}"" within the given scope."))
-                .Map(x => new SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>
-                {
-                    Suggestions = x.MapToEstablishmentSearchSuggestionsResults(),
-                    SearchTerm = searchTerm,
-                    MaxSuggestions = maxSuggestions
-                });
+            return await _documentDB.QueryAsync(
+                ContainerKey,
+                ApplyScopeAndSearchSuggestionsQuery(scope, searchTerm, maxSuggestions),
+                cancellationToken
+            )
+            .Map(r => r.MapToEstablishmentSearchSuggestionsResults())
+            .ErrorIf(r => r.Count == 0, Error.NotFound($@"there were no matches for ""{searchTerm}"" within the given scope."));
+        }
+
+        public async Task<Result<List<EstablishmentSearchSuggestionsResult>>> GetEstablishmentSearchSuggestionsByUrn(Scope scope, string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default)
+        {
+            return await _documentDB.QueryAsync(
+                ContainerKey,
+                ApplyScopeAndSearchSuggestionsUrnQuery(scope, searchTerm, maxSuggestions),
+                cancellationToken
+            )
+            .Map(r => r.MapToEstablishmentSearchSuggestionsResults())
+            .ErrorIf(r => r.Count == 0, Error.NotFound($@"there were no matches for ""{searchTerm}"" within the given scope."));
+        }
+
+        public async Task<Result<List<EstablishmentSearchSuggestionsResult>>> GetEstablishmentSearchSuggestionsByLaEstab(Scope scope, string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default)
+        {
+            return await _documentDB.QueryAsync(
+                ContainerKey,
+                ApplyScopeAndSearchSuggestionsLaestabQuery(scope, searchTerm, maxSuggestions),
+                cancellationToken
+            )
+            .Map(r => r.MapToEstablishmentSearchSuggestionsResults())
+            .ErrorIf(r => r.Count == 0, Error.NotFound($@"there were no matches for ""{searchTerm}"" within the given scope."));
+        }
+
+        public async Task<Result<List<EstablishmentSearchSuggestionsResult>>> GetEstablishmentSearchSuggestionsByNameAddress(Scope scope, string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default)
+        {
+            return await _documentDB.QueryAsync(
+                ContainerKey,
+                ApplyScopeAndSearchSuggestionsNameAddressQuery(scope, searchTerm, maxSuggestions),
+                cancellationToken
+            )
+            .Map(r => r.MapToEstablishmentSearchSuggestionsResults())
+            .ErrorIf(r => r.Count == 0, Error.NotFound($@"there were no matches for ""{searchTerm}"" within the given scope."));
         }
 
         private async Task<Result<SearchResultsPage<EstablishmentListItem>>> SearchByLaestabCommon(
@@ -218,5 +244,60 @@ namespace ASP.Infrastructure.Establishments
             };
         }
 
+        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>>
+            ApplyScopeAndSearchSuggestionsUrnQuery(Scope scope,
+                string searchTerm, int maxSuggestions)
+        {
+            return queryable =>
+            {
+                // Apply scope filter
+                var scopedQuery = ScopeWhere(scope)(queryable);
+                var urnMatches = scopedQuery
+                    .Where(x => !x.IsDeleted && x.IsVisible && (x.Urn.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)));
+
+                return urnMatches.OrderBy(x => x.Urn).Take(maxSuggestions);
+            };
+        }
+
+        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>>
+            ApplyScopeAndSearchSuggestionsLaestabQuery(Scope scope,
+                string searchTerm, int maxSuggestions)
+        {
+            return queryable =>
+            {
+                // Apply scope filter
+                var scopedQuery = ScopeWhere(scope)(queryable);
+                var laestabMatches = scopedQuery
+                    .Where(x => !x.IsDeleted && x.IsVisible &&
+                                (x.Laestab != null &&
+                                (x.Laestab.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || x.Laestab
+                                    .Replace("/", "").Contains(searchTerm,
+                                        StringComparison.CurrentCultureIgnoreCase))));
+
+                return laestabMatches.OrderBy(x => x.Laestab).Take(maxSuggestions);
+            };
+        }
+
+        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>>
+            ApplyScopeAndSearchSuggestionsNameAddressQuery(Scope scope,
+                string searchTerm, int maxSuggestions)
+        {
+            return queryable =>
+            {
+                // Apply scope filter
+                var scopedQuery = ScopeWhere(scope)(queryable);
+                var nameAddressMatches = scopedQuery
+                    .Where(x => !x.IsDeleted && x.IsVisible &&
+                                (x.Name.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                                (x.Address != null &&
+                                 (x.Address.Street.Contains(searchTerm,
+                                      StringComparison.CurrentCultureIgnoreCase) ||
+                                  x.Address.Town.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                                  x.Address.PostCode.Contains(searchTerm,
+                                      StringComparison.CurrentCultureIgnoreCase)))));
+
+                return nameAddressMatches.OrderBy(x => x.Name).Take(maxSuggestions);
+            };
+        }
     }
 }

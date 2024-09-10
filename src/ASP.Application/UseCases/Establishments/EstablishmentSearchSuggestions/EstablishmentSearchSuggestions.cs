@@ -10,36 +10,37 @@ namespace ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions
 
 public class EstablishmentSearchSuggestions : IEstablishmentSearchSuggestions
 {
-    private readonly IEstablishmentRepository _repository;
-    private readonly ILocalAuthorityRepository _localAuthorityRepository;
-    private readonly IMultiAcademyTrustRepository _multiAcademyTrustRepository;
+    private readonly EstablishmentSearchSuggestionsService _searchService;
 
-    public EstablishmentSearchSuggestions(IEstablishmentRepository repository,
+    public EstablishmentSearchSuggestions(
+        IEstablishmentRepository establishmentRepository,
         ILocalAuthorityRepository localAuthorityRepository,
-        IMultiAcademyTrustRepository multiAcademyTrustRepository)
+        IMultiAcademyTrustRepository multiAcademyTrustRepository
+    )
     {
-        _localAuthorityRepository = localAuthorityRepository;
-        _multiAcademyTrustRepository = multiAcademyTrustRepository;
-        _repository = repository;
+        _searchService = new EstablishmentSearchSuggestionsService(
+            establishmentRepository,
+            localAuthorityRepository,
+            multiAcademyTrustRepository
+        );
     }
 
     public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>> HandleRequest(
-        EstablishmentSearchSuggestionsRequest request)
+        EstablishmentSearchSuggestionsRequest request
+    )
     {
         var maxSuggestions = request.MaxSuggestions ?? Core.Constants.SearchResultMaxSuggestions;
 
         var scope = new Scope(request.ScopeType, request.ScopeIdentifier);
 
-        return await scope.Validate(_localAuthorityRepository, _multiAcademyTrustRepository)
-            .Then(async t => await _repository.EstablishmentSearchSuggestions(scope, request.SearchTerm,
-                maxSuggestions)).Map(x =>
-                new SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>()
-                {
-                    Suggestions = x.Suggestions.MapToListOfSearchSuggestionsResultsDTO(),
-                    MaxSuggestions = maxSuggestions,
-                    SearchTerm = request.SearchTerm,
-                    Scope = request.ScopeType.ToString(),
-                    ScopeIdentifier = request.ScopeIdentifier
-                });
+        return await _searchService.Search(request.SearchTerm, scope, maxSuggestions)
+            .Map(x => new SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>()
+            {
+                Suggestions = x.Suggestions.MapToListOfSearchSuggestionsResultsDTO(),
+                MaxSuggestions = maxSuggestions,
+                SearchTerm = request.SearchTerm,
+                Scope = request.ScopeType.ToString(),
+                ScopeIdentifier = request.ScopeIdentifier
+            });
     }
 }

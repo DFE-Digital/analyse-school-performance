@@ -12,7 +12,6 @@ using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariable
 using ASP.Application;
 using ASP.Core.LocalAuthorities;
 using ASP.Core.MultiAcademyTrusts;
-using ASP.Infrastructure;
 using ASP.Infrastructure.Establishments;
 using ASP.Infrastructure.LocalAuthorities;
 using ASP.Infrastructure.MultiAcademyTrusts;
@@ -38,8 +37,6 @@ namespace ASP.Api
 
                     services.AddCosmosDbDependencies();
                     services.RegisterUseCases();
-                    services.ConfigureSearchStrategyFactory();
-                    services.ConfigureSearchServices();
 
                     services.AddOptions<ErrorHandlingOptions>()
                        .Configure<IConfiguration>(

@@ -7,7 +7,6 @@ using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using Microsoft.Extensions.DependencyInjection;
-using ASP.Core.Establishments.Search;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
@@ -28,14 +27,6 @@ public static class AspApplicationExtensions
         services.AddScoped<IGetLocalAuthority, GetLocalAuthority>();
         services.AddScoped<IGetAvailableSchoolDownloads, GetAvailableSchoolDownloads>();
         services.AddScoped<IGetMultiAcademyTrust, GetMultiAcademyTrust>();
-
-        return services;
-    }
-
-    public static IServiceCollection ConfigureSearchStrategyFactory(this IServiceCollection services)
-    {
-        // Register the factory
-        services.AddScoped<IEstablishmentSearchStrategyFactory, EstablishmentSearchStrategyFactory>();
 
         return services;
     }

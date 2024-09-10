@@ -31,9 +31,24 @@ namespace ASP.Core.Establishments
             int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>>
-            EstablishmentSearchSuggestions(
+        Task<Result<List<EstablishmentSearchSuggestionsResult>>>
+            GetEstablishmentSearchSuggestions(
                 Scope scope, string searchTerm, 
+                int maxSuggestions, CancellationToken cancellationToken = default);
+
+        Task<Result<List<EstablishmentSearchSuggestionsResult>>>
+            GetEstablishmentSearchSuggestionsByUrn(
+                Scope scope, string searchTerm,
+                int maxSuggestions, CancellationToken cancellationToken = default);
+
+        Task<Result<List<EstablishmentSearchSuggestionsResult>>>
+            GetEstablishmentSearchSuggestionsByLaEstab(
+                Scope scope, string searchTerm,
+                int maxSuggestions, CancellationToken cancellationToken = default);
+
+        Task<Result<List<EstablishmentSearchSuggestionsResult>>>
+            GetEstablishmentSearchSuggestionsByNameAddress(
+                Scope scope, string searchTerm,
                 int maxSuggestions, CancellationToken cancellationToken = default);
     }
 }

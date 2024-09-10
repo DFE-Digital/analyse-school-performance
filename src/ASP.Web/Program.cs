@@ -1,5 +1,4 @@
 using ASP.Infrastructure.Api;
-using ASP.Web.Areas.Search;
 using ASP.Web.Components;
 using ASP.Web.Core.Environment;
 using ASP.Web.Core.Templating;
@@ -44,8 +43,7 @@ namespace ASP.Web
                 .ConfigureTemplateComponents()
                 .ConfigureLogging()
 
-                .ConfigureRepositories()
-                .ConfigureSearch();
+                .ConfigureRepositories();
 
             builder.Services.ConfigureInProcessApi();
 

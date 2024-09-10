@@ -1870,16 +1870,18 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 	And I update the textbox "#searchTerm" to have the value "42"
 	Then the autocomplete results should appear
 	Then there should be 4 autocomplete items
-	Then the elements ".autocomplete__option strong" should have the text contents: 
+	Then the elements ".autocomplete__option strong" should have the text contents:
 	  | Highlighted Values |
-	  | 4/2                |
-	  | 4/2                |
-	  | 4/2                |
 	  | 42                 |
+	  | 4/2                |
+	  | 4/2                |
+	  | 4/2                |
 	  | 4/2                |
 	Then the elements ".autocomplete__option" should have the text contents:
 	  | Autocomplete Items                                                                                    |
-	  | A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
-	  | Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201              |
-	  | Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200               |
 	  | Some Secondary School Address:13 The Road, SomeTown TR18 3JT URN:444442, LAESTAB:894/2203             |
+	  | Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200               |
+	  | Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201              |
+	  | A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
+	  
+	  

@@ -4,17 +4,22 @@ namespace ASP.Core.Establishments.Search;
 
 public class EstablishmentNameOrLocationSearchStrategy : EstablishmentSearchStrategy
 {
-    private readonly ISearchService _searchService;
+    private readonly IEstablishmentRepository _establishmentRepository;
 
-    public EstablishmentNameOrLocationSearchStrategy(ISearchService searchService, Scope scope, string searchTerm,
-        int page, int resultsPerPage) : base(scope, searchTerm, page, resultsPerPage)
+    public EstablishmentNameOrLocationSearchStrategy(
+        IEstablishmentRepository establishmentRepository, 
+        Scope scope, 
+        string searchTerm,
+        int page, 
+        int resultsPerPage
+    ) : base(scope, searchTerm, page, resultsPerPage)
     {
-        _searchService = searchService;
+        _establishmentRepository = establishmentRepository;
     }
 
     public override async Task<Result<SearchResultsPage<EstablishmentListItem>>> Execute()
     {
-        var results = await _searchService.SearchAsync(Scope, SearchTerm, Page, ResultsPerPage);
+        var results = await _establishmentRepository.SearchEstablishmentNameOrLocation(Scope, SearchTerm, Page, ResultsPerPage);
 
         return results;
     }

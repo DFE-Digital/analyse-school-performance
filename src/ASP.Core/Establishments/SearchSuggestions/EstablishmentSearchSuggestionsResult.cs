@@ -18,4 +18,15 @@ public class EstablishmentSearchSuggestionsResult
         IsDeleted = isDeleted;
         IsVisible = isVisible;
     }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is EstablishmentSearchSuggestionsResult dao &&
+               Urn == dao.Urn;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Urn);
+    }
 }
