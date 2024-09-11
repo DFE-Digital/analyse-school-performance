@@ -4,6 +4,10 @@
     ViewData["Title"] = Model.Title;
 }
 
+<div class="govuk-width-container app-width-container">
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+</div>
+
 <div class="govuk-width-container govuk-main-wrapper">
     <h1 class="govuk-heading-xl">@Model.Title</h1>
     <div>
@@ -72,10 +76,10 @@
                     </dt>
                     <dd class="govuk-summary-list__value">
                         @await Html.PartialAsync("OfstedRating/_OfstedRatingPartial", new OfstedRatingModel()
-                        {
-                            OfstedRating = Model.EstablishmentDetails.OfstedRating,
-                            Urn = Model.EstablishmentDetails.Urn
-                        })
+                   {
+                       OfstedRating = Model.EstablishmentDetails.OfstedRating,
+                       Urn = Model.EstablishmentDetails.Urn
+                   })
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -89,7 +93,7 @@
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-principal-key"  class="govuk-summary-list__key app-school-details-summary-key">
+                    <dt data-testid="school-details-principal-key" class="govuk-summary-list__key app-school-details-summary-key">
                         Headteacher / Principal
                     </dt>
                     <dd data-testid="school-details-principal-value" class="govuk-summary-list__value">
@@ -114,7 +118,7 @@
                     <dt data-testid="school-details-religious-key" class="govuk-summary-list__key app-school-details-summary-key">
                         Religious character
                     </dt>
-                    <dd data-testid="school-details-religious-value"  class="govuk-summary-list__value">
+                    <dd data-testid="school-details-religious-value" class="govuk-summary-list__value">
                         @(Model.EstablishmentDetails.ReligiousDenomination == null
                             ? string.Empty
                             : Model.EstablishmentDetails.ReligiousDenomination.Name)
