@@ -1,4 +1,4 @@
-﻿using ASP.Core.Establishments;
+﻿using ASP.Core.Scope;
 
 namespace ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 

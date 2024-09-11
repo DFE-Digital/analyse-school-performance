@@ -8,7 +8,7 @@ public class EstablishmentNameOrLocationSearchStrategy : EstablishmentSearchStra
 
     public EstablishmentNameOrLocationSearchStrategy(
         IEstablishmentRepository establishmentRepository, 
-        Scope scope, 
+        Scope.Scope scope, 
         string searchTerm,
         int page, 
         int resultsPerPage
@@ -17,7 +17,7 @@ public class EstablishmentNameOrLocationSearchStrategy : EstablishmentSearchStra
         _establishmentRepository = establishmentRepository;
     }
 
-    public override async Task<Result<SearchResultsPage<EstablishmentListItem>>> Execute()
+    public override async Task<Result<SearchResultsPage<EstablishmentListing>>> Execute()
     {
         var results = await _establishmentRepository.SearchEstablishmentNameOrLocation(Scope, SearchTerm, Page, ResultsPerPage);
 

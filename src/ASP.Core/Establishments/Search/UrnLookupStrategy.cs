@@ -6,24 +6,24 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
 {
     private readonly IEstablishmentRepository _repository;
 
-    public UrnLookupStrategy(IEstablishmentRepository repository, Scope scope, string searchTerm, int page = 1,
+    public UrnLookupStrategy(IEstablishmentRepository repository, Scope.Scope scope, string searchTerm, int page = 1,
         int resultsPerPage = Constants.SearchResultPageSize) : base(scope, searchTerm, page, resultsPerPage)
     {
         _repository = repository;
     }
 
-    public override async Task<Result<SearchResultsPage<EstablishmentListItem>>> Execute()
+    public override async Task<Result<SearchResultsPage<EstablishmentListing>>> Execute()
     {
         var result = await _repository.GetEstablishmentDetails(SearchTerm);
 
-        return result.Map(establishment => new SearchResultsPage<EstablishmentListItem>(
+        return result.Map(establishment => new SearchResultsPage<EstablishmentListing>(
             SearchTerm,
             Scope.ScopeType.ToString(),
             Scope.ScopeIdentifier,
             Page,
             ResultsPerPage,
             totalResults: 1,
-            [new EstablishmentListItem(
+            [new EstablishmentListing(
                 establishment.Urn,
                 establishment.Name,
                 establishment.IsPrimary,

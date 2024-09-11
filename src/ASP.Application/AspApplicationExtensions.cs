@@ -9,6 +9,7 @@ using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using Microsoft.Extensions.DependencyInjection;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
+using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 
 namespace ASP.Application;
@@ -19,6 +20,7 @@ public static class AspApplicationExtensions
     {
         services.AddScoped<IUpdateContentTemplate, UpdateContentTemplate>();
         services.AddScoped<IViewContentTemplate, ViewContentTemplate>();
+        services.AddScoped<IGetAllEstablishments, GetAllEstablishments>();
         services.AddScoped<IGetEstablishmentDetails, GetEstablishmentDetails>();
         services.AddScoped<IEstablishmentSearch, EstablishmentSearch>();
         services.AddScoped<IEstablishmentSearchSuggestions, EstablishmentSearchSuggestions>();

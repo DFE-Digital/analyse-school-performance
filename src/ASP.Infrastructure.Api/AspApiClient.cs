@@ -97,7 +97,7 @@ namespace ASP.Infrastructure.Api
                 .Then(response => JsonHelper.DeserializeNotNull<EstablishmentDetailsDTO>(response));
         }
 
-        public async Task<Result<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>> EstablishmentSearch(
+        public async Task<Result<SearchResultsPage<EstablishmentListingDTO>>> EstablishmentSearch(
             EstablishmentSearchRequest request)
         {
             var url = "/api/EstablishmentSearch";
@@ -118,10 +118,10 @@ namespace ASP.Infrastructure.Api
 
             return await ApiGet(url, queryString)
                 .Then(response =>
-                    JsonHelper.DeserializeNotNull<SearchResultsPage<EstablishmentDetailsSearchResultDTO>>(response));
+                    JsonHelper.DeserializeNotNull<SearchResultsPage<EstablishmentListingDTO>>(response));
         }
 
-        public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>>
+        public async Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>>
             EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request)
         {
             var url = "/api/EstablishmentSearchSuggestions";
@@ -137,7 +137,7 @@ namespace ASP.Infrastructure.Api
 
             return await ApiGet(url, queryString)
                 .Then(response =>
-                    JsonHelper.DeserializeNotNull<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>(
+                    JsonHelper.DeserializeNotNull<SearchSuggestionsResult<EstablishmentSuggestionDTO>>(
                         response));
         }
         

@@ -1,6 +1,6 @@
 ﻿namespace ASP.Core.Establishments
 {
-    public class EstablishmentListItem
+    public class EstablishmentListing
     {
         public string Urn { get; }
         public string Name { get; }
@@ -12,7 +12,7 @@
         public DateTime? OfstedLastInspectionDate { get; }
         public string? Laestab { get; }
 
-        public EstablishmentListItem(
+        public EstablishmentListing(
             string urn,
             string name,
             bool? isPrimary, bool? isSecondary,

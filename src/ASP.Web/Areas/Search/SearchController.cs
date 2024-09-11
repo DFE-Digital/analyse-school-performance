@@ -3,9 +3,9 @@ using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Core;
-using ASP.Core.Establishments;
 using ASP.Core.Establishments.Search;
 using ASP.Core.Results;
+using ASP.Core.Scope;
 using ASP.Web.Areas.Shared.Pagination;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Features.TermsOfUse;
@@ -93,7 +93,7 @@ public class SearchController : Controller
         return await _api.EstablishmentSearchSuggestions(estabSearchSuggestions).ToActionResult(Json, _hostEnvironment);
     }
 
-    private SearchViewModel DefaultViewModel(SearchResultsPage<EstablishmentDetailsSearchResultDTO> result)
+    private SearchViewModel DefaultViewModel(SearchResultsPage<EstablishmentListingDTO> result)
     {
         var breadcrumbTrail = new BreadcrumbTrailViewModel($"Search results for \"{result.SearchTerm}\"").AddBreadcrumb("Search", "/search");
 

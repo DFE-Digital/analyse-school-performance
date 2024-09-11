@@ -1,6 +1,6 @@
 ﻿namespace ASP.Core.Establishments.SearchSuggestions;
 
-public class EstablishmentSearchSuggestionsResult
+public class EstablishmentSuggestion
 {
     public string Urn { get; }
     public string Name { get; }
@@ -9,7 +9,8 @@ public class EstablishmentSearchSuggestionsResult
     public bool IsDeleted { get; }
     public bool IsVisible { get; }
 
-    public EstablishmentSearchSuggestionsResult(string urn, string name, Address? address, string? laestab, bool isDeleted, bool isVisible)
+    public EstablishmentSuggestion(string urn, string name, Address? address,
+        string? laestab, bool isDeleted, bool isVisible)
     {
         Urn = urn;
         Name = name;
@@ -21,7 +22,7 @@ public class EstablishmentSearchSuggestionsResult
 
     public override bool Equals(object? obj)
     {
-        return obj is EstablishmentSearchSuggestionsResult dao &&
+        return obj is EstablishmentSuggestion dao &&
                Urn == dao.Urn;
     }
 

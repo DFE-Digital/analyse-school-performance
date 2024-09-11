@@ -21,7 +21,7 @@ namespace ASP.Core.Establishments.SearchSuggestions
             _multiAcademyTrustRepository = multiAcademyTrustRepository;
         }
 
-        public async Task<Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResult>>> Search(string searchTerm, Scope scope, int maxSuggestions)
+        public async Task<Result<SearchSuggestionsResult<EstablishmentSuggestion>>> Search(string searchTerm, Scope.Scope scope, int maxSuggestions)
         {
             return await scope.Validate(_localAuthorityRepository, _multiAcademyTrustRepository)
                 .Then(async t =>
@@ -54,7 +54,7 @@ namespace ASP.Core.Establishments.SearchSuggestions
 
                     return await _establishmentRepository.GetEstablishmentSearchSuggestions(scope, searchTerm, maxSuggestions);
                 })
-                .Map(results => new SearchSuggestionsResult<EstablishmentSearchSuggestionsResult> {
+                .Map(results => new SearchSuggestionsResult<EstablishmentSuggestion> {
                     Suggestions = results,
                     SearchTerm = searchTerm,
                     MaxSuggestions = maxSuggestions

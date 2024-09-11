@@ -2,7 +2,7 @@
 using ASP.Core.MultiAcademyTrusts;
 using ASP.Core.Results;
 
-namespace ASP.Core.Establishments;
+namespace ASP.Core.Scope;
 
 public class Scope
 {

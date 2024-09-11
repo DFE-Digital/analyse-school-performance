@@ -2,11 +2,11 @@
 
 namespace ASP.Infrastructure.Establishments.DAO.Mapper;
 
-public static class EstablishmentListItemMapper
+public static class EstablishmentListingMapper
 {
-    public static EstablishmentListItem MapToEstablishmentListItem(this EstablishmentDAO details)
+    public static EstablishmentListing MapToEstablishmentListing(this EstablishmentDAO details)
     {
-        return new EstablishmentListItem(
+        return new EstablishmentListing(
             details.Urn,
             details.Name,
             details.IsPrimary,
@@ -17,10 +17,5 @@ public static class EstablishmentListItemMapper
             details.OfstedLastInspectionDate,
             details.Laestab
         );
-    }
-
-    public static List<EstablishmentListItem> MapToEstablishmentListItem(this IEnumerable<EstablishmentDAO> detailsList)
-    {
-        return detailsList.Select(MapToEstablishmentListItem).ToList();
     }
 }

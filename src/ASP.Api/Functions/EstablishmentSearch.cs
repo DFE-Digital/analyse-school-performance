@@ -1,5 +1,5 @@
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
-using ASP.Core.Establishments;
+using ASP.Core.Scope;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;

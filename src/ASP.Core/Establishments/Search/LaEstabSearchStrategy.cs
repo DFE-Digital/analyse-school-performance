@@ -7,18 +7,18 @@ public class LaEstabSearchStrategy : EstablishmentSearchStrategy
 {
     private readonly IEstablishmentRepository _repository;
 
-    public LaEstabSearchStrategy(IEstablishmentRepository repository, Scope scope,
+    public LaEstabSearchStrategy(IEstablishmentRepository repository, Scope.Scope scope,
         string searchTerm, int page = 1,
         int resultsPerPage = Constants.SearchResultPageSize) : base(scope, searchTerm, page, resultsPerPage)
     {
         _repository = repository;
     }
 
-    public override async Task<Result<SearchResultsPage<EstablishmentListItem>>> Execute()
+    public override async Task<Result<SearchResultsPage<EstablishmentListing>>> Execute()
     {
         var searchType = SearchTerm.ClassifySearchType();
 
-        Result<SearchResultsPage<EstablishmentListItem>> result = searchType switch
+        Result<SearchResultsPage<EstablishmentListing>> result = searchType switch
         {
             SearchType.LocalAuthEstablishment => await _repository.SearchEstablishmentByLaCodeOrEstablishmentNumber(Scope, SearchTerm, Page, ResultsPerPage),
             SearchType.LocalAuthEstablishment7Digit => await _repository.SearchEstablishmentByLaestab7DigitCode(Scope, SearchTerm, Page, ResultsPerPage),

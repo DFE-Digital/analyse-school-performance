@@ -4,12 +4,12 @@ namespace ASP.Core.Establishments.Search;
 
 public abstract class EstablishmentSearchStrategy : IEstablishmentSearchStrategy
 {
-    protected Scope Scope { get; }
+    protected Scope.Scope Scope { get; }
     protected string SearchTerm { get; }
     protected int Page { get; }
     protected int ResultsPerPage { get; }
 
-    protected EstablishmentSearchStrategy(Scope scope, string searchTerm, int page, int resultsPerPage)
+    protected EstablishmentSearchStrategy(Scope.Scope scope, string searchTerm, int page, int resultsPerPage)
     {
         Scope = scope;
         SearchTerm = searchTerm;
@@ -17,5 +17,5 @@ public abstract class EstablishmentSearchStrategy : IEstablishmentSearchStrategy
         ResultsPerPage = resultsPerPage;
     }
 
-    public abstract Task<Result<SearchResultsPage<EstablishmentListItem>>> Execute();
+    public abstract Task<Result<SearchResultsPage<EstablishmentListing>>> Execute();
 }

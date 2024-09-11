@@ -6,6 +6,6 @@ using DfE.Data.ComponentLibrary.CleanArchitecture.CleanArchitecture.Application.
 namespace ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 
 public interface IEstablishmentSearchSuggestions : IUseCase<EstablishmentSearchSuggestionsRequest,
-    Result<SearchSuggestionsResult<EstablishmentSearchSuggestionsResultDTO>>>
+    Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>>
 {
 }

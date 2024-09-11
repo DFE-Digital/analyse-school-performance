@@ -1,4 +1,4 @@
-﻿namespace ASP.Core.Establishments;
+﻿namespace ASP.Core.Scope;
 
 public enum ScopeType
 {

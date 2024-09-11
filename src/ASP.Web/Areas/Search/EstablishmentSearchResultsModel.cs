@@ -12,7 +12,7 @@ public class EstablishmentSearchResultsModel
     public string LaEstab { get; set; } = "";
 
     public static List<EstablishmentSearchResultsModel> FromEstablishmentDetails(
-        IEnumerable<EstablishmentDetailsSearchResultDTO> establishmentDetails)
+        IEnumerable<EstablishmentListingDTO> establishmentDetails)
     {
         var result = establishmentDetails.Select(x => new EstablishmentSearchResultsModel
             {

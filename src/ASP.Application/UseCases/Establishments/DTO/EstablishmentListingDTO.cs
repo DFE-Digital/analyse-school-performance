@@ -1,6 +1,6 @@
 ﻿namespace ASP.Application.UseCases.Establishments.DTO;
 
-public class EstablishmentDetailsSearchResultDTO
+public class EstablishmentListingDTO
 {
     public string Urn { get; set; } = "";
     public string Name { get; set; } = "";
