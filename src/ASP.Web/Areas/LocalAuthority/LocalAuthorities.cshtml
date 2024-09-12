@@ -1,0 +1,14 @@
+@model ASP.Web.Areas.LocalAuthority.LocalAuthoritiesPageViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="govuk-width-container">
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+    <div class="govuk-width-container govuk-main-wrapper">
+        <h1 class="govuk-heading-xl">@Model.Title</h1>
+        <div class="govuk-width-container">
+            <p class="govuk-body">This page is still in progress...</p>
+        </div>
+    </div>
+</div>

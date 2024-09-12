@@ -35,7 +35,7 @@ namespace ASP.Web.Areas.School
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Index(string urn, string? revision)
+        public async Task<IActionResult> LandingPage(string urn, string? revision)
         {
             return await EstablishmentDetailsWithTemplate(urn, LANDING_PAGE_CONTENT_TEMPLATE_ID, revision);
         }

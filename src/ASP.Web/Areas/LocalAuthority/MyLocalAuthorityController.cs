@@ -2,7 +2,6 @@
 using ASP.Core.Authorization;
 using ASP.Core.Results;
 using ASP.Web.Core.BreadcrumbTrail;
-using ASP.Web.Core.Templating;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
@@ -14,42 +13,51 @@ namespace ASP.Web.Areas.LocalAuthority
     [Area("LocalAuthority")]
     [Route("my-local-authority")]
     [ServiceFilter<TermsOfUseActionFilter>]
-    public class MyLocalAuthorityController : Controller
+    public class MyLocalAuthorityController : LocalAuthorityController
     {
-        const string LANDING_PAGE_CONTENT_TEMPLATE_ID = "la-landing-page";
-
-        private readonly IAspApiClient _api;
-        private readonly IHostEnvironment _hostEnvironment;
-
-        public MyLocalAuthorityController(IAspApiClient api, IHostEnvironment hostEnvironment)
+        public MyLocalAuthorityController(
+            IAspApiClient api, 
+            IHostEnvironment hostEnvironment
+        ) : base(api, hostEnvironment)
         {
-            _api = api ?? throw new ArgumentNullException(nameof(api));
-            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Index()
-        {
-            return await LocalAuthorityWithTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID);
-        }
-
-        private async Task<IActionResult> LocalAuthorityWithTemplate(string contentTemplateId, string? page = null)
+        public async Task<IActionResult> LandingPage(string? revision)
         {
             return await User.GetLocalAuthorityCode()
-                .Then(laCode => _api.GetLocalAuthority(new(laCode))
-                    .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
-                    .Then(async localAuthority => await _api.ViewContentTemplate(new(contentTemplateId, null))
-                        .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, null, template))
-                        .DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel())
-                        .Map(contentTemplateModel => new LocalAuthorityViewModel(
-                            "My local authority",
-                            localAuthority.Name,
-                            contentTemplateModel,
-                            page == null
-                                ? new BreadcrumbTrailViewModel("My local authority")
-                                : new BreadcrumbTrailViewModel(page).AddBreadcrumb("My local authority", $"/my-local-authority/")
-                        ))))
+                .Then(laCode => base.LandingPage(laCode, revision))
                 .ToActionResult(View, _hostEnvironment);
+        }
+
+        [HttpGet("download-data")]
+        public async Task<IActionResult> DownloadData()
+        {
+            return await User.GetLocalAuthorityCode()
+                .Then(laCode => base.DownloadData(laCode))
+                .ToActionResult(View, _hostEnvironment);
+        }
+
+        protected override Task<Result<string>> GetLocalAuthorityName(string laCode)
+        {
+            return base.GetLocalAuthorityName(laCode)
+                .MapError(error => error is NotFoundError 
+                    ? Error.Unexpected(error.Message, null) 
+                    : error);
+        }
+
+        protected override Task<Result<LocalAuthorityPageViewModel>> GetLocalAuthorityPage(string laCode, string laName, string? page = null)
+        {
+            var viewModel = new LocalAuthorityPageViewModel(
+                "My local authority",
+                laName,
+                page == null
+                    ? new BreadcrumbTrailViewModel("My local authority")
+                    : new BreadcrumbTrailViewModel(page)
+                        .AddBreadcrumb("My local authority", $"/my-local-authority/")
+            );
+
+            return Task.FromResult(Result.Success(viewModel));
         }
     }
 }

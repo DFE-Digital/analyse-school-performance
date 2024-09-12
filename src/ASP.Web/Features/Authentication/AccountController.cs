@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using ASP.Web.Areas.Home;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace ASP.Web.Features.Authentication
         {
             if (!(User?.Identity?.IsAuthenticated ?? false))
             {
-                return RedirectToAction("Index", "Home", new { area = "Home" });
+                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = "Home" });
             }
 
             return SignOut(

@@ -1,0 +1,16 @@
+﻿@using ASP.Web.Areas.Shared.OfstedRating
+@model ASP.Web.Areas.School.ViewModels.SchoolsPageViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="govuk-width-container app-width-container">
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+</div>
+
+<div class="govuk-width-container govuk-main-wrapper">
+    <h1 class="govuk-heading-xl">@Model.Title</h1>
+    <div class="govuk-width-container">
+        <p class="govuk-body">This page is still in progress...</p>
+    </div>
+</div>

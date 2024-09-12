@@ -1,9 +1,6 @@
 ﻿using ASP.Application;
-using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
-using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Core.Results;
 using ASP.Web.Core.BreadcrumbTrail;
-using ASP.Web.Core.Templating;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
@@ -15,48 +12,41 @@ namespace ASP.Web.Areas.LocalAuthority
     [Area("LocalAuthority")]
     [Route("local-authority/{laCode}")]
     [ServiceFilter<TermsOfUseActionFilter>]
-    public class GenericLocalAuthorityController : Controller
+    public class GenericLocalAuthorityController : LocalAuthorityController
     {
-        const string LANDING_PAGE_CONTENT_TEMPLATE_ID = "la-landing-page";
-
-        private readonly IAspApiClient _api;
-        private readonly IHostEnvironment _hostEnvironment;
-
-        public GenericLocalAuthorityController(IAspApiClient api, IHostEnvironment hostEnvironment)
+        public GenericLocalAuthorityController(
+            IAspApiClient api, 
+            IHostEnvironment hostEnvironment
+        ) : base(api, hostEnvironment)
         {
-            _api = api ?? throw new ArgumentNullException(nameof(api));
-            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Index(string laCode)
+        public new Task<IActionResult> LandingPage(string laCode, string? revision)
         {
-            return await LocalAuthorityWithTemplate(laCode, LANDING_PAGE_CONTENT_TEMPLATE_ID);
+            return base.LandingPage(laCode, revision)
+                .ToActionResult(View, _hostEnvironment);
         }
 
-        private async Task<IActionResult> LocalAuthorityWithTemplate(string laCode, string contentTemplateId, string? page = null)
+        [HttpGet("download-data")]
+        public new Task<IActionResult> DownloadData(string laCode)
         {
-            return await _api.GetLocalAuthority(new GetLocalAuthorityRequest(laCode))
-                .Then(async localAuthority => await _api
-                    .ViewContentTemplate(new ViewContentTemplateRequest(contentTemplateId, null))
-                    .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, null, template))
-                    .DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel())
-                    .Map(contentTemplateModel =>
-                    {
-                        var localAuthorityName = !string.IsNullOrWhiteSpace(localAuthority.Name)
-                            ? localAuthority.Name
-                            : "Missing local authority name";
-
-                        return new LocalAuthorityViewModel(
-                            localAuthorityName,
-                            localAuthorityName,
-                            contentTemplateModel,
-                            page == null
-                                ? new BreadcrumbTrailViewModel(localAuthorityName)
-                                : new BreadcrumbTrailViewModel(page).AddBreadcrumb(localAuthorityName, $"local-authority/{laCode}"));
-
-                    }))
+            return base.DownloadData(laCode)
                 .ToActionResult(View, _hostEnvironment);
+        }
+
+        protected override Task<Result<LocalAuthorityPageViewModel>> GetLocalAuthorityPage(string laCode, string laName, string? page = null)
+        {
+            var viewModel = new LocalAuthorityPageViewModel(
+                laName,
+                laName,
+                page == null
+                    ? new BreadcrumbTrailViewModel(laName)
+                    : new BreadcrumbTrailViewModel(page)
+                        .AddBreadcrumb(laName, $"local-authority/{laCode}")
+            );
+
+            return Task.FromResult(Result.Success(viewModel));
         }
     }
 }

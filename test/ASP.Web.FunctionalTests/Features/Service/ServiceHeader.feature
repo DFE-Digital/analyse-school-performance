@@ -33,21 +33,20 @@ Scenario Outline: Any user can view the Home link
 	And  the element "[data-testid="app-header-navigation-item-home"] a" should have the href "/"
 Examples: 
 	| Role            |
-	| DfE Named       |
-	| DfE Unnamed     |
-	| Super Admin     |
-	| Ofsted Unnamed  |
+	| School Named    |
+	| School Unnamed  |
+	| School Governor |
 	| LA Named        |
 	| LA Unnamed      |
     | MAT Named       |
 	| MAT Unnamed     |
-	| School Named    |
-	| School Unnamed  |
+	| MAT Governor    |
 	| Diocese Named   |
 	| Diocese Unnamed |
-	| MAT Governor    |
-	| School Governor |
-
+	| DfE Named       |
+	| DfE Unnamed     |
+	| Ofsted Unnamed  |
+	| Super Admin     |
 
 @Javascript:disabled
 Scenario Outline: LA users can view the My local authority link
@@ -60,7 +59,6 @@ Examples:
 	| LA Named   |
 	| LA Unnamed |
 
-
 @Javascript:disabled
 Scenario Outline: Non LA users cannot view the My local authority link
 	Given I am a <Role> user
@@ -68,19 +66,81 @@ Scenario Outline: Non LA users cannot view the My local authority link
 	Then the element "[data-testid="app-header-navigation-item-my-local-authority"]" should not exist
 Examples: 
 	| Role            |
+	| School Named    |
+	| School Unnamed  |
+	| School Governor |
+	| MAT Named       |
+	| MAT Unnamed     |
+	| MAT Governor    |
+	| Diocese Named   |
+	| Diocese Unnamed |
+	| DfE Named       |
+	| DfE Unnamed     |
+	| Ofsted Unnamed  |
+	| Super Admin     |
+
+@Javascript:disabled
+Scenario Outline: Users with all local authorities access can view the All local authorities link
+	Given I am a <Role> user
+    When I navigate to /
+	Then the element "[data-testid="app-header-navigation-item-local-authorities"]" should have the text content "All local authorities"
+	And  the element "[data-testid="app-header-navigation-item-local-authorities"] a" should have the href "/local-authorities/"
+Examples: 
+	| Role            |
 	| DfE Named       |
 	| DfE Unnamed     |
 	| Super Admin     |
 	| Ofsted Unnamed  |
-	| MAT Named       |
-	| MAT Unnamed     |
+
+@Javascript:disabled
+Scenario Outline: Users without all local authorities access cannot view the All local authorities link
+	Given I am a <Role> user
+    When I navigate to /
+	Then the element "[data-testid="app-header-navigation-item-local-authorities"]" should not exist
+Examples: 
+	| Role            |
 	| School Named    |
 	| School Unnamed  |
+	| School Governor |
+	| LA Named        |
+	| LA Unnamed      |
+	| MAT Named       |
+	| MAT Unnamed     |
+	| MAT Governor    |
 	| Diocese Named   |
 	| Diocese Unnamed |
-	| MAT Governor    |
-	| School Governor |
 
+
+@Javascript:disabled
+Scenario Outline: Users with all schools access can view the All schools link
+	Given I am a <Role> user
+    When I navigate to /
+	Then the element "[data-testid="app-header-navigation-item-schools"]" should have the text content "All schools"
+	And  the element "[data-testid="app-header-navigation-item-schools"] a" should have the href "/schools/"
+Examples: 
+	| Role            |
+	| DfE Named       |
+	| DfE Unnamed     |
+	| Ofsted Unnamed  |
+	| Super Admin     |
+
+@Javascript:disabled
+Scenario Outline: Users without all schools access cannot view the All schools link
+	Given I am a <Role> user
+    When I navigate to /
+	Then the element "[data-testid="app-header-navigation-item-schools"]" should not exist
+Examples: 
+	| Role            |
+	| School Named    |
+	| School Unnamed  |
+	| School Governor |
+	| LA Named        |
+	| LA Unnamed      |
+	| MAT Named       |
+	| MAT Unnamed     |
+	| MAT Governor    |
+	| Diocese Named   |
+	| Diocese Unnamed |
 
 @Javascript:disabled
 Scenario Outline: Users who can search can view the Search link
@@ -90,18 +150,17 @@ Scenario Outline: Users who can search can view the Search link
 	And  the element "[data-testid="app-header-navigation-item-search"] a" should have the href "/search/"
 Examples: 
 	| Role            |
-	| DfE Named       |
-	| DfE Unnamed     |
-	| Super Admin     |
-	| Ofsted Unnamed  |
 	| LA Named        |
 	| LA Unnamed      |
 	| MAT Named       |
 	| MAT Unnamed     |
+	| MAT Governor    |
 	| Diocese Named   |
 	| Diocese Unnamed |
-	| MAT Governor    |
-
+	| DfE Named       |
+	| DfE Unnamed     |
+	| Ofsted Unnamed  |
+	| Super Admin     |
 
 @Javascript:disabled
 Scenario Outline: Users who cannot search cannot view the Search link
@@ -114,7 +173,6 @@ Examples:
 	| School Named    |
 	| School Governor |
 
-
 @Javascript:disabled
 Scenario Outline: Users with access to My school can view the My school link
 	Given I am a <Role> user
@@ -123,9 +181,9 @@ Scenario Outline: Users with access to My school can view the My school link
 	And  the element "[data-testid="app-header-navigation-item-my-school"] a" should have the href "/my-school/"
 Examples: 
 	| Role           |
-	| School Unnamed |
 	| School Named   |
-
+	| School Unnamed |
+	| School Governor |
 
 @Javascript:disabled
 Scenario Outline: Users without access to My school cannot view the My school link
@@ -134,19 +192,17 @@ Scenario Outline: Users without access to My school cannot view the My school li
 	Then the element "[data-testid="app-header-navigation-item-my-school"]" should not exist
 Examples: 
 	| Role            |
-	| DfE Named       |
-	| DfE Unnamed     |
-	| Super Admin     |
-	| Ofsted Unnamed  |
 	| LA Named        |
 	| LA Unnamed      |
 	| MAT Named       |
 	| MAT Unnamed     |
+	| MAT Governor    |
 	| Diocese Named   |
 	| Diocese Unnamed |
-	| MAT Governor    |
-	| School Governor |
-
+	| DfE Named       |
+	| DfE Unnamed     |
+	| Ofsted Unnamed  |
+	| Super Admin     |
 
 @Javascript:disabled
 Scenario Outline: Users with access to My schools can view the My schools link
@@ -164,7 +220,6 @@ Examples:
 	| Diocese Named   |
 	| Diocese Unnamed |
 
-
 @Javascript:disabled
 Scenario Outline: Users without access to My schools cannot view the My schools link
 	Given I am a <Role> user
@@ -172,15 +227,13 @@ Scenario Outline: Users without access to My schools cannot view the My schools 
 	Then the element "[data-testid="app-header-navigation-item-my-schools"]" should not exist
 Examples: 
 	| Role            |
+	| School Named    |
+	| School Unnamed  |
+	| School Governor |
 	| DfE Named       |
 	| DfE Unnamed     |
-	| School Unnamed  |
-	| School Named    |
-	| School Governor |
-	| Super Admin     |
 	| Ofsted Unnamed  |
-
-
+	| Super Admin     |
 
 @Javascript:disabled
 Scenario Outline: Any user can view the Release timetable link
@@ -190,21 +243,20 @@ Scenario Outline: Any user can view the Release timetable link
 	And  the element "[data-testid="app-header-navigation-item-release-timetable"] a" should have the href "/help/release-timetable/"
 Examples: 
 	| Role            |
-	| DfE Named       |
-	| DfE Unnamed     |
-	| Super Admin     |
-	| Ofsted Unnamed  |
+	| School Named    |
+	| School Unnamed  |
+	| School Governor |
 	| LA Named        |
 	| LA Unnamed      |
     | MAT Named       |
 	| MAT Unnamed     |
-	| School Named    |
-	| School Unnamed  |
+	| MAT Governor    |
 	| Diocese Named   |
 	| Diocese Unnamed |
-	| MAT Governor    |
-	| School Governor |
-
+	| DfE Named       |
+	| DfE Unnamed     |
+	| Ofsted Unnamed  |
+	| Super Admin     |
 
 @Javascript:disabled
 Scenario Outline: Any user can view the Guidance link
@@ -214,17 +266,17 @@ Scenario Outline: Any user can view the Guidance link
 	And  the element "[data-testid="app-header-navigation-item-guidance"] a" should have the href "/help/guidance/"
 Examples: 
 	| Role            |
-	| DfE Named       |
-	| DfE Unnamed     |
-	| Super Admin     |
-	| Ofsted Unnamed  |
+	| School Named    |
+	| School Unnamed  |
+	| School Governor |
 	| LA Named        |
 	| LA Unnamed      |
     | MAT Named       |
 	| MAT Unnamed     |
-	| School Named    |
-	| School Unnamed  |
+	| MAT Governor    |
 	| Diocese Named   |
 	| Diocese Unnamed |
-	| MAT Governor    |
-	| School Governor |
+	| DfE Named       |
+	| DfE Unnamed     |
+	| Ofsted Unnamed  |
+	| Super Admin     |

@@ -6,6 +6,7 @@ using ASP.Core;
 using ASP.Core.Establishments.Search;
 using ASP.Core.Results;
 using ASP.Core.Scope;
+using ASP.Web.Areas.School;
 using ASP.Web.Areas.Shared.Pagination;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Features.TermsOfUse;
@@ -37,7 +38,7 @@ public class SearchController : Controller
         {
             if (!ModelState.IsValid)
             {
-                return View("Index");
+                return View(nameof(Index));
             }
             
             // Initialize the page number to 1 by default
@@ -56,7 +57,7 @@ public class SearchController : Controller
             {
                 // Add error for both autocomplete and non-JS fields
                 ModelState.AddModelError(nameof(searchParams.Search), Constants.SchoolSearchTermShortValidationMessage);
-                return View("Index");
+                return View(nameof(Index));
             }
 
             var estabSearchRequest = new EstablishmentSearchRequest(
@@ -73,7 +74,7 @@ public class SearchController : Controller
                 .ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
         }
 
-        return View("Index");
+        return View(nameof(Index));
     }
 
     [HttpGet("suggestions")]
@@ -81,7 +82,7 @@ public class SearchController : Controller
     {
         if (!ModelState.IsValid)
         {
-            return View("Index");
+            return View(nameof(Index));
         }
 
         var estabSearchSuggestions = new EstablishmentSearchSuggestionsRequest(
@@ -100,7 +101,7 @@ public class SearchController : Controller
         return new SearchViewModel(
             EstablishmentSearchResultsModel.FromEstablishmentDetails(result.Results),
             new PaginationModel(
-                Url.Action("Index", new { search = result.SearchTerm }) ?? "", 
+                Url.Action(nameof(Index), new { search = result.SearchTerm }) ?? "", 
                 result.Page, 
                 result.TotalResults, 
                 result.ResultsPerPage,
@@ -130,7 +131,7 @@ public class SearchController : Controller
     {
         if (model.TotalCount == 1)
         {
-            return RedirectToAction("Index", "GenericSchool",
+            return RedirectToAction(nameof(GenericSchoolController.LandingPage), "GenericSchool",
                 new { area = "School", urn = model.SearchResults.FirstOrDefault()!.Urn });
         }
 

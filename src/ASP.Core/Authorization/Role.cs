@@ -130,7 +130,8 @@ public sealed class Role
     public static readonly RoleCollection AccessToMySchool =
     [
         SchoolNamed,
-        SchoolUnnamed
+        SchoolUnnamed,
+        SchoolGovernor
     ];
 
     public static readonly RoleCollection AccessToMySchools =

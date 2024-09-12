@@ -1,4 +1,5 @@
-﻿@using ASP.Web.Areas.Search
+﻿@using ASP.Web.Areas.School
+@using ASP.Web.Areas.Search
 @using ASP.Web.Areas.Shared.OfstedRating
 @model ASP.Web.Areas.Search.SearchViewModel
 @{
@@ -37,11 +38,11 @@
                         <li>
                             <div class="search-results-school-name-container">
                                 <h2 class="govuk-heading-m search-results-school-name-heading">
-                                    <a class="govuk-link" data-testid="school-search-results-name-@counter" href="@Url.Action("Index", "School", new { Area = "School", urn = item.Urn })">
+                                    <a class="govuk-link" data-testid="school-search-results-name-@counter" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
                                         @item.Name
                                     </a>
                                 </h2>
-                                <a class="govuk-link search-results-school-tile-arrow" href="@Url.Action("Index", "School", new { Area = "School", urn = item.Urn })">
+                                <a class="govuk-link search-results-school-tile-arrow" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
                                     <span class="govuk-visually-hidden">More information on @item.Name</span>
                                 </a>
                             </div>
