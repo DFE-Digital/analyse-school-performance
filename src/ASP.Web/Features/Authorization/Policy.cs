@@ -56,6 +56,7 @@ public static class Policy
         // Add fallback policy for all routes, requiring the user to be authenticated
         options.FallbackPolicy = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
+            .RequireRole(Role.Any)
             .Build();
     }
 }
