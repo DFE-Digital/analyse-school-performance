@@ -1,6 +1,6 @@
 ﻿using ASP.Core.Utilities;
 
-namespace ASP.Core.Scope;
+namespace ASP.Core.Scoping;
 
 public class ScopedResultsPage<T> : ResultsPage<T>
 {

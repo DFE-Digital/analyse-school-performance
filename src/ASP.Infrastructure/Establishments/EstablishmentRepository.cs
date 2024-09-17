@@ -4,7 +4,7 @@ using ASP.Core.Establishments.Search;
 using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Extensions;
 using ASP.Core.Results;
-using ASP.Core.Scope;
+using ASP.Core.Scoping;
 using ASP.Infrastructure.Establishments.DAO;
 using ASP.Infrastructure.Establishments.DAO.Mapper;
 

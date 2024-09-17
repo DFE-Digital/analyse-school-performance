@@ -26,18 +26,23 @@ namespace ASP.Api.Functions
         }
 
         [Function("UpdateContentTemplate")]
-        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req, CancellationToken cancellationToken)
+        public override async Task<ApiResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post")] 
+            HttpRequest request, 
+            CancellationToken cancellationToken
+        )
         {
-            _logger.LogInformation(req.Method + " " + req.Path + req.QueryString);
+            _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
-            var apiResult = await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Post])
-                .Then(_ => RequestValidation.RequiredParameter(req, "id")
-                .Then(id => RequestValidation.OptionalParameter(req, "revision")
-                .Then(revision => RequestValidation.RequiredBodyAsync<ContentTemplate>(req)
-                .Then(contentTemplate => _update.HandleRequest(new UpdateContentTemplateRequest(id, revision, contentTemplate))))))
-                .ToApiResultAsync(_options, cancellationToken);
+            var result =
+                from _ in request.ValidateHttpMethod([HttpMethods.Post])
+                from id in request.ValidateParameter("id", p => p.IsRequired())
+                from revision in request.ValidateParameter("revision", p => p.IsOptional())
+                from contentTemplate in request.ValidateBodyAsync<ContentTemplate>()
+                from response in _update.HandleRequest(new UpdateContentTemplateRequest(id, revision, contentTemplate))
+                select response;
 
-            return apiResult;
+            return await result.ToApiResultAsync(_options, cancellationToken);
         }
     }
 }

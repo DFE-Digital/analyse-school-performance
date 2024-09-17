@@ -1,4 +1,5 @@
 ﻿using ASP.Application.UseCases.ContentPage.GetAllContentTemplates;
+using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -26,13 +27,20 @@ namespace ASP.Api.Functions
         }
 
         [Function("GetAllContentTemplates")]
-        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req, CancellationToken cancellationToken)
+        public override async Task<ApiResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get")] 
+            HttpRequest request, 
+            CancellationToken cancellationToken
+        )
         {
-            _logger.LogInformation($"{req.Method} {req.Path + req.QueryString}");
+            _logger.LogInformation($"{request.Method} {request.Path + request.QueryString}");
 
-            return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
-                .Then(_ => _useCase.HandleRequest())
-                .ToApiResultAsync(_options, cancellationToken);
+            var result =
+                from _ in request.ValidateHttpMethod([HttpMethods.Get])
+                from response in _useCase.HandleRequest()
+                select response;
+
+            return await result.ToApiResultAsync(_options, cancellationToken);
         }
     }
 }

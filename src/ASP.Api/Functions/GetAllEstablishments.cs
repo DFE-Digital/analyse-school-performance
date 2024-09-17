@@ -1,5 +1,6 @@
 ﻿using ASP.Application.UseCases.Establishments.GetAllEstablishments;
-using ASP.Core.Scope;
+using ASP.Core.Results;
+using ASP.Core.Scoping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -28,23 +29,26 @@ public class GetAllEstablishments : ApiFunction
     [Function("GetAllEstablishments")]
     public override async Task<ApiResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
-        HttpRequest req,
-        CancellationToken cancellationToken)
+        HttpRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        _logger.LogInformation(req.Method + " " + req.Path + req.QueryString);
+        _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
-        return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
-                .Then(_ => RequestValidation.RequiredParameter<ScopeType>(req, "scope")
-                    .Then(scope => RequestValidation
-                        .RequiredParameterIf(req, "scopeIdentifier", scope == ScopeType.All)
-                        .Then(scopeIdentifier => RequestValidation.OptionalParameter(req, "page")
-                            .Then(page => RequestValidation.NumericParameter(page, "page"))
-                            .Then(page => RequestValidation.OptionalParameter(req, "resultsPerPage")
-                                .Then(resultsPerPage =>
-                                    RequestValidation.NumericParameter(resultsPerPage, "resultsPerPage"))
-                                .Then(resultsPerPage => _useCase.HandleRequest(
-                                    new GetAllEstablishmentsRequest(scope,
-                                        scopeIdentifier, page, resultsPerPage)))))))
-            .ToApiResultAsync(_options, cancellationToken);
+        var result =
+            from _ in request.ValidateHttpMethod([HttpMethods.Get])
+            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<ScopeType>())
+            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequiredIf(scope != ScopeType.All))
+            from page in request.ValidateParameter("page", p => p.IsOptional().IsNumeric())
+            from resultsPerPage in request.ValidateParameter("resultsPerPage", p => p.IsOptional().IsNumeric())
+            from response in _useCase.HandleRequest(new GetAllEstablishmentsRequest(
+                scope,
+                scopeIdentifier,
+                page,
+                resultsPerPage
+            ))
+            select response;
+
+        return await result.ToApiResultAsync(_options, cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
+using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -23,14 +24,20 @@ public class GetMultiAcademyTrust : ApiFunction
     }
 
     [Function("GetMultiAcademyTrust")]
-    public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req,
-        CancellationToken cancellationToken)
+    public override async Task<ApiResult> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        HttpRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        _logger.LogInformation(req.Method + " " + req.Path + req.QueryString);
+        _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
-        return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
-            .Then(_ => RequestValidation.RequiredParameter(req, "id")
-                .Then(id => _useCase.HandleRequest(new GetMultiAcademyTrustRequest(id))))
-            .ToApiResultAsync(_options, cancellationToken);
+        var result =
+            from _ in request.ValidateHttpMethod([HttpMethods.Get])
+            from uid in request.ValidateParameter("id", p => p.IsRequired().IsDigits())
+            from response in _useCase.HandleRequest(new GetMultiAcademyTrustRequest(uid))
+            select response;
+
+        return await result.ToApiResultAsync(_options, cancellationToken);
     }
 }

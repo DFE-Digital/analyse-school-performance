@@ -1,4 +1,6 @@
-﻿namespace ASP.Core.Establishments.Search;
+﻿using ASP.Core.Scoping;
+
+namespace ASP.Core.Establishments.Search;
 
 public class EstablishmentSearchStrategyFactory
 {
@@ -9,7 +11,7 @@ public class EstablishmentSearchStrategyFactory
         _repository = repository;
     }
 
-    public EstablishmentSearchStrategy CreateStrategy(Scope.Scope scope, SearchType searchType, string searchTerm, int page, int resultsPerPage)
+    public EstablishmentSearchStrategy CreateStrategy(Scope scope, SearchType searchType, string searchTerm, int page, int resultsPerPage)
     {
         switch (searchType)
         {

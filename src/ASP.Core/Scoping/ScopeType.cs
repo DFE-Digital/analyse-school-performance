@@ -1,4 +1,4 @@
-﻿namespace ASP.Core.Scope;
+﻿namespace ASP.Core.Scoping;
 
 public enum ScopeType
 {

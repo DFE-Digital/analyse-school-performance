@@ -1,6 +1,6 @@
 ﻿using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Core.Results;
-using ASP.Core.Scope;
+using ASP.Core.Scoping;
 using DfE.Data.ComponentLibrary.CleanArchitecture.CleanArchitecture.Application.UseCase;
 
 namespace ASP.Application.UseCases.Establishments.GetAllEstablishments;

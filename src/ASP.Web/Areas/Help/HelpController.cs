@@ -5,6 +5,7 @@ using ASP.Application;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using Microsoft.AspNetCore.Authorization;
 using ASP.Web.Features.Authorization;
+using ASP.Core.Optionality;
 
 namespace ASP.Web.Areas.Help
 {
@@ -31,7 +32,7 @@ namespace ASP.Web.Areas.Help
         public async Task<IActionResult> ViewPage(string contentId, string? revision)
         {
             string templateId = $"help-{contentId}".ToLower();
-            ViewContentTemplateRequest request = new(templateId, revision);
+            ViewContentTemplateRequest request = new(templateId, Optional.FromNullable(revision));
 
             return await _api.ViewContentTemplate(request)
                 .Map(t => ContentTemplateViewModel.FromTemplate(contentId, revision, t))
@@ -44,7 +45,7 @@ namespace ASP.Web.Areas.Help
         public async Task<IActionResult> EditPage(string contentId, string? revision)
         {
             string templateId = $"help-{contentId}".ToLower();
-            ViewContentTemplateRequest request = new(templateId, revision);
+            ViewContentTemplateRequest request = new(templateId, Optional.FromNullable(revision));
 
             return await _api.ViewContentTemplate(request)
                 .Map(t => ContentTemplateEditModel.FromTemplate(contentId, revision, t, _editModelFactory))
@@ -58,7 +59,7 @@ namespace ASP.Web.Areas.Help
             string templateId = $"help-{contentId}".ToLower();
 
             return await model.ToTemplate()
-                .Then(t => _api.UpdateContentTemplate(new(templateId, revision, t)))
+                .Then(t => _api.UpdateContentTemplate(new(templateId, Optional.FromNullable(revision), t)))
                 .ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId, revision }), _hostEnvironment);
         }
     }

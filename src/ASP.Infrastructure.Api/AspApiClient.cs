@@ -58,10 +58,11 @@ namespace ASP.Infrastructure.Api
         {
             var url = "/api/ViewContentTemplate";
             var queryString = QueryString.Create("id", request.ContentTemplateId);
-            if (request.Revision != null)
+
+            request.Revision.IfSome(value =>
             {
-                queryString = queryString.Add("revision", request.Revision);
-            }
+                queryString = queryString.Add("revision", value);
+            });
             
              return await ApiGet(url, queryString)
                 .Then(response => JsonHelper.DeserializeNotNull<ContentTemplate>(response));
@@ -71,10 +72,11 @@ namespace ASP.Infrastructure.Api
         {
             var url = "/api/UpdateContentTemplate";
             var queryString = QueryString.Create("id", request.ContentTemplateId);
-            if (request.Revision != null)
+
+            request.Revision.IfSome(value =>
             {
-                queryString = queryString.Add("revision", request.Revision);
-            }
+                queryString = queryString.Add("revision", value);
+            });
 
             return await ApiPost(url, queryString, request.ContentTemplate)
                 .Then<string, Done>(_ => Result.Done);
@@ -103,18 +105,23 @@ namespace ASP.Infrastructure.Api
             var url = "/api/EstablishmentSearch";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
 
-            queryString = queryString.Add("scope", request.ScopeType.ToString())
-                .Add("scopeIdentifier", request.ScopeIdentifier);
+            queryString = queryString.Add("scope", request.ScopeType.ToString());
 
-            if (request.Page != null)
-            {
-                queryString = queryString.Add("page", request.Page.ToString() ?? "");
-            }
 
-            if (request.ResultsPerPage != null)
+            request.ScopeIdentifier.IfSome(value =>
             {
-                queryString = queryString.Add("resultsPerPage", request.ResultsPerPage.ToString() ?? "");
-            }
+                queryString = queryString.Add("scopeIdentifier", value);
+            });
+
+            request.Page.IfSome(value =>
+            {
+                queryString = queryString.Add("page", value.ToString());
+            });
+
+            request.ResultsPerPage.IfSome(value =>
+            {
+                queryString = queryString.Add("resultsPerPage", value.ToString());
+            });
 
             return await ApiGet(url, queryString)
                 .Then(response =>
@@ -127,13 +134,17 @@ namespace ASP.Infrastructure.Api
             var url = "/api/EstablishmentSearchSuggestions";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
 
-            queryString = queryString.Add("scope", request.ScopeType.ToString())
-                .Add("scopeIdentifier", request.ScopeIdentifier);
+            queryString = queryString.Add("scope", request.ScopeType.ToString());
 
-            if (request.MaxSuggestions != null)
+            request.ScopeIdentifier.IfSome(value =>
             {
-                queryString = queryString.Add("maxSuggestions", request.MaxSuggestions.ToString() ?? "");
-            }
+                queryString = queryString.Add("scopeIdentifier", value);
+            });
+
+            request.MaxSuggestions.IfSome(value =>
+            {
+                queryString = queryString.Add("maxSuggestions", value.ToString());
+            });
 
             return await ApiGet(url, queryString)
                 .Then(response =>

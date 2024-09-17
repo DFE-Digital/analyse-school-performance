@@ -1,6 +1,7 @@
 ﻿using ASP.Application;
 using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
+using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Web;
 using ASP.Web.Core.Templating;
@@ -42,7 +43,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         [HttpGet("view")]
         public new async Task<IActionResult> View()
         {
-            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
+            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, Optional.FromNullable(TEST_COMPONENT_TEMPLATE_ID)))
                 .Map(t => ContentTemplateViewModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, t))
                 .ToActionResult(View, _hostEnvironment);
         }
@@ -50,7 +51,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         [HttpGet("edit")]
         public async Task<IActionResult> Edit()
         {
-            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
+            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, Optional.FromNullable(TEST_COMPONENT_TEMPLATE_ID)))
                 .Map(t => ContentTemplateEditModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, t, _editModelFactory))
                 .ToActionResult(View, _hostEnvironment);
         }
@@ -59,7 +60,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         public async Task<IActionResult> Edit(ContentTemplateEditModel model)
         {
             return await model.ToTemplate()
-                .Then(v => _api.UpdateContentTemplate(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, v)))
+                .Then(v => _api.UpdateContentTemplate(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, Optional.FromNullable(TEST_COMPONENT_TEMPLATE_ID), v)))
                 .ToActionResult(_ => RedirectToAction(nameof(View)), _hostEnvironment);
         }
     }

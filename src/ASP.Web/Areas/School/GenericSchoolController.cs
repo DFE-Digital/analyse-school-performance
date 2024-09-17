@@ -1,6 +1,7 @@
 using ASP.Application;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
+using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Web.Areas.School.ViewModels;
 using ASP.Web.Core.BreadcrumbTrail;
@@ -57,7 +58,7 @@ namespace ASP.Web.Areas.School
         {
             return await _api.GetEstablishmentDetails(new GetEstablishmentDetailsRequest(urn))
                 .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
-                .Then(async establishmentDetailsModel => await _api.ViewContentTemplate(new ViewContentTemplateRequest(contentTemplateId, revision))
+                .Then(async establishmentDetailsModel => await _api.ViewContentTemplate(new ViewContentTemplateRequest(contentTemplateId, Optional.FromNullable(revision)))
                     .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template))
                     .DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel())
                     .Map(contentTemplateModel => 

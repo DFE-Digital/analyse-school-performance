@@ -1,31 +1,24 @@
 ﻿using ASP.Core.Extensions;
-using ASP.Core.LocalAuthorities;
-using ASP.Core.MultiAcademyTrusts;
 using ASP.Core.Results;
+using ASP.Core.Scoping;
 
 namespace ASP.Core.Establishments.Search
 {
     public class EstablishmentSearchService
     {
         private readonly IEstablishmentRepository _establishmentRepository;
-        private readonly ILocalAuthorityRepository _localAuthorityRepository;
-        private readonly IMultiAcademyTrustRepository _multiAcademyTrustRepository;
         private readonly EstablishmentSearchStrategyFactory _strategyFactory;
 
         public EstablishmentSearchService(
-            IEstablishmentRepository establishmentRepository,
-            ILocalAuthorityRepository localAuthorityRepository,
-            IMultiAcademyTrustRepository multiAcademyTrustRepository
+            IEstablishmentRepository establishmentRepository
         )
         {
             _establishmentRepository = establishmentRepository;
-            _localAuthorityRepository = localAuthorityRepository;
-            _multiAcademyTrustRepository = multiAcademyTrustRepository;
 
             _strategyFactory = new EstablishmentSearchStrategyFactory(_establishmentRepository);
         }
 
-        public async Task<Result<SearchResultsPage<EstablishmentListing>>> Search(string searchTerm, Scope.Scope scope, int page, int resultsPerPage)
+        public async Task<Result<SearchResultsPage<EstablishmentListing>>> Search(string searchTerm, Scope scope, int page, int resultsPerPage)
         {
             var searchType = searchTerm.ClassifySearchType();
 
@@ -52,8 +45,7 @@ namespace ASP.Core.Establishments.Search
                 resultsPerPage
             );
 
-            return await scope.Validate(_localAuthorityRepository, _multiAcademyTrustRepository)
-                .Then(async x => await initialStrategy.Execute())
+            return await initialStrategy.Execute()
                 .IfErrorThen(
                     e => e is NotFoundError && searchType != SearchType.EstablishmentNameOrLocation,
                     backupStrategy.Execute

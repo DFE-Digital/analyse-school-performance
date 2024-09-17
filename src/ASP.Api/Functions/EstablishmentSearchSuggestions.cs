@@ -1,5 +1,6 @@
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
-using ASP.Core.Scope;
+using ASP.Core.Results;
+using ASP.Core.Scoping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -28,24 +29,27 @@ namespace ASP.Api.Functions
         [Function("EstablishmentSearchSuggestions")]
         public override async Task<ApiResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
-            HttpRequest req,
-            CancellationToken cancellationToken)
+            HttpRequest request,
+            CancellationToken cancellationToken
+        )
         {
-            _logger.LogInformation(req.Method + " " + req.Path + req.QueryString);
+            _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
-            return await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
-                .Then(_ => RequestValidation.RequiredParameter(req, "searchTerm")
-                    .Then(searchTerm => RequestValidation.RequiredParameter<ScopeType>(req, "scope")
-                        .Then(scope => RequestValidation
-                            .RequiredParameterIf(req, "scopeIdentifier", scope == ScopeType.All)
-                            .Then(scopeIdentifier => RequestValidation.OptionalParameter(req, "maxSuggestions")
-                                .Then(maxSuggestions =>
-                                    RequestValidation.NumericParameter(maxSuggestions, "maxSuggestions"))
-                                .Then(maxSuggestions => _useCase.HandleRequest(
-                                        new EstablishmentSearchSuggestionsRequest(searchTerm, scope,
-                                            scopeIdentifier, maxSuggestions))
-                                  )))))
-                .ToApiResultAsync(_options, cancellationToken);
+            var result =
+                from _ in request.ValidateHttpMethod([HttpMethods.Get])
+                from searchTerm in request.ValidateParameter("searchTerm", p => p.IsRequired())
+                from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<ScopeType>())
+                from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequiredIf(scope != ScopeType.All))
+                from maxSuggestions in request.ValidateParameter("maxSuggestions", p => p.IsOptional().IsNumeric())
+                from response in _useCase.HandleRequest(new EstablishmentSearchSuggestionsRequest(
+                    searchTerm,
+                    scope,
+                    scopeIdentifier,
+                    maxSuggestions
+                ))
+                select response;
+
+            return await result.ToApiResultAsync(_options, cancellationToken);
         }
     }
 }

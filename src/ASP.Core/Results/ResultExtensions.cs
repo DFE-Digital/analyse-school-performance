@@ -1,4 +1,6 @@
-﻿namespace ASP.Core.Results
+﻿using ASP.Core.Optionality;
+
+namespace ASP.Core.Results
 {
     public static class ResultExtensions
     {
@@ -215,6 +217,84 @@
             var values = results.OfType<SuccessResult<TValue>>().Select(r => r.Value);
 
             return Result.Success(values);
+        }
+
+        public static Result<Optional<TNewValue>> Then<TValue, TNewValue>(this Result<Optional<TValue>> result, Func<TValue, Result<TNewValue>> mapFunction)
+        {
+            return result.Then(optionalValue =>
+                optionalValue switch {
+                    Some<TValue> s => mapFunction(s.Value)
+                        .Map(Optional<TNewValue>.Some),
+                    _ => Result.Success(Optional<TNewValue>.None)
+                });
+        }
+
+        public static async Task<Result<Optional<TNewValue>>> Then<TValue, TNewValue>(this Result<Optional<TValue>> result, Func<TValue, Task<Result<TNewValue>>> mapFunction)
+        {
+            return await result.Then(async optionalValue =>
+                optionalValue switch {
+                    Some<TValue> s => (await mapFunction(s.Value))
+                        .Map(Optional<TNewValue>.Some),
+                    _ => Result.Success(Optional<TNewValue>.None)
+                });
+        }
+
+        public static async Task<Result<Optional<TNewValue>>> Then<TValue, TNewValue>(this Task<Result<Optional<TValue>>> resultTask, Func<TValue, Result<TNewValue>> mapFunction)
+        {
+            var result = await resultTask;
+
+            return result.Then(mapFunction);
+        }
+
+        public static async Task<Result<Optional<TNewValue>>> Then<TValue, TNewValue>(this Task<Result<Optional<TValue>>> resultTask, Func<TValue, Task<Result<TNewValue>>> mapFunction)
+        {
+            var result = await resultTask;
+
+            return await result.Then(mapFunction);
+        }
+
+        // Allows LINQ syntax from ... in ... select to be used with Results
+        public static Result<TResult> SelectMany<TFirst, TSecond, TResult>(
+            this Result<TFirst> first,
+            Func<TFirst, Result<TSecond>> getSecond,
+            Func<TFirst, TSecond, TResult> getResult)
+        {
+            return first
+                .Then(firstValue => getSecond(firstValue)
+                .Map(secondValue => getResult(firstValue, secondValue)));
+        }
+
+        // Allows LINQ syntax from ... in ... select to be used with Results
+        public static Task<Result<TResult>> SelectMany<TFirst, TSecond, TResult>(
+            this Result<TFirst> first,
+            Func<TFirst, Task<Result<TSecond>>> getSecond,
+            Func<TFirst, TSecond, TResult> getResult)
+        {
+            return first
+                .Then(firstValue => getSecond(firstValue)
+                .Map(secondValue => getResult(firstValue, secondValue)));
+        }
+
+        // Allows LINQ syntax from ... in ... select to be used with Results
+        public static Task<Result<TResult>> SelectMany<TFirst, TSecond, TResult>(
+            this Task<Result<TFirst>> first,
+            Func<TFirst, Task<Result<TSecond>>> getSecond,
+            Func<TFirst, TSecond, TResult> getResult)
+        {
+            return first
+                .Then(firstValue => getSecond(firstValue)
+                .Map(secondValue => getResult(firstValue, secondValue)));
+        }
+
+        // Allows LINQ syntax from ... in ... select to be used with Results
+        public static Task<Result<TResult>> SelectMany<TFirst, TSecond, TResult>(
+            this Task<Result<TFirst>> first,
+            Func<TFirst, Result<TSecond>> getSecond,
+            Func<TFirst, TSecond, TResult> getResult)
+        {
+            return first
+                .Then(firstValue => getSecond(firstValue)
+                .Map(secondValue => getResult(firstValue, secondValue)));
         }
     }
 }

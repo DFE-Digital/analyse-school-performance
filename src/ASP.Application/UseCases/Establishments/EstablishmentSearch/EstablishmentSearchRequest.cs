@@ -1,10 +1,23 @@
-﻿using ASP.Core.Scope;
+﻿using ASP.Core.Optionality;
+using ASP.Core.Scoping;
 
 namespace ASP.Application.UseCases.Establishments.EstablishmentSearch;
 
 public class EstablishmentSearchRequest
 {
-    public EstablishmentSearchRequest(string searchTerm, ScopeType scopeType, string scopeIdentifier, int? page, int? resultsPerPage)
+    public string SearchTerm { get; }
+    public ScopeType ScopeType { get; }
+    public Optional<string> ScopeIdentifier { get; }
+    public Optional<int> Page { get; }
+    public Optional<int> ResultsPerPage { get; }
+
+    public EstablishmentSearchRequest(
+        string searchTerm, 
+        ScopeType scopeType, 
+        Optional<string> scopeIdentifier, 
+        Optional<int> page, 
+        Optional<int> resultsPerPage
+    )
     {
         SearchTerm = searchTerm;
         ScopeType = scopeType;
@@ -12,10 +25,4 @@ public class EstablishmentSearchRequest
         Page = page;
         ResultsPerPage = resultsPerPage;
     }
-
-    public string SearchTerm { get; set; }
-    public ScopeType ScopeType { get; set; }
-    public string ScopeIdentifier { get; set; }
-    public int? Page { get; set; }
-    public int? ResultsPerPage { get; set; }
 }

@@ -4,8 +4,9 @@ using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Core;
 using ASP.Core.Establishments.Search;
+using ASP.Core.Optionality;
 using ASP.Core.Results;
-using ASP.Core.Scope;
+using ASP.Core.Scoping;
 using ASP.Web.Areas.School;
 using ASP.Web.Areas.Shared.Pagination;
 using ASP.Web.Core.BreadcrumbTrail;
@@ -63,9 +64,9 @@ public class SearchController : Controller
             var estabSearchRequest = new EstablishmentSearchRequest(
                 searchParams.Search,
                 ScopeType.All,
-                string.Empty,
-                pageNumber,
-                Constants.SearchResultPageSize
+                Optional<string>.None,
+                Optional<int>.Some(pageNumber),
+                Optional<int>.Some(Constants.SearchResultPageSize)
             );
 
             return await _api.EstablishmentSearch(estabSearchRequest)
@@ -88,7 +89,8 @@ public class SearchController : Controller
         var estabSearchSuggestions = new EstablishmentSearchSuggestionsRequest(
             searchParams.Search ?? "",
             ScopeType.All,
-            string.Empty
+            Optional<string>.None,
+            Optional<int>.None
         );
 
         return await _api.EstablishmentSearchSuggestions(estabSearchSuggestions).ToActionResult(Json, _hostEnvironment);

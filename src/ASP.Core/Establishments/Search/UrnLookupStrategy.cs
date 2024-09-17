@@ -1,4 +1,5 @@
 ﻿using ASP.Core.Results;
+using ASP.Core.Scoping;
 
 namespace ASP.Core.Establishments.Search;
 
@@ -6,7 +7,7 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
 {
     private readonly IEstablishmentRepository _repository;
 
-    public UrnLookupStrategy(IEstablishmentRepository repository, Scope.Scope scope, string searchTerm, int page = 1,
+    public UrnLookupStrategy(IEstablishmentRepository repository, Scope scope, string searchTerm, int page = 1,
         int resultsPerPage = Constants.SearchResultPageSize) : base(scope, searchTerm, page, resultsPerPage)
     {
         _repository = repository;

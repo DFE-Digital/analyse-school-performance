@@ -1,15 +1,16 @@
 ﻿using ASP.Core.Results;
+using ASP.Core.Scoping;
 
 namespace ASP.Core.Establishments.Search;
 
 public abstract class EstablishmentSearchStrategy : IEstablishmentSearchStrategy
 {
-    protected Scope.Scope Scope { get; }
+    protected Scope Scope { get; }
     protected string SearchTerm { get; }
     protected int Page { get; }
     protected int ResultsPerPage { get; }
 
-    protected EstablishmentSearchStrategy(Scope.Scope scope, string searchTerm, int page, int resultsPerPage)
+    protected EstablishmentSearchStrategy(Scope scope, string searchTerm, int page, int resultsPerPage)
     {
         Scope = scope;
         SearchTerm = searchTerm;

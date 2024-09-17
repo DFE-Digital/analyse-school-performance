@@ -1,4 +1,5 @@
 ﻿using ASP.Application;
+using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
 using Microsoft.AspNetCore.Mvc;
@@ -47,8 +48,8 @@ namespace ASP.Web.Areas.LocalAuthority
 
         protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentTemplateId, string? revision)
         {
-            return _api.ViewContentTemplate(new(contentTemplateId, revision))
-                .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, null, template))
+            return _api.ViewContentTemplate(new(contentTemplateId, Optional.FromNullable(revision)))
+                .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template))
                 .DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel());
         }
     }

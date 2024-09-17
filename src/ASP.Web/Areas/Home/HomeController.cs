@@ -1,5 +1,6 @@
 using ASP.Application;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
+using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features.TermsOfUse;
@@ -41,7 +42,7 @@ namespace ASP.Web.Areas.Home
                 Views = []
             };
 
-            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID, revision))
+            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID, Optional.FromNullable(revision)))
                 .Map(template => ContentTemplateViewModel.FromTemplate(CONTENT_TEMPLATE_ID, revision, template))
                 .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
                 .ToActionResult(View, _hostEnvironment);

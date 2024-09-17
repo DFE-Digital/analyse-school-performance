@@ -1,19 +1,25 @@
-﻿using ASP.Core.Scope;
+﻿using ASP.Core.Optionality;
+using ASP.Core.Scoping;
 
 namespace ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 
 public class EstablishmentSearchSuggestionsRequest
 {
-    public EstablishmentSearchSuggestionsRequest(string searchTerm, ScopeType scopeType, string scopeIdentifier, int? maxSuggestions = null)
+    public string SearchTerm { get; }
+    public ScopeType ScopeType { get; }
+    public Optional<string> ScopeIdentifier { get; }
+    public Optional<int> MaxSuggestions { get; }
+
+    public EstablishmentSearchSuggestionsRequest(
+        string searchTerm, 
+        ScopeType scopeType, 
+        Optional<string> scopeIdentifier, 
+        Optional<int> maxSuggestions
+    )
     {
         SearchTerm = searchTerm;
         ScopeType = scopeType;
         ScopeIdentifier = scopeIdentifier;
         MaxSuggestions = maxSuggestions;
     }
-
-    public ScopeType ScopeType { get; set; }
-    public string ScopeIdentifier { get; set; }
-    public string SearchTerm { get; set; }
-    public int? MaxSuggestions { get; set; }
 }

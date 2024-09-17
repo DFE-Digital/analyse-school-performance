@@ -6,12 +6,14 @@ using ASP.Core.Results;
 using ASP.Core.Establishments;
 using ASP.Core.LocalAuthorities;
 using ASP.Core.MultiAcademyTrusts;
-using ASP.Core.Scope;
+using ASP.Core.Scoping;
 
 namespace ASP.Application.UseCases.Establishments.EstablishmentSearch;
 
 public class EstablishmentSearch : IEstablishmentSearch
 {
+    private readonly ILocalAuthorityRepository _localAuthorityRepository;
+    private readonly IMultiAcademyTrustRepository _multiAcademyTrustRepository;
     private readonly EstablishmentSearchService _searchService;
 
     public EstablishmentSearch(
@@ -20,21 +22,21 @@ public class EstablishmentSearch : IEstablishmentSearch
         IMultiAcademyTrustRepository multiAcademyTrustRepository
     )
     {
-        _searchService = new EstablishmentSearchService(
-            establishmentRepository,
-            localAuthorityRepository,
-            multiAcademyTrustRepository
-        );
+        _localAuthorityRepository = localAuthorityRepository;
+        _multiAcademyTrustRepository = multiAcademyTrustRepository;
+
+        _searchService = new EstablishmentSearchService(establishmentRepository);
     }
 
     public async Task<Result<SearchResultsPage<EstablishmentListingDTO>>> HandleRequest(
         EstablishmentSearchRequest request)
     {
-        var scope = new Scope(request.ScopeType, request.ScopeIdentifier);
-        var page = request.Page ?? 1;
-        var resultsPerPage = request.ResultsPerPage ?? Constants.SearchResultPageSize;
+        var page = request.Page.GetValueOrDefault(1);
+        var resultsPerPage = request.ResultsPerPage.GetValueOrDefault(Constants.SearchResultPageSize);
+        var scopeIdentifier = request.ScopeIdentifier.GetValueOrDefault("");
 
-        return await _searchService.Search(request.SearchTerm, scope, page, resultsPerPage)
+        return await Scope.Validate(request.ScopeType, scopeIdentifier, _localAuthorityRepository, _multiAcademyTrustRepository)
+            .Then(scope => _searchService.Search(request.SearchTerm, scope, page, resultsPerPage))
             .Map(results => results.Map(r => r.MapToEstablishmentListingDTO()));
     }
 }

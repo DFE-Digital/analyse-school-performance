@@ -45,26 +45,22 @@ namespace ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate
         {
             var notAllowedError = Error.NotAllowed("Only unpublished Content Template revisions can be updated.");
 
-            if (request.Revision == null)
-            {
-                return await _repository.GetBaseTemplate(request.ContentTemplateId)
-                    .ErrorIf(t => t.IsPublished, notAllowedError)
-                    .DefaultIf(e => e is NotFoundError, request.ContentTemplate)
-                    .Then(t => _repository.Update(request.ContentTemplateId, request.ContentTemplateId, request.ContentTemplate))
-                    .Map(_ => Result.Done);
-            }
-            else
-            {
-                return await _repository.GetBaseTemplate(request.ContentTemplateId)
-                    .Then(_ => _repository.GetRevision(request.ContentTemplateId, request.Revision)
+            return await request.Revision.Match(
+                revision => _repository.GetBaseTemplate(request.ContentTemplateId)
+                    .Then(_ => _repository.GetRevision(request.ContentTemplateId, revision)
                     .ErrorIf(t =>
                     {
                         return t.IsPublished;
                     }, notAllowedError)
                     .DefaultIf(e => e is NotFoundError, request.ContentTemplate)
-                    .Then(t => _repository.Update(request.ContentTemplateId, request.Revision, request.ContentTemplate))
-                    .Map(_ => Result.Done));
-            }
+                    .Then(t => _repository.Update(request.ContentTemplateId, revision, request.ContentTemplate))
+                    .Map(_ => Result.Done)),
+                () => _repository.GetBaseTemplate(request.ContentTemplateId)
+                    .ErrorIf(t => t.IsPublished, notAllowedError)
+                    .DefaultIf(e => e is NotFoundError, request.ContentTemplate)
+                    .Then(t => _repository.Update(request.ContentTemplateId, request.ContentTemplateId, request.ContentTemplate))
+                    .Map(_ => Result.Done)
+            );
         }
     }
 }

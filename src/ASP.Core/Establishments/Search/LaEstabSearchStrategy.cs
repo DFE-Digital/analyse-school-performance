@@ -1,5 +1,6 @@
 ﻿using ASP.Core.Extensions;
 using ASP.Core.Results;
+using ASP.Core.Scoping;
 
 namespace ASP.Core.Establishments.Search;
 
@@ -7,7 +8,7 @@ public class LaEstabSearchStrategy : EstablishmentSearchStrategy
 {
     private readonly IEstablishmentRepository _repository;
 
-    public LaEstabSearchStrategy(IEstablishmentRepository repository, Scope.Scope scope,
+    public LaEstabSearchStrategy(IEstablishmentRepository repository, Scope scope,
         string searchTerm, int page = 1,
         int resultsPerPage = Constants.SearchResultPageSize) : base(scope, searchTerm, page, resultsPerPage)
     {

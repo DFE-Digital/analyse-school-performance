@@ -1,4 +1,5 @@
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
+using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -25,17 +26,22 @@ namespace ASP.Api.Functions
         }
 
         [Function("ViewContentTemplate")]
-        public override async Task<ApiResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req, CancellationToken cancellationToken)
+        public override async Task<ApiResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post")] 
+            HttpRequest request, 
+            CancellationToken cancellationToken
+        )
         {
-            _logger.LogInformation(req.Method + " " + req.Path + req.QueryString);
+            _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
-            var apiResult = await RequestValidation.RequiredHttpMethod(req, [HttpMethods.Get])
-                .Then(_ => RequestValidation.RequiredParameter(req, "id")
-                .Then(id => RequestValidation.OptionalParameter(req, "revision")
-                .Then(revision => _view.HandleRequest(new ViewContentTemplateRequest(id, revision)))))
-                .ToApiResultAsync(_options, cancellationToken);
+            var result =
+                from _ in request.ValidateHttpMethod([HttpMethods.Get])
+                from id in request.ValidateParameter("id", p => p.IsRequired())
+                from revision in request.ValidateParameter("revision", p => p.IsOptional())
+                from response in _view.HandleRequest(new ViewContentTemplateRequest(id, revision))
+                select response;
 
-            return apiResult;
+            return await result.ToApiResultAsync(_options, cancellationToken);
         }
     }
 }

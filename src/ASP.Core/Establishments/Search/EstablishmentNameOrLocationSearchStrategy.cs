@@ -1,4 +1,5 @@
 ﻿using ASP.Core.Results;
+using ASP.Core.Scoping;
 
 namespace ASP.Core.Establishments.Search;
 
@@ -7,8 +8,8 @@ public class EstablishmentNameOrLocationSearchStrategy : EstablishmentSearchStra
     private readonly IEstablishmentRepository _establishmentRepository;
 
     public EstablishmentNameOrLocationSearchStrategy(
-        IEstablishmentRepository establishmentRepository, 
-        Scope.Scope scope, 
+        IEstablishmentRepository establishmentRepository,
+        Scope scope, 
         string searchTerm,
         int page, 
         int resultsPerPage

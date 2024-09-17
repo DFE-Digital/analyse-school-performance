@@ -40,16 +40,12 @@ namespace ASP.Application.UseCases.ContentTemplates.ViewContentTemplate
 
         public async Task<Result<ContentTemplate>> HandleRequest(ViewContentTemplateRequest request)
         {
-            if (request.Revision == null)
-            {
-                return await _repository.GetBaseTemplate(request.ContentTemplateId)
-                    .Then(_ => _repository.GetPublishedRevision(request.ContentTemplateId));
-            }
-            else
-            {
-                return await _repository.GetBaseTemplate(request.ContentTemplateId)
-                    .Then(_ => _repository.GetRevision(request.ContentTemplateId, request.Revision));
-            }
+            return await request.Revision.Match(
+                revision => _repository.GetBaseTemplate(request.ContentTemplateId)
+                    .Then(_ => _repository.GetRevision(request.ContentTemplateId, revision)),
+                () => _repository.GetBaseTemplate(request.ContentTemplateId)
+                    .Then(_ => _repository.GetPublishedRevision(request.ContentTemplateId))
+            );
         }
     }
 }
