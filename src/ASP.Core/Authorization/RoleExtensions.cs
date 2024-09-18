@@ -1,6 +1,5 @@
 ﻿using ASP.Core.Results;
 using Microsoft.AspNetCore.Authorization;
-using System.Data;
 using System.Security.Claims;
 
 namespace ASP.Core.Authorization
@@ -56,6 +55,40 @@ namespace ASP.Core.Authorization
             if (string.IsNullOrEmpty(claim?.Value))
             {
                 return Result.NotAllowed<string>($"User's {CustomClaimTypes.UniqueReferenceNumber} claim is missing or empty.");
+            }
+
+            return claim.Value;
+        }
+        
+        public static Result<string> GetMatUid(this ClaimsPrincipal user)
+        {
+            if(!(user.Role() is Role r && r.IsMatUser))
+            {
+                return Result.NotAllowed<string>("User is not a Multi-Academy Trust user.");
+            }
+
+            var claim = user.FindFirst(CustomClaimTypes.UniqueIdentifier);
+
+            if(string.IsNullOrEmpty(claim?.Value))
+            {
+                return Result.NotAllowed<string>($"User's {CustomClaimTypes.UniqueIdentifier} claim is missing or empty.");
+            }
+
+            return claim.Value;
+        }
+        
+        public static Result<string> GetDioceseName(this ClaimsPrincipal user)
+        {
+            if(!(user.Role() is Role r && r.IsDioceseUser))
+            {
+                return Result.NotAllowed<string>("User is not a Diocese user.");
+            }
+
+            var claim = user.FindFirst(CustomClaimTypes.OrganisationName);
+
+            if(string.IsNullOrEmpty(claim?.Value))
+            {
+                return Result.NotAllowed<string>($"User's {CustomClaimTypes.OrganisationName} claim is missing or empty.");
             }
 
             return claim.Value;

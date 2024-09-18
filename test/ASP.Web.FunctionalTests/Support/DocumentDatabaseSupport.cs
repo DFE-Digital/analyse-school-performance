@@ -27,6 +27,7 @@ namespace ASP.Web.FunctionalTests.Support
             await _web.DocumentDatabase.DeleteAllAsync("content");
             await _web.DocumentDatabase.DeleteAllAsync("establishments");
             await _web.DocumentDatabase.DeleteAllAsync("local-authorities");
+            await _web.DocumentDatabase.DeleteAllAsync("multi-academy-trusts");
         }
     }
 }

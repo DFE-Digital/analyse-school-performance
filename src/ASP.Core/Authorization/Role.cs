@@ -28,6 +28,9 @@ public sealed class Role
     public bool HasAccessToGuidance => AccessToGuidance.Contains(this);
     public bool IsLaUser => AccessToMyLocalAuthority.Contains(this);
     public bool IsSchoolUser => AccessToMySchool.Contains(this);
+    public bool IsMatUser => AccessToMyMatSchools.Contains(this);
+    public bool IsDfeUser => AccessToAllSchools.Contains(this);
+    public bool IsDioceseUser => AccessToMyDioceseSchools.Contains(this);
     public bool IsAny => All.Contains(this);
 
     public override bool Equals(object? obj)

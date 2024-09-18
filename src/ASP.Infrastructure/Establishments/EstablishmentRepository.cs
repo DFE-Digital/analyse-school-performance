@@ -42,7 +42,7 @@ namespace ASP.Infrastructure.Establishments
             Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
-            return await _documentDB.QueryPagedAsync<EstablishmentDAO>(
+            return await _documentDB.QueryPagedAsync(
                     ContainerKey,
                     ApplyScopeAndSearchQuery(scope, searchTerm),
                     page,

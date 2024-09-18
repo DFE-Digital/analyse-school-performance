@@ -1883,5 +1883,310 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 	  | Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200               |
 	  | Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201              |
 	  | A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
-	  
-	  
+   
+@Javascript:disabled
+Scenario: Search page returns 'Access not allowed' error for School Named user (Unauthorized user)
+	Given I am a School Named user for Establishment "123456"
+	When I navigate to /search/
+	Then I should get a 403 response
+	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
+	
+@Javascript:disabled
+Scenario: Search functionality returns server error for LA Named user when no Local Authorities are present
+	Given I am a LA Named user for Local Authority "100"
+	And no Local Authorities exist
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Test"
+	And I click the button "#searchSubmit"
+	Then I should get a 500 response
+	And the page title should be "Sorry, there is a problem with the service | Analyse school performance"
+	
+@Javascript:disabled
+Scenario: Search functionality returns no results for LA Named user when querying establishments from other Local Authorities
+	Given I am a LA Named user for Local Authority "100"
+	And Local Authority "100" exists:
+	"""
+		{ 
+		 "name": "Test LA"
+		}
+	"""
+	And Establishment "111111" exists:
+	"""
+		{
+			"name": "Test School 1",
+			"localAuthority":
+			 {
+			 	"code": "999"
+			 }
+		}
+	"""
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Test"
+	And I click the button "#searchSubmit"
+	Then the element "h1.govuk-heading-l" should have the text content "We found no matches for "Test""	
+	
+	
+@Javascript:disabled
+Scenario: LA Named user sees only establishments within their Local Authority in search results
+	Given I am a LA Named user for Local Authority "100"
+	And Local Authority "100" exists:
+	"""
+		{ 
+		"name": "Test LA"
+		}
+	"""
+	And Establishment "111111" exists:
+	"""
+		{
+			"name": "Test School 1",
+			"localAuthority":
+			{
+			"code": "100"
+			}
+		}
+	"""
+	And Establishment "222222" exists:
+	"""
+		{
+			"name": "Test School 2",
+			"localAuthority":
+			{
+			"code": "100"
+			}
+		}
+	"""
+	And Establishment "333333" exists:
+	"""
+		{
+			"name": "Test School 3",
+			"localAuthority":
+			{
+			"code": "999"
+			}
+		}
+	"""
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Test"
+	And I click the button "#searchSubmit"
+	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+	And the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+Examples: 
+  | Counter | URN    | Name          |
+  | 1       | 111111 | Test School 1 |
+  | 2       | 222222 | Test School 2 |
+  
+
+@Javascript:disabled
+Scenario: MAT Named user encounters server error when searching with no Multi-Academy Trusts existing
+	Given I am a MAT Named user for Multi-Academy Trust "1234"
+	And no Multi Academy Trust exist
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Test"
+	And I click the button "#searchSubmit"
+	Then I should get a 500 response
+	And the page title should be "Sorry, there is a problem with the service | Analyse school performance"
+	
+	
+@Javascript:disabled
+Scenario: MAT Named user receives no results when searching for establishments not associated with their Multi-Academy Trust
+	Given I am a MAT Named user for Multi-Academy Trust "1234"
+	And Multi Academy Trust "1234" exists:
+	  """
+	  { 
+	  	"name": "Test MAT"
+	  }
+	  """
+	And Establishment "111111" exists:
+	  """
+	  {
+	    "name": "Test School 1"
+	  }
+	  """
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Test"
+	And I click the button "#searchSubmit"
+	Then the element "h1.govuk-heading-l" should have the text content "We found no matches for "Test""	
+	
+@Javascript:disabled
+Scenario: MAT Named user sees only establishments within their Multi-Academy Trust in search results
+	Given I am a MAT Named user for Multi-Academy Trust "1234"
+	And Multi Academy Trust "1234" exists:
+	"""
+		{ 
+		 "name": "Test MAT"
+		}
+	"""
+	And Establishment "111111" exists:
+	"""
+		{
+		 "name": "Test School 1",
+	      "multiAcademyTrust": {
+	         "uid": 1234
+	      }
+		}
+	"""
+	And Establishment "222222" exists:
+	"""
+		{
+		"name": "Test School 2"
+		}
+	"""
+	And Establishment "333333" exists:
+	"""
+		{
+		 "name": "Test School 3",
+	      "multiAcademyTrust": {
+	         "uid": 1234
+	      }
+		}
+    """
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Test"
+	And I click the button "#searchSubmit"
+	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+	And the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+	Examples: 
+	| Counter | URN      | Name          |
+	| 1       | 111111   | Test School 1 |
+	| 2       | 333333   | Test School 3 |
+
+
+@Javascript:disabled
+Scenario: Diocese Named user receives no results when searching for establishments not associated with any diocese		
+	 Given I am a Diocese Named user for Diocese "Test Diocese"
+	 And Establishment "111111" exists:
+	 """
+	  {
+	        "name": "Test School 1",
+	        "diocese": {
+	            "code": "1000",
+	            "name": "Test Diocese1",
+	            "lname": "test diocese1",
+	            "isNullish": false
+	       }
+	     }
+	 """
+	 And Establishment "222222" exists:
+	 """
+	  {
+	      "name": "Test School 2",
+	      "diocese": null
+	  }
+	 """
+	 And Establishment "333333" exists:
+	 """
+	 {
+	 	"name": "Test School 3"
+	 }
+	 """
+	 When I navigate to /search/
+	 And I update the textbox "#searchTerm" to have the value "Test"
+	 And I click the button "#searchSubmit"
+	 Then the element "h1.govuk-heading-l" should have the text content "We found no matches for "Test""	  
+	 
+@Javascript:disabled
+Scenario: Diocese Named user sees only establishments within their Diocese in search results	 
+	Given I am a Diocese Named user for Diocese "Test Diocese"
+	And Establishment "111111" exists:
+		"""
+		 {
+		     "name": "Test School 1",
+		     "diocese": {
+		         "code": "1000",
+		         "name": "Test Diocese",
+		         "lname": "test diocese",
+		         "isNullish": false
+		     }
+		 }
+		"""
+	And Establishment "222222" exists:
+		"""
+		 {
+		    "name": "Test School 2",
+		    "diocese": {
+		        "code": "1001",
+		        "name": "Another Diocese",
+		        "lname": "another diocese",
+		        "isNullish": false
+		    }
+		 }
+		"""
+	And Establishment "333333" exists:
+		"""
+		 {
+		    "name": "Test School 3",
+		    "diocese": {
+		        "code": "1000",
+		        "name": "Test Diocese",
+		        "lname": "test diocese",
+		        "isNullish": false
+		    }
+		 }
+		"""
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Test"
+	And I click the button "#searchSubmit"
+	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+	And the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+	Examples: 
+	| Counter | URN      | Name          |
+	| 1       | 111111   | Test School 1 |
+	| 2       | 333333   | Test School 3 |
+	
+@Javascript:disabled
+Scenario: DfE Named user sees all establishments across different affiliations in search results
+	Given I am a DfE Named user
+	And Local Authority "100" exists:
+	 """
+		{ 
+		   "name": "Test LA"
+		}
+	 """
+	And Establishment "111111" exists:
+	 """
+		{
+		   "name": "Test School 1",
+		   "localAuthority":
+		   {
+		       "code": "100"
+		   }
+		}
+	 """
+	And Multi Academy Trust "1234" exists:
+	 """
+		{ 
+		   "name": "Test MAT"
+		}
+	 """
+	And Establishment "222222" exists:
+	 """
+		{
+		   "name": "Test School 2"
+		}
+	 """
+	And Establishment "333333" exists:
+	 """
+		{
+		   "name": "Test School 3",
+		   "diocese": {
+		       "code": "1000",
+		       "name": "Test Diocese",
+		       "lname": "test diocese",
+		       "isNullish": false
+		   }
+		}
+	 """
+	When I navigate to /search/
+	And I update the textbox "#searchTerm" to have the value "Test"
+	And I click the button "#searchSubmit"
+	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 3 of 3 schools or colleges"
+	And the element "[data-testid="school-search-results-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-search-results-name-<Counter>"]" should have the text content "<Name>"
+	Examples: 
+	| Counter | URN      | Name          |
+	| 1       | 111111   | Test School 1 |
+	| 2       | 222222   | Test School 2 |
+	| 3       | 333333   | Test School 3 |
