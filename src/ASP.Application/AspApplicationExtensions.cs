@@ -11,6 +11,7 @@ using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
 using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
+using ASP.Application.UseCases.Downloads.DownloadAsZip;
 
 namespace ASP.Application;
 
@@ -29,7 +30,8 @@ public static class AspApplicationExtensions
         services.AddScoped<IGetLocalAuthority, GetLocalAuthority>();
         services.AddScoped<IGetAvailableSchoolDownloads, GetAvailableSchoolDownloads>();
         services.AddScoped<IGetMultiAcademyTrust, GetMultiAcademyTrust>();
-
+        services.AddScoped<IDownloadAsZipFile, DownloadAsZipFile>();
+        
         return services;
     }
 }

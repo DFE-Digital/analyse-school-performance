@@ -1,6 +1,7 @@
 ﻿using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -24,11 +25,10 @@ public class GetLocalAuthority : ApiFunction
     }
 
     [Function("GetLocalAuthority")]
-    public override async Task<ApiResult> Run(
+    public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
         HttpRequest request,
-        CancellationToken cancellationToken
-    )
+        CancellationToken cancellationToken)
     {
         _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 

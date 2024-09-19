@@ -4,7 +4,7 @@ using ASP.Core.Results;
 namespace ASP.Api;
 
 public static class RequestParameterValidationBuilderExtensions
-{ 
+{
     public static RequestParameterValidationBuilder<string> IsRequired(this RequestParameterValidationBuilder<Done> builder)
     {
         Result<string> result = builder.Result.Then(_ =>
@@ -32,6 +32,33 @@ public static class RequestParameterValidationBuilderExtensions
         });
 
         return new RequestParameterValidationBuilder<string>(builder.Request, builder.ParameterName, result);
+    }
+
+    public static RequestParameterValidationBuilder<List<string>> IsRequiredMultiParameter(this RequestParameterValidationBuilder<Done> builder)
+    {
+        Result<List<string>> result = builder.Result.Then(_ =>
+        {
+            var values = builder.Request.Query[builder.ParameterName];
+
+            if (values.Count == 0)
+            {
+                return Error.Invalid($@"The parameter ""{builder.ParameterName}"" is missing.");
+            }
+
+            var validValues = values
+                .Where(v => !string.IsNullOrWhiteSpace(v))
+                .Select(v => v!)
+                .ToList();
+
+            if (validValues.Count == 0)
+            {
+                return Error.Invalid($@"The parameter ""{builder.ParameterName}"" should not be empty.");
+            }
+
+            return Result.Success(validValues);
+        });
+
+        return new RequestParameterValidationBuilder<List<string>>(builder.Request, builder.ParameterName, result);
     }
 
     public static RequestParameterValidationBuilder<Optional<string>> IsOptional(this RequestParameterValidationBuilder<Done> builder)
@@ -72,7 +99,7 @@ public static class RequestParameterValidationBuilderExtensions
         return new RequestParameterValidationBuilder<Optional<string>>(builder.Request, builder.ParameterName, result);
     }
 
-    public static RequestParameterValidationBuilder<TEnum> IsEnum<TEnum>(this RequestParameterValidationBuilder<string> builder) 
+    public static RequestParameterValidationBuilder<TEnum> IsEnum<TEnum>(this RequestParameterValidationBuilder<string> builder)
         where TEnum : struct, Enum
     {
         Result<TEnum> result = builder.Result.Then(value => ValidateEnum<TEnum>(value, builder.ParameterName));
@@ -80,7 +107,7 @@ public static class RequestParameterValidationBuilderExtensions
         return new RequestParameterValidationBuilder<TEnum>(builder.Request, builder.ParameterName, result);
     }
 
-    public static RequestParameterValidationBuilder<Optional<TEnum>> IsEnum<TEnum>(this RequestParameterValidationBuilder<Optional<string>> builder) 
+    public static RequestParameterValidationBuilder<Optional<TEnum>> IsEnum<TEnum>(this RequestParameterValidationBuilder<Optional<string>> builder)
         where TEnum : struct, Enum
     {
         Result<Optional<TEnum>> result = builder.Result.Then(value => ValidateEnum<TEnum>(value, builder.ParameterName));

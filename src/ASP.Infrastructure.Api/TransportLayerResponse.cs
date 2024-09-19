@@ -7,6 +7,7 @@
     {
         public int? StatusCode { get; set; }
         public Dictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
-        public string? Body { get; set; }
+        public string? BodyString { get; set; }
+        public Stream? BodyStream { get; set; }
     }
 }

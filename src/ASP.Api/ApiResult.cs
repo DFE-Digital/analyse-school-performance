@@ -7,6 +7,7 @@ namespace ASP.Api
     public class ApiResult : ContentResult
     {
         public object Value { get; }
+        public Dictionary<string, string> Headers { get; } = new Dictionary<string, string>();
 
         public ApiResult(int statusCode, string message)
         {
@@ -24,13 +25,13 @@ namespace ASP.Api
             ContentType = "application/json";
         }
 
-        public Dictionary<string, string> Headers { get; } = new Dictionary<string, string>();
 
         public override async Task ExecuteResultAsync(ActionContext context)
         {
+            HttpResponse response = context.HttpContext.Response;
             foreach (var header in Headers)
             {
-                context.HttpContext?.Response?.Headers?.Append(header.Key, header.Value);
+                response.Headers.Append(header.Key, header.Value);
             }
 
             await base.ExecuteResultAsync(context);

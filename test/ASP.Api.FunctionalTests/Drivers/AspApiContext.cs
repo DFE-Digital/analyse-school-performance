@@ -60,7 +60,7 @@ namespace ASP.Api.FunctionalTests.Drivers
                 }
 
                 _outputHelper.WriteLine("Response content:");
-                _outputHelper.WriteLine(_lastResponse.Body);
+                _outputHelper.WriteLine(_lastResponse.BodyString);
 
                 return _lastResponse!;
             }

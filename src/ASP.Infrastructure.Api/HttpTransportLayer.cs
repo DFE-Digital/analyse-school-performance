@@ -35,7 +35,7 @@ namespace ASP.Infrastructure.Api
 
             var response = new TransportLayerResponse();
             response.StatusCode = (int)httpResponse.StatusCode;
-            response.Body = await httpResponse.Content.ReadAsStringAsync();
+            response.BodyString = await httpResponse.Content.ReadAsStringAsync();
             foreach (var header in httpResponse.Headers)
             {
                 response.Headers[header.Key] = header.Value.ToString() ?? "";

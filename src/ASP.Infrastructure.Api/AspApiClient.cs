@@ -212,7 +212,7 @@ namespace ASP.Infrastructure.Api
 
             try
             {
-                var content = response.Body ?? "";
+                var content = response.BodyString ?? "";
 
                 Result<string> handleUnexpected(string content)
                 {

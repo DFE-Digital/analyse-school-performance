@@ -1,6 +1,7 @@
 ﻿using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,7 +23,7 @@ namespace ASP.Api.Functions
         }
 
         [Function("GetAvailableLADownloads")]
-        public override async Task<ApiResult> Run(
+        public override async Task<ActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get")]
             HttpRequest request,
             CancellationToken cancellationToken

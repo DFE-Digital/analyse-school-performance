@@ -17,8 +17,8 @@ namespace ASP.Infrastructure.Api
     public class InProcessTransportLayer : ITransportLayer
     {
         public static List<Type> FunctionTypes { get; }
-        
-        private readonly Dictionary<string, Func<HttpRequest, Task<ApiResult>>> _functions;
+
+        private readonly Dictionary<string, Func<HttpRequest, Task<ActionResult>>> _functions;
 
         static InProcessTransportLayer()
         {
@@ -45,12 +45,13 @@ namespace ASP.Infrastructure.Api
 
                     return "/api/" + functionAttribute.Name;
                 },
-                t => (Func<HttpRequest, Task<ApiResult>>)(async (req) => await Run(t, req))
+                t => (Func<HttpRequest, Task<ActionResult>>)(async (req) => await Run(t, req))
             );
         }
 
-        private async Task<ApiResult> Run(Type type, HttpRequest req) {
-            if(_serviceProvider.GetService(type) is ApiFunction function)
+        private async Task<ActionResult> Run(Type type, HttpRequest req)
+        {
+            if (_serviceProvider.GetService(type) is ApiFunction function)
             {
                 using (var cancellationTokenSource = new CancellationTokenSource())
                 {
@@ -68,10 +69,10 @@ namespace ASP.Infrastructure.Api
 
             using (new RequestBodyWriter(httpRequest, request.Body ?? ""))
             {
-                Func<HttpRequest, Task<ApiResult>> func =
+                Func<HttpRequest, Task<ActionResult>> func =
                     _functions.TryGetValue(function, out var runMethod)
                         ? runMethod
-                        : _ => Task.FromResult(new ApiResult(404, $"Function {function} not found."));
+                        : _ => Task.FromResult((ActionResult)new ApiResult(404, $"Function {function} not found."));
 
                 var result = await func(httpRequest);
                 httpRequest.HttpContext.RequestServices = new RequestServiceProvider();
@@ -80,11 +81,14 @@ namespace ASP.Infrastructure.Api
 
                 var httpResponse = httpRequest.HttpContext.Response;
                 httpResponse.Body.Position = 0;
+                var ms = new MemoryStream();
                 using (var sr = new StreamReader(httpResponse.Body))
                 {
-                    var response = new TransportLayerResponse {
+                    var response = new TransportLayerResponse
+                    {
                         StatusCode = httpResponse.StatusCode,
-                        Body = await sr.ReadToEndAsync()
+                        BodyString = await sr.ReadToEndAsync(),
+                        BodyStream = ms
                     };
 
                     foreach (var header in httpResponse.Headers)
@@ -92,6 +96,9 @@ namespace ASP.Infrastructure.Api
                         response.Headers[header.Key] = header.Value.ToString() ?? "";
                     }
 
+                    httpResponse.Body.Position = 0;
+                    httpResponse.Body.CopyTo(ms);
+                    response.BodyStream.Position = 0;
                     return response;
                 }
             }
@@ -140,14 +147,19 @@ namespace ASP.Infrastructure.Api
             {
                 if (serviceType == typeof(IActionResultExecutor<ContentResult>))
                 {
-                    return Activator.CreateInstance(typeof(ActionResultExecutor));
+                    return Activator.CreateInstance(typeof(ContentResultExecutor));
+                }
+
+                if (serviceType == typeof(IActionResultExecutor<FileStreamResult>))
+                {
+                    return Activator.CreateInstance(typeof(FileStreamResultExecutor));
                 }
 
                 throw new NotImplementedException();
             }
         }
 
-        private class ActionResultExecutor : IActionResultExecutor<ContentResult>
+        private class ContentResultExecutor : IActionResultExecutor<ContentResult>
         {
             public async Task ExecuteAsync(ActionContext context, ContentResult result)
             {
@@ -157,6 +169,18 @@ namespace ASP.Infrastructure.Api
                 response.Body = new MemoryStream();
                 response.ContentLength = result.Content?.Length ?? 0;
                 await response.WriteAsync(result.Content ?? "");
+            }
+        }
+
+        private class FileStreamResultExecutor : IActionResultExecutor<FileStreamResult>
+        {
+            public Task ExecuteAsync(ActionContext context, FileStreamResult result)
+            {
+                var response = context.HttpContext.Response;
+                response.StatusCode = 200;
+                response.ContentType = result.ContentType;
+                response.Body = result.FileStream;
+                return Task.CompletedTask;
             }
         }
     }

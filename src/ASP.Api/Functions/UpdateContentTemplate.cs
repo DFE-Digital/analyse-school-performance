@@ -2,6 +2,7 @@ using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
 using ASP.Core.Results;
 using ASP.Core.Templating;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -26,11 +27,10 @@ namespace ASP.Api.Functions
         }
 
         [Function("UpdateContentTemplate")]
-        public override async Task<ApiResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post")] 
+        public override async Task<ActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
             HttpRequest request, 
-            CancellationToken cancellationToken
-        )
+            CancellationToken cancellationToken)
         {
             _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 

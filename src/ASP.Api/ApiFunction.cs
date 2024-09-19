@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Api
 {
     public abstract class ApiFunction
     {
-        public abstract Task<ApiResult> Run(HttpRequest req, CancellationToken cancellationToken);
+        public abstract Task<ActionResult> Run(HttpRequest req, CancellationToken cancellationToken);
     }
 }
