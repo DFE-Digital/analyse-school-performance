@@ -142,7 +142,7 @@ public static class RequestParameterValidationBuilderExtensions
 
         return new RequestParameterValidationBuilder<Optional<string>>(builder.Request, builder.ParameterName, result);
     }
-
+    
     public static RequestParameterValidationBuilder<string> IsDigits(this RequestParameterValidationBuilder<string> builder)
     {
         Result<string> result = builder.Result.Then(value => ValidateDigits(value, builder.ParameterName));
@@ -163,7 +163,7 @@ public static class RequestParameterValidationBuilderExtensions
             ? Result.Success(value)
             : Error.Invalid($@"The parameter ""{parameterName}"" must be exactly {requiredLength} characters long.");
     }
-
+    
     private static Result<string> ValidateDigits(this string value, string parameterName)
     {
         return value.All(char.IsDigit)

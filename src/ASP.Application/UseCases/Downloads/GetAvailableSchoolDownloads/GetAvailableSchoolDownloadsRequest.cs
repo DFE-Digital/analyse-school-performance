@@ -1,4 +1,6 @@
-﻿namespace ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads
+﻿using ASP.Core.Optionality;
+
+namespace ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads
 {
-    public record GetAvailableSchoolDownloadsRequest(string Urn);
+    public record GetAvailableSchoolDownloadsRequest(string Urn, Optional<int> Year);
 }

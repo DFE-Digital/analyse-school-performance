@@ -36,7 +36,8 @@ namespace ASP.Api.Functions
             var result =
                 from _ in request.ValidateHttpMethod([HttpMethods.Get])
                 from urn in request.ValidateParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
-                from response in _useCase.HandleRequest(new GetAvailableSchoolDownloadsRequest(urn))
+                from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
+                from response in _useCase.HandleRequest(new GetAvailableSchoolDownloadsRequest(urn, year))
                 select response;
 
             return await result.ToApiResultAsync(_options, cancellationToken);

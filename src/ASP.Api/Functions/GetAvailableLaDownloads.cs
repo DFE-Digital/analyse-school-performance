@@ -34,7 +34,8 @@ namespace ASP.Api.Functions
             var result =
                 from _ in request.ValidateHttpMethod([HttpMethods.Get])
                 from laCode in request.ValidateParameter("laCode", p => p.IsRequired().IsDigits().HasLength(3))
-                from response in _useCase.HandleRequest(new GetAvailableLADownloadsRequest(laCode))
+                from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
+                from response in _useCase.HandleRequest(new GetAvailableLADownloadsRequest(laCode, year))
                 select response;
 
             return await result.ToApiResultAsync(_options, cancellationToken);
