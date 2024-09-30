@@ -15,8 +15,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net;
 using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
+using ASP.Core.Scoping;
 
 namespace ASP.Infrastructure.Api
 {
@@ -166,6 +168,32 @@ namespace ASP.Infrastructure.Api
             var queryString = QueryString.Create("id", request.Id);
             return await ApiGet(url, queryString)
                 .Then(response => JsonHelper.DeserializeNotNull<Application.UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>(response));
+        }
+        
+        public async Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> GetAllEstablishments(
+            GetAllEstablishmentsRequest request)
+        {
+            var url = "/api/GetAllEstablishments";
+            var queryString = QueryString.Create("scope", request.ScopeType.ToString());
+
+            request.ScopeIdentifier.IfSome(value =>
+            {
+                queryString = queryString.Add("scopeIdentifier", value);
+            });
+
+            request.Page.IfSome(value =>
+            {
+                queryString = queryString.Add("page", value.ToString());
+            });
+
+            request.ResultsPerPage.IfSome(value =>
+            {
+                queryString = queryString.Add("resultsPerPage", value.ToString());
+            });
+
+            return await ApiGet(url, queryString)
+                .Then(response =>
+                    JsonHelper.DeserializeNotNull<ScopedResultsPage<EstablishmentListingDTO>>(response));
         }
 
         private async Task<Result<string>> ApiGet(string url, QueryString? queryString)

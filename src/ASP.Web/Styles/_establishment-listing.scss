@@ -1,4 +1,4 @@
-﻿.search-results-school-tile-arrow {
+﻿.app-establishment-listing-tile-arrow {
   width: 19px;
   height: 34px;
   background-color: white;
@@ -10,13 +10,13 @@
   margin-left: 10px;
 }
 
-.search-results-school-name-container {
+.app-establishment-listing-name-container {
   display: flex;
   align-items: center;
   width: 100%;
 }
 
-.search-results-school-name-container .search-results-school-name-heading {
+.app-establishment-listing-name-container .app-establishment-listing-name-heading {
   flex-grow: 1;
   margin: 0;
   white-space: nowrap;
@@ -24,17 +24,12 @@
   text-overflow: ellipsis;
 }
 
-.search-results-school-table {
+.app-establishment-listing-table {
   table-layout: fixed;
   width: 100%;
 }
-.search-results-school-table .govuk-table__header, .search-results-school-table .govuk-table__cell {
+.app-establishment-listing-table .govuk-table__header, .app-establishment-listing-table .govuk-table__cell {
   width: 50%; /* This ensures each column is half the table width */
   vertical-align: top;
   line-height: 1.5;
-}
-
-.pagination-container-p-text {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
 }

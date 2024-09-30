@@ -1,6 +1,6 @@
-﻿@using ASP.Web.Areas.School
-@using ASP.Web.Areas.Search
-@using ASP.Web.Areas.Shared.OfstedRating
+﻿@using ASP.Web.Areas.Search
+@using ASP.Web.Areas.Shared.EstablishmentListing
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ASP.Web.Areas.Search.SearchViewModel
 @{
     ViewData["Title"] = Model.TotalCount == 0 ? $"We found no matching results for \"{Model.SearchTerm}\"" : $"Search results for \"{Model.SearchTerm}\"";
@@ -20,73 +20,18 @@
         </div>
     </div>
     <div class="govuk-grid-row">
-        @{
-            var counter = 1;
-        }
         @if (Model.TotalCount > 0)
         {
             <div class="govuk-grid-column-two-thirds">
                 <h1 id="school-search-results-some-results-heading" class="govuk-heading-l school-name-heading">Search results for "@Model.SearchTerm"</h1>
                 @if (Model.PaginationModel != null)
                 {
-                    <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Header")) />
+                    <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Header"))/>
                 }
-                <ul class="govuk-list">
-                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
-                    @foreach (var item in Model.SearchResults)
-                    {
-                        <li>
-                            <div class="search-results-school-name-container">
-                                <h2 class="govuk-heading-m search-results-school-name-heading">
-                                    <a class="govuk-link" data-testid="school-search-results-name-@counter" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
-                                        @item.Name
-                                    </a>
-                                </h2>
-                                <a class="govuk-link search-results-school-tile-arrow" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
-                                    <span class="govuk-visually-hidden">More information on @item.Name</span>
-                                </a>
-                            </div>
-                            
-                            <table class="govuk-table search-results-school-table">
-                                <tbody class="govuk-table__body">
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">Address</th>
-                                    <td class="govuk-table__cell" data-testid="school-search-results-address-@counter">
-                                        @item.Address?.ToString()
-                                    </td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">Education phase</th>
-                                    <td class="govuk-table__cell" data-testid="school-search-results-phase-@counter">@item.PhaseOfEducation</td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">Ofsted rating</th>
-                                        <td data-testid="school-search-results-ofstedrating-@counter" class="govuk-table__cell">
-                                        @await Html.PartialAsync("~/Areas/Shared/OfstedRating/_OfstedRatingPartial.cshtml", new OfstedRatingModel()
-                                        {
-                                            OfstedRating = item.OfstedRating,
-                                            Urn = item.Urn
-                                        })
-                                    </td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">URN</th>
-                                        <td class="govuk-table__cell" data-testid="school-search-results-urn-@counter">@item.Urn</td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">LAESTAB</th>
-                                    <td data-testid="school-search-results-laestab-@counter" class="govuk-table__cell">@item.LaEstab</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </li>
-                        <hr class="govuk-section-break govuk-section-break--m"/>
-                        counter++;
-                    }
-                </ul>
+                @await Html.PartialAsync("~/Areas/Shared/EstablishmentListing/_EstablishmentListingPartial.cshtml", new EstablishmentListingViewModel(Model.EstablishmentListingsModel))
                 @if (Model.PaginationModel != null)
                 {
-                    <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Footer")) />
+                    <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Footer"))/>
                 }
             </div>
         }

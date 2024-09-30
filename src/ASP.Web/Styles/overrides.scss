@@ -22,8 +22,6 @@ $app-breakpoint-custom : 700px;
     padding-bottom: 5px;
 }
 
-
-
 .app-header {
     border-bottom: 10px;
 }
@@ -429,4 +427,10 @@ body:not(.js-enabled) .js-enabled {
 /* Show the JavaScript-disabled version when JavaScript is disabled */
 body:not(.js-enabled) .js-disabled {
     display: block;
+}
+
+// Pagination 
+.pagination-container-p-text {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
 }

@@ -195,6 +195,12 @@ namespace ASP.Web.Features.Authentication
                                     {
                                         claims.Add(new Claim(CustomClaimTypes.EstablishmentNumber, organisation.EstablishmentNumber));
                                     }
+                                    
+                                    // Add Organisation Name
+                                    if (!string.IsNullOrEmpty(organisation.Name))
+                                    {
+                                        claims.Add(new Claim(CustomClaimTypes.OrganisationName, organisation.Name));
+                                    }
 
                                     //Create a new ClaimsPrincipal containing the Claims of the logged in user taken from the API
                                     //This overrides the Principal that is created from the id_token that's sent as part of the authentication process.

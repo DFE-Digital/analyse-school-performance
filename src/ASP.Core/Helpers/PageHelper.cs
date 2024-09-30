@@ -14,5 +14,23 @@ public static class PageHelper
 
         return (skip, take, validPage);
     }
+    
+    /// <summary>
+    /// Parses a string representation of a page number into an integer.
+    /// </summary>
+    /// <param name="page">The string representation of the page number.</param>
+    /// <returns>
+    /// The parsed page number as an integer if successful and greater than or equal to 1;
+    /// otherwise, returns 1 as the default page number.
+    /// </returns>
+    /// <remarks>
+    /// This method attempts to parse the input string into an integer. 
+    /// If parsing is successful and the resulting value is 1 or greater, that value is returned.
+    /// If parsing fails or the result is less than 1, the method returns 1 as a default value.
+    /// </remarks>
+    public static int ParsePageNumber(string? page)
+    {
+        return int.TryParse(page, out int intValue) && intValue >= 1 ? intValue : 1;
+    }
 
 }

@@ -49,5 +49,5 @@ public static class StringExtensions
         ArgumentNullException.ThrowIfNull(newPrefix);
 
         return input.Replace(oldPrefix, newPrefix);
-    } 
+    }
 }

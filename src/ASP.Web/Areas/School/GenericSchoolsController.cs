@@ -1,5 +1,6 @@
 using ASP.Application;
 using ASP.Web.Areas.School.ViewModels;
+using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
@@ -31,7 +32,10 @@ namespace ASP.Web.Areas.School
         {
             return View(new SchoolsPageViewModel(
                 "All schools",
-                new BreadcrumbTrailViewModel("All schools")
+                0,
+                null,
+                new BreadcrumbTrailViewModel("All schools"),
+                new List<EstablishmentListingModel>()
             ));
         }
     }

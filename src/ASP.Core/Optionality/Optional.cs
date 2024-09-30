@@ -28,9 +28,9 @@ public abstract class Optional<TValue>
 
     public abstract Task<TNextValue> Match<TNextValue>(Func<TValue, Task<TNextValue>> onSome, Func<Task<TNextValue>> onNone);
 
-    public abstract void Switch<TNextValue>(Action<TValue> onSome, Action onNone);
+    public abstract void Switch(Action<TValue> onSome, Action onNone);
 
-    public abstract Task Switch<TNextValue>(Func<TValue, Task> onSome, Task onNone);
+    public abstract Task Switch(Func<TValue, Task> onSome, Task onNone);
 
     public abstract void IfSome(Action<TValue> actionIfSome);
 

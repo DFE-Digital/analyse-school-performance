@@ -8,8 +8,10 @@ using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Results;
 using ASP.Core.Templating;
 using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
+using ASP.Core.Scoping;
 
 namespace ASP.Application
 {
@@ -23,5 +25,6 @@ namespace ASP.Application
         Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request);
         Task<Result<UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request);
         Task<Result<UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>> GetMultiAcademyTrust(GetMultiAcademyTrustRequest request);
+        Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> GetAllEstablishments(GetAllEstablishmentsRequest request);
     }
 }

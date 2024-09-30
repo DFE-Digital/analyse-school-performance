@@ -1,0 +1,49 @@
+﻿@using ASP.Web.Areas.School
+@model ASP.Web.Areas.Shared.EstablishmentListing.EstablishmentListingViewModel
+
+@{
+    var counter = 1;
+}
+
+<ul class="govuk-list">
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+    @foreach (var item in Model.EstablishmentListingModel)
+    {
+        <li>
+            <div class="app-establishment-listing-name-container">
+                <h2 class="govuk-heading-m app-establishment-listing-name-heading">
+                    <a class="govuk-link" data-testid="establishment-listing-name-@counter" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
+                        @item.Name
+                    </a>
+                </h2>
+                <a class="govuk-link app-establishment-listing-tile-arrow" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
+                    <span class="govuk-visually-hidden">More information on @item.Name</span>
+                </a>
+            </div>
+
+            <table class="govuk-table app-establishment-listing-table">
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Address</th>
+                    <td class="govuk-table__cell" data-testid="establishment-listing-address-@counter">
+                        @item.Address
+                    </td>
+                </tr>
+
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">URN</th>
+                    <td class="govuk-table__cell" data-testid="establishment-listing-urn-@counter">@item.Urn</td>
+                </tr>
+
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">LAESTAB</th>
+                    <td data-testid="establishment-listing-laestab-@counter" class="govuk-table__cell">@item.LaEstab</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </li>
+        <hr class="govuk-section-break govuk-section-break--m"/>
+        counter++;
+    }
+</ul>

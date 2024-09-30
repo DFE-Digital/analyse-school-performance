@@ -1,5 +1,8 @@
-﻿using ASP.Core.LocalAuthorities;
+﻿using System.Security.Claims;
+using ASP.Core.Authorization;
+using ASP.Core.LocalAuthorities;
 using ASP.Core.MultiAcademyTrusts;
+using ASP.Core.Optionality;
 using ASP.Core.Results;
 
 namespace ASP.Core.Scoping;
@@ -82,5 +85,52 @@ public class Scope
         }
 
         return new Scope(scopeType, "");
+    }
+    
+    public static Task<Result<ScopeInfo>> GetScopeInfoForRole(ClaimsPrincipal user, 
+        ILocalAuthorityRepository localAuthorityRepository,
+        IMultiAcademyTrustRepository multiAcademyTrustRepository)
+    {
+        if (user.Role()!.IsLaUser)
+        {
+            return GetScopeIdForLaUser(user, localAuthorityRepository)
+                .Map(scopeId => new ScopeInfo(ScopeType.LA, scopeId));
+        }
+
+        if (user.Role()!.IsMatUser)
+        {
+            return GetScopeIdForMatUser(user, multiAcademyTrustRepository)
+                .Map(scopeId => new ScopeInfo(ScopeType.MAT, scopeId));
+        }
+
+        if (user.Role()!.IsDioceseUser)
+        {
+            return Task.FromResult(
+                user.GetDioceseName()
+                    .Map(name => new ScopeInfo(ScopeType.Diocese, Optional<string>.Some(name)))
+            );
+        }
+
+        return Task.FromResult(Result.Success(
+            new ScopeInfo(ScopeType.All, Optional<string>.None)
+        ));
+    }
+
+    private static Task<Result<Optional<string>>> GetScopeIdForLaUser(ClaimsPrincipal user,
+        ILocalAuthorityRepository localAuthorityRepository)
+    {
+        return user.GetLocalAuthorityCode()
+            .Then(laCode => localAuthorityRepository.GetLocalAuthority(laCode)
+                .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
+                .Map(_ => Optional<string>.Some(laCode)));
+    }
+
+    private static Task<Result<Optional<string>>> GetScopeIdForMatUser(ClaimsPrincipal user,
+        IMultiAcademyTrustRepository multiAcademyTrustRepository)
+    {
+        return user.GetMatUid()
+            .Then(matUid => multiAcademyTrustRepository.GetMultiAcademyTrust(matUid)
+                .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
+                .Map(_ => Optional<string>.Some(matUid)));
     }
 }

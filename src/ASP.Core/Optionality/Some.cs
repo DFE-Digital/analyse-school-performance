@@ -48,12 +48,12 @@
             return await onSome(Value);
         }
 
-        public override void Switch<TNextValue>(Action<TValue> onSome, Action onNone)
+        public override void Switch(Action<TValue> onSome, Action onNone)
         {
             onSome(Value);
         }
 
-        public override async Task Switch<TNextValue>(Func<TValue, Task> onSome, Task onNone)
+        public override async Task Switch(Func<TValue, Task> onSome, Task onNone)
         {
             await onSome(Value);
         }

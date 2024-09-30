@@ -3,15 +3,16 @@ using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Core;
-using ASP.Core.Authorization;
 using ASP.Core.Establishments.Search;
 using ASP.Core.Establishments.SearchSuggestions;
+using ASP.Core.Helpers;
 using ASP.Core.LocalAuthorities;
 using ASP.Core.MultiAcademyTrusts;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
 using ASP.Web.Areas.School;
+using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Areas.Shared.Pagination;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Features.Authorization;
@@ -60,16 +61,15 @@ public class SearchController : Controller
             return View(nameof(Index));
         }
 
-        var pageNumber = ParsePageNumber(searchParams.Page);
+        var pageNumber = PageHelper.ParsePageNumber(searchParams.Page);
 
         if (string.IsNullOrEmpty(searchParams.Search))
         {
             ModelState.AddModelError(nameof(searchParams.Search), Constants.SchoolSearchTermShortValidationMessage);
             return View(nameof(Index));
         }
-
-        var userRole = User.Role();
-        var searchResult = await PerformSearchBasedOnUserRole(userRole!, searchParams, pageNumber);
+        
+        var searchResult = await PerformSearchBasedOnUserRole(searchParams, pageNumber);
 
         return searchResult.ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
     }
@@ -81,25 +81,19 @@ public class SearchController : Controller
         {
             return View(nameof(Index));
         }
-
-        var userRole = User.Role();
-        var searchResult = await PerformSearchSuggestionsBasedOnUserRole(userRole!, searchParams);
+        
+        var searchResult = await PerformSearchSuggestionsBasedOnUserRole(searchParams);
 
         return searchResult.ToActionResult(Json, _hostEnvironment);
     }
-
-    private int ParsePageNumber(string? page)
-    {
-        return int.TryParse(page, out int intValue) && intValue >= 1 ? intValue : 1;
-    }
-
+    
     private SearchViewModel DefaultViewModel(SearchResultsPage<EstablishmentListingDTO> result)
     {
         var breadcrumbTrail = new BreadcrumbTrailViewModel($"Search results for \"{result.SearchTerm}\"")
             .AddBreadcrumb("Search", "/search");
-
-        return new SearchViewModel(
-            EstablishmentSearchResultsModel.FromEstablishmentDetails(result.Results),
+        
+        return new SearchViewModel(EstablishmentListingModel
+                .FromEstablishmentListingDto(result.Results),
             new PaginationModel(
                 Url.Action(nameof(Index), new { search = result.SearchTerm }) ?? "",
                 result.Page,
@@ -120,7 +114,7 @@ public class SearchController : Controller
                 .AddBreadcrumb("Search", "/search");
 
         return new SearchViewModel(
-            new List<EstablishmentSearchResultsModel>(),
+            new List<EstablishmentListingModel>(),
             null,
             searchParams.Search ?? "",
             0,
@@ -133,62 +127,32 @@ public class SearchController : Controller
         if (model.TotalCount == 1)
         {
             return RedirectToAction(nameof(GenericSchoolController.LandingPage), "GenericSchool",
-                new { area = "School", urn = model.SearchResults.FirstOrDefault()!.Urn });
+                new { area = "School", urn = model.EstablishmentListingsModel.FirstOrDefault()!.Urn });
         }
 
         return View("SearchResults", model);
     }
 
-    private async Task<Result<SearchViewModel>> PerformSearchBasedOnUserRole(Role userRole, SearchParams searchParams,
+    private Task<Result<SearchViewModel>> PerformSearchBasedOnUserRole(SearchParams searchParams,
         int pageNumber)
     {
-        var (scopeType, scopeIdResult) = GetScopeInfoForRole(userRole);
-        return await scopeIdResult.Then(scopeId =>
-            PerformEstablishmentSearch(searchParams, scopeType, scopeId, pageNumber));
+        return Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+            .Then(scopeInfo => PerformEstablishmentSearch(searchParams, scopeInfo, pageNumber));
     }
 
-    private async Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>>
-        PerformSearchSuggestionsBasedOnUserRole(Role userRole, SearchParams searchParams)
+    private Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>>
+        PerformSearchSuggestionsBasedOnUserRole(SearchParams searchParams)
     {
-        var (scopeType, scopeIdResult) = GetScopeInfoForRole(userRole);
-        return await scopeIdResult.Then(scopeId =>
-            PerformEstablishmentSearchSuggestions(searchParams, scopeType, scopeId));
+        return Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+            .Then(scopeInfo => PerformEstablishmentSearchSuggestions(searchParams, scopeInfo));
     }
-
-    private (ScopeType, Task<Result<Optional<string>>>) GetScopeInfoForRole(Role userRole)
-    {
-        if (userRole.IsLaUser)
-            return (ScopeType.LA, GetScopeIdForLaUser());
-        if (userRole.IsMatUser)
-            return (ScopeType.MAT, GetScopeIdForMatUser());
-        if (userRole.IsDioceseUser)
-            return (ScopeType.Diocese, Task.FromResult(User.GetDioceseName().Map(Optional<string>.Some)));
-        return (ScopeType.All, Task.FromResult(Result.Success(Optional<string>.None)));
-    }
-
-    private Task<Result<Optional<string>>> GetScopeIdForLaUser()
-    {
-        return User.GetLocalAuthorityCode()
-            .Then(laCode => _localAuthorityRepository.GetLocalAuthority(laCode)
-                .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
-                .Map(_ => Optional<string>.Some(laCode)));
-    }
-
-    private Task<Result<Optional<string>>> GetScopeIdForMatUser()
-    {
-        return User.GetMatUid()
-            .Then(matUid => _multiAcademyTrustRepository.GetMultiAcademyTrust(matUid)
-                .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
-                .Map(_ => Optional<string>.Some(matUid)));
-    }
-
-    private Task<Result<SearchViewModel>> PerformEstablishmentSearch(SearchParams searchParams, ScopeType scopeType,
-        Optional<string> scopeId, int pageNumber)
+    
+    private Task<Result<SearchViewModel>> PerformEstablishmentSearch(SearchParams searchParams, ScopeInfo scopeInfo, int pageNumber)
     {
         var estabSearchRequest = new EstablishmentSearchRequest(
             searchParams.Search ?? "",
-            scopeType,
-            scopeId,
+            scopeInfo.ScopeType,
+            scopeInfo.ScopeId,
             Optional<int>.Some(pageNumber),
             Optional<int>.Some(Constants.SearchResultPageSize)
         );
@@ -199,12 +163,12 @@ public class SearchController : Controller
     }
 
     private Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> PerformEstablishmentSearchSuggestions(
-        SearchParams searchParams, ScopeType scopeType, Optional<string> scopeId)
+        SearchParams searchParams, ScopeInfo scopeInfo)
     {
         var request = new EstablishmentSearchSuggestionsRequest(
             searchParams.Search ?? "",
-            scopeType,
-            scopeId,
+            scopeInfo.ScopeType,
+            scopeInfo.ScopeId,
             Optional<int>.None
         );
 
