@@ -25,7 +25,6 @@ public sealed class Role
     public bool HasAccessToAllSchools => AccessToAllSchools.Contains(this);
     public bool HasAccessToAllLocalAuthoritiess => AccessToAllLocalAuthorities.Contains(this);
     public bool HasAccessToEditPages => AccessToEditPages.Contains(this);
-    public bool HasAccessToGuidance => AccessToGuidance.Contains(this);
     public bool IsLaUser => AccessToMyLocalAuthority.Contains(this);
     public bool IsSchoolUser => AccessToMySchool.Contains(this);
     public bool IsMatUser => AccessToMyMatSchools.Contains(this);
@@ -188,18 +187,6 @@ public sealed class Role
         OfstedUnnamed,
         SuperUser,
     ];
-
-    public static readonly RoleCollection AccessToGuidance =
-    [
-        SchoolNamed,
-        SchoolUnnamed,
-        MatUnnamed,
-        MatNamed,
-        MatGovernor,
-        DioceseUnnamed,
-        DioceseNamed
-    ];
-
 
     public static readonly RoleCollection AccessToEditPages =
     [

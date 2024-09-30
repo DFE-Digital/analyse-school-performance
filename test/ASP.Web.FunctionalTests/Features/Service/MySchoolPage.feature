@@ -17,7 +17,7 @@ Scenario: A user with access to all schools should not be able to access the 'My
     And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
-Scenario: School page should throw page not found if Establishment is not visible
+Scenario: School page should display server error page if user's Establishment is not visible
     Given non-visible Establishment "111111" exists:
 	"""
 	{
@@ -32,7 +32,7 @@ Scenario: School page should throw page not found if Establishment is not visibl
     Then the element "*[data-testid='error-display-message']" should have the text content "Error message: API error: Establishment with URN "111111" is not currently visible."
 
 @Javascript:disabled
-Scenario: School page should throw page not found if Establishment is deleted
+Scenario: School page should display server error page if user's Establishment is deleted
     Given deleted Establishment "111111" exists:
 	"""
 	{

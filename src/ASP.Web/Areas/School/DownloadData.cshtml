@@ -1,0 +1,13 @@
+﻿@model ASP.Web.Areas.School.ViewModels.SchoolPageViewModel
+@{
+    ViewData["Title"] = "Download data";
+}
+
+<div class="govuk-width-container">
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+    
+    <h1 class="govuk-heading-xl">Download data</h1>
+    @await Html.PartialAsync("~/Areas/School/Shared/_SubMenuNavigationPartial.cshtml", Model)
+
+    <p class="govuk-body">This page is still in progress...</p>
+</div>

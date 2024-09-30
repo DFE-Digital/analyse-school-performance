@@ -333,6 +333,7 @@ Scenario: School page should show if values are null case 2
     Given Establishment "123456" exists:
 		"""
 		{
+            "name": "Hollinswood Primary School",
             "isPost16": null,
             "isPrimary": null,
             "isSecondary": null,
@@ -362,7 +363,6 @@ Scenario: School page should show if values are null case 2
             "localAuthority": {
                 "name": null,
             },
-            "name": null,
             "noOfPupils": null,
             "ofstedLastInspectionDate": null,
             "ofstedRating": {

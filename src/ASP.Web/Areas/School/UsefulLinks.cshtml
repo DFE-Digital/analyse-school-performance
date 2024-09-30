@@ -1,14 +1,14 @@
-﻿@model ASP.Web.Areas.School.ViewModels.SchoolViewModel
+﻿@model ASP.Web.Areas.School.ViewModels.SchoolContentPageViewModel
 @{
     ViewData["Title"] = "Useful links";
 }
 
 <div class="govuk-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.SchoolPage.Breadcrumbs)
 
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <h1 class="govuk-heading-xl">Useful links</h1>
-        @await Html.PartialAsync("~/Areas/School/Shared/_SubMenuNavigationPartial.cshtml", Model)
+        @await Html.PartialAsync("~/Areas/School/Shared/_SubMenuNavigationPartial.cshtml", Model.SchoolPage)
         <div class="govuk-width-container">
             <main class="govuk-main-wrapper main-asp">
                 <div class="page-content js-content-target">

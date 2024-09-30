@@ -26,115 +26,115 @@ Scenario Outline: Should return 200 response with laCode reports response
         "Downloads": [
             {
                 "Id": "kts-123-phonics-la-2022-final-pupil",
-                "Name": "Phonics LA pupil data",
-                "DownloadSource": "Key to success",
+                "Label": "Phonics LA pupil data",
+                "Source": "Key to success",
                 "Year": 2022,
                 "DatasetType": "Phonics",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             },
             {
                 "Id": "kts-123-phonics-la-2023-final-pupil",
-                "Name": "Phonics LA pupil data",
-                "DownloadSource": "Key to success",
+                "Label": "Phonics LA pupil data",
+                "Source": "Key to success",
                 "Year": 2023,
                 "DatasetType": "Phonics",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             },
             {
                 "Id": "kts-123-phonics-la-2024-provisional-pupil",
-                "Name": "Phonics LA pupil data",
-                "DownloadSource": "Key to success",
+                "Label": "Phonics LA pupil data",
+                "Source": "Key to success",
                 "Year": 2024,
                 "DatasetType": "Phonics",
-                "ReleaseVersion": "Provisional"
+                "Version": "Provisional"
             },
             {
                 "Id": "asp-123-phonics-la-2024-revised-pupil",
-                "Name": "Phonics LA pupil data",
-                "DownloadSource": "Analyse school performance",
+                "Label": "Phonics LA pupil data",
+                "Source": "Analyse school performance",
                 "Year": 2024,
                 "DatasetType": "Phonics",
-                "ReleaseVersion": "Revised"
+                "Version": "Revised"
             },
             {
                 "Id": "kts-123-ks2-la-2022-final",
-                "Name": "Key stage 2 LA data",
-                "DownloadSource": "Key to success",
+                "Label": "Key stage 2 LA data",
+                "Source": "Key to success",
                 "Year": 2022,
                 "DatasetType": "Key stage 2",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             },
             {
                 "Id": "kts-123-ks2-la-2023-final",
-                "Name": "Key stage 2 LA data",
-                "DownloadSource": "Key to success",
+                "Label": "Key stage 2 LA data",
+                "Source": "Key to success",
                 "Year": 2023,
                 "DatasetType": "Key stage 2",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             },
             {
                 "Id": "kts-123-ks2-la-2024-revised",
-                "Name": "Key stage 2 LA data",
-                "DownloadSource": "Key to success",
+                "Label": "Key stage 2 LA data",
+                "Source": "Key to success",
                 "Year": 2024,
                 "DatasetType": "Key stage 2",
-                "ReleaseVersion": "Revised"
+                "Version": "Revised"
             },
             {
                 "Id": "asp-123-ks2-la-2022-provisional",
-                "Name": "Key stage 2 LA data",
-                "DownloadSource": "Analyse school performance",
+                "Label": "Key stage 2 LA data",
+                "Source": "Analyse school performance",
                 "Year": 2022,
                 "DatasetType": "Key stage 2",
-                "ReleaseVersion": "Provisional"
+                "Version": "Provisional"
             },
             {
                 "Id": "asp-123-ks2-la-2023-provisional",
-                "Name": "Key stage 2 LA data",
-                "DownloadSource": "Analyse school performance",
+                "Label": "Key stage 2 LA data",
+                "Source": "Analyse school performance",
                 "Year": 2023,
                 "DatasetType": "Key stage 2",
-                "ReleaseVersion": "Provisional"
+                "Version": "Provisional"
             },
             {
                 "Id": "kts-123-ks4-la-2022-final-pupil",
-                "Name": "Key stage 4 LA pupil data",
-                "DownloadSource": "Key to success",
+                "Label": "Key stage 4 LA pupil data",
+                "Source": "Key to success",
                 "Year": 2022,
                 "DatasetType": "Key stage 4",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             },
             {
                 "Id": "kts-123-ks4-la-2023-revised-pupil",
-                "Name": "Key stage 4 LA pupil data",
-                "DownloadSource": "Key to success",
+                "Label": "Key stage 4 LA pupil data",
+                "Source": "Key to success",
                 "Year": 2023,
                 "DatasetType": "Key stage 4",
-                "ReleaseVersion": "Revised"
+                "Version": "Revised"
             },
             {
                 "Id": "asp-123-ks4-la-2022-final-pupil",
-                "Name": "Key stage 4 LA pupil data",
-                "DownloadSource": "Analyse school performance",
+                "Label": "Key stage 4 LA pupil data",
+                "Source": "Analyse school performance",
                 "Year": 2022,
                 "DatasetType": "Key stage 4",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             },
             {
                 "Id": "asp-123-ks4-la-2023-final-pupil",
-                "Name": "Key stage 4 LA pupil data",
-                "DownloadSource": "Analyse school performance",
+                "Label": "Key stage 4 LA pupil data",
+                "Source": "Analyse school performance",
                 "Year": 2023,
                 "DatasetType": "Key stage 4",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             },
             {
                 "Id": "asp-123-ks4-la-2024-provisional-pupil",
-                "Name": "Key stage 4 LA pupil data",
-                "DownloadSource": "Analyse school performance",
+                "Label": "Key stage 4 LA pupil data",
+                "Source": "Analyse school performance",
                 "Year": 2024,
                 "DatasetType": "Key stage 4",
-                "ReleaseVersion": "Provisional"
+                "Version": "Provisional"
             }
         ]
     }
@@ -150,43 +150,43 @@ Scenario Outline: Should return 200 response with LA download data with year par
         "Downloads": [
             {
                 "Id": "kts-123-phonics-la-2023-final-pupil",
-                "Name": "Phonics LA pupil data",
-                "DownloadSource": "Key to success",
+                "Label": "Phonics LA pupil data",
+                "Source": "Key to success",
                 "Year": 2023,
                 "DatasetType": "Phonics",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             },
             {
                 "Id": "kts-123-ks2-la-2023-final",
-                "Name": "Key stage 2 LA data",
-                "DownloadSource": "Key to success",
+                "Label": "Key stage 2 LA data",
+                "Source": "Key to success",
                 "Year": 2023,
                 "DatasetType": "Key stage 2",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             },
             {
                 "Id": "asp-123-ks2-la-2023-provisional",
-                "Name": "Key stage 2 LA data",
-                "DownloadSource": "Analyse school performance",
+                "Label": "Key stage 2 LA data",
+                "Source": "Analyse school performance",
                 "Year": 2023,
                 "DatasetType": "Key stage 2",
-                "ReleaseVersion": "Provisional"
+                "Version": "Provisional"
             },
             {
                 "Id": "kts-123-ks4-la-2023-revised-pupil",
-                "Name": "Key stage 4 LA pupil data",
-                "DownloadSource": "Key to success",
+                "Label": "Key stage 4 LA pupil data",
+                "Source": "Key to success",
                 "Year": 2023,
                 "DatasetType": "Key stage 4",
-                "ReleaseVersion": "Revised"
+                "Version": "Revised"
             },
             {
                 "Id": "asp-123-ks4-la-2023-final-pupil",
-                "Name": "Key stage 4 LA pupil data",
-                "DownloadSource": "Analyse school performance",
+                "Label": "Key stage 4 LA pupil data",
+                "Source": "Analyse school performance",
                 "Year": 2023,
                 "DatasetType": "Key stage 4",
-                "ReleaseVersion": "Final"
+                "Version": "Final"
             }
         ]
     }

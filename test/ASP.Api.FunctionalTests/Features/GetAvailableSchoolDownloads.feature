@@ -45,115 +45,115 @@ Scenario Outline: Should return 200 response with school download data without y
             "Downloads": [
                 {
                     "Id": "kts-123456-phonics-2022-final-pupil",
-                    "Name": "Phonics pupil data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Phonics pupil data",
+                    "Source": "Key to success",
                     "Year": 2022,
                     "DatasetType": "Phonics",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 },
                 {
                     "Id": "kts-123456-phonics-2023-final-pupil",
-                    "Name": "Phonics pupil data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Phonics pupil data",
+                    "Source": "Key to success",
                     "Year": 2023,
                     "DatasetType": "Phonics",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 },
                 {
                     "Id": "kts-123456-phonics-2024-provisional-pupil",
-                    "Name": "Phonics pupil data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Phonics pupil data",
+                    "Source": "Key to success",
                     "Year": 2024,
                     "DatasetType": "Phonics",
-                    "ReleaseVersion": "Provisional"
+                    "Version": "Provisional"
                 },
                 {
                     "Id": "asp-123456-phonics-2024-revised-pupil",
-                    "Name": "Phonics pupil data",
-                    "DownloadSource": "Analyse school performance",
+                    "Label": "Phonics pupil data",
+                    "Source": "Analyse school performance",
                     "Year": 2024,
                     "DatasetType": "Phonics",
-                    "ReleaseVersion": "Revised"
+                    "Version": "Revised"
                 },
                 {
                     "Id": "kts-123456-ks2-2022-final-school",
-                    "Name": "Key stage 2 school data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Key stage 2 school data",
+                    "Source": "Key to success",
                     "Year": 2022,
                     "DatasetType": "Key stage 2",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 },
                 {
                     "Id": "kts-123456-ks2-2023-final-school",
-                    "Name": "Key stage 2 school data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Key stage 2 school data",
+                    "Source": "Key to success",
                     "Year": 2023,
                     "DatasetType": "Key stage 2",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 },
                 {
                     "Id": "kts-123456-ks2-2024-revised-school",
-                    "Name": "Key stage 2 school data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Key stage 2 school data",
+                    "Source": "Key to success",
                     "Year": 2024,
                     "DatasetType": "Key stage 2",
-                    "ReleaseVersion": "Revised"
+                    "Version": "Revised"
                 },
                 {
                     "Id": "asp-123456-ks2-2022-provisional-school",
-                    "Name": "Key stage 2 school data",
-                    "DownloadSource": "Analyse school performance",
+                    "Label": "Key stage 2 school data",
+                    "Source": "Analyse school performance",
                     "Year": 2022,
                     "DatasetType": "Key stage 2",
-                    "ReleaseVersion": "Provisional"
+                    "Version": "Provisional"
                 },
                 {
                     "Id": "asp-123456-ks2-2023-provisional-school",
-                    "Name": "Key stage 2 school data",
-                    "DownloadSource": "Analyse school performance",
+                    "Label": "Key stage 2 school data",
+                    "Source": "Analyse school performance",
                     "Year": 2023,
                     "DatasetType": "Key stage 2",
-                    "ReleaseVersion": "Provisional"
+                    "Version": "Provisional"
                 },
                 {
                     "Id": "kts-123456-ks4-2022-final-pupil",
-                    "Name": "Key stage 4 pupil data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Key stage 4 pupil data",
+                    "Source": "Key to success",
                     "Year": 2022,
                     "DatasetType": "Key stage 4",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 },
                 {
                     "Id": "kts-123456-ks4-2023-revised-pupil",
-                    "Name": "Key stage 4 pupil data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Key stage 4 pupil data",
+                    "Source": "Key to success",
                     "Year": 2023,
                     "DatasetType": "Key stage 4",
-                    "ReleaseVersion": "Revised"
+                    "Version": "Revised"
                 },
                 {
                     "Id": "asp-123456-ks4-2022-final-pupil",
-                    "Name": "Key stage 4 pupil data",
-                    "DownloadSource": "Analyse school performance",
+                    "Label": "Key stage 4 pupil data",
+                    "Source": "Analyse school performance",
                     "Year": 2022,
                     "DatasetType": "Key stage 4",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 },
                 {
                     "Id": "asp-123456-ks4-2023-final-pupil",
-                    "Name": "Key stage 4 pupil data",
-                    "DownloadSource": "Analyse school performance",
+                    "Label": "Key stage 4 pupil data",
+                    "Source": "Analyse school performance",
                     "Year": 2023,
                     "DatasetType": "Key stage 4",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 },
                 {
                     "Id": "asp-123456-ks4-2024-provisional-pupil",
-                    "Name": "Key stage 4 pupil data",
-                    "DownloadSource": "Analyse school performance",
+                    "Label": "Key stage 4 pupil data",
+                    "Source": "Analyse school performance",
                     "Year": 2024,
                     "DatasetType": "Key stage 4",
-                    "ReleaseVersion": "Provisional"
+                    "Version": "Provisional"
                 }
             ]
         }
@@ -174,43 +174,43 @@ Scenario Outline: Should return 200 response with school download data with year
             "Downloads": [
                 {
                     "Id": "kts-123456-phonics-2023-final-pupil",
-                    "Name": "Phonics pupil data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Phonics pupil data",
+                    "Source": "Key to success",
                     "Year": 2023,
                     "DatasetType": "Phonics",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 },
                 {
                     "Id": "kts-123456-ks2-2023-final-school",
-                    "Name": "Key stage 2 school data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Key stage 2 school data",
+                    "Source": "Key to success",
                     "Year": 2023,
                     "DatasetType": "Key stage 2",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 },
                 {
                     "Id": "asp-123456-ks2-2023-provisional-school",
-                    "Name": "Key stage 2 school data",
-                    "DownloadSource": "Analyse school performance",
+                    "Label": "Key stage 2 school data",
+                    "Source": "Analyse school performance",
                     "Year": 2023,
                     "DatasetType": "Key stage 2",
-                    "ReleaseVersion": "Provisional"
+                    "Version": "Provisional"
                 },
                 {
                     "Id": "kts-123456-ks4-2023-revised-pupil",
-                    "Name": "Key stage 4 pupil data",
-                    "DownloadSource": "Key to success",
+                    "Label": "Key stage 4 pupil data",
+                    "Source": "Key to success",
                     "Year": 2023,
                     "DatasetType": "Key stage 4",
-                    "ReleaseVersion": "Revised"
+                    "Version": "Revised"
                 },
                 {
                     "Id": "asp-123456-ks4-2023-final-pupil",
-                    "Name": "Key stage 4 pupil data",
-                    "DownloadSource": "Analyse school performance",
+                    "Label": "Key stage 4 pupil data",
+                    "Source": "Analyse school performance",
                     "Year": 2023,
                     "DatasetType": "Key stage 4",
-                    "ReleaseVersion": "Final"
+                    "Version": "Final"
                 }
             ]
         }

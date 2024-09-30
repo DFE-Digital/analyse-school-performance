@@ -2,23 +2,23 @@
 using ASP.Application;
 using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
+using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
+using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
+using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
+using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 using ASP.Core.Establishments.Search;
 using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Helpers;
 using ASP.Core.Results;
+using ASP.Core.Scoping;
 using ASP.Core.Templating;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net;
-using ASP.Application.UseCases.Establishments.DTO;
-using ASP.Application.UseCases.Establishments.GetAllEstablishments;
-using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
-using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
-using ASP.Core.Scoping;
 
 namespace ASP.Infrastructure.Api
 {
@@ -153,7 +153,7 @@ namespace ASP.Infrastructure.Api
                     JsonHelper.DeserializeNotNull<SearchSuggestionsResult<EstablishmentSuggestionDTO>>(
                         response));
         }
-        
+
         public async Task<Result<Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request)
         {
             var url = "/api/GetLocalAuthority";
@@ -161,8 +161,8 @@ namespace ASP.Infrastructure.Api
             return await ApiGet(url, queryString)
                 .Then(response => JsonHelper.DeserializeNotNull<Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>(response));
         }
-        
-        public async  Task<Result<Application.UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>> GetMultiAcademyTrust(GetMultiAcademyTrustRequest request)
+
+        public async Task<Result<Application.UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>> GetMultiAcademyTrust(GetMultiAcademyTrustRequest request)
         {
             var url = "/api/GetMultiAcademyTrust";
             var queryString = QueryString.Create("id", request.Id);
@@ -200,10 +200,11 @@ namespace ASP.Infrastructure.Api
         {
             try
             {
-                var response = await _transportLayer.ExecuteRequest(new TransportLayerRequest { 
-                    Method = HttpMethods.Get, 
-                    Path = url, 
-                    QueryString = queryString.ToString() 
+                var response = await _transportLayer.ExecuteRequest(new TransportLayerRequest
+                {
+                    Method = HttpMethods.Get,
+                    Path = url,
+                    QueryString = queryString.ToString()
                 });
 
                 return ToResult(response);
@@ -218,12 +219,12 @@ namespace ASP.Infrastructure.Api
         {
             try
             {
-                var response = await _transportLayer.ExecuteRequest(new TransportLayerRequest 
-                { 
-                    Method = HttpMethods.Post, 
-                    Path = url, 
-                    QueryString = queryString.ToString(), 
-                    Body = JsonHelper.Serialize(body) 
+                var response = await _transportLayer.ExecuteRequest(new TransportLayerRequest
+                {
+                    Method = HttpMethods.Post,
+                    Path = url,
+                    QueryString = queryString.ToString(),
+                    Body = JsonHelper.Serialize(body)
                 });
 
                 return ToResult(response);
@@ -246,12 +247,13 @@ namespace ASP.Infrastructure.Api
                 {
                     return JsonHelper.DeserializeNotNull<UnexpectedError>(content)
                         .Then(e => Result.Unexpected<string>(
-                            ApiError + StringHelper.RemoveFromStart(_unexpectedPrefix, e.Message), 
+                            ApiError + StringHelper.RemoveFromStart(_unexpectedPrefix, e.Message),
                             _options.ShowStackTrace ? e.StackTrace : null
                         ));
                 }
 
-                result = response.StatusCode switch {
+                result = response.StatusCode switch
+                {
                     (int)HttpStatusCode.OK => Result.Success(content ?? ""),
 
                     (int)HttpStatusCode.NotFound => Result.NotFound<string>(

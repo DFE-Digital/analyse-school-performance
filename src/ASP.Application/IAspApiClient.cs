@@ -1,17 +1,17 @@
 ﻿using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
+using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
+using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
+using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
+using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 using ASP.Core.Establishments.Search;
 using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Results;
-using ASP.Core.Templating;
-using ASP.Application.UseCases.Establishments.DTO;
-using ASP.Application.UseCases.Establishments.GetAllEstablishments;
-using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
-using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 using ASP.Core.Scoping;
+using ASP.Core.Templating;
 
 namespace ASP.Application
 {

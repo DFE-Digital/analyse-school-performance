@@ -1,12 +1,8 @@
 using ASP.Application;
-using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
-using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Core.Authorization;
-using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Web.Areas.School.ViewModels;
 using ASP.Web.Core.BreadcrumbTrail;
-using ASP.Web.Core.Templating;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
@@ -18,63 +14,71 @@ namespace ASP.Web.Areas.School
     [Route("my-school")]
     [ServiceFilter<TermsOfUseActionFilter>]
     [Authorize(Policy = Policy.AccessToMySchool)]
-    public class MySchoolController : Controller
+    public class MySchoolController : SchoolController
     {
-        const string LANDING_PAGE_CONTENT_TEMPLATE_ID = "school-landing-page";
-        const string USEFUL_LINKS_CONTENT_TEMPLATE_ID = "school-useful-links";
-        const string OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID = "school-other-reports-ofsted";
-
-        private readonly IAspApiClient _api;
-        private readonly IHostEnvironment _hostEnvironment;
-
         public MySchoolController(
             IAspApiClient api,
             IHostEnvironment hostEnvironment
-        )
+        ) : base(api, hostEnvironment)
         {
-            _api = api ?? throw new ArgumentNullException(nameof(api));
-            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> LandingPage(string? revision)
+        public Task<IActionResult> LandingPage(string? revision)
         {
-            return await EstablishmentDetailsWithTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision);
+            return User.GetEstablishmentUrn()
+                .Then(urn => base.LandingPage(urn, revision))
+                .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("other-reports")]
-        public async Task<IActionResult> OtherReports(string? revision)
+        public Task<IActionResult> OtherReports(string? revision)
         {
-            return await EstablishmentDetailsWithTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision, "Other reports");
+            return User.GetEstablishmentUrn()
+                .Then(urn => base.OtherReports(urn, revision))
+                .ToActionResult(View, _hostEnvironment);
         }
-
 
         [HttpGet("useful-links")]
-        public async Task<IActionResult> UsefulLinks(string? revision)
+        public Task<IActionResult> UsefulLinks(string? revision)
         {
-            return await EstablishmentDetailsWithTemplate(USEFUL_LINKS_CONTENT_TEMPLATE_ID, revision, "Useful links");
+            return User.GetEstablishmentUrn()
+                .Then(urn => base.UsefulLinks(urn, revision))
+                .ToActionResult(View, _hostEnvironment);
         }
 
-        private async Task<IActionResult> EstablishmentDetailsWithTemplate(string contentTemplateId, string? revision, string? page = null)
+        [HttpGet("download-data")]
+        public Task<IActionResult> DownloadData()
         {
-            return await User.GetEstablishmentUrn()
-                .Then(urn => _api.GetEstablishmentDetails(new GetEstablishmentDetailsRequest(urn))
-                   .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
-                   .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails)
-                   .Then(async establishmentDetailsModel => await _api.ViewContentTemplate(new ViewContentTemplateRequest(contentTemplateId, Optional.FromNullable(revision)))
-                       .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template))
-                       .DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel())
-                       .Map(contentTemplateModel => new SchoolViewModel(
-                           "My school",
-                           Request.Path,
-                           "/my-school/",
-                           establishmentDetailsModel,
-                           contentTemplateModel,
-                           page == null
-                                ? new BreadcrumbTrailViewModel("My school")
-                                : new BreadcrumbTrailViewModel(page).AddBreadcrumb("My school", $"/my-school/")
-                       ))))
-               .ToActionResult(View, _hostEnvironment);
+            return User.GetEstablishmentUrn()
+                .Then(urn => base.DownloadData(urn))
+                .ToActionResult(View, _hostEnvironment);
+        }
+
+        protected override Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string laCode)
+        {
+            return base.GetEstablishmentDetails(laCode)
+                .MapError(error => error is NotFoundError
+                    ? Error.Unexpected(error.Message, null)
+                    : error);
+        }
+
+        protected override Task<Result<SchoolPageViewModel>> GetSchoolPage(EstablishmentDetailsViewModel establishmentDetails, string? page = null)
+        {
+            var schoolPage = new SchoolPageViewModel(
+                "MySchool",
+                "My school",
+                establishmentDetails.Name,
+                establishmentDetails.Urn,
+                Request.Path,
+                $"/my-school/",
+                page == null
+                    ? new BreadcrumbTrailViewModel("My school")
+                    : new BreadcrumbTrailViewModel(page)
+                        .AddBreadcrumb("My school", $"/my-school/")
+            );
+
+            return Task.FromResult(Result.Success(schoolPage));
         }
     }
 }

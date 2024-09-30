@@ -1,15 +1,15 @@
 ﻿@using ASP.Web.Areas.Shared.OfstedRating
-@model ASP.Web.Areas.School.ViewModels.SchoolViewModel
+@model ASP.Web.Areas.School.ViewModels.SchoolLandingPageViewModel
 @{
-    ViewData["Title"] = Model.Title;
+    ViewData["Title"] = Model.SchoolPage.Title;
 }
 
 <div class="govuk-width-container app-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.SchoolPage.Breadcrumbs)
 </div>
 
 <div class="govuk-width-container govuk-main-wrapper">
-    <h1 class="govuk-heading-xl">@Model.Title</h1>
+    <h1 class="govuk-heading-xl">@Model.SchoolPage.Title</h1>
     <div>
         <h1 data-testid="school-page-school-name" class="govuk-heading-l">
             @Model.EstablishmentDetails.Name

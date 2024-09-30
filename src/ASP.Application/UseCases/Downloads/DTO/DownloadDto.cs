@@ -3,12 +3,12 @@
     public class DownloadDto
     {
         public string? Id { get; set; }
-        public string? Name { get; set; }
+        public string? Label { get; set; }
 
-        public string? DownloadSource { get; set; }
+        public string? Source { get; set; }
         public int Year { get; set; }
         public string? DatasetType { get; set; }
 
-        public string? ReleaseVersion { get; set; }
+        public string? Version { get; set; }
     }
 }

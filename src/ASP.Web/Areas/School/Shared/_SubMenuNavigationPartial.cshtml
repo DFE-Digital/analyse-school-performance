@@ -1,10 +1,11 @@
 ﻿@using ASP.Web.Shared
-@model ASP.Web.Areas.School.ViewModels.SchoolViewModel
+@model ASP.Web.Areas.School.ViewModels.SchoolPageViewModel
 
-<h2 id="school-name-heading" class="govuk-heading-m">@Model.EstablishmentDetails.Name <span class="urn">(URN: @Model.EstablishmentDetails.Urn)</span></h2>
+<h2 id="school-name-heading" class="govuk-heading-m">@Model.SchoolName <span class="urn">(URN: @Model.SchoolUrn)</span></h2>
 <nav aria-label="Sub navigation">
     <ul class="app-sub-navigation__list">
         <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(new NavigationItemViewModel("other-reports", "Other reports", $"{Model.BasePath}other-reports/", Model.RequestPath)) />
         <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(new NavigationItemViewModel("useful-links", "Useful links", $"{Model.BasePath}useful-links/", Model.RequestPath)) />
+        <partial name="~/Areas/School/Shared/_SubMenuNavigationItemPartial.cshtml" model=@(new NavigationItemViewModel("download-data", "Download data", $"{Model.BasePath}download-data/", Model.RequestPath)) />
     </ul>
 </nav>

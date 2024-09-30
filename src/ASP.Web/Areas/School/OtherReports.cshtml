@@ -1,15 +1,15 @@
-﻿@model ASP.Web.Areas.School.ViewModels.SchoolViewModel
+﻿@model ASP.Web.Areas.School.ViewModels.SchoolContentPageViewModel
 @{
     ViewData["Title"] = "Other reports";
-    ViewData["TextReplacements"] = new Dictionary<string, string> { { "{URN}", Model.EstablishmentDetails.Urn } };
+    ViewData["TextReplacements"] = new Dictionary<string, string> { { "{URN}", Model.SchoolPage.SchoolUrn } };
 }
 
 <div class="govuk-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.SchoolPage.Breadcrumbs)
 
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <h1 class="govuk-heading-xl">Other reports</h1>
-        @await Html.PartialAsync("~/Areas/School/Shared/_SubMenuNavigationPartial.cshtml", Model)
+        @await Html.PartialAsync("~/Areas/School/Shared/_SubMenuNavigationPartial.cshtml", Model.SchoolPage)
         <p class="govuk-body">
             <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
                 <asp-accordion Title="Ofsted inspection data summary reports" title-data-test-id="1" body-data-test-id="inspection-data-summary-panel">
