@@ -6,11 +6,11 @@ namespace ASP.Infrastructure.Dsi.DsiApiClientProvider
 {
     public class SymmetricSecurityKeyProvider : ISecurityKeyProvider
     {
-        private readonly DsiPublicApiConfiguration _dsiPublicApiConfiguration;
+        private readonly DsiPublicApiOptions _options;
 
-        public SymmetricSecurityKeyProvider(IOptions<DsiPublicApiConfiguration> dsiPublicApiConfiguration)
+        public SymmetricSecurityKeyProvider(IOptions<DsiPublicApiOptions> dsiPublicApiConfiguration)
         {
-            _dsiPublicApiConfiguration = dsiPublicApiConfiguration.Value ??
+            _options = dsiPublicApiConfiguration.Value ??
                 throw new ArgumentNullException(nameof(dsiPublicApiConfiguration));
         }
 
@@ -18,8 +18,8 @@ namespace ASP.Infrastructure.Dsi.DsiApiClientProvider
         public string SecurityAlgorithm => SecurityAlgorithms.HmacSha256Signature;
 
         private byte[] GetEncodedDsiSecret =>
-            string.IsNullOrWhiteSpace(_dsiPublicApiConfiguration.DsiApiClientSecret) ?
+            string.IsNullOrWhiteSpace(_options.ClientSecret) ?
             throw new SecurityTokenSignatureKeyNotFoundException("Unable to locate required signing key.") :
-            Encoding.ASCII.GetBytes(_dsiPublicApiConfiguration.DsiApiClientSecret);
+            Encoding.ASCII.GetBytes(_options.ClientSecret);
     }
 }

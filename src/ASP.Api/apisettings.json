@@ -6,10 +6,9 @@
         }
     },
     "AllowedHosts": "*",
-    "RepositoryOptions": {
-        "EndpointUri": null,
-        "PrimaryKey": null,
-        "DatabaseId": null,
+    "CosmosDb": {
+        "EndpointUri": "https://s192d01-cdb-dev.documents.azure.com:443/",
+        "DatabaseId": "asp",
         "Containers": [
             {
                 "content": {
@@ -31,7 +30,10 @@
             }
         ]
     },
-    "ErrorHandlingOptions": {
+    "ErrorHandling": {
         "ShowStackTrace": true
+    },
+    "DocumentDatabase": {
+        "InMemory": false
     }
 }

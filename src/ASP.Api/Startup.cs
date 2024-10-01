@@ -1,20 +1,8 @@
-﻿using ASP.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using ASP.Infrastructure.Repositories;
-using ASP.Infrastructure.Cosmos;
-using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb;
-using ASP.Core.Templating;
-using ASP.Core.Establishments;
-using Azure.Identity;
-using AppEnvironmentVariables = ASP.Infrastructure.Constants.EnvironmentVariables;
+﻿using Microsoft.Extensions.Hosting;
 using ASP.Application;
-using ASP.Core.LocalAuthorities;
-using ASP.Core.MultiAcademyTrusts;
-using ASP.Infrastructure.Establishments;
-using ASP.Infrastructure.LocalAuthorities;
-using ASP.Infrastructure.MultiAcademyTrusts;
+using ASP.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using ASP.Infrastructure.DocumentDatabase;
 
 namespace ASP.Api
 {
@@ -23,48 +11,21 @@ namespace ASP.Api
         public void Configure(IHostBuilder builder)
         {
             builder
-                .ConfigureFunctionsWebApplication(builder =>
-                    builder.UseMiddleware<ExceptionHandlingMiddleware>()
-                )
-                .ConfigureServices(services =>
+                .ConfigureAppConfiguration((context, builder) => 
                 {
-                    services.AddScoped<IContentTemplateRepository, ContentTemplateRepository>();
-                    services.AddScoped<IEstablishmentRepository, EstablishmentRepository>();
-                    services.AddScoped<ILocalAuthorityRepository, LocalAuthorityRepository>();
-                    services.AddScoped<IMultiAcademyTrustRepository, MultiAcademyTrustRepository>();
-                    services.AddScoped<IDocumentDatabase, CosmosDocumentDatabase>();
-                    services.AddScoped<ICosmosDbQueryHandler, CosmosDbQueryHandler>();
-
-                    services.AddCosmosDbDependencies();
-                    services.RegisterUseCases();
-
-                    services.AddOptions<ErrorHandlingOptions>()
-                       .Configure<IConfiguration>(
-                           (settings, configuration) =>
-                               configuration
-                                   .GetSection(nameof(ErrorHandlingOptions))
-                                   .Bind(settings));
+                    builder.ConfigureSettings(context.HostingEnvironment, context.Configuration);
                 })
-                .ConfigureAppConfiguration((context, builder) =>
+                .ConfigureServices((context, services) =>
                 {
-                    builder.AddJsonFile(Path.Combine(
-                            context.HostingEnvironment.ContentRootPath, "apisettings.json"),
-                            optional: false)
-                        .AddJsonFile(Path.Combine(
-                            context.HostingEnvironment.ContentRootPath, "apisettings.local.json"),
-                            optional: true)
-                        .AddEnvironmentVariables();
-                    
-                    var builtConfig = builder.Build();
-
-                    var keyVaultName = builtConfig[AppEnvironmentVariables.AspAzureKeyVaultName];
-
-                    if (!string.IsNullOrEmpty(keyVaultName))
-                    {
-                        var credential = new DefaultAzureCredential();
-                        builder.AddAzureKeyVault(new Uri($"https://{keyVaultName}.vault.azure.net/"), credential);
-                    }
-                });
+                    services
+                        .ConfigureDocumentDatabase(context.Configuration)
+                        .RegisterUseCases()
+                        .RegisterRepositories()
+                        .AddScoped<ApiResultConverter>();
+                })
+                .ConfigureFunctionsWebApplication(app =>
+                    app.UseErrorHandling()
+                );
         }
     }
 }

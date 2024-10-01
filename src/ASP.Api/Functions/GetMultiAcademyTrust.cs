@@ -4,24 +4,29 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace ASP.Api.Functions;
 
 public class GetMultiAcademyTrust : ApiFunction
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<GetMultiAcademyTrust> _logger;
     private readonly IGetMultiAcademyTrust _useCase;
-    private readonly ErrorHandlingOptions _options;
+    private readonly ApiResultConverter _resultConverter;
 
-    public GetMultiAcademyTrust(ILoggerFactory loggerFactory,
+    public GetMultiAcademyTrust(
+        ILogger<GetMultiAcademyTrust> logger,
         IGetMultiAcademyTrust useCase,
-        IOptions<ErrorHandlingOptions> options)
+        ApiResultConverter resultConverter
+    )
     {
-        _logger = loggerFactory.CreateLogger<GetMultiAcademyTrust>();
-        _useCase = useCase;
-        _options = (options ?? throw new ArgumentNullException(nameof(options)))
-            .Value;
+        _logger = logger
+            ?? throw new ArgumentNullException(nameof(logger));
+
+        _useCase = useCase
+            ?? throw new ArgumentNullException(nameof(useCase));
+
+        _resultConverter = resultConverter
+            ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
     [Function("GetMultiAcademyTrust")]
@@ -38,6 +43,6 @@ public class GetMultiAcademyTrust : ApiFunction
             from response in _useCase.HandleRequest(new GetMultiAcademyTrustRequest(uid))
             select response;
 
-        return await result.ToApiResultAsync(_options, cancellationToken);
+        return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);
     }
 }

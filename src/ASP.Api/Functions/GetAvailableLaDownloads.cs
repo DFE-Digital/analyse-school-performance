@@ -4,41 +4,47 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
-namespace ASP.Api.Functions
+namespace ASP.Api.Functions;
+
+public class GetAvailableLADownloads : ApiFunction
 {
-    public class GetAvailableLADownloads : ApiFunction
+    private readonly ILogger<GetAvailableLADownloads> _logger;
+    private readonly IGetAvailableLADownloads _useCase;
+    private readonly ApiResultConverter _resultConverter;
+
+    public GetAvailableLADownloads(
+        ILogger<GetAvailableLADownloads> logger,
+        IGetAvailableLADownloads useCase,
+        ApiResultConverter resultConverter
+    )
     {
-        private readonly ILogger _logger;
-        private readonly IGetAvailableLADownloads _useCase;
-        private readonly ErrorHandlingOptions _options;
+        _logger = logger
+            ?? throw new ArgumentNullException(nameof(logger));
 
-        public GetAvailableLADownloads(ILoggerFactory loggerFactory, IGetAvailableLADownloads useCase, IOptions<ErrorHandlingOptions> options)
-        {
-            _logger = loggerFactory.CreateLogger<GetAvailableLADownloads>();
-            _useCase = useCase;
-            _options = (options ?? throw new ArgumentNullException(nameof(options)))
-                .Value;
-        }
+        _useCase = useCase
+            ?? throw new ArgumentNullException(nameof(useCase));
 
-        [Function("GetAvailableLADownloads")]
-        public override async Task<ActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get")]
-            HttpRequest request,
-            CancellationToken cancellationToken
-        )
-        {
-            _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
+        _resultConverter = resultConverter
+            ?? throw new ArgumentNullException(nameof(resultConverter));
+    }
 
-            var result =
-                from _ in request.ValidateHttpMethod([HttpMethods.Get])
-                from laCode in request.ValidateParameter("laCode", p => p.IsRequired().IsDigits().HasLength(3))
+    [Function("GetAvailableLADownloads")]
+    public override async Task<ActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "get")]
+        HttpRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
+
+        var result =
+            from _ in request.ValidateHttpMethod([HttpMethods.Get])
+            from laCode in request.ValidateParameter("laCode", p => p.IsRequired().IsDigits().HasLength(3))
                 from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
                 from response in _useCase.HandleRequest(new GetAvailableLADownloadsRequest(laCode, year))
-                select response;
+            select response;
 
-            return await result.ToApiResultAsync(_options, cancellationToken);
-        }
+        return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);
     }
 }

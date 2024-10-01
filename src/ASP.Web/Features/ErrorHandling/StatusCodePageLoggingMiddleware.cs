@@ -3,6 +3,7 @@ using ASP.Core.Logging;
 using ASP.Core.Results;
 using ASP.Infrastructure.TableStorage;
 using ASP.Web.Core.Environment;
+using ASP.Web.Core.ErrorHandling;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Options;
 using System.Net;

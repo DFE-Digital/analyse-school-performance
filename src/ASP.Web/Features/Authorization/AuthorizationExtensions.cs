@@ -1,4 +1,4 @@
-﻿using ASP.Infrastructure.Dsi;
+﻿using ASP.Infrastructure;
 using ASP.Infrastructure.Dsi.DsiApiClient;
 using ASP.Infrastructure.Dsi.DsiApiClientProvider;
 
@@ -8,14 +8,12 @@ namespace ASP.Web.Features.Authorization
     {
         public static IServiceCollection ConfigureAuthorization(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAuthorization(Policy.AddPolicies);
-
             services
+                .ConfigureOptions<DsiPublicApiOptions>(configuration)
+                .AddAuthorization(Policy.AddPolicies)
                 .AddScoped<ISecurityKeyProvider, SymmetricSecurityKeyProvider>()
-                .AddScoped<IDsiApiClient, DsiApiClient>();
-
-            services.AddHttpClient<IDsiApiClientProvider, DsiApiClientProvider>();
-            services.Configure<DsiPublicApiConfiguration>(configuration.GetSection(DsiConstants.DsiPublicApiSection));
+                .AddScoped<IDsiApiClient, DsiApiClient>()
+                .AddHttpClient<IDsiApiClientProvider, DsiApiClientProvider>();
 
             return services;
         }

@@ -4,44 +4,47 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
-namespace ASP.Api.Functions
+namespace ASP.Api.Functions;
+
+public class ViewContentTemplate : ApiFunction
 {
-    public class ViewContentTemplate : ApiFunction
+    private readonly ILogger<ViewContentTemplate> _logger;
+    private readonly IViewContentTemplate _useCase;
+    private readonly ApiResultConverter _resultConverter;
+
+    public ViewContentTemplate(
+        ILogger<ViewContentTemplate> logger,
+        IViewContentTemplate useCase,
+        ApiResultConverter resultConverter
+    )
     {
-        private readonly ILogger _logger;
-        private readonly IViewContentTemplate _view;
-        private readonly ErrorHandlingOptions _options;
+        _logger = logger
+            ?? throw new ArgumentNullException(nameof(logger));
 
-        public ViewContentTemplate(
-            ILoggerFactory loggerFactory,
-            IViewContentTemplate view,
-            IOptions<ErrorHandlingOptions> options
-        )
-        {
-            _logger = loggerFactory.CreateLogger<ViewContentTemplate>();
-            _view = view;
-            _options = (options ?? throw new ArgumentNullException(nameof(options)))
-                .Value;
-        }
+        _useCase = useCase
+            ?? throw new ArgumentNullException(nameof(useCase));
 
-        [Function("ViewContentTemplate")]
-        public override async Task<ActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
-            HttpRequest request,
-            CancellationToken cancellationToken)
-        {
-            _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
+        _resultConverter = resultConverter
+            ?? throw new ArgumentNullException(nameof(resultConverter));
+    }
 
-            var result =
-                from _ in request.ValidateHttpMethod([HttpMethods.Get])
-                from id in request.ValidateParameter("id", p => p.IsRequired())
-                from revision in request.ValidateParameter("revision", p => p.IsOptional())
-                from response in _view.HandleRequest(new ViewContentTemplateRequest(id, revision))
-                select response;
+    [Function("ViewContentTemplate")]
+    public override async Task<ActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post")] 
+        HttpRequest request, 
+        CancellationToken cancellationToken
+    )
+    {
+        _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
-            return await result.ToApiResultAsync(_options, cancellationToken);
-        }
+        var result =
+            from _ in request.ValidateHttpMethod([HttpMethods.Get])
+            from id in request.ValidateParameter("id", p => p.IsRequired())
+            from revision in request.ValidateParameter("revision", p => p.IsOptional())
+            from response in _useCase.HandleRequest(new ViewContentTemplateRequest(id, revision))
+            select response;
+
+        return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);
     }
 }

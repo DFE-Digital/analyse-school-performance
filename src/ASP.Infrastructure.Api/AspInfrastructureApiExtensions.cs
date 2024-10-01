@@ -1,32 +1,57 @@
-﻿using ASP.Application;
+﻿using ASP.Api;
+using ASP.Application;
+using ASP.Infrastructure.DocumentDatabase;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ASP.Infrastructure.Api
 {
     public static class AspInfrastructureApiExtensions
     {
-        public static void ConfigureInProcessApi(this IServiceCollection services)
+        public static IServiceCollection ConfigureApiClient(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IAspApiClient, AspApiClient>();
+            services
+                .ConfigureOptions<ApiOptions>(configuration, out var config)
+                .AddScoped<IAspApiClient, AspApiClient>();
+
+            if(config.InProcess)
+            {
+                ConfigureInProcessApi(services, configuration);
+            } else
+            {
+                ConfigureHttpApi(services);
+            }
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureInProcessTransportLayer(this IServiceCollection services)
+        {
+            services.RemoveAll<ITransportLayer>();
             services.AddScoped<ITransportLayer, InProcessTransportLayer>();
             foreach (var functionType in InProcessTransportLayer.FunctionTypes)
             {
                 services.AddScoped(functionType);
             }
-            services.RegisterUseCases();
+
+            return services;
         }
 
-        public static void ConfigureHttpApi(this IServiceCollection services)
+        private static void ConfigureInProcessApi(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IAspApiClient, AspApiClient>();
+            services
+                .ConfigureInProcessTransportLayer()
+                .ConfigureDocumentDatabase(configuration)
+                .RegisterUseCases()
+                .RegisterRepositories()
+                .AddScoped<ApiResultConverter>();
+        }
+
+        private static void ConfigureHttpApi(IServiceCollection services)
+        {
+            services.RemoveAll<ITransportLayer>();
             services.AddScoped<ITransportLayer, HttpTransportLayer>();
-            services.AddOptions<HttpApiOptions>()
-               .Configure<IConfiguration>(
-                   (settings, configuration) =>
-                       configuration
-                           .GetSection(nameof(HttpApiOptions))
-                           .Bind(settings));
         }
     }
 }

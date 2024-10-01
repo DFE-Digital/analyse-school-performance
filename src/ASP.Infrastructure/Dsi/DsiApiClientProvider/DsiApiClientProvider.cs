@@ -9,18 +9,19 @@ namespace ASP.Infrastructure.Dsi.DsiApiClientProvider
     public class DsiApiClientProvider : IDsiApiClientProvider
     {
         private readonly HttpClient _httpClient;
-        private readonly DsiPublicApiConfiguration _dsiPublicApiConfiguration;
+        private readonly DsiPublicApiOptions _options;
         private readonly ISecurityKeyProvider _securityKeyProvider;
 
         public DsiApiClientProvider(
             HttpClient httpClient,
-            IOptions<DsiPublicApiConfiguration> dsiPublicApiConfiguration,
-            ISecurityKeyProvider securityKeyProvider)
+            IOptions<DsiPublicApiOptions> options,
+            ISecurityKeyProvider securityKeyProvider
+        )
         {
             _httpClient = httpClient ??
                 throw new ArgumentNullException(nameof(httpClient));
-            _dsiPublicApiConfiguration = dsiPublicApiConfiguration.Value ??
-                throw new ArgumentNullException(nameof(dsiPublicApiConfiguration));
+            _options = options?.Value ??
+                throw new ArgumentNullException(nameof(options));
             _securityKeyProvider = securityKeyProvider ??
                 throw new ArgumentNullException(nameof(securityKeyProvider));
         }
@@ -32,7 +33,7 @@ namespace ASP.Infrastructure.Dsi.DsiApiClientProvider
 
             string encodedDsiAccessToken = CreateEncodedDsiAccessToken();
 
-            string dsiAuthorizationUrl = _dsiPublicApiConfiguration.DsiApiAuthorizationUrl!.TrimEnd('/');
+            string dsiAuthorizationUrl = _options.AuthorizationUrl.TrimEnd('/');
 
             _httpClient.BaseAddress = new Uri(dsiAuthorizationUrl);
 
@@ -48,8 +49,8 @@ namespace ASP.Infrastructure.Dsi.DsiApiClientProvider
                 .CreateEncodedJwt(
                     new SecurityTokenDescriptor
                     {
-                        Issuer = _dsiPublicApiConfiguration.DsiApiClientId,
-                        Audience = _dsiPublicApiConfiguration.DsiApiAudience,
+                        Issuer = _options.ClientId,
+                        Audience = _options.Audience,
                         SigningCredentials =
                             new SigningCredentials(
                                 _securityKeyProvider.SecurityKeyInstance,

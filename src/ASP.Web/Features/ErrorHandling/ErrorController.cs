@@ -1,3 +1,4 @@
+using ASP.Web.Core.ErrorHandling;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

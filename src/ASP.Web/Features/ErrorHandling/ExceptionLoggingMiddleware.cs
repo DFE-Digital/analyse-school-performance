@@ -4,6 +4,7 @@ using System.Net;
 using ASP.Core.Logging;
 using ASP.Core.Results;
 using Microsoft.Extensions.Options;
+using ASP.Web.Core.ErrorHandling;
 
 namespace ASP.Web.Features.ErrorHandling
 {

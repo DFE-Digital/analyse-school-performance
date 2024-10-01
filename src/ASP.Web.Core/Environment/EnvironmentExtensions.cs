@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using ASP.Web.Core.ErrorHandling;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace ASP.Web.Core.Environment
@@ -14,9 +14,9 @@ namespace ASP.Web.Core.Environment
         /// A boolean value indicating whether the production error page should be used. Returns <c>true</c> if the 
         /// "ForceProductionErrorPage" setting is enabled; otherwise, <c>false</c>.
         /// </returns>
-        public static bool ShouldUseProductionErrorPage(this IHostEnvironment environment, IConfiguration configuration)
+        public static bool ShouldUseProductionErrorPage(this IHostEnvironment environment, ErrorHandlingOptions errorHandlingConfig)
         {
-            return environment.IsProduction() || configuration.GetValue("ForceProductionErrorPage", defaultValue: false);
+            return environment.IsProduction() || errorHandlingConfig.ForceProductionErrorPage;
         }
 
         public static bool ShouldShowErrorMessage(this IHostEnvironment environment)

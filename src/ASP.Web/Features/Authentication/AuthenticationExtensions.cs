@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using ASP.Core.Authorization;
+using ASP.Infrastructure;
 using ASP.Infrastructure.Dsi;
 using ASP.Infrastructure.Dsi.DsiApiClient;
 using ASP.Infrastructure.Dsi.Models;
@@ -8,17 +9,18 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace ASP.Web.Features.Authentication
+namespace ASP.Web.Features.Authentication;
+
+public static class AuthenticationExtensions
 {
-    public static class AuthenticationExtensions
+    public static IServiceCollection ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection ConfigureDsiAuthentication(this IServiceCollection services, IConfiguration configuration)
-        {
-            var dsiConfiguration = configuration.GetSection(DsiConstants.DsiSection);
+        services
+            .ConfigureOptions<DsiOidcOptions>(configuration, out var config);
 
-            var overallSessionTimeout = TimeSpan.FromMinutes(double.Parse(dsiConfiguration[DsiConstants.SessionTimeout] ?? "20"));
+        var overallSessionTimeout = TimeSpan.FromMinutes(config.SessionTimeout);
 
-            services
+        services
             .Configure<MvcOptions>(options =>
             {
                 options.Filters.Add(typeof(UserDetailsActionFilter));
@@ -54,9 +56,9 @@ namespace ASP.Web.Features.Authentication
             .AddOpenIdConnect(options =>
             {
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.MetadataAddress = dsiConfiguration[DsiConstants.DsiMetadataAddress];
-                options.ClientId = dsiConfiguration[DsiConstants.DsiOidcClientId];
-                options.ClientSecret = dsiConfiguration[DsiConstants.DsiOidcClientSecret];
+                options.MetadataAddress = config.MetadataAddress;
+                options.ClientId = config.ClientId;
+                options.ClientSecret = config.ClientSecret;
                 options.ResponseType = OpenIdConnectResponseType.Code;
                 options.RequireHttpsMetadata = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
@@ -77,30 +79,28 @@ namespace ASP.Web.Features.Authentication
                 //Requests to this path are handled automatically by the OIDC middleware.
                 //The path value does need to match the one that's requested in the 'Redirect URL' section of the
                 //DSI Service Configuration for the ASP2
-                options.CallbackPath = dsiConfiguration[DsiConstants.DsiCallbackPath];
+                options.CallbackPath = config.CallbackPath;
 
                 //This 'SignedOutCallbackPath' does not require a controller route. 
                 //Requests to this path are handler automatically by the OIDC middleware.
                 //The path value does need to match the one that's requested in the 'Logout redirect URL' section of the
                 //DSI Service Configuration for the ASP2
-                options.SignedOutCallbackPath = dsiConfiguration[DsiConstants.DsiSignedOutCallbackPath];
+                options.SignedOutCallbackPath = config.SignedOutCallbackPath;
 
                 //The URI users are redirected to once they sign out
-                options.SignedOutRedirectUri = dsiConfiguration[DsiConstants.DsiSignedOutRedirectUri] ?? "";
+                options.SignedOutRedirectUri = config.SignedOutRedirectUri;
 
                 //Taken from GIAP and left unchanged.
                 //Probably worth investigating what properties of the id_token we should/need to be validating.
                 //'ProtocolValidator' states that the id_token should match the specification
                 //defined at 'https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation'
-                options.ProtocolValidator = new OpenIdConnectProtocolValidator
-                {
+                options.ProtocolValidator = new OpenIdConnectProtocolValidator {
                     RequireSub = true,
                     RequireStateValidation = false,
                     NonceLifetime = TimeSpan.FromMinutes(60)
                 };
 
-                options.Events = new OpenIdConnectEvents
-                {
+                options.Events = new OpenIdConnectEvents {
                     OnMessageReceived = context =>
                     {
                         var isSpuriousAuthCbRequest =
@@ -111,7 +111,7 @@ namespace ASP.Web.Features.Authentication
                         if (isSpuriousAuthCbRequest)
                         {
                             context.HandleResponse();
-                            context.Response.Redirect("/error/accessdenied/");
+                            context.Response.Redirect(DsiConstants.AccessDeniedRoute);
                         }
 
                         return Task.CompletedTask;
@@ -139,8 +139,7 @@ namespace ASP.Web.Features.Authentication
                             //These two properties refer to cookie behaviour.
                             //If 'IsPersistent = true' and an 'ExpiresUtc' is set then the cookie will be removed from the
                             //browser once 'ExpiresUtc' is reached
-                            context.Properties = new()
-                            {
+                            context.Properties = new() {
                                 IsPersistent = true,
                                 ExpiresUtc = DateTime.UtcNow.Add(overallSessionTimeout)
                             };
@@ -164,7 +163,7 @@ namespace ASP.Web.Features.Authentication
                                 var dsiPublicApiClient = context.HttpContext.RequestServices.GetService<IDsiApiClient>();
 
                                 //userAccess contains the Role information needed to construct a set of Claims for use in the service
-                                var userAccessResult = await dsiPublicApiClient!.GetUserAccess(dsiConfiguration[DsiConstants.DsiServiceId]!, organisation.Id!, authenticatedUserInfo.UserId);
+                                var userAccessResult = await dsiPublicApiClient!.GetUserAccess(config.ServiceId, organisation.Id, authenticatedUserInfo.UserId);
 
                                 var userAccess = userAccessResult.GetValueOrDefault(new UserAccess());
                                 if (!userAccess.Roles.Any())
@@ -213,7 +212,6 @@ namespace ASP.Web.Features.Authentication
                 };
             });
 
-            return services;
-        }
+        return services;
     }
 }

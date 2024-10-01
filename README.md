@@ -91,7 +91,7 @@ Test database is configured using appsettings.Test.json and appsettings.Test.loc
 appsettings.Test.json is a replica of appsettings.json in the ASP.Web project, containing this section:
 
 ```
-"RepositoryOptions": {
+"CosmosDb": {
     "EndpointUri": null,
     "PrimaryKey": null,
     "DatabaseId": "test",
@@ -123,7 +123,7 @@ You'll also need your local cosmos instance running and update the details win y
 ```
 {
   ...,
-  "RepositoryOptions": {
+  "CosmosDb": {
     "EndpointUri": "https://localhost:8081",
     "PrimaryKey": "your-key-here",
     "DatabaseId": "your-database-id",

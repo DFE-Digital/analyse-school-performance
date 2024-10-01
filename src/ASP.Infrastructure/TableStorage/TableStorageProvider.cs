@@ -9,30 +9,30 @@ namespace ASP.Infrastructure.TableStorage
 {
     public class TableStorageProvider : ITableStorageProvider
     {
-        private readonly TableServiceClient _tableServiceClient;
-        private readonly TableStorageConfiguration _tableStorageConfiguration;
+        private readonly TableServiceClient _client;
+        private readonly TableStorageOptions _options;
         private readonly IHostEnvironment _hostEnvironment;
 
-        public TableStorageProvider(IOptions<TableStorageConfiguration> tableStorageConfiguration, IHostEnvironment hostEnvironment)
+        public TableStorageProvider(IOptions<TableStorageOptions> options, IHostEnvironment hostEnvironment)
         {
             _hostEnvironment = hostEnvironment;
-            _tableStorageConfiguration = tableStorageConfiguration.Value;
+            _options = options.Value;
 
             // We want to use Azure credentials for everything BUT local development.
             // For local development, we want to use the connection string for the _tableServiceClient.
             if (hostEnvironment.IsLocalDevelopment())
             {
-                _tableServiceClient = new TableServiceClient(_tableStorageConfiguration.ConnectionString);
+                _client = new TableServiceClient($"DefaultEndpointsProtocol=https;AccountName={_options.StorageAccountName};AccountKey={_options.PrimaryKey};EndpointSuffix=core.windows.net");
             }
             else
             {
                 var credentialOptions = new DefaultAzureCredentialOptions
                 {
-                    ManagedIdentityClientId = _tableStorageConfiguration.ManagedIdentityClientId
+                    ManagedIdentityClientId = _options.ManagedIdentityClientId
                 };
                 var credential = new DefaultAzureCredential(credentialOptions);
-                _tableServiceClient = new TableServiceClient(
-                    new Uri($"https://{_tableStorageConfiguration.StorageAccountName}.table.core.windows.net/"),
+                _client = new TableServiceClient(
+                    new Uri($"https://{_options.StorageAccountName}.table.core.windows.net/"),
                     credential);
             }
         }
@@ -57,19 +57,19 @@ namespace ASP.Infrastructure.TableStorage
         private async Task<TableClient> CreateTable()
         {
             bool exists = false;
-            await foreach (var table in _tableServiceClient.QueryAsync(t => t.Name == _tableStorageConfiguration.TableName))
+            await foreach (var table in _client.QueryAsync(t => t.Name == _options.TableName))
             {
                 exists = true;
             }
 
             if (!exists)
             {
-                await _tableServiceClient.CreateTableAsync(_tableStorageConfiguration.TableName);
+                await _client.CreateTableAsync(_options.TableName);
 
-                return _tableServiceClient.GetTableClient(_tableStorageConfiguration.TableName);
+                return _client.GetTableClient(_options.TableName);
             }
 
-            return _tableServiceClient.GetTableClient(_tableStorageConfiguration.TableName);
+            return _client.GetTableClient(_options.TableName);
         }
     }
 }

@@ -1,6 +1,5 @@
 using ASP.Infrastructure.Api;
 using ASP.Web.Components;
-using ASP.Web.Core.Environment;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features;
 using ASP.Web.Features.AnalyticsTrackingPreferences;
@@ -15,78 +14,55 @@ using ASP.Web.Features.Logging;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Features.UrlRewriting;
 
-namespace ASP.Web
+namespace ASP.Web;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+        builder.Configuration
+            .ConfigureSettings(builder.Configuration);
+
+        builder.Services
+            .ConfigureRouting()
+            .ConfigureFeatures()
+            .ConfigureViews()
+            .ConfigureWebComponents()
+            .ConfigureAuthentication(builder.Configuration)
+            .ConfigureAuthorization(builder.Configuration)
+            .ConfigureErrorHandling(builder.Configuration, out var errorHandlingConfig)
+            .ConfigureApiClient(builder.Configuration)
+            .ConfigureContentTemplates()
+            .ConfigureContentSecurityPolicy()
+            .ConfigureApplicationServiceVersion()
+            .ConfigureCookies()
+            .ConfigureTermsOfUse()
+            .ConfigureAnalyticsTrackingPreferences()
+            .ConfigureTemplateComponents()
+            .ConfigureLogging();
+
+        WebApplication app = builder.Build();
+
+        app.UseErrorHandling(app.Environment, errorHandlingConfig);
+
+        if (app.Environment.IsProduction())
         {
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-            builder.Services
-                .ConfigureSettings(builder.Configuration)
-                .ConfigureRouting()
-                .ConfigureFeatures()
-
-                .ConfigureViews()
-                
-                .ConfigureWebComponents()
-                .ConfigureDsiAuthentication(builder.Configuration)
-                .ConfigureAuthorization(builder.Configuration)
-                .ConfigureErrorHandling(builder.Configuration)
-                .ConfigureContentTemplates()
-                .ConfigureContentSecurityPolicy()
-                .ConfigureApplicationServiceVersion()
-                .ConfigureCookies()
-                .ConfigureTermsOfUse()
-                .ConfigureAnalyticsTrackingPreferences()
-                .ConfigureTemplateComponents()
-                .ConfigureLogging()
-
-                .ConfigureRepositories();
-
-            builder.Services.ConfigureInProcessApi();
-
-            builder.Services.AddOptions<ErrorHandlingOptions>()
-               .Configure<IConfiguration>(
-                   (settings, configuration) =>
-                       configuration
-                           .GetSection(nameof(ErrorHandlingOptions))
-                           .Bind(settings));
-
-            WebApplication app = builder.Build();
-
-            // this must be called before the UseExceptionHandler so that it can pass the correct errors message through to the view
-            // see CustomPageNotFoundMiddleware comments for how it works
-            app.UseMiddleware<StatusCodePageLoggingMiddleware>();
-
-            // we only want to call exception handling middleware during production or testing the production server error pages
-            if (app.Environment.ShouldUseProductionErrorPage(app.Configuration))
-            {
-                app.UseExceptionHandler("/error/servererror/");
-            }
-            else
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            if (app.Environment.IsProduction())
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseUrlRewriteRules();
-            app.UseRouting();
-            app.UseCookieContentSecurityPolicy();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseContentSecurityPolicy(app.Environment);
-
-            app.MapControllers();
-            app.Run();
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
         }
+
+        app.UseHttpsRedirection()
+           .UseStaticFiles()
+           .UseUrlRewriteRules()
+           .UseRouting()
+           .UseCookieContentSecurityPolicy()
+           .UseAuthentication()
+           .UseAuthorization()
+           .UseContentSecurityPolicy(app.Environment);
+
+        app.MapControllers();
+        app.Run();
     }
 }

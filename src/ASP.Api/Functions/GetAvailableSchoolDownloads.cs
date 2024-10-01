@@ -4,43 +4,47 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
-namespace ASP.Api.Functions
+namespace ASP.Api.Functions;
+
+public class GetAvailableSchoolDownloads : ApiFunction
 {
-    public class GetAvailableSchoolDownloads : ApiFunction
+    private readonly ILogger<GetAvailableSchoolDownloads> _logger;
+    private readonly IGetAvailableSchoolDownloads _useCase;
+    private readonly ApiResultConverter _resultConverter;
+
+    public GetAvailableSchoolDownloads(
+        ILogger<GetAvailableSchoolDownloads> logger,
+        IGetAvailableSchoolDownloads useCase,
+        ApiResultConverter resultConverter
+    )
     {
-        private readonly ILogger _logger;
-        private readonly IGetAvailableSchoolDownloads _useCase;
-        private readonly ErrorHandlingOptions _options;
+        _logger = logger
+            ?? throw new ArgumentNullException(nameof(logger));
 
-        public GetAvailableSchoolDownloads(
-            ILoggerFactory loggerFactory,
-            IGetAvailableSchoolDownloads useCase,
-            IOptions<ErrorHandlingOptions> options)
-        {
-            _logger = loggerFactory.CreateLogger<GetAvailableSchoolDownloads>();
-            _useCase = useCase;
-            _options = (options ?? throw new ArgumentNullException(nameof(options)))
-                .Value;
-        }
+        _useCase = useCase
+            ?? throw new ArgumentNullException(nameof(useCase));
 
-        [Function("GetAvailableSchoolDownloads")]
-        public override async Task<ActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
-            HttpRequest request,
-            CancellationToken cancellationToken)
-        {
-            _logger.LogInformation($"{request.Method} {request.Path + request.QueryString}");
+        _resultConverter = resultConverter
+            ?? throw new ArgumentNullException(nameof(resultConverter));
+    }
 
-            var result =
-                from _ in request.ValidateHttpMethod([HttpMethods.Get])
-                from urn in request.ValidateParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
+    [Function("GetAvailableSchoolDownloads")]
+    public override async Task<ActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post")] 
+        HttpRequest request, 
+        CancellationToken cancellationToken
+	)
+    {
+        _logger.LogInformation($"{request.Method} {request.Path + request.QueryString}");
+
+        var result =
+            from _ in request.ValidateHttpMethod([HttpMethods.Get])
+            from urn in request.ValidateParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
                 from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
                 from response in _useCase.HandleRequest(new GetAvailableSchoolDownloadsRequest(urn, year))
-                select response;
+            select response;
 
-            return await result.ToApiResultAsync(_options, cancellationToken);
-        }
+        return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);
     }
 }

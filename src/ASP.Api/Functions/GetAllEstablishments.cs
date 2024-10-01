@@ -5,28 +5,31 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace ASP.Api.Functions;
 
 public class GetAllEstablishments : ApiFunction
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<GetAllEstablishments> _logger;
     private readonly IGetAllEstablishments _useCase;
-    private readonly ErrorHandlingOptions _options;
+    private readonly ApiResultConverter _resultConverter;
 
     public GetAllEstablishments(
-        ILoggerFactory loggerFactory,
+        ILogger<GetAllEstablishments> logger,
         IGetAllEstablishments useCase,
-        IOptions<ErrorHandlingOptions> options
+        ApiResultConverter resultConverter
     )
     {
-        _logger = loggerFactory.CreateLogger<GetEstablishmentDetails>();
-        _useCase = useCase;
-        _options = (options ?? throw new ArgumentNullException(nameof(options)))
-            .Value;
+        _logger = logger
+            ?? throw new ArgumentNullException(nameof(logger));
+
+        _useCase = useCase
+            ?? throw new ArgumentNullException(nameof(useCase));
+
+        _resultConverter = resultConverter
+            ?? throw new ArgumentNullException(nameof(resultConverter));
     }
-    
+
     [Function("GetAllEstablishments")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
@@ -50,6 +53,6 @@ public class GetAllEstablishments : ApiFunction
             ))
             select response;
 
-        return await result.ToApiResultAsync(_options, cancellationToken);
+        return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);
     }
 }

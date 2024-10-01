@@ -8,10 +8,5 @@
 
             return services;
         }
-
-        internal static IApplicationBuilder UseLoggingMiddleware(this IApplicationBuilder app)
-        {
-            return app;
-        }
     }
 }

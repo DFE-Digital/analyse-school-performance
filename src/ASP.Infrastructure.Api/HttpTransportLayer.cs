@@ -9,11 +9,11 @@ namespace ASP.Infrastructure.Api
     /// </summary>
     public class HttpTransportLayer : ITransportLayer
     {
-        private readonly HttpApiOptions _options;
+        private readonly ApiOptions _options;
         private readonly ILogger<HttpTransportLayer> _logger;
         private readonly HttpClient _httpClient;
 
-        public HttpTransportLayer(IOptions<HttpApiOptions> options, ILogger<HttpTransportLayer> logger)
+        public HttpTransportLayer(IOptions<ApiOptions> options, ILogger<HttpTransportLayer> logger)
         {
             _options = (options ?? throw new ArgumentNullException(nameof(options)))
                 .Value;
@@ -29,7 +29,7 @@ namespace ASP.Infrastructure.Api
         {
             var httpRequest = new HttpRequestMessage(HttpMethod.Parse(request.Method), request.Path + request.QueryString);
             httpRequest.Content = new StringContent(request.Body ?? "");
-            httpRequest.Headers.Add("x-functions-key", _options.FunctionsKey ?? "");
+            httpRequest.Headers.Add("x-functions-key", _options.FunctionsKey);
             
             var httpResponse = await _httpClient.SendAsync(httpRequest);
 

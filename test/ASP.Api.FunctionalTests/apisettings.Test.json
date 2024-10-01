@@ -1,29 +1,8 @@
 {
-    "Logging": {
-        "LogLevel": {
-            "Default": "Information",
-            "Microsoft.AspNetCore": "Warning"
-        }
+    "CosmosDb": {
+        "DatabaseId": "test"
     },
-    "AllowedHosts": "*",
-    "RepositoryOptions": {
-        "EndpointUri": null, // }
-        "PrimaryKey": null, // } set in appsettings.Test.local.json
-        "DatabaseId": "test", // }
-        "Containers": [
-            {
-                "content": {
-                    "ContainerName": "content",
-                    "PartitionKey": "/contentId"
-                },
-                "establishments": {
-                    "ContainerName": "establishments",
-                    "PartitionKey": "/urn"
-                }
-            }
-        ]
-    },
-    "ErrorHandlingOptions": {
-        "ShowStackTrace": true
+    "DocumentDatabase": {
+        "InMemory": true
     }
 }

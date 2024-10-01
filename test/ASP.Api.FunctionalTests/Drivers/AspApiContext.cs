@@ -3,7 +3,6 @@ using ASP.Infrastructure.Api;
 using ASP.Test.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using TechTalk.SpecFlow.Infrastructure;
@@ -12,7 +11,6 @@ namespace ASP.Api.FunctionalTests.Drivers
 {
     public class AspApiContext
     {
-        private static readonly MemoryStore _store = new MemoryStore();
         private static readonly IHost _host;
         private static readonly ITransportLayer _transport;
 
@@ -94,30 +92,16 @@ namespace ASP.Api.FunctionalTests.Drivers
             var testMode = Environment.GetEnvironmentVariable("ASP_Test_Mode") ?? "Development";
             var path = Path.GetDirectoryName(typeof(AspApiContext).Assembly.GetAssemblyLocation());
 
-            builder.ConfigureServices(services =>
-            {
-                services.ConfigureInProcessApi();
-
-                if (testMode == "Development")
-                {
-                    services.Add(new ServiceDescriptor(typeof(MemoryStore), _store));
-
-                    services.RemoveAll<IDocumentDatabase>();
-                    services.AddSingleton<IDocumentDatabase, InMemoryDocumentDatabase>();
-                }
-            });
-
             builder.ConfigureAppConfiguration(configure =>
             {
                 var config = configure
                     .SetBasePath(path)
-                    .AddJsonFile("apisettings.Test.json", false);
-
-                if (testMode == "Integration")
-                {
-                    config.AddJsonFile("apisettings.Test.local.json", true);
-                }
+                    .AddJsonFile("apisettings.Test.json", false)
+                    // Add local config for connection strings to the test database
+                    .AddJsonFile("apisettings.Test.local.json", true);
             });
+
+            builder.ConfigureServices(services => services.ConfigureInProcessTransportLayer());
         }
     }
 }
