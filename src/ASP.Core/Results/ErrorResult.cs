@@ -4,7 +4,7 @@
     /// Represents the failed result of an operation. See <see cref="Result{TValue}"/>
     /// </summary>
     /// <typeparam name="TValue">Type of the successful result of the operation</typeparam>
-    public sealed class ErrorResult<TValue> : Result<TValue>
+    public sealed class ErrorResult<TValue> : Result<TValue> 
     {
         public Error Error { get; }
 
@@ -12,43 +12,27 @@
         {
             Error = error;
         }
-        
+
         public override Result<TNextValue> Map<TNextValue>(Func<TValue, TNextValue> mapFunction)
-        {
-            return new ErrorResult<TNextValue>(Error);
-        }
+            => new ErrorResult<TNextValue>(Error);
 
         public override Task<Result<TNextValue>> Map<TNextValue>(Func<TValue, Task<TNextValue>> mapFunction)
-        {
-            return Task.FromResult((Result<TNextValue>)new ErrorResult<TNextValue>(Error));
-        }
+            => Task.FromResult((Result<TNextValue>)new ErrorResult<TNextValue>(Error));
 
         public override Result<TNextValue> Then<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess)
-        {
-            return new ErrorResult<TNextValue>(Error);
-        }
+            => new ErrorResult<TNextValue>(Error);
 
         public override Task<Result<TNextValue>> Then<TNextValue>(Func<TValue, Task<Result<TNextValue>>> onSuccess)
-        {
-            return Task.FromResult((Result<TNextValue>)new ErrorResult<TNextValue>(Error));
-        }
+            => Task.FromResult((Result<TNextValue>)new ErrorResult<TNextValue>(Error));
 
         public override Result<TValue> MapError(Func<Error, Error> onError)
-        {
-            return onError(Error);
-        }
+            => onError(Error);
 
         public override async Task<Result<TValue>> MapError(Func<Error, Task<Error>> onError)
-        {
-            var error = await onError(Error);
-
-            return error;
-        }
+            => await onError(Error);
 
         public override Result<TValue> MapErrorMessage(Func<string, string> mapFunction)
-        {
-            return new ErrorResult<TValue>(Error.MapMessage(mapFunction));
-        }
+            => new ErrorResult<TValue>(Error.MapMessage(mapFunction));
 
         public override async Task<Result<TValue>> MapErrorMessage(Func<string, Task<string>> mapFunction)
         {
@@ -57,34 +41,22 @@
         }
 
         public override TNextValue Match<TNextValue>(Func<TValue, TNextValue> onSuccess, Func<Error, TNextValue> onError)
-        {
-            return onError(Error);
-        }
+            => onError(Error);
 
         public override Task<TNextValue> Match<TNextValue>(Func<TValue, Task<TNextValue>> onSuccess, Func<Error, Task<TNextValue>> onError)
-        {
-            return onError(Error);
-        }
+            => onError(Error);
 
         public override void Switch(Action<TValue> onSuccess, Action<Error> onError)
-        {
-            onError(Error);
-        }
+            => onError(Error);
 
         public override Task Switch(Func<TValue, Task> onSuccess, Func<Error, Task> onError)
-        {
-            return onError(Error);
-        }
+            => onError(Error);
 
         public override Result<TValue> OnSuccess(Action<TValue> onSuccess)
-        {
-            return this;
-        }
+            => this;
 
         public override Task<Result<TValue>> OnSuccess(Func<TValue, Task> onSuccess)
-        {
-            return Task.FromResult((Result<TValue>)this);
-        }
+            => Task.FromResult((Result<TValue>)this);
 
         public override Result<TValue> OnError(Action<Error> onError)
         {
@@ -99,24 +71,16 @@
         }
 
         public override TValue GetValueOrDefault(TValue defaultValue)
-        {
-            return defaultValue;
-        }
+            => defaultValue;
 
         public override SuccessResult<TValue> DefaultIfError(TValue defaultValue)
-        {
-            return (SuccessResult<TValue>)defaultValue;
-        }
+            => (SuccessResult<TValue>)defaultValue;
 
         public override Result<TValue> DefaultIf(Func<Error, bool> predicate, TValue defaultValue)
-        {
-            return predicate(Error) ? defaultValue : this;
-        }
+            => predicate(Error) ? defaultValue : this;
 
         public override Result<TValue> ErrorIf(Func<TValue, bool> predicate, Error error)
-        {
-            return this;
-        }
+            => this;
 
         public override Result<TValue> IfErrorThen(Func<Error, bool> predicate, Func<Result<TValue>> onError)
         {
@@ -138,14 +102,23 @@
             return this;
         }
 
-        public override Result<TNextValue> Convert<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess, Func<Error, Result<TNextValue>> onError)
-        {
-            return onError(Error);
-        }
+        public override Result<TNextValue> Convert<TNextValue>(
+            Func<TValue, Result<TNextValue>> onSuccess, 
+            Func<Error, Result<TNextValue>> onError
+        )   => onError(Error);
 
-        public override async Task<Result<TNextValue>> Convert<TNextValue>(Func<TValue, Task<Result<TNextValue>>> onSuccess, Func<Error, Task<Result<TNextValue>>> onError)
-        {
-            return await onError(Error);
-        }
+        public override async Task<Result<TNextValue>> Convert<TNextValue>(
+            Func<TValue, Task<Result<TNextValue>>> onSuccess, 
+            Func<Error, Task<Result<TNextValue>>> onError
+        )   => await onError(Error);
+
+        protected override bool Equals(Result<TValue> other)
+            => other is ErrorResult<TValue> error && error.Error.Equals(Error);
+
+        public override int GetHashCode()
+            => HashCode.Combine(Error);
+
+        public override string ToString()
+            => $"Error: {Error}";
     }
 }

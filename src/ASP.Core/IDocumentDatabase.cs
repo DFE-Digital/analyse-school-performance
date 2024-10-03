@@ -34,9 +34,6 @@ namespace ASP.Core
             CancellationToken cancellationToken = default
         ) where TItem : class;
 
-        Task<Result<Done>> DeleteAllAsync(
-            string container, 
-            CancellationToken cancellationToken = default
-        );
+        Task<Result<Done>> Clear();
     }
 }

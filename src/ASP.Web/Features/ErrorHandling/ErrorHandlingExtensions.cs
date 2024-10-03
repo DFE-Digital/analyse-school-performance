@@ -1,5 +1,4 @@
 ﻿using ASP.Infrastructure;
-using ASP.Infrastructure.TableStorage;
 using ASP.Web.Core.Environment;
 using ASP.Web.Core.ErrorHandling;
 
@@ -10,9 +9,7 @@ namespace ASP.Web.Features.ErrorHandling
         internal static IServiceCollection ConfigureErrorHandling(this IServiceCollection services, IConfiguration configuration, out ErrorHandlingOptions errorHandlingConfig)
         {
             services
-                .ConfigureOptions<TableStorageOptions>(configuration)
                 .ConfigureOptions(configuration, out errorHandlingConfig)
-                .AddSingleton<ITableStorageProvider, TableStorageProvider>()
                 .AddExceptionHandler<ExceptionLoggingMiddleware>();
 
             return services;

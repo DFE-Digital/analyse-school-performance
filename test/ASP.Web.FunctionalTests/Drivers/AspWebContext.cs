@@ -1,5 +1,4 @@
 ﻿using ASP.Core;
-using ASP.Infrastructure.TableStorage;
 using ASP.Test.Web.Areas.ComponentTest;
 using ASP.Web.Features.Cookies;
 using ASP.Web.FunctionalTests.Services;
@@ -13,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
-using System.IO;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.Drivers;
@@ -50,7 +48,7 @@ public class AspWebContext
     public HttpClient Client => _client;
     public IDocumentDatabase DocumentDatabase => _factory.DocumentDatabase;
     public TestCookieProvider CookieProvider => _factory.CookieProvider;
-    public TestTableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
+    public ITableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
     public TestClaimsProvider TestClaimsProvider => _factory.TestClaimsProvider;
 
     public string ServerAddress => _factory.ServerAddress;
@@ -60,40 +58,21 @@ public class AspWebContext
     {
         private IHost? _host;
         private readonly TestCookieProvider _cookieProvider;
-        private readonly TestTableStorageProvider _tableStorageProvider;
         private readonly TestClaimsProvider _testClaimsProvider;
 
-        private IDocumentDatabase? _documentDatabase;
-
         public TestCookieProvider CookieProvider => _cookieProvider;
-        public TestTableStorageProvider TableStorageProvider => _tableStorageProvider;
         public TestClaimsProvider TestClaimsProvider => _testClaimsProvider;
 
         public CustomWebApplicationFactory()
         {
             _cookieProvider = new TestCookieProvider();
-            _tableStorageProvider = new TestTableStorageProvider();
             _testClaimsProvider = new TestClaimsProvider();
 
             ClientOptions.AllowAutoRedirect = true;
         }
 
-        public IDocumentDatabase DocumentDatabase
-        {
-            get
-            {
-                if (_documentDatabase != null)
-                {
-                    return _documentDatabase;
-                }
-
-                using (var scope = Services.CreateScope())
-                {
-                    _documentDatabase = scope.ServiceProvider.GetService<IDocumentDatabase>()!;
-                    return _documentDatabase;
-                }
-            }
-        }
+        public IDocumentDatabase DocumentDatabase => Services.GetRequiredService<IDocumentDatabase>();
+        public ITableStorageProvider TableStorageProvider => Services.GetRequiredService<ITableStorageProvider>();
 
         public string ServerAddress
         {
@@ -225,9 +204,6 @@ public class AspWebContext
                 services.RemoveAll<ICookieProvider>();
                 services.Add(new ServiceDescriptor(typeof(ICookieProvider), _cookieProvider));
 
-                // Add test implementation of table storage provider
-                services.RemoveAll<ITableStorageProvider>();
-                services.Add(new ServiceDescriptor(typeof(ITableStorageProvider), _tableStorageProvider));
                 // Add service that provides Roles for use in authorization tests
                 services.Add(new ServiceDescriptor(typeof(TestClaimsProvider), _testClaimsProvider));
             });

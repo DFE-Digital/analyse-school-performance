@@ -2,9 +2,7 @@
 
 public static class Result
 {
-    private static readonly Done _done = new Done();
-
-    public static Done Done => _done;
+    public static Done Done => Done.Instance;
 
     public static Result<TValue> Success<TValue>(TValue value)
     {
@@ -43,7 +41,7 @@ public static class Result
 /// indicates an error and contains an <c>Error</c> object
 /// </summary>
 /// <typeparam name="TValue">Type of the successful result of the operation</typeparam>
-public abstract class Result<TValue>
+public abstract class Result<TValue> 
 {
     /// <summary>
     /// Converts the current result from a <c>Result&lt;<typeparamref name="TValue"/>&gt;</c> to a 
@@ -656,11 +654,11 @@ public abstract class Result<TValue>
     /// <param name="otherResult">Result to combine with the current result</param>
     /// <param name="combineFunction">Function to use to combine the values of both results</param>
     /// <returns>A result object of type <c>Result&lt;<typeparamref name="TNewValue"/>&gt;</c></returns>
-    public Result<TNewValue> Combine<TOtherValue, TNewValue>(Result<TOtherValue> otherResult, Func<TValue, TOtherValue, TNewValue> combineFunction)
-    {
-        return this.Then(value => 
+    public Result<TNewValue> Combine<TOtherValue, TNewValue>(
+        Result<TOtherValue> otherResult, 
+        Func<TValue, TOtherValue, TNewValue> combineFunction
+    )   => this.Then(value => 
             otherResult.Map(otherValue => combineFunction(value, otherValue)));
-    }
 
     /// <summary>
     /// Combines the current result with two other results using the <paramref name="combineFunction"/> provided to create a new value from the values of all results if all are <c>SuccessResult</c>s.
@@ -672,12 +670,13 @@ public abstract class Result<TValue>
     /// <param name="result2">Second result to combine with the current result</param>
     /// <param name="combineFunction">Function to use to combine the values of all results</param>
     /// <returns>A result object of type <c>Result&lt;<typeparamref name="TNewValue"/>&gt;</c></returns>
-    public Result<TNewValue> Combine<TValue1, TValue2, TNewValue>(Result<TValue1> result1, Result<TValue2> result2, Func<TValue, TValue1, TValue2, TNewValue> combineFunction)
-    {
-        return this.Then(value => 
+    public Result<TNewValue> Combine<TValue1, TValue2, TNewValue>(
+        Result<TValue1> result1, 
+        Result<TValue2> result2, 
+        Func<TValue, TValue1, TValue2, TNewValue> combineFunction
+    )   => this.Then(value => 
             result1.Then(value1 => 
                 result2.Map(value2 => combineFunction(value, value1, value2))));
-    }
 
     /// <summary>
     /// Combines the current result with three other results using the <paramref name="combineFunction"/> provided to create a new value from the values of all results if all are <c>SuccessResult</c>s.
@@ -691,13 +690,15 @@ public abstract class Result<TValue>
     /// <param name="result3">Third result to combine with the current result</param>
     /// <param name="combineFunction">Function to use to combine the values of all results</param>
     /// <returns>A result object of type <c>Result&lt;<typeparamref name="TNewValue"/>&gt;</c></returns>
-    public Result<TNewValue> Combine<TValue1, TValue2, TValue3, TNewValue>(Result<TValue1> result1, Result<TValue2> result2, Result<TValue3> result3, Func<TValue, TValue1, TValue2, TValue3, TNewValue> combineFunction)
-    {
-        return this.Then(value =>
+    public Result<TNewValue> Combine<TValue1, TValue2, TValue3, TNewValue>(
+        Result<TValue1> result1, 
+        Result<TValue2> result2, 
+        Result<TValue3> result3, 
+        Func<TValue, TValue1, TValue2, TValue3, TNewValue> combineFunction
+    )   => this.Then(value =>
             result1.Then(value1 =>
                 result2.Then(value2 => 
                     result3.Map(value3 => combineFunction(value, value1, value2, value3)))));
-    }
 
     /// <summary>
     /// Combines the current result with four other results using the <paramref name="combineFunction"/> provided to create a new value from the values of all results if all are <c>SuccessResult</c>s.
@@ -713,14 +714,17 @@ public abstract class Result<TValue>
     /// <param name="result4">Fourth result to combine with the current result</param>
     /// <param name="combineFunction">Function to use to combine the values of all results</param>
     /// <returns>A result object of type <c>Result&lt;<typeparamref name="TNewValue"/>&gt;</c></returns>
-    public Result<TNewValue> Combine<TValue1, TValue2, TValue3, TValue4, TNewValue>(Result<TValue1> result1, Result<TValue2> result2, Result<TValue3> result3, Result<TValue4> result4, Func<TValue, TValue1, TValue2, TValue3, TValue4, TNewValue> combineFunction)
-    {
-        return this.Then(value =>
+    public Result<TNewValue> Combine<TValue1, TValue2, TValue3, TValue4, TNewValue>(
+        Result<TValue1> result1, 
+        Result<TValue2> result2, 
+        Result<TValue3> result3, 
+        Result<TValue4> result4, 
+        Func<TValue, TValue1, TValue2, TValue3, TValue4, TNewValue> combineFunction
+    )   => this.Then(value =>
             result1.Then(value1 =>
                 result2.Then(value2 =>
                     result3.Then(value3 =>
                         result4.Map(value4 => combineFunction(value, value1, value2, value3, value4))))));
-    }
 
     /// <summary>
     /// Converts the current result into a result of type <c>Result&lt;<typeparamref name="TNextValue"/>&gt;</c>, using the provided <c>onSuccess</c> function if the current result is a 
@@ -730,7 +734,10 @@ public abstract class Result<TValue>
     /// <param name="onSuccess">Function to use if the current result is a <c>SuccessResult</c></param>
     /// <param name="onError">Function to use if the current result is an <c>ErrorResult</c></param>
     /// <returns>A result object of type <c>Result&lt;<typeparamref name="TNextValue"/>&gt;</c></returns>
-    public abstract Result<TNextValue> Convert<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess, Func<Error, Result<TNextValue>> onError);
+    public abstract Result<TNextValue> Convert<TNextValue>(
+        Func<TValue, Result<TNextValue>> onSuccess, 
+        Func<Error, Result<TNextValue>> onError
+    );
 
     /// <summary>
     /// Converts the current result into a result of type <c>Result&lt;<typeparamref name="TNextValue"/>&gt;</c>, using the provided <c>onSuccess</c> function if the current result is a 
@@ -740,15 +747,25 @@ public abstract class Result<TValue>
     /// <param name="onSuccess">Function to use if the current result is a <c>SuccessResult</c></param>
     /// <param name="onError">Function to use if the current result is an <c>ErrorResult</c></param>
     /// <returns>The task object representing the asynchronous operation</returns>
-    public abstract Task<Result<TNextValue>> Convert<TNextValue>(Func<TValue, Task<Result<TNextValue>>> onSuccess, Func<Error, Task<Result<TNextValue>>> onError);
+    public abstract Task<Result<TNextValue>> Convert<TNextValue>(
+        Func<TValue, Task<Result<TNextValue>>> onSuccess, 
+        Func<Error, Task<Result<TNextValue>>> onError
+    );
+
+    public override bool Equals(object? other)
+        => other is Result<TValue> result && Equals(result);
+
+    protected abstract bool Equals(Result<TValue> other);
+
+    public override int GetHashCode()
+        => base.GetHashCode();
+
+    public override string? ToString()
+        => base.ToString();
 
     public static implicit operator Result<TValue>(TValue value)
-    {
-        return new SuccessResult<TValue>(value);
-    }
+        => new SuccessResult<TValue>(value);
 
     public static implicit operator Result<TValue>(Error error)
-    {
-        return new ErrorResult<TValue>(error);
-    }
+        => new ErrorResult<TValue>(error);
 }

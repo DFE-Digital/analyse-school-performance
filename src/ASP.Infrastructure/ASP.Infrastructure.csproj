@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <WarningLevel>9999</WarningLevel>
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -18,28 +19,27 @@
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
-    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.1" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.37.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
-    <PackageReference Include="Azure.Identity" Version="1.11.4" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
-    <ProjectReference Include="..\ASP.Web.Core\ASP.Web.Core.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
+        <ProjectReference Include="..\ASP.Infrastructure.Azure\ASP.Infrastructure.Azure.csproj" />
+        <ProjectReference Include="..\ASP.Infrastructure.InMemory\ASP.Infrastructure.InMemory.csproj" />
+        <ProjectReference Include="..\ASP.Web.Core\ASP.Web.Core.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
-      <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+    <ItemGroup>
+        <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
+            <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+        </Reference>
+    </ItemGroup>
 
 </Project>

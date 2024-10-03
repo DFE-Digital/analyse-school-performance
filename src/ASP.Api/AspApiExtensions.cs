@@ -1,5 +1,5 @@
 ﻿using ASP.Infrastructure;
-using ASP.Infrastructure.AzureKeyVault;
+using ASP.Infrastructure.Azure.KeyVault;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 

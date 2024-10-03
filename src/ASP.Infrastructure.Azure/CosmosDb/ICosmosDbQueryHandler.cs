@@ -1,6 +1,6 @@
 using ASP.Core.Utilities;
 
-namespace ASP.Infrastructure.DocumentDatabase
+namespace ASP.Infrastructure.Azure.CosmosDb
 {
     public interface ICosmosDbQueryHandler
     {

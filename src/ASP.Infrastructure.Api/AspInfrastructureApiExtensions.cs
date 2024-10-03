@@ -1,5 +1,6 @@
 ﻿using ASP.Api;
 using ASP.Application;
+using ASP.Infrastructure.Blob;
 using ASP.Infrastructure.DocumentDatabase;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +44,7 @@ namespace ASP.Infrastructure.Api
             services
                 .ConfigureInProcessTransportLayer()
                 .ConfigureDocumentDatabase(configuration)
+                .ConfigureBlobStorage(configuration)
                 .RegisterUseCases()
                 .RegisterRepositories()
                 .AddScoped<ApiResultConverter>();

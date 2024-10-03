@@ -1,31 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <WarningLevel>9999</WarningLevel>
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <WarningLevel>9999</WarningLevel>
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
-    <PackageReference Include="GracefulExpandoObject.Json" Version="1.6.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Azure.Data.Tables" Version="12.8.3" />
+        <PackageReference Include="GracefulExpandoObject.Json" Version="1.6.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+    
 </Project>

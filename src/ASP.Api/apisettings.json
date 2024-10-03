@@ -35,5 +35,8 @@
     },
     "DocumentDatabase": {
         "InMemory": false
+    },
+    "BlobStorage": {
+        "InMemory": false
     }
 }

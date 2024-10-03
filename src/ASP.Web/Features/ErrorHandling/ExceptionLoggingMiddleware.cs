@@ -1,10 +1,10 @@
-﻿using ASP.Infrastructure.TableStorage;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using ASP.Core.Logging;
 using ASP.Core.Results;
 using Microsoft.Extensions.Options;
 using ASP.Web.Core.ErrorHandling;
+using ASP.Core;
 
 namespace ASP.Web.Features.ErrorHandling
 {
@@ -30,9 +30,10 @@ namespace ASP.Web.Features.ErrorHandling
                 Detail = exception.StackTrace,
             };
 
-            await tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails))
+            var entry = tableStorageProblemDetails.Create(problemDetails);
+            await tableStorageProvider.AddTableEntry(entry)
                 .Switch(
-                    success => logger.LogInformation(success),
+                    _ => logger.LogInformation("Error details added to table storage with error code " + entry.RowKey),
                     failure => logger.LogError(failure.ToString()));
 
             string errorMessage = exception.Message;

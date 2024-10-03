@@ -17,6 +17,7 @@ namespace ASP.Api.FunctionalTests.Drivers
         private readonly ISpecFlowOutputHelper _outputHelper;
 
         private IDocumentDatabase? _documentDatabase = null;
+        private IBlobStorage? _blobStorage = null;
         private TransportLayerRequest? _lastRequest = null;
         private TransportLayerResponse? _lastResponse = null;
 
@@ -77,6 +78,23 @@ namespace ASP.Api.FunctionalTests.Drivers
                 {
                     _documentDatabase = scope.ServiceProvider.GetService<IDocumentDatabase>()!;
                     return _documentDatabase;
+                }
+            }
+        }
+
+        public IBlobStorage BlobStorage
+        {
+            get
+            {
+                if (_blobStorage != null)
+                {
+                    return _blobStorage;
+                }
+
+                using (var scope = _host.Services.CreateScope())
+                {
+                    _blobStorage = scope.ServiceProvider.GetService<IBlobStorage>()!;
+                    return _blobStorage;
                 }
             }
         }

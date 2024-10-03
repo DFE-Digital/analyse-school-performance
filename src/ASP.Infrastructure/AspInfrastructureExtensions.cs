@@ -9,6 +9,7 @@ using ASP.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Reflection;
 
 namespace ASP.Infrastructure
 {
@@ -27,7 +28,7 @@ namespace ASP.Infrastructure
         public static IConfiguration BindConfig<T>(this IConfiguration configuration, out T config)
             where T : class, new()
         {
-            var sectionName = typeof(T).GetField("SectionName")?.GetRawConstantValue() is string s ? s : typeof(T).Name;
+            var sectionName = typeof(T).GetField("SectionName", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)?.GetRawConstantValue() is string s ? s : typeof(T).Name;
             var section = configuration.GetSection(sectionName);
             config = section.Get<T>() ?? new();
 
@@ -37,7 +38,7 @@ namespace ASP.Infrastructure
         public static IServiceCollection ConfigureOptions<T>(this IServiceCollection services, IConfiguration configuration, out T config)
             where T : class, new()
         {
-            var sectionName = typeof(T).GetField("SectionName")?.GetRawConstantValue() is string s ? s : typeof(T).Name;
+            var sectionName = typeof(T).GetField("SectionName", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)?.GetRawConstantValue() is string s ? s : typeof(T).Name;
             var section = configuration.GetSection(sectionName);
             services.Configure<T>(section);
             config = section.Get<T>() ?? new();

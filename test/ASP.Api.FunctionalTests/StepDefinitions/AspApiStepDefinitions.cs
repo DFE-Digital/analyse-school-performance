@@ -127,7 +127,7 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
         }
 
         [Then(@"the ZIP file name should follow the expected format")]
-        public async Task ThenTheZipFileNameShouldFollowTheExpectedFormat()
+        public Task ThenTheZipFileNameShouldFollowTheExpectedFormat()
         {
             var responseBody = _api.LastResponse.BodyStream;
             Assert.NotNull(responseBody);
@@ -145,6 +145,8 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
             // Expected format: "yyyyMMdd_HHmmss_download.zip"
             var regexPattern = @"^\d{8}_\d{6}_asp_download\.zip$";
             Assert.Matches(regexPattern, fileName);
+
+            return Task.CompletedTask;
         }
     }
 }

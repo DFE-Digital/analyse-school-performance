@@ -1,7 +1,7 @@
 ﻿using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 
-namespace ASP.Infrastructure.AzureKeyVault
+namespace ASP.Infrastructure.Azure.KeyVault
 {
     public static class AzureKeyVaultExtensions
     {

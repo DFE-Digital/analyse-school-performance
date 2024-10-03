@@ -9,14 +9,15 @@ namespace ASP.Web.Core.Environment
         /// <summary>
         /// Determines if the production error page should be used based on the configuration settings.
         /// </summary>
-        /// <param name="configuration">The configuration object to retrieve settings from.</param>
+        /// <param name="environment">The host environment.</param>
+        /// <param name="options">The error handling options.</param>
         /// <returns>
         /// A boolean value indicating whether the production error page should be used. Returns <c>true</c> if the 
         /// "ForceProductionErrorPage" setting is enabled; otherwise, <c>false</c>.
         /// </returns>
-        public static bool ShouldUseProductionErrorPage(this IHostEnvironment environment, ErrorHandlingOptions errorHandlingConfig)
+        public static bool ShouldUseProductionErrorPage(this IHostEnvironment environment, ErrorHandlingOptions options)
         {
-            return environment.IsProduction() || errorHandlingConfig.ForceProductionErrorPage;
+            return environment.IsProduction() || options.ForceProductionErrorPage;
         }
 
         public static bool ShouldShowErrorMessage(this IHostEnvironment environment)

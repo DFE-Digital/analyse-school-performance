@@ -46,7 +46,7 @@ namespace ASP.Web.Core.Templating
             await modelBinder.BindModelAsync(newBindingContext);
             bindingContext.Result = newBindingContext.Result;
 
-            if (newBindingContext.Result.IsModelSet)
+            if (newBindingContext.Result.IsModelSet && newBindingContext.Result.Model != null)
             {
                 // Setting the ValidationState ensures properties on derived types are correctly 
                 bindingContext.ValidationState[newBindingContext.Result.Model] = new ValidationStateEntry

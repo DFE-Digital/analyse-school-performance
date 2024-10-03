@@ -1,64 +1,66 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
-    <OutputType>Exe</OutputType>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <WarningLevel>9999</WarningLevel>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <WarningLevel>9999</WarningLevel>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.22.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.2.1" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.17.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Azure.Identity" Version="1.11.4" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ASP.Application\ASP.Application.csproj" />
-    <ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="DfE.Data.ComponentLibrary.CleanArchitecture">
-      <HintPath>..\..\lib\DfE.Data.ComponentLibrary.CleanArchitecture.dll</HintPath>
-    </Reference>
-    <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
-      <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="apisettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="apisettings.local.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="host.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="local.settings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.22.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.1.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.2.1" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.17.2" />
+        <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="Azure.Identity" Version="1.11.4" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\ASP.Application\ASP.Application.csproj" />
+        <ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="DfE.Data.ComponentLibrary.CleanArchitecture">
+            <HintPath>..\..\lib\DfE.Data.ComponentLibrary.CleanArchitecture.dll</HintPath>
+        </Reference>
+        <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
+            <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="apisettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="apisettings.local.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="host.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="local.settings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
+    </ItemGroup>
 </Project>

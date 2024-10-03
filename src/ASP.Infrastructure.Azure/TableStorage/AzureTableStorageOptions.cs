@@ -1,9 +1,9 @@
-﻿namespace ASP.Infrastructure.TableStorage
-{
-    public class TableStorageOptions
-    {
-        public const string SectionName = "TableStorage";
+﻿using ASP.Core;
 
+namespace ASP.Infrastructure.Azure.TableStorage
+{
+    public class AzureTableStorageOptions : TableStorageOptions
+    {
         public string ManagedIdentityClientId { get; set; } = "";
         public string TableName { get; set; } = "";
         public string StorageAccountName { get; set; } = "";

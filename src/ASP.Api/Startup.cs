@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using ASP.Application;
 using ASP.Infrastructure;
+using ASP.Infrastructure.Blob;
 using Microsoft.Extensions.DependencyInjection;
 using ASP.Infrastructure.DocumentDatabase;
 
@@ -19,6 +20,7 @@ namespace ASP.Api
                 {
                     services
                         .ConfigureDocumentDatabase(context.Configuration)
+                        .ConfigureBlobStorage(context.Configuration)
                         .RegisterUseCases()
                         .RegisterRepositories()
                         .AddScoped<ApiResultConverter>();

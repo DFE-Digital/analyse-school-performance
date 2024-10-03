@@ -4,5 +4,8 @@
     },
     "DocumentDatabase": {
         "InMemory": true
+    },
+    "BlobStorage": {
+        "InMemory": true
     }
 }

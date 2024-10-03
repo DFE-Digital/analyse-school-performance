@@ -200,11 +200,6 @@ namespace ASP.Core.Results
             return await result.Convert(onSuccess, onError);
         }
 
-        public static Result<TValue> ToResult<TValue>(this TValue value)
-        {
-            return Result.Success(value);
-        }
-
         public static Result<IEnumerable<TValue>> Combine<TValue>(this IEnumerable<Result<TValue>> results)
         {
             var error = results.OfType<ErrorResult<TValue>>().FirstOrDefault();
@@ -220,6 +215,8 @@ namespace ASP.Core.Results
         }
 
         public static Result<Optional<TNewValue>> Then<TValue, TNewValue>(this Result<Optional<TValue>> result, Func<TValue, Result<TNewValue>> mapFunction)
+            where TValue : notnull
+            where TNewValue : notnull
         {
             return result.Then(optionalValue =>
                 optionalValue switch {
@@ -230,6 +227,8 @@ namespace ASP.Core.Results
         }
 
         public static async Task<Result<Optional<TNewValue>>> Then<TValue, TNewValue>(this Result<Optional<TValue>> result, Func<TValue, Task<Result<TNewValue>>> mapFunction)
+            where TValue : notnull
+            where TNewValue : notnull
         {
             return await result.Then(async optionalValue =>
                 optionalValue switch {
@@ -240,6 +239,8 @@ namespace ASP.Core.Results
         }
 
         public static async Task<Result<Optional<TNewValue>>> Then<TValue, TNewValue>(this Task<Result<Optional<TValue>>> resultTask, Func<TValue, Result<TNewValue>> mapFunction)
+            where TValue : notnull
+            where TNewValue : notnull
         {
             var result = await resultTask;
 
@@ -247,6 +248,8 @@ namespace ASP.Core.Results
         }
 
         public static async Task<Result<Optional<TNewValue>>> Then<TValue, TNewValue>(this Task<Result<Optional<TValue>>> resultTask, Func<TValue, Task<Result<TNewValue>>> mapFunction)
+            where TValue : notnull
+            where TNewValue : notnull
         {
             var result = await resultTask;
 

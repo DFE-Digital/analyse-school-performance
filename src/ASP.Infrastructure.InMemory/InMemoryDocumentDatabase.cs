@@ -3,13 +3,13 @@ using ASP.Core.Helpers;
 using ASP.Core.Results;
 using ASP.Core.Utilities;
 
-namespace ASP.Infrastructure.DocumentDatabase
+namespace ASP.Infrastructure.InMemory
 {
     public class InMemoryDocumentDatabase : IDocumentDatabase
     {
-        private MemoryStore _memoryStore;
+        private MemoryStore<DocumentDatabaseKey> _memoryStore;
 
-        public InMemoryDocumentDatabase(MemoryStore memoryStore)
+        public InMemoryDocumentDatabase(MemoryStore<DocumentDatabaseKey> memoryStore)
         {
             _memoryStore = memoryStore;
         }
@@ -21,7 +21,11 @@ namespace ASP.Infrastructure.DocumentDatabase
             CancellationToken cancellationToken = default
         ) where TItem : class
         {
-            var items = _memoryStore.Get<TItem>(container, id, partitionKeyValue);
+            var items = _memoryStore.Get(container, new(id, partitionKeyValue))
+                .MapError(e => e is NotFoundError
+                    ? Error.NotFound($@"Could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{container}"".")
+                    : e)
+                .Then(item => JsonHelper.DeserializeNotNull<TItem>(item.Contents, ignoreMissingMembers: true));
 
             return Task.FromResult(items);
         }
@@ -32,7 +36,10 @@ namespace ASP.Infrastructure.DocumentDatabase
             CancellationToken cancellationToken = default
         ) where TItem : class
         {
-            var items = _memoryStore.GetAll<TItem>(container);
+            var items = _memoryStore.GetAll(container)
+                .Then(items => items
+                    .Select(item => JsonHelper.DeserializeNotNull<TItem>(item.Contents, ignoreMissingMembers: true))
+                    .Combine());
 
             var result = items.Map(all =>
             {
@@ -51,7 +58,10 @@ namespace ASP.Infrastructure.DocumentDatabase
             CancellationToken cancellationToken = default
         ) where TItem : class
         {
-            var result = _memoryStore.GetAll<TItem>(container)
+            var result = _memoryStore.GetAll(container)
+                .Then(items => items
+                    .Select(item => JsonHelper.DeserializeNotNull<TItem>(item.Contents, ignoreMissingMembers: true))
+                    .Combine())
                 .Map(all =>
                 {
                     var items = query(all.AsQueryable()).ToList();
@@ -70,19 +80,16 @@ namespace ASP.Infrastructure.DocumentDatabase
             CancellationToken cancellationToken = default
         ) where TItem : class
         {
-            _memoryStore.Set(container, id, partitionKeyValue, item);
+            _memoryStore.Set(container, new(id, partitionKeyValue), item);
 
-            return Task.FromResult(Result.Done.ToResult());
+            return Task.FromResult(Result.Success(Result.Done));
         }
 
-        public Task<Result<Done>> DeleteAllAsync(
-            string container,
-            CancellationToken cancellationToken = default
-        )
+        public Task<Result<Done>> Clear()
         {
-            _memoryStore.ClearContainer(container);
+            _memoryStore.Clear();
 
-            return Task.FromResult(Result.Done.ToResult());
+            return Task.FromResult(Result.Success(Result.Done));
         }
     }
 }

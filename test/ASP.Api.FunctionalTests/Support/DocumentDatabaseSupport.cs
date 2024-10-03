@@ -24,10 +24,7 @@ namespace ASP.Api.FunctionalTests.Support
         [BeforeScenario]
         public async Task ClearDownData()
         {
-            await _api.DocumentDatabase.DeleteAllAsync("content");
-            await _api.DocumentDatabase.DeleteAllAsync("establishments");
-            await _api.DocumentDatabase.DeleteAllAsync("local-authorities");
-            await _api.DocumentDatabase.DeleteAllAsync("multi-academy-trusts");
+            await _api.DocumentDatabase.Clear();
         }
     }
 }

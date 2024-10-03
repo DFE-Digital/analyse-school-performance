@@ -58,6 +58,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "variables", "variables", "{
 	ProjectSection(SolutionItems) = preProject
 		pipelines\variables\common-var.yml = pipelines\variables\common-var.yml
 		pipelines\variables\dev-var.yml = pipelines\variables\dev-var.yml
+		pipelines\variables\test-var.yml = pipelines\variables\test-var.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Web", "test\ASP.Test.Web\ASP.Test.Web.csproj", "{ECD76A3D-550D-4B94-8F9A-E2A7C6FF778C}"
@@ -71,6 +72,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Core.UnitTests", "test\ASP.Core.UnitTests\ASP.Core.UnitTests.csproj", "{A6FD4398-3115-4F68-A2F4-9B8F7C75253E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Infrastructure.Api", "src\ASP.Infrastructure.Api\ASP.Infrastructure.Api.csproj", "{FD784CE4-18E2-4411-A302-4BC894E9CCE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.Infrastructure.InMemory", "src\ASP.Infrastructure.InMemory\ASP.Infrastructure.InMemory.csproj", "{971681BB-2484-4821-B631-113816071A86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.Infrastructure.Azure", "src\ASP.Infrastructure.Azure\ASP.Infrastructure.Azure.csproj", "{96518660-9DF9-43C2-B26B-07F2FB717144}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -142,6 +147,14 @@ Global
 		{FD784CE4-18E2-4411-A302-4BC894E9CCE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD784CE4-18E2-4411-A302-4BC894E9CCE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD784CE4-18E2-4411-A302-4BC894E9CCE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{971681BB-2484-4821-B631-113816071A86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{971681BB-2484-4821-B631-113816071A86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{971681BB-2484-4821-B631-113816071A86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{971681BB-2484-4821-B631-113816071A86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96518660-9DF9-43C2-B26B-07F2FB717144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96518660-9DF9-43C2-B26B-07F2FB717144}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96518660-9DF9-43C2-B26B-07F2FB717144}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96518660-9DF9-43C2-B26B-07F2FB717144}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +179,8 @@ Global
 		{1D288915-50F2-444E-AE96-5BCBFC35D5CF} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
 		{A6FD4398-3115-4F68-A2F4-9B8F7C75253E} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
 		{FD784CE4-18E2-4411-A302-4BC894E9CCE5} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
+		{971681BB-2484-4821-B631-113816071A86} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
+		{96518660-9DF9-43C2-B26B-07F2FB717144} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4950C0DD-CDAE-42E7-8BCB-678C73C51298}

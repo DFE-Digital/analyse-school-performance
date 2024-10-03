@@ -4,15 +4,16 @@
 @inject MarkdownHelper MarkdownHelper
 
 @{
-    var headings = Model.ViewContent.Headings switch {
+    var headings = Model.ViewContent.Headings switch
+    {
         List<string> l => l,
-        JArray a => a.ToObject<List<string>>(),
+        JArray a => a.ToObject<List<string>>() ?? [],
         _ => new List<string>()
     };
 
     var rows = Model.ViewContent.Rows switch {
         List<List<string>> ll => ll,
-        JArray a => a.ToObject<List<List<string>>>(),
+        JArray a => a.ToObject<List<List<string>>>() ?? [],
         _ => new List<List<string>> { new List<string>() }
     };
 

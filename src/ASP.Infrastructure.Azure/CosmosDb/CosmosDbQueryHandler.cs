@@ -4,7 +4,7 @@ using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.Providers;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 
-namespace ASP.Infrastructure.DocumentDatabase
+namespace ASP.Infrastructure.Azure.CosmosDb
 {
     public sealed class CosmosDbQueryHandler : ICosmosDbQueryHandler
     {

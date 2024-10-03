@@ -1,8 +1,7 @@
-﻿using ASP.Core;
-using ASP.Core.Logging;
+﻿using ASP.Core.Logging;
 using Microsoft.AspNetCore.Http;
 
-namespace ASP.Infrastructure.TableStorage
+namespace ASP.Core
 {
     public class TableStorageProblemDetails(HttpContext httpContext, string partitionKey) : IProblemDetails<TableStorageEntry>
     {
@@ -11,7 +10,7 @@ namespace ASP.Infrastructure.TableStorage
 
         public TableStorageEntry Create(ProblemDetails problemDetails)
         {
-            var tableStorageEntry = new TableStorageEntry
+            var tableStorageEntry = new TableStorageEntry 
             {
                 RowKey = _httpContext.TraceIdentifier,
                 PartitionKey = _partitionKey,

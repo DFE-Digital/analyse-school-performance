@@ -1,7 +1,7 @@
-﻿using ASP.Core.Helpers;
+﻿using ASP.Core;
+using ASP.Core.Helpers;
 using ASP.Core.Logging;
 using ASP.Core.Results;
-using ASP.Infrastructure.TableStorage;
 using ASP.Web.Core.Environment;
 using ASP.Web.Core.ErrorHandling;
 using Microsoft.AspNetCore.Http.Features;
@@ -131,10 +131,11 @@ namespace ASP.Web.Features.ErrorHandling
             };
 
             var tableStorageProblemDetails = new TableStorageProblemDetails(context, context.Response.StatusCode.ToString());
+            var entry = tableStorageProblemDetails.Create(problemDetails);
 
-            await _tableStorageProvider.AddTableEntry(tableStorageProblemDetails.Create(problemDetails))
+            await _tableStorageProvider.AddTableEntry(entry)
                 .Switch(
-                    success => _logger.LogInformation(success),
+                    _ => _logger.LogInformation("Error details added to table storage with error code " + entry.RowKey),
                     failure => _logger.LogError(failure.ToString())
                 );
 

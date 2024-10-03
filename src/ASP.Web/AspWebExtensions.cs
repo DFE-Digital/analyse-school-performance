@@ -1,5 +1,5 @@
 ﻿using ASP.Infrastructure;
-using ASP.Infrastructure.AzureKeyVault;
+using ASP.Infrastructure.Azure.KeyVault;
 using ASP.Web.Areas;
 using ASP.Web.Features;
 using Microsoft.AspNetCore.Mvc.Razor;

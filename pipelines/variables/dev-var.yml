@@ -10,5 +10,3 @@ variables:
   value: s192d01-app-dev-01
 - name: functionAppName
   value: s192d01-func-dev-01
-
-  

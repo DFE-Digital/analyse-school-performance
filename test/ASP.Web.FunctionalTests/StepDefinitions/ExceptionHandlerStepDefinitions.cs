@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using ASP.Core.Results;
 using ASP.Web.FunctionalTests.Drivers;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
@@ -13,20 +13,18 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             _web = web;
         }
 
-
         [BeforeScenario(Order = 0)]
-        public void ClearTableStorageCookies()
+        public Task ClearTableStorageCookies()
         {
-            _web.TableStorageProvider.ClearTableStorage();
+            return _web.TableStorageProvider.Clear();
         }
 
-        [Then(@"the exception details are added to table storage")]
-        public void ExceptionDetailsAreAddedToTableStorage()
+        [Then(@"an? (.+) entry should be added to table storage")]
+        public async Task AnErrorWithStatusCodeWasAddedToTableStorage(string errorType)
         {
-            var actual = _web.TableStorageProvider._tableStorageEntry
-                           .Any(t => t.PartitionKey == HttpStatusCode.InternalServerError.ToString());
+            var actual = await _web.TableStorageProvider.Exists(errorType);
 
-            Assert.True(actual);
+            Assert.Equal(Result.Success(true), actual);
         }
     }
 }

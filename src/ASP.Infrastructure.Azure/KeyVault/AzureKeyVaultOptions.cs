@@ -1,4 +1,4 @@
-﻿namespace ASP.Infrastructure.AzureKeyVault
+﻿namespace ASP.Infrastructure.Azure.KeyVault
 {
     public class AzureKeyVaultOptions
     {

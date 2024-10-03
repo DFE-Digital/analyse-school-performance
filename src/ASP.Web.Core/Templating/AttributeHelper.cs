@@ -19,9 +19,8 @@
 
 
             string serverHost = _requestHostProvider.RequestHost;
-            Uri uri;
 
-            if (Uri.TryCreate(url, UriKind.Absolute, out uri))
+            if (Uri.TryCreate(url, UriKind.Absolute, out var uri))
             {
                 if (uri.Host != serverHost)
                     return Blank;

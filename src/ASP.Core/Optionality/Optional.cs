@@ -3,6 +3,7 @@
 public static class Optional
 {
     public static Optional<TValue> FromNullable<TValue>(TValue? value)
+        where TValue : notnull
     {
         return value is null
             ? Optional<TValue>.None
@@ -11,22 +12,29 @@ public static class Optional
 }
 
 public abstract class Optional<TValue>
+    where TValue : notnull
 {
     public abstract TValue GetValueOrDefault(TValue defaultValue);
 
     public abstract bool HasValue { get; }
 
-    public abstract Optional<TNextValue> Map<TNextValue>(Func<TValue, TNextValue> mapFunction);
+    public abstract Optional<TNextValue> Map<TNextValue>(Func<TValue, TNextValue> mapFunction)
+        where TNextValue : notnull;
 
-    public abstract Task<Optional<TNextValue>> Map<TNextValue>(Func<TValue, Task<TNextValue>> mapFunction);
+    public abstract Task<Optional<TNextValue>> Map<TNextValue>(Func<TValue, Task<TNextValue>> mapFunction)
+        where TNextValue : notnull;
 
-    public abstract Optional<TNextValue> Then<TNextValue>(Func<TValue, Optional<TNextValue>> onSome);
+    public abstract Optional<TNextValue> Then<TNextValue>(Func<TValue, Optional<TNextValue>> onSome)
+        where TNextValue : notnull;
 
-    public abstract Task<Optional<TNextValue>> Then<TNextValue>(Func<TValue, Task<Optional<TNextValue>>> onSome);
+    public abstract Task<Optional<TNextValue>> Then<TNextValue>(Func<TValue, Task<Optional<TNextValue>>> onSome)
+        where TNextValue : notnull;
 
-    public abstract TNextValue Match<TNextValue>(Func<TValue, TNextValue> onSome, Func<TNextValue> onNone);
+    public abstract TNextValue Match<TNextValue>(Func<TValue, TNextValue> onSome, Func<TNextValue> onNone)
+        where TNextValue : notnull;
 
-    public abstract Task<TNextValue> Match<TNextValue>(Func<TValue, Task<TNextValue>> onSome, Func<Task<TNextValue>> onNone);
+    public abstract Task<TNextValue> Match<TNextValue>(Func<TValue, Task<TNextValue>> onSome, Func<Task<TNextValue>> onNone)
+        where TNextValue : notnull;
 
     public abstract void Switch(Action<TValue> onSome, Action onNone);
 
@@ -40,10 +48,20 @@ public abstract class Optional<TValue>
 
     public abstract Task IfNone(Task actionIfNone);
 
-    public static Optional<TValue> Some(TValue value)
-    {
-        return new Some<TValue>(value);
-    }
+    public override bool Equals(object? other)
+        => other is Optional<TValue> result && Equals(result);
 
-    public static Optional<TValue> None => new None<TValue>();
+    public override int GetHashCode()
+        => base.GetHashCode();
+
+    public override string? ToString()
+        => base.ToString();
+
+    protected abstract bool Equals(Optional<TValue> other);
+
+    public static Optional<TValue> Some(TValue value)
+        => new Some<TValue>(value);
+
+    public static Optional<TValue> None
+        => None<TValue>.Instance;
 }

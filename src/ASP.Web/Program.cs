@@ -1,4 +1,5 @@
 using ASP.Infrastructure.Api;
+using ASP.Infrastructure.TableStorage;
 using ASP.Web.Components;
 using ASP.Web.Core.Templating;
 using ASP.Web.Features;
@@ -33,6 +34,7 @@ public class Program
             .ConfigureAuthentication(builder.Configuration)
             .ConfigureAuthorization(builder.Configuration)
             .ConfigureErrorHandling(builder.Configuration, out var errorHandlingConfig)
+            .ConfigureTableStorage(builder.Configuration)
             .ConfigureApiClient(builder.Configuration)
             .ConfigureContentTemplates()
             .ConfigureContentSecurityPolicy()

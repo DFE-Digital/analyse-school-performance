@@ -10,4 +10,4 @@ Scenario: Application displays error page on server errors
 Scenario: Exception handler updates table storage
    When the application throws an exception
    Then I should get a 500 response
-   And the exception details are added to table storage
+   And an InternalServerError entry should be added to table storage

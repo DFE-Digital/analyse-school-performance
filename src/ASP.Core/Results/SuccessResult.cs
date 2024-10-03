@@ -14,9 +14,7 @@
         }
 
         public override Result<TNextValue> Map<TNextValue>(Func<TValue, TNextValue> mapFunction)
-        {
-            return new SuccessResult<TNextValue>(mapFunction(Value));
-        }
+            => new SuccessResult<TNextValue>(mapFunction(Value));
 
         public override async Task<Result<TNextValue>> Map<TNextValue>(Func<TValue, Task<TNextValue>> mapFunction)
         {
@@ -26,54 +24,34 @@
         }
 
         public override Result<TNextValue> Then<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess)
-        {
-            return onSuccess(Value);
-        }
+            => onSuccess(Value);
 
         public override Task<Result<TNextValue>> Then<TNextValue>(Func<TValue, Task<Result<TNextValue>>> onSuccess)
-        {
-            return onSuccess(Value);
-        }
+            => onSuccess(Value);
 
         public override Result<TValue> MapError(Func<Error, Error> onError)
-        {
-            return this;
-        }
+            => this;
 
         public override Task<Result<TValue>> MapError(Func<Error, Task<Error>> onError)
-        {
-            return Task.FromResult((Result<TValue>)this);
-        }
+            => Task.FromResult((Result<TValue>)this);
 
         public override Result<TValue> MapErrorMessage(Func<string, string> mapFunction)
-        {
-            return this;
-        }
+            => this;
 
         public override Task<Result<TValue>> MapErrorMessage(Func<string, Task<string>> mapFunction)
-        {
-            return Task.FromResult((Result<TValue>)this);
-        }
+            => Task.FromResult((Result<TValue>)this);
 
         public override TNextValue Match<TNextValue>(Func<TValue, TNextValue> onSuccess, Func<Error, TNextValue> onError)
-        {
-            return onSuccess(Value);
-        }
+            => onSuccess(Value);
 
         public override Task<TNextValue> Match<TNextValue>(Func<TValue, Task<TNextValue>> onSuccess, Func<Error, Task<TNextValue>> onError)
-        {
-            return onSuccess(Value);
-        }
+            => onSuccess(Value);
 
         public override void Switch(Action<TValue> onSuccess, Action<Error> onError)
-        {
-            onSuccess(Value);
-        }
+            => onSuccess(Value);
 
         public override Task Switch(Func<TValue, Task> onSuccess, Func<Error, Task> onError)
-        {
-            return onSuccess(Value);
-        }
+            => onSuccess(Value);
 
         public override Result<TValue> OnSuccess(Action<TValue> onSuccess)
         {
@@ -88,53 +66,45 @@
         }
 
         public override Result<TValue> OnError(Action<Error> onError)
-        {
-            return this;
-        }
+            => this;
 
         public override Task<Result<TValue>> OnError(Func<Error, Task> onError)
-        {
-            return Task.FromResult((Result<TValue>)this);
-        }
+            => Task.FromResult((Result<TValue>)this);
 
         public override TValue GetValueOrDefault(TValue defaultValue)
-        {
-            return Value;
-        }
+            => Value;
 
         public override SuccessResult<TValue> DefaultIfError(TValue defaultValue)
-        {
-            return this;
-        }
+            => this;
 
         public override Result<TValue> DefaultIf(Func<Error, bool> predicate, TValue defaultValue)
-        {
-            return this;
-        }
+            => this;
 
         public override Result<TValue> ErrorIf(Func<TValue, bool> predicate, Error error)
-        {
-            return predicate(Value) ? error : this;
-        }
+            => predicate(Value) ? error : this;
 
         public override Result<TValue> IfErrorThen(Func<Error, bool> predicate, Func<Result<TValue>> onError)
-        {
-            return this;
-        }
+            => this;
 
         public override Task<Result<TValue>> IfErrorThen(Func<Error, bool> predicate, Func<Task<Result<TValue>>> onError)
-        {
-            return Task.FromResult((Result<TValue>)this);
-        }
+            => Task.FromResult((Result<TValue>)this);
 
         public override Result<TNextValue> Convert<TNextValue>(Func<TValue, Result<TNextValue>> onSuccess, Func<Error, Result<TNextValue>> onError)
-        {
-            return onSuccess(Value);
-        }
+            => onSuccess(Value);
 
         public override async Task<Result<TNextValue>> Convert<TNextValue>(Func<TValue, Task<Result<TNextValue>>> onSuccess, Func<Error, Task<Result<TNextValue>>> onError)
-        {
-            return await onSuccess(Value);
-        }
+            => await onSuccess(Value);
+
+        protected override bool Equals(Result<TValue> obj)
+            => obj is SuccessResult<TValue> other && (
+                Value is null && other.Value is null ||
+                Value is not null && Value.Equals(other.Value)
+            );
+
+        public override int GetHashCode()
+            => HashCode.Combine(Value);
+
+        public override string ToString()
+            => $"Success: {Value}";
     }
 }
