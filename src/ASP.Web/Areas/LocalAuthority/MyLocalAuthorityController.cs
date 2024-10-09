@@ -34,9 +34,16 @@ namespace ASP.Web.Areas.LocalAuthority
         public async Task<IActionResult> DownloadData()
         {
             return await User.GetLocalAuthorityCode()
-                .Then(laCode => base.DownloadData(laCode))
+                .Then(laCode => base.DownloadData(laCode, new([
+                ], "Download data")))
                 .ToActionResult(View, _hostEnvironment);
         }
+        protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string laCode, string laName) => new([
+        ], "My local authority");
+
+        protected override IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string laCode, string laName) => [
+            new("My local authority", $"/my-local-authority/")
+        ];
 
         protected override Task<Result<string>> GetLocalAuthorityName(string laCode)
         {
@@ -46,15 +53,12 @@ namespace ASP.Web.Areas.LocalAuthority
                     : error);
         }
 
-        protected override Task<Result<LocalAuthorityPageViewModel>> GetLocalAuthorityPage(string laCode, string laName, string? page = null)
+        protected override Task<Result<LocalAuthorityPageViewModel>> GetLocalAuthorityPage(string laCode, string laName, BreadcrumbTrailViewModel breadcrumbs)
         {
             var viewModel = new LocalAuthorityPageViewModel(
                 "My local authority",
                 laName,
-                page == null
-                    ? new BreadcrumbTrailViewModel("My local authority")
-                    : new BreadcrumbTrailViewModel(page)
-                        .AddBreadcrumb("My local authority", $"/my-local-authority/")
+                breadcrumbs
             );
 
             return Task.FromResult(Result.Success(viewModel));

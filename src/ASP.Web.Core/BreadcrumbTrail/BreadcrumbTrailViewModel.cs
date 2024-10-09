@@ -13,12 +13,26 @@
             CurrentPageTitle = currentPage;
         }
 
+        public BreadcrumbTrailViewModel(IEnumerable<BreadcrumbItem> breadcrumbs, string currentPage)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(currentPage, nameof(currentPage));
+
+            Breadcrumbs = breadcrumbs.ToList();
+            CurrentPageTitle = currentPage;
+        }
+
         public BreadcrumbTrailViewModel AddBreadcrumb(string title, string url)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(title, nameof(title));
             ArgumentException.ThrowIfNullOrWhiteSpace(url, nameof(url));
 
             Breadcrumbs.Add(new BreadcrumbItem(title, url));
+            return this;
+        }
+
+        public BreadcrumbTrailViewModel Prepend(IEnumerable<BreadcrumbItem> breadcrumbs)
+        {
+            Breadcrumbs.InsertRange(0, breadcrumbs);
             return this;
         }
     }

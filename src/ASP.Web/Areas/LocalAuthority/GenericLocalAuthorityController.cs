@@ -23,27 +23,34 @@ namespace ASP.Web.Areas.LocalAuthority
 
         [HttpGet("")]
         public new Task<IActionResult> LandingPage(string laCode, string? revision)
-        {
+        {            
             return base.LandingPage(laCode, revision)
                 .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("download-data")]
-        public new Task<IActionResult> DownloadData(string laCode)
+        public Task<IActionResult> DownloadData(string laCode)
         {
-            return base.DownloadData(laCode)
+            return base.DownloadData(laCode, new([
+                ], "Download data"))
                 .ToActionResult(View, _hostEnvironment);
         }
+        protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string laCode, string laName) => new([
+            new("All local authorities", $"/local-authorities/")
+        ], laName);
 
-        protected override Task<Result<LocalAuthorityPageViewModel>> GetLocalAuthorityPage(string laCode, string laName, string? page = null)
+        protected override IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string laCode, string laName) => [
+            new("All local authorities", $"/local-authorities/"),
+            new(laName, $"/local-authority/{laCode}/"),
+        ];
+
+        protected override Task<Result<LocalAuthorityPageViewModel>> GetLocalAuthorityPage(string laCode, string laName,
+            BreadcrumbTrailViewModel breadcrumbs)
         {
             var viewModel = new LocalAuthorityPageViewModel(
                 laName,
                 laName,
-                page == null
-                    ? new BreadcrumbTrailViewModel(laName)
-                    : new BreadcrumbTrailViewModel(page)
-                        .AddBreadcrumb(laName, $"local-authority/{laCode}")
+                breadcrumbs
             );
 
             return Task.FromResult(Result.Success(viewModel));

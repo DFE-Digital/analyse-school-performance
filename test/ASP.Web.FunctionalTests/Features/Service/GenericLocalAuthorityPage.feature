@@ -60,9 +60,18 @@ Scenario: Local authority page cards should be populated from the "la-landing-pa
         	{
                 "ViewId": "Card",
                 "ViewContent": {
-                    "Id": "app-card-download-data",
+                    "Id": "app-card-la-all-schools",
+                    "Title": "All schools",
+                    "LinkUrl": "schools/",
+                    "Text": "All schools found in this LA."
+                }
+            },
+            {
+                "ViewId": "Card",
+                "ViewContent": {
+                    "Id": "app-card-la-download",
                     "Title": "Download data",
-                    "LinkUrl": "download-data",
+                    "LinkUrl": "download-data/",
                     "Text": "Download data for Analyse school performance and Key to success."
                 }
             }
@@ -77,6 +86,28 @@ Scenario: Local authority page cards should be populated from the "la-landing-pa
     }
     """
     When I navigate to /local-authority/302/
-    Then the element "#app-card-download-data h2 a" should have the href "download-data"
-    And the element "#app-card-download-data h2 a" should have the text content "Download data"
-    And the element "#app-card-download-data p" should have the text content "Download data for Analyse school performance and Key to success."
+    Then the element "#app-card-la-all-schools h2 a" should have the href "schools/"
+    And the element "#app-card-la-all-schools h2 a" should have the text content "All schools"
+    And the element "#app-card-la-all-schools p" should have the text content "All schools found in this LA."
+    Then the element "#app-card-la-download h2 a" should have the href "download-data/"
+    And the element "#app-card-la-download h2 a" should have the text content "Download data"
+    And the element "#app-card-la-download p" should have the text content "Download data for Analyse school performance and Key to success."
+    
+@Javascript:disabled
+Scenario: Page should show a breadcrumb trail
+    Given I am a DfE Named user
+    And Local Authority "301" exists:
+    """
+    {
+        "Name": "Test Name",
+        "Code": "301"
+    }
+    """
+    When I navigate to /local-authority/301/
+    Then I should get a 200 response
+    And the page title should be "Test Name | Analyse school performance"
+    And the element "[data-testid='all-school-in-la-sub-title']" should have the text content "All schools within Test Name"
+    And the element "[data-testid='breadcrumb-home']" should have the href "/"
+    And the element "[data-testid='breadcrumb-all-local-authorities']" should have the text content "All local authorities"
+    And the element "[data-testid='breadcrumb-all-local-authorities']" should have the href "/local-authorities/"
+    And the element "[data-testid='breadcrumb-current-page']" should have the text content "Test Name"

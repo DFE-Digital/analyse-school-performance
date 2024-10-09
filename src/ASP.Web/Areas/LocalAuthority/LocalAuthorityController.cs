@@ -1,6 +1,7 @@
 ﻿using ASP.Application;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
+using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Core.Templating;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,20 +24,25 @@ namespace ASP.Web.Areas.LocalAuthority
         {
             return await GetLocalAuthorityName(laCode)
                 .Then(laName => GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
-                .Then(contentTemplate => GetLocalAuthorityPage(laCode, laName)
-                .Map(page => new LocalAuthorityContentPageViewModel(
-                    page,
-                    contentTemplate
-                ))));
+                    .Then(contentTemplate => GetLocalAuthorityPage(laCode, laName, GetLandingPageBreadcrumbs(laCode, laName))
+                        .Map(pageViewModel => new LocalAuthorityContentPageViewModel(
+                            pageViewModel,
+                            contentTemplate
+                        ))));
         }
 
-        protected async Task<Result<LocalAuthorityPageViewModel>> DownloadData(string laCode)
+        protected async Task<Result<LocalAuthorityPageViewModel>> DownloadData(string laCode, BreadcrumbTrailViewModel breadcrumbs)
         {
             return await GetLocalAuthorityName(laCode)
-                .Then(laName => GetLocalAuthorityPage(laCode, laName));
+                .Then(laName => GetLocalAuthorityPage(laCode, laName, 
+                    breadcrumbs.Prepend(GetChildPageBreadcrumbs(laCode, laName))));
         }
 
-        protected abstract Task<Result<LocalAuthorityPageViewModel>> GetLocalAuthorityPage(string laCode, string laName, string? page = null);
+        protected abstract BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string laCode, string laName);
+        
+        protected abstract IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string laCode, string laName);
+        
+        protected abstract Task<Result<LocalAuthorityPageViewModel>> GetLocalAuthorityPage(string laCode, string laName, BreadcrumbTrailViewModel breadcrumbs);
 
         protected virtual Task<Result<string>> GetLocalAuthorityName(string laCode)
         {
