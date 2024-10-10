@@ -75,6 +75,12 @@
       <DesignTime>true</DesignTime>
       <Visible>true</Visible>
     </Compile>
+    <Compile Update="Features\GetAllLocalAuthorities.feature.cs">
+      <DependentUpon>GetAllLocalAuthorities.feature</DependentUpon>
+      <AutoGen>true</AutoGen>
+      <DesignTime>true</DesignTime>
+      <Visible>true</Visible>
+    </Compile>
   </ItemGroup>
 
 </Project>

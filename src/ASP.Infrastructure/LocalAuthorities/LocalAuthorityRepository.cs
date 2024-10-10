@@ -1,6 +1,7 @@
 ﻿using ASP.Core;
 using ASP.Core.LocalAuthorities;
 using ASP.Core.Results;
+using ASP.Core.Utilities;
 using ASP.Infrastructure.LocalAuthorities.DAO;
 using ASP.Infrastructure.LocalAuthorities.DAO.Mapper;
 
@@ -24,5 +25,19 @@ public class LocalAuthorityRepository : ILocalAuthorityRepository
                 ? Error.NotFound($@"Could not find Local Authority with code ""{code}"".")
                 : e)
             .Map(dto => dto.MapToDomainEntityLocalAuthority());
+    }
+
+    public async Task<Result<ResultsPage<LocalAuthority>>> GetAllLocalAuthorities(int page,
+        int resultsPerPage, CancellationToken cancellationToken = default)
+    {
+        return await _documentDB.QueryPagedAsync<LocalAuthorityDAO>(
+                ContainerKey,
+                q => q.OrderBy(x => x.Name),
+                page,
+                resultsPerPage,
+                cancellationToken)
+            .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no Local Authorities."))
+            .Map(results => new ResultsPage<LocalAuthority>(page, resultsPerPage, results.TotalResults,
+                results.Map(r => r.MapToDomainEntityLocalAuthority())));
     }
 }

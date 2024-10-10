@@ -16,6 +16,14 @@ public class ResultsPage<T>
         TotalResults = totalResults;
         Results = results;
     }
+    
+    public ResultsPage(int page, int resultsPerPage, int totalResults, ResultsPage<T> resultsPage)
+    {
+        Page = page;
+        ResultsPerPage = resultsPerPage;
+        TotalResults = totalResults;
+        Results = resultsPage.Results;
+    }
 
     public ResultsPage<TNew> Map<TNew>(Func<T, TNew> mapFunction)
     {
