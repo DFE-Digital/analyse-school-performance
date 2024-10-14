@@ -1,4 +1,5 @@
 ﻿using ASP.Web.Areas.Home;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,24 @@ namespace ASP.Web.Features.Authentication
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 OpenIdConnectDefaults.AuthenticationScheme
             );
+        }
+        
+        [HttpGet]
+        [Route("login")]
+        public IActionResult Login(string returnUrl = "/")
+        {
+            return Challenge(new AuthenticationProperties { RedirectUri = returnUrl }, OpenIdConnectDefaults.AuthenticationScheme);
+        }
+        
+        [HttpGet]
+        [Route("auth/status")]
+        public IActionResult CheckAuthStatus()
+        {
+            if (User.Identity is { IsAuthenticated: true })
+            {
+                return Ok();
+            }
+            return Unauthorized();
         }
     }
 }

@@ -24,8 +24,26 @@ export default class AutoComplete {
         };
     }
 
-    search = (query, populateResults, suggestUrl) => {
-        console.log(`Search triggered with query: ${query}`);  // Check if search is triggered
+    async checkAuthStatus() {
+        try {
+            const response = await fetch('/account/auth/status');
+            return response.ok;
+        } catch (error) {
+            console.error('Error checking auth status:', error);
+            return false;
+        }
+    }
+
+    search = async (query, populateResults, suggestUrl) => {
+        console.log(`Search triggered with query: ${query}`);
+
+        const isAuthenticated = await this.checkAuthStatus();
+        if (!isAuthenticated) {
+            console.log('Not authenticated. Redirecting to login...');
+            window.location.href = '/account/login?returnUrl=' + encodeURIComponent(window.location.pathname);
+            return;
+        }
+
         const encodedQuery = encodeURIComponent(query);
         const urlWithQuery = `${suggestUrl}?${this.queryParameter}=${encodedQuery}`;
 
@@ -35,28 +53,35 @@ export default class AutoComplete {
         const controller = new AbortController();
         this.currentRequestSignal = controller;
 
-        fetch(urlWithQuery, {
-            method: "GET",
-            headers: new Headers({"Content-Type": "application/json"}),
-            signal: controller.signal
-        })
-        .then(response => {
+        try {
+            const response = await fetch(urlWithQuery, {
+                method: "GET",
+                headers: new Headers({"Content-Type": "application/json"}),
+                signal: controller.signal
+            });
+
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                console.error(`Network response was not ok: ${response.status} ${response.statusText}`);
+                populateResults([]);
+                return;
             }
-            return response.json();
-        })
-        .then(data => {
-            populateResults(data[this.resultDataProperty]);
-        })
-        .catch(error => {
-            if (error.name !== 'AbortError') {
-                console.error('Error fetching search data:', error);
+
+            const data = await response.json();
+            if (data && data[this.resultDataProperty]) {
+                populateResults(data[this.resultDataProperty]);
+            } else {
+                console.log('No results found or invalid data structure');
                 populateResults([]);
             }
-        });
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log('Request was aborted');
+            } else {
+                console.error('Error fetching search data:', error);
+            }
+            populateResults([]);
+        }
     }
-    
     bindAutoSuggest() {
         const container = document.querySelector(`#${this.containerId}`);
         const suggestUrl = encodeURI(container.dataset.suggestUrl);
