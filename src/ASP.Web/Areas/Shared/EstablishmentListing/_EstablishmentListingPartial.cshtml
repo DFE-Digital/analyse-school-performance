@@ -10,18 +10,18 @@
     @foreach (var item in Model.EstablishmentListingModel)
     {
         <li>
-            <div class="app-establishment-listing-name-container">
-                <h2 class="govuk-heading-m app-establishment-listing-name-heading">
+            <div class="app-listing-name-container">
+                <h2 class="govuk-heading-m app-listing-name-heading">
                     <a class="govuk-link" data-testid="establishment-listing-name-@counter" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
                         @item.Name
                     </a>
                 </h2>
-                <a class="govuk-link app-establishment-listing-tile-arrow" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
+                <a class="govuk-link app-listing-tile-arrow" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
                     <span class="govuk-visually-hidden">More information on @item.Name</span>
                 </a>
             </div>
 
-            <table class="govuk-table app-establishment-listing-table">
+            <table class="govuk-table app-listing-table">
                 <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Address</th>

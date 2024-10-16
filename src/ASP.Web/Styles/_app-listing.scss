@@ -1,4 +1,4 @@
-﻿.app-establishment-listing-tile-arrow {
+﻿.app-listing-tile-arrow {
   width: 19px;
   height: 34px;
   background-color: white;
@@ -10,13 +10,13 @@
   margin-left: 10px;
 }
 
-.app-establishment-listing-name-container {
+.app-listing-name-container {
   display: flex;
   align-items: center;
   width: 100%;
 }
 
-.app-establishment-listing-name-container .app-establishment-listing-name-heading {
+.app-listing-name-container .app-listing-name-heading {
   flex-grow: 1;
   margin: 0;
   white-space: nowrap;
@@ -24,11 +24,11 @@
   text-overflow: ellipsis;
 }
 
-.app-establishment-listing-table {
+.app-listing-table {
   table-layout: fixed;
   width: 100%;
 }
-.app-establishment-listing-table .govuk-table__header, .app-establishment-listing-table .govuk-table__cell {
+.app-listing-table .govuk-table__header, .app-listing-table .govuk-table__cell {
   width: 50%; /* This ensures each column is half the table width */
   vertical-align: top;
   line-height: 1.5;

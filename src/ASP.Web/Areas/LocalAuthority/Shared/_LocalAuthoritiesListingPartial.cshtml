@@ -1,0 +1,37 @@
+﻿@using ASP.Web.Areas.LocalAuthority
+@model ASP.Web.Areas.LocalAuthority.Shared.LocalAuthoritiesListingViewModel
+@{
+    var counter = 1;
+}
+<ul class="govuk-list">
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+    @foreach (var item in Model.LocalAuthorities)
+    {
+        <li>
+            <div class="app-listing-name-container">
+                <h2 class="govuk-heading-m app-listing-name-heading">
+                    <a class="govuk-link" data-testid="all-local-authorities-listing-name-@counter" href="@Url.Action(nameof(GenericLocalAuthorityController.LandingPage), "GenericLocalAuthority", new { Area = "LocalAuthority", laCode = item.Code })">
+                        @item.Name
+                    </a>
+                </h2>
+                <a class="govuk-link app-listing-tile-arrow" href="@Url.Action(nameof(GenericLocalAuthorityController.LandingPage), "GenericLocalAuthority", new { Area = "LocalAuthority", laCode = item.Code })">
+                    <span class="govuk-visually-hidden">More information on @item.Name</span>
+                </a>
+            </div>
+
+            <table class="govuk-table app-listing-table">
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Code</th>
+                    <td class="govuk-table__cell" data-testid="all-local-authorities-listing-code-@counter">
+                        @item.Code
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </li>
+        <hr class="govuk-section-break govuk-section-break--m"/>
+        counter++;
+    }
+</ul>

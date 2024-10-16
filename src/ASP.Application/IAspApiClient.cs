@@ -5,6 +5,7 @@ using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
+using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 using ASP.Core.Establishments.Search;
@@ -12,6 +13,7 @@ using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
 using ASP.Core.Templating;
+using ASP.Core.Utilities;
 
 namespace ASP.Application
 {
@@ -26,5 +28,6 @@ namespace ASP.Application
         Task<Result<UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request);
         Task<Result<UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>> GetMultiAcademyTrust(GetMultiAcademyTrustRequest request);
         Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> GetAllEstablishments(GetAllEstablishmentsRequest request);
+        Task<Result<ResultsPage<ASP.Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>>> GetAllLocalAuthorities(GetAllLocalAuthoritiesRequest request);
     }
 }

@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net;
+using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
+using ASP.Core.Utilities;
 
 namespace ASP.Infrastructure.Api
 {
@@ -194,6 +196,27 @@ namespace ASP.Infrastructure.Api
             return await ApiGet(url, queryString)
                 .Then(response =>
                     JsonHelper.DeserializeNotNull<ScopedResultsPage<EstablishmentListingDTO>>(response));
+        }
+        
+        public async Task<Result<ResultsPage<ASP.Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>>> GetAllLocalAuthorities(
+            GetAllLocalAuthoritiesRequest request)
+        {
+            var url = "/api/GetAllLocalAuthorities";
+            var queryString = new QueryString();
+            
+            request.Page.IfSome(value =>
+            {
+                queryString = queryString.Add("page", value.ToString());
+            });
+
+            request.ResultsPerPage.IfSome(value =>
+            {
+                queryString = queryString.Add("resultsPerPage", value.ToString());
+            });
+
+            return await ApiGet(url, queryString)
+                .Then(response =>
+                    JsonHelper.DeserializeNotNull<ResultsPage<ASP.Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>>(response));
         }
 
         private async Task<Result<string>> ApiGet(string url, QueryString? queryString)

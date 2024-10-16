@@ -1,3 +1,5 @@
+@using ASP.Web.Areas.LocalAuthority.Shared
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ASP.Web.Areas.LocalAuthority.LocalAuthoritiesPageViewModel
 @{
     ViewData["Title"] = Model.Title;
@@ -7,8 +9,21 @@
     @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
     <div class="govuk-width-container govuk-main-wrapper">
         <h1 class="govuk-heading-xl">@Model.Title</h1>
-        <div class="govuk-width-container">
-            <p class="govuk-body">This page is still in progress...</p>
+        <div class="govuk-grid-row">
+            @if (Model.TotalCount > 0)
+            {
+                <div class="govuk-grid-column-two-thirds">
+                    @if (Model.PaginationModel != null)
+                    {
+                        <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Header"))/>
+                    }
+                    @await Html.PartialAsync("~/Areas/LocalAuthority/Shared/_LocalAuthoritiesListingPartial.cshtml", new LocalAuthoritiesListingViewModel(Model.Results))
+                    @if (Model.PaginationModel != null)
+                    {
+                        <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Footer"))/>
+                    }
+                </div>
+            }
         </div>
     </div>
 </div>
