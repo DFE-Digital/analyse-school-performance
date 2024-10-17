@@ -90,7 +90,7 @@ Scenario: Correct results displayed for LA Named user with schools in their Loca
         }
     """
     When I navigate to /my-schools/
-    Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+    Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
     And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
     And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
 Examples: 
@@ -157,7 +157,7 @@ Scenario: MAT Named user sees correct list of schools associated with their Mult
         }
     """
     When I navigate to /my-schools/
-    Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+    Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
     And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
     And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
 Examples: 
@@ -236,10 +236,67 @@ Scenario: Diocese Named user sees correct list of schools associated with their 
         }
     """
     When I navigate to /my-schools/
-    Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+    Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
     And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
     And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
 Examples: 
   | Counter | URN    | Name          |
   | 1       | 111111 | Test School 1 |
   | 2       | 333333 | Test School 3 |
+  
+@Javascript:disabled
+Scenario: Pagination in my schools    
+    Given I am a MAT Named user for Multi-Academy Trust "1234"
+    And Multi Academy Trust "1234" exists:
+    """
+        { 
+         "name": "Test MAT"
+        }
+    """
+    And 251 Establishments exist with properties:
+      | urn          | name                        | multiAcademyTrust |
+      | (100000 + n) | Primary School (100000 + n) | { "uid": "1234" } |
+    When I navigate to /my-schools/
+    Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 50 of 251 schools"
+    And the element "*[data-testid='PageLinks-Footer-1']" should have the href "/my-schools/?page=1"
+    And the element "*[data-testid='PageLinks-Footer-2']" should have the href "/my-schools/?page=2"
+    And the element "*[data-testid='PageLinks-Footer-3']" should have the href "/my-schools/?page=3"
+    And the element "*[data-testid='PageLinks-Footer-4']" should have the href "/my-schools/?page=4"
+    And the element "*[data-testid='PageLinks-Footer-5']" should have the href "/my-schools/?page=5"
+    And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/my-schools/?page=2"
+    And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
+    And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100002"
+    And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100003"
+    And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100004"
+    And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100005"
+    And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100001"
+    And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100002"
+    And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100003"
+    And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100004"
+    And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100005"
+    
+@Javascript:disabled
+Scenario: Page should show a breadcrumb trail
+    Given I am a MAT Named user for Multi-Academy Trust "1234"
+    And Multi Academy Trust "1234" exists:
+    """
+        { 
+         "name": "Test MAT"
+        }
+    """
+    And Establishment "111111" exists:
+    """
+        {
+         "name": "Test School 1",
+          "multiAcademyTrust": {
+              "uid": 1234
+          }
+        }
+    """
+    When I navigate to /my-schools/
+    Then I should get a 200 response
+    And the page title should be "My schools | Analyse school performance"
+    And the element "h1.govuk-heading-xl" should have the text content "My schools"
+    And the element "[data-testid='breadcrumb-home']" should have the href "/"
+    And the element "[data-testid='breadcrumb-home']" should have the text content "Home"
+    And the element "[data-testid='breadcrumb-current-page']" should have the text content "My schools"    

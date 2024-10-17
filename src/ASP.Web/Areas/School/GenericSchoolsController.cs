@@ -1,7 +1,8 @@
 using ASP.Application;
-using ASP.Web.Areas.School.ViewModels;
-using ASP.Web.Areas.Shared.EstablishmentListing;
-using ASP.Web.Core.BreadcrumbTrail;
+using ASP.Core.Helpers;
+using ASP.Core.Optionality;
+using ASP.Core.Results;
+using ASP.Core.Scoping;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
@@ -13,30 +14,24 @@ namespace ASP.Web.Areas.School
     [Route("schools")]
     [ServiceFilter<TermsOfUseActionFilter>]
     [Authorize(Policy = Policy.AccessToAllSchools)]
-    public class GenericSchoolsController : Controller
+    public class GenericSchoolsController : SchoolsController
     {
-        private readonly IAspApiClient _api;
-        private readonly IHostEnvironment _hostEnvironment;
-
         public GenericSchoolsController(
             IAspApiClient api,
             IHostEnvironment hostEnvironment
-        )
+        ) : base(api, hostEnvironment)
         {
-            _api = api ?? throw new ArgumentNullException(nameof(api));
-            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
         [HttpGet("")]
-        public IActionResult Schools()
+        public Task<IActionResult> Schools(string? page)
         {
-            return View(new SchoolsPageViewModel(
-                "All schools",
-                0,
-                null,
-                new BreadcrumbTrailViewModel("All schools"),
-                new List<EstablishmentListingModel>()
-            ));
+            var pageNumber = PageHelper.ParsePageNumber(page);
+
+            return GetAllEstablishments(ScopeType.All, Optional<string>.None, pageNumber)
+                .Map(results =>
+                    DefaultViewModel(results, "All schools", $"{results.TotalResults:N0} schools", "/schools/"))
+                .ToActionResult(View, _hostEnvironment);
         }
     }
 }

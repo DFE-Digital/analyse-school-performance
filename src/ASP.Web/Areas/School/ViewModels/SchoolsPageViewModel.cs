@@ -7,6 +7,7 @@ namespace ASP.Web.Areas.School.ViewModels;
 public class SchoolsPageViewModel
 {
     public string Title { get; }
+    public string SubTitle { get; }
     public int TotalCount { get; }
     public PaginationModel? PaginationModel { get; }
     public List<EstablishmentListingModel> EstablishmentListingsModel { get; }
@@ -14,12 +15,14 @@ public class SchoolsPageViewModel
 
     public SchoolsPageViewModel(
         string title,
+        string subTitle,
         int totalCount,
         PaginationModel? paginationModel,
         BreadcrumbTrailViewModel breadcrumbs,
         List<EstablishmentListingModel> establishmentListingsModel)
     {
         Title = title;
+        SubTitle = subTitle;
         TotalCount = totalCount;
         PaginationModel = paginationModel;
         Breadcrumbs = breadcrumbs;

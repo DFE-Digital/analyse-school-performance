@@ -185,12 +185,12 @@ public static class AuthenticationExtensions
                                     //Add user name claims
                                     claims.AddRange(principal.FindAll(c => c.Type == ClaimTypes.GivenName || c.Type == ClaimTypes.Surname));
 
-                                    if (organisation.UniqueReferenceNumber != null)
+                                    if (!string.IsNullOrEmpty(organisation.UniqueReferenceNumber))
                                     {
                                         claims.Add(new Claim(CustomClaimTypes.UniqueReferenceNumber, organisation.UniqueReferenceNumber));
                                     }
 
-                                    if (organisation.EstablishmentNumber != null)
+                                    if (!string.IsNullOrEmpty(organisation.EstablishmentNumber))
                                     {
                                         claims.Add(new Claim(CustomClaimTypes.EstablishmentNumber, organisation.EstablishmentNumber));
                                     }
@@ -199,6 +199,11 @@ public static class AuthenticationExtensions
                                     if (!string.IsNullOrEmpty(organisation.Name))
                                     {
                                         claims.Add(new Claim(CustomClaimTypes.OrganisationName, organisation.Name));
+                                    }
+
+                                    if (!string.IsNullOrEmpty(organisation.UniqueIdentifier))
+                                    {
+                                        claims.Add(new Claim(CustomClaimTypes.UniqueIdentifier, organisation.UniqueIdentifier));
                                     }
 
                                     //Create a new ClaimsPrincipal containing the Claims of the logged in user taken from the API

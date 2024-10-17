@@ -1,5 +1,4 @@
-﻿@using ASP.Core.Authorization
-@using ASP.Web.Areas.Shared.EstablishmentListing
+﻿@using ASP.Web.Areas.Shared.EstablishmentListing
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ASP.Web.Areas.School.ViewModels.SchoolsPageViewModel
 @{
@@ -12,7 +11,7 @@
 
 <div class="govuk-width-container govuk-main-wrapper">
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.Title</h1>
-    <h2 class="govuk-heading-m">@User.FindFirst(CustomClaimTypes.OrganisationName)?.Value - @Model.TotalCount schools</h2>
+    <h2 class="govuk-heading-m">@Model.SubTitle</h2>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (Model.TotalCount == 0)
@@ -28,10 +27,6 @@
         @if (Model.TotalCount > 0)
         {
             <div class="govuk-grid-column-two-thirds">
-                @if (Model.PaginationModel != null)
-                {
-                    <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Header"))/>
-                }
                 @await Html.PartialAsync("~/Areas/Shared/EstablishmentListing/_EstablishmentListingPartial.cshtml", new EstablishmentListingViewModel(Model.EstablishmentListingsModel))
                 @if (Model.PaginationModel != null)
                 {

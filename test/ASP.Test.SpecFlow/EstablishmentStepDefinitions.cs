@@ -1,7 +1,9 @@
-﻿using ASP.Core;
+﻿using System.Text.RegularExpressions;
+using ASP.Core;
 using ASP.Core.Results;
 using ASP.Test.Core;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 
@@ -63,7 +65,18 @@ public partial class EstablishmentStepDefinitions
 
                 foreach (var (key, value) in row)
                 {
-                    data[key] = StringReplacementPatterns.ReplaceNInPropertyValue(value, n);
+                    var processedValue = StringReplacementPatterns.ReplaceNInPropertyValue(value, n);
+
+                    // Check if the value is a JSON-like structure (object or array)
+                    if (IsJsonStructure(processedValue))
+                    {
+                        // Parse the JSON-like string into a JToken (can be JObject or JArray)
+                        data[key] = JToken.Parse(processedValue);
+                    }
+                    else
+                    {
+                        data[key] = processedValue;
+                    }
                 }
             }
 
@@ -100,5 +113,12 @@ public partial class EstablishmentStepDefinitions
         document["isDeleted"] = isDeleted;
 
         return await _database.UpsertAsync("establishments", id, id, document);
+    }
+    
+    private bool IsJsonStructure(string value)
+    {
+        value = value.Trim();
+        return (value.StartsWith('{') && value.EndsWith('}')) || // JSON object
+               (value.StartsWith('[') && value.EndsWith(']'));   // JSON array
     }
 }
