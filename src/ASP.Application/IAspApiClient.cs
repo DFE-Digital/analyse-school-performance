@@ -1,5 +1,7 @@
 ﻿using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
+using ASP.Application.UseCases.Downloads.DownloadAsZip;
+using ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads;
 using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
@@ -13,6 +15,7 @@ using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
 using ASP.Core.Templating;
+using Microsoft.AspNetCore.Mvc;
 using ASP.Core.Utilities;
 
 namespace ASP.Application
@@ -23,6 +26,8 @@ namespace ASP.Application
         Task<Result<Done>> UpdateContentTemplate(UpdateContentTemplateRequest request);
         Task<Result<List<ContentTemplate>>> GetAllContentTemplates();
         Task<Result<EstablishmentDetailsDTO>> GetEstablishmentDetails(GetEstablishmentDetailsRequest request);
+        Task<Result<GetAvailableSchoolDownloadsResponse>> GetAvailableSchoolDownloads(GetAvailableSchoolDownloadsRequest request);
+        Task<Result<ActionResult>> DownloadAsZipFile(DownloadAsZipFileRequest request);
         Task<Result<SearchResultsPage<EstablishmentListingDTO>>> EstablishmentSearch(EstablishmentSearchRequest request);
         Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request);
         Task<Result<UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request);

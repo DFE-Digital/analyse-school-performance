@@ -15,7 +15,7 @@ namespace ASP.Web.Areas.LocalAuthority
     public class GenericLocalAuthorityController : LocalAuthorityController
     {
         public GenericLocalAuthorityController(
-            IAspApiClient api, 
+            IAspApiClient api,
             IHostEnvironment hostEnvironment
         ) : base(api, hostEnvironment)
         {

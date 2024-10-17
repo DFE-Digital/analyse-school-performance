@@ -12,8 +12,8 @@ Scenario Outline: Other reports page should be accessible when valid urn is prov
     When I navigate to /my-school/other-reports/
     Then I should get a 200 response
     And the element "h1.govuk-heading-xl" should have the text content "Other reports"
-    And the element "[data-testid='app-sub-navigation-item-other-reports']" should have the text content "Other reports"
-    And the element "[data-testid='app-sub-navigation-item-other-reports'] a" should have the attribute "aria-current" set to "page"
+    And the element "[data-testid='sub-navigation-item-other-reports']" should have the text content "Other reports"
+    And the element "[data-testid='sub-navigation-item-other-reports'] a" should have the attribute "aria-current" set to "page"
 
 @Javascript:disabled
 Scenario Outline: Other reports page should be accessible when valid urn is provided (Generic school page)
@@ -27,8 +27,8 @@ Scenario Outline: Other reports page should be accessible when valid urn is prov
     When I navigate to /school/136028/other-reports/
     Then I should get a 200 response
     And the element "h1.govuk-heading-xl" should have the text content "Other reports"
-    And the element "[data-testid='app-sub-navigation-item-other-reports']" should have the text content "Other reports"
-    And the element "[data-testid='app-sub-navigation-item-other-reports'] a" should have the attribute "aria-current" set to "page"
+    And the element "[data-testid='sub-navigation-item-other-reports']" should have the text content "Other reports"
+    And the element "[data-testid='sub-navigation-item-other-reports'] a" should have the attribute "aria-current" set to "page"
 
 @Javascript:disabled
 Scenario: Other reports page should show the accordion component when javascript disabled

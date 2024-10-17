@@ -82,7 +82,7 @@ Scenario: School page should be accessible if user's Establishment exists
        """
 
 @Javascript:disabled
-Scenario: School page should contain seven app card container element
+Scenario: School page should contain eight app card container elements
     Given Content Template "school-landing-page" exists:
     """
     {
@@ -149,6 +149,15 @@ Scenario: School page should contain seven app card container element
                 "LinkUrl": "useful-links",
                 "Text": "View links to other services and published documents that may be useful."
             }
+        },
+        {
+            "ViewId": "Card",
+            "ViewContent": {
+                "Id": "app-card-data-downloads",
+                "Title": "Data downloads",
+                "LinkUrl": "data-downloads",
+                "Text": "Download data for Analyse school performance and Key to success"
+            }
         }
       ]
     }
@@ -162,7 +171,7 @@ Scenario: School page should contain seven app card container element
     And I am a School Named user for Establishment "123456"
     When I navigate to /my-school/
     Then the element "#app-card-container" class should contain "app-grid-container-four-column"
-    And the elements "#app-card-container .app-card" should total 7
+    And the elements "#app-card-container .app-card" should total 8
 
     And the element "#app-card-phonics h2 a" should have the href "phonics"
     And the element "#app-card-phonics h2 a" should have the text content "Phonics"
@@ -191,6 +200,10 @@ Scenario: School page should contain seven app card container element
     And the element "#app-card-useful-links h2 a" should have the href "useful-links"
     And the element "#app-card-useful-links h2 a" should have the text content "Useful links"
     And the element "#app-card-useful-links p" should have the text content "View links to other services and published documents that may be useful."
+
+    And the element "#app-card-data-downloads h2 a" should have the href "data-downloads"
+    And the element "#app-card-data-downloads h2 a" should have the text content "Data downloads"
+    And the element "#app-card-data-downloads p" should have the text content "Download data for Analyse school performance and Key to success"
 
 
 @Javascript:disabled

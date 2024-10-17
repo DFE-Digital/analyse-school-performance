@@ -1,4 +1,5 @@
-﻿using ASP.Web.Core.BreadcrumbTrail;
+﻿using ASP.Web.Areas.Shared.Navigation;
+using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Areas.School.ViewModels;
 
@@ -8,26 +9,27 @@ public class SchoolPageViewModel
     public string Title { get; }
     public string SchoolName { get; set; }
     public string SchoolUrn { get; set; }
-    public PathString RequestPath { get; }
-    public PathString BasePath { get; }
     public BreadcrumbTrailViewModel Breadcrumbs { get; }
+    public NavigationViewModel? SubNavigation { get; set; }
+    public NavigationViewModel? SideNavigation { get; set; }
 
     public SchoolPageViewModel(
         string controller,
-        string title, 
+        string title,
         string schoolName,
         string schoolUrn,
-        PathString requestPath, 
-        PathString basePath, 
-        BreadcrumbTrailViewModel breadcrumbs
+        BreadcrumbTrailViewModel breadcrumbs,
+        NavigationViewModel? subNavigation,
+        NavigationViewModel? sideNavigation
+
     )
     {
         Controller = controller;
         Title = title;
         SchoolName = schoolName;
         SchoolUrn = schoolUrn;
-        RequestPath = requestPath;
-        BasePath = basePath;
         Breadcrumbs = breadcrumbs;
+        SubNavigation = subNavigation;
+        SideNavigation = sideNavigation;
     }
 }

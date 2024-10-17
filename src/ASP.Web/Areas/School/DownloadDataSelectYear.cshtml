@@ -1,0 +1,61 @@
+﻿@using ASP.Web.Areas.School
+@model ASP.Web.Areas.School.ViewModels.SchoolDownloadsViewModel
+@{
+    ViewData["Title"] = "Download data";
+}
+
+<div class="govuk-width-container app-width-container">
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.SchoolPage.Breadcrumbs)
+</div>
+
+<div class="govuk-main-wrapper govuk-width-container">
+    <h1 class="govuk-heading-xl">Download data</h1>
+    <h2 id="school-name-heading" class="govuk-heading-m">
+       @Model.SchoolPage.SchoolName <span class="govuk-!-font-weight-regular">(URN: @Model.SchoolPage.SchoolUrn)</span>
+    </h2>
+    @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SchoolPage.SubNavigation)
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third app-side-navigation-width">
+            @await Html.PartialAsync("~/Areas/Shared/Navigation/_SideMenuNavigationPartial.cshtml", Model.SchoolPage.SideNavigation)
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+            <h2 data-testid="available-downloads-dates-heading" class="govuk-heading-l app-downloads">
+                <span data-testid="available-downloads-dates-name" class="govuk-caption-l">@Model.SchoolPage.SchoolName data</span>
+                Dates available for download
+            </h2>
+            @using (Html.BeginForm("DownloadDataSelectFiles", Model.SchoolPage.Controller, FormMethod.Get, new { @id = "app-available-download-dates-form" }))
+            {
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset govuk-!-padding-bottom-5" aria-describedby="app-available-downloads-dates-hint">
+                        <legend id="app-available-downloads-dates-hint" class="govuk-fieldset__legend">
+                            Select one option
+                        </legend>
+                        <div class="govuk-radios" data-module="govuk-radios">
+                                @foreach (var year in Model.AvailableDownloads.AvailableDates)
+                                {
+                                    <div class="govuk-radios__item">
+                                        <input data-testid="available-downloads-dates-@year.Year" id="app-available-downloads-dates-@year.Year" class="govuk-radios__input" name="SelectedYear"
+                                               type="radio"
+                                               value=@year.Year
+                                               aria-describedby="app-available-downloads-dates-@year.Year-label">
+                                        <label data-testid="available-downloads-dates-@year.Year-label" 
+                                                        id="app-available-downloads-dates-@year.Year-label" 
+                                                        class="govuk-label govuk-radios__label" 
+                                                        for=app-available-downloads-dates-@year.Year>
+                                          @year.StartToEndYears
+                                        </label>
+                                    </div>
+                                }
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="govuk-button-group">
+                    <button type="submit" class="govuk-button" data-module="govuk-button">
+                        Continue
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

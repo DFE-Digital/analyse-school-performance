@@ -1,0 +1,12 @@
+﻿@using ASP.Web.Shared
+@model NavigationItemViewModel
+
+@{
+    var current = Model.IsCurrent ? "page" : "";
+}
+
+<li data-testid ="side-navigation-item-@Model.Id" class="app-side-navigation__item app-side-navigation__item--current">
+    <a href="@Model.Path" aria-current=@current>
+        @Model.Name
+     </a>
+</li>

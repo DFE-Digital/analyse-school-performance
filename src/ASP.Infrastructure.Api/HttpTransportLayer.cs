@@ -20,8 +20,9 @@ namespace ASP.Infrastructure.Api
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            _httpClient = new HttpClient { 
-                BaseAddress = new Uri(_options.EndpointBaseUrl) 
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(_options.EndpointBaseUrl)
             };
         }
 
@@ -30,7 +31,7 @@ namespace ASP.Infrastructure.Api
             var httpRequest = new HttpRequestMessage(HttpMethod.Parse(request.Method), request.Path + request.QueryString);
             httpRequest.Content = new StringContent(request.Body ?? "");
             httpRequest.Headers.Add("x-functions-key", _options.FunctionsKey);
-            
+
             var httpResponse = await _httpClient.SendAsync(httpRequest);
 
             var response = new TransportLayerResponse();

@@ -8,7 +8,10 @@
 
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <h1 class="govuk-heading-xl">Useful links</h1>
-        @await Html.PartialAsync("~/Areas/School/Shared/_SubMenuNavigationPartial.cshtml", Model.SchoolPage)
+        <h2 id="school-name-heading" class="govuk-heading-m">
+            @Model.SchoolPage.SchoolName <span class="govuk-!-font-weight-regular">(URN: @Model.SchoolPage.SchoolUrn)</span>
+        </h2>
+        @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SchoolPage.SubNavigation)
         <div class="govuk-width-container">
             <main class="govuk-main-wrapper main-asp">
                 <div class="page-content js-content-target">

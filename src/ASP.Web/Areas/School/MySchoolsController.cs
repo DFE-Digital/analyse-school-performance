@@ -52,7 +52,7 @@ namespace ASP.Web.Areas.School
                     .Map(DefaultViewModel))
                 .ToActionResult(View, _hostEnvironment);
         }
-        
+
         private SchoolsPageViewModel DefaultViewModel(ScopedResultsPage<EstablishmentListingDTO> result)
         {
             var breadcrumbTrail = new BreadcrumbTrailViewModel("My schools");

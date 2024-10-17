@@ -5,7 +5,7 @@
     var current = Model.IsCurrent ? "page" : null;
 }
 
-<li data-testid="app-sub-navigation-item-@Model.Id" class="app-sub-navigation__item" authorization-policy=@Model.Policy>
+<li data-testid="sub-navigation-item-@Model.Id" class="app-sub-navigation__item" authorization-policy=@Model.Policy>
     <a class="app-sub-navigation__link" href=@Model.Path aria-current=@current>
         @Model.Name
     </a>

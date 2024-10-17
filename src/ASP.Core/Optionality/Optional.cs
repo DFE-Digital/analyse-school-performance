@@ -9,6 +9,14 @@ public static class Optional
             ? Optional<TValue>.None
             : Optional<TValue>.Some(value);
     }
+
+    public static Optional<TValue> FromNullable<TValue>(TValue? value) where TValue : struct
+    {
+        return value.HasValue
+            ? Optional<TValue>.Some(value.Value)
+            : Optional<TValue>.None;
+    }
+
 }
 
 public abstract class Optional<TValue>

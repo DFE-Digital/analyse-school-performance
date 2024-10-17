@@ -16,7 +16,7 @@ namespace ASP.Web.Areas.LocalAuthority
     public class MyLocalAuthorityController : LocalAuthorityController
     {
         public MyLocalAuthorityController(
-            IAspApiClient api, 
+            IAspApiClient api,
             IHostEnvironment hostEnvironment
         ) : base(api, hostEnvironment)
         {
@@ -48,8 +48,8 @@ namespace ASP.Web.Areas.LocalAuthority
         protected override Task<Result<string>> GetLocalAuthorityName(string laCode)
         {
             return base.GetLocalAuthorityName(laCode)
-                .MapError(error => error is NotFoundError 
-                    ? Error.Unexpected(error.Message, null) 
+                .MapError(error => error is NotFoundError
+                    ? Error.Unexpected(error.Message, null)
                     : error);
         }
 

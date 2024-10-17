@@ -3,9 +3,24 @@
 @import '/node_modules/govuk-frontend/dist/govuk/helpers/_colour.scss';
 @import '/node_modules/govuk-frontend/dist/govuk/settings/_colours-applied.scss';
 
-
 $app-breakpoint-custom : 700px;
 
+.app-downloads {
+    padding-left: 0px;
+    padding-top: 20px;
+}
+
+.app-icon-download {
+    position: relative;
+    left: 0px;
+    width: 20px;
+    height: 20px;
+    top: 5px;
+}
+
+.app-download-helptext {
+    display: inline;
+}
 
 .app-hero {
     background: govuk-colour("blue");
@@ -318,6 +333,10 @@ $app-breakpoint-custom : 700px;
 
 .app-sub-navigation {
     margin-bottom: 40px;
+}
+
+.app-sub-navigation.urn {
+
 }
 
 .app-sub-navigation__list {

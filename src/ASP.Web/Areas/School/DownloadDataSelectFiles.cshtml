@@ -1,0 +1,63 @@
+﻿@model ASP.Web.Areas.School.ViewModels.SchoolDownloadsViewModel
+@{
+    ViewData["Title"] = "Download data";
+}
+
+<div class="govuk-width-container app-width-container">
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.SchoolPage.Breadcrumbs)
+</div>
+
+<div class="govuk-main-wrapper govuk-width-container">
+    <h1 class="govuk-heading-xl">Download data</h1>
+    <h2 id="school-name-heading" class="govuk-heading-m">
+        @Model.SchoolPage.SchoolName <span class="govuk-!-font-weight-regular">(URN: @Model.SchoolPage.SchoolUrn)</span>
+    </h2>
+    @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SchoolPage.SubNavigation)
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third app-side-navigation-width">
+            @await Html.PartialAsync("~/Areas/Shared/Navigation/_SideMenuNavigationPartial.cshtml", Model.SchoolPage.SideNavigation)
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+            <h2 data-testid="available-downloads-files-heading" class="govuk-heading-l app-downloads">
+                <span data-testid="available-downloads-files-name" class="govuk-caption-l">@Model.SchoolPage.SchoolName data</span>
+                Data files available for download
+            </h2>
+            @using (Html.BeginForm("DownloadDataSelectFormat", Model.SchoolPage.Controller, FormMethod.Get, new { @id = "app-available-downloads-files-form" }))
+            {
+                @Html.Hidden("selectedYear", Model.AvailableDownloads.AvailableDates.FirstOrDefault())
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset" aria-describedby="app-available-downloads-files-hint">
+                        <div id="app-available-downloads-files-hint" class="govuk-hint">
+                            Select all that apply.
+                        </div>
+                        <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                                @foreach (var group in Model.AvailableDownloads.Downloads.GroupBy(x => x.DatasetType).OrderBy(x => x.Key))
+                                {
+                                    <h3 data-testid="available-downloads-file-group-@group.Key" class="govuk-heading-s govuk-!-font-weight-regular govuk-!-margin-top-6 govuk-!-margin-bottom-3">@group.Key</h3>
+                                    
+                                    @foreach (var file in group)
+                                    {
+                                        <div class="govuk-checkboxes__item">
+                                            <input data-testid="available-downloads-file-@file.Id" id="app-available-downloads-file-@file.Id" class="govuk-checkboxes__input" name="SelectedFiles" 
+                                                   type="checkbox" 
+                                                   value="@file.Id"
+                                                   aria-describedby="app-available-downloads-file-@file.Id-label">
+                                            <label data-testid="available-downloads-file-@file.Id-label" id="app-available-downloads-file-@file.Id-label" class="govuk-label govuk-checkboxes__label" for="app-available-downloads-file-@file.Id">
+                                                @($"{file.DatasetType} ({file.Version}) ({file.Source})")
+                                            </label>
+                                        </div>
+                                    }
+                                }
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="govuk-button-group">
+                    <button type="submit" class="govuk-button" data-module="govuk-button">
+                        Continue
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

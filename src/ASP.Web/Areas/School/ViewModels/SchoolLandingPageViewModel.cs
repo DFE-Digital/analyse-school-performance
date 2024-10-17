@@ -9,7 +9,7 @@ public class SchoolLandingPageViewModel
     public ContentTemplateViewModel ContentTemplate { get; }
 
     public SchoolLandingPageViewModel(
-        SchoolPageViewModel schoolPage, 
+        SchoolPageViewModel schoolPage,
         EstablishmentDetailsViewModel establishmentDetails,
         ContentTemplateViewModel contentTemplate
     )
