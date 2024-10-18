@@ -45,31 +45,35 @@ namespace ASP.Web.Areas.School
         }
 
         protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string schoolName) => new([
-            new($"{schoolName}", $"/my-schools/")], schoolName);
+            new($"{schoolName}", $"/my-schools/")
+        ], schoolName);
 
         protected override IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string urn, string schoolName) => [
-                    new("My schools", $"/my-schools/"),
+            new("My schools", $"/my-schools/"),
             new(schoolName, $"/school/{urn}"),
         ];
 
         protected override NavigationViewModel GetSubNavigation(EstablishmentDetailsViewModel establishmentDetails, PathString requestPath)
         {
             return new NavigationViewModel(new([
-                    new("download-data", "Download data", $"/school/{establishmentDetails.Urn}/download-data/", requestPath),
-                    new("other-reports", "Other reports", $"/school/{establishmentDetails.Urn}/other-reports/", requestPath),
-                    new("useful-links", "Useful links", $"/school/{establishmentDetails.Urn}/useful-links/", requestPath)
-                ]));
+                new("download-data", "Download data", $"/school/{establishmentDetails.Urn}/download-data/", requestPath),
+                new("other-reports", "Other reports", $"/school/{establishmentDetails.Urn}/other-reports/", requestPath),
+                new("useful-links", "Useful links", $"/school/{establishmentDetails.Urn}/useful-links/", requestPath)
+            ]));
         }
 
         protected override NavigationViewModel GetSideNavigation(EstablishmentDetailsViewModel establishmentDetails, PathString requestPath)
         {
-            return new NavigationViewModel(new([new("name", $"{establishmentDetails.Name} data", $"/school/{establishmentDetails.Urn}/download-data/", requestPath)]));
+            return new NavigationViewModel(new([
+                new("name", $"{establishmentDetails.Name} data", $"/school/{establishmentDetails.Urn}/download-data/", requestPath)
+            ]));
         }
 
-        protected override Task<Result<SchoolPageViewModel>> GetSchoolPage(EstablishmentDetailsViewModel establishmentDetails,
-                                                                           BreadcrumbTrailViewModel breadcrumbs,
-                                                                           NavigationViewModel? subNavigation,
-                                                                           NavigationViewModel? sideNavigation)
+        protected override Task<Result<SchoolPageViewModel>> GetSchoolPage(
+            EstablishmentDetailsViewModel establishmentDetails,
+            BreadcrumbTrailViewModel breadcrumbs,
+            NavigationViewModel? subNavigation,
+            NavigationViewModel? sideNavigation)
         {
             var schoolPage = new SchoolPageViewModel(
                 "GenericSchool",

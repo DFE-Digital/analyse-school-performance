@@ -37,8 +37,9 @@ public abstract class SchoolsController : Controller
             Optional<int>.Some(Constants.SearchResultPageSize)
         );
 
-        return _api.GetAllEstablishments(request).DefaultIf(error => error is NotFoundError,
-            new ScopedResultsPage<EstablishmentListingDTO>());
+        return _api.GetAllEstablishments(request)
+            .DefaultIf(error => error is NotFoundError,
+                new ScopedResultsPage<EstablishmentListingDTO>());
     }
 
     protected SchoolsPageViewModel DefaultViewModel(ScopedResultsPage<EstablishmentListingDTO> result,

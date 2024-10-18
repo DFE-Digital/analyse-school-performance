@@ -38,13 +38,17 @@ namespace ASP.Application.UseCases.ContentTemplates.ViewContentTemplate
                 throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public async Task<Result<ContentTemplate>> HandleRequest(ViewContentTemplateRequest request)
+        public Task<Result<ContentTemplate>> HandleRequest(ViewContentTemplateRequest request)
         {
-            return await request.Revision.Match(
-                revision => _repository.GetBaseTemplate(request.ContentTemplateId)
-                    .Then(_ => _repository.GetRevision(request.ContentTemplateId, revision)),
-                () => _repository.GetBaseTemplate(request.ContentTemplateId)
-                    .Then(_ => _repository.GetPublishedRevision(request.ContentTemplateId))
+            return request.Revision.Match(
+                revision => 
+                    from _ in _repository.GetBaseTemplate(request.ContentTemplateId)
+                    from template in _repository.GetRevision(request.ContentTemplateId, revision)
+                    select template,
+                () => 
+                    from _ in _repository.GetBaseTemplate(request.ContentTemplateId)
+                    from template in _repository.GetPublishedRevision(request.ContentTemplateId)
+                    select template
             );
         }
     }

@@ -15,10 +15,11 @@ namespace ASP.Application.UseCases.Establishments.GetEstablishmentDetails
                           throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public async Task<Result<EstablishmentDetailsDTO>> HandleRequest(GetEstablishmentDetailsRequest request)
+        public Task<Result<EstablishmentDetailsDTO>> HandleRequest(GetEstablishmentDetailsRequest request)
         {
-            return await _repository.GetEstablishmentDetails(request.Urn).Map(x =>
-                x.MapToEstablishmentDetailsDTO());
+            return 
+                from establishment in _repository.GetEstablishmentDetails(request.Urn)
+                select establishment.MapToEstablishmentDetailsDTO();
         }
     }
 }

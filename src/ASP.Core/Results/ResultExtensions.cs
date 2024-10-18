@@ -257,6 +257,24 @@ namespace ASP.Core.Results
         }
 
         // Allows LINQ syntax from ... in ... select to be used with Results
+        public static Result<TResult> Select<TFirst, TResult>(
+            this Result<TFirst> first,
+            Func<TFirst, TResult> getResult)
+        {
+            return first
+                .Map(firstValue => getResult(firstValue));
+        }
+
+        // Allows LINQ syntax from ... in ... select to be used with Results
+        public static Task<Result<TResult>> Select<TFirst, TResult>(
+            this Task<Result<TFirst>> first,
+            Func<TFirst, TResult> getResult)
+        {
+            return first
+                .Map(firstValue => getResult(firstValue));
+        }
+
+        // Allows LINQ syntax from ... in ... select to be used with Results
         public static Result<TResult> SelectMany<TFirst, TSecond, TResult>(
             this Result<TFirst> first,
             Func<TFirst, Result<TSecond>> getSecond,

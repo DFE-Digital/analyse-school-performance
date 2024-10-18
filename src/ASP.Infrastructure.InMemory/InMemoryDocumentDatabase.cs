@@ -21,13 +21,15 @@ namespace ASP.Infrastructure.InMemory
             CancellationToken cancellationToken = default
         ) where TItem : class
         {
-            var items = _memoryStore.Get(container, new(id, partitionKeyValue))
-                .MapError(e => e is NotFoundError
-                    ? Error.NotFound($@"Could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{container}"".")
-                    : e)
-                .Then(item => JsonHelper.DeserializeNotNull<TItem>(item.Contents, ignoreMissingMembers: true));
+            var result =
+                from item in _memoryStore.Get(container, new(id, partitionKeyValue))
+                    .MapError(e => e is NotFoundError
+                        ? Error.NotFound($@"Could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{container}"".")
+                        : e)
+                from deserialized in JsonHelper.DeserializeNotNull<TItem>(item.Contents, ignoreMissingMembers: true)
+                select deserialized;
 
-            return Task.FromResult(items);
+            return Task.FromResult(result);
         }
 
         public Task<Result<IEnumerable<TItem>>> QueryAsync<TItem>(
@@ -36,16 +38,13 @@ namespace ASP.Infrastructure.InMemory
             CancellationToken cancellationToken = default
         ) where TItem : class
         {
-            var items = _memoryStore.GetAll(container)
-                .Then(items => items
+            var result =
+                from items in _memoryStore.GetAll(container)
+                from deserialized in items
                     .Select(item => JsonHelper.DeserializeNotNull<TItem>(item.Contents, ignoreMissingMembers: true))
-                    .Combine());
-
-            var result = items.Map(all =>
-            {
-                return query(all.AsQueryable())
+                    .Combine()
+                select query(deserialized.AsQueryable())
                     .AsEnumerable();
-            });
 
             return Task.FromResult(result);
         }
@@ -58,16 +57,14 @@ namespace ASP.Infrastructure.InMemory
             CancellationToken cancellationToken = default
         ) where TItem : class
         {
-            var result = _memoryStore.GetAll(container)
-                .Then(items => items
+            var result =
+                from items in _memoryStore.GetAll(container)
+                from deserialized in items
                     .Select(item => JsonHelper.DeserializeNotNull<TItem>(item.Contents, ignoreMissingMembers: true))
-                    .Combine())
-                .Map(all =>
-                {
-                    var items = query(all.AsQueryable()).ToList();
-                    var (skip, take, validPage) = PageHelper.ConstructPagingRequest(items.Count, page, itemsPerPage);
-                    return new ResultsPage<TItem>(validPage, itemsPerPage, items.Count, items.Skip(skip).Take(take));
-                });
+                    .Combine()
+                let all = query(deserialized.AsQueryable()).ToList()
+                let paging = PageHelper.ConstructPagingRequest(all.Count, page, itemsPerPage)
+                select new ResultsPage<TItem>(paging.ValidPage, itemsPerPage, all.Count, all.Skip(paging.Skip).Take(paging.Take));
 
             return Task.FromResult(result);
         }

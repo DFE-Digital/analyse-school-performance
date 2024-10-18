@@ -15,9 +15,10 @@ public class GetMultiAcademyTrust : IGetMultiAcademyTrust
                       throw new ArgumentNullException(nameof(multiAcademyTrust));
     }
 
-    public async Task<Result<MultiAcademyTrustDTO>> HandleRequest(GetMultiAcademyTrustRequest request)
+    public Task<Result<MultiAcademyTrustDTO>> HandleRequest(GetMultiAcademyTrustRequest request)
     {
-        return await _repository.GetMultiAcademyTrust(request.Id).Map(x =>
-            x.MapToMultiAcademyTrustDTO());
+        return 
+            from mat in _repository.GetMultiAcademyTrust(request.Id)
+            select mat.MapToMultiAcademyTrustDTO();
     }
 }

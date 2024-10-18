@@ -29,38 +29,45 @@ namespace ASP.Web.Areas.Help
         }
 
         [HttpGet("{contentId}", Name = "app-route-help-view")]
-        public async Task<IActionResult> ViewPage(string contentId, string? revision)
+        public Task<IActionResult> ViewPage(string contentId, string? revision)
         {
             string templateId = $"help-{contentId}".ToLower();
             ViewContentTemplateRequest request = new(templateId, Optional.FromNullable(revision));
 
-            return await _api.ViewContentTemplate(request)
-                .Map(t => ContentTemplateViewModel.FromTemplate(contentId, revision, t))
-                .ToActionResult(View, _hostEnvironment);
+            var result =
+                from template in _api.ViewContentTemplate(request)
+                select ContentTemplateViewModel.FromTemplate(contentId, revision, template);
+
+            return result.ToActionResult(View, _hostEnvironment);
         }
 
 
         [Authorize(Policy = Policy.AccessToEditPages)]
         [HttpGet("{contentId}/edit", Name = "app-route-help-edit")]
-        public async Task<IActionResult> EditPage(string contentId, string? revision)
+        public Task<IActionResult> EditPage(string contentId, string? revision)
         {
             string templateId = $"help-{contentId}".ToLower();
             ViewContentTemplateRequest request = new(templateId, Optional.FromNullable(revision));
 
-            return await _api.ViewContentTemplate(request)
-                .Map(t => ContentTemplateEditModel.FromTemplate(contentId, revision, t, _editModelFactory))
-                .ToActionResult(View, _hostEnvironment);
+            var result =
+                from template in _api.ViewContentTemplate(request)
+                select ContentTemplateEditModel.FromTemplate(contentId, revision, template, _editModelFactory);
+                
+            return result.ToActionResult(View, _hostEnvironment);
         }
 
         [Authorize(Policy = Policy.AccessToEditPages)]
         [HttpPost("{contentId}/edit")]
-        public async Task<IActionResult> EditPage(string contentId, string revision, ContentTemplateEditModel model)
+        public Task<IActionResult> EditPage(string contentId, string revision, ContentTemplateEditModel model)
         {
             string templateId = $"help-{contentId}".ToLower();
 
-            return await model.ToTemplate()
-                .Then(t => _api.UpdateContentTemplate(new(templateId, Optional.FromNullable(revision), t)))
-                .ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId, revision }), _hostEnvironment);
+            var result =
+                from template in model.ToTemplate()
+                from done in _api.UpdateContentTemplate(new(templateId, Optional.FromNullable(revision), template))
+                select done;
+
+            return result.ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId, revision }), _hostEnvironment);
         }
     }
 }

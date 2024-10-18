@@ -28,15 +28,16 @@ public class EstablishmentSearch : IEstablishmentSearch
         _searchService = new EstablishmentSearchService(establishmentRepository);
     }
 
-    public async Task<Result<SearchResultsPage<EstablishmentListingDTO>>> HandleRequest(
+    public Task<Result<SearchResultsPage<EstablishmentListingDTO>>> HandleRequest(
         EstablishmentSearchRequest request)
     {
         var page = request.Page.GetValueOrDefault(1);
         var resultsPerPage = request.ResultsPerPage.GetValueOrDefault(Constants.SearchResultPageSize);
         var scopeIdentifier = request.ScopeIdentifier.GetValueOrDefault("");
 
-        return await Scope.Validate(request.ScopeType, scopeIdentifier, _localAuthorityRepository, _multiAcademyTrustRepository)
-            .Then(scope => _searchService.Search(request.SearchTerm, scope, page, resultsPerPage))
-            .Map(results => results.Map(r => r.MapToEstablishmentListingDTO()));
+        return 
+            from scope in Scope.Validate(request.ScopeType, scopeIdentifier, _localAuthorityRepository, _multiAcademyTrustRepository)
+            from results in _searchService.Search(request.SearchTerm, scope, page, resultsPerPage)
+            select results.Map(r => r.MapToEstablishmentListingDTO());
     }
 }

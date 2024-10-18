@@ -30,7 +30,7 @@ namespace ASP.Web.Areas.Home
         [HttpGet("/")]
         [HttpGet("")]
         [HttpGet("index")]
-        public async Task<IActionResult> Index(string? revision)
+        public Task<IActionResult> Index(string? revision)
         {
             var defaultIfNotFound = new ContentTemplateViewModel
             {
@@ -42,8 +42,11 @@ namespace ASP.Web.Areas.Home
                 Views = []
             };
 
-            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID, Optional.FromNullable(revision)))
-                .Map(template => ContentTemplateViewModel.FromTemplate(CONTENT_TEMPLATE_ID, revision, template))
+            var result =
+                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID, Optional.FromNullable(revision)))
+                select ContentTemplateViewModel.FromTemplate(CONTENT_TEMPLATE_ID, revision, template);
+
+            return result
                 .DefaultIf(error => error is NotFoundError, defaultIfNotFound)
                 .ToActionResult(View, _hostEnvironment);
         }

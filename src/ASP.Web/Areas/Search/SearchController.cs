@@ -92,7 +92,8 @@ public class SearchController : Controller
         var breadcrumbTrail = new BreadcrumbTrailViewModel($"Search results for \"{result.SearchTerm}\"")
             .AddBreadcrumb("Search", "/search");
         
-        return new SearchViewModel(EstablishmentListingModel
+        return new SearchViewModel(
+            EstablishmentListingModel
                 .FromEstablishmentListingDto(result.Results),
             new PaginationModel(
                 Url.Action(nameof(Index), new { search = result.SearchTerm }) ?? "",
@@ -136,15 +137,19 @@ public class SearchController : Controller
     private Task<Result<SearchViewModel>> PerformSearchBasedOnUserRole(SearchParams searchParams,
         int pageNumber)
     {
-        return Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
-            .Then(scopeInfo => PerformEstablishmentSearch(searchParams, scopeInfo, pageNumber));
+        return
+            from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+            from result in PerformEstablishmentSearch(searchParams, scopeInfo, pageNumber)
+            select result;
     }
 
     private Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>>
         PerformSearchSuggestionsBasedOnUserRole(SearchParams searchParams)
     {
-        return Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
-            .Then(scopeInfo => PerformEstablishmentSearchSuggestions(searchParams, scopeInfo));
+        return
+            from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+            from result in PerformEstablishmentSearchSuggestions(searchParams, scopeInfo)
+            select result;
     }
     
     private Task<Result<SearchViewModel>> PerformEstablishmentSearch(SearchParams searchParams, ScopeInfo scopeInfo, int pageNumber)
@@ -157,8 +162,11 @@ public class SearchController : Controller
             Optional<int>.Some(Constants.SearchResultPageSize)
         );
 
-        return _api.EstablishmentSearch(estabSearchRequest)
-            .Map(DefaultViewModel)
+        var model =
+            from searchResults in _api.EstablishmentSearch(estabSearchRequest)
+            select DefaultViewModel(searchResults);
+        
+        return model
             .DefaultIf(e => e is NotFoundError, NoResultsViewModel(searchParams));
     }
 

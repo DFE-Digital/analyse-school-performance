@@ -41,25 +41,24 @@ namespace ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate
                 throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public async Task<Result<Done>> HandleRequest(UpdateContentTemplateRequest request)
+        public Task<Result<Done>> HandleRequest(UpdateContentTemplateRequest request)
         {
             var notAllowedError = Error.NotAllowed("Only unpublished Content Template revisions can be updated.");
 
-            return await request.Revision.Match(
-                revision => _repository.GetBaseTemplate(request.ContentTemplateId)
-                    .Then(_ => _repository.GetRevision(request.ContentTemplateId, revision)
-                    .ErrorIf(t =>
-                    {
-                        return t.IsPublished;
-                    }, notAllowedError)
-                    .DefaultIf(e => e is NotFoundError, request.ContentTemplate)
-                    .Then(t => _repository.Update(request.ContentTemplateId, revision, request.ContentTemplate))
-                    .Map(_ => Result.Done)),
-                () => _repository.GetBaseTemplate(request.ContentTemplateId)
-                    .ErrorIf(t => t.IsPublished, notAllowedError)
-                    .DefaultIf(e => e is NotFoundError, request.ContentTemplate)
-                    .Then(t => _repository.Update(request.ContentTemplateId, request.ContentTemplateId, request.ContentTemplate))
-                    .Map(_ => Result.Done)
+            return request.Revision.Match(
+                revision => 
+                    from _ in _repository.GetBaseTemplate(request.ContentTemplateId)
+                    from t in _repository.GetRevision(request.ContentTemplateId, revision)
+                        .ErrorIf(t => t.IsPublished, notAllowedError)
+                        .DefaultIf(e => e is NotFoundError, request.ContentTemplate)
+                    from done in _repository.Update(request.ContentTemplateId, revision, request.ContentTemplate)
+                    select done,
+                () => 
+                    from t in _repository.GetBaseTemplate(request.ContentTemplateId)
+                        .ErrorIf(t => t.IsPublished, notAllowedError)
+                        .DefaultIf(e => e is NotFoundError, request.ContentTemplate)
+                    from done in _repository.Update(request.ContentTemplateId, request.ContentTemplateId, request.ContentTemplate)
+                    select done
             );
         }
     }

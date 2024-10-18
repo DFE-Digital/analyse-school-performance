@@ -19,10 +19,11 @@ public class MultiAcademyTrustRepository : IMultiAcademyTrustRepository
 
     public Task<Result<MultiAcademyTrust>> GetMultiAcademyTrust(string id)
     {
-        return _documentDB.GetAsync<MultiAcademyTrustDAO>(ContainerKey, id, id)
-            .MapError(e => e is NotFoundError
-                ? Error.NotFound($@"Could not find Multi-Academy Trust with id ""{id}"".")
-                : e)
-            .Map(dto => dto.MapToDomainEntityLocalAuthority());
+        return 
+            from dao in _documentDB.GetAsync<MultiAcademyTrustDAO>(ContainerKey, id, id)
+                .MapError(e => e is NotFoundError
+                    ? Error.NotFound($@"Could not find Multi-Academy Trust with id ""{id}"".")
+                    : e)
+            select dao.MapToDomainEntityLocalAuthority();
     }
 }

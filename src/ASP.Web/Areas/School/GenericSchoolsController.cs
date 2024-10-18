@@ -28,10 +28,15 @@ namespace ASP.Web.Areas.School
         {
             var pageNumber = PageHelper.ParsePageNumber(page);
 
-            return GetAllEstablishments(ScopeType.All, Optional<string>.None, pageNumber)
-                .Map(results =>
-                    DefaultViewModel(results, "All schools", $"{results.TotalResults:N0} schools", "/schools/"))
-                .ToActionResult(View, _hostEnvironment);
+            var result =
+                from results in GetAllEstablishments(ScopeType.All, Optional<string>.None, pageNumber)
+                select DefaultViewModel(
+                    results,
+                    "All schools",
+                    $"{results.TotalResults:N0} schools",
+                    "/schools/");
+
+            return result.ToActionResult(View, _hostEnvironment);
         }
     }
 }

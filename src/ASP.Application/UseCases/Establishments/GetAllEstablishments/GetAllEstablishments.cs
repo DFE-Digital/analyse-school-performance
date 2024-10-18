@@ -23,15 +23,16 @@ public class GetAllEstablishments : IGetAllEstablishments
         _multiAcademyTrustRepository = multiAcademyTrustRepository ?? throw new ArgumentNullException(nameof(multiAcademyTrustRepository));
     }
 
-    public async Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> HandleRequest(
+    public Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> HandleRequest(
         GetAllEstablishmentsRequest request)
     {
         var page = request.Page.GetValueOrDefault(1);
         var resultsPerPage = request.ResultsPerPage.GetValueOrDefault(Constants.SearchResultPageSize);
         var scopeIdentifier = request.ScopeIdentifier.GetValueOrDefault("");
 
-        return await Scope.Validate(request.ScopeType, scopeIdentifier, _localAuthorityRepository, _multiAcademyTrustRepository)
-            .Then(scope => _repository.GetAllEstablishments(scope, page, resultsPerPage))
-            .Map(results => results.Map(r => r.MapToEstablishmentListingDTO()));
+        return 
+            from scope in Scope.Validate(request.ScopeType, scopeIdentifier, _localAuthorityRepository, _multiAcademyTrustRepository)
+            from results in _repository.GetAllEstablishments(scope, page, resultsPerPage)
+            select results.Map(r => r.MapToEstablishmentListingDTO());
     }
 }

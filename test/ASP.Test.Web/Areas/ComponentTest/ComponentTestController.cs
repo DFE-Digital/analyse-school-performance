@@ -41,26 +41,36 @@ namespace ASP.Test.Web.Areas.ComponentTest
         }
 
         [HttpGet("view")]
-        public new async Task<IActionResult> View()
+        public new Task<IActionResult> View()
         {
-            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, Optional.FromNullable(TEST_COMPONENT_TEMPLATE_ID)))
-                .Map(t => ContentTemplateViewModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, t))
+            var model =
+                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, Optional.FromNullable(TEST_COMPONENT_TEMPLATE_ID)))
+                select ContentTemplateViewModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, template);
+
+            return model
                 .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("edit")]
-        public async Task<IActionResult> Edit()
+        public Task<IActionResult> Edit()
         {
-            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, Optional.FromNullable(TEST_COMPONENT_TEMPLATE_ID)))
-                .Map(t => ContentTemplateEditModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, t, _editModelFactory))
+            var model =
+                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, Optional.FromNullable(TEST_COMPONENT_TEMPLATE_ID)))
+                select ContentTemplateEditModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, template, _editModelFactory);
+
+            return model
                 .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpPost("edit")]
-        public async Task<IActionResult> Edit(ContentTemplateEditModel model)
+        public Task<IActionResult> Edit(ContentTemplateEditModel model)
         {
-            return await model.ToTemplate()
-                .Then(v => _api.UpdateContentTemplate(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, Optional.FromNullable(TEST_COMPONENT_TEMPLATE_ID), v)))
+            var result =
+                from template in model.ToTemplate()
+                from done in _api.UpdateContentTemplate(new UpdateContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, Optional.FromNullable(TEST_COMPONENT_TEMPLATE_ID), template))
+                select done;
+
+            return result
                 .ToActionResult(_ => RedirectToAction(nameof(View)), _hostEnvironment);
         }
     }

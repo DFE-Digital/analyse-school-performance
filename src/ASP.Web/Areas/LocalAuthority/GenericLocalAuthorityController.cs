@@ -16,8 +16,8 @@ namespace ASP.Web.Areas.LocalAuthority
     {
         public GenericLocalAuthorityController(
             IAspApiClient api,
-            IHostEnvironment hostEnvironment
-        ) : base(api, hostEnvironment)
+            IHostEnvironment hostEnvironment) 
+            : base(api, hostEnvironment)
         {
         }
 
@@ -31,8 +31,9 @@ namespace ASP.Web.Areas.LocalAuthority
         [HttpGet("download-data")]
         public Task<IActionResult> DownloadData(string laCode)
         {
-            return base.DownloadData(laCode, new([
-                ], "Download data"))
+            return base.DownloadData(laCode, new(
+                [], 
+                "Download data"))
                 .ToActionResult(View, _hostEnvironment);
         }
         protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string laCode, string laName) => new([

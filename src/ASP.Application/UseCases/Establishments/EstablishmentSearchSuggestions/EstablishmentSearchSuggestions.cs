@@ -27,22 +27,22 @@ public class EstablishmentSearchSuggestions : IEstablishmentSearchSuggestions
         _searchService = new EstablishmentSearchSuggestionsService(establishmentRepository);
     }
 
-    public async Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> HandleRequest(
+    public Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> HandleRequest(
         EstablishmentSearchSuggestionsRequest request
     )
     {
         var maxSuggestions = request.MaxSuggestions.GetValueOrDefault(Core.Constants.SearchResultMaxSuggestions);
         var scopeIdentifier = request.ScopeIdentifier.GetValueOrDefault("");
 
-        return await Scope.Validate(request.ScopeType, scopeIdentifier, _localAuthorityRepository, _multiAcademyTrustRepository)
-            .Then(scope => _searchService.Search(request.SearchTerm, scope, maxSuggestions)
-            .Map(x => new SearchSuggestionsResult<EstablishmentSuggestionDTO>()
-            {
-                Suggestions = x.Suggestions.MapToListOfEstablishmentSuggestionDTO(),
+        return 
+            from scope in Scope.Validate(request.ScopeType, scopeIdentifier, _localAuthorityRepository, _multiAcademyTrustRepository)
+            from response in _searchService.Search(request.SearchTerm, scope, maxSuggestions)
+            select new SearchSuggestionsResult<EstablishmentSuggestionDTO> {
+                Suggestions = response.Suggestions.MapToListOfEstablishmentSuggestionDTO(),
                 MaxSuggestions = maxSuggestions,
                 SearchTerm = request.SearchTerm,
                 Scope = request.ScopeType.ToString(),
                 ScopeIdentifier = scopeIdentifier
-            }));
+            };
     }
 }

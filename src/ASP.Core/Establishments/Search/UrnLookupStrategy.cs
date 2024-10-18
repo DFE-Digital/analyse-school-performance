@@ -13,28 +13,28 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
         _repository = repository;
     }
 
-    public override async Task<Result<SearchResultsPage<EstablishmentListing>>> Execute()
+    public override Task<Result<SearchResultsPage<EstablishmentListing>>> Execute()
     {
-        var result = await _repository.GetEstablishmentDetails(SearchTerm);
-
-        return result.Map(establishment => new SearchResultsPage<EstablishmentListing>(
-            SearchTerm,
-            Scope.ScopeType.ToString(),
-            Scope.ScopeIdentifier,
-            Page,
-            ResultsPerPage,
-            totalResults: 1,
-            [new EstablishmentListing(
-                establishment.Urn,
-                establishment.Name,
-                establishment.IsPrimary,
-                establishment.IsSecondary,
-                establishment.IsPost16,
-                establishment.Address,
-                establishment.OfstedRating,
-                establishment.OfstedLastInspectionDate,
-                establishment.Laestab
-            )]
-        ));
+        return 
+            from establishment in _repository.GetEstablishmentDetails(SearchTerm)
+            select new SearchResultsPage<EstablishmentListing>(
+                SearchTerm,
+                Scope.ScopeType.ToString(),
+                Scope.ScopeIdentifier,
+                Page,
+                ResultsPerPage,
+                totalResults: 1,
+                [new EstablishmentListing(
+                    establishment.Urn,
+                    establishment.Name,
+                    establishment.IsPrimary,
+                    establishment.IsSecondary,
+                    establishment.IsPost16,
+                    establishment.Address,
+                    establishment.OfstedRating,
+                    establishment.OfstedLastInspectionDate,
+                    establishment.Laestab
+                )]
+            );
     }
 }

@@ -9,7 +9,8 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableLADownloads
         public Task<Result<GetAvailableLADownloadsResponse>> HandleRequest(GetAvailableLADownloadsRequest request)
         {
             return GetAvailableLaDownloadsResponse(request.LaCode, request.Year)
-                .MapError(error => error is NotFoundError ? Error.NotFound(error.Message) : error).Map(Task.FromResult);
+                .MapError(error => error is NotFoundError ? Error.NotFound(error.Message) : error)
+                .Map(Task.FromResult);
         }
 
         private Result<GetAvailableLADownloadsResponse> GetAvailableLaDownloadsResponse(string laCode, Optional<int> year)

@@ -20,24 +20,29 @@ public class LocalAuthorityRepository : ILocalAuthorityRepository
 
     public Task<Result<LocalAuthority>> GetLocalAuthority(string code)
     {
-        return _documentDB.GetAsync<LocalAuthorityDAO>(ContainerKey, code, code)
-            .MapError(e => e is NotFoundError
-                ? Error.NotFound($@"Could not find Local Authority with code ""{code}"".")
-                : e)
-            .Map(dto => dto.MapToDomainEntityLocalAuthority());
+        return
+            from dao in _documentDB.GetAsync<LocalAuthorityDAO>(ContainerKey, code, code)
+                .MapError(e => e is NotFoundError
+                    ? Error.NotFound($@"Could not find Local Authority with code ""{code}"".")
+                    : e)
+            select dao.MapToDomainEntityLocalAuthority();
     }
 
     public async Task<Result<ResultsPage<LocalAuthority>>> GetAllLocalAuthorities(int page,
         int resultsPerPage, CancellationToken cancellationToken = default)
     {
-        return await _documentDB.QueryPagedAsync<LocalAuthorityDAO>(
+        return 
+            from results in await _documentDB.QueryPagedAsync<LocalAuthorityDAO>(
                 ContainerKey,
                 q => q.OrderBy(x => x.Name),
                 page,
                 resultsPerPage,
                 cancellationToken)
-            .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no Local Authorities."))
-            .Map(results => new ResultsPage<LocalAuthority>(page, resultsPerPage, results.TotalResults,
-                results.Map(r => r.MapToDomainEntityLocalAuthority())));
+                .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no Local Authorities."))
+            select new ResultsPage<LocalAuthority>(
+                page, 
+                resultsPerPage, 
+                results.TotalResults,
+                results.Map(r => r.MapToDomainEntityLocalAuthority()));
     }
 }

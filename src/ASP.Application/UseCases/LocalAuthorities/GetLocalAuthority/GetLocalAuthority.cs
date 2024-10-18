@@ -15,9 +15,10 @@ public class GetLocalAuthority : IGetLocalAuthority
                       throw new ArgumentNullException(nameof(localAuthorityRepository));
     }
 
-    public async Task<Result<LocalAuthorityDTO>> HandleRequest(GetLocalAuthorityRequest request)
+    public Task<Result<LocalAuthorityDTO>> HandleRequest(GetLocalAuthorityRequest request)
     {
-        return await _repository.GetLocalAuthority(request.Code).Map(x =>
-            x.MapToLocalAuthorityDTO());
+        return 
+            from la in _repository.GetLocalAuthority(request.Code)
+            select la.MapToLocalAuthorityDTO();
     }
 }

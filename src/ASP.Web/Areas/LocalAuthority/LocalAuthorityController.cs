@@ -20,22 +20,27 @@ namespace ASP.Web.Areas.LocalAuthority
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
-        protected async Task<Result<LocalAuthorityContentPageViewModel>> LandingPage(string laCode, string? revision)
+
+        protected Task<Result<LocalAuthorityContentPageViewModel>> LandingPage(string laCode, string? revision)
         {
-            return await GetLocalAuthorityName(laCode)
-                .Then(laName => GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
-                    .Then(contentTemplate => GetLocalAuthorityPage(laCode, laName, GetLandingPageBreadcrumbs(laCode, laName))
-                        .Map(pageViewModel => new LocalAuthorityContentPageViewModel(
-                            pageViewModel,
-                            contentTemplate
-                        ))));
+            return
+                from laName in GetLocalAuthorityName(laCode)
+                from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
+                from page in GetLocalAuthorityPage(laCode, laName, GetLandingPageBreadcrumbs(laCode, laName))
+                select new LocalAuthorityContentPageViewModel(
+                    page,
+                    contentTemplate
+                );
         }
 
-        protected async Task<Result<LocalAuthorityPageViewModel>> DownloadData(string laCode, BreadcrumbTrailViewModel breadcrumbs)
+
+        protected Task<Result<LocalAuthorityPageViewModel>> DownloadData(string laCode, BreadcrumbTrailViewModel breadcrumbs)
         {
-            return await GetLocalAuthorityName(laCode)
-                .Then(laName => GetLocalAuthorityPage(laCode, laName, 
-                    breadcrumbs.Prepend(GetChildPageBreadcrumbs(laCode, laName))));
+            return
+                from laName in GetLocalAuthorityName(laCode)
+                from page in GetLocalAuthorityPage(laCode, laName, 
+                    breadcrumbs.Prepend(GetChildPageBreadcrumbs(laCode, laName)))
+                select page;
         }
 
         protected abstract BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string laCode, string laName);
@@ -46,16 +51,20 @@ namespace ASP.Web.Areas.LocalAuthority
 
         protected virtual Task<Result<string>> GetLocalAuthorityName(string laCode)
         {
-            return _api.GetLocalAuthority(new(laCode))
-                .Map(la => !string.IsNullOrWhiteSpace(la.Name)
-                    ? la.Name
-                    : "Missing local authority name");
+            return
+                from la in _api.GetLocalAuthority(new(laCode))
+                select string.IsNullOrWhiteSpace(la.Name)
+                    ? "Missing local authority name"
+                    : la.Name;
         }
 
         protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentTemplateId, string? revision)
         {
-            return _api.ViewContentTemplate(new(contentTemplateId, Optional.FromNullable(revision)))
-                .Map(template => ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template))
+            var model =
+                from template in _api.ViewContentTemplate(new(contentTemplateId, Optional.FromNullable(revision)))
+                select ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template);
+
+            return model
                 .DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel());
         }
     }

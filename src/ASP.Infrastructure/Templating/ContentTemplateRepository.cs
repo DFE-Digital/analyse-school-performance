@@ -18,45 +18,54 @@ namespace ASP.Infrastructure.Repositories
 
         public Task<Result<ContentTemplate>> GetPublishedRevision(string contentTemplateId)
         {
-            return _documentDB.QueryAsync<ContentTemplateDAO>(ContainerKey, q => q.Where(t => t.ContentId == contentTemplateId && t.IsPublished))
-                .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find a published revision for Content Template ""{contentTemplateId}""."))
-                .Map(dtos => dtos.First().ToContentTemplate());
+            return 
+                from daos in _documentDB.QueryAsync<ContentTemplateDAO>(ContainerKey, 
+                        q => q.Where(t => t.ContentId == contentTemplateId && t.IsPublished))
+                    .ErrorIf(daos => daos.Count() == 0, Error.NotFound($@"Could not find a published revision for Content Template ""{contentTemplateId}""."))
+                select daos.First().ToContentTemplate();
         }
 
         public Task<Result<ContentTemplate>> GetRevision(string contentTemplateId, string revision)
         {
-            return _documentDB.QueryAsync<ContentTemplateDAO>(ContainerKey, q => q.Where(t => t.Id == revision && t.ContentId == contentTemplateId))
-                .ErrorIf(dtos => dtos.Count() == 0, Error.NotFound($@"Could not find revision ""{revision}"" for Content Template ""{contentTemplateId}""."))
-                .Map(dtos => dtos.First().ToContentTemplate());
+            return 
+                from daos in _documentDB.QueryAsync<ContentTemplateDAO>(ContainerKey, 
+                        q => q.Where(t => t.Id == revision && t.ContentId == contentTemplateId))
+                    .ErrorIf(daos => daos.Count() == 0, Error.NotFound($@"Could not find revision ""{revision}"" for Content Template ""{contentTemplateId}""."))
+                select daos.First().ToContentTemplate();
         }
 
         public Task<Result<ContentTemplate>> GetBaseTemplate(string contentTemplateId)
         {
-            return _documentDB.GetAsync<ContentTemplateDAO>(ContainerKey, contentTemplateId, contentTemplateId)
-                .MapError(e => e is NotFoundError
-                    ? Error.NotFound($@"Could not find Content Template ""{contentTemplateId}"".")
-                    : e)
-                .Map(dto => dto.ToContentTemplate());
+            return 
+                from dao in _documentDB.GetAsync<ContentTemplateDAO>(ContainerKey, contentTemplateId, contentTemplateId)
+                    .MapError(e => e is NotFoundError
+                        ? Error.NotFound($@"Could not find Content Template ""{contentTemplateId}"".")
+                        : e)
+                select dao.ToContentTemplate();
         }
 
-        public async Task<Result<Done>> Update(string contentTemplateId, string revision, ContentTemplate contentTemplate)
+        public Task<Result<Done>> Update(string contentTemplateId, string revision, ContentTemplate contentTemplate)
         {
-            return await _documentDB.UpsertAsync(ContainerKey, revision, contentTemplateId, new ContentTemplateDAO {
-                Id = revision,
-                ContentId = contentTemplateId,
-                PageTitle = contentTemplate.PageTitle,
-                PageContent = contentTemplate.PageContent,
-                Views = (contentTemplate.Views ?? new List<TemplateComponent>())
-                    .Select(TemplateComponentDAO.FromTemplateComponent)
-                    .ToList()
-            });
+            return
+                from done in _documentDB.UpsertAsync(ContainerKey, revision, contentTemplateId, new ContentTemplateDAO {
+                    Id = revision,
+                    ContentId = contentTemplateId,
+                    PageTitle = contentTemplate.PageTitle,
+                    PageContent = contentTemplate.PageContent,
+                    Views = (contentTemplate.Views ?? new List<TemplateComponent>())
+                        .Select(TemplateComponentDAO.FromTemplateComponent)
+                        .ToList()
+                })
+                select done;
         }
 
-        public async Task<Result<List<ContentTemplate>>> GetAllPublishedTemplates()
+        public Task<Result<List<ContentTemplate>>> GetAllPublishedTemplates()
         {
-            return await _documentDB.QueryAsync<ContentTemplateDAO>(ContainerKey, q => q.Where(t => t.IsPublished))
-                .ErrorIf(dtos => !dtos.Any(), Error.NotFound("Could not find any published Content Templates"))
-                .Map(dtos => dtos.Select(dto => dto.ToContentTemplate()).ToList());
+            return 
+                from daos in _documentDB.QueryAsync<ContentTemplateDAO>(ContainerKey, 
+                        q => q.Where(t => t.IsPublished))
+                    .ErrorIf(dtos => !dtos.Any(), Error.NotFound("Could not find any published Content Templates"))
+                select daos.Select(dto => dto.ToContentTemplate()).ToList();
         }
     }
 }

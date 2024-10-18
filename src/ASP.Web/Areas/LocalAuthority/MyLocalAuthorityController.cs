@@ -23,23 +23,35 @@ namespace ASP.Web.Areas.LocalAuthority
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> LandingPage(string? revision)
+        public Task<IActionResult> LandingPage(string? revision)
         {
-            return await User.GetLocalAuthorityCode()
-                .Then(laCode => base.LandingPage(laCode, revision))
+            var result =
+                from laCode in User.GetLocalAuthorityCode()
+                from model in base.LandingPage(laCode, revision)
+                select model;
+
+            return result
                 .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("download-data")]
-        public async Task<IActionResult> DownloadData()
+
+        public Task<IActionResult> DownloadData()
         {
-            return await User.GetLocalAuthorityCode()
-                .Then(laCode => base.DownloadData(laCode, new([
-                ], "Download data")))
+            var result =
+                from laCode in User.GetLocalAuthorityCode()
+                from model in base.DownloadData(laCode, new(
+                    [], 
+                    "Download data"))
+                select model;
+
+            return result
                 .ToActionResult(View, _hostEnvironment);
         }
-        protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string laCode, string laName) => new([
-        ], "My local authority");
+		
+        protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string laCode, string laName) => new(
+            [], 
+            "My local authority");
 
         protected override IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string laCode, string laName) => [
             new("My local authority", $"/my-local-authority/")

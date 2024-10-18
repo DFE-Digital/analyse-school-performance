@@ -9,7 +9,8 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads
         public Task<Result<GetAvailableSchoolDownloadsResponse>> HandleRequest(GetAvailableSchoolDownloadsRequest request)
         {
             return GetAvailableSchoolDownloadsResponse(request.Urn, request.Year)
-                .MapError(error => error is NotFoundError ? Error.NotFound(error.Message) : error).Map(Task.FromResult);
+                .MapError(error => error is NotFoundError ? Error.NotFound(error.Message) : error)
+                .Map(Task.FromResult);
         }
 
         private Result<GetAvailableSchoolDownloadsResponse> GetAvailableSchoolDownloadsResponse(string urn, Optional<int> year)

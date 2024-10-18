@@ -32,117 +32,147 @@ namespace ASP.Web.Areas.School
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
-        protected async Task<Result<SchoolLandingPageViewModel>> LandingPage(string urn, string? revision)
+        protected Task<Result<SchoolLandingPageViewModel>> LandingPage(string urn, string? revision)
         {
-            return await GetEstablishmentDetails(urn)
-                .Then(establishmentDetails => GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
-                .Then(contentTemplate => GetSchoolPage(establishmentDetails, GetLandingPageBreadcrumbs(establishmentDetails.Name))
-                .Map(schoolPage => new SchoolLandingPageViewModel(
+            return 
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
+                let breadcrumbs = GetLandingPageBreadcrumbs(establishmentDetails.Name ?? "")
+                from schoolPage in GetSchoolPage(
+                    establishmentDetails, 
+                    breadcrumbs)
+                select new SchoolLandingPageViewModel(
                     schoolPage,
                     establishmentDetails,
-                    contentTemplate
-                ))));
+                    contentTemplate);
         }
 
-        protected async Task<Result<SchoolContentPageViewModel>> OtherReports(string urn, string? revision, Func<string, BreadcrumbTrailViewModel> breadcrumbs)
+        protected Task<Result<SchoolContentPageViewModel>> OtherReports(string urn, string? revision, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs)
         {
-            return await GetEstablishmentDetails(urn)
-                .Then(establishmentDetails => GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)       
-                .Then(contentTemplate => GetSchoolPage(establishmentDetails,
-                                                  breadcrumbs(establishmentDetails.Name ?? "").Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? "")),
-                                                  GetSubNavigation(establishmentDetails, Request.Path))
-                .Map(schoolPage => new SchoolContentPageViewModel(
+            return 
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
+                let breadcrumbs = buildBreadcrumbs(establishmentDetails.Name ?? "")
+                    .Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? ""))
+                from schoolPage in GetSchoolPage(
+                    establishmentDetails,
+                    breadcrumbs,
+                    GetSubNavigation(establishmentDetails, Request.Path))
+                select new SchoolContentPageViewModel(
                     schoolPage,
-                    contentTemplate
-                ))));
+                    contentTemplate);
         }
 
-        protected async Task<Result<SchoolContentPageViewModel>> UsefulLinks(string urn, string? revision, Func<string, BreadcrumbTrailViewModel> breadcrumbs)
+        protected Task<Result<SchoolContentPageViewModel>> UsefulLinks(string urn, string? revision, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs)
         {
-            return await GetEstablishmentDetails(urn)
-                .Then(establishmentDetails => GetContentTemplate(USEFUL_LINKS_CONTENT_TEMPLATE_ID, revision)
-                .Then(contentTemplate => GetSchoolPage(establishmentDetails, 
-                                                  breadcrumbs(establishmentDetails.Name ?? "").Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? "")),
-                                                  GetSubNavigation(establishmentDetails, Request.Path))
-                .Map(schoolPage => new SchoolContentPageViewModel(
+            return 
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from contentTemplate in GetContentTemplate(USEFUL_LINKS_CONTENT_TEMPLATE_ID, revision)
+                let breadcrumbs = buildBreadcrumbs(establishmentDetails.Name ?? "")
+                    .Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? ""))
+                from schoolPage in GetSchoolPage(
+                    establishmentDetails, 
+                    breadcrumbs,
+                    GetSubNavigation(establishmentDetails, Request.Path))
+                select new SchoolContentPageViewModel(
                     schoolPage,
-                    contentTemplate
-                ))));
+                    contentTemplate);
         }
 
-        protected async Task<Result<SchoolDownloadsViewModel>> DownloadDataSelectYear(string urn, Func<string, BreadcrumbTrailViewModel> breadcrumbs)
+        protected Task<Result<SchoolDownloadsViewModel>> DownloadDataSelectYear(string urn, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs)
         { 
-            return await GetEstablishmentDetails(urn)
-                .Then(establishmentDetails => GetAvailableDownloads(establishmentDetails.Urn, Optional<int>.None)
-                .Then(availableDownloads => GetSchoolPage(establishmentDetails, 
-                                                  breadcrumbs(establishmentDetails.Name ?? "").Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? "")),
-                                                  GetSubNavigation(establishmentDetails, Request.Path),
-                                                  GetSideNavigation(establishmentDetails, Request.Path))
-                .Map(schoolPage => new SchoolDownloadsViewModel(
+            return 
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from availableDownloads in GetAvailableDownloads(establishmentDetails.Urn, Optional<int>.None)
+                let breadcrumbs = buildBreadcrumbs(establishmentDetails.Name ?? "")
+                    .Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? ""))
+                from schoolPage in GetSchoolPage(
+                    establishmentDetails, 
+                    breadcrumbs,
+                    GetSubNavigation(establishmentDetails, Request.Path),
+                    GetSideNavigation(establishmentDetails, Request.Path))
+                select new SchoolDownloadsViewModel(
+                    schoolPage,
+                    availableDownloads);
+        }
+
+        protected Task<Result<SchoolDownloadsViewModel>> DownloadDataSelectFiles(string urn, Optional<int> selectedYear, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs)
+        {
+            return 
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from availableDownloads in GetAvailableDownloads(establishmentDetails.Urn, selectedYear)
+                let breadcrumbs = buildBreadcrumbs(establishmentDetails.Name ?? "")
+                    .Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? ""))
+                from schoolPage in GetSchoolPage(
+                    establishmentDetails, 
+                    breadcrumbs,
+                    GetSubNavigation(establishmentDetails, Request.Path),
+                    GetSideNavigation(establishmentDetails, Request.Path))
+                select new SchoolDownloadsViewModel(
                     schoolPage,
                     availableDownloads
-                ))));
+                );
         }
 
-        protected async Task<Result<SchoolDownloadsViewModel>> DownloadDataSelectFiles(string urn, Optional<int> selectedYear, Func<string, BreadcrumbTrailViewModel> breadcrumbs)
+        protected Task<Result<SchoolDownloadsSelectFormatViewModel>> DownloadDataSelectFormat(string urn, int selectedYear, List<string> selectedFiles, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs)
         {
-            return await GetEstablishmentDetails(urn)
-                .Then(establishmentDetails => GetAvailableDownloads(establishmentDetails.Urn, selectedYear)
-                .Then(availableDownloads => GetSchoolPage(establishmentDetails, 
-                                                          breadcrumbs(establishmentDetails.Name ?? "").Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? "")),
-                                                          GetSubNavigation(establishmentDetails, Request.Path),
-                                                          GetSideNavigation(establishmentDetails, Request.Path))
-                .Map(schoolPage => new SchoolDownloadsViewModel(
+            return
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                let breadcrumbs = buildBreadcrumbs(establishmentDetails.Name ?? "")
+                    .Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? ""))
+                from schoolPage in GetSchoolPage(
+                    establishmentDetails, 
+                    breadcrumbs,
+                    GetSubNavigation(establishmentDetails, Request.Path),
+                    GetSideNavigation(establishmentDetails, Request.Path))
+                select new SchoolDownloadsSelectFormatViewModel(
                     schoolPage,
-                    availableDownloads
-                ))));
+                    selectedFiles);
         }
 
-        protected async Task<Result<SchoolDownloadsSelectFormatViewModel>> DownloadDataSelectFormat(string urn, int selectedYear, List<string> selectedFiles, Func<string, BreadcrumbTrailViewModel> breadcrumbs)
-        {
-            return await GetEstablishmentDetails(urn)
-                .Then(establishmentDetails=> GetSchoolPage(establishmentDetails, 
-                                                 breadcrumbs(establishmentDetails.Name ?? "").Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? "")),
-                                                 GetSubNavigation(establishmentDetails, Request.Path),
-                                                 GetSideNavigation(establishmentDetails, Request.Path))
-                .Map(schoolPage => new SchoolDownloadsSelectFormatViewModel(
-                    schoolPage,
-                    selectedFiles
-                )));
-        }
-
-        protected abstract Task<Result<SchoolPageViewModel>> GetSchoolPage(EstablishmentDetailsViewModel establishmentDetails, 
-                                                                           BreadcrumbTrailViewModel breadcrumb, 
-                                                                           NavigationViewModel? subNavigation = null, 
-                                                                           NavigationViewModel? sideNavigation = null);
+        protected abstract Task<Result<SchoolPageViewModel>> GetSchoolPage(
+            EstablishmentDetailsViewModel establishmentDetails, 
+            BreadcrumbTrailViewModel breadcrumb, 
+            NavigationViewModel? subNavigation = null, 
+            NavigationViewModel? sideNavigation = null);
+        
         protected abstract BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string schoolName);
+        
         protected abstract IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string urn, string schoolName);
-        protected abstract NavigationViewModel GetSubNavigation(EstablishmentDetailsViewModel establishmentDetails, PathString requestPath);
-        protected abstract NavigationViewModel GetSideNavigation(EstablishmentDetailsViewModel establishmentDetails, PathString requestPath);
+        
+        protected abstract NavigationViewModel GetSubNavigation(
+            EstablishmentDetailsViewModel establishmentDetails, 
+            PathString requestPath);
+        
+        protected abstract NavigationViewModel GetSideNavigation(
+            EstablishmentDetailsViewModel establishmentDetails, 
+            PathString requestPath);
 
-
-        protected virtual async Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
+        protected virtual Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
         {
-            return await _api.GetEstablishmentDetails(new GetEstablishmentDetailsRequest(urn))
-                .Map(EstablishmentDetailsViewModel.FromEstablishmentDetails);
+            return 
+                from establishmentDetails in _api.GetEstablishmentDetails(new GetEstablishmentDetailsRequest(urn))
+                select EstablishmentDetailsViewModel.FromEstablishmentDetails(establishmentDetails);
         }
 
-        protected virtual async Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentId, string? revision)
+        protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentId, string? revision)
         {
-            return await _api.ViewContentTemplate(new ViewContentTemplateRequest(contentId, Optional.FromNullable(revision)))
-                .Map(template => ContentTemplateViewModel.FromTemplate(contentId, revision, template))
-                .DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel());
+            return (
+                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(contentId, Optional.FromNullable(revision)))
+                select ContentTemplateViewModel.FromTemplate(contentId, revision, template)
+            ).DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel());
         }
 
-        protected virtual async Task<Result<AvailableDownloadsViewModel>> GetAvailableDownloads(string urn, Optional<int> year)
+        protected virtual Task<Result<AvailableDownloadsViewModel>> GetAvailableDownloads(string urn, Optional<int> year)
         {
-            return await _api.GetAvailableSchoolDownloads(new GetAvailableSchoolDownloadsRequest(urn, year))
-                .Map(response => AvailableDownloadsViewModel.FromAvailableDownloads(response));
+            return 
+                from downloads in _api.GetAvailableSchoolDownloads(new GetAvailableSchoolDownloadsRequest(urn, year))
+                select AvailableDownloadsViewModel.FromAvailableDownloads(downloads);
         }
 
-        protected virtual async Task<Result<ActionResult>> GetDownloadsAsZipFile(FileType fileType, List<string> fileIds)
+        protected virtual Task<Result<ActionResult>> GetDownloadsAsZipFile(FileType fileType, List<string> fileIds)
         {
-            return await _api.DownloadAsZipFile(new DownloadAsZipFileRequest(fileType, fileIds));
+            return _api.DownloadAsZipFile(new DownloadAsZipFileRequest(fileType, fileIds));
         }
     }
 }

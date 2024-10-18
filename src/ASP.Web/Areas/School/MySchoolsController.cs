@@ -36,13 +36,18 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> Schools(string? page)
         {
             var pageNumber = PageHelper.ParsePageNumber(page);
+            var organisationName = User.FindFirst(CustomClaimTypes.OrganisationName)?.Value;
 
-            return Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
-                .Then(scopeInfo => GetAllEstablishments(scopeInfo.ScopeType, scopeInfo.ScopeId, pageNumber)
-                    .Map(results => DefaultViewModel(results, "My schools",
-                        $"{User.FindFirst(CustomClaimTypes.OrganisationName)?.Value} - {results.TotalResults:N0} schools",
-                        "/my-schools/")))
-                .ToActionResult(View, _hostEnvironment);
+            var result =
+                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+                from results in GetAllEstablishments(scopeInfo.ScopeType, scopeInfo.ScopeId, pageNumber)
+                select DefaultViewModel(
+                    results,
+                    "My schools",
+                    $"{organisationName} - {results.TotalResults:N0} schools",
+                    "/my-schools/");
+
+            return result.ToActionResult(View, _hostEnvironment);
         }
     }
 }
