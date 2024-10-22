@@ -24,6 +24,7 @@
                         <li>a number, e.g. 123</li>
                         <li>an array, e.g. ["a", "b", "c"]</li>
                         <li>an object, e.g. {"property1": "xyz", "property2": 123}</li>
+                        <li>to escape Markdown, add a double backslash (\), e.g. {"property1": "\\_xyz\\_"}</li>
                     </ul>
                 </div>
                 <textarea asp-for="ViewContent[kvp.Key]" class="govuk-textarea" rows="5" area-describedby="hint-@Html.IdFor(m => m.ViewContent[@kvp.Key])">

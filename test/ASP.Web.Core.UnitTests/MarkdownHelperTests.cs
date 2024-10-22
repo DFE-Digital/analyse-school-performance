@@ -285,5 +285,27 @@ namespace ASP.Web.Core.UnitTests
 
             Assert.Equal(expected, result.ToString());
         }
+
+        [Theory]
+        [InlineData("\\_escaped text\\_", "_escaped text_")]
+        [InlineData("\\*escaped text\\*", "*escaped text*")]
+        [InlineData("\\\\_escaped text\\\\_", @"\_escaped text\_")]
+        [InlineData("\\\\*escaped text\\\\*", @"\*escaped text\*")]
+        [InlineData("\\\\\\_escaped text\\\\\\_", @"\\_escaped text\\_")]
+        [InlineData("\\\\\\*escaped text\\\\\\*", @"\\*escaped text\\*")]
+        [InlineData("\\_\\_escaped text\\_\\_", "__escaped text__")]
+        [InlineData("\\*\\*escaped text\\*\\*", "**escaped text**")]
+        [InlineData("\\\\_\\\\_escaped text\\\\_\\\\_", @"\_\_escaped text\_\_")]
+        [InlineData("\\\\*\\\\*escaped text\\\\*\\\\*", @"\*\*escaped text\*\*")]
+        public void ConvertInlineMarkdown_WhenTextContainsEscapedCharacters_EscapesCorrectly(string input, string expected)
+        {
+            TestRequestHostProvider requestHostProvider = new("asp.gov.uk");
+            AttributeHelper attributeHelper = new(requestHostProvider);
+            MarkdownHelper markdownHelper = new(attributeHelper);
+
+            HtmlString result = markdownHelper.ConvertInlineMarkdown(input);
+
+            Assert.Equal(expected, result.ToString());
+        }
     }
 }

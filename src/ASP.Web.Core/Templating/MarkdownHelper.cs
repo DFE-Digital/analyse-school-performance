@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -80,10 +79,22 @@ namespace ASP.Web.Core.Templating
             // Escape HTML
             inputString = HttpUtility.HtmlEncode(inputString);
 
-            // We need to keep performing the replace until the inputString is unchanged.
-            // This is because a string like "**_text_**" will match first with the "**" and be replaced with
-            // "<strong>_text_</strong>" - but then we've already passed that point in the string and won't pick
-            // up the "_text_" part unless we do the replace again.
+            // Step 1: Replace escaped markdown characters with placeholders (e.g., \_ -> ##UNDERSCORE##)
+            inputString = Regex.Replace(inputString, @"(\{1})?\\([*_])", m =>
+            {
+                if (m.Groups[1].Success) // This matches double backslashes
+                {
+                    return m.Value; // Leave it as is (don't replace double backslashes)
+                }
+                switch (m.Groups[2].Value) // This matches single backslash + _ or *
+                {
+                    case "_": return "##UNDERSCORE##";
+                    case "*": return "##ASTERISK##";
+                    default: return m.Value;
+                }
+            });
+
+            // Step 2: Process the input for Markdown (without affecting placeholders)
             while (true)
             {
                 var newString = _markdown.Replace(inputString, m =>
@@ -148,6 +159,11 @@ namespace ASP.Web.Core.Templating
                 inputString = newString;
             }
 
+            // Step 3: Replace placeholders back to original characters
+            inputString = inputString
+                .Replace("##UNDERSCORE##", "_")
+                .Replace("##ASTERISK##", "*");
+
             return new HtmlString(inputString);
         }
 
@@ -173,8 +189,6 @@ namespace ASP.Web.Core.Templating
             }
 
             return inputString;
-
         }
-
     }
 }

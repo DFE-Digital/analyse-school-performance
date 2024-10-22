@@ -20,7 +20,8 @@ namespace ASP.Web.Core.Templating
 
             ViewId = contentTemplate.ViewId;
 
-            IDictionary<string, object> viewContent = contentTemplate.ViewContent switch {
+            IDictionary<string, object> viewContent = contentTemplate.ViewContent switch
+            {
                 JObject o => o.ToObject<Dictionary<string, object>>() ?? new Dictionary<string, object>(),
                 IDictionary<string, object> d => d,
                 _ => new Dictionary<string, object>()
@@ -37,7 +38,7 @@ namespace ASP.Web.Core.Templating
                     JObject o => JsonHelper.SerializeIndented(o),
                     _ => c.Value.ToString() ?? ""
                 });
-            
+
             IList<TemplateComponent> childViews = contentTemplate.ChildViews ?? new List<TemplateComponent>();
             ChildViews = childViews.Select(editModelFactory.CreateTemplateComponentEditModel).ToList();
 
@@ -139,6 +140,5 @@ namespace ASP.Web.Core.Templating
                 _ => JsonHelper.DeserializeOrNull<object>(value).Match(v => v, e => null)
             };
         }
-
     }
 }

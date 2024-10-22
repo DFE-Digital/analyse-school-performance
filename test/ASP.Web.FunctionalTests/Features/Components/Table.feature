@@ -176,7 +176,6 @@ Scenario: Table content should display html correctly with headings and rows whe
 		|           |
 		| link text |
 
-
 @Javascript:disabled
 Scenario: Table content should display html correctly with more row columns than heading columns
 	Given a content template contains the component:
