@@ -9,12 +9,11 @@
 </div>
 
 <div class="govuk-width-container govuk-main-wrapper">
-    <h1 class="govuk-heading-xl">@Model.SchoolPage.Title</h1>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.SchoolPage.Title</h1>
     <div>
-        <h1 data-testid="school-page-school-name" class="govuk-heading-l">
-            @Model.EstablishmentDetails.Name
-            <span style="font-weight:400;">(URN: @Model.EstablishmentDetails.Urn)</span>
-        </h1>
+        <h2 data-testid="school-page-school-name" id="app-school-name-heading" class="govuk-heading-l">
+            @Html.Raw(Model.SchoolPage.SubTitle)
+        </h2>
     </div>
     <details id="app-school-page-details" class="govuk-details">
         <summary class="govuk-details__summary">

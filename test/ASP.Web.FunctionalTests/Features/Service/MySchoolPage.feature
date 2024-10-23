@@ -74,11 +74,11 @@ Scenario: School page should be accessible if user's Establishment exists
 	Then I should get a 200 response
 	Then the page title should be "My school | Analyse school performance"
 	Then the element "h1.govuk-heading-xl" should have the text content "My school" 
-    Then the element "h1.govuk-heading-l" should have the outer HTML:
+    Then the element "h2.govuk-heading-l" should have the outer HTML:
        """
-       <h1 data-testid="school-page-school-name" class="govuk-heading-l"> Hollinswood Primary School
-            <span style="font-weight:400;">(URN: 123456)</span>
-        </h1>
+       <h2 data-testid="school-page-school-name" id="app-school-name-heading" class="govuk-heading-l"> Hollinswood Primary School
+            <span>(URN: 123456)</span>
+        </h2>
        """
 
 @Javascript:disabled

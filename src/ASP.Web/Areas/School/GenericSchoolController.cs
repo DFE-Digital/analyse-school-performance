@@ -1,4 +1,6 @@
 using ASP.Application;
+using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Core.Authorization;
 using ASP.Core.Results;
 using ASP.Web.Areas.School.ViewModels;
 using ASP.Web.Areas.Shared.Navigation;
@@ -13,7 +15,7 @@ namespace ASP.Web.Areas.School
     [Area("School")]
     [Route("school/{urn}")]
     [ServiceFilter<TermsOfUseActionFilter>]
-    [Authorize(Policy = Policy.AccessToAllSchools)]
+    [Authorize(Policy = Policy.AccessToGenericSchool)]
     public class GenericSchoolController : SchoolController
     {
         public GenericSchoolController(
@@ -44,9 +46,32 @@ namespace ASP.Web.Areas.School
                 .ToActionResult(View, _hostEnvironment);
         }
 
-        protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string schoolName) => new([
-            new($"{schoolName}", $"/my-schools/")
-        ], schoolName);
+        protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string schoolName,
+            LocalAuthorityDTO? localAuthority)
+        {
+            var breadcrumbs = new List<BreadcrumbItem>();
+
+            if (User.Role()!.HasAccessToAllSchools)
+            {
+                var laCode = localAuthority?.Code ?? "";
+                var laName = localAuthority?.Name ?? "";
+                breadcrumbs =
+                [
+                    new("All local authorities", $"/local-authorities"),
+                    new(laName, $"/local-authority/{laCode}"),
+                    new("All schools", $"/local-authority/{laCode}/schools")
+                ];
+            }
+            else if (User.Role()!.HasAccessToMySchools)
+            {
+                breadcrumbs =
+                [
+                    new("My schools", $"/my-schools")
+                ];
+            }
+
+            return new BreadcrumbTrailViewModel(breadcrumbs, schoolName);
+        }
 
         protected override IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string urn, string schoolName) => [
             new("My schools", $"/my-schools/"),
@@ -75,9 +100,23 @@ namespace ASP.Web.Areas.School
             NavigationViewModel? subNavigation,
             NavigationViewModel? sideNavigation)
         {
+            string title = string.Empty, subtitle = string.Empty;
+
+            if (User.Role()!.HasAccessToAllSchools)
+            {
+                 title = $"{establishmentDetails.Name}";
+                 subtitle = $"<span>(URN: {establishmentDetails.Urn})</span>";
+                 
+            } else if (User.Role()!.HasAccessToMySchools)
+            {
+                title = "My schools";
+                subtitle = $"{establishmentDetails.Name} <span>(URN: {establishmentDetails.Urn})</span>";
+            }
+            
             var schoolPage = new SchoolPageViewModel(
                 "GenericSchool",
-                establishmentDetails.Name,
+                title,
+                subtitle,
                 establishmentDetails.Name,
                 establishmentDetails.Urn,
                 breadcrumbs,

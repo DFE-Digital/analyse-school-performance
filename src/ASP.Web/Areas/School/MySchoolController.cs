@@ -1,4 +1,5 @@
 using ASP.Application;
+using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Core.Authorization;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
@@ -111,7 +112,7 @@ namespace ASP.Web.Areas.School
                 .ToActionResult(_hostEnvironment);
         }
 
-        protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string schoolName) => 
+        protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string schoolName, LocalAuthorityDTO? localAuthority) => 
             new([], "My school");
 
         protected override IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string urn, string schoolName) => [
@@ -152,9 +153,11 @@ namespace ASP.Web.Areas.School
             NavigationViewModel? subNavigation,
             NavigationViewModel? sideNavigation)
         {
+            var subTitle = $"{establishmentDetails.Name} <span>(URN: {establishmentDetails.Urn})</span>";
             var schoolPage = new SchoolPageViewModel(
                 "MySchool",
                 "My school",
+                subTitle,
                 establishmentDetails.Name,
                 establishmentDetails.Urn,
                 breadcrumb,

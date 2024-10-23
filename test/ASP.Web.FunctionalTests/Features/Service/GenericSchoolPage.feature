@@ -1,14 +1,6 @@
 Feature: Generic School page
  
 @Javascript:disabled
-Scenario: A user with no access to all Schools should not be able to access the generic 'School' page. Instead, they should see a 403 Access not allowed page.
-    Given I am a MAT Named user for Multi-Academy Trust "1234"
-    When I navigate to /school/123456/
-    Then I should get a 403 response
-    And the page title should be "Access not allowed | Analyse school performance"
-    And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
-
-@Javascript:disabled
 Scenario: A School user should not be able to access the generic 'School' page, even if it's for their own School. Instead, they should see a 403 Access not allowed page.
     Given I am a School Named user for Establishment "123456"
     When I navigate to /school/123456/
@@ -134,9 +126,13 @@ Scenario: School page should contain seven app card container element
     """
     And Establishment "123456" exists:
     """
-    {
-        "name": "Hollinswood Primary School"
-    }
+        {
+            "name": "Hollinswood Primary School",
+             "localAuthority": {
+                "code": "999",
+            	"name": "Test LA"
+             }
+        }
     """
     And I am a DfE Named user
     When I navigate to /school/123456/
@@ -176,7 +172,11 @@ Scenario: School page should be accessible when provided urn
   Given Establishment "123456" exists:
 		"""
 		{
-            "name": "Hollinswood Primary School"
+            "name": "Hollinswood Primary School",
+            "localAuthority": {
+        	   "code": "999",
+               "name": "Test LA"
+            }
         }
 		"""
     And I am a DfE Named user
@@ -184,12 +184,7 @@ Scenario: School page should be accessible when provided urn
 	Then I should get a 200 response
 	Then the page title should be "Hollinswood Primary School | Analyse school performance"
 	Then the element "h1.govuk-heading-xl" should have the text content "Hollinswood Primary School" 
-    Then the element "h1.govuk-heading-l" should have the outer HTML:
-       """
-       <h1 data-testid="school-page-school-name" class="govuk-heading-l"> Hollinswood Primary School
-            <span style="font-weight:400;">(URN: 123456)</span>
-        </h1>
-       """
+    Then the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 123456)"
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
@@ -224,6 +219,7 @@ Scenario: School page should contain a school details disclosure element
             },
             "localAuthority": {
                 "name": "Telford and Wrekin",
+                "code": "999"
             },
             "name": "Hollinswood Primary School",
             "noOfPupils": 404,
@@ -288,7 +284,10 @@ Scenario: School page should show if values are null
             "establishmentType": null,
             "gender": null,
             "headteacher": null,
-            "localAuthority": null,
+            "localAuthority": {
+              	"code": "999",
+                "name": "Test LA"
+            },
             "name": "Hollinswood Primary School",
             "noOfPupils": null,
             "ofstedLastInspectionDate": null,
@@ -312,7 +311,7 @@ Scenario: School page should show if values are null
     And the element "*[data-testid='school-details-gender-value']" should have the text content ""
     And the element "*[data-testid='school-details-ofsted-key']" should have the text content "Ofsted rating"
     And the element "*[data-testid='school-details-la-key']" should have the text content "Local authority"
-    And the element "*[data-testid='school-details-la-value']" should have the text content ""
+    And the element "*[data-testid='school-details-la-value']" should have the text content "Test LA"
     And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
     And the element "*[data-testid='school-details-gender-value']" should have the text content ""
     And the element "*[data-testid='school-details-principal-key']" should have the text content "Headteacher / Principal"
@@ -361,8 +360,9 @@ Scenario: School page should show if values are null case 2
                 "lastName": null
             },
             "localAuthority": {
-                "name": null,
-            },
+        		"code": "999",
+              	"name": "Test LA"
+        	},
             "noOfPupils": null,
             "ofstedLastInspectionDate": null,
             "ofstedRating": {
@@ -392,7 +392,7 @@ Scenario: School page should show if values are null case 2
     And the element "*[data-testid='school-details-gender-value']" should have the text content ""
     And the element "*[data-testid='school-details-ofsted-key']" should have the text content "Ofsted rating"
     And the element "*[data-testid='school-details-la-key']" should have the text content "Local authority"
-    And the element "*[data-testid='school-details-la-value']" should have the text content ""
+    And the element "*[data-testid='school-details-la-value']" should have the text content "Test LA"
     And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
     And the element "*[data-testid='school-details-gender-value']" should have the text content ""
     And the element "*[data-testid='school-details-principal-key']" should have the text content "Headteacher / Principal"
@@ -414,9 +414,149 @@ Scenario: Details disclosure element text should read 'Show school details' when
     Given Establishment "123456" exists:
 	"""
 	{
-        "name": "Hollinswood Primary School"
+        "name": "Hollinswood Primary School",
+        "localAuthority": {
+    		"code": "999",
+           	"name": "Test LA"
+    	}
     }
 	"""
     And I am a DfE Named user
     When I navigate to /school/123456/
     Then the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
+    
+@Javascript:disabled
+Scenario Outline: Page should show a breadcrumb trail for 'AccessToAllSchools' users
+    Given I am a <AccessToAllSchools> user
+    And Establishment "111111" exists:
+    """
+        {
+          "name": "Test School 1",
+          "localAuthority": {
+    		"code": "931",
+           	"name": "Oxfordshire"
+    	  }
+        }
+    """
+    When I navigate to /school/111111/
+    Then I should get a 200 response
+    And the page title should be "Test School 1 | Analyse school performance"
+    And the element "h1.govuk-heading-xl" should have the text content "Test School 1"
+    And the element "[data-testid='breadcrumb-home']" should have the href "/"
+    And the element "[data-testid='breadcrumb-home']" should have the text content "Home"
+    And the element "[data-testid='breadcrumb-all-local-authorities']" should have the href "/local-authorities"
+    And the element "[data-testid='breadcrumb-all-local-authorities']" should have the text content "All local authorities"
+    And the element "[data-testid='breadcrumb-oxfordshire']" should have the href "/local-authority/931"
+    And the element "[data-testid='breadcrumb-oxfordshire']" should have the text content "Oxfordshire"
+    And the element "[data-testid='breadcrumb-all-schools']" should have the href "/local-authority/931/schools"
+    And the element "[data-testid='breadcrumb-all-schools']" should have the text content "All schools"
+    And the element "[data-testid='breadcrumb-current-page']" should have the text content "Test School 1" 
+Examples:
+  | AccessToAllSchools |
+  | DfE Named          |
+  | DfE Unnamed        |
+  | Ofsted Unnamed     |
+  | Super Admin        |    
+    
+@Javascript:disabled
+Scenario Outline: Page should show a breadcrumb trail for 'AccessToMySchools' user
+    Given I am a <AccessToMySchools> user 
+    And Establishment "123456" exists:
+    """
+        {
+         "name": "Test School 1",
+          "multiAcademyTrust": {
+              "uid": "1234"
+          },
+          "localAuthority":
+           {
+           	 "code": "999"
+           },
+          "diocese": {
+             "code": "1000",
+             "name": "Test Diocese1",
+             "lname": "test diocese1",
+             "isNullish": false
+          }
+        }
+    """
+    When I navigate to /school/123456/
+    Then I should get a 200 response
+    And the page title should be "My schools | Analyse school performance"
+    And the element "h1.govuk-heading-xl" should have the text content "My schools"
+    And the element "[data-testid='breadcrumb-home']" should have the href "/"
+    And the element "[data-testid='breadcrumb-home']" should have the text content "Home"
+    And the element "[data-testid='breadcrumb-my-schools']" should have the href "/my-schools"
+    And the element "[data-testid='breadcrumb-my-schools']" should have the text content "My schools"
+    And the element "[data-testid='breadcrumb-current-page']" should have the text content "Test School 1"  
+Examples:
+  | AccessToMySchools |
+  | LA Named          |
+  | LA Unnamed        |
+  | MAT Named         |
+  | MAT Unnamed       |
+  | MAT Governor      |
+  | Diocese Named     |
+  | Diocese Unnamed   |  
+    
+@Javascript:disabled
+Scenario Outline: School page should have the correct title and subtitle for 'AccessToAllSchools' users
+    Given Establishment "123456" exists:
+    """
+        {
+           "name": "Hollinswood Primary School",
+           "localAuthority": {
+              "code": "999",
+        	  "name": "Test LA"
+            }
+        }
+    """
+    And I am a <AccessToAllSchools> user
+    When I navigate to /school/123456/
+    Then I should get a 200 response
+    Then the page title should be "Hollinswood Primary School | Analyse school performance"
+    Then the element "h1.govuk-heading-xl" should have the text content "Hollinswood Primary School" 
+    Then the element "h2.govuk-heading-l" should have the outer HTML:
+    """
+    <h2 data-testid="school-page-school-name" id="app-school-name-heading" class="govuk-heading-l">
+         <span>(URN: 123456)</span>
+     </h2>
+    """
+Examples:
+  | AccessToAllSchools |
+  | DfE Named          |
+  | DfE Unnamed        |
+  | Ofsted Unnamed     |
+  | Super Admin        |
+          
+@Javascript:disabled
+Scenario Outline: School page should have the correct title and subtitle for 'AccessToMySchools' user
+    Given I am a <AccessToMySchools> user 
+    And Establishment "111111" exists:
+    """
+        {
+           "name": "Hollinswood Primary School",
+            "multiAcademyTrust": {
+              "uid": "1111"
+            }
+        }
+    """
+    When I navigate to /school/111111/
+    Then I should get a 200 response
+    Then the page title should be "My schools | Analyse school performance"
+    Then the element "h1.govuk-heading-xl" should have the text content "My schools" 
+    Then the element "h2.govuk-heading-l" should have the outer HTML:
+    """
+    <h2 data-testid="school-page-school-name" id="app-school-name-heading" class="govuk-heading-l"> Hollinswood Primary School
+         <span>(URN: 111111)</span>
+     </h2>
+    """    
+Examples:
+  | AccessToMySchools |
+  | LA Named          |
+  | LA Unnamed        |
+  | MAT Named         |
+  | MAT Unnamed       |
+  | MAT Governor      |
+  | Diocese Named     |
+  | Diocese Unnamed   |       

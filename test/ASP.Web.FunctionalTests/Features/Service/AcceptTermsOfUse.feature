@@ -30,7 +30,11 @@ Scenario: Should not be redirected to accept terms when Accepted terms cookie is
 	Given Establishment "136028" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	And Local Authority "301" exists:
@@ -154,7 +158,11 @@ Scenario: Should redirect to the correct referrer
 	And Establishment "136028" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+		    "code": "999",
+	        "name": "Test LA"
+		}
 	}
 	"""
 	And Local Authority "301" exists:

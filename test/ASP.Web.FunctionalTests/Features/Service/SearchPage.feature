@@ -336,56 +336,72 @@ Scenario: Matching URN search should redirect to school landing page
 	Given Establishment "111111" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+			   "code": "999",
+	       	   "name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: Matching URN search should redirect to school landing page (JS)
 	Given Establishment "111111" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+			 "code": "999",
+	       	 "name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: Partial match for school name should redirect to school landing page
 	Given Establishment "111111" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "PRiMaRY"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: Partial match for school name should redirect to school landing page (JS)
 	Given Establishment "111111" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "PRiMaRY"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: Partial street match should redirect to school landing page
@@ -397,6 +413,10 @@ Scenario: Partial street match should redirect to school landing page
 			"street": "13 The Street",
 			"town": "SomeTown",
 			"postCode": "TR18 3JT"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	} 
 	"""
@@ -416,6 +436,10 @@ Scenario: Partial street match should redirect to school landing page (JS)
 			"street": "13 The Street",
 			"town": "SomeTown",
 			"postCode": "TR18 3JT"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	} 
 	"""
@@ -435,6 +459,10 @@ Scenario: Partial town match should redirect to school landing page
 			"street": "13 The Street",
 			"town": "SomeTown",
 			"postCode": "TR18 3JT"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	} 
 	"""
@@ -454,6 +482,10 @@ Scenario: Partial town match should redirect to school landing page (JS)
 			"street": "13 The Street",
 			"town": "SomeTown",
 			"postCode": "TR18 3JT"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	} 
 	"""
@@ -473,6 +505,10 @@ Scenario: Partial postcode match should redirect to school landing page
 			"street": "13 The Street",
 			"town": "SomeTown",
 			"postCode": "TR18 3JT"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	} 
 	"""
@@ -492,6 +528,10 @@ Scenario: Partial postcode match should redirect to school landing page (JS)
 			"street": "13 The Street",
 			"town": "SomeTown",
 			"postCode": "TR18 3JT"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	} 
 	"""
@@ -566,6 +606,10 @@ Scenario Outline: Results page should show partial name and address matches (JS)
 			"street": "13 The Street",
 			"town": "SomeTown",
 			"postCode": "B1 1AA"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	}
 	"""
@@ -577,6 +621,10 @@ Scenario Outline: Results page should show partial name and address matches (JS)
 			"street": "13 The Road",
 			"town": "Tring",
 			"postCode": "B1 1AA"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	}
 	"""
@@ -588,13 +636,21 @@ Scenario Outline: Results page should show partial name and address matches (JS)
 			"street": "13 The Road",
 			"town": "SomeTown",
 			"postCode": "TR18 3JT"
+		},
+	    "localAuthority": {
+			 "code": "999",
+	       	 "name": "Test LA"
 		}
 	}
 	"""
 	And Establishment "444444" exists:
 	"""
 	{
-		"name": "The Training Centre"
+		"name": "The Training Centre",
+	     "localAuthority": {
+			 "code": "999",
+	       	 "name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
@@ -616,28 +672,36 @@ Scenario: School search successful for 6-digit URN
 	Given Establishment "111111" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: School search successful for 6-digit URN (JS)
 	Given Establishment "111111" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario Outline: School search with less than 6 digits does not match on URN
@@ -697,6 +761,10 @@ Scenario Outline: School search with less than 6 digits matches on school addres
 			"street": "<SearchTerm> The Street",
 			"town": "SomeTown",
 			"postCode": "TR18 3JT"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	} 
 	"""
@@ -704,7 +772,7 @@ Scenario Outline: School search with less than 6 digits matches on school addres
 	And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/222222/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Another Primary School (URN: 222222)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 222222)"
 Examples: 
 | SearchTerm |
 | 1          |
@@ -729,6 +797,10 @@ Scenario Outline: School search with less than 6 digits matches on school addres
 			"street": "<SearchTerm> The Street",
 			"town": "SomeTown",
 			"postCode": "TR18 3JT"
+		},
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
 		}
 	} 
 	"""
@@ -736,7 +808,7 @@ Scenario Outline: School search with less than 6 digits matches on school addres
 	And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/222222/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Another Primary School (URN: 222222)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 222222)"
 Examples: 
 | SearchTerm |
 | 1          |
@@ -750,7 +822,11 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
 	Given Establishment "111111" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	And Establishment "222222" exists:
@@ -768,14 +844,18 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search (JS)
 	Given Establishment "111111" exists:
 	"""
 	{
-		"name": "Some Primary School"
+		"name": "Some Primary School",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	And Establishment "222222" exists:
@@ -793,7 +873,7 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search (JS
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (with forward slash)
@@ -801,14 +881,18 @@ Scenario: Search term matching establishment LAESTAB code (with forward slash)
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"
+		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit" 
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: Search term matching establishment LAESTAB code (with forward slash) (JS)
@@ -816,14 +900,18 @@ Scenario: Search term matching establishment LAESTAB code (with forward slash) (
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"
+		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit" 
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (without forward slash)
@@ -831,14 +919,18 @@ Scenario: Search term matching establishment LAESTAB code (without forward slash
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"
+		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: Search term matching establishment LAESTAB code (without forward slash) (JS)
@@ -846,14 +938,18 @@ Scenario: Search term matching establishment LAESTAB code (without forward slash
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"
+		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (LA part)
@@ -1033,7 +1129,11 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"
+		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	And Establishment "222222" exists:
@@ -1052,7 +1152,7 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields) (JS)
@@ -1060,7 +1160,11 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"
+		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	And Establishment "222222" exists:
@@ -1079,7 +1183,7 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields)
@@ -1088,6 +1192,10 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 	{
 		"name": "Some Primary School",
 		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	} 
 	"""
 	And Establishment "222222" exists:
@@ -1106,7 +1214,7 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields) (JS)
@@ -1115,6 +1223,10 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 	{
 		"name": "Some Primary School",
 		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	} 
 	"""
 	And Establishment "222222" exists:
@@ -1133,7 +1245,7 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields)
@@ -1141,7 +1253,11 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"		 
+		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}		 
 	}
 	"""
 	 And Establishment "222222" exists:
@@ -1160,7 +1276,7 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 	And I update the textbox "#searchTerm" to have the value "894"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields) (JS)
@@ -1168,7 +1284,11 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"		 
+		"laestab": "894/2200",
+		"localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}		 
 	}
 	"""
 	 And Establishment "222222" exists:
@@ -1187,7 +1307,7 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 	And I update the textbox "#searchTerm" to have the value "894"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields)
@@ -1195,7 +1315,11 @@ Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code sea
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"
+		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	And Establishment "222222" exists:
@@ -1214,7 +1338,7 @@ Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code sea
 	And I update the textbox "#searchTerm" to have the value "2200"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields) (JS)
@@ -1222,7 +1346,11 @@ Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code sea
 	"""
 	{
 		"name": "Some Primary School",
-		"laestab": "894/2200"
+		"laestab": "894/2200",
+	    "localAuthority": {
+			"code": "999",
+	       	"name": "Test LA"
+		}
 	}
 	"""
 	And Establishment "222222" exists:
@@ -1241,7 +1369,7 @@ Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code sea
 	And I update the textbox "#searchTerm" to have the value "2200"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "Some Primary School (URN: 111111)"
+	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct search results

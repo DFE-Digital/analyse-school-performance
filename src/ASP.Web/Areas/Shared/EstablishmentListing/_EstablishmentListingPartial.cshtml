@@ -6,44 +6,27 @@
 }
 
 <ul class="govuk-list">
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
     @foreach (var item in Model.EstablishmentListingModel)
     {
         <li>
-            <div class="app-listing-name-container">
-                <h2 class="govuk-heading-m app-listing-name-heading">
+            <div class="app-listing-result-tile">
+                <h3 class="govuk-heading-s">
                     <a class="govuk-link" data-testid="establishment-listing-name-@counter" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
                         @item.Name
                     </a>
-                </h2>
-                <a class="govuk-link app-listing-tile-arrow" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
-                    <span class="govuk-visually-hidden">More information on @item.Name</span>
-                </a>
+                </h3>
+                <dl class="govuk-list asp-summary-list">
+                    <dt class="app-summary-list__key">Address:</dt>
+                    <dd class="app-summary-list__value" data-testid="establishment-listing-address-@counter">@item.Address</dd>
+                    <dt class="app-summary-list__key">URN:</dt>
+                    <dd class="app-summary-list__value" data-testid="establishment-listing-urn-@counter">@item.Urn</dd>
+                    <dt class="app-summary-list__key">LAESTAB:</dt>
+                    <dd class="app-summary-list__value" data-testid="establishment-listing-laestab-@counter">@item.LaEstab</dd>
+                </dl>
             </div>
 
-            <table class="govuk-table app-listing-table">
-                <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">Address</th>
-                    <td class="govuk-table__cell" data-testid="establishment-listing-address-@counter">
-                        @item.Address
-                    </td>
-                </tr>
-
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">URN</th>
-                    <td class="govuk-table__cell" data-testid="establishment-listing-urn-@counter">@item.Urn</td>
-                </tr>
-
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">LAESTAB</th>
-                    <td data-testid="establishment-listing-laestab-@counter" class="govuk-table__cell">@item.LaEstab</td>
-                </tr>
-
-                </tbody>
-            </table>
         </li>
-        <hr class="govuk-section-break govuk-section-break--m"/>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
         counter++;
     }
 </ul>

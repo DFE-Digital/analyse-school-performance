@@ -7,15 +7,17 @@ namespace ASP.Web.Areas.LocalAuthority;
 public class LocalAuthoritiesPageViewModel
 {
     public string Title { get; }
+    public string SubTitle { get; }
     public int TotalCount { get; }
     public PaginationModel? PaginationModel { get; }
     public IEnumerable<LocalAuthorityDTO> Results { get; }
     public BreadcrumbTrailViewModel? Breadcrumbs { get; }
 
-    public LocalAuthoritiesPageViewModel(string title, int totalCount, PaginationModel? paginationModel,
+    public LocalAuthoritiesPageViewModel(string title, string subTitle, int totalCount, PaginationModel? paginationModel,
         IEnumerable<LocalAuthorityDTO> results, BreadcrumbTrailViewModel? breadcrumbs)
     {
         Title = title;
+        SubTitle = subTitle;
         TotalCount = totalCount;
         PaginationModel = paginationModel;
         Results = results;

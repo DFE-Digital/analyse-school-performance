@@ -2,6 +2,7 @@
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.Downloads.DownloadAsZip;
 using ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads;
+using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
@@ -37,7 +38,8 @@ namespace ASP.Web.Areas.School
             return 
                 from establishmentDetails in GetEstablishmentDetails(urn)
                 from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
-                let breadcrumbs = GetLandingPageBreadcrumbs(establishmentDetails.Name ?? "")
+                let breadcrumbs = GetLandingPageBreadcrumbs(establishmentDetails.Name ?? "", 
+                    establishmentDetails.LocalAuthority)
                 from schoolPage in GetSchoolPage(
                     establishmentDetails, 
                     breadcrumbs)
@@ -136,7 +138,7 @@ namespace ASP.Web.Areas.School
             NavigationViewModel? subNavigation = null, 
             NavigationViewModel? sideNavigation = null);
         
-        protected abstract BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string schoolName);
+        protected abstract BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string schoolName, LocalAuthorityDTO? localAuthority);
         
         protected abstract IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string urn, string schoolName);
         

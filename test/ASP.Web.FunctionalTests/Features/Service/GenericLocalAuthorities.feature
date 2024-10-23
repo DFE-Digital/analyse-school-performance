@@ -36,13 +36,13 @@
           | code      | name                        |
           | (100 + n) | ASP Test LA Named (100 + n) |
         When I navigate to /local-authorities/
-        Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 50 of 251 local authorities"
-        And the element "*[data-testid='PageLinks-Header-1']" should have the href "/local-authorities/?page=1"
-        And the element "*[data-testid='PageLinks-Header-2']" should have the href "/local-authorities/?page=2"
-        And the element "*[data-testid='PageLinks-Header-3']" should have the href "/local-authorities/?page=3"
-        And the element "*[data-testid='PageLinks-Header-4']" should have the href "/local-authorities/?page=4"
-        And the element "*[data-testid='PageLinks-Header-5']" should have the href "/local-authorities/?page=5"
-        And the element "*[data-testid='PageLinks-Header-Next']" should have the href "/local-authorities/?page=2"
+        Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 50 of 251 local authorities"
+        And the element "*[data-testid='PageLinks-Footer-1']" should have the href "/local-authorities/?page=1"
+        And the element "*[data-testid='PageLinks-Footer-2']" should have the href "/local-authorities/?page=2"
+        And the element "*[data-testid='PageLinks-Footer-3']" should have the href "/local-authorities/?page=3"
+        And the element "*[data-testid='PageLinks-Footer-4']" should have the href "/local-authorities/?page=4"
+        And the element "*[data-testid='PageLinks-Footer-5']" should have the href "/local-authorities/?page=5"
+        And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authorities/?page=2"
         And the element "*[data-testid='all-local-authorities-listing-name-1']" should have the text content "ASP Test LA Named 101"
         And the element "*[data-testid='all-local-authorities-listing-name-2']" should have the text content "ASP Test LA Named 102"
         And the element "*[data-testid='all-local-authorities-listing-name-3']" should have the text content "ASP Test LA Named 103"

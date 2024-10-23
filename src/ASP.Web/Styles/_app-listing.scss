@@ -1,35 +1,32 @@
-﻿.app-listing-tile-arrow {
-  width: 19px;
-  height: 34px;
-  background-color: white;
-  background-image: url('/assets/public/images/icons/tile-arrow.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  margin-top: 0;
-  margin-left: 10px;
-}
+﻿@import '/node_modules/govuk-frontend/dist/govuk/settings/_media-queries.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/helpers/_media-queries.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/helpers/_colour.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/settings/_colours-applied.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/helpers/_spacing.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/settings/_spacing.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/helpers/_font-faces.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/helpers/_typography.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/settings/_typography-font.scss';
+@import '/node_modules/govuk-frontend/dist/govuk/settings/_typography-responsive.scss';
 
-.app-listing-name-container {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
 
-.app-listing-name-container .app-listing-name-heading {
-  flex-grow: 1;
-  margin: 0;
-  white-space: nowrap;
+.app-listing-result-tile {
+  display: block;
+  clear: both;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.app-listing-table {
-  table-layout: fixed;
-  width: 100%;
+.app-summary-list {
+  @include govuk-font(16);
 }
-.app-listing-table .govuk-table__header, .app-listing-table .govuk-table__cell {
-  width: 50%; /* This ensures each column is half the table width */
-  vertical-align: top;
-  line-height: 1.5;
+
+.app-summary-list__key {
+  float: left;
+  clear: left;
+  margin-right: govuk-spacing(2);
+}
+
+.app-summary-list__value {
+  float: left;
+  margin-left: 0;
 }

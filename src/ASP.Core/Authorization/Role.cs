@@ -146,6 +146,21 @@ public sealed class Role
         DioceseUnnamed,
         DioceseNamed,
     ];
+    
+    public static readonly RoleCollection AccessToGenericSchool=
+    [
+        LaUnnamed,
+        LaNamed,
+        MatUnnamed,
+        MatNamed,
+        MatGovernor,
+        DioceseUnnamed,
+        DioceseNamed,
+        DfeUnnamed,
+        DfeNamed,
+        OfstedUnnamed,
+        SuperUser
+    ];
 
     public static readonly RoleCollection AccessToMyLaSchools =
     [

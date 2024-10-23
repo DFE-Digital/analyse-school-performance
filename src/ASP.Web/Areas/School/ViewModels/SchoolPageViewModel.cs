@@ -7,6 +7,7 @@ public class SchoolPageViewModel
 {
     public string Controller { get; set; }
     public string Title { get; }
+    public string SubTitle { get; }
     public string SchoolName { get; set; }
     public string SchoolUrn { get; set; }
     public BreadcrumbTrailViewModel Breadcrumbs { get; }
@@ -16,16 +17,17 @@ public class SchoolPageViewModel
     public SchoolPageViewModel(
         string controller,
         string title,
+        string subTitle,
         string schoolName,
         string schoolUrn,
         BreadcrumbTrailViewModel breadcrumbs,
         NavigationViewModel? subNavigation,
         NavigationViewModel? sideNavigation
-
     )
     {
         Controller = controller;
         Title = title;
+        SubTitle = subTitle;
         SchoolName = schoolName;
         SchoolUrn = schoolUrn;
         Breadcrumbs = breadcrumbs;

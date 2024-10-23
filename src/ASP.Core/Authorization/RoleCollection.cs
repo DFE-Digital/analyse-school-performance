@@ -18,9 +18,9 @@ public class RoleCollection: IEnumerable<Role>
 
     public void Add(Role role) => _roles.Add(role);
 
-    public Role? Find(string code) => _roles.FirstOrDefault(r => r.Code == code);
+    public Role? Find(string code) => _roles.Find(r => r.Code == code);
 
-    public Role? FindByName(string name) => _roles.FirstOrDefault(r => r.Name == name);
+    public Role? FindByName(string name) => _roles.Find(r => r.Name == name);
 
     public IEnumerator<Role> GetEnumerator() => _roles.GetEnumerator();
 

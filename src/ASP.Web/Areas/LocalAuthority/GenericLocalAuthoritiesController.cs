@@ -47,6 +47,7 @@ namespace ASP.Web.Areas.LocalAuthority
         
             return new LocalAuthoritiesPageViewModel(
                 "All local authorities",
+                $"{result.TotalResults:N0} local authorities",
                 result.TotalResults,
                 new PaginationModel(
                     Url.Action(nameof(LocalAuthorities)) ?? "",
