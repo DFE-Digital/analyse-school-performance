@@ -137,7 +137,7 @@ namespace ASP.Web.Core.Templating
                 ViewContentPropertyType.Bool => bool.TryParse(value, out var b) ? b : false,
                 ViewContentPropertyType.Double => double.TryParse(value, out var d) ? d : 0.0,
                 ViewContentPropertyType.Long => long.TryParse(value, out var l) ? l : 0,
-                _ => JsonHelper.DeserializeOrNull<object>(value).Match(v => v, e => null)
+                _ => JsonHelper.DeserializeOrNull<object>(value).Match(v => v, e => throw new Exception(e.Message))
             };
         }
     }
