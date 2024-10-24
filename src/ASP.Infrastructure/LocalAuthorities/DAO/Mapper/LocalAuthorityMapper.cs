@@ -13,4 +13,10 @@ public static class LocalAuthorityMapper
     {
         return new LocalAuthorityDAO(localAuthority.Code, localAuthority.Name);
     }
+    
+    public static List<LocalAuthority> MapToDomainEntityLocalAuthority(
+        this IEnumerable<LocalAuthorityDAO> localAuthoritiesDao)
+    {
+        return localAuthoritiesDao.Select(MapToDomainEntityLocalAuthority).ToList();
+    }
 }

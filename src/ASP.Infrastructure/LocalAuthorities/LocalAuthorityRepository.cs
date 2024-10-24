@@ -31,18 +31,48 @@ public class LocalAuthorityRepository : ILocalAuthorityRepository
     public async Task<Result<ResultsPage<LocalAuthority>>> GetAllLocalAuthorities(int page,
         int resultsPerPage, CancellationToken cancellationToken = default)
     {
-        return 
+        return
             from results in await _documentDB.QueryPagedAsync<LocalAuthorityDAO>(
-                ContainerKey,
-                q => q.OrderBy(x => x.Name),
-                page,
-                resultsPerPage,
-                cancellationToken)
+                    ContainerKey,
+                    q => q.OrderBy(x => x.Name),
+                    page,
+                    resultsPerPage,
+                    cancellationToken)
                 .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no Local Authorities."))
             select new ResultsPage<LocalAuthority>(
-                page, 
-                resultsPerPage, 
+                page,
+                resultsPerPage,
                 results.TotalResults,
                 results.Map(r => r.MapToDomainEntityLocalAuthority()));
+    }
+
+    public Task<Result<List<LocalAuthority>>> LocalAuthoritySearchSuggestionsByLaName(
+        string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default)
+    {
+        return
+            from results in _documentDB.QueryAsync<LocalAuthorityDAO>(
+                    ContainerKey,
+                    q => q.Where(x =>
+                            x.Name.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                        ).OrderBy(x => x.Name)
+                        .Take(maxSuggestions),
+                    cancellationToken)
+                .ErrorIf(r => !r.Any(), Error.NotFound($@"there were no matches for ""{searchTerm}""."))
+            select results.MapToDomainEntityLocalAuthority();
+    }
+
+    public Task<Result<List<LocalAuthority>>> LocalAuthoritySearchSuggestionsByLaCode(
+        string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default)
+    {
+        return
+            from results in _documentDB.QueryAsync<LocalAuthorityDAO>(
+                    ContainerKey,
+                    q => q.Where(x =>
+                            x.Code.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                        ).OrderBy(x => x.Code)
+                        .Take(maxSuggestions),
+                    cancellationToken)
+                .ErrorIf(r => !r.Any(), Error.NotFound($@"there were no matches for ""{searchTerm}""."))
+            select results.MapToDomainEntityLocalAuthority();
     }
 }

@@ -9,4 +9,10 @@ public interface ILocalAuthorityRepository
 
     Task<Result<ResultsPage<LocalAuthority>>> GetAllLocalAuthorities(int page,
         int resultsPerPage, CancellationToken cancellationToken = default);
+
+    Task<Result<List<LocalAuthority>>> LocalAuthoritySearchSuggestionsByLaName(
+        string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default);
+
+    Task<Result<List<LocalAuthority>>> LocalAuthoritySearchSuggestionsByLaCode(
+        string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default);
 }

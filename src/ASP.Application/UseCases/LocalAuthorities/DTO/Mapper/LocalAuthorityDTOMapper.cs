@@ -8,4 +8,10 @@ public static class LocalAuthorityDTOMapper
     {
         return new LocalAuthorityDTO(localAuthority.Code, localAuthority.Name);
     }
+    
+    public static List<LocalAuthorityDTO> MapToLocalAuthorityDTO(
+        this IEnumerable<LocalAuthority> localAuthorities)
+    {
+        return localAuthorities.Select(MapToLocalAuthorityDTO).ToList();
+    }
 }
