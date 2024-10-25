@@ -2,7 +2,7 @@
 using ASP.Web.Areas.Shared.Pagination;
 using ASP.Web.Core.BreadcrumbTrail;
 
-namespace ASP.Web.Areas.School.ViewModels;
+namespace ASP.Web.Areas.Shared;
 
 public class SchoolsPageViewModel
 {

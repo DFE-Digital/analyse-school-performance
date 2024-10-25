@@ -3,6 +3,7 @@ using ASP.Core.Helpers;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
+using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
@@ -34,9 +35,16 @@ namespace ASP.Web.Areas.School
                     results,
                     "All schools",
                     $"{results.TotalResults:N0} schools",
-                    "/schools/");
+                    "/schools/",
+                    GetSchoolsPageBreadcrumbs("All schools"));
 
             return result.ToActionResult(View, _hostEnvironment);
+        }
+
+        private BreadcrumbTrailViewModel GetSchoolsPageBreadcrumbs(string currentPage)
+        {
+            var breadcrumbTrail = new BreadcrumbTrailViewModel(currentPage);
+            return breadcrumbTrail;
         }
     }
 }

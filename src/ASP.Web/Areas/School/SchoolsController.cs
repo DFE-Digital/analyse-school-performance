@@ -5,7 +5,7 @@ using ASP.Core;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
-using ASP.Web.Areas.School.ViewModels;
+using ASP.Web.Areas.Shared;
 using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Areas.Shared.Pagination;
 using ASP.Web.Core.BreadcrumbTrail;
@@ -43,10 +43,8 @@ public abstract class SchoolsController : Controller
     }
 
     protected SchoolsPageViewModel DefaultViewModel(ScopedResultsPage<EstablishmentListingDTO> result,
-        string title, string subTitle, string paginationUrl)
+        string title, string subTitle, string paginationUrl, BreadcrumbTrailViewModel breadcrumbTrailViewModel)
     {
-        var breadcrumbTrail = new BreadcrumbTrailViewModel(title);
-
         return new SchoolsPageViewModel(
             title,
             subTitle,
@@ -59,7 +57,7 @@ public abstract class SchoolsController : Controller
                 "school",
                 "schools"
             ),
-            breadcrumbTrail,
+            breadcrumbTrailViewModel,
             EstablishmentListingModel.FromEstablishmentListingDto(result.Results)
         );
     }

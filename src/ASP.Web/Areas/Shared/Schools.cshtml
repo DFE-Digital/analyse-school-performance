@@ -1,6 +1,6 @@
 ﻿@using ASP.Web.Areas.Shared.EstablishmentListing
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model ASP.Web.Areas.School.ViewModels.SchoolsPageViewModel
+@model ASP.Web.Areas.Shared.SchoolsPageViewModel
 @{
     ViewData["Title"] = Model.Title;
 }
@@ -10,8 +10,8 @@
 </div>
 
 <div class="govuk-width-container govuk-main-wrapper">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.Title</h1>
-    <h2 class="govuk-heading-m">@Model.SubTitle</h2>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4" data-testid="schools-title">@Model.Title</h1>
+    <h2 class="govuk-heading-m" data-testid="schools-subtitle">@Model.SubTitle</h2>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (Model.TotalCount == 0)
