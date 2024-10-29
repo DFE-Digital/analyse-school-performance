@@ -1,4 +1,5 @@
 ﻿using ASP.Core.Results;
+using ASP.Core.Time;
 using ASP.Core.Utilities;
 using System.IO.Compression;
 using System.Text;
@@ -7,6 +8,13 @@ namespace ASP.Application.UseCases.Downloads.DownloadAsZip
 {
     public class DownloadAsZipFile : IDownloadAsZipFile
     {
+        private readonly CurrentTimeProvider _currentTimeProvider;
+
+        public DownloadAsZipFile(CurrentTimeProvider currentTimeProvider)
+        {
+            _currentTimeProvider = currentTimeProvider;
+        }
+
         public async Task<Result<FileStreamResponse>> HandleRequest(DownloadAsZipFileRequest request)
         {
             var zipStream = new MemoryStream();
@@ -16,7 +24,7 @@ namespace ASP.Application.UseCases.Downloads.DownloadAsZip
             }
 
             zipStream.Position = 0;
-            var zipFileResult = new FileStreamResponse($"{DateTime.UtcNow:yyyyMMdd_HHmmss}_asp_download.zip", zipStream, "application/zip");
+            var zipFileResult = new FileStreamResponse($"{_currentTimeProvider.CurrentTime:yyyyMMdd_HHmmss}_asp_download.zip", zipStream, "application/zip");
 
             return zipFileResult;
         }
@@ -48,7 +56,7 @@ namespace ASP.Application.UseCases.Downloads.DownloadAsZip
             var sb = new StringBuilder();
             sb.AppendLine("Id,Name,Value");
             sb.AppendLine($"{downloadId},Test Name,123");
-            sb.AppendLine($"{downloadId},Another Name,456");
+            sb.Append($"{downloadId},Another Name,456");
 
             return sb.ToString();
         }

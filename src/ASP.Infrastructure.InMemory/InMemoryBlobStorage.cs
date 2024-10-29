@@ -1,6 +1,5 @@
 ﻿using ASP.Core;
 using ASP.Core.Results;
-using System.Text;
 
 namespace ASP.Infrastructure.InMemory
 {
@@ -13,25 +12,45 @@ namespace ASP.Infrastructure.InMemory
             _memoryStore = memoryStore;
         }
 
-        public Task<Result<Stream>> DownloadAsStreamAsync(string container, string path, CancellationToken cancellationToken = default)
+        public async Task<Result<Done>> DownloadToAsync(Stream stream, string container, string path, CancellationToken cancellationToken = default)
+        {
+            var result = await _memoryStore.Get(container, path)
+                .Map(async r =>
+                {
+                    using (var writer = new StreamWriter(stream, leaveOpen: true))
+                    {
+                        await writer.WriteAsync(r.Contents);
+                    }
+
+                    return Result.Done;
+                });
+
+            return result;
+        }
+
+        public Task<Result<BinaryData>> DownloadAsync(string container, string path, CancellationToken cancellationToken = default)
         {
             var result = _memoryStore.Get(container, path)
-                .Map(r =>
-                {
-                    var stream = new MemoryStream(Encoding.UTF8.GetBytes(r.Contents));
-                    stream.Position = 0;
-                    return (Stream)stream;
-                });
+                .Map(r => BinaryData.FromString(r.Contents));
 
             return Task.FromResult(result);
         }
 
-        public Task<Result<string>> DownloadAsStringAsync(string container, string path, CancellationToken cancellationToken = default)
+        public Result<Stream> DownloadStream(string container, string path, CancellationToken cancellationToken = default)
         {
             var result = _memoryStore.Get(container, path)
-                .Map(r => r.Contents);
+                .Map(r =>
+                {
+                    var stream = new MemoryStream();
+                    using (var writer = new StreamWriter(stream, leaveOpen: true))
+                    {
+                        writer.Write(r.Contents);
+                    }
+                    stream.Position = 0;
+                    return (Stream)stream;
+                });
 
-            return Task.FromResult(result);
+            return result;
         }
 
         public Task<Result<List<string>>> ListAsync(string container, string basePath, CancellationToken cancellationToken = default)
@@ -45,9 +64,9 @@ namespace ASP.Infrastructure.InMemory
             return Task.FromResult(results);
         }
 
-        public Task<Result<Done>> UploadAsync(string container, string path, string fileContents, CancellationToken cancellationToken = default)
+        public Task<Result<Done>> UploadAsync(string container, string path, BinaryData fileContents, CancellationToken cancellationToken = default)
         {
-            _memoryStore.Set(container, path, fileContents);
+            _memoryStore.Set(container, path, fileContents.ToString());
 
             return Task.FromResult(Result.Success(Result.Done));
         }

@@ -89,7 +89,7 @@ public sealed class Role
     public static readonly Role SchoolNamed = new("RAISE_School_Named", "School Named", true);
     public static readonly Role SchoolGovernor = new("RAISE_School_Governor", "School Governor", false);
 
-    public static readonly Role SuperUser = new("RAISE_Super_User", "Super Admin", true);
+    public static readonly Role SuperAdmin = new("RAISE_Super_User", "Super Admin", true);
 
     public static readonly Role TrainingUnnamed = new("RAISE_Training_Anon", "Training Unnamed", false);
 
@@ -110,7 +110,7 @@ public sealed class Role
         SchoolNamed,
         MatGovernor,
         SchoolGovernor,
-        SuperUser,
+        SuperAdmin,
         TrainingUnnamed
     ];
 
@@ -126,7 +126,7 @@ public sealed class Role
         MatNamed,
         OfstedUnnamed,
         MatGovernor,
-        SuperUser
+        SuperAdmin
     ];
 
     public static readonly RoleCollection AccessToMySchool =
@@ -159,7 +159,7 @@ public sealed class Role
         DfeUnnamed,
         DfeNamed,
         OfstedUnnamed,
-        SuperUser
+        SuperAdmin
     ];
 
     public static readonly RoleCollection AccessToMyLaSchools =
@@ -192,7 +192,7 @@ public sealed class Role
         DfeUnnamed,
         DfeNamed,
         OfstedUnnamed,
-        SuperUser,
+        SuperAdmin,
     ];
 
     public static readonly RoleCollection AccessToAllSchools =
@@ -200,11 +200,11 @@ public sealed class Role
         DfeUnnamed,
         DfeNamed,
         OfstedUnnamed,
-        SuperUser,
+        SuperAdmin,
     ];
 
     public static readonly RoleCollection AccessToEditPages =
     [
-        SuperUser
+        SuperAdmin
     ];
 }

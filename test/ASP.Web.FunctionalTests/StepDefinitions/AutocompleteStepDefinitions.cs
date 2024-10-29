@@ -21,14 +21,14 @@ public class AutocompleteStepDefinitions
     [Then(@"the autocomplete results should appear")]
     public async Task WaitForAutocompleteResults()
     {
-        await _web.WaitForSelectorAsync(".autocomplete__menu", "Autocomplete results did not appear");
+        await _web.CurrentPage.WaitForSelectorAsync(".autocomplete__menu", "Autocomplete results did not appear");
     }
 
     [Then(@"there should be (.*) autocomplete items")]
     public async Task VerifyAutocompleteItemCount(int expectedCount)
     {
         var selector = ".autocomplete__option";
-        var autocompleteItems = await _web.Element(selector);
+        var autocompleteItems = await _web.CurrentPage.ElementAsync(selector);
         await autocompleteItems.ShouldHaveCountAsync(expectedCount,
             (expected, actual) =>
                 $@"Found {actual} elements within the component with the selector ""{selector}"", expected {expected}.");

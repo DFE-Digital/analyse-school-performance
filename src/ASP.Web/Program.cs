@@ -1,3 +1,4 @@
+using ASP.Core.Time;
 using ASP.Infrastructure.Api;
 using ASP.Infrastructure.TableStorage;
 using ASP.Web.Components;
@@ -43,7 +44,8 @@ public class Program
             .ConfigureTermsOfUse()
             .ConfigureAnalyticsTrackingPreferences()
             .ConfigureTemplateComponents()
-            .ConfigureLogging();
+            .ConfigureLogging()
+            .ConfigureCurrentTime();
 
         WebApplication app = builder.Build();
 

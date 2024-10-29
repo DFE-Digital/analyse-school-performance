@@ -23,5 +23,6 @@
         Task SetValueAsync(string value);
         Task SetCheckedAsync(bool isChecked);
         Task ClickAsync();
+        Task StartDownloadAsync();
     }
 }

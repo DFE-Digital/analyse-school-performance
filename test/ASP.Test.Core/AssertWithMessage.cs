@@ -1,28 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Xunit;
 using Xunit.Sdk;
 
-namespace ASP.Test.Core
+namespace Xunit
 {
-    public partial class AssertWithMessage
+    public partial class Assert
     {
-        public static void True(bool actual, string message)
-        {
-            try
-            {
-                Assert.True(actual);
-            }
-            catch (XunitException)
-            {
-                throw new XunitException(message);
-            }
-        }
-
         public static void NotNull([NotNull] object? @object, string message)
         {
             try
             {
-                Assert.NotNull(@object);
+                NotNull(@object);
             }
             catch(XunitException)
             {
@@ -34,7 +21,7 @@ namespace ASP.Test.Core
         {
             try
             {
-                Assert.Null(@object);
+                Null(@object);
             }
             catch (XunitException)
             {
@@ -42,16 +29,35 @@ namespace ASP.Test.Core
             }
         }
 
-        public static void Fail(string message)
+        public static void NotEmpty([NotNull] string @string, string message)
         {
-            throw new XunitException(message);
+            try
+            {
+                NotEmpty(@string);
+            }
+            catch (XunitException)
+            {
+                throw new XunitException(message);
+            }
+        }
+
+        public static void Empty(string @string, string message)
+        {
+            try
+            {
+                Empty(@string);
+            }
+            catch (XunitException)
+            {
+                throw new XunitException(message);
+            }
         }
 
         public static T IsAssignableFrom<T>(object @object, string message)
         {
             try
             {
-                return Assert.IsAssignableFrom<T>(@object);
+                return IsAssignableFrom<T>(@object);
             }
             catch(XunitException)
             {
@@ -63,7 +69,7 @@ namespace ASP.Test.Core
         {
             try
             {
-                Assert.Equal(expected, actual);
+                Equal(expected, actual);
             }
             catch (XunitException)
             {
@@ -75,7 +81,7 @@ namespace ASP.Test.Core
         {
             try
             {
-                Assert.NotEqual(expected, actual);
+                NotEqual(expected, actual);
             }
             catch (XunitException)
             {

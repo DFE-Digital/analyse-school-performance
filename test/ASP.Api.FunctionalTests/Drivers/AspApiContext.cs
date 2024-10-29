@@ -1,6 +1,7 @@
 ﻿using ASP.Core;
+using ASP.Core.Time;
 using ASP.Infrastructure.Api;
-using ASP.Test.Core;
+using FluentAssertions.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,11 +16,8 @@ namespace ASP.Api.FunctionalTests.Drivers
         private static readonly ITransportLayer _transport;
 
         private readonly ISpecFlowOutputHelper _outputHelper;
-
-        private IDocumentDatabase? _documentDatabase = null;
-        private IBlobStorage? _blobStorage = null;
-        private TransportLayerRequest? _lastRequest = null;
-        private TransportLayerResponse? _lastResponse = null;
+        private HttpRequestMessage? _lastRequest = null;
+        private HttpResponseMessage? _lastResponse = null;
 
         static AspApiContext()
         {
@@ -36,30 +34,27 @@ namespace ASP.Api.FunctionalTests.Drivers
             _outputHelper = outputHelper;
         }
 
-        public TransportLayerRequest LastRequest
+        public HttpRequestMessage LastRequest
         {
             get
             {
                 if (_lastRequest == null)
                 {
-                    AssertWithMessage.NotNull(_lastResponse, "No HTTP request initiated yet. Is the test missing an action?");
+                    Assert.NotNull(_lastResponse, "No HTTP request initiated yet. Is the test missing an action?");
                 }
 
                 return _lastRequest!;
             }
         }
 
-        public TransportLayerResponse LastResponse
+        public HttpResponseMessage LastResponse
         {
             get
             {
                 if (_lastResponse == null)
                 {
-                    AssertWithMessage.NotNull(_lastResponse, "No API response received. Is the test missing an action?");
+                    Assert.NotNull(_lastResponse, "No API response received. Is the test missing an action?");
                 }
-
-                _outputHelper.WriteLine("Response content:");
-                _outputHelper.WriteLine(_lastResponse.BodyString);
 
                 return _lastResponse!;
             }
@@ -69,15 +64,9 @@ namespace ASP.Api.FunctionalTests.Drivers
         {
             get
             {
-                if (_documentDatabase != null)
-                {
-                    return _documentDatabase;
-                }
-
                 using (var scope = _host.Services.CreateScope())
                 {
-                    _documentDatabase = scope.ServiceProvider.GetService<IDocumentDatabase>()!;
-                    return _documentDatabase;
+                    return scope.ServiceProvider.GetService<IDocumentDatabase>()!;
                 }
             }
         }
@@ -86,20 +75,22 @@ namespace ASP.Api.FunctionalTests.Drivers
         {
             get
             {
-                if (_blobStorage != null)
-                {
-                    return _blobStorage;
-                }
-
                 using (var scope = _host.Services.CreateScope())
                 {
-                    _blobStorage = scope.ServiceProvider.GetService<IBlobStorage>()!;
-                    return _blobStorage;
+                    return scope.ServiceProvider.GetService<IBlobStorage>()!;
                 }
             }
         }
 
-        public async Task Run(TransportLayerRequest request)
+        public CurrentTimeProvider CurrentTimeProvider
+        {
+            get
+            {
+                return _host.Services.GetRequiredService<CurrentTimeProvider>();
+            }
+        }
+
+        public async Task Run(HttpRequestMessage request)
         {
             _lastRequest = request;
             _lastResponse = await _transport.ExecuteRequest(request);

@@ -13,13 +13,15 @@ namespace ASP.Web.FunctionalTests.Drivers
         private string _selector;
         private IElement? _element;
         private int _elementCount;
+        private AngleSharpPage _page;
         private AngleSharpWebDriver _web;
         private ISpecFlowOutputHelper _outputHelper;
 
-        public AngleSharpElementDriver(IElement outerElement, string selector, AngleSharpWebDriver web, ISpecFlowOutputHelper outputHelper)
+        public AngleSharpElementDriver(IElement outerElement, string selector, AngleSharpPage page, AngleSharpWebDriver web, ISpecFlowOutputHelper outputHelper)
         {
             _outerElement = outerElement;
             _selector = selector;
+            _page = page;
             _web = web;
             _elementCount = _outerElement.QuerySelectorAll(_selector).Count();
             _element = _outerElement.QuerySelector(_selector);
@@ -30,7 +32,7 @@ namespace ASP.Web.FunctionalTests.Drivers
         {
             get
             {
-                AssertWithMessage.NotNull(_element, "Element does not exist on the page");
+                Assert.NotNull(_element, "Element does not exist on the page");
 
                 return _element;
             }
@@ -38,27 +40,27 @@ namespace ASP.Web.FunctionalTests.Drivers
 
         public IElementDriver Element(string selector)
         {
-            return new AngleSharpElementDriver(El, selector, _web, _outputHelper);
+            return new AngleSharpElementDriver(El, selector, _page, _web, _outputHelper);
         }
 
         public IElementDriver ElementByLabel(string labelText)
         {
             var label = El.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, $@"Could not find a label with the text ""{labelText}"".");
+            Assert.NotNull(label, $@"Could not find a label with the text ""{labelText}"".");
 
             var fieldSelector = $":scope #{label?.Attributes["for"]?.Value}";
 
-            return new AngleSharpElementDriver(El, fieldSelector, _web, _outputHelper);
+            return new AngleSharpElementDriver(El, fieldSelector, _page, _web, _outputHelper);
         }
 
         public IElementsDriver Elements(string selector)
         {
-            return new AngleSharpElementsDriver(El, selector, _web);
+            return new AngleSharpElementsDriver(El, selector);
         }
 
         public Task ShouldHaveCountAsync(int count, Func<int, int, string> errorIfIncorrectCount)
         {
-            AssertWithMessage.Equal(count, _elementCount, errorIfIncorrectCount(count, _elementCount));
+            Assert.Equal(count, _elementCount, errorIfIncorrectCount(count, _elementCount));
 
             return Task.CompletedTask;
         }
@@ -67,11 +69,11 @@ namespace ASP.Web.FunctionalTests.Drivers
         {
             if (_element != null)
             {
-                var pageContent = await _web.PageContentAsync();
+                var pageContent = await _page.PageContentAsync();
                 _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
             }
 
-            AssertWithMessage.Null(_element, errorIfExists);
+            Assert.Null(_element, errorIfExists);
 
             return;
         }
@@ -80,11 +82,11 @@ namespace ASP.Web.FunctionalTests.Drivers
         {
             if (_element == null)
             {
-                var pageContent = await _web.PageContentAsync();
+                var pageContent = await _page.PageContentAsync();
                 _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
             }
 
-            AssertWithMessage.NotNull(_element, errorIfNotExists);
+            Assert.NotNull(_element, errorIfNotExists);
 
             return this;
         }
@@ -154,12 +156,12 @@ namespace ASP.Web.FunctionalTests.Drivers
             return Task.CompletedTask;
         }
 
-        public Task SetCheckedAsync(bool isChecked)
+        public async Task SetCheckedAsync(bool isChecked)
         {
             if(isChecked)
             {
                 var input = Assert.IsAssignableFrom<IHtmlInputElement>(El);
-                var radios = _web.LastResponse.QuerySelectorAll<IHtmlInputElement>($@"[name=""{input.Name}""]");
+                var radios = _page.Document.QuerySelectorAll<IHtmlInputElement>($@"[name=""{input.Name}""]");
 
                 foreach (var radio in radios)
                 {
@@ -171,8 +173,6 @@ namespace ASP.Web.FunctionalTests.Drivers
                 IHtmlInputElement input => input.IsChecked = isChecked,
                 _ => throw new XunitException($"Could not set the checked state of element of type {El.GetType().Name}.")
             };
-
-            return Task.CompletedTask;
         }
 
         public Task<string> AttributeAsync(string attributeName)
@@ -186,14 +186,21 @@ namespace ASP.Web.FunctionalTests.Drivers
         {
             // When Javascript is disabled, any element that needs to perform a function when clicked (other than being a pure link
             // to another page) must be a submit button within a form that submits to a controller action.
-            var button = AssertWithMessage.IsAssignableFrom<IHtmlButtonElement>(El, "Clicked element was not a <button> element");
-            AssertWithMessage.Equal("submit", button.Type, @"Clicked element was not a submit button - expecting <button type=""submit""");
+            var button = Assert.IsAssignableFrom<IHtmlButtonElement>(El, "Clicked element was not a <button> element");
+            Assert.Equal("submit", button.Type, @"Clicked element was not a submit button - expecting <button type=""submit""");
 
             var form = button.Ancestors<IHtmlFormElement>().FirstOrDefault();
 
-            AssertWithMessage.NotNull(form, "Clicked element was not contained within a <form> elemnent");
+            Assert.NotNull(form, "Clicked element was not contained within a <form> elemnent");
 
             await _web.SubmitFormAsync(form, button);
+        }
+
+        public async Task StartDownloadAsync()
+        {
+            var link = Assert.IsAssignableFrom<IHtmlAnchorElement>(El, "Clicked element was not an <a> element");
+            Assert.NotEmpty(link.Href, "Element href was empty.");
+            await _web.CaptureDownloadAsync(link.Href);
         }
     }
 }

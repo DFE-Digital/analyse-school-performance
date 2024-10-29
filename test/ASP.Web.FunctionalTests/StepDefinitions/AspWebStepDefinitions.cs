@@ -1,6 +1,7 @@
 using ASP.Test.Core;
 using ASP.Web.FunctionalTests.Drivers;
 using TechTalk.SpecFlow.Infrastructure;
+using Xunit.Sdk;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
@@ -8,6 +9,8 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
     [Binding]
     public class AspWebStepDefinitions
     {
+        private const string HTTP_HEADER = @"""([^:""]+): ([^:""]+)""";
+
         private readonly IWebDriver _web;
         private readonly ISpecFlowOutputHelper _outputHelper;
         private readonly ScenarioContext _scenarioContext;
@@ -41,7 +44,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [When(@"I update the element ""(.+)"" to be (checked|unchecked)")]
         public async Task WhenIUpdateTheElementToBe(string selector, string state)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
             await element.SetCheckedAsync(state == "checked");
@@ -50,7 +53,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [When(@"I update the textbox ""(.+)"" to have the value ""([^""]*)""")]
         public async Task WhenIUpdateTheTextBoxToHaveTheValue(string selector, string value)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
             await element.SetValueAsync(value);
@@ -59,7 +62,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [When(@"I click the button ""(.+)""")]
         public async Task WhenIClickTheButton(string elementSelector)
         {
-            var button = await _web.Element(elementSelector);
+            var button = await _web.CurrentPage.ElementAsync(elementSelector);
             await button.ShouldExistAsync($@"Could not find an element with the selector ""{elementSelector}"".");
 
             await button.ClickAsync();
@@ -68,7 +71,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [When(@"I remember the (text content|tag name|class|value|href|outer HTML|inner HTML) of (element|textbox|input|hidden input|button) ""(.+)"" as <([^>]+)>")]
         public async Task WhenIRememberTheElementValueAs(string valueType, string elementType, string selector, string variableName)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
             var value = valueType switch {
@@ -92,17 +95,32 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             await _web.ExpectStatusCode();
         }
 
+        [Then($@"the response should include the header {HTTP_HEADER}")]
+        public void ThenTheResponseShouldIncludeTheHeader(string name, string value)
+        {
+            Assert.Contains(name, value, _web.Headers, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        [Then(@"the response should include the headers:")]
+        public void ThenTheResponseShouldIncludeTheHeaders(Table table)
+        {
+            foreach (var row in table.Rows)
+            {
+                Assert.Contains(row["Key"], row["Value"], _web.Headers, StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
+
         [Then(@"the path should be ((?:/.*)+)")]
         public async Task ThePathShouldBe(string path)
         {
             await _web.ExpectStatusCode();
-            Assert.Equal(_web.BaseAddress + path, _web.Path);
+            Assert.Equal(_web.BaseAddress + path, _web.CurrentPage.Path);
         }
 
         [Then(@"the page title should be ""(.*)""")]
         public async Task ThenThePageTitleShouldBe(string expected)
         {
-            var actual = await _web.PageTitleAsync();
+            var actual = await _web.CurrentPage.TitleAsync();
 
             Assert.Equal(expected, actual);
         }
@@ -110,7 +128,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should (exist|not exist)")]
         public async Task ThenTheElementShouldExist(string elementType, string selector, string criteria)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
 
             if(criteria == "exist")
             {
@@ -125,11 +143,11 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should match the selector ""(.+)""")]
         public async Task ThenTheElementShouldMatchTheSelector(string elementType, string selector, string selectorToMatch)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
             var matches = await element.MatchesAsync(selectorToMatch);
-            AssertWithMessage.True(matches, $@"The element did not match ""{selectorToMatch}"".");
+            Assert.True(matches, $@"The element did not match ""{selectorToMatch}"".");
         }
 
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should have the (outer HTML|inner HTML) <(.+)>")]
@@ -143,7 +161,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should have the (outer HTML|inner HTML):")]
         public async Task ThenTheElementShouldHaveTheHtmlMultiline(string elementType, string selector, string valueType, string expectedValue)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
             var value = valueType switch {
@@ -152,13 +170,13 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
                 _ => throw new NotImplementedException("We shouldn't have got here")
             };
 
-            AssertHtml.Equal(expectedValue.Trim(), value.Trim(), _outputHelper.WriteLine);
+            Assert.HtmlEqual(expectedValue.Trim(), value.Trim(), _outputHelper.WriteLine);
         }
 
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" class should contain ""([^""]*)""")]
         public async Task ThenTheElementClassShouldContain(string elementType, string selector, string expectedClass)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
             var @classes = await element.AttributeAsync("class");
@@ -177,7 +195,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should have the (text content|tag name|class|value|href) ""(.*)""")]
         public async Task ThenTheElementShouldHaveTheValue(string elementType, string selector, string valueType, string expectedValue)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
             var value = valueType switch {
@@ -189,13 +207,13 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
                 _ => throw new NotImplementedException("We shouldn't have got here")
             };
 
-            AssertHtml.Equal(expectedValue.Trim(), value.Trim(), _outputHelper.WriteLine);
+            Assert.HtmlEqual(expectedValue.Trim(), value.Trim(), _outputHelper.WriteLine);
         }
 
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should be (checked|unchecked)")]
         public async Task ThenTheElementShouldBe(string elementType, string selector, string state)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
             var isChecked = await element.IsCheckedAsync();
@@ -205,7 +223,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should have the attribute ""(.*)"" set to ""(.*)""")]
         public async Task ThenTheElementShouldHaveTheAttribute(string elementType, string selector, string attribute, string expectedValue)
         {
-            var element = await _web.Element(selector);
+            var element = await _web.CurrentPage.ElementAsync(selector);
             await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
 
             var @class = await element.AttributeAsync(attribute);
@@ -216,7 +234,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"the field labelled ""(.+)"" should have the value ""(.*)""")]
         public async Task ThenTheFieldLabelledShouldHaveTheValue(string labelText, string expectedValue)
         {
-            var field = await _web.ElementByLabel(labelText);
+            var field = await _web.CurrentPage.ElementByLabelAsync(labelText);
             await field.ShouldExistAsync($@"Could not find the associated input for the label ""{labelText}"" (""for"" attribute missing or incorrect).");
 
             var actualValue = await field.ValueAsync();
@@ -226,7 +244,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"the (elements|textboxes|inputs|hidden inputs|buttons) ""(.+)"" should total (.*)")]
         public async Task ThenTheElementsShouldTotal(string elementType, string selector, int expectedCount)
         {
-            var elements = await _web.Elements(selector);
+            var elements = await _web.CurrentPage.ElementsAsync(selector);
             await elements.ShouldHaveCountAsync(expectedCount, actual => $"Expected {expectedCount} elements but found {actual}");
         }
 
@@ -234,7 +252,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         public async Task ThenTheElementsShouldHaveTheTextContents(string elementType, string selector, string valueTypes, Table content)
         {
             int index = 0;
-            var elements = await _web.Elements(selector);
+            var elements = await _web.CurrentPage.ElementsAsync(selector);
             await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
             
             var values = valueTypes switch {
@@ -256,7 +274,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"the (elements|textboxes|inputs|hidden inputs|buttons) ""(.+)"" should all have the (text content|tag name|class|value|href) ""(.+)""")]
         public async Task ThenTheElementsShouldAllHaveTheClass(string elementType, string selector, string valueType, string expectedValue)
         {
-            var elements = await _web.Elements(selector);
+            var elements = await _web.CurrentPage.ElementsAsync(selector);
 
             var value = valueType switch {
                 "text content" => await elements.TextContentsAsync(),

@@ -3,20 +3,18 @@
 namespace ASP.Web.FunctionalTests.Drivers
 {
     // Interface for tests to interact with a test web browser (either virtual or real)
-    public interface IWebDriver
+    public interface IWebDriver: IDisposable, IAsyncDisposable
     {
-        Task NavigateAsync(string path);
-        HttpStatusCode Status { get; }
-        string Path { get; }
         string BaseAddress { get; }
-        int ExpectedStatusCode { get; set; }
 
-        Task<string> PageContentAsync();
-        Task<string> PageTitleAsync();
-        Task<IElementDriver> Element(string selector);
-        Task<IElementDriver> ElementByLabel(string labelText);
-        Task<IElementsDriver> Elements(string selector);
+        Task NavigateAsync(string path);
+
+        IHtmlPage CurrentPage { get; }
+        IDownload CurrentDownload { get; }
+        public HttpStatusCode StatusCode { get; }
+        public Dictionary<string, string> Headers { get; }
+
+        int ExpectedStatusCode { get; set; }
         Task ExpectStatusCode();
-        Task WaitForSelectorAsync(string selector, string errorIfNotExists);
     }
 }

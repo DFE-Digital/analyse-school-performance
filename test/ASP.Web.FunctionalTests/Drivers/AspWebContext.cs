@@ -1,4 +1,6 @@
 ﻿using ASP.Core;
+using ASP.Core.Time;
+using ASP.Infrastructure.InMemory;
 using ASP.Test.Web.Areas.ComponentTest;
 using ASP.Web.Features.Cookies;
 using ASP.Web.FunctionalTests.Services;
@@ -47,9 +49,11 @@ public class AspWebContext
 
     public HttpClient Client => _client;
     public IDocumentDatabase DocumentDatabase => _factory.DocumentDatabase;
+    public IBlobStorage BlobStorage => _factory.BlobStorage;
     public TestCookieProvider CookieProvider => _factory.CookieProvider;
     public ITableStorageProvider TableStorageProvider => _factory.TableStorageProvider;
     public TestClaimsProvider TestClaimsProvider => _factory.TestClaimsProvider;
+    public CurrentTimeProvider CurrentTimeProvider => _factory.CurrentTimeProvider;
 
     public string ServerAddress => _factory.ServerAddress;
 
@@ -57,22 +61,21 @@ public class AspWebContext
         where TProgram : class
     {
         private IHost? _host;
-        private readonly TestCookieProvider _cookieProvider;
-        private readonly TestClaimsProvider _testClaimsProvider;
+        private readonly TestCookieProvider _cookieProvider = new TestCookieProvider();
+        private readonly TestClaimsProvider _testClaimsProvider = new TestClaimsProvider();
 
         public TestCookieProvider CookieProvider => _cookieProvider;
         public TestClaimsProvider TestClaimsProvider => _testClaimsProvider;
 
         public CustomWebApplicationFactory()
         {
-            _cookieProvider = new TestCookieProvider();
-            _testClaimsProvider = new TestClaimsProvider();
-
             ClientOptions.AllowAutoRedirect = true;
         }
 
         public IDocumentDatabase DocumentDatabase => Services.GetRequiredService<IDocumentDatabase>();
+        public IBlobStorage BlobStorage => Services.GetRequiredService<IBlobStorage>();
         public ITableStorageProvider TableStorageProvider => Services.GetRequiredService<ITableStorageProvider>();
+        public CurrentTimeProvider CurrentTimeProvider => Services.GetRequiredService<CurrentTimeProvider>();
 
         public string ServerAddress
         {
@@ -203,6 +206,10 @@ public class AspWebContext
                 // Add test implementation of cookie provider to control/inspect cookie state
                 services.RemoveAll<ICookieProvider>();
                 services.Add(new ServiceDescriptor(typeof(ICookieProvider), _cookieProvider));
+
+                services.RemoveAll<IBlobStorage>();
+                services.TryAdd(new ServiceDescriptor(typeof(MemoryStore<string>), new MemoryStore<string>()));
+                services.AddSingleton<IBlobStorage, InMemoryBlobStorage>();
 
                 // Add service that provides Roles for use in authorization tests
                 services.Add(new ServiceDescriptor(typeof(TestClaimsProvider), _testClaimsProvider));

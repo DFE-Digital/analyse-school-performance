@@ -1,9 +1,9 @@
 ﻿using ASP.Core;
 using ASP.Core.Results;
-using ASP.Test.Core;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
+using Xunit;
 
 namespace ASP.Test.SpecFlow;
 
@@ -32,7 +32,7 @@ public partial class MultiAcademyTrustStepDefinitions
     {
         await SetUpMultiAcademyTrust(id, data).Switch(
             _ => { },
-            e => AssertWithMessage.Fail(e.ToString()));
+            e => Assert.Fail(e.ToString()));
     }
     protected Task<Result<Done>> SetUpMultiAcademyTrust(string id, string data)
     {

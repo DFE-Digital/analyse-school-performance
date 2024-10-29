@@ -8,11 +8,11 @@ namespace ASP.Web.FunctionalTests.Drivers
     internal class PlaywrightElementDriver : IElementDriver
     {
         private ILocator _element;
-        private IPage _page;
-        private PlaywrightWebDriver _web;
+        private PlaywrightPage _page;
+        PlaywrightWebDriver _web;
         private ISpecFlowOutputHelper _outputHelper;
 
-        public PlaywrightElementDriver(ILocator element, IPage page, PlaywrightWebDriver web, ISpecFlowOutputHelper outputHelper)
+        public PlaywrightElementDriver(ILocator element, PlaywrightPage page, PlaywrightWebDriver web, ISpecFlowOutputHelper outputHelper)
         {
             _element = element;
             _page = page;
@@ -48,7 +48,7 @@ namespace ASP.Web.FunctionalTests.Drivers
             {
                 var actual = await _element.CountAsync();
 
-                AssertWithMessage.Fail(errorIfIncorrectCount(count, actual));
+                Assert.Fail(errorIfIncorrectCount(count, actual));
             }
         }
 
@@ -57,9 +57,9 @@ namespace ASP.Web.FunctionalTests.Drivers
             var count = await _element.CountAsync();
             if (count != 0)
             {
-                var pageContent = await _web.PageContentAsync();
+                var pageContent = await _page.PageContentAsync();
                 _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
-                AssertWithMessage.Fail(errorIfExists);
+                Assert.Fail(errorIfExists);
             }
         }
 
@@ -68,9 +68,9 @@ namespace ASP.Web.FunctionalTests.Drivers
             var count = await _element.CountAsync();
             if (count == 0)
             {
-                var pageContent = await _web.PageContentAsync();
+                var pageContent = await _page.PageContentAsync();
                 _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
-                AssertWithMessage.Fail(errorIfNotExists);
+                Assert.Fail(errorIfNotExists);
             }
 
             return this;
@@ -127,7 +127,7 @@ namespace ASP.Web.FunctionalTests.Drivers
         public async Task<bool> MatchesAsync(string selector)
         {
             var thisCount = await _element.CountAsync();
-            var count = await _element.And(_page.Locator(selector)).CountAsync();
+            var count = await _element.And(_page.Page.Locator(selector)).CountAsync();
 
             return thisCount == count;
         }
@@ -145,6 +145,15 @@ namespace ASP.Web.FunctionalTests.Drivers
         public async Task ClickAsync()
         {
             await _element.ClickAsync();
+        }
+
+        public async Task StartDownloadAsync()
+        {
+            var href = await _element.GetAttributeAsync("href");
+            Assert.NotNull(href, "Element does not have an href attribute.");
+            Assert.NotEmpty(href, "Element href was empty.");
+
+            await _web.CaptureDownloadAsync(() => _element.ClickAsync());
         }
     }
 }

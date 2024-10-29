@@ -12,18 +12,25 @@ namespace ASP.Web.FunctionalTests.Drivers
         private const string ExceptionMessage = 
             "No web driver configured. Please add either the @Javascript:enabled or the @Javascript:disabled attribute to the test scenario to specify the web driver.";
 
-        public Task NavigateAsync(string path)
-        {
-            throw new XunitException(ExceptionMessage);
-        }
-
-        public HttpStatusCode Status =>
+        public string BaseAddress =>
             throw new XunitException(ExceptionMessage);
 
-        public string Path => 
+        public Task NavigateAsync(string path) =>
             throw new XunitException(ExceptionMessage);
 
-        public string BaseAddress => 
+        public Task CaptureDownloadAsync(Func<Task> action) =>
+            throw new XunitException(ExceptionMessage);
+
+        public Task ExpectStatusCode() =>
+            throw new XunitException(ExceptionMessage);
+
+        public HttpStatusCode StatusCode =>
+            throw new XunitException(ExceptionMessage);
+
+        public IHtmlPage CurrentPage =>
+            throw new XunitException(ExceptionMessage);
+
+        public IDownload CurrentDownload =>
             throw new XunitException(ExceptionMessage);
 
         public int ExpectedStatusCode
@@ -32,49 +39,14 @@ namespace ASP.Web.FunctionalTests.Drivers
             set => throw new XunitException(ExceptionMessage);
         }
 
-        public Task<IElementDriver> Element(string selector)
-        {
+        public Dictionary<string, string> Headers =>
             throw new XunitException(ExceptionMessage);
+
+        public void Dispose()
+        {
         }
 
-        public Task<IElementDriver> ElementByLabel(string labelText)
-        {
-            throw new XunitException(ExceptionMessage);
-        }
-
-        public Task<string> PageContentAsync()
-        {
-            throw new XunitException(ExceptionMessage);
-        }
-
-        public Task<string> PageTitleAsync()
-        {
-            throw new XunitException(ExceptionMessage);
-        }
-
-        public Task SubmitFormAsync(IElementDriver form)
-        {
-            throw new XunitException(ExceptionMessage);
-        }
-
-        public Task SubmitFormAsync(IElementDriver form, IElementDriver element)
-        {
-            throw new XunitException(ExceptionMessage);
-        }
-
-        public Task<IElementsDriver> Elements(string selector)
-        {
-            throw new XunitException(ExceptionMessage);
-        }
-
-        public Task ExpectStatusCode()
-        {
-            throw new XunitException(ExceptionMessage);
-        }
-        
-        public Task WaitForSelectorAsync(string selector, string errorIfNotExists)
-        {
-            throw new XunitException(ExceptionMessage);
-        }
+        public ValueTask DisposeAsync() =>
+            ValueTask.CompletedTask;
     }
 }

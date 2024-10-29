@@ -20,9 +20,6 @@ namespace ASP.Api
             {
                 response.Headers.Append(header.Key, header.Value);
             }
-
-            response.Headers.Append("Content-Type", ContentType);
-            response.Headers.Append("Content-Disposition", $"attachment; filename={FileDownloadName}; filename*=UTF-8''{FileDownloadName}");
             
             await base.ExecuteResultAsync(context);
         }

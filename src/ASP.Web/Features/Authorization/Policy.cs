@@ -18,6 +18,7 @@ public static class Policy
     public const string AccessToMyDioceseSchools = "AccessToMyDioceseSchools";
     public const string AccessToGuidance = "AccessToGuidance";
     public const string AccessToEditPages = "AccessToEditPages";
+    public const string AdminOnly = "AdminOnly";
 
     public static void AddPolicies(AuthorizationOptions options)
     {
@@ -56,6 +57,9 @@ public static class Policy
 
         options.AddPolicy(AccessToEditPages, policy => 
             policy.RequireRole(Role.AccessToEditPages));
+
+        options.AddPolicy(AdminOnly, policy =>
+            policy.RequireRole(Role.SuperAdmin));
 
         // Add fallback policy for all routes, requiring the user to be authenticated
         options.FallbackPolicy = new AuthorizationPolicyBuilder()

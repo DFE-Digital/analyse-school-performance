@@ -2,7 +2,7 @@
 
 namespace ASP.Core.Extensions;
 
-public static class StringExtensions    
+public static class StringExtensions
 {
     public static SearchType ClassifySearchType(this string input)
     {

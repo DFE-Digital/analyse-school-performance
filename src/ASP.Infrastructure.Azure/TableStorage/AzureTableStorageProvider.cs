@@ -10,9 +10,9 @@ namespace ASP.Infrastructure.Azure.TableStorage
 {
     public class AzureTableStorageProvider : ITableStorageProvider
     {
-        private readonly TableServiceClient _client;
         private readonly AzureTableStorageOptions _options;
         private readonly IHostEnvironment _hostEnvironment;
+        private readonly TableServiceClient _client;
 
         public AzureTableStorageProvider(IOptions<AzureTableStorageOptions> options, IHostEnvironment hostEnvironment)
         {

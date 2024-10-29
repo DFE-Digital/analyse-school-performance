@@ -1,4 +1,5 @@
 ﻿using ASP.Core;
+using ASP.Core.Results;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit;
@@ -27,13 +28,14 @@ namespace ASP.Test.SpecFlow
         [Given(@"blob storage file (.+) exists in (.+) container:")]
         public async Task GivenBlobStorageFileExistsInContainer(string filePath, string container, string fileContents)
         {
-            await _blobStorage.UploadAsync(container, filePath, fileContents);
+            await _blobStorage.UploadAsync(container, filePath, BinaryData.FromString(fileContents));
         }
 
         [Then(@"blob storage file (.+) should exist in (.+) container:")]
         public async Task ThenBlobStorageFileShouldExistInContainer(string filePath, string container, string expectedFileContents)
         {
-            var actualFileContents = await _blobStorage.DownloadAsStringAsync(container, filePath);
+            var actualFileContents = await _blobStorage.DownloadAsync(container, filePath)
+                .Map(contents => contents.ToString());
 
             Assert.Equal(expectedFileContents, actualFileContents);
         }

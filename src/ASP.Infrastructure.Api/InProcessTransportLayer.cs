@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Azure.Functions.Worker;
+using System.Net;
 using System.Reflection;
 
 namespace ASP.Infrastructure.Api
@@ -62,83 +63,47 @@ namespace ASP.Infrastructure.Api
             return new ApiResult(500, $"Could not find function for path: \"{req.Path}\"");
         }
 
-        public async Task<TransportLayerResponse> ExecuteRequest(TransportLayerRequest request)
+        public async Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
         {
-            var function = request.Path ?? "/";
-            var httpRequest = CreateRequest(request.Method ?? "GET", function, request.QueryString ?? "");
+            var function = request.RequestUri?.AbsolutePath ?? "/";
 
-            using (new RequestBodyWriter(httpRequest, request.Body ?? ""))
+            var httpRequest = new DefaultHttpContext().Request;
+            httpRequest.Method = request.Method.ToString();
+            httpRequest.Path = request.RequestUri?.AbsolutePath;
+            httpRequest.QueryString = QueryString.FromUriComponent(request.RequestUri?.Query ?? "");
+            if (request.Content != null)
             {
-                Func<HttpRequest, Task<ActionResult>> func =
-                    _functions.TryGetValue(function, out var runMethod)
-                        ? runMethod
-                        : _ => Task.FromResult((ActionResult)new ApiResult(404, $"Function {function} not found."));
+                httpRequest.Body = await request.Content.ReadAsStreamAsync();
+            }
 
-                var result = await func(httpRequest);
-                httpRequest.HttpContext.RequestServices = new RequestServiceProvider();
+            Func<HttpRequest, Task<ActionResult>> func =
+                _functions.TryGetValue(function, out var runMethod)
+                    ? runMethod
+                    : _ => Task.FromResult((ActionResult)new ApiResult(404, $"Function {function} not found."));
 
-                await result.ExecuteResultAsync(new ActionContext { HttpContext = httpRequest.HttpContext });
+            var result = await func(httpRequest);
+            httpRequest.HttpContext.RequestServices = new RequestServiceProvider();
 
-                var httpResponse = httpRequest.HttpContext.Response;
-                httpResponse.Body.Position = 0;
-                var ms = new MemoryStream();
-                using (var sr = new StreamReader(httpResponse.Body))
+            await result.ExecuteResultAsync(new ActionContext { HttpContext = httpRequest.HttpContext });
+
+            var httpResponse = httpRequest.HttpContext.Response;
+
+            var response = new HttpResponseMessage((HttpStatusCode)httpResponse.StatusCode) {
+                Content = new StreamContent(httpResponse.Body)
+            };
+
+            foreach(var header in httpResponse.Headers)
+            {
+                try
                 {
-                    var response = new TransportLayerResponse
-                    {
-                        StatusCode = httpResponse.StatusCode,
-                        BodyString = await sr.ReadToEndAsync(),
-                        BodyStream = ms
-                    };
-
-                    foreach (var header in httpResponse.Headers)
-                    {
-                        response.Headers[header.Key] = header.Value.ToString() ?? "";
-                    }
-
-                    httpResponse.Body.Position = 0;
-                    httpResponse.Body.CopyTo(ms);
-                    response.BodyStream.Position = 0;
-                    return response;
+                    response.Headers.Add(header.Key, header.Value.AsEnumerable());
+                } catch (InvalidOperationException)
+                {
+                    response.Content.Headers.Add(header.Key, header.Value.AsEnumerable());
                 }
             }
-        }
 
-        private HttpRequest CreateRequest(string method, string path, string queryString)
-        {
-            var request = new DefaultHttpContext().Request;
-
-            request.Method = method;
-            request.Path = path;
-
-            if (queryString != null)
-            {
-                request.QueryString = new QueryString(queryString);
-            }
-
-            return request;
-        }
-
-        private class RequestBodyWriter : IDisposable
-        {
-            private readonly Stream _stream;
-            private readonly StreamWriter _writer;
-
-            public RequestBodyWriter(HttpRequest request, string body)
-            {
-                _stream = new MemoryStream();
-                _writer = new StreamWriter(_stream);
-                _writer.Write(body);
-                _writer.Flush();
-                _stream.Position = 0;
-                request.Body = _stream;
-            }
-
-            public void Dispose()
-            {
-                _writer.Dispose();
-                _stream.Dispose();
-            }
+            return response;
         }
 
         private class RequestServiceProvider : IServiceProvider
@@ -166,9 +131,10 @@ namespace ASP.Infrastructure.Api
                 var response = context.HttpContext.Response;
                 response.StatusCode = result.StatusCode ?? 200;
                 response.ContentType = result.ContentType;
-                response.Body = new MemoryStream();
                 response.ContentLength = result.Content?.Length ?? 0;
+                response.Body = new MemoryStream();
                 await response.WriteAsync(result.Content ?? "");
+                response.Body.Position = 0;
             }
         }
 
@@ -179,6 +145,7 @@ namespace ASP.Infrastructure.Api
                 var response = context.HttpContext.Response;
                 response.StatusCode = 200;
                 response.ContentType = result.ContentType;
+                response.Headers.Append("Content-Disposition", $"attachment; filename={result.FileDownloadName}; filename*=UTF-8''{result.FileDownloadName}");
                 response.Body = result.FileStream;
                 return Task.CompletedTask;
             }

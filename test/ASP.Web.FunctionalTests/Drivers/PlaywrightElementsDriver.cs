@@ -7,9 +7,9 @@ namespace ASP.Web.FunctionalTests.Drivers
     internal class PlaywrightElementsDriver : IElementsDriver
     {
         private readonly ILocator _elements;
-        private readonly IPage _page;
+        private readonly PlaywrightPage _page;
 
-        public PlaywrightElementsDriver(ILocator elements, IPage page)
+        public PlaywrightElementsDriver(ILocator elements, PlaywrightPage page)
         {
             _elements = elements;
             _page = page;
@@ -25,7 +25,7 @@ namespace ASP.Web.FunctionalTests.Drivers
             {
                 var actual = await _elements.CountAsync();
 
-                AssertWithMessage.Fail(errorIfIncorrectCount(actual));
+                Assert.Fail(errorIfIncorrectCount(actual));
             }
         }
 
@@ -37,7 +37,7 @@ namespace ASP.Web.FunctionalTests.Drivers
             }
             catch (PlaywrightException)
             {
-                AssertWithMessage.Fail(errorIfExists);
+                Assert.Fail(errorIfExists);
             }
         }
 
@@ -49,7 +49,7 @@ namespace ASP.Web.FunctionalTests.Drivers
             }
             catch (PlaywrightException)
             {
-                AssertWithMessage.Fail(errorIfNotExists);
+                Assert.Fail(errorIfNotExists);
             }
 
             return this;

@@ -1,6 +1,7 @@
 using ASP.Api.FunctionalTests.Drivers;
 using ASP.Infrastructure.Api;
 using ASP.Test.SpecFlow;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
@@ -30,7 +31,10 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
         [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}")]
         public async Task WhenISendARequest(string method, string function)
         {
-            var request = new TransportLayerRequest { Method = method, Path = function };
+            var request = new HttpRequestMessage { 
+                Method = HttpMethod.Parse(method), 
+                RequestUri = new Uri($"https://localhost{function}") 
+            };
 
             await _api.Run(request);
         }
@@ -38,7 +42,10 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
         [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING}")]
         public async Task WhenISendARequest(string method, string function, string queryString)
         {
-            var request = new TransportLayerRequest { Method = method, Path = function, QueryString = "?" + queryString };
+            var request = new HttpRequestMessage { 
+                Method = HttpMethod.Parse(method), 
+                RequestUri = new Uri($"https://localhost{function}?{queryString}") 
+            };
 
             await _api.Run(request);
         }
@@ -46,7 +53,11 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
         [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT} with content:")]
         public async Task WhenISendARequestWithContent(string method, string function, string content)
         {
-            var request = new TransportLayerRequest { Method = method, Path = function, Body = content };
+            var request = new HttpRequestMessage { 
+                Method = HttpMethod.Parse(method), 
+                RequestUri = new Uri($"https://localhost{function}"),
+                Content = new StringContent(content)
+            };
 
             await _api.Run(request);
         }
@@ -54,99 +65,76 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
         [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING} with content:")]
         public async Task WhenISendARequestWithContent(string method, string function, string queryString, string content)
         {
-            var request = new TransportLayerRequest { Method = method, Path = function, QueryString = "?" + queryString, Body = content };
+            var request = new HttpRequestMessage {
+                Method = HttpMethod.Parse(method),
+                RequestUri = new Uri($"https://localhost{function}?{queryString}"),
+                Content = new StringContent(content)
+            };
 
             await _api.Run(request);
         }
 
         [Then($@"I should get a {STATUS_CODE} response")]
-        public void ThenIShouldGetAResponse(int statusCode)
+        public async Task ThenIShouldGetAResponse(int statusCode)
         {
-            Assert.Equal(statusCode, _api.LastResponse.StatusCode);
+            if (_api.LastResponse.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                var responseBody = await _api.LastResponse.Content.ReadAsStringAsync();
+                _output.WriteLine("Full content:");
+                _output.WriteLine(responseBody);
+            }
+
+            Assert.Equal(statusCode, (int)_api.LastResponse.StatusCode);
         }
 
         [Then($@"the response should be the message {RESPONSE_MESSAGE}")]
-        public void ThenTheResponseShouldBeTheMessage(string message)
+        public async Task ThenTheResponseShouldBeTheMessage(string message)
         {
-            Assert.Equal(message, _api.LastResponse.BodyString);
+            var responseBody = await _api.LastResponse.Content.ReadAsStringAsync();
+
+            Assert.Equal(message, responseBody);
         }
 
         [Then($@"the response should include the header {HTTP_HEADER}")]
         public void ThenTheResponseShouldIncludeTheHeader(string name, string value)
         {
-            Assert.Contains(name, _api.LastResponse.Headers.Keys);
-            var header = _api.LastResponse.Headers[name];
+            var headerDict = _api.LastResponse.Headers.Concat(_api.LastResponse.Content.Headers).ToDictionary(h => h.Key, h => h.Value);
+            Assert.Contains(name, headerDict);
+            var header = headerDict[name];
 
-            Assert.Equal(value, header);
+            Assert.Equal(value, string.Join(",", header));
         }
 
         [Then($@"the response should be an object with these exact properties:")]
-        public void ThenTheResponseShouldBeAnObjectWithTheseExactProperties(string expectedContent)
+        public async Task ThenTheResponseShouldBeAnObjectWithTheseExactProperties(string expectedContent)
         {
-            Assert.Equal(JsonConvert.SerializeObject(JsonConvert.DeserializeObject<object>(expectedContent)), _api.LastResponse.BodyString);
+            var responseBody = await _api.LastResponse.Content.ReadAsStringAsync();
+
+            Assert.Equal(JsonConvert.SerializeObject(JsonConvert.DeserializeObject<object>(expectedContent)), responseBody);
         }
 
         [Then($@"the response should be an object containing these properties:")]
-        public void ThenTheResponseShouldBeAnObjectContainingTheseProperties(string expectedContent)
+        public async Task ThenTheResponseShouldBeAnObjectContainingTheseProperties(string expectedContent)
         {
-            AssertObjects.MatchProperties(expectedContent, _api.LastResponse?.BodyString ?? "");
+            var responseBody = await _api.LastResponse.Content.ReadAsStringAsync();
+
+            Assert.ObjectMatchesProperties(expectedContent, responseBody);
         }
 
         [Then($@"the response should be an object containing these properties excluding null:")]
-        public void ThenTheResponseShouldBeAnObjectContainingThesePropertiesExcludingNull(string expectedContent)
+        public async Task ThenTheResponseShouldBeAnObjectContainingThesePropertiesExcludingNull(string expectedContent)
         {
-            AssertObjects.MatchPropertiesExcludingNullValues(expectedContent, _api.LastResponse?.BodyString ?? "");
+            var responseBody = await _api.LastResponse.Content.ReadAsStringAsync();
+
+            Assert.ObjectMatchesPropertiesExcludingNullValues(expectedContent, responseBody);
         }
 
         [Then($@"the response should be an array of objects containing these properties:")]
-        public void ThenTheResponseShouldBeAnArrayOfObjectsContainingTheseProperties(string expectedContent)
+        public async Task ThenTheResponseShouldBeAnArrayOfObjectsContainingTheseProperties(string expectedContent)
         {
-            AssertObjects.MatchPropertiesExcludingNullValues(expectedContent, _api.LastResponse?.BodyString ?? "");
-        }
+            var responseBody = await _api.LastResponse.Content.ReadAsStringAsync();
 
-        [Then(@"the ZIP file should contain (.*) CSV files with at least (.*) rows each")]
-        public async Task ThenTheZipFileShouldContainCsvFiles(int expectedFileCount, int minRowCount)
-        {
-            var responseBody = _api.LastResponse.BodyStream;
-            Assert.NotNull(responseBody);
-
-            using var archive = new ZipArchive(responseBody);
-
-            var csvEntries = archive.Entries.Where(entry => entry.FullName.EndsWith(".csv")).ToList();
-            Assert.Equal(expectedFileCount, csvEntries.Count);
-
-            foreach (var csvEntry in csvEntries)
-            {
-                using var reader = new StreamReader(csvEntry.Open());
-                var csvContent = await reader.ReadToEndAsync();
-
-                var rows = csvContent.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-                Assert.True(rows.Length >= minRowCount, $"File {csvEntry.FullName} contains less than {minRowCount} rows.");
-            }
-        }
-
-        [Then(@"the ZIP file name should follow the expected format")]
-        public Task ThenTheZipFileNameShouldFollowTheExpectedFormat()
-        {
-            var responseBody = _api.LastResponse.BodyStream;
-            Assert.NotNull(responseBody);
-
-            var contentDispositionHeader = _api.LastResponse.Headers["Content-Disposition"];
-            var fileName = contentDispositionHeader
-                .Split(';')
-                .Select(part => part.Trim())
-                .FirstOrDefault(part => part.StartsWith("filename="))?
-                .Split('=')[1]
-                .Trim('"');
-
-            Assert.NotNull(fileName);
-
-            // Expected format: "yyyyMMdd_HHmmss_download.zip"
-            var regexPattern = @"^\d{8}_\d{6}_asp_download\.zip$";
-            Assert.Matches(regexPattern, fileName);
-
-            return Task.CompletedTask;
+            Assert.ObjectMatchesPropertiesExcludingNullValues(expectedContent, responseBody);
         }
     }
 }

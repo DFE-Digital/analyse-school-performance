@@ -33,14 +33,14 @@ namespace ASP.Test.SpecFlow
         public async Task GivenContentTemplateExistsMultiline(string id, string data)
         {
             await SetUpPublishedContentTemplate(id, id, data)
-                .OnError(e => AssertWithMessage.Fail(e.ToString()));
+                .OnError(e => Assert.Fail(e.ToString()));
         }
 
         [Given(@"(?:published )?Content Template with id ""([^""]+)"" and contentId ""([^""]+)"" exists:")]
         public async Task GivenContentTemplateWithIdAndContentIdExistsMultiline(string id, string contentId, string data)
         {
             await SetUpPublishedContentTemplate(id, contentId, data)
-                .OnError(e => AssertWithMessage.Fail(e.ToString()));
+                .OnError(e => Assert.Fail(e.ToString()));
 
         }
 
@@ -48,14 +48,14 @@ namespace ASP.Test.SpecFlow
         public async Task GivenUnpublishedContentTemplateExistsMultiline(string id, string data)
         {
             await SetUpUnpublishedContentTemplate(id, id, data)
-                .OnError(e => AssertWithMessage.Fail(e.ToString()));
+                .OnError(e => Assert.Fail(e.ToString()));
         }
 
         [Given(@"unpublished Content Template with id ""([^""]+)"" and contentId ""([^""]+)"" exists:")]
         public async Task GivenUnpublishedContentTemplateWithIdAndContentIdExistsMultiline(string id, string contentId, string data)
         {
             await SetUpUnpublishedContentTemplate(id, contentId, data)
-                .OnError(e => AssertWithMessage.Fail(e.ToString()));
+                .OnError(e => Assert.Fail(e.ToString()));
         }
 
         [Then(@"Content Template <(.+)> should have property ""([^""]+)"" equal to (.+)")]
@@ -69,8 +69,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateShouldHavePropertyEqualTo(string id, string propertyPath, string propertyValue)
         {
             await GetContentTemplate(id, id).Switch(
-                contentTemplate => AssertObjects.HavePropertyIdenticalTo(propertyPath, propertyValue, contentTemplate),
-                e => AssertWithMessage.Fail(e.ToString())
+                contentTemplate => Assert.ObjectHasPropertyIdenticalTo(propertyPath, propertyValue, contentTemplate),
+                e => Assert.Fail(e.ToString())
             );
         }
 
@@ -100,8 +100,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualTo(string id, string contentId, string propertyPath, string propertyValue)
         {
             await GetContentTemplate(id, contentId).Switch(
-                contentTemplate => AssertObjects.HavePropertyIdenticalTo(propertyPath, propertyValue, contentTemplate),
-                e => AssertWithMessage.Fail(e.ToString())
+                contentTemplate => Assert.ObjectHasPropertyIdenticalTo(propertyPath, propertyValue, contentTemplate),
+                e => Assert.Fail(e.ToString())
             );
         }
 
@@ -116,8 +116,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateShouldHavePropertyEqualToMultiline(string id, string propertyPath, string propertyValue)
         {
             await GetContentTemplate(id, id).Switch(
-                contentTemplate => AssertObjects.HavePropertyIdenticalTo(propertyPath, propertyValue, contentTemplate),
-                e => AssertWithMessage.Fail(e.ToString())
+                contentTemplate => Assert.ObjectHasPropertyIdenticalTo(propertyPath, propertyValue, contentTemplate),
+                e => Assert.Fail(e.ToString())
             );
         }
 
@@ -147,8 +147,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateWithIdAndContentIdShouldHavePropertyEqualToMultiline(string id, string contentId, string propertyPath, string propertyValue)
         {
             await GetContentTemplate(id, contentId).Switch(
-                contentTemplate => AssertObjects.HavePropertyIdenticalTo(propertyPath, propertyValue, contentTemplate),
-                e => AssertWithMessage.Fail(e.ToString())
+                contentTemplate => Assert.ObjectHasPropertyIdenticalTo(propertyPath, propertyValue, contentTemplate),
+                e => Assert.Fail(e.ToString())
             );
         }
 
@@ -163,8 +163,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateShouldHavePropertyMatchingMultiline(string id, string propertyPath, string expected)
         {
             await GetContentTemplate(id, id).Switch(
-                contentTemplate => AssertObjects.HavePropertyMatching(propertyPath, expected, contentTemplate),
-                e => AssertWithMessage.Fail(e.ToString())
+                contentTemplate => Assert.ObjectHasPropertyMatching(propertyPath, expected, contentTemplate),
+                e => Assert.Fail(e.ToString())
             );
         }
 
@@ -194,8 +194,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateWithIdAndContentIdShouldHavePropertyMatchingMultiline(string id, string contentId, string propertyPath, string expected)
         {
             await GetContentTemplate(id, contentId).Switch(
-                contentTemplate => AssertObjects.HavePropertyMatching(propertyPath, expected, contentTemplate),
-                e => AssertWithMessage.Fail(e.ToString())
+                contentTemplate => Assert.ObjectHasPropertyMatching(propertyPath, expected, contentTemplate),
+                e => Assert.Fail(e.ToString())
             );
         }
 
@@ -210,8 +210,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateShouldMatchMultiline(string id, string expected)
         {
             await GetContentTemplate(id, id).Switch(
-                actual => AssertObjects.MatchProperties(expected, actual),
-                e => AssertWithMessage.Fail(e.ToString())
+                actual => Assert.ObjectMatchesProperties(expected, actual),
+                e => Assert.Fail(e.ToString())
             );
         }
 
@@ -241,8 +241,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateWithIdAndContentIdShouldMatchMultiline(string id, string contentId, string expected)
         {
             await GetContentTemplate(id, contentId).Switch(
-                actual => AssertObjects.MatchProperties(expected, actual),
-                e => AssertWithMessage.Fail(e.ToString())
+                actual => Assert.ObjectMatchesProperties(expected, actual),
+                e => Assert.Fail(e.ToString())
             );
         }
 
@@ -257,8 +257,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateShouldBeEqualToMultiline(string id, string properties)
         {
             await GetContentTemplate(id, id).Switch(
-                actual => AssertObjects.AreIdentical(properties, actual),
-                e => AssertWithMessage.Fail(e.ToString())
+                actual => Assert.ObjectsAreIdentical(properties, actual),
+                e => Assert.Fail(e.ToString())
             );
         }
 
@@ -288,8 +288,8 @@ namespace ASP.Test.SpecFlow
         public async Task ThenContentTemplateWithIdAndContentIdShouldBeEqualToMultiline(string id, string contentId, string properties)
         {
             await GetContentTemplate(id, contentId).Switch(
-                actual => AssertObjects.AreIdentical(properties, actual),
-                e => AssertWithMessage.Fail(e.ToString())
+                actual => Assert.ObjectsAreIdentical(properties, actual),
+                e => Assert.Fail(e.ToString())
             );
         }
 

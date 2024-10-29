@@ -174,7 +174,11 @@ namespace ASP.Web.Areas.School
 
         protected virtual Task<Result<ActionResult>> GetDownloadsAsZipFile(FileType fileType, List<string> fileIds)
         {
-            return _api.DownloadAsZipFile(new DownloadAsZipFileRequest(fileType, fileIds));
+            return 
+                from response in _api.DownloadAsZipFile(new DownloadAsZipFileRequest(fileType, fileIds))
+                select (ActionResult)new FileStreamResult(response.Content, response.ContentType) {
+                    FileDownloadName = response.FileName
+                };
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using System.Net.Http.Headers;
+﻿using System.Net;
 using AngleSharp;
 using AngleSharp.Dom;
+using AngleSharp.Dom.Events;
 using AngleSharp.Html.Dom;
 using AngleSharp.Io.Network;
 using ASP.Test.Core;
@@ -20,7 +19,9 @@ namespace ASP.Web.FunctionalTests.Drivers
         private static IBrowsingContext? _browsingContext;
         private readonly AspWebContext _web;
         private readonly ISpecFlowOutputHelper _outputHelper;
-        private IDocument? _lastResponse;
+        private AngleSharpDownload? _lastDownload;
+        private AngleSharpPage? _lastPage;
+        private AngleSharp.Io.IResponse? _lastResponse;
 
         public AngleSharpWebDriver(AspWebContext web, ISpecFlowOutputHelper outputHelper)
         {
@@ -38,150 +39,133 @@ namespace ASP.Web.FunctionalTests.Drivers
                 var config = Configuration.Default.With(requester).WithDefaultLoader();
                 _browsingContext = BrowsingContext.New(config);
             }
+            _browsingContext.AddEventListener(EventNames.Requested, BrowsingContext_Requested);
         }
 
-        // Clear down the static resources after the test run
-        // (not strictly necessary but just being tidy)
-        [AfterTestRun]
-        public static void DisposeResources()
+        private void BrowsingContext_Requested(object sender, Event ev)
         {
-            if (_browsingContext != null)
+            if (ev is RequestEvent r)
             {
-                _browsingContext.Dispose();
+                _lastResponse = r.Response;
             }
         }
 
-        [NotNull]
-        public IDocument LastResponse
+        public IHtmlPage CurrentPage
         {
             get
             {
-                if (_lastResponse == null)
-                {
-                    AssertWithMessage.NotNull(_lastResponse, @"No web response received. Is the test missing a ""navigate"" step?");
-                }
+                Assert.NotNull(_lastPage, @"No web response received. Is the test missing a ""navigate"" step?");
 
-                return _lastResponse!;
+                return _lastPage!;
             }
         }
 
-        public int ExpectedStatusCode { get; set; }
+        public IDownload CurrentDownload
+        {
+            get
+            {
+                Assert.NotNull(_lastDownload, @"No web response received. Is the test missing a ""navigate"" step?");
+
+                return _lastDownload!;
+            }
+        }
 
         public async Task NavigateAsync(string path)
         {
-            var response = await _web.Client.GetAsync(path);
+            var document = await _browsingContext!.OpenAsync(BaseAddress + path);
 
-            _lastResponse = await GetDocumentAsync(response);
+            _lastPage = new AngleSharpPage(document, _lastResponse!, this, _outputHelper);
+            if (_lastDownload != null)
+            {
+                _lastDownload.Dispose();
+                _lastDownload = null;
+            }
+
             ExpectedStatusCode = 200;
         }
 
-        public HttpStatusCode Status => LastResponse.StatusCode;
-        public string BaseAddress => _web.Client.BaseAddress!.AbsoluteUri.Trim('/') ?? string.Empty;
-        public string Path => LastResponse.Url;
-        public Task<string> PageContentAsync() => Task.FromResult(LastResponse.ToHtml());
-        public Task<string> PageTitleAsync() => Task.FromResult(LastResponse.Title ?? "");
-
-        public async Task<IElementDriver> Element(string selector)
+        public async Task CaptureDownloadAsync(string path)
         {
-            await ExpectStatusCode();
+            var response = await _web.Client.GetAsync(path);
+            var stream = await response.Content.ReadAsStreamAsync();
 
-            return new AngleSharpElementDriver(LastResponse.DocumentElement, selector, this, _outputHelper);
-        }
+            _lastDownload = new AngleSharpDownload(response, stream, _outputHelper);
+            if (_lastPage != null)
+            {
+                _lastPage.Dispose();
+                _lastPage = null;
+            }
 
-        public async Task<IElementDriver> ElementByLabel(string labelText)
-        {
-            await ExpectStatusCode();
-
-            var label = LastResponse.QuerySelectorAll(":scope label").FirstOrDefault(l => l.TextContent.Trim() == labelText.Trim());
-            AssertWithMessage.NotNull(label, $@"Could not find a label with the text ""{labelText}"".");
-
-            var fieldSelector = $":scope #{label?.Attributes["for"]?.Value}";
-
-            return new AngleSharpElementDriver(LastResponse.DocumentElement, fieldSelector, this, _outputHelper);
-        }
-
-        public async Task<IElementsDriver> Elements(string selector)
-        {
-            await ExpectStatusCode();
-
-            return new AngleSharpElementsDriver(LastResponse.DocumentElement, selector, this);
+            ExpectedStatusCode = 200;
         }
 
         public async Task SubmitFormAsync(IHtmlFormElement form, IHtmlElement element)
         {
-            _lastResponse = await form.SubmitAsync(element);
-            ExpectedStatusCode = 200;
+            var document = await form.SubmitAsync(element);
+
+            _lastPage = new AngleSharpPage(document, _lastResponse!, this, _outputHelper);
+            _lastDownload = null;
         }
 
-        private async Task<IHtmlDocument> GetDocumentAsync(HttpResponseMessage response)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            var document = await _browsingContext!
-                .OpenAsync(htmlResponse =>
-                {
-                    htmlResponse
-                        .Address(response.RequestMessage!.RequestUri)
-                        .Status(response.StatusCode);
+        public HttpStatusCode StatusCode => 
+            _lastPage?.Status ?? _lastDownload?.Status ?? 0;
 
-                    MapHeaders(response.Headers);
-                    MapHeaders(response.Content.Headers);
+        public Dictionary<string, string> Headers => 
+            (_lastPage?.Headers ?? _lastDownload?.Headers ?? new())
+                .ToDictionary(h => h.Key, h => string.Join(",", h.Value));
 
-                    htmlResponse.Content(content);
+        public string BaseAddress => 
+            _web.Client.BaseAddress?.AbsoluteUri.Trim('/') ?? string.Empty;
 
-                    void MapHeaders(HttpHeaders headers)
-                    {
-                        foreach (var header in headers)
-                        {
-                            foreach (var value in header.Value)
-                            {
-                                htmlResponse.Header(header.Key, value);
-                            }
-                        }
-                    }
-                });
-
-            return (IHtmlDocument)document;
-        }
+        public int ExpectedStatusCode { get; set; }
 
         public async Task ExpectStatusCode()
         {
-            if ((int)Status != 200)
+            if ((int)StatusCode != 200)
             {
-                var pageContent = await PageContentAsync();
-                if (pageContent.StartsWith("<!DOCTYPE html>"))
+                if (_lastPage != null)
                 {
-                    var errorMessageElement = LastResponse.DocumentElement.QuerySelector(@"[data-testid=""error-display-message""]");
-                    var errorMessage = errorMessageElement?.TextContent?
-                        .Trim()
-                        .Replace("\\u0022", "\"")
-                        .Replace("\\r", "\r")
-                        .Replace("\\n", "\n") 
-                        ?? "(none)";
+                    var pageContent = await _lastPage.PageContentAsync();
+                    if (pageContent.StartsWith("<!DOCTYPE html>"))
+                    {
+                        var errorMessageElement = _lastPage.Document.DocumentElement.QuerySelector(@"[data-testid=""error-display-message""]");
+                        var errorMessage = errorMessageElement?.TextContent?
+                            .Trim()
+                            .Replace("\\u0022", "\"")
+                            .Replace("\\r", "\r")
+                            .Replace("\\n", "\n")
+                            ?? "(none)";
 
-                    _outputHelper.WriteLine($"Error message: {errorMessage}");
+                        _outputHelper.WriteLine($"Error message: {errorMessage}");
 
-                    var stackTraceElement = LastResponse.DocumentElement.QuerySelector(@"[data-testid=""error-display-stack-trace""]");
-                    var stackTrace = stackTraceElement?.TextContent?
-                        .Trim()
-                        .Replace("\\u0022", "\"")
-                        .Replace("\\r", "\r")
-                        .Replace("\\n", "\n")
-                        ?? "(none)";
+                        var stackTraceElement = _lastPage.Document.DocumentElement.QuerySelector(@"[data-testid=""error-display-stack-trace""]");
+                        var stackTrace = stackTraceElement?.TextContent?
+                            .Trim()
+                            .Replace("\\u0022", "\"")
+                            .Replace("\\r", "\r")
+                            .Replace("\\n", "\n")
+                            ?? "(none)";
 
-                    _outputHelper.WriteLine($"Stack trace: {stackTrace}");
-                }
-                else
-                {
-                    _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+                        _outputHelper.WriteLine($"Stack trace: {stackTrace}");
+                    }
+                    else
+                    {
+                        _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+                    }
                 }
             }
 
-            AssertWithMessage.Equal(ExpectedStatusCode, (int)Status, $"Expected response status to be {ExpectedStatusCode} but was {(int)Status}.");
+            Assert.Equal(ExpectedStatusCode, (int)StatusCode, $"Expected response status to be {ExpectedStatusCode} but was {(int)StatusCode}.");
         }
 
-        public Task WaitForSelectorAsync(string selector, string errorIfNotExists)
+        public void Dispose()
         {
-            return Task.CompletedTask;
+            if (_browsingContext != null)
+            {
+                _browsingContext.RemoveEventListener(EventNames.Requested, BrowsingContext_Requested);
+            }
         }
+
+        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Net;
+﻿using System.Net;
 using ASP.Test.Core;
 using Microsoft.Playwright;
 using TechTalk.SpecFlow.Infrastructure;
@@ -17,6 +16,8 @@ namespace ASP.Web.FunctionalTests.Drivers
         private static IBrowser? _browser;
         private readonly AspWebContext _web;
         private readonly ISpecFlowOutputHelper _outputHelper;
+        private PlaywrightDownload? _lastDownload;
+        private PlaywrightPage? _lastPage;
         private IResponse? _lastResponse;
 
         public PlaywrightWebDriver(AspWebContext web, ISpecFlowOutputHelper outputHelper)
@@ -53,159 +54,122 @@ namespace ASP.Web.FunctionalTests.Drivers
                 }).Wait();
             }
 
-            _page!.Response += (object? sender, IResponse e) =>
-            {
-                if (e.Request.ResourceType == "document")
-                {
-                    ExpectedStatusCode = 200;
-                    _lastResponse = e;
-                }
-            };
+            _page!.Response += PlaywrightWebDriver_Response;
         }
 
-        // Clear down the static resources after the test run
-        // (not strictly necessary but just being tidy)
-        [AfterTestRun]
-        public static async Task DisposeResources()
+        private void PlaywrightWebDriver_Response(object? sender, IResponse e)
         {
-            if (_browser != null)
+            if (e.Request.ResourceType == "document")
             {
-                await _browser.DisposeAsync();
-            }
-
-            if (_playwright != null)
-            {
-                _playwright!.Dispose();
+                ExpectedStatusCode = 200;
+                _lastResponse = e;
             }
         }
 
-        [NotNull]
-        private IResponse LastResponse
+        public IHtmlPage CurrentPage
         {
             get
             {
-                if (_lastResponse == null)
-                {
-                    AssertWithMessage.NotNull(_lastResponse, @"No web response received. Is the test missing a ""navigate"" step?");
-                }
+                Assert.NotNull(_lastPage, @"No web response received. Is the test missing a ""navigate"" step?");
 
-                return _lastResponse!;
+                return _lastPage!;
             }
         }
 
-        [NotNull]
-        private IPage Page
+        public IDownload CurrentDownload
         {
             get
             {
-                return _page!;
+                Assert.NotNull(_lastDownload, @"No web response received. Is the test missing a ""navigate"" step?");
+
+                return _lastDownload!;
             }
         }
 
         public async Task NavigateAsync(string path)
         {
-            _lastResponse = await _page!.GotoAsync($"{_web.ServerAddress.TrimEnd('/')}{path}");
-            ExpectedStatusCode = 200;
+            var response = await _page!.GotoAsync($"{_web.ServerAddress.TrimEnd('/')}{path}");
+            Assert.NotNull(response, @"Response from GotoAsync() was null");
+
+            _lastPage = new PlaywrightPage(_page, this, response, _outputHelper);
+            if(_lastDownload != null)
+            {
+                _lastDownload.Dispose();
+                _lastDownload = null;
+            }
         }
 
-        public HttpStatusCode Status => (HttpStatusCode)LastResponse.Status;
+        public async Task CaptureDownloadAsync(Func<Task> action)
+        {
+            var waitForDownloadTask = _page!.WaitForDownloadAsync();
+            await action();
+            
+            var download = await waitForDownloadTask;
 
-        public string Path => LastResponse.Url;
+            var stream = await download.CreateReadStreamAsync();
+            _lastDownload = new PlaywrightDownload(stream, _outputHelper);
+            if (_lastPage != null)
+            {
+                _lastPage.Dispose();
+                _lastPage = null;
+            }
+        }
 
-        public string BaseAddress => _web.ServerAddress.TrimEnd('/') ?? string.Empty;
+        public HttpStatusCode StatusCode => 
+            (HttpStatusCode)(_lastResponse?.Status ?? 0);
+
+        public Dictionary<string, string> Headers => 
+            _lastResponse?.Headers ?? new();
+
+        public string BaseAddress => 
+            _web.ServerAddress.TrimEnd('/') ?? string.Empty;
 
         public int ExpectedStatusCode { get; set; }
 
-        public async Task<string> PageContentAsync()
-        {
-            return await LastResponse.TextAsync();
-        }
-
-        public async Task<string> PageTitleAsync()
-        {
-            return await Page.TitleAsync();
-        }
-
-        public async Task<IElementDriver> Element(string selector)
-        {
-            await ExpectStatusCode();
-
-            var element = Page.Locator(selector);
-            return new PlaywrightElementDriver(element, Page, this, _outputHelper);
-        }
-
-        public async Task<IElementDriver> ElementByLabel(string labelText)
-        {
-            await ExpectStatusCode();
-
-            var element = Page.GetByLabel(labelText);
-            return new PlaywrightElementDriver(element, Page, this, _outputHelper);
-        }
-
-        public async Task<IElementsDriver> Elements(string selector)
-        {
-            await ExpectStatusCode();
-
-            var elements = Page.Locator(selector);
-            return new PlaywrightElementsDriver(elements, Page);
-        }
-        
-        public async Task WaitForSelectorAsync(string selector, string errorIfNotExists)
-        {
-            try
-            {
-                await Page.WaitForSelectorAsync(selector);
-            }
-            catch (TimeoutException ex)
-            {
-                _outputHelper.WriteLine($"TimeoutException occurred while waiting for selector: {selector}");
-                _outputHelper.WriteLine($"Error message: {ex.Message}");
-                AssertWithMessage.Fail(errorIfNotExists);
-            }
-            catch (Exception ex)
-            {
-                _outputHelper.WriteLine($"Unexpected exception occurred while waiting for selector: {selector}");
-                _outputHelper.WriteLine($"Exception type: {ex.GetType().Name}");
-                _outputHelper.WriteLine($"Error message: {ex.Message}");
-                _outputHelper.WriteLine($"Stack trace: {ex.StackTrace}");
-                AssertWithMessage.Fail(errorIfNotExists);
-            }
-        }
-
         public async Task ExpectStatusCode()
         {
-            if ((int)Status != 200)
+            if ((int)StatusCode != 200)
             {
-                var pageContent = await PageContentAsync();
-                if (pageContent.StartsWith("<!DOCTYPE html>"))
+                if (_lastPage != null)
                 {
-                    var errorMessageElement = Page.Locator(@"[data-testid=""error-display-message""]");
-                    var errorMessage = (await errorMessageElement.TextContentAsync())?
-                        .Trim()
-                        .Replace("\\u0022", "\"")
-                        .Replace("\\r", "\r")
-                        .Replace("\\n", "\n")
-                        ?? "(none)";
+                    var pageContent = await _lastPage.PageContentAsync();
+                    if (pageContent.StartsWith("<!DOCTYPE html>"))
+                    {
+                        var errorMessageElement = _lastPage.Page.Locator(@"[data-testid=""error-display-message""]");
+                        var errorMessage = (await errorMessageElement.TextContentAsync())?
+                            .Trim()
+                            .Replace("\\u0022", "\"")
+                            .Replace("\\r", "\r")
+                            .Replace("\\n", "\n")
+                            ?? "(none)";
 
-                    _outputHelper.WriteLine($"Error message: {errorMessage}");
+                        _outputHelper.WriteLine($"Error message: {errorMessage}");
 
-                    var stackTraceElement = Page.Locator(@"[data-testid=""error-stack-trace""]");
-                    var stackTrace = (await stackTraceElement.TextContentAsync())?
-                        .Trim()
-                        .Replace("\\u0022", "\"")
-                        .Replace("\\r", "\r")
-                        .Replace("\\n", "\n")
-                        ?? "(none)";
+                        var stackTraceElement = _lastPage.Page.Locator(@"[data-testid=""error-stack-trace""]");
+                        var stackTrace = (await stackTraceElement.TextContentAsync())?
+                            .Trim()
+                            .Replace("\\u0022", "\"")
+                            .Replace("\\r", "\r")
+                            .Replace("\\n", "\n")
+                            ?? "(none)";
 
-                    _outputHelper.WriteLine($"Stack trace: {stackTrace}");
+                        _outputHelper.WriteLine($"Stack trace: {stackTrace}");
+                    }
+                    else
+                    {
+                        _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+                    }
                 }
-                else
-                {
-                    _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
-                }
+
+                Assert.Equal(ExpectedStatusCode, (int)StatusCode, $"Expected response status to be {ExpectedStatusCode} but was {(int)StatusCode}.");
             }
-
-            AssertWithMessage.Equal(ExpectedStatusCode, (int)Status, $"Expected response status to be {ExpectedStatusCode} but was {(int)Status}.");
         }
+
+        public void Dispose()
+        {
+            _page!.Response -= PlaywrightWebDriver_Response;
+        }
+
+        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
     }
 }

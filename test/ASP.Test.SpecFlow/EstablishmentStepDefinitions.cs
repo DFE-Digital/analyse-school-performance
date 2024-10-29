@@ -1,11 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using ASP.Core;
+﻿using ASP.Core;
 using ASP.Core.Results;
-using ASP.Test.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
+using Xunit;
 
 namespace ASP.Test.SpecFlow;
 
@@ -35,21 +34,21 @@ public partial class EstablishmentStepDefinitions
     public async Task GivenVisibleEstablishmentExistsMultiline(string id, string data)
     {
         await SetUpEstablishment(id, data, true)
-            .OnError(e => AssertWithMessage.Fail(e.ToString()));
+            .OnError(e => Assert.Fail(e.ToString()));
     }
 
     [Given(@"non-visible Establishment ""([^""]+)"" exists:")]
     public async Task GivenEstablishmentExistsMultiline(string id, string data)
     {
         await SetUpEstablishment(id, data, false)
-            .OnError(e => AssertWithMessage.Fail(e.ToString()));
+            .OnError(e => Assert.Fail(e.ToString()));
     }
 
     [Given(@"deleted Establishment ""([^""]+)"" exists:")]
     public async Task GivenDeletedEstablishmentExistsMultiline(string id, string data)
     {
         await SetUpEstablishment(id, data, false, true)
-            .OnError(e => AssertWithMessage.Fail(e.ToString()));
+            .OnError(e => Assert.Fail(e.ToString()));
     }
 
     [Given(@"([0-9]+) Establishments exist with properties:")]
@@ -84,7 +83,7 @@ public partial class EstablishmentStepDefinitions
 
             await SetUpEstablishment(id, data).Switch(
                 _ => { },
-                e => AssertWithMessage.Fail(e.ToString()));
+                e => Assert.Fail(e.ToString()));
         }
     }
 

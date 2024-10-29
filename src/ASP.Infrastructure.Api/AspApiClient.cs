@@ -18,12 +18,15 @@ using ASP.Core.Results;
 using ASP.Core.Scoping;
 using ASP.Core.Templating;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net;
 using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
 using ASP.Core.Utilities;
+using LA = ASP.Application.UseCases.LocalAuthorities.DTO;
+using MAT = ASP.Application.UseCases.MultiAcademyTrusts.DTO;
+using ASP.Application.UseCases.BlobStorageDemoFileDownload;
+using ASP.Application.UseCases.BlobStorageDemoZipFileDownload;
 
 namespace ASP.Infrastructure.Api
 {
@@ -71,10 +74,14 @@ namespace ASP.Infrastructure.Api
                 queryString = queryString.Add("revision", value);
             });
 
-            return 
-                from response in ApiGet(url, queryString)
-                from result in JsonHelper.DeserializeNotNull<ContentTemplate>(response)
-                select result;
+            return ApiGet<ContentTemplate>(url, queryString);
+        }
+
+        public Task<Result<List<ContentTemplate>>> GetAllContentTemplates()
+        {
+            var url = "/api/GetAllContentTemplates";
+
+            return ApiGet<List<ContentTemplate>>(url, null);
         }
 
         public Task<Result<Done>> UpdateContentTemplate(UpdateContentTemplateRequest request)
@@ -87,22 +94,10 @@ namespace ASP.Infrastructure.Api
                 queryString = queryString.Add("revision", value);
             });
 
-            return 
-                from _ in ApiPost(url, queryString, request.ContentTemplate)
-                select Result.Done;
+            return ApiPost<Done>(url, queryString, request.ContentTemplate);
         }
 
-        public Task<Result<List<ContentTemplate>>> GetAllContentTemplates()
-        {
-            var url = "/api/GetAllContentTemplates";
-
-            return 
-                from response in ApiGet(url, null)
-                from result in JsonHelper.DeserializeNotNull<List<ContentTemplate>>(response)
-                select result;
-        }
-
-        public async Task<Result<GetAvailableSchoolDownloadsResponse>> GetAvailableSchoolDownloads(GetAvailableSchoolDownloadsRequest request)
+        public Task<Result<GetAvailableSchoolDownloadsResponse>> GetAvailableSchoolDownloads(GetAvailableSchoolDownloadsRequest request)
         {
             var url = "/api/GetAvailableSchoolDownloads";
             var queryString = QueryString.Create("urn", request.Urn);
@@ -112,13 +107,10 @@ namespace ASP.Infrastructure.Api
                queryString = queryString.Add("year", value.ToString());
             });
 
-            var data = await ApiGet(url, queryString)
-                .Then(response => JsonHelper.DeserializeNotNull<GetAvailableSchoolDownloadsResponse>(response));
-
-            return data;
+            return ApiGet<GetAvailableSchoolDownloadsResponse>(url, queryString);
         }
 
-        public async Task<Result<ActionResult>> DownloadAsZipFile(DownloadAsZipFileRequest request)
+        public Task<Result<FileStreamResponse>> DownloadAsZipFile(DownloadAsZipFileRequest request)
         {
             var url = "/api/DownloadAsZipFile";
             var queryString = QueryString.Create("fileType", request.FileType.ToString());
@@ -128,7 +120,7 @@ namespace ASP.Infrastructure.Api
                 queryString = queryString.Add("downloadIds", id);
             }
 
-            return await ApiGetZip(url, queryString);
+            return ApiGetFileStream(url, queryString);
         }
 
         public Task<Result<EstablishmentDetailsDTO>> GetEstablishmentDetails(GetEstablishmentDetailsRequest request)
@@ -136,14 +128,10 @@ namespace ASP.Infrastructure.Api
             var url = "/api/GetEstablishmentDetails";
             var queryString = QueryString.Create("urn", request.Urn);
 
-            return 
-                from response in ApiGet(url, queryString)
-                from result in JsonHelper.DeserializeNotNull<EstablishmentDetailsDTO>(response)
-                select result;
+            return ApiGet<EstablishmentDetailsDTO>(url, queryString);
         }
 
-        public async Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> GetAllEstablishments(
-        GetAllEstablishmentsRequest request)
+        public Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> GetAllEstablishments(GetAllEstablishmentsRequest request)
         {
             var url = "/api/GetAllEstablishments";
             var queryString = QueryString.Create("scope", request.ScopeType.ToString());
@@ -163,13 +151,10 @@ namespace ASP.Infrastructure.Api
                 queryString = queryString.Add("resultsPerPage", value.ToString());
             });
 
-            return await ApiGet(url, queryString)
-                .Then(response =>
-                    JsonHelper.DeserializeNotNull<ScopedResultsPage<EstablishmentListingDTO>>(response));
+            return ApiGet<ScopedResultsPage<EstablishmentListingDTO>>(url, queryString);
         }
 
-        public Task<Result<SearchResultsPage<EstablishmentListingDTO>>> EstablishmentSearch(
-            EstablishmentSearchRequest request)
+        public Task<Result<SearchResultsPage<EstablishmentListingDTO>>> EstablishmentSearch(EstablishmentSearchRequest request)
         {
             var url = "/api/EstablishmentSearch";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
@@ -192,14 +177,10 @@ namespace ASP.Infrastructure.Api
                 queryString = queryString.Add("resultsPerPage", value.ToString());
             });
 
-            return 
-                from response in ApiGet(url, queryString)
-                from result in JsonHelper.DeserializeNotNull<SearchResultsPage<EstablishmentListingDTO>>(response)
-                select result;
+            return ApiGet<SearchResultsPage<EstablishmentListingDTO>>(url, queryString);
         }
 
-        public Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>>
-            EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request)
+        public Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request)
         {
             var url = "/api/EstablishmentSearchSuggestions";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
@@ -216,40 +197,22 @@ namespace ASP.Infrastructure.Api
                 queryString = queryString.Add("maxSuggestions", value.ToString());
             });
 
-            return 
-                from response in ApiGet(url, queryString)
-                from result in JsonHelper.DeserializeNotNull<SearchSuggestionsResult<EstablishmentSuggestionDTO>>(response)
-                select result;
+            return ApiGet<SearchSuggestionsResult<EstablishmentSuggestionDTO>>(url, queryString);
         }
 
-        public Task<Result<Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request)
+        public Task<Result<LA.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request)
         {
             var url = "/api/GetLocalAuthority";
             var queryString = QueryString.Create("code", request.Code);
 
-            return 
-                from response in ApiGet(url, queryString)
-                from result in JsonHelper.DeserializeNotNull<Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>(response)
-                select result;
+            return ApiGet<LA.LocalAuthorityDTO>(url, queryString);
         }
 
-        public Task<Result<Application.UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>> GetMultiAcademyTrust(GetMultiAcademyTrustRequest request)
-        {
-            var url = "/api/GetMultiAcademyTrust";
-            var queryString = QueryString.Create("id", request.Id);
-
-            return 
-                from response in ApiGet(url, queryString)
-                from result in JsonHelper.DeserializeNotNull<Application.UseCases.MultiAcademyTrusts.DTO.MultiAcademyTrustDTO>(response)
-                select result;
-        }
-        
-        public Task<Result<ResultsPage<ASP.Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>>> GetAllLocalAuthorities(
-            GetAllLocalAuthoritiesRequest request)
+        public Task<Result<ResultsPage<LA.LocalAuthorityDTO>>> GetAllLocalAuthorities(GetAllLocalAuthoritiesRequest request)
         {
             var url = "/api/GetAllLocalAuthorities";
             var queryString = new QueryString();
-            
+
             request.Page.IfSome(value =>
             {
                 queryString = queryString.Add("page", value.ToString());
@@ -260,123 +223,118 @@ namespace ASP.Infrastructure.Api
                 queryString = queryString.Add("resultsPerPage", value.ToString());
             });
 
-            return
-                from response in ApiGet(url, queryString)
-                from result in JsonHelper.DeserializeNotNull<ResultsPage<ASP.Application.UseCases.LocalAuthorities.DTO.LocalAuthorityDTO>>(response)
-                select result;
+            return ApiGet<ResultsPage<LA.LocalAuthorityDTO>>(url, queryString);
         }
 
-        private async Task<Result<string>> ApiGet(string url, QueryString? queryString)
+        public Task<Result<MAT.MultiAcademyTrustDTO>> GetMultiAcademyTrust(GetMultiAcademyTrustRequest request)
+        {
+            var url = "/api/GetMultiAcademyTrust";
+            var queryString = QueryString.Create("id", request.Id);
+
+            return ApiGet<MAT.MultiAcademyTrustDTO>(url, queryString);
+        }
+
+        public Task<Result<FileStreamResponse>> BlobStorageDemoFileDownload(BlobStorageDemoFileDownloadRequest request)
+        {
+            var url = "/api/BlobStorageDemoFileDownload";
+            var queryString = QueryString.Create("container", request.Container)
+                .Add("filepath", request.Filepath);
+
+            return ApiGetFileStream(url, queryString);
+        }
+
+        public Task<Result<FileStreamResponse>> BlobStorageDemoZipFileDownload(BlobStorageDemoZipFileDownloadRequest request)
+        {
+            var url = "/api/BlobStorageDemoZipFileDownload";
+            var queryString = QueryString.Create("container", request.Container)
+                .Add("filepath", request.Filepath);
+
+            return ApiGetFileStream(url, queryString);
+        }
+
+        private async Task<Result<T>> ApiGet<T>(string url, QueryString? queryString)
+            where T : notnull
         {
             try
             {
-                var response = await _transportLayer.ExecuteRequest(new TransportLayerRequest
-                {
-                    Method = HttpMethods.Get,
-                    Path = url,
-                    QueryString = queryString.ToString()
-                });
+                var response = await _transportLayer.ExecuteRequest(new HttpRequestMessage(HttpMethod.Get, $"https://localhost{url}{queryString}"));
 
-                return ToResult(response);
+                return await ToResult<T>(response);
             }
             catch (Exception ex)
             {
-                return Result.Unexpected<string>($"{ApiConnectionError}{ex.Message}", ex.StackTrace);
+                return Result.Unexpected<T>($"{ApiConnectionError}{ex.Message}", ex.StackTrace);
             }
         }
 
-        private async Task<Result<string>> ApiPost(string url, QueryString? queryString, object body)
+        private async Task<Result<T>> ApiPost<T>(string url, QueryString? queryString, object body)
+            where T : notnull
         {
             try
             {
-                var response = await _transportLayer.ExecuteRequest(new TransportLayerRequest
-                {
-                    Method = HttpMethods.Post,
-                    Path = url,
-                    QueryString = queryString.ToString(),
-                    Body = JsonHelper.Serialize(body)
+                var response = await _transportLayer.ExecuteRequest(new HttpRequestMessage(HttpMethod.Post, $"https://localhost{url}{queryString}") {
+                    Content = new StringContent(JsonHelper.Serialize(body))
                 });
 
-                return ToResult(response);
+                return await ToResult<T>(response);
             }
             catch (Exception ex)
             {
-                return Result.Unexpected<string>($"{ApiConnectionError}{ex.Message}", ex.StackTrace);
+                return Result.Unexpected<T>($"{ApiConnectionError}{ex.Message}", ex.StackTrace);
             }
         }
 
-        private async Task<Result<ActionResult>> ApiGetZip(string url, QueryString? queryString)
+        private async Task<Result<FileStreamResponse>> ApiGetFileStream(string url, QueryString? queryString)
         {
             try
             {
-                var response = await _transportLayer.ExecuteRequest(new TransportLayerRequest {
-                    Method = HttpMethods.Get,
-                    Path = url,
-                    QueryString = queryString.ToString()
-                });
+                var response = await _transportLayer.ExecuteRequest(new HttpRequestMessage(HttpMethod.Get, $"https://localhost{url}{queryString}"));
+                var filename = response.Content.Headers.ContentDisposition?.FileName ?? "";
+                var stream = await response.Content.ReadAsStreamAsync();
+                var contentType = response.Content.Headers.ContentType?.ToString() ?? "";
 
-                var contentDispositionHeader = response.Headers["Content-Disposition"];
-                var fileName = contentDispositionHeader
-                    .Split(';')
-                    .Select(part => part.Trim())
-                    .FirstOrDefault(part => part.StartsWith("filename="))?
-                    .Split('=')[1]
-                    .Trim('"');
-
-                return new FileStreamResult(response.BodyStream!, "application/octet-stream") {
-                    FileDownloadName = fileName
-                };
+                return new FileStreamResponse(filename, stream, contentType);
             }
             catch (Exception ex)
             {
-                return Result.Unexpected<ActionResult>($"{ApiConnectionError}{ex.Message}", ex.StackTrace);
+                return Result.Unexpected<FileStreamResponse>($"{ApiConnectionError}{ex.Message}", ex.StackTrace);
             }
         }
 
-        private Result<string> ToResult(TransportLayerResponse response)
+        private async Task<Result<T>> ToResult<T>(HttpResponseMessage response)
+            where T : notnull
         {
-            Result<string> result;
-
             try
             {
-                var content = response.BodyString ?? "";
+                var content = await response.Content.ReadAsStringAsync();
 
-                Result<string> handleUnexpected(string content)
+                return response.StatusCode switch
                 {
-                    return 
-                        from e in JsonHelper.DeserializeNotNull<UnexpectedError>(content)
-                        from result in Result.Unexpected<string>(
-                            ApiError + StringHelper.RemoveFromStart(_unexpectedPrefix, e.Message),
-                            _options.ShowStackTrace ? e.StackTrace : null
-                        )
-                        select result;
-                }
+                    HttpStatusCode.OK => JsonHelper.DeserializeNotNull<T>(content),
 
-                result = response.StatusCode switch
-                {
-                    (int)HttpStatusCode.OK => Result.Success(content ?? ""),
-
-                    (int)HttpStatusCode.NotFound => Result.NotFound<string>(
+                    HttpStatusCode.NotFound => Result.NotFound<T>(
                         ApiError + StringHelper.RemoveFromStart(_notFoundPrefix, content)),
 
-                    (int)HttpStatusCode.BadRequest => Result.Invalid<string>(
+                    HttpStatusCode.BadRequest => Result.Invalid<T>(
                         ApiError + StringHelper.RemoveFromStart(_invalidPrefix, content)),
 
-                    (int)HttpStatusCode.Forbidden => Result.NotAllowed<string>(
+                    HttpStatusCode.Forbidden => Result.NotAllowed<T>(
                         ApiError + StringHelper.RemoveFromStart(_notAllowedPrefix, content)),
 
-                    (int)HttpStatusCode.MethodNotAllowed => Result.Invalid<string>(
+                    HttpStatusCode.MethodNotAllowed => Result.Invalid<T>(
                         ApiError + StringHelper.RemoveFromStart(_methodNotAllowedPrefix, content)),
 
-                    _ => handleUnexpected(content)
+                    _ => JsonHelper.DeserializeNotNull<UnexpectedError>(content)
+                        .Then(e => Result.Unexpected<T>(
+                            ApiError + StringHelper.RemoveFromStart(_unexpectedPrefix, e.Message),
+                            _options.ShowStackTrace ? e.StackTrace : null
+                        ))
                 };
             }
             catch (Exception ex)
             {
-                result = Result.Unexpected<string>($"{ApiResponseError}{ex.Message}", ex.StackTrace);
+                return Result.Unexpected<T>($"{ApiResponseError}{ex.Message}", ex.StackTrace);
             }
-
-            return result;
         }
     }
 }

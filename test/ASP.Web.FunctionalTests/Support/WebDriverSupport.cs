@@ -38,5 +38,14 @@ namespace ASP.Web.FunctionalTests.Support
             // Use the Playwright web driver for tests that exercise Javascript code
             _objectContainer.RegisterTypeAs<PlaywrightWebDriver, IWebDriver>();
         }
+
+        [AfterScenario]
+        public async Task DisposeWebDriver()
+        {
+            // Use the AngleSharp web driver for tests that don't need Javascript (most tests)
+            var webDriver = _objectContainer.Resolve<IWebDriver>();
+            webDriver.Dispose();
+            await webDriver.DisposeAsync();
+        }
     }
 }

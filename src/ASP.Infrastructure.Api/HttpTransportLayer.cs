@@ -26,23 +26,11 @@ namespace ASP.Infrastructure.Api
             };
         }
 
-        public async Task<TransportLayerResponse> ExecuteRequest(TransportLayerRequest request)
+        public Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
         {
-            var httpRequest = new HttpRequestMessage(HttpMethod.Parse(request.Method), request.Path + request.QueryString);
-            httpRequest.Content = new StringContent(request.Body ?? "");
-            httpRequest.Headers.Add("x-functions-key", _options.FunctionsKey);
+            request.Headers.Add("x-functions-key", _options.FunctionsKey);
 
-            var httpResponse = await _httpClient.SendAsync(httpRequest);
-
-            var response = new TransportLayerResponse();
-            response.StatusCode = (int)httpResponse.StatusCode;
-            response.BodyString = await httpResponse.Content.ReadAsStringAsync();
-            foreach (var header in httpResponse.Headers)
-            {
-                response.Headers[header.Key] = header.Value.ToString() ?? "";
-            }
-
-            return response;
+            return _httpClient.SendAsync(request);
         }
     }
 }

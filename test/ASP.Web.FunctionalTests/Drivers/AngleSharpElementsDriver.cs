@@ -12,34 +12,32 @@ namespace ASP.Web.FunctionalTests.Drivers
         private string _selector;
 
         private readonly IHtmlCollection<IElement> _elements;
-        private readonly AngleSharpWebDriver _web;
 
-        public AngleSharpElementsDriver(IElement outerElement, string selector, AngleSharpWebDriver web)
+        public AngleSharpElementsDriver(IElement outerElement, string selector)
         {
             _outerElement = outerElement;
             _selector = selector;
-            _web = web;
             _elements = _outerElement.QuerySelectorAll(_selector);
         }
 
         public Task ShouldHaveCountAsync(int count, Func<int, string> errorIfIncorrectCount)
         {
             var actual = _elements.Count();
-            AssertWithMessage.Equal(count, actual, errorIfIncorrectCount(actual));
+            Assert.Equal(count, actual, errorIfIncorrectCount(actual));
 
             return Task.CompletedTask;
         }
 
         public Task ShouldNotExistAsync(string errorIfExists)
         {
-            AssertWithMessage.Equal(0, _elements.Count(), errorIfExists);
+            Assert.Equal(0, _elements.Count(), errorIfExists);
 
             return Task.CompletedTask;
         }
 
         public Task<IElementsDriver> ShouldExistAsync(string errorIfNotExists)
         {
-            AssertWithMessage.NotEqual(0, _elements.Count(), errorIfNotExists);
+            Assert.NotEqual(0, _elements.Count(), errorIfNotExists);
 
             return Task.FromResult((IElementsDriver)this);
         }

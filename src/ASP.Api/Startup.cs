@@ -4,6 +4,7 @@ using ASP.Infrastructure;
 using ASP.Infrastructure.Blob;
 using Microsoft.Extensions.DependencyInjection;
 using ASP.Infrastructure.DocumentDatabase;
+using ASP.Core.Time;
 
 namespace ASP.Api
 {
@@ -23,7 +24,8 @@ namespace ASP.Api
                         .ConfigureBlobStorage(context.Configuration)
                         .RegisterUseCases()
                         .RegisterRepositories()
-                        .AddScoped<ApiResultConverter>();
+                        .AddScoped<ApiResultConverter>()
+                        .ConfigureCurrentTime();
                 })
                 .ConfigureFunctionsWebApplication(app =>
                     app.UseErrorHandling()

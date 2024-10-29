@@ -9,6 +9,6 @@ namespace ASP.Infrastructure.Api
     /// </summary>
     public interface ITransportLayer
     {
-        Task<TransportLayerResponse> ExecuteRequest(TransportLayerRequest request);
+        Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request);
     }
 }

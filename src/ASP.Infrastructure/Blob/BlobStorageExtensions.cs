@@ -13,29 +13,33 @@ namespace ASP.Infrastructure.Blob
 
         public static IServiceCollection ConfigureBlobStorage(this IServiceCollection services, IConfiguration configuration)
         {
-            services.ConfigureOptions<BlobStorageOptions>(configuration, out var config);
+            configuration.BindConfig<BlobStorageOptions>(out var config);
 
             if (config.InMemory)
             {
-                ConfigureInMemory(services);
+                ConfigureInMemory(services, configuration);
             }
             else
             {
-                ConfigureAzure(services);
+                ConfigureAzure(services, configuration);
             }
 
             return services;
         }
 
-        private static void ConfigureInMemory(IServiceCollection services)
+        private static void ConfigureInMemory(IServiceCollection services, IConfiguration configuration)
         {
+            services.ConfigureOptions<BlobStorageOptions>(configuration);
+
             services.RemoveAll<IBlobStorage>();
             services.TryAdd(new ServiceDescriptor(typeof(MemoryStore<string>), _store));
             services.TryAddScoped<IBlobStorage, InMemoryBlobStorage>();
         }
 
-        private static void ConfigureAzure(IServiceCollection services)
+        private static void ConfigureAzure(IServiceCollection services, IConfiguration configuration)
         {
+            services.ConfigureOptions<AzureBlobStorageOptions>(configuration);
+
             services.RemoveAll<IBlobStorage>();
             services.TryAddScoped<IBlobStorage, AzureBlobStorage>();
         }

@@ -5,9 +5,9 @@ using TechTalk.SpecFlow.Infrastructure;
 namespace ASP.Web.FunctionalTests.StepDefinitions;
 
 [Binding]
-public partial class LocalAuthorityWebStepDefinitions : LocalAuthorityStepDefinitions
+public partial class EstablishmentStepDefinitions : Test.SpecFlow.EstablishmentStepDefinitions
 {
-    public LocalAuthorityWebStepDefinitions(ScenarioContext scenarioContext, IDocumentDatabase database,
+    public EstablishmentStepDefinitions(ScenarioContext scenarioContext, IDocumentDatabase database,
         ISpecFlowOutputHelper outputHelper)
         : base(scenarioContext, database, outputHelper)
     {

@@ -1,0 +1,50 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
+using ASP.Core.Results;
+using ASP.Application.UseCases.BlobStorageDemoFileDownload;
+
+namespace ASP.Api.Functions;
+
+public class BlobStorageDemoFileDownload : ApiFunction
+{
+    private readonly ILogger<BlobStorageDemoFileDownload> _logger;
+    private readonly IBlobStorageDemoFileDownload _useCase;
+    private readonly ApiResultConverter _resultConverter;
+
+    public BlobStorageDemoFileDownload(
+        ILogger<BlobStorageDemoFileDownload> logger,
+        IBlobStorageDemoFileDownload useCase,
+        ApiResultConverter resultConverter
+    )
+    {
+        _logger = logger
+            ?? throw new ArgumentNullException(nameof(logger));
+
+        _useCase = useCase
+            ?? throw new ArgumentNullException(nameof(useCase));
+
+        _resultConverter = resultConverter
+            ?? throw new ArgumentNullException(nameof(resultConverter));
+    }
+
+    [Function("BlobStorageDemoFileDownload")]
+    public override async Task<ActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        HttpRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
+
+        var result =
+            from _ in request.ValidateHttpMethod([HttpMethods.Get])
+            from container in request.ValidateParameter("container", p => p.IsRequired())
+            from filepath in request.ValidateParameter("filepath", p => p.IsRequired())
+            from response in _useCase.HandleRequest(new BlobStorageDemoFileDownloadRequest(container, filepath))
+            select response;
+
+        return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);
+    }
+}

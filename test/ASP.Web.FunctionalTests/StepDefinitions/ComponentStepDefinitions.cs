@@ -36,7 +36,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [When(@"I save the component")]
         public async Task WhenISaveTheComponent()
         {
-            var saveButton = await _web.Element("#test-save");
+            var saveButton = await _web.CurrentPage.ElementAsync("#test-save");
             await saveButton.ShouldExistAsync($@"Could not find an element with the selector ""#test-save"".");
 
             await saveButton.ClickAsync();
@@ -86,7 +86,6 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"there should be no errors")]
         public async Task ThenThereShouldBeNoErrors()
         {
-            _web.ExpectedStatusCode = 200;
             await _web.ExpectStatusCode();
         }
 
@@ -117,7 +116,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
             var innerHtml = await component.InnerHtmlAsync();
 
-            AssertHtml.Equal(expectedHtml, innerHtml, _outputHelper.WriteLine);
+            Assert.HtmlEqual(expectedHtml, innerHtml, _outputHelper.WriteLine);
         }
 
         [Then(@"the component outer element should have the tag name ""([^""]*)""")]
@@ -153,7 +152,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             var component = await ComponentShouldExistAsync();
 
             var matches = await component.MatchesAsync(selectorToMatch);
-            AssertWithMessage.True(matches, $@"The element did not match ""{selectorToMatch}"".");
+            Assert.True(matches, $@"The element did not match ""{selectorToMatch}"".");
         }
 
         [Then(@"the component outer element should have the attribute ""(.*)"" set to ""(.*)""")]
@@ -228,7 +227,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             var element = await ComponentElementShouldExistAsync(selector);
             var innerHtml = await element.InnerHtmlAsync();
 
-            AssertHtml.Equal(expectedHtml, innerHtml, _outputHelper.WriteLine);
+            Assert.HtmlEqual(expectedHtml, innerHtml, _outputHelper.WriteLine);
         }
 
         [Then(@"the element ""(.+)"" within the component should have the href ""([^""]*)""")]
@@ -246,7 +245,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             var element = await ComponentElementShouldExistAsync(selector);
 
             var matches = await element.MatchesAsync(selectorToMatch);
-            AssertWithMessage.True(matches, $@"The element did not match ""{selectorToMatch}"".");
+            Assert.True(matches, $@"The element did not match ""{selectorToMatch}"".");
         }
 
         [Then(@"the element ""(.*)"" within the component should have the attribute ""(.*)"" set to ""(.*)""")]
@@ -374,14 +373,14 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
 
             var matches = await field.MatchesAsync(selector);
 
-            AssertWithMessage.True(matches, $@"The associated input element for the label ""{labelText}"" did not match ""{selector}"".");
+            Assert.True(matches, $@"The associated input element for the label ""{labelText}"" did not match ""{selector}"".");
         }
 
         private async Task<IElementDriver> ComponentShouldExistAsync()
         {
             await ThenThereShouldBeNoErrors();
 
-            var testWrapper = await _web.Element("#test");
+            var testWrapper = await _web.CurrentPage.ElementAsync("#test");
             await testWrapper.ShouldExistAsync($@"Could not find an element with the selector ""#test"".");
             
             var component = await testWrapper.Element(":scope > div > *")
@@ -394,10 +393,10 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         {
             await ThenThereShouldBeNoErrors();
 
-            var testWrapper = await _web.Element("#test");
+            var testWrapper = await _web.CurrentPage.ElementAsync("#test");
             await testWrapper.ShouldExistAsync($@"Could not find an element with the selector ""#test"".");
 
-            AssertWithMessage.NotNull(testWrapper, $@"Could not find an element with the selector ""#test"".");
+            Assert.NotNull(testWrapper, $@"Could not find an element with the selector ""#test"".");
 
             await testWrapper.Element(":scope > div > *")
                 .ShouldNotExistAsync($@"Found the component's outer element on the page.");
