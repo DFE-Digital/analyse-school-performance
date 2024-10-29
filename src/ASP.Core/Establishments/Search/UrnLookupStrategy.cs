@@ -13,11 +13,11 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
         _repository = repository;
     }
 
-    public override Task<Result<SearchResultsPage<EstablishmentListing>>> Execute()
+    public override Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> Execute()
     {
         return 
             from establishment in _repository.GetEstablishmentDetails(SearchTerm)
-            select new SearchResultsPage<EstablishmentListing>(
+            select new ScopedSearchResultsPage<EstablishmentListing>(
                 SearchTerm,
                 Scope.ScopeType.ToString(),
                 Scope.ScopeIdentifier,

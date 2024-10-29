@@ -13,24 +13,24 @@ namespace ASP.Core.Establishments
         Task<Result<EstablishmentDetails>> GetEstablishmentDetails(string urn);
         Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails);
 
-        Task<Result<SearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCode(
+        Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCode(
             Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResultsPage<EstablishmentListing>>> SearchEstablishmentByEstablishmentNumber(
+        Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByEstablishmentNumber(
             Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResultsPage<EstablishmentListing>>>
+        Task<Result<ScopedSearchResultsPage<EstablishmentListing>>>
             SearchEstablishmentByLaestab7DigitCode(
                 Scope scope, string searchTerm, int page, int resultsPerPage,
                 CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
+        Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
             Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<SearchResultsPage<EstablishmentListing>>> SearchEstablishmentNameOrLocation(
+        Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentNameOrLocation(
             Scope scope, string searchTerm, 
             int page, int resultsPerPage,
             CancellationToken cancellationToken = default);

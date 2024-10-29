@@ -13,6 +13,7 @@ using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 using ASP.Application.UseCases.Downloads.DownloadAsZip;
 using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
+using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearch;
 using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
 using ASP.Application.UseCases.BlobStorageDemoFileDownload;
 using ASP.Application.UseCases.BlobStorageDemoZipFileDownload;
@@ -34,6 +35,7 @@ public static class AspApplicationExtensions
         services.AddScoped<IGetLocalAuthority, GetLocalAuthority>();
         services.AddScoped<IGetAllLocalAuthorities, GetAllLocalAuthorities>();
         services.AddScoped<ILocalAuthoritySearchSuggestions, LocalAuthoritySearchSuggestions>();
+        services.AddScoped<ILocalAuthoritySearch, LocalAuthoritySearch>();
         services.AddScoped<IGetAvailableSchoolDownloads, GetAvailableSchoolDownloads>();
         services.AddScoped<IGetMultiAcademyTrust, GetMultiAcademyTrust>();
         services.AddScoped<IDownloadAsZipFile, DownloadAsZipFile>();

@@ -87,7 +87,7 @@ public class SearchController : Controller
         return searchResult.ToActionResult(Json, _hostEnvironment);
     }
     
-    private SearchViewModel DefaultViewModel(SearchResultsPage<EstablishmentListingDTO> result)
+    private SearchViewModel DefaultViewModel(ScopedSearchResultsPage<EstablishmentListingDTO> result)
     {
         var breadcrumbTrail = new BreadcrumbTrailViewModel($"Search results for \"{result.SearchTerm}\"")
             .AddBreadcrumb("Search", "/search");

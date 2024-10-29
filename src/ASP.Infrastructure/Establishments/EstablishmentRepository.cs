@@ -38,7 +38,7 @@ namespace ASP.Infrastructure.Establishments
             return _documentDB.UpsertAsync(ContainerKey, contentId, establishmentDetails.Urn, establishmentDetails);
         }
 
-        public Task<Result<SearchResultsPage<EstablishmentListing>>> SearchEstablishmentNameOrLocation(
+        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentNameOrLocation(
             Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
@@ -50,14 +50,14 @@ namespace ASP.Infrastructure.Establishments
                     resultsPerPage,
                     cancellationToken)
                     .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no matches for ""{searchTerm}"" within the given scope."))
-                select new SearchResultsPage<EstablishmentListing>(
+                select new ScopedSearchResultsPage<EstablishmentListing>(
                     searchTerm, 
                     scope.ScopeType.ToString(),
                     scope.ScopeIdentifier, 
                     results.Map(r => r.MapToEstablishmentListing()));
         }
 
-        public Task<Result<SearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCode(
+        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCode(
             Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
@@ -66,7 +66,7 @@ namespace ASP.Infrastructure.Establishments
             return SearchByLaestabCommon(scope, inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public Task<Result<SearchResultsPage<EstablishmentListing>>> SearchEstablishmentByEstablishmentNumber(
+        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByEstablishmentNumber(
             Scope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
@@ -75,7 +75,7 @@ namespace ASP.Infrastructure.Establishments
             return SearchByLaestabCommon(scope, inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public Task<Result<SearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
+        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
             Scope scope,
             string searchTerm,
             int page,
@@ -85,7 +85,7 @@ namespace ASP.Infrastructure.Establishments
             return SearchByLaestabCommon(scope, searchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public Task<Result<SearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaestab7DigitCode(
+        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaestab7DigitCode(
             Scope scope,
             string searchTerm,
             int page,
@@ -177,7 +177,7 @@ namespace ASP.Infrastructure.Establishments
                     results.Map(r => r.MapToEstablishmentListing()));
         }
 
-        private Task<Result<SearchResultsPage<EstablishmentListing>>> SearchByLaestabCommon(
+        private Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchByLaestabCommon(
             Scope scope,
             string searchTerm,
             string originalSearchTerm,
@@ -194,7 +194,7 @@ namespace ASP.Infrastructure.Establishments
                     resultsPerPage,
                     cancellationToken)
                     .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no matches for ""{originalSearchTerm}""."))
-                select new SearchResultsPage<EstablishmentListing>(
+                select new ScopedSearchResultsPage<EstablishmentListing>(
                     originalSearchTerm, 
                     scope.ScopeType.ToString(),
                     scope.ScopeIdentifier, 

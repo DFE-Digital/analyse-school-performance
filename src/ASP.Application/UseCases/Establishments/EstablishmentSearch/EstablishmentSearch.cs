@@ -28,7 +28,7 @@ public class EstablishmentSearch : IEstablishmentSearch
         _searchService = new EstablishmentSearchService(establishmentRepository);
     }
 
-    public Task<Result<SearchResultsPage<EstablishmentListingDTO>>> HandleRequest(
+    public Task<Result<ScopedSearchResultsPage<EstablishmentListingDTO>>> HandleRequest(
         EstablishmentSearchRequest request)
     {
         var page = request.Page.GetValueOrDefault(1);

@@ -75,4 +75,22 @@ public class LocalAuthorityRepository : ILocalAuthorityRepository
                 .ErrorIf(r => !r.Any(), Error.NotFound($@"there were no matches for ""{searchTerm}""."))
             select results.MapToDomainEntityLocalAuthority();
     }
+
+    public Task<Result<SearchResultsPage<LocalAuthority>>> LocalAuthoritySearchByLaName(
+        string searchTerm, int page, int resultsPerPage,
+        CancellationToken cancellationToken = default)
+    {
+        return
+            from results in _documentDB.QueryPagedAsync<LocalAuthorityDAO>(
+                    ContainerKey,
+                    q => q.Where(x =>
+                        x.Name.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                    ).OrderBy(x => x.Name),
+                    page,
+                    resultsPerPage,
+                    cancellationToken)
+                .ErrorIf(r => r.TotalResults == 0, Error.NotFound($@"there were no matches for ""{searchTerm}""."))
+            select new SearchResultsPage<LocalAuthority>(searchTerm,
+                results.Map(r => r.MapToDomainEntityLocalAuthority()));
+    }
 }

@@ -15,4 +15,8 @@ public interface ILocalAuthorityRepository
 
     Task<Result<List<LocalAuthority>>> LocalAuthoritySearchSuggestionsByLaCode(
         string searchTerm, int maxSuggestions, CancellationToken cancellationToken = default);
+
+    Task<Result<SearchResultsPage<LocalAuthority>>> LocalAuthoritySearchByLaName(
+        string searchTerm, int page, int resultsPerPage,
+        CancellationToken cancellationToken = default);
 }

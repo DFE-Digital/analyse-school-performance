@@ -11,7 +11,6 @@ using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
-using ASP.Core.Establishments.Search;
 using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Helpers;
 using ASP.Core.Results;
@@ -22,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net;
 using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
+using ASP.Core.Establishments.Search;
 using ASP.Core.Utilities;
 using LA = ASP.Application.UseCases.LocalAuthorities.DTO;
 using MAT = ASP.Application.UseCases.MultiAcademyTrusts.DTO;
@@ -154,7 +154,8 @@ namespace ASP.Infrastructure.Api
             return ApiGet<ScopedResultsPage<EstablishmentListingDTO>>(url, queryString);
         }
 
-        public Task<Result<SearchResultsPage<EstablishmentListingDTO>>> EstablishmentSearch(EstablishmentSearchRequest request)
+        public Task<Result<ScopedSearchResultsPage<EstablishmentListingDTO>>> EstablishmentSearch(
+            EstablishmentSearchRequest request)
         {
             var url = "/api/EstablishmentSearch";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
@@ -177,7 +178,7 @@ namespace ASP.Infrastructure.Api
                 queryString = queryString.Add("resultsPerPage", value.ToString());
             });
 
-            return ApiGet<SearchResultsPage<EstablishmentListingDTO>>(url, queryString);
+            return ApiGet<ScopedSearchResultsPage<EstablishmentListingDTO>>(url, queryString);
         }
 
         public Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request)
