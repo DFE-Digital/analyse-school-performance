@@ -273,7 +273,7 @@ Scenario: Errors in Search Term Validation
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=
 	And the element "#searchTerm-input-error" should have the text content "Please enter a search term such as a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
-	And the element "h2.govuk-error-summary__title" should have the text content "Please correct the following error(s)."
+	And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
 	And the element "*[data-testid='searchTerm']" should have the text content "Enter school name, address or reference number"
 
 @Javascript:enabled
@@ -282,7 +282,7 @@ Scenario: Errors in Search Term Validation (JS)
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=
 	And the element "#searchTerm-input-error" should have the text content "Please enter a search term such as a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
-	And the element "h2.govuk-error-summary__title" should have the text content "Please correct the following error(s)."
+	And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
 	And the element "*[data-testid='searchTerm']" should have the text content "Enter school name, address or reference number"
 
 @Javascript:disabled

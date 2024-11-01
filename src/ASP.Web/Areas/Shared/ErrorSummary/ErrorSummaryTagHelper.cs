@@ -15,7 +15,7 @@ namespace ASP.Web.Areas.Shared.ErrorSummary
                 <div class="govuk-error-summary" data-module="govuk-error-summary">
                     <div role="alert">
                         <h2 class="govuk-error-summary__title">
-                            Please correct the following error(s).
+                            There is a problem
                         </h2>
                         <div class="govuk-error-summary__body">
                             <ul class="govuk-list govuk-error-summary__list">

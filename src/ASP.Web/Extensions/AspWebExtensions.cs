@@ -4,7 +4,7 @@ using ASP.Web.Areas;
 using ASP.Web.Features;
 using Microsoft.AspNetCore.Mvc.Razor;
 
-namespace ASP.Web
+namespace ASP.Web.Extensions
 {
     public static class AspWebExtensions
     {

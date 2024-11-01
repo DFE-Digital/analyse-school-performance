@@ -3,6 +3,7 @@ using ASP.Infrastructure.Api;
 using ASP.Infrastructure.TableStorage;
 using ASP.Web.Components;
 using ASP.Web.Core.Templating;
+using ASP.Web.Extensions;
 using ASP.Web.Features;
 using ASP.Web.Features.AnalyticsTrackingPreferences;
 using ASP.Web.Features.ApplicationServiceVersion;

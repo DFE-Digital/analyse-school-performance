@@ -1,6 +1,9 @@
-﻿@model ASP.Web.Areas.School.ViewModels.SchoolDownloadsViewModel
+﻿@using ASP.Core
+@using ASP.Web.Extensions
+@model ASP.Web.Areas.School.ViewModels.SchoolDownloadsViewModel
 @{
     ViewData["Title"] = "Download data";
+    var hasSelectedFilesError = ViewData.ModelState.HasError(Constants.ModelErrorKeySelectedFiles);
 }
 
 <div class="govuk-width-container app-width-container">
@@ -8,6 +11,20 @@
 </div>
 
 <div class="govuk-main-wrapper govuk-width-container">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <asp-error-summary>
+            @{
+                var selectedFilesError = ViewData.ModelState.GetFirstErrorForKey(Constants.ModelErrorKeySelectedFiles);
+                if (selectedFilesError != null)
+                {
+                    <li>
+                        <a href="#app-available-downloads-files" data-testid="app-available-downloads-files">@selectedFilesError.ErrorMessage</a>
+                    </li>
+                }
+            }
+        </asp-error-summary>
+    }
     <h1 class="govuk-heading-xl">Download data</h1>
     <h2 id="school-name-heading" class="govuk-heading-m">
         @Model.SchoolPage.SchoolName <span class="govuk-!-font-weight-regular">(URN: @Model.SchoolPage.SchoolUrn)</span>
@@ -23,37 +40,43 @@
                 <span data-testid="available-downloads-files-name" class="govuk-caption-l">@Model.SchoolPage.SchoolName data</span>
                 Data files available for download
             </h2>
-            @using (Html.BeginForm("DownloadDataSelectFormat", Model.SchoolPage.Controller, FormMethod.Get, new { @id = "app-available-downloads-files-form" }))
+            @using (Html.BeginForm("DownloadDataSelectFiles", Model.SchoolPage.Controller, FormMethod.Post, new { id = "app-available-downloads-files-form" }))
             {
                 @Html.Hidden("selectedYear", Model.AvailableDownloads.AvailableDates.FirstOrDefault())
-                <div class="govuk-form-group">
+                <div class="govuk-form-group @(hasSelectedFilesError ? "govuk-form-group--error" : "")">
                     <fieldset class="govuk-fieldset" aria-describedby="app-available-downloads-files-hint">
-                        <div id="app-available-downloads-files-hint" class="govuk-hint">
+                        <legend id="app-available-downloads-files-hint" class="govuk-fieldset__legend">
                             Select all that apply.
-                        </div>
-                        <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                                @foreach (var group in Model.AvailableDownloads.Downloads.GroupBy(x => x.DatasetType).OrderBy(x => x.Key))
+                        </legend>
+                        <div class="govuk-checkboxes" data-module="govuk-checkboxes" id="app-available-downloads-files">
+                            @if (hasSelectedFilesError)
+                            {
+                                <span id="app-available-downloads-files-error" data-testid="app-available-downloads-files-error" class="govuk-error-message">
+                                    @Constants.DataFilesAvialableForDownlodValidationErrorMessage
+                                </span>
+                            }
+                            @foreach (var group in Model.AvailableDownloads.Downloads.GroupBy(x => x.DatasetType).OrderBy(x => x.Key))
+                            {
+                                <h3 data-testid="available-downloads-file-group-@group.Key" class="govuk-heading-s govuk-!-font-weight-regular govuk-!-margin-top-6 govuk-!-margin-bottom-3">@group.Key</h3>
+
+                                @foreach (var file in group)
                                 {
-                                    <h3 data-testid="available-downloads-file-group-@group.Key" class="govuk-heading-s govuk-!-font-weight-regular govuk-!-margin-top-6 govuk-!-margin-bottom-3">@group.Key</h3>
-                                    
-                                    @foreach (var file in group)
-                                    {
-                                        <div class="govuk-checkboxes__item">
-                                            <input data-testid="available-downloads-file-@file.Id" id="app-available-downloads-file-@file.Id" class="govuk-checkboxes__input" name="SelectedFiles" 
-                                                   type="checkbox" 
-                                                   value="@file.Id"
-                                                   aria-describedby="app-available-downloads-file-@file.Id-label">
-                                            <label data-testid="available-downloads-file-@file.Id-label" id="app-available-downloads-file-@file.Id-label" class="govuk-label govuk-checkboxes__label" for="app-available-downloads-file-@file.Id">
-                                                @($"{file.DatasetType} ({file.Version}) ({file.Source})")
-                                            </label>
-                                        </div>
-                                    }
+                                    <div class="govuk-checkboxes__item">
+                                        <input data-testid="available-downloads-file-@file.Id" id="app-available-downloads-file-@file.Id" class="govuk-checkboxes__input" name="selectedFiles"
+                                               type="checkbox"
+                                               value="@file.Id"
+                                               aria-describedby="app-available-downloads-file-@file.Id-label">
+                                        <label data-testid="available-downloads-file-@file.Id-label" id="app-available-downloads-file-@file.Id-label" class="govuk-label govuk-checkboxes__label" for="app-available-downloads-file-@file.Id">
+                                            @($"{file.DatasetType} ({file.Version}) ({file.Source})")
+                                        </label>
+                                    </div>
                                 }
+                            }
                         </div>
                     </fieldset>
                 </div>
                 <div class="govuk-button-group">
-                    <button type="submit" class="govuk-button" data-module="govuk-button">
+                    <button type="submit" id="selectedFilesSubmit" data-testid="selectedFilesSubmit" class="govuk-button" data-module="govuk-button">
                         Continue
                     </button>
                 </div>

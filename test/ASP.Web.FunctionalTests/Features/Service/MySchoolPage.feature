@@ -435,3 +435,36 @@ Scenario: Details disclosure element text should read 'Show school details' when
     And I am a School Named user for Establishment "123456"
     When I navigate to /my-school/
     Then the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
+    
+    
+@Javascript:disabled
+Scenario: Errors on the Download Data page, in the Dates Available for Download step
+    Given Establishment "123456" exists:
+    """
+     {
+        "name": "Hollinswood Primary School"
+     }
+    """
+    And I am a School Named user for Establishment "123456"
+    When I navigate to /my-school/download-data/
+    And I click the button "*[data-testid='selectedYearSubmit']"
+    Then the path should be /my-school/download-data/
+    And the element "*[data-testid='app-available-downloads-dates-select-option-error']" should have the text content "Please choose an academic year to download"
+    And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
+    And the element "*[data-testid='app-available-downloads-dates-select-option']" should have the text content "Please choose an academic year to download" 
+    
+@Javascript:disabled
+Scenario: Errors On the Download data page, in the Data files available for download step
+    Given Establishment "123456" exists:
+    """
+     {
+        "name": "Hollinswood Primary School"
+     }
+    """
+    And I am a School Named user for Establishment "123456"
+    When I navigate to /my-school/download-data/select-files/
+    And I click the button "*[data-testid='selectedFilesSubmit']"
+    Then the path should be /my-school/download-data/select-files/
+    And the element "*[data-testid='app-available-downloads-files-error']" should have the text content "Please choose one or more data files to download"
+    And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
+    And the element "*[data-testid='app-available-downloads-files']" should have the text content "Please choose one or more data files to download"       

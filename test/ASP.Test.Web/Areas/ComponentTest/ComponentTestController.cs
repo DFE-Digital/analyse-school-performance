@@ -5,6 +5,7 @@ using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Web;
 using ASP.Web.Core.Templating;
+using ASP.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;

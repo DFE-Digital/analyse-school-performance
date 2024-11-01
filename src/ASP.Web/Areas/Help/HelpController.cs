@@ -6,6 +6,7 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using Microsoft.AspNetCore.Authorization;
 using ASP.Web.Features.Authorization;
 using ASP.Core.Optionality;
+using ASP.Web.Extensions;
 
 namespace ASP.Web.Areas.Help
 {

@@ -1,5 +1,6 @@
 using ASP.Application;
 using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Core;
 using ASP.Core.Authorization;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
@@ -7,6 +8,7 @@ using ASP.Core.Utilities;
 using ASP.Web.Areas.School.ViewModels;
 using ASP.Web.Areas.Shared.Navigation;
 using ASP.Web.Core.BreadcrumbTrail;
+using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
@@ -59,20 +61,41 @@ namespace ASP.Web.Areas.School
 
             return result.ToActionResult(View, _hostEnvironment);
         }
-
         [HttpGet("download-data")]
-        public Task<IActionResult> DownloadDataSelectYear()
+        public async Task<IActionResult> DownloadDataSelectYear()
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
                 from model in base.DownloadDataSelectYear(urn, schoolName => new([], "Download data"))
                 select model;
 
-            return result.ToActionResult(View, _hostEnvironment);
+            return await result.ToActionResult(View, _hostEnvironment);
+        }
+
+        [HttpPost("download-data")]
+        public async Task<IActionResult> DownloadDataSelectYear(int? selectedYear)
+        {
+            if (!selectedYear.HasValue)
+            {
+                ModelState.AddModelError(Constants.ModelErrorKeySelectedYear, 
+                    Constants.AcademicYearToDownldValidationErrorMessage);
+            
+                // Reload the view with the error
+                var result =
+                    from urn in User.GetEstablishmentUrn()
+                    from model in base.DownloadDataSelectYear(urn, schoolName => new([], "Download data"))
+                    select model;
+
+                return await result.ToActionResult(View, _hostEnvironment);
+            }
+
+            // Redirect to files selection if year is valid
+            return RedirectToAction(nameof(DownloadDataSelectFiles), 
+                new { selectedYear = selectedYear });
         }
 
         [HttpGet("download-data/select-files")]
-        public Task<IActionResult> DownloadDataSelectFiles(int? selectedYear)
+        public async Task<IActionResult> DownloadDataSelectFiles(int? selectedYear)
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
@@ -83,8 +106,32 @@ namespace ASP.Web.Areas.School
                         new("Download data", $"/my-school/download-data/")
                     ], "Data files available for download"))
                 select model;
-
-            return result.ToActionResult(View, _hostEnvironment);
+            
+            return await result.ToActionResult(View, _hostEnvironment);
+        }
+        
+        [HttpPost("download-data/select-files")]
+        public async Task<IActionResult> DownloadDataSelectFiles(int? selectedYear, List<string> selectedFiles)
+        {
+            var result =
+                from urn in User.GetEstablishmentUrn()
+                from model in base.DownloadDataSelectFiles(
+                    urn,
+                    Optional.FromNullable(selectedYear),
+                    schoolName => new([
+                        new("Download data", $"/my-school/download-data/")
+                    ], "Data files available for download"))
+                select model;
+            
+            if (!selectedFiles.Any())
+            {
+                ModelState.AddModelError(Constants.ModelErrorKeySelectedFiles, 
+                    Constants.DataFilesAvialableForDownlodValidationErrorMessage);
+                return await result.ToActionResult(View, _hostEnvironment);
+            }
+            // Redirect to data select format page if year is valid
+            return RedirectToAction(nameof(DownloadDataSelectFormat), 
+                new { selectedYear = selectedYear, selectedFiles= selectedFiles });
         }
 
         [HttpGet("download-data/select-format")]
@@ -98,7 +145,7 @@ namespace ASP.Web.Areas.School
                     selectedFiles,
                     schoolName => new([
                         new("Download data", $"/my-school/download-data/"),
-                        new("Data files available for download", $"/my-school/download-data/select-files/?SelectedYear={selectedYear}")
+                        new("Data files available for download", $"/my-school/download-data/select-files/?selectedYear={selectedYear}")
                     ], $"Download {schoolName ?? "school"} data"))
                 select model;
 

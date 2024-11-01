@@ -5,6 +5,7 @@ using ASP.Core.Results;
 using ASP.Web.Areas.School.ViewModels;
 using ASP.Web.Areas.Shared.Navigation;
 using ASP.Web.Core.BreadcrumbTrail;
+using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;

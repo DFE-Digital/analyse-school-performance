@@ -32,4 +32,12 @@ public static class Constants
     public const string SchoolSearchFormSearchTermInputLabel =
         "Enter school name, address, URN (Unique Reference Number) or\n LAESTAB (Local Authority Establishment Number)";
 
+    public const string AcademicYearToDownldValidationErrorMessage = "Please choose an academic year to download";
+    
+    public const string DataFilesAvialableForDownlodValidationErrorMessage = "Please choose one or more data files to download";
+
+    public const string ModelErrorKeySelectedYear = "selectedYear";
+    
+    public const string ModelErrorKeySelectedFiles = "selectedFiles";
+
 }

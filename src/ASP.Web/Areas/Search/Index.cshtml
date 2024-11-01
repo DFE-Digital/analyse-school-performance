@@ -1,10 +1,9 @@
 ﻿@using ASP.Core
 @using ASP.Web.Areas.Search
+@using ASP.Web.Extensions
 @{
     ViewData["Title"] = "Search";
-
-    var hasSearchTermError = ViewData.ModelState.ContainsKey(nameof(SearchParams.Search))
-                             && ViewData.ModelState[nameof(SearchParams.Search)]?.Errors.Count > 0;
+    var hasSearchTermError = ViewData.ModelState.HasError(nameof(SearchParams.Search));
 }
 
 <div class="govuk-width-container govuk-main-wrapper">
@@ -12,9 +11,7 @@
     {
         <asp-error-summary>
             @{
-                var searchTermError = ViewData.ModelState
-                    .FirstOrDefault(x => x.Key == nameof(SearchParams.Search))
-                    .Value?.Errors.FirstOrDefault();
+                var searchTermError = ViewData.ModelState.GetFirstErrorForKey(nameof(SearchParams.Search));
 
                 if (searchTermError != null)
                 {

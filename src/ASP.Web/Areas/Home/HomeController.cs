@@ -3,6 +3,7 @@ using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
+using ASP.Web.Extensions;
 using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Mvc;
 
