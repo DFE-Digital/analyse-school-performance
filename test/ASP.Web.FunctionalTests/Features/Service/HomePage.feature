@@ -159,3 +159,119 @@ Scenario: Home page hero should display correct heading and description
 	Then I should get a 200 response
 	Then the element "#app-hero h1" should have the text content "Analyse school performance"
 	Then the element "#app-hero p" should have the text content "Hero description"
+	
+@Javascript:disabled
+Scenario Outline: Home page cards should be populated correctly for DfE/Ofsted user roles
+	Given I am a <AccessToAllSchools> user
+	And Content Template "home-page" exists:
+	"""
+	{
+		"Views": [
+			       {
+						"ViewId": "Card",
+						"ViewContent": {
+							"AuthorizationPolicy": "AccessToMyDioceseSchools",
+							"Id": "app-card-my-schools",
+							"Title": "My schools",
+							"LinkUrl": "/my-schools/",
+							"Text": "View schools within your diocese"
+						} 
+	                },
+					{ 
+						"ViewId": "Card",
+						"ViewContent": {
+							"AuthorizationPolicy": "AccessToAllSchools",
+							"Id": "app-card-local-authorities",
+							"Title": "All local authorities",
+							"LinkUrl": "/local-authorities/",
+							"Text": "Search all local authorities"
+	                	}
+					},
+	               {
+						"ViewId": "Card",
+						"ViewContent": {
+							"AuthorizationPolicy": "AccessToAllSchools",
+							"Id": "app-card-schools",
+							"Title": "All schools",
+							"LinkUrl": "/schools/",
+							"Text": "Search all schools."
+						}
+	                } 
+		     ]
+	}
+	"""
+	When I navigate to /
+	Then the element "#app-card-local-authorities h2 a" should have the href "/local-authorities/"
+	And  the element "#app-card-local-authorities h2 a" should have the text content "All local authorities"
+	And  the element "#app-card-local-authorities p" should have the text content "Search all local authorities"
+  
+	And  the element "#app-card-schools h2 a" should have the href "/schools/"
+	And  the element "#app-card-schools h2 a" should have the text content "All schools"
+	And  the element "#app-card-schools p" should have the text content "Search all schools."	
+Examples:
+  | AccessToAllSchools |
+  | DfE Named          |
+  | DfE Unnamed        |
+  | Ofsted Unnamed     |
+  | Super Admin        |
+  
+@Javascript:disabled
+Scenario Outline: Home page cards should not be populated correctly for Non DfE/Ofsted user roles
+	Given I am a <NoAccessToAllSchools> user
+	And Content Template "home-page" exists:
+	"""
+	{
+	 "Views": [
+	{
+		"ViewId": "Card",
+		"ViewContent": {
+			"AuthorizationPolicy": "AccessToMyDioceseSchools",
+			"Id": "app-card-my-schools",
+			"Title": "My schools",
+			"LinkUrl": "/my-schools/",
+			"Text": "View schools within your diocese"
+		   } 
+	    },
+   		{ 
+		"ViewId": "Card",
+		"ViewContent": {
+			"AuthorizationPolicy": "AccessToAllSchools",
+			"Id": "app-card-local-authorities",
+			"Title": "All local authorities",
+			"LinkUrl": "/local-authorities/",
+			"Text": "Search all local authorities"
+		    }
+   		},
+		{
+		"ViewId": "Card",
+		"ViewContent": {
+			"AuthorizationPolicy": "AccessToAllSchools",
+			"Id": "app-card-schools",
+			"Title": "All schools",
+			"LinkUrl": "/schools/",
+			"Text": "Search all schools."
+			}
+		} 
+	 ]
+	}
+	"""
+	When I navigate to /
+	Then the element "#app-card-local-authorities h2 a" should not exist
+	And the element "#app-card-local-authorities h2 a" should not exist
+	And the element "#app-card-local-authorities p" should not exist
+ 
+	And the element "#app-card-schools h2 a" should not exist
+	And the element "#app-card-schools h2 a" should not exist
+	And the element "#app-card-schools p" should not exist
+Examples:
+  | NoAccessToAllSchools |
+  | School Named         |
+  | School Unnamed       |
+  | School Governor      |
+  | MAT Named            |
+  | MAT Unnamed          |
+  | MAT Governor         |
+  | Diocese Named        |
+  | Diocese Unnamed      |
+  | LA Named             |
+  | LA Unnamed           |
