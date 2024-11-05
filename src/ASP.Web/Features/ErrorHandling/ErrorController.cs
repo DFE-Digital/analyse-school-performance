@@ -1,5 +1,4 @@
 using ASP.Web.Core.ErrorHandling;
-using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -7,7 +6,6 @@ using Microsoft.Extensions.Options;
 namespace ASP.Web.Features.ErrorHandling
 {
     [Route("error")]
-    [ServiceFilter<TermsOfUseActionFilter>]
     [AllowAnonymous]
     public class ErrorController : Controller
     {
@@ -61,6 +59,7 @@ namespace ASP.Web.Features.ErrorHandling
             return View(errorModel);
         }
 
+       
         [HttpGet("accessdenied")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult AccessDenied()
