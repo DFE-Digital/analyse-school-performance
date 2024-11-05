@@ -36,11 +36,6 @@ public static class AuthenticationExtensions
                 //If a cookie name is not provided it will default to .ASPNetCore.Cookies
                 options.Cookie.Name = DsiConstants.DsiCookieName;
 
-                //The 'DsiCookie' will contain the authentication information for the logged in user.
-                //This authentication information is held in the cookie and will be invalidated if there is no user activity and the 'overallSessionTimeout' is reached.
-                //Invalidating the authentication information in the cookie does not remove the cookie from the browser - see the 'OnTokenValidated' section below
-                options.ExpireTimeSpan = overallSessionTimeout;
-
                 //If 'SlidingExpiration' is set to true then a new cookie is issue if a request is received (user activity on the service) more than halfway
                 //through the 'overallSessionTimeout' value.
                 //This is to improve the user experience by preventing users having to sign in everytime the 'overallSessionTimeout'
@@ -75,6 +70,9 @@ public static class AuthenticationExtensions
                 //This information is known as the authentication ticket
                 options.SaveTokens = true;
 
+                //Does not change the id tokens exp claim value
+                options.MaxAge = overallSessionTimeout;
+
                 //This 'CallbackPath' does not require a controller route. 
                 //Requests to this path are handled automatically by the OIDC middleware.
                 //The path value does need to match the one that's requested in the 'Redirect URL' section of the
@@ -97,10 +95,20 @@ public static class AuthenticationExtensions
                 options.ProtocolValidator = new OpenIdConnectProtocolValidator {
                     RequireSub = true,
                     RequireStateValidation = false,
-                    NonceLifetime = TimeSpan.FromMinutes(60)
+                    NonceLifetime = TimeSpan.FromMinutes(60)           
                 };
 
                 options.Events = new OpenIdConnectEvents {
+
+                    //capture the user's path when the authentication process starts.
+                    //This path is used to return the user their location before the authentication process started
+                    OnRedirectToIdentityProvider = context =>
+                    {
+                        context.ProtocolMessage.State = context.HttpContext.Request.Path.Value?.ToString();
+
+                        return Task.CompletedTask;
+                    },
+
                     OnMessageReceived = context =>
                     {
                         var isSpuriousAuthCbRequest =
@@ -116,7 +124,6 @@ public static class AuthenticationExtensions
 
                         return Task.CompletedTask;
                     },
-
 
                     //Should ideally redirect to an exception page
                     //Not implemented yet
@@ -182,6 +189,12 @@ public static class AuthenticationExtensions
                                         new Claim(ClaimTypes.Role, userAccess.Roles.First().Code)
                                     };
 
+                                    //Create a claim for the user's return url
+                                    if (!string.IsNullOrEmpty(context.ProtocolMessage.GetParameter("state")))
+                                    {
+                                        claims.Add(new Claim(CustomClaimTypes.ReturnUrl, context.ProtocolMessage.GetParameter("state")));
+                                    }                                    
+
                                     //Add user name claims
                                     claims.AddRange(principal.FindAll(c => c.Type == ClaimTypes.GivenName || c.Type == ClaimTypes.Surname));
 
@@ -213,7 +226,14 @@ public static class AuthenticationExtensions
                                 }
                             }
                         }
-                    }
+                    },
+                    //Set the ReturnUri to the url of the user when the authentication process started
+                    OnTicketReceived = context =>
+                    {
+                        var returnUrl = context.Principal?.FindFirst(CustomClaimTypes.ReturnUrl)?.Value;
+                        context.ReturnUri = returnUrl;
+                        return Task.CompletedTask;
+                    },
                 };
             });
 

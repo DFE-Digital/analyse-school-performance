@@ -9,4 +9,5 @@ public static class CustomClaimTypes
     public const string UniqueReferenceNumber = "uniquereferencenumber";
     public const string UniqueIdentifier = "uniqueidentifier";
     public const string OrganisationName = "organisationname";
+    public const string ReturnUrl = "returnurl";
 }
