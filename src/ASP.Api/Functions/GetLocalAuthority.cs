@@ -1,9 +1,13 @@
-﻿using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
+﻿using ASP.Application.UseCases.LocalAuthorities.DTO;
+using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -30,6 +34,12 @@ public class GetLocalAuthority : ApiFunction
     }
 
     [Function("GetLocalAuthority")]
+    [OpenApiOperation(operationId: "GetLocalAuthority", tags: ["Local Authorities"], Description = "Retrieves details for a specific local authority based on the provided code.")]
+    [OpenApiParameter(name: "code", In = ParameterLocation.Query, Required = true, Description = "The local authority code (3 digits).")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(LocalAuthorityDTO), Description = "Details of the local authority for the specified code.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid local authority code parameter.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No local authority found for the specified code.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
         HttpRequest request,

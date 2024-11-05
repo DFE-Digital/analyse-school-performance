@@ -1,10 +1,15 @@
+using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
+using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -31,6 +36,15 @@ public class EstablishmentSearchSuggestions : ApiFunction
     }
 
     [Function("EstablishmentSearchSuggestions")]
+    [OpenApiOperation(operationId: "EstablishmentSearchSuggestions", tags: ["Establishments"], Description = "Retrieves a list of establishments based on a search term within a specified scope.")]
+    [OpenApiParameter(name: "searchTerm", In = ParameterLocation.Query, Required = true, Description = "The search term for establishment suggestions.")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the search, e.g., `All`, `LA`, `MAT`, `Diocese`.")]
+    [OpenApiParameter(name: "scopeIdentifier", In = ParameterLocation.Query, Required = false, Description = "An identifier for the selected scope, e.g, `LA Code`, `MAT UID`, `Diocese name`")]
+    [OpenApiParameter(name: "maxSuggestions", In = ParameterLocation.Query, Required = false, Description = "The maximum number of suggestions to return.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(SearchSuggestionsResult<EstablishmentSuggestionDTO>), Description = "A list of establishment search suggestions.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No matching suggestions for the search term and scope.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
         HttpRequest request,

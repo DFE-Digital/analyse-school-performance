@@ -1,10 +1,15 @@
+using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
+using ASP.Core.Establishments.Search;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -23,14 +28,24 @@ public class EstablishmentSearch : ApiFunction
         _logger = logger
             ?? throw new ArgumentNullException(nameof(logger));
 
-        _useCase = useCase 
+        _useCase = useCase
             ?? throw new ArgumentNullException(nameof(useCase));
 
-        _resultConverter = resultConverter 
+        _resultConverter = resultConverter
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
     [Function("EstablishmentSearch")]
+    [OpenApiOperation(operationId: "EstablishmentSearch", tags: ["Establishments"], Description = "Retrieves a list of establishments based on a search term within a specified scope.")]
+    [OpenApiParameter(name: "searchTerm", In = ParameterLocation.Query, Required = true, Description = "The search term for establishments.")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the search, e.g, `All`, `LA`, `MAT`, `Diocese`.")]
+    [OpenApiParameter(name: "scopeIdentifier", In = ParameterLocation.Query, Required = false, Description = "An identifier for the selected scope, e.g, `LA Code`, `MAT UID`, `Diocese name`")]
+    [OpenApiParameter(name: "page", In = ParameterLocation.Query, Required = false, Description = "The page number for pagination.")]
+    [OpenApiParameter(name: "resultsPerPage", In = ParameterLocation.Query, Required = false, Description = "The number of results per page for pagination (optional).")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ScopedSearchResultsPage<EstablishmentListingDTO>), Description = "A paginated list of establishments matching the search criteria.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No matching establishments for the search term and scope.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
         HttpRequest request,

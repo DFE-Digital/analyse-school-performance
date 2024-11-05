@@ -1,9 +1,13 @@
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Core.Results;
+using ASP.Core.Templating;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -30,9 +34,16 @@ public class ViewContentTemplate : ApiFunction
     }
 
     [Function("ViewContentTemplate")]
+    [OpenApiOperation(operationId: "ViewContentTemplate", tags: ["Content Templates"], Description = "Retrieves details for a specific content template based on the provided ID.")]
+    [OpenApiParameter(name: "id", In = ParameterLocation.Query, Required = true, Description = "The unique identifier of the content template.")]
+    [OpenApiParameter(name: "revision", In = ParameterLocation.Query, Required = false, Description = "The revision identifier of the content template.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ContentTemplate), Description = "Details of the specified content template.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Content template not found for the given ID and revision.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")] 
-        HttpRequest request, 
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        HttpRequest request,
         CancellationToken cancellationToken
     )
     {

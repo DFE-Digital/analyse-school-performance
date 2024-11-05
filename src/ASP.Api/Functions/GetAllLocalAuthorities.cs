@@ -1,9 +1,14 @@
-﻿using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
+﻿using ASP.Application.UseCases.LocalAuthorities.DTO;
+using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
 using ASP.Core.Results;
+using ASP.Core.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -30,6 +35,12 @@ public class GetAllLocalAuthorities : ApiFunction
     }
 
     [Function("GetAllLocalAuthorities")]
+    [OpenApiOperation(operationId: "GetAllLocalAuthorities", tags: ["Local Authorities"], Description = "Retrieves a paginated list of all local authorities.")]
+    [OpenApiParameter(name: "page", In = ParameterLocation.Query, Required = false, Description = "The page number for pagination.")]
+    [OpenApiParameter(name: "resultsPerPage", In = ParameterLocation.Query, Required = false, Description = "The number of results to return per page.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ResultsPage<LocalAuthorityDTO>), Description = "A paginated list of local authorities.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find any local authorities.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
         HttpRequest request,

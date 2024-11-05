@@ -5,6 +5,7 @@ using ASP.Infrastructure.Blob;
 using Microsoft.Extensions.DependencyInjection;
 using ASP.Infrastructure.DocumentDatabase;
 using ASP.Core.Time;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 
 namespace ASP.Api
 {
@@ -13,7 +14,8 @@ namespace ASP.Api
         public void Configure(IHostBuilder builder)
         {
             builder
-                .ConfigureAppConfiguration((context, builder) => 
+                .ConfigureOpenApi()
+                .ConfigureAppConfiguration((context, builder) =>
                 {
                     builder.ConfigureSettings(context.HostingEnvironment, context.Configuration);
                 })
@@ -25,7 +27,8 @@ namespace ASP.Api
                         .RegisterUseCases()
                         .RegisterRepositories()
                         .AddScoped<ApiResultConverter>()
-                        .ConfigureCurrentTime();
+                        .ConfigureCurrentTime()
+                        .AddOpenApiConfiguration();
                 })
                 .ConfigureFunctionsWebApplication(app =>
                     app.UseErrorHandling()

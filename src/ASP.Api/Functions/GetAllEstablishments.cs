@@ -1,10 +1,14 @@
-﻿using ASP.Application.UseCases.Establishments.GetAllEstablishments;
+﻿using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -31,6 +35,15 @@ public class GetAllEstablishments : ApiFunction
     }
 
     [Function("GetAllEstablishments")]
+    [OpenApiOperation(operationId: "GetAllEstablishments", tags: ["Establishments"], Description = "Retrieves a list of establishments within a specified scope.")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the search, e.g., `All`, `LA`, `MAT`, `Diocese`.")]
+    [OpenApiParameter(name: "scopeIdentifier", In = ParameterLocation.Query, Required = false, Description = "An identifier for the selected scope, e.g, `LA Code`, `MAT UID`, `Diocese name`")]
+    [OpenApiParameter(name: "page", In = ParameterLocation.Query, Required = false, Description = "The page number for pagination.")]
+    [OpenApiParameter(name: "resultsPerPage", In = ParameterLocation.Query, Required = false, Description = "The number of results to return per page.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ScopedResultsPage<EstablishmentListingDTO>), Description = "A list of establishments within the specified scope.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find any establishments within the given scope.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
         HttpRequest request,

@@ -4,7 +4,10 @@ using ASP.Core.Templating;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -31,11 +34,19 @@ public class UpdateContentTemplate : ApiFunction
     }
 
     [Function("UpdateContentTemplate")]
+    [OpenApiOperation(operationId: "UpdateContentTemplate", tags: ["Content Templates"], Description = "Updates a specific content template based on the provided ID.")]
+    [OpenApiParameter(name: "id", In = ParameterLocation.Query, Required = true, Description = "The unique identifier of the content template.")]
+    [OpenApiParameter(name: "revision", In = ParameterLocation.Query, Required = false, Description = "The revision identifier of the content template.")]
+    [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ContentTemplate), Required = true, Description = "The content template details to update.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK, Description = "Updated content template details.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Content template not found for the given ID and revision.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method GET is not allowed.")]
     public override async Task<ActionResult> Run(
-    	[HttpTrigger(AuthorizationLevel.Function, "get", "post")] 
-    	HttpRequest request, 
-    	CancellationToken cancellationToken
-	)
+        [HttpTrigger(AuthorizationLevel.Function, "post", "get")]
+        HttpRequest request,
+        CancellationToken cancellationToken
+    )
     {
         _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 

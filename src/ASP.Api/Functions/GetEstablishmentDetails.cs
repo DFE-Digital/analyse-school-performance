@@ -1,9 +1,13 @@
+using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -30,11 +34,17 @@ public class GetEstablishmentDetails : ApiFunction
     }
 
     [Function("GetEstablishmentDetails")]
+    [OpenApiOperation(operationId: "GetEstablishmentDetails", tags: ["Establishments"], Description = "Retrieves details for a specific establishment based on URN.")]
+    [OpenApiParameter(name: "urn", In = ParameterLocation.Query, Required = true, Description = "The URN of the establishment.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(EstablishmentDetailsDTO), Description = "Details of the establishment for the specified URN.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid URN parameter.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No establishment found for the specified URN.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")] 
-      	HttpRequest request,
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+          HttpRequest request,
         CancellationToken cancellationToken
-	)
+    )
     {
         _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 

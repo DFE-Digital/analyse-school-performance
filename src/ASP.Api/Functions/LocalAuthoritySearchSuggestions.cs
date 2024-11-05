@@ -1,9 +1,14 @@
-﻿using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
+﻿using ASP.Application.UseCases.LocalAuthorities.DTO;
+using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
+using ASP.Core.LocalAuthorities.LocalAuthoritySearchSuggestions;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -29,6 +34,13 @@ public class LocalAuthoritySearchSuggestions : ApiFunction
     }
 
     [Function("LocalAuthoritySearchSuggestions")]
+    [OpenApiOperation(operationId: "LocalAuthoritySearchSuggestions", tags: ["Local Authorities"], Description = "Provides suggestions for local authorities based on a search term.")]
+    [OpenApiParameter(name: "searchTerm", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The term to search for local authorities.")]
+    [OpenApiParameter(name: "maxSuggestions", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "The maximum number of suggestions to return.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(LocalAuthoritySearchSuggestionsResult<LocalAuthorityDTO>), Description = "A list of suggested local authorities.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No suggestions found for the given search term.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest request,
         CancellationToken cancellationToken)

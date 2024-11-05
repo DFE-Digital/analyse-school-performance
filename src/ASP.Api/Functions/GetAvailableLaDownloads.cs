@@ -3,7 +3,10 @@ using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -30,8 +33,15 @@ public class GetAvailableLADownloads : ApiFunction
     }
 
     [Function("GetAvailableLADownloads")]
+    [OpenApiOperation(operationId: "GetAllLocalAuthorities", tags: ["Downloads"], Description = "Retrieves a paginated list of all local authority downloads.")]
+    [OpenApiParameter(name: "page", In = ParameterLocation.Query, Required = false, Description = "The page number for pagination.")]
+    [OpenApiParameter(name: "resultsPerPage", In = ParameterLocation.Query, Required = false, Description = "The number of results to return per page.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(GetAvailableLADownloadsResponse), Description = "A paginated list of local authorities.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid parameters provided.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find any local authorities.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
         HttpRequest request,
         CancellationToken cancellationToken
     )
@@ -41,8 +51,8 @@ public class GetAvailableLADownloads : ApiFunction
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from laCode in request.ValidateParameter("laCode", p => p.IsRequired().IsDigits().HasLength(3))
-                from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
-                from response in _useCase.HandleRequest(new GetAvailableLADownloadsRequest(laCode, year))
+            from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
+            from response in _useCase.HandleRequest(new GetAvailableLADownloadsRequest(laCode, year))
             select response;
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);

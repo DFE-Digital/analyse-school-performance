@@ -1,9 +1,13 @@
-﻿using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
+﻿using ASP.Application.UseCases.MultiAcademyTrusts.DTO;
+using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ASP.Api.Functions;
 
@@ -30,6 +34,12 @@ public class GetMultiAcademyTrust : ApiFunction
     }
 
     [Function("GetMultiAcademyTrust")]
+    [OpenApiOperation(operationId: "GetMultiAcademyTrust", tags: ["Multi Academy Trust"], Description = "Retrieves details for a specific Multi Academy Trust based on the provided ID.")]
+    [OpenApiParameter(name: "id", In = ParameterLocation.Query, Required = true, Description = "The ID of the Multi Academy Trust (numeric).")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(MultiAcademyTrustDTO), Description = "Details of the Multi Academy Trust for the specified ID.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid ID parameter.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No Multi Academy Trust found for the specified ID.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
         HttpRequest request,
