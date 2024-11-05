@@ -2,6 +2,7 @@
 using TechTalk.SpecFlow.Infrastructure;
 using TechTalk.SpecFlow;
 using Xunit;
+using ASP.Core.Extensions;
 
 namespace ASP.Test.SpecFlow
 {
@@ -49,16 +50,34 @@ namespace ASP.Test.SpecFlow
         protected abstract Dictionary<string, string> Headers { get; }
         protected abstract Task<Stream> StreamAsync();
 
+        [Then(@"the response should be an? (ZIP|CSV|TSV|TXT|XLSX|XML) file download")]
+        public async Task ThenTheResponseShouldBeAFileDownload(string fileType)
+        {
+            await ThenTheResponseShouldBeAFileDownloadWithFilename(fileType, null);
+        }
+
         [Then(@"the response should be an? (ZIP|CSV|TSV|TXT|XLSX|XML) file download with filename (.*)")]
-        public async Task ThenTheResponseShouldBeAFileDownload(string fileType, string filename)
+        public async Task ThenTheResponseShouldBeAFileDownloadWithFilename(string fileType, string? filename)
         {
             var headers = Headers;
 
-            Assert.Contains(
-                "Content-Disposition",
-                $"attachment; filename={filename}; filename*=UTF-8''{filename}",
-                headers,
-                StringComparison.InvariantCultureIgnoreCase);
+            if (filename != null)
+            {
+                Assert.Contains(
+                    "Content-Disposition",
+                    $"attachment; filename={filename}; filename*=UTF-8''{filename}",
+                    headers,
+                    StringComparison.InvariantCultureIgnoreCase);
+            } else
+            {
+                Assert.Contains(
+                    "Content-Disposition",
+                    headers,
+                    StringComparison.InvariantCultureIgnoreCase);
+
+                headers.TryGetValue("Content-Disposition", out var value);
+                Assert.Contains("attachment;", value, StringComparison.InvariantCultureIgnoreCase);
+            }
 
             var contentType = fileType switch {
                 "ZIP" => "application/zip",
