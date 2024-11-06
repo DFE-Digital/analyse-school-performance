@@ -33,12 +33,12 @@ public class GetAvailableLADownloads : ApiFunction
     }
 
     [Function("GetAvailableLADownloads")]
-    [OpenApiOperation(operationId: "GetAllLocalAuthorities", tags: ["Downloads"], Description = "Retrieves a paginated list of all local authority downloads.")]
-    [OpenApiParameter(name: "page", In = ParameterLocation.Query, Required = false, Description = "The page number for pagination.")]
-    [OpenApiParameter(name: "resultsPerPage", In = ParameterLocation.Query, Required = false, Description = "The number of results to return per page.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(GetAvailableLADownloadsResponse), Description = "A paginated list of local authorities.")]
+    [OpenApiOperation(operationId: "GetAvailableLADownloads", tags: ["Downloads"], Description = "Retrieves available downloads for specific local authority based on the code.")]
+    [OpenApiParameter(name: "laCode", In = ParameterLocation.Query, Required = true, Description = "The local authority code (3 digits).")]
+    [OpenApiParameter(name: "year", In = ParameterLocation.Query, Required = false, Description = "The requested year for downloads.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(GetAvailableLADownloadsResponse), Description = "Available local authority downloads for the specified code and year.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid parameters provided.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find any local authorities.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No available downloads for the specified code.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
