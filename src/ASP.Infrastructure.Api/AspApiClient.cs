@@ -27,6 +27,7 @@ using LA = ASP.Application.UseCases.LocalAuthorities.DTO;
 using MAT = ASP.Application.UseCases.MultiAcademyTrusts.DTO;
 using ASP.Application.UseCases.BlobStorageDemoFileDownload;
 using ASP.Application.UseCases.BlobStorageDemoZipFileDownload;
+using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
 
 namespace ASP.Infrastructure.Api
 {
@@ -108,6 +109,20 @@ namespace ASP.Infrastructure.Api
             });
 
             return ApiGet<GetAvailableSchoolDownloadsResponse>(url, queryString);
+        }
+
+        public Task<Result<GetAvailableLADownloadsResponse>> GetAvailableLaDownloads(
+            GetAvailableLADownloadsRequest request)
+        {
+            var url = "/api/GetAvailableLADownloads";
+            var queryString = QueryString.Create("laCode", request.LaCode);
+
+            request.Year.IfSome(value =>
+            {
+                queryString = queryString.Add("year", value.ToString());
+            });
+
+            return ApiGet<GetAvailableLADownloadsResponse>(url, queryString);
         }
 
         public Task<Result<FileStreamResponse>> DownloadAsZipFile(DownloadAsZipFileRequest request)

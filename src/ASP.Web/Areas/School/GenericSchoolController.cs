@@ -3,6 +3,7 @@ using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Core.Authorization;
 using ASP.Core.Results;
 using ASP.Web.Areas.School.ViewModels;
+using ASP.Web.Areas.Shared.DownloadData;
 using ASP.Web.Areas.Shared.Navigation;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
@@ -126,6 +127,47 @@ namespace ASP.Web.Areas.School
             );
 
             return Task.FromResult(Result.Success(schoolPage));
+        }
+        
+        protected override Task<Result<BaseDownloadDataModel>> GetDownloadDataPage(
+            EstablishmentDetailsViewModel establishmentDetails,
+            BreadcrumbTrailViewModel breadcrumb,
+            string currentActionName,
+            NavigationViewModel? subNavigation = null,
+            NavigationViewModel? sideNavigation = null)
+        {
+            var title = "Download data";
+            var subtitle = $@"{establishmentDetails.Name} <span class=""govuk-!-font-weight-regular"">(URN: {establishmentDetails.Urn})</span>";
+            
+            var (contentTitle, contentTitleCaption) = currentActionName switch
+            {
+                nameof(DownloadDataSelectYear) => (
+                    "Dates available for download",
+                    $"{establishmentDetails.Name} data"
+                ),
+                nameof(DownloadDataSelectFiles) => (
+                    "Data files available for download",
+                    $"{establishmentDetails.Name} data"
+                ),
+                nameof(DownloadDataSelectFormat) => (
+                    $"Download {establishmentDetails.Name} data",
+                    $"{establishmentDetails.Name} data"
+                ),
+                _ => ("", "") // Default case
+            };
+            
+            var downloadDataPage = new BaseDownloadDataModel(
+                breadcrumb,
+                subNavigation,
+                sideNavigation,
+                title,
+                subtitle,
+                contentTitle,
+                contentTitleCaption,
+                "GenericSchool",
+                ""
+            );
+            return Task.FromResult(Result.Success(downloadDataPage));
         }
     }
 }

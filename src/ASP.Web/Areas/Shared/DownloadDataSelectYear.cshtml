@@ -1,0 +1,6 @@
+﻿@model ASP.Web.Areas.Shared.DownloadData.SelectYear.DownloadDataSelectYearModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+@await Html.PartialAsync("~/Areas/Shared/DownloadData/SelectYear/_DownloadDataSelectYearPartial.cshtml", Model)

@@ -8,6 +8,10 @@ using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Utilities;
 using ASP.Web.Areas.School.ViewModels;
+using ASP.Web.Areas.Shared.DownloadData;
+using ASP.Web.Areas.Shared.DownloadData.SelectFiles;
+using ASP.Web.Areas.Shared.DownloadData.SelectFormat;
+using ASP.Web.Areas.Shared.DownloadData.SelectYear;
 using ASP.Web.Areas.Shared.Navigation;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Core.Templating;
@@ -81,55 +85,64 @@ namespace ASP.Web.Areas.School
                     contentTemplate);
         }
 
-        protected Task<Result<SchoolDownloadsViewModel>> DownloadDataSelectYear(string urn, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs)
-        { 
-            return 
+        protected Task<Result<DownloadDataSelectYearModel>> DownloadDataSelectYear(string urn, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs, string actionName)
+        {
+            return
                 from establishmentDetails in GetEstablishmentDetails(urn)
                 from availableDownloads in GetAvailableDownloads(establishmentDetails.Urn, Optional<int>.None)
                 let breadcrumbs = buildBreadcrumbs(establishmentDetails.Name ?? "")
                     .Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? ""))
-                from schoolPage in GetSchoolPage(
-                    establishmentDetails, 
+                from downloadDataPage in GetDownloadDataPage(
+                    establishmentDetails,
                     breadcrumbs,
+                    nameof(DownloadDataSelectYear),
                     GetSubNavigation(establishmentDetails, Request.Path),
                     GetSideNavigation(establishmentDetails, Request.Path))
-                select new SchoolDownloadsViewModel(
-                    schoolPage,
-                    availableDownloads);
+                select new DownloadDataSelectYearModel(breadcrumbs, downloadDataPage.SubNavigation, downloadDataPage.SideNavigation,
+                    availableDownloads.AvailableDates, downloadDataPage.Title, downloadDataPage.SubTitle,
+                    downloadDataPage.ContentTitle, downloadDataPage.ContentTitleCaption, downloadDataPage.ControllerName, actionName);
         }
 
-        protected Task<Result<SchoolDownloadsViewModel>> DownloadDataSelectFiles(string urn, Optional<int> selectedYear, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs)
+        protected Task<Result<DownloadDataSelectFilesModel>> DownloadDataSelectFiles(string urn,
+            Optional<int> selectedYear,
+            Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs,
+            string actionName)
         {
-            return 
+            return
                 from establishmentDetails in GetEstablishmentDetails(urn)
                 from availableDownloads in GetAvailableDownloads(establishmentDetails.Urn, selectedYear)
                 let breadcrumbs = buildBreadcrumbs(establishmentDetails.Name ?? "")
                     .Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? ""))
-                from schoolPage in GetSchoolPage(
-                    establishmentDetails, 
+                from downloadDataPage in GetDownloadDataPage(
+                    establishmentDetails,
                     breadcrumbs,
+                    nameof(DownloadDataSelectFiles),
                     GetSubNavigation(establishmentDetails, Request.Path),
                     GetSideNavigation(establishmentDetails, Request.Path))
-                select new SchoolDownloadsViewModel(
-                    schoolPage,
-                    availableDownloads
-                );
+                select new DownloadDataSelectFilesModel(breadcrumbs, downloadDataPage.SubNavigation, downloadDataPage.SideNavigation,
+                    availableDownloads.Downloads, downloadDataPage.Title, downloadDataPage.SubTitle,
+                    downloadDataPage.ContentTitle, downloadDataPage.ContentTitleCaption,
+                    downloadDataPage.ControllerName, actionName);
         }
 
-        protected Task<Result<SchoolDownloadsSelectFormatViewModel>> DownloadDataSelectFormat(string urn, int selectedYear, List<string> selectedFiles, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs)
+        protected Task<Result<DownloadDataSelectFormatModel>> DownloadDataSelectFormat(string urn, int selectedYear,
+            List<string> selectedFiles, Func<string, BreadcrumbTrailViewModel> buildBreadcrumbs,
+            string linkText, string actionName, string fileType = "CSV")
         {
             return
                 from establishmentDetails in GetEstablishmentDetails(urn)
                 let breadcrumbs = buildBreadcrumbs(establishmentDetails.Name ?? "")
                     .Prepend(GetChildPageBreadcrumbs(urn, establishmentDetails.Name ?? ""))
-                from schoolPage in GetSchoolPage(
-                    establishmentDetails, 
+                from downloadDataPage in GetDownloadDataPage(
+                    establishmentDetails,
                     breadcrumbs,
+                    nameof(DownloadDataSelectFormat),
                     GetSubNavigation(establishmentDetails, Request.Path),
                     GetSideNavigation(establishmentDetails, Request.Path))
-                select new SchoolDownloadsSelectFormatViewModel(
-                    schoolPage,
-                    selectedFiles);
+                select new DownloadDataSelectFormatModel(breadcrumbs, downloadDataPage.SubNavigation,
+                    downloadDataPage.SideNavigation, downloadDataPage.Title, downloadDataPage.SubTitle,
+                    downloadDataPage.ContentTitle, downloadDataPage.ContentTitleCaption, downloadDataPage.ControllerName,
+                    actionName, linkText, fileType, selectedFiles, "school");
         }
 
         protected abstract Task<Result<SchoolPageViewModel>> GetSchoolPage(
@@ -149,6 +162,13 @@ namespace ASP.Web.Areas.School
         protected abstract NavigationViewModel GetSideNavigation(
             EstablishmentDetailsViewModel establishmentDetails, 
             PathString requestPath);
+        
+        protected abstract Task<Result<BaseDownloadDataModel>> GetDownloadDataPage(
+            EstablishmentDetailsViewModel establishmentDetails, 
+            BreadcrumbTrailViewModel breadcrumb,
+            string currentActionName,
+            NavigationViewModel? subNavigation = null, 
+            NavigationViewModel? sideNavigation = null);
 
         protected virtual Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
         {

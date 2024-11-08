@@ -1,11 +1,10 @@
-﻿@using ASP.Web.Shared
-@model ASP.Web.Areas.Shared.Navigation.NavigationViewModel
+﻿@model ASP.Web.Areas.Shared.Navigation.NavigationViewModel
 
 <nav aria-label="Sub navigation">
     <ul class="app-sub-navigation__list">
         @foreach (var item in Model.NavigationItems)
         {
-            <partial name="~/Areas/Shared/Navigation/_SubMenuNavigationItemPartial.cshtml" model=@(@item) />
+            <partial name="~/Areas/Shared/Navigation/_SubMenuNavigationItemPartial.cshtml" model=@(item) />
         }
     </ul>
 </nav>

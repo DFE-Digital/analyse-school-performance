@@ -1,13 +1,12 @@
 ﻿@using ASP.Core
 @using ASP.Web.Extensions
-@model ASP.Web.Areas.School.ViewModels.SchoolDownloadsViewModel
+@model ASP.Web.Areas.Shared.DownloadData.SelectYear.DownloadDataSelectYearModel
+
 @{
-    ViewData["Title"] = "Download data";
     var hasSelectedYearError = ViewData.ModelState.HasError(Constants.ModelErrorKeySelectedYear);
 }
-
 <div class="govuk-width-container app-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.SchoolPage.Breadcrumbs)
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
 </div>
 
 <div class="govuk-main-wrapper govuk-width-container">
@@ -25,23 +24,22 @@
             }
         </asp-error-summary>
     }
-    <h1 class="govuk-heading-xl">Download data</h1>
-    <h2 id="school-name-heading" class="govuk-heading-m">
-        @Model.SchoolPage.SchoolName <span class="govuk-!-font-weight-regular">(URN: @Model.SchoolPage.SchoolUrn)</span>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.Title</h1>
+    <h2 class="govuk-heading-m">
+        @Html.Raw(Model.SubTitle)
     </h2>
-    @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SchoolPage.SubNavigation)
+    @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SubNavigation)
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third app-side-navigation-width">
-            @await Html.PartialAsync("~/Areas/Shared/Navigation/_SideMenuNavigationPartial.cshtml", Model.SchoolPage.SideNavigation)
+            @await Html.PartialAsync("~/Areas/Shared/Navigation/_SideMenuNavigationPartial.cshtml", Model.SideNavigation)
         </div>
         <div class="govuk-grid-column-two-thirds">
             <h2 data-testid="available-downloads-dates-heading" class="govuk-heading-l app-downloads">
-                <span data-testid="available-downloads-dates-name" class="govuk-caption-l">@Model.SchoolPage.SchoolName data</span>
-                Dates available for download
+                <span data-testid="available-downloads-caption" class="govuk-caption-l">@Model.ContentTitleCaption</span>
+                @Model.ContentTitle
             </h2>
-            @using (Html.BeginForm("DownloadDataSelectYear", Model.SchoolPage.Controller, FormMethod.Post, new { id = "app-available-download-dates-form" }))
-            {
+            <form id="app-available-download-dates-form" asp-controller="@Model.ControllerName" asp-action="@Model.ControllerActionName" method="post">
                 <div class="govuk-form-group @(hasSelectedYearError ? "govuk-form-group--error" : "")">
                     <fieldset class="govuk-fieldset" aria-describedby="app-available-downloads-dates-hint">
                         <legend id="app-available-downloads-dates-hint" class="govuk-fieldset__legend">
@@ -54,7 +52,7 @@
                                     @Constants.AcademicYearToDownldValidationErrorMessage
                                 </span>
                             }
-                            @foreach (var year in Model.AvailableDownloads.AvailableDates)
+                            @foreach (var year in Model.AvailableDates)
                             {
                                 <div class="govuk-radios__item">
                                     <input data-testid="available-downloads-dates-@year.Year" id="app-available-downloads-dates-@year.Year" class="govuk-radios__input" name="selectedYear"
@@ -77,7 +75,7 @@
                         Continue
                     </button>
                 </div>
-            }
+            </form>
         </div>
     </div>
 </div>

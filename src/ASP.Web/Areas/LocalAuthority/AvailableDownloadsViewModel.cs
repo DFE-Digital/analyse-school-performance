@@ -1,21 +1,21 @@
 ﻿using ASP.Application.UseCases.Downloads;
 using ASP.Application.UseCases.Downloads.DTO;
-using ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads;
+using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
 
-namespace ASP.Web.Areas.School.ViewModels
+namespace ASP.Web.Areas.LocalAuthority
 {
     public class AvailableDownloadsViewModel
     {
-        public string? Urn { get; set; }
+        public string? LaCode { get; set; }
         public List<DownloadDto> Downloads { get; set; } = new();
 
         public List<AcademicYear> AvailableDates { get; set; } = new();
 
-        public static AvailableDownloadsViewModel FromAvailableDownloads(GetAvailableSchoolDownloadsResponse response)
+        public static AvailableDownloadsViewModel FromAvailableDownloads(GetAvailableLADownloadsResponse response)
         {
             return new AvailableDownloadsViewModel
             {
-                Urn = response.Urn,
+                LaCode = response.LaCode,
                 Downloads = response.Downloads,
                 AvailableDates = AcademicYear.ToAcademicYears(response.Downloads.Select(x => x.Year).Distinct()),
             };

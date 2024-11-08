@@ -6,6 +6,7 @@ using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Utilities;
 using ASP.Web.Areas.School.ViewModels;
+using ASP.Web.Areas.Shared.DownloadData;
 using ASP.Web.Areas.Shared.Navigation;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
@@ -56,7 +57,7 @@ namespace ASP.Web.Areas.School
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
-                from model in base.UsefulLinks(urn, revision, schoolName => new([], "Useful links"))
+                from model in base.UsefulLinks(urn, revision, _ => new([], "Useful links"))
                 select model;
 
             return result.ToActionResult(View, _hostEnvironment);
@@ -66,7 +67,8 @@ namespace ASP.Web.Areas.School
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
-                from model in base.DownloadDataSelectYear(urn, schoolName => new([], "Download data"))
+                from model in base.DownloadDataSelectYear(urn, _ => new([], 
+                    "Download data"), nameof(DownloadDataSelectYear))
                 select model;
 
             return await result.ToActionResult(View, _hostEnvironment);
@@ -83,7 +85,8 @@ namespace ASP.Web.Areas.School
                 // Reload the view with the error
                 var result =
                     from urn in User.GetEstablishmentUrn()
-                    from model in base.DownloadDataSelectYear(urn, schoolName => new([], "Download data"))
+                    from model in base.DownloadDataSelectYear(urn, _ => new([], 
+                        "Download data"), nameof(DownloadDataSelectYear))
                     select model;
 
                 return await result.ToActionResult(View, _hostEnvironment);
@@ -104,7 +107,7 @@ namespace ASP.Web.Areas.School
                     Optional.FromNullable(selectedYear),
                     schoolName => new([
                         new("Download data", $"/my-school/download-data/")
-                    ], "Data files available for download"))
+                    ], "Data files available for download"), nameof(DownloadDataSelectFiles))
                 select model;
             
             return await result.ToActionResult(View, _hostEnvironment);
@@ -120,7 +123,7 @@ namespace ASP.Web.Areas.School
                     Optional.FromNullable(selectedYear),
                     schoolName => new([
                         new("Download data", $"/my-school/download-data/")
-                    ], "Data files available for download"))
+                    ], "Data files available for download"), nameof(DownloadDataSelectFiles))
                 select model;
             
             if (!selectedFiles.Any())
@@ -146,7 +149,8 @@ namespace ASP.Web.Areas.School
                     schoolName => new([
                         new("Download data", $"/my-school/download-data/"),
                         new("Data files available for download", $"/my-school/download-data/select-files/?selectedYear={selectedYear}")
-                    ], $"Download {schoolName ?? "school"} data"))
+                    ], $"Download {schoolName ?? "school"} data"),
+                    "Data in CSV format", nameof(DownloadDataAsZip))
                 select model;
 
             return result.ToActionResult(View, _hostEnvironment);
@@ -213,6 +217,48 @@ namespace ASP.Web.Areas.School
             );
 
             return Task.FromResult(Result.Success(schoolPage));
+        }
+
+        protected override Task<Result<BaseDownloadDataModel>> GetDownloadDataPage(
+            EstablishmentDetailsViewModel establishmentDetails,
+            BreadcrumbTrailViewModel breadcrumb,
+            string currentActionName,
+            NavigationViewModel? subNavigation = null,
+            NavigationViewModel? sideNavigation = null)
+        {
+            var title = "Download data";
+            var subtitle =
+                $@"{establishmentDetails.Name} <span class=""govuk-!-font-weight-regular"">(URN: {establishmentDetails.Urn})</span>";
+
+            var (contentTitle, contentTitleCaption) = currentActionName switch
+            {
+                nameof(DownloadDataSelectYear) => (
+                    "Dates available for download",
+                    $"{establishmentDetails.Name} data"
+                ),
+                nameof(DownloadDataSelectFiles) => (
+                    "Data files available for download",
+                    $"{establishmentDetails.Name} data"
+                ),
+                nameof(DownloadDataSelectFormat) => (
+                    $"Download {establishmentDetails.Name} data",
+                    $"{establishmentDetails.Name} data"
+                ),
+                _ => ("", "") // Default case
+            };
+
+            var downloadDataPage = new BaseDownloadDataModel(
+                breadcrumb,
+                subNavigation,
+                sideNavigation,
+                title,
+                subtitle,
+                contentTitle,
+                contentTitleCaption,
+                "MySchool",
+                ""
+            );
+            return Task.FromResult(Result.Success(downloadDataPage));
         }
     }
 }

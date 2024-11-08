@@ -1,13 +1,13 @@
-﻿@using ASP.Core
+@using ASP.Core
 @using ASP.Web.Extensions
-@model ASP.Web.Areas.School.ViewModels.SchoolDownloadsViewModel
+@model ASP.Web.Areas.Shared.DownloadData.SelectFiles.DownloadDataSelectFilesModel
+
 @{
-    ViewData["Title"] = "Download data";
     var hasSelectedFilesError = ViewData.ModelState.HasError(Constants.ModelErrorKeySelectedFiles);
 }
 
 <div class="govuk-width-container app-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.SchoolPage.Breadcrumbs)
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
 </div>
 
 <div class="govuk-main-wrapper govuk-width-container">
@@ -25,24 +25,23 @@
             }
         </asp-error-summary>
     }
-    <h1 class="govuk-heading-xl">Download data</h1>
-    <h2 id="school-name-heading" class="govuk-heading-m">
-        @Model.SchoolPage.SchoolName <span class="govuk-!-font-weight-regular">(URN: @Model.SchoolPage.SchoolUrn)</span>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.Title</h1>
+    <h2 class="govuk-heading-m">
+        @Html.Raw(Model.SubTitle)
     </h2>
-    @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SchoolPage.SubNavigation)
+    @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SubNavigation)
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third app-side-navigation-width">
-            @await Html.PartialAsync("~/Areas/Shared/Navigation/_SideMenuNavigationPartial.cshtml", Model.SchoolPage.SideNavigation)
+            @await Html.PartialAsync("~/Areas/Shared/Navigation/_SideMenuNavigationPartial.cshtml", Model.SideNavigation)
         </div>
         <div class="govuk-grid-column-two-thirds">
             <h2 data-testid="available-downloads-files-heading" class="govuk-heading-l app-downloads">
-                <span data-testid="available-downloads-files-name" class="govuk-caption-l">@Model.SchoolPage.SchoolName data</span>
-                Data files available for download
+                <span data-testid="available-downloads-caption" class="govuk-caption-l">@Model.ContentTitleCaption</span>
+                @Model.ContentTitle
             </h2>
-            @using (Html.BeginForm("DownloadDataSelectFiles", Model.SchoolPage.Controller, FormMethod.Post, new { id = "app-available-downloads-files-form" }))
-            {
-                @Html.Hidden("selectedYear", Model.AvailableDownloads.AvailableDates.FirstOrDefault())
+            <form id="app-available-downloads-files-form" asp-controller="@Model.ControllerName" asp-action="@Model.ControllerActionName" method="post">
+                @Html.Hidden("selectedYear", Model.AvailableDownloads.FirstOrDefault())
                 <div class="govuk-form-group @(hasSelectedFilesError ? "govuk-form-group--error" : "")">
                     <fieldset class="govuk-fieldset" aria-describedby="app-available-downloads-files-hint">
                         <legend id="app-available-downloads-files-hint" class="govuk-fieldset__legend">
@@ -55,7 +54,7 @@
                                     @Constants.DataFilesAvialableForDownlodValidationErrorMessage
                                 </span>
                             }
-                            @foreach (var group in Model.AvailableDownloads.Downloads.GroupBy(x => x.DatasetType).OrderBy(x => x.Key))
+                            @foreach (var group in Model.AvailableDownloads.GroupBy(x => x.DatasetType).OrderBy(x => x.Key))
                             {
                                 <h3 data-testid="available-downloads-file-group-@group.Key" class="govuk-heading-s govuk-!-font-weight-regular govuk-!-margin-top-6 govuk-!-margin-bottom-3">@group.Key</h3>
 
@@ -80,7 +79,7 @@
                         Continue
                     </button>
                 </div>
-            }
+            </form>
         </div>
     </div>
 </div>
