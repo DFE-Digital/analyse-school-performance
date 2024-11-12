@@ -26,7 +26,7 @@ export default class AutoComplete {
 
     async checkAuthStatus() {
         try {
-            const response = await fetch('/account/auth/status');
+            const response = await fetch('/account/auth/status/');
             return response.ok;
         } catch (error) {
             console.error('Error checking auth status:', error);
