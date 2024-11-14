@@ -91,7 +91,7 @@ Scenario: Page title should show correct text when search returns no results
 	And I update the textbox "#searchTerm" to have the value "Secondary"
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=Secondary
-	And the page title should be "We found no matching results for "Secondary" | Analyse school performance"
+	And the page title should be "We found no matches for "Secondary" | Analyse school performance"
 
 @Javascript:enabled
 Scenario: Page title should show correct text when search returns no results (JS)
@@ -121,7 +121,7 @@ Scenario: Page title should show correct text when search returns no results (JS
 	And I update the textbox "#searchTerm" to have the value "Secondary"
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=Secondary
-	And the page title should be "We found no matching results for "Secondary" | Analyse school performance"
+	And the page title should be "We found no matches for "Secondary" | Analyse school performance"
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns results
@@ -272,18 +272,18 @@ Scenario: Errors in Search Term Validation
 	When I navigate to /search/
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=
-	And the element "#searchTerm-input-error" should have the text content "Please enter a search term such as a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+	And the element "#searchTerm-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 	And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-	And the element "*[data-testid='searchTerm']" should have the text content "Enter school name, address or reference number"
+	And the element "*[data-testid='searchTerm']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 
 @Javascript:enabled
 Scenario: Errors in Search Term Validation (JS)
 	When I navigate to /search/
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=
-	And the element "#searchTerm-input-error" should have the text content "Please enter a search term such as a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+	And the element "#searchTerm-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 	And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-	And the element "*[data-testid='searchTerm']" should have the text content "Enter school name, address or reference number"
+	And the element "*[data-testid='searchTerm']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 
 @Javascript:disabled
 Scenario: School search page should show correct message when there is no data
@@ -1469,13 +1469,12 @@ Scenario: Pagination in Search Validation
 	| urn		  | name						|
 	| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /search/?search=primary
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 50 of 251 schools or colleges"
-	And the element "*[data-testid='PageLinks-Header-1']" should have the href "/search/?search=primary&page=1"
-	And the element "*[data-testid='PageLinks-Header-2']" should have the href "/search/?search=primary&page=2"
-	And the element "*[data-testid='PageLinks-Header-3']" should have the href "/search/?search=primary&page=3"
-	And the element "*[data-testid='PageLinks-Header-4']" should have the href "/search/?search=primary&page=4"
-	And the element "*[data-testid='PageLinks-Header-5']" should have the href "/search/?search=primary&page=5"
-	And the element "*[data-testid='PageLinks-Header-Next']" should have the href "/search/?search=primary&page=2"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 50 of 251 schools or colleges"
+	And the element "*[data-testid='PageLinks-Footer-1']" should have the href "/search/?search=primary&page=1"
+	And the element "*[data-testid='PageLinks-Footer-2']" should have the href "/search/?search=primary&page=2"
+	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
+	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/search/?search=primary&page=6"
+	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/search/?search=primary&page=2"
 	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
 	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100002"
 	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100003"
@@ -1493,13 +1492,12 @@ Scenario: Pagination in Search Validation (JS)
 	| urn		  | name						|
 	| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /search/?search=primary
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 50 of 251 schools or colleges"
-	And the element "*[data-testid='PageLinks-Header-1']" should have the href "/search/?search=primary&page=1"
-	And the element "*[data-testid='PageLinks-Header-2']" should have the href "/search/?search=primary&page=2"
-	And the element "*[data-testid='PageLinks-Header-3']" should have the href "/search/?search=primary&page=3"
-	And the element "*[data-testid='PageLinks-Header-4']" should have the href "/search/?search=primary&page=4"
-	And the element "*[data-testid='PageLinks-Header-5']" should have the href "/search/?search=primary&page=5"
-	And the element "*[data-testid='PageLinks-Header-Next']" should have the href "/search/?search=primary&page=2"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 50 of 251 schools or colleges"
+	And the element "*[data-testid='PageLinks-Footer-1']" should have the href "/search/?search=primary&page=1"
+	And the element "*[data-testid='PageLinks-Footer-2']" should have the href "/search/?search=primary&page=2"
+	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
+	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/search/?search=primary&page=6"
+	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/search/?search=primary&page=2"
 	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
 	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100002"
 	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100003"
@@ -1517,14 +1515,14 @@ Scenario: Pagination in Search Validation 2
 	| urn		  | name						|
 	| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /search/?page=3&search=primary
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 101 - 150 of 251 schools or colleges"
-	And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/?search=primary&page=2"
-	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=primary&page=1"
-	And the elements "*[data-testid='PageLinks-Header-2']" should all have the href "/search/?search=primary&page=2"
-	And the elements "*[data-testid='PageLinks-Header-3']" should all have the href "/search/?search=primary&page=3"
-	And the elements "*[data-testid='PageLinks-Header-4']" should all have the href "/search/?search=primary&page=4"
-	And the elements "*[data-testid='PageLinks-Header-5']" should all have the href "/search/?search=primary&page=5"
-	And the elements "*[data-testid='PageLinks-Header-Next']" should all have the href "/search/?search=primary&page=4"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 101 - 150 of 251 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/search/?search=primary&page=2"
+	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/search/?search=primary&page=1"
+	And the elements "*[data-testid='PageLinks-Footer-2']" should all have the href "/search/?search=primary&page=2"
+	And the elements "*[data-testid='PageLinks-Footer-3']" should all have the href "/search/?search=primary&page=3"
+	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/search/?search=primary&page=4"
+	And the elements "*[data-testid='PageLinks-Footer-5']" should all have the href "/search/?search=primary&page=5"
+	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/search/?search=primary&page=4"
 	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100101"
 	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100102"
 	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100103"
@@ -1542,14 +1540,14 @@ Scenario: Pagination in Search Validation 2 (JS)
 	| urn		  | name						|
 	| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /search/?page=3&search=primary
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 101 - 150 of 251 schools or colleges"
-	And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/?search=primary&page=2"
-	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=primary&page=1"
-	And the elements "*[data-testid='PageLinks-Header-2']" should all have the href "/search/?search=primary&page=2"
-	And the elements "*[data-testid='PageLinks-Header-3']" should all have the href "/search/?search=primary&page=3"
-	And the elements "*[data-testid='PageLinks-Header-4']" should all have the href "/search/?search=primary&page=4"
-	And the elements "*[data-testid='PageLinks-Header-5']" should all have the href "/search/?search=primary&page=5"
-	And the elements "*[data-testid='PageLinks-Header-Next']" should all have the href "/search/?search=primary&page=4"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 101 - 150 of 251 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/search/?search=primary&page=2"
+	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/search/?search=primary&page=1"
+	And the elements "*[data-testid='PageLinks-Footer-2']" should all have the href "/search/?search=primary&page=2"
+	And the elements "*[data-testid='PageLinks-Footer-3']" should all have the href "/search/?search=primary&page=3"
+	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/search/?search=primary&page=4"
+	And the elements "*[data-testid='PageLinks-Footer-5']" should all have the href "/search/?search=primary&page=5"
+	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/search/?search=primary&page=4"
 	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100101"
 	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100102"
 	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100103"
@@ -1568,9 +1566,9 @@ Scenario: Pagination in Search Validation 3
 	| urn		  | name						|
 	| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /search/?page=2&search=primary
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 51 - 51 of 51 schools or colleges"
-	And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/?search=primary&page=1"
-	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=primary&page=1"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 51 - 51 of 51 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/search/?search=primary&page=1"
+	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/search/?search=primary&page=1"
 	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100051"
 	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100051"
 
@@ -1581,9 +1579,9 @@ Scenario: Pagination in Search Validation 3 (JS)
 	| urn		  | name						|
 	| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /search/?page=2&search=primary
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 51 - 51 of 51 schools or colleges"
-	And the elements "*[data-testid='PageLinks-Header-Prev']" should all have the href "/search/?search=primary&page=1"
-	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=primary&page=1"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 51 - 51 of 51 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/search/?search=primary&page=1"
+	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/search/?search=primary&page=1"
 	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100051"
 	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100051"
 	
@@ -1613,8 +1611,8 @@ Scenario Outline: The PageNo parameter should handle invalid values with a defau
 	"""
 	When I navigate to /search/?search=Primary&page=<page>
 	Then the page title should be "Search results for "Primary" | Analyse school performance"
-	And the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
-	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=Primary&page=1"
+	And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/search/?search=Primary&page=1"
   
 Examples:
   | page |
@@ -1630,8 +1628,8 @@ Scenario: The PageNo parameter number greater than the total number of pages, th
 	  | (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /search/?page=50&search=Primary
 	Then the page title should be "Search results for "Primary" | Analyse school performance"
-	And the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 26 of 26 schools or colleges"
-	And the elements "*[data-testid='PageLinks-Header-1']" should all have the href "/search/?search=Primary&page=1"
+	And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 26 of 26 schools or colleges"
+	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/search/?search=Primary&page=1"
 	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
 	And the element "*[data-testid='establishment-listing-name-26']" should have the text content "Primary School 100026"
 
@@ -1920,7 +1918,7 @@ Scenario: LA Named user sees only establishments within their Local Authority in
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Test"
 	And I click the button "#searchSubmit"
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
 	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
 	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
 Examples: 
@@ -1996,7 +1994,7 @@ Scenario: MAT Named user sees only establishments within their Multi-Academy Tru
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Test"
 	And I click the button "#searchSubmit"
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
 	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
 	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
 	Examples: 
@@ -2080,7 +2078,7 @@ Scenario: Diocese Named user sees only establishments within their Diocese in se
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Test"
 	And I click the button "#searchSubmit"
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools or colleges"
 	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
 	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
 	Examples: 
@@ -2134,7 +2132,7 @@ Scenario: DfE Named user sees all establishments across different affiliations i
 	When I navigate to /search/
 	And I update the textbox "#searchTerm" to have the value "Test"
 	And I click the button "#searchSubmit"
-	Then the element "*[data-testid='NumberOfPages-Header']" should have the text content "Showing 1 - 3 of 3 schools or colleges"
+	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 3 of 3 schools or colleges"
 	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
 	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
 	Examples: 

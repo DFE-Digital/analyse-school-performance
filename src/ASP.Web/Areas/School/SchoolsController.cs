@@ -1,13 +1,19 @@
 ﻿using ASP.Application;
 using ASP.Application.UseCases.Establishments.DTO;
+using ASP.Application.UseCases.Establishments.EstablishmentSearch;
+using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
 using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Core;
+using ASP.Core.Establishments.Search;
+using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
 using ASP.Web.Areas.Shared;
 using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Areas.Shared.Pagination;
+using ASP.Web.Areas.Shared.Search;
+using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,22 +49,140 @@ public abstract class SchoolsController : Controller
     }
 
     protected SchoolsPageViewModel DefaultViewModel(ScopedResultsPage<EstablishmentListingDTO> result,
-        string title, string subTitle, string paginationUrl, BreadcrumbTrailViewModel breadcrumbTrailViewModel)
+        SchoolsPageParameters parameters)
     {
+        var paginationModel = CreatePaginationModel(result, parameters.PaginationUrl);
+        var establishmentListings = MapEstablishmentListings(result.Results);
+
         return new SchoolsPageViewModel(
-            title,
-            subTitle,
-            result.TotalResults,
-            new PaginationModel(
-                paginationUrl ?? "",
-                result.Page,
-                result.TotalResults,
-                result.ResultsPerPage,
-                "school",
-                "schools"
-            ),
-            breadcrumbTrailViewModel,
-            EstablishmentListingModel.FromEstablishmentListingDto(result.Results)
+            title: parameters.Title,
+            subTitle: parameters.SubTitle,
+            totalCount: result.TotalResults,
+            paginationModel: paginationModel,
+            breadcrumbs: parameters.BreadcrumbTrailViewModel,
+            establishmentListingsModel: establishmentListings,
+            controller: parameters.Controller,
+            controllerAction: parameters.ControllerAction,
+            searchSuggestionUrl: parameters.SearchSuggestionUrl
         );
     }
+    
+    protected Task<Result<SchoolSearchViewModel>> PerformEstablishmentSearch(
+        SearchParams searchParams,
+        ScopeInfo scopeInfo,
+        int pageNumber,
+        SchoolSearchParameters parameters,
+        SchoolSearchViewModel noResultsViewModel)
+    {
+        var searchRequest = CreateSearchRequest(searchParams, scopeInfo, pageNumber);
+
+        var model = from searchResults in _api.EstablishmentSearch(searchRequest)
+            select GetSchoolSearchViewModel(searchResults, parameters);
+
+        return model.DefaultIf(e => e is NotFoundError, noResultsViewModel);
+    }
+    
+    protected Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> PerformEstablishmentSearchSuggestions(
+        SearchParams searchParams, ScopeInfo scopeInfo)
+    {
+        var request = new EstablishmentSearchSuggestionsRequest(
+            searchParams.Search ?? "",
+            scopeInfo.ScopeType,
+            scopeInfo.ScopeId,
+            Optional<int>.None
+        );
+
+        return _api.EstablishmentSearchSuggestions(request);
+    }
+
+    protected SchoolSearchViewModel NoResultsViewModel(SearchParams searchParams,
+        BreadcrumbTrailViewModel breadcrumbTrail,
+        string searchUrl, string searchSuggestionUrl,
+        string controller, string controllerAction)
+    {
+        return new SchoolSearchViewModel(
+            new List<EstablishmentListingModel>(),
+            null,
+            searchParams.Search ?? "",
+            0,
+            breadcrumbTrail,
+            searchUrl,
+            searchSuggestionUrl,
+            controller,
+            controllerAction
+        );
+    }
+    
+    private List<EstablishmentListingModel> MapEstablishmentListings(
+        IEnumerable<EstablishmentListingDTO> results)
+    {
+        return EstablishmentListingModel.FromEstablishmentListingDto(results);
+    }
+    
+    private SchoolSearchViewModel GetSchoolSearchViewModel(
+        ScopedSearchResultsPage<EstablishmentListingDTO> result,
+        SchoolSearchParameters parameters)
+    {
+        return new SchoolSearchViewModel(
+            MapEstablishmentListings(result.Results),
+            paginationModel: CreatePaginationModel(result, parameters.SearchUrl),
+            searchTerm: result.SearchTerm,
+            result.TotalResults,
+            breadcrumbs: parameters.BreadcrumbTrail,
+            parameters.SearchUrl,
+            searchSuggestionUrl: parameters.SearchSuggestionUrl,
+            controller: parameters.Controller,
+            controllerAction: parameters.ControllerAction,
+            FormatResultsTitle(result.TotalResults)
+        );
+    }
+    
+    private PaginationModel CreatePaginationModel(
+        ScopedSearchResultsPage<EstablishmentListingDTO> result,
+        string searchUrl)
+    {
+        var paginationUrl = Url.Action(searchUrl, new { search = result.SearchTerm }) ?? string.Empty;
+    
+        return new PaginationModel(
+            paginationUrl,
+            currentPage: result.Page,
+            totalResults: result.TotalResults,
+            resultsPerPage: result.ResultsPerPage,
+            "school",
+            "schools"
+        );
+    }
+
+    private string FormatResultsTitle(int totalResults)
+    {
+        return $"{totalResults:N0} schools";
+    }
+    private EstablishmentSearchRequest CreateSearchRequest(
+        SearchParams searchParams,
+        ScopeInfo scopeInfo,
+        int pageNumber)
+    {
+        return new EstablishmentSearchRequest(
+            searchTerm: searchParams.Search ?? string.Empty,
+            scopeType: scopeInfo.ScopeType,
+            scopeInfo.ScopeId,
+            page: Optional<int>.Some(pageNumber),
+            resultsPerPage: Optional<int>.Some(Constants.SearchResultPageSize)
+        );
+    }
+    
+    private PaginationModel CreatePaginationModel(
+        ScopedResultsPage<EstablishmentListingDTO> result, 
+        string paginationUrl)
+    {
+        return new PaginationModel(
+            paginationUrl ?? string.Empty,
+            currentPage: result.Page,
+            totalResults: result.TotalResults,
+            resultsPerPage: result.ResultsPerPage,
+            "school",
+            "schools"
+        );
+    }
+    
 }

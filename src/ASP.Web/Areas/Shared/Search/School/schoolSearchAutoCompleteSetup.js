@@ -1,4 +1,4 @@
-import AutoComplete from '../../../scripts/autocomplete.js'
+import AutoComplete from '../../../../scripts/autocomplete.js'
 
 // Helper functions
 const escapeRegExChars = (str) => str ? str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") : '';

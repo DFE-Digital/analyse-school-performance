@@ -5,6 +5,7 @@ using ASP.Core.LocalAuthorities;
 using ASP.Core.MultiAcademyTrusts;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
+using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
@@ -39,16 +40,17 @@ namespace ASP.Web.Areas.School
         {
             var pageNumber = PageHelper.ParsePageNumber(page);
             var organisationName = User.FindFirst(CustomClaimTypes.OrganisationName)?.Value;
+            var searchSuggestionsUrl = $"/search/suggestions/";
 
             var result =
-                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository,
+                    _multiAcademyTrustRepository)
                 from results in GetAllEstablishments(scopeInfo.ScopeType, scopeInfo.ScopeId, pageNumber)
                 select DefaultViewModel(
                     results,
-                    "My schools",
-                    $"{organisationName} - {results.TotalResults:N0} schools",
-                    "/my-schools/",
-                    GetSchoolsPageBreadcrumbs("My schools"));
+                    new SchoolsPageParameters("My schools", $"{organisationName} - {results.TotalResults:N0} schools",
+                        $"/my-schools/", GetSchoolsPageBreadcrumbs("My schools"),
+                        "MySchools", nameof(Schools), searchSuggestionsUrl));
 
             return result.ToActionResult(View, _hostEnvironment);
         }

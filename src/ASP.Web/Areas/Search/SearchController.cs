@@ -14,6 +14,8 @@ using ASP.Core.Scoping;
 using ASP.Web.Areas.School;
 using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Areas.Shared.Pagination;
+using ASP.Web.Areas.Shared.Search;
+using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
@@ -54,20 +56,20 @@ public class SearchController : Controller
         if (!Request.Query.Keys.Any(k =>
                 k.Equals(nameof(searchParams.Search), StringComparison.InvariantCultureIgnoreCase)))
         {
-            return View(nameof(Index));
+            return View(nameof(Index), GetEmptySchoolSearchViewModel());
         }
 
         if (!ModelState.IsValid)
         {
-            return View(nameof(Index));
+            return View(nameof(Index), GetEmptySchoolSearchViewModel());
         }
 
         var pageNumber = PageHelper.ParsePageNumber(searchParams.Page);
 
         if (string.IsNullOrEmpty(searchParams.Search))
         {
-            ModelState.AddModelError(nameof(searchParams.Search), Constants.SchoolSearchTermShortValidationMessage);
-            return View(nameof(Index));
+            ModelState.AddModelError(nameof(searchParams.Search), Constants.SchoolSearchTermInputValidationMessage);
+            return View(nameof(Index), GetEmptySchoolSearchViewModel());
         }
         
         var searchResult = await PerformSearchBasedOnUserRole(searchParams, pageNumber);
@@ -88,12 +90,18 @@ public class SearchController : Controller
         return searchResult.ToActionResult(Json, _hostEnvironment);
     }
     
-    private SearchViewModel DefaultViewModel(ScopedSearchResultsPage<EstablishmentListingDTO> result)
+    private SchoolSearchViewModel GetEmptySchoolSearchViewModel()
+    {
+        return DefaultViewModel(
+            new ScopedSearchResultsPage<EstablishmentListingDTO>());
+    }
+    
+    private SchoolSearchViewModel DefaultViewModel(ScopedSearchResultsPage<EstablishmentListingDTO> result)
     {
         var breadcrumbTrail = new BreadcrumbTrailViewModel($"Search results for \"{result.SearchTerm}\"")
             .AddBreadcrumb("Search", "/search");
         
-        return new SearchViewModel(
+        return new SchoolSearchViewModel(
             EstablishmentListingModel
                 .FromEstablishmentListingDto(result.Results),
             new PaginationModel(
@@ -106,25 +114,33 @@ public class SearchController : Controller
             ),
             result.SearchTerm,
             result.TotalResults,
-            breadcrumbTrail
+            breadcrumbTrail,
+            "/search/",
+            "/search/suggestions/",
+            "Search",
+            nameof(Index)
         );
     }
 
-    private SearchViewModel NoResultsViewModel(SearchParams searchParams)
+    private SchoolSearchViewModel NoResultsViewModel(SearchParams searchParams)
     {
         var breadcrumbTrail = new BreadcrumbTrailViewModel($"We found no matches for \"{searchParams.Search}\"")
                 .AddBreadcrumb("Search", "/search");
 
-        return new SearchViewModel(
+        return new SchoolSearchViewModel(
             new List<EstablishmentListingModel>(),
             null,
             searchParams.Search ?? "",
             0,
-            breadcrumbTrail
+            breadcrumbTrail,
+            "/search/",
+            "/search/suggestions/",
+            "Search",
+            nameof(Index)
         );
     }
 
-    private IActionResult RedirectToSchoolLandingPageIfSingleResult(SearchViewModel model)
+    private IActionResult RedirectToSchoolLandingPageIfSingleResult(SchoolSearchViewModel model)
     {
         if (model.TotalCount == 1)
         {
@@ -132,10 +148,10 @@ public class SearchController : Controller
                 new { area = "School", urn = model.EstablishmentListingsModel.FirstOrDefault()!.Urn });
         }
 
-        return View("SearchResults", model);
+        return View("SchoolSearchResults", model);
     }
 
-    private Task<Result<SearchViewModel>> PerformSearchBasedOnUserRole(SearchParams searchParams,
+    private Task<Result<SchoolSearchViewModel>> PerformSearchBasedOnUserRole(SearchParams searchParams,
         int pageNumber)
     {
         return
@@ -153,7 +169,7 @@ public class SearchController : Controller
             select result;
     }
     
-    private Task<Result<SearchViewModel>> PerformEstablishmentSearch(SearchParams searchParams, ScopeInfo scopeInfo, int pageNumber)
+    private Task<Result<SchoolSearchViewModel>> PerformEstablishmentSearch(SearchParams searchParams, ScopeInfo scopeInfo, int pageNumber)
     {
         var estabSearchRequest = new EstablishmentSearchRequest(
             searchParams.Search ?? "",

@@ -1,4 +1,4 @@
-﻿namespace ASP.Web.Areas.Search;
+﻿namespace ASP.Web.Areas.Shared.Search;
 
 public class SearchParams
 {

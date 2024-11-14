@@ -1,0 +1,19 @@
+﻿@using ASP.Web.Areas.Shared.ErrorSummary
+@using ASP.Web.Areas.Shared.Search
+@using ASP.Web.Extensions
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <asp-error-summary>
+        @{
+            var searchTermError = ViewData.ModelState.GetFirstErrorForKey(nameof(SearchParams.Search));
+
+            if (searchTermError != null)
+            {
+                <li>
+                    <a href="#searchTerm" data-testid="searchTerm">@searchTermError.ErrorMessage</a>
+                </li>
+            }
+        }
+    </asp-error-summary>
+}

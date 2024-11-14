@@ -1,65 +1,13 @@
-﻿@using ASP.Core
-@using ASP.Web.Areas.Search
-@using ASP.Web.Extensions
+﻿@using ASP.Web.Areas.Shared.Search.School
+@model ASP.Web.Areas.Shared.Search.School.SchoolSearchViewModel
 @{
     ViewData["Title"] = "Search";
-    var hasSearchTermError = ViewData.ModelState.HasError(nameof(SearchParams.Search));
 }
 
 <div class="govuk-width-container govuk-main-wrapper">
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <asp-error-summary>
-            @{
-                var searchTermError = ViewData.ModelState.GetFirstErrorForKey(nameof(SearchParams.Search));
-
-                if (searchTermError != null)
-                {
-                    <li>
-                        <a href="#searchTerm" data-testid="searchTerm">@searchTermError.ErrorMessage</a>
-                    </li>
-                }
-            }
-        </asp-error-summary>
-    }
-
-    <h1 id="search-page-heading" class="govuk-heading-l">Search for a school</h1>
-    <div class="govuk-grid-row" x-data="searchSuggestions">
-        <div class="govuk-grid-column-one-half">
-            <h2 class="govuk-heading-s asp-search-heading">School</h2>
-
-            <input type="hidden" id="suggestionUrn" name="suggestionUrn" x-model="suggestionUrn" />
-            <form id="searchForm" asp-controller="Search" asp-action="Index" method="get" x-on:submit="handleSubmit">
-                <div class="govuk-form-group">
-
-                    <label for="searchTerm" class="govuk-label govuk-body">
-                        @Constants.SchoolSearchFormSearchTermInputLabel
-                    </label>
-
-                    <div asp-validation-group-for="searchTerm" data-testid="searchTermValidationGroup">
-
-                        @if (hasSearchTermError)
-                        {
-                            <span id="searchTerm-input-error" class="govuk-error-message">
-                                @Constants.SchoolSearchTermInputValidationMessage
-                            </span>
-                        }
-                        <div class="search-input-container">
-                            <div id="suggestionSearchTermContainer" data-suggest-url="/search/suggestions/"
-                                 class="js-enabled govuk-!-width-three-quarters @(hasSearchTermError ? "search-input--error" : "")"
-                                 aria-describedby="searchTerm-input-error">
-                            </div>
-                            <input type="text" id="searchTerm"
-                                   class="js-disabled govuk-input govuk-!-width-three-quarters @(hasSearchTermError ? "search-input--error" : "")"
-                                   aria-describedby="searchTerm-input-error"
-                                   name="search" spellcheck="false"/>
-                            <button id="searchSubmit" type="submit" class="govuk-button app-search-button">
-                                <span class="govuk-visually-hidden">Search</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+    @await Html.PartialAsync("~/Areas/Shared/Search/School/_SchoolSearchErrorSummaryPartial.cshtml")
+    <h1 id="search-page-heading" class="govuk-heading-l govuk-!-margin-bottom-4">Search for a school</h1>
+    <h2 class="govuk-heading-s asp-search-heading">School</h2>
+    @await Html.PartialAsync("~/Areas/Shared/Search/School/_SchoolSearchFormPartial.cshtml",
+    new SchoolSearchFormModel(Model.Controller, Model.ControllerAction, Model.SearchSuggestionUrl))
 </div>

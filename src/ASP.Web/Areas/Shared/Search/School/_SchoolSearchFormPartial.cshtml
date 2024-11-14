@@ -1,0 +1,44 @@
+﻿@using ASP.Core
+@using ASP.Web.Areas.Shared.Search
+@using ASP.Web.Extensions
+@model ASP.Web.Areas.Shared.Search.School.SchoolSearchFormModel
+@{
+    var hasSearchTermError = ViewData.ModelState.HasError(nameof(SearchParams.Search));
+}
+
+<div class="govuk-grid-row" x-data="searchSuggestions">
+    <div class="govuk-grid-column-one-half">
+        <input type="hidden" id="suggestionUrn" name="suggestionUrn" x-model="suggestionUrn"/>
+        <form id="searchForm" asp-controller="@Model.Controller" asp-action="@Model.ControllerAction" method="get" x-on:submit="handleSubmit">
+            <div class="govuk-form-group">
+
+                <label for="searchTerm" class="govuk-label govuk-body">
+                    @Constants.SchoolSearchFormSearchTermInputLabel
+                </label>
+
+                <div asp-validation-group-for="searchTerm" data-testid="searchTermValidationGroup">
+
+                    @if (hasSearchTermError)
+                    {
+                        <span id="searchTerm-input-error" class="govuk-error-message">
+                            @Constants.SchoolSearchTermInputValidationMessage
+                        </span>
+                    }
+                    <div class="search-input-container">
+                        <div id="suggestionSearchTermContainer" data-suggest-url="@(Model.SearchSuggestionUrl)"
+                             class="js-enabled govuk-!-width-three-quarters @(hasSearchTermError ? "search-input--error" : "")"
+                             aria-describedby="searchTerm-input-error">
+                        </div>
+                        <input type="text" id="searchTerm"
+                               class="js-disabled govuk-input govuk-!-width-three-quarters @(hasSearchTermError ? "search-input--error" : "")"
+                               aria-describedby="searchTerm-input-error"
+                               name="search" spellcheck="false"/>
+                        <button id="searchSubmit" type="submit" class="govuk-button app-search-button">
+                            <span class="govuk-visually-hidden">Search</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

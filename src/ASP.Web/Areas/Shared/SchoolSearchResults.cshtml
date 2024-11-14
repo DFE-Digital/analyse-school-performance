@@ -1,0 +1,46 @@
+﻿@using ASP.Web.Areas.Shared.EstablishmentListing
+@using ASP.Web.Areas.Shared.Search.School
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ASP.Web.Areas.Shared.Search.School.SchoolSearchViewModel
+@{
+    ViewData["Title"] = Model.TotalCount == 0 ? $"We found no matches for \"{Model.SearchTerm}\"" : $"Search results for \"{Model.SearchTerm}\"";
+}
+
+<div class="govuk-width-container">
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+</div>
+<div class="govuk-width-container govuk-main-wrapper">
+    @await Html.PartialAsync("~/Areas/Shared/Search/School/_SchoolSearchErrorSummaryPartial.cshtml")
+    @if (Model.TotalCount > 0)
+    {
+        <h1 id="school-search-results-some-results-title" data-testid="school-search-results-some-results-title"
+            class="govuk-heading-xl govuk-!-margin-bottom-4">
+            Search results for "@Model.SearchTerm"
+        </h1>
+        @if (Model.SubTitle != null)
+        {
+            <h2 class="govuk-heading-m" data-testid="school-search-results-sub-title">@Model.SubTitle</h2>
+        }
+
+        @await Html.PartialAsync("~/Areas/Shared/Search/School/_SchoolSearchFormPartial.cshtml", 
+            new SchoolSearchFormModel(Model.Controller, Model.ControllerAction, Model.SearchSuggestionUrl))
+    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @await Html.PartialAsync("~/Areas/Shared/Search/School/_SchoolSearchResultNotFoundPartial.cshtml",
+                new SchoolSearchResultNotFoundModel(Model.SearchTerm, Model.SearchUrl, Model.TotalCount))
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        @if (Model.TotalCount > 0)
+        {
+            <div class="govuk-grid-column-two-thirds">
+                @await Html.PartialAsync("~/Areas/Shared/EstablishmentListing/_EstablishmentListingPartial.cshtml", new EstablishmentListingViewModel(Model.EstablishmentListingsModel))
+                @if (Model.PaginationModel != null)
+                {
+                    <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Footer"))/>
+                }
+            </div>
+        }
+    </div>
+</div>

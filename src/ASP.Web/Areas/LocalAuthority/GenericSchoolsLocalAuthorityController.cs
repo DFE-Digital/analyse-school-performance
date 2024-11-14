@@ -4,6 +4,7 @@ using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
 using ASP.Web.Areas.School;
+using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
@@ -30,15 +31,16 @@ namespace ASP.Web.Areas.LocalAuthority
         public Task<IActionResult> Schools(string laCode, string? page)
         {
             var pageNumber = PageHelper.ParsePageNumber(page);
+            var searchSuggestionsUrl = $"/search/suggestions/";
+
             var result =
                 from results in GetAllEstablishments(ScopeType.LA, Optional<string>.Some(laCode), pageNumber)
                 from laName in GetLocalAuthorityName(laCode)
                 select DefaultViewModel(
                     results,
-                    "All schools",
-                    $"{laName} - {results.TotalResults:N0} schools",
-                    $"/local-authority/{laCode}/schools/",
-                    GetSchoolsPageBreadcrumbs("All schools", laCode, laName)
+                    new SchoolsPageParameters("All schools", $"{laName} - {results.TotalResults:N0} schools",
+                        $"/local-authority/{laCode}/schools/", GetSchoolsPageBreadcrumbs("All schools", laCode, laName),
+                        "GenericSchoolsLocalAuthority", nameof(Schools), searchSuggestionsUrl)
                 );
 
             return result.ToActionResult(View, _hostEnvironment);

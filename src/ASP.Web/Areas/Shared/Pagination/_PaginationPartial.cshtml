@@ -3,48 +3,72 @@
 <div class="govuk-body">
     <p class="govuk-body pagination-container-p-text" data-testid="NumberOfPages-@Model.LocationOnPage">
         Showing @Model.Pagination.ResultsStartOffset - @Model.Pagination.ResultsEndOffset
-        of <span class="govuk-!-font-weight-bold">@Model.Pagination.TotalResults</span> @(Model.Pagination.TotalResults == 1 ? Model.Pagination.ResultNameSingular : Model.Pagination.ResultNamePlural)
+        of <span class="govuk-!-font-weight-bold">@Model.Pagination.TotalResults</span>
+        @(Model.Pagination.TotalResults == 1 ? Model.Pagination.ResultNameSingular : Model.Pagination.ResultNamePlural)
     </p>
-    <nav class="govuk-pagination" aria-label="Pagination">
-        @if (Model.Pagination.ShowPreviousLink)
-        {
-            <div class="govuk-pagination__prev">
-                <a class="govuk-link govuk-pagination__link" data-testid="PageLinks-@(Model.LocationOnPage)-Prev" href="@Model.Pagination.PreviousLink" rel="prev" aria-label="Previous page">
-                    <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
-                        <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
-                    </svg>
-                    <span class="govuk-pagination__link-title">
-                        Prev<span class="govuk-visually-hidden"> page</span>
-                    </span>
-                </a>
-            </div>
-        }
 
-        <ul class="govuk-pagination__list">
-            @foreach (var (page, link) in Model.Pagination.PageLinks)
+    @if (Model.Pagination.ShowPagination)
+    {
+        <nav class="govuk-pagination" aria-label="Pagination">
+            @if (Model.Pagination.ShowPreviousLink)
             {
-                <li class="govuk-pagination__item @(page == Model.Pagination.CurrentPage ? "govuk-pagination__item--current" : "")">
-                    <a class="govuk-link govuk-pagination__link" data-testid="PageLinks-@(Model.LocationOnPage)-@(page)" href="@link"
-                       aria-label="Page @(page)" @(page == Model.Pagination.CurrentPage ? "aria-current=\"page\"" : "")>
-                        @(page)
+                <div class="govuk-pagination__prev">
+                    <a class="govuk-link govuk-pagination__link"
+                       data-testid="PageLinks-@(Model.LocationOnPage)-Prev"
+                       href="@Model.Pagination.PreviousLink"
+                       rel="prev"
+                       aria-label="Previous page">
+                        <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+                            <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+                        </svg>
+                        <span class="govuk-pagination__link-title">
+                            Prev<span class="govuk-visually-hidden"> page</span>
+                        </span>
                     </a>
-                </li>
+                </div>
             }
-        </ul>
 
-        @if (Model.Pagination.ShowNextLink)
-        {
-            <div class="govuk-pagination__next">
-                <a class="govuk-link govuk-pagination__link" data-testid="PageLinks-@(Model.LocationOnPage)-Next" href="@Model.Pagination.NextLink" rel="next" aria-label="Next page">
-                    <span class="govuk-pagination__link-title">
-                        Next<span class="govuk-visually-hidden"> page</span>
-                    </span>
-                    <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
-                        <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
-                    </svg>
-                </a>
-            </div>
-        }
-    </nav>
+            <ul class="govuk-pagination__list">
+                @foreach (var item in Model.Pagination.GetPageLinks())
+                {
+                    @if (item.Ellipsis)
+                    {
+                        <li class="govuk-pagination__item govuk-pagination__item--ellipses">
+                            <span class="govuk-pagination__link" data-testid="govuk-pagination__link--@Model.LocationOnPage">...</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="govuk-pagination__item @(item.Current ? "govuk-pagination__item--current" : "")">
+                            <a class="govuk-link govuk-pagination__link"
+                               data-testid="PageLinks-@(Model.LocationOnPage)-@(item.Number)"
+                               href="@item.Href"
+                               aria-label="Page @(item.Number)"
+                               @(item.Current ? "aria-current=\"page\"" : "")>
+                                @(item.Number)
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+
+            @if (Model.Pagination.ShowNextLink)
+            {
+                <div class="govuk-pagination__next">
+                    <a class="govuk-link govuk-pagination__link"
+                       data-testid="PageLinks-@(Model.LocationOnPage)-Next"
+                       href="@Model.Pagination.NextLink"
+                       rel="next"
+                       aria-label="Next page">
+                        <span class="govuk-pagination__link-title">
+                            Next<span class="govuk-visually-hidden"> page</span>
+                        </span>
+                        <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+                            <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+                        </svg>
+                    </a>
+                </div>
+            }
+        </nav>
+    }
 </div>
-

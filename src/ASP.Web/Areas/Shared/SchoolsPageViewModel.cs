@@ -1,10 +1,11 @@
 ﻿using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Areas.Shared.Pagination;
+using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Areas.Shared;
 
-public class SchoolsPageViewModel
+public class SchoolsPageViewModel : SchoolSearchFormModel
 {
     public string Title { get; }
     public string SubTitle { get; }
@@ -19,7 +20,10 @@ public class SchoolsPageViewModel
         int totalCount,
         PaginationModel? paginationModel,
         BreadcrumbTrailViewModel breadcrumbs,
-        List<EstablishmentListingModel> establishmentListingsModel)
+        List<EstablishmentListingModel> establishmentListingsModel,
+        string controller, 
+        string controllerAction,
+        string searchSuggestionUrl) : base(controller, controllerAction, searchSuggestionUrl)
     {
         Title = title;
         SubTitle = subTitle;
