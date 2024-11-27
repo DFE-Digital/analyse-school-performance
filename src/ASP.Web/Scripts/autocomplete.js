@@ -16,6 +16,20 @@ export default class AutoComplete {
         this.init();
     }
 
+    // function to hide menu
+    hideMenu = (container) => {
+        const menu = container.querySelector('[role="listbox"]');
+        if (menu) {
+            // Remove all list items
+            while (menu.firstChild) {
+                menu.removeChild(menu.firstChild);
+            }
+            // Or simply set innerHTML to empty
+            menu.innerHTML = '';
+            menu.classList.add('autocomplete__menu--hidden');
+        }
+    };
+
     debounce(fn, delay = 500) {
         let timer;
         return (...args) => {
@@ -90,6 +104,7 @@ export default class AutoComplete {
             element: container,
             id: this.targetInputElementId,
             name: this.targetInputElementName,
+            defaultValue: '',
             minLength: this.minLength,
             source: this.debounce((query, populateResults) => this.search(query, populateResults, suggestUrl), this.searchRegenerateDelay),
             templates: {
@@ -100,6 +115,37 @@ export default class AutoComplete {
             displayMenu: 'overlay',
             showNoOptionsFound: false
         });
+
+        const input = container.querySelector(`#${this.targetInputElementId}`);
+        if (input) {
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Backspace' || event.key === 'Delete') {
+                    // Check the length after the key press would take effect
+                    const currentLength = event.target.value.length;
+                    if (currentLength <= this.minLength) {
+                        this.hideMenu(container);
+                    }
+                }
+            });
+
+            // Override the default menu behavior
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'childList') {
+                        const menu = container.querySelector('[role="listbox"]');
+                        if (menu && (!input.value || input.value.length < this.minLength)) {
+                            this.hideMenu(container);
+                        }
+                    }
+                });
+            });
+
+            // Start observing the menu for changes
+            const menu = container.querySelector('[role="listbox"]');
+            if (menu) {
+                observer.observe(menu, {childList: true, subtree: true});
+            }
+        }
     }
 
     init() {
