@@ -4,28 +4,18 @@ using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Areas.Shared.Search.School;
 
-public class SchoolSearchViewModel : SchoolSearchFormModel
+public class SchoolSearchViewModel : SearchViewModel
 {
     public List<EstablishmentListingModel> EstablishmentListingsModel { get; }
-    public PaginationModel? PaginationModel { get; }
-    public string SearchTerm { get; }
-    public string? SubTitle { get; }
-    public string SearchUrl { get; }
-    public int TotalCount { get; }
-    public BreadcrumbTrailViewModel Breadcrumbs { get; }
 
     public SchoolSearchViewModel(List<EstablishmentListingModel> establishmentListingsModel,
         PaginationModel? paginationModel, string searchTerm, int totalCount,
-        BreadcrumbTrailViewModel breadcrumbs, string searchUrl, string searchSuggestionUrl,
-        string controller, string controllerAction, string? subTitle = null)
-        : base(controller, controllerAction, searchSuggestionUrl)
+        BreadcrumbTrailViewModel breadcrumbs, string controller, string controllerAction, string searchUrl,
+        string searchSuggestionUrl,
+        string inputLabel, string inputValidationMessage, string? subTitle = null) : base(
+         searchTerm, searchUrl, totalCount, paginationModel, controller, controllerAction, searchSuggestionUrl,
+        inputLabel, inputValidationMessage, breadcrumbs, subTitle)
     {
         EstablishmentListingsModel = establishmentListingsModel;
-        PaginationModel = paginationModel;
-        SearchTerm = searchTerm;
-        TotalCount = totalCount;
-        Breadcrumbs = breadcrumbs;
-        SearchUrl = searchUrl;
-        SubTitle = subTitle;
     }
 }

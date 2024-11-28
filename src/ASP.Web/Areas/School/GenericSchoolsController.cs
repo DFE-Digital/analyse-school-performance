@@ -5,7 +5,6 @@ using ASP.Core.Helpers;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
-using ASP.Web.Areas.Shared;
 using ASP.Web.Areas.Shared.Search;
 using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
@@ -61,7 +60,7 @@ namespace ASP.Web.Areas.School
             var searchSuggestionsUrl = $"/search/suggestions/";
             var noResultsVm = NoResultsViewModel(searchParams,
                 GetSchoolsSearchNoResultsPageBreadcrumbs(searchParams.Search), searchUrlForNoResults,
-                searchSuggestionsUrl, "GenericSchools", nameof(Search));
+                searchSuggestionsUrl, "GenericSchools", nameof(Schools));
             var schoolSearchParameters = new SchoolSearchParameters(nameof(Schools), searchSuggestionsUrl, "GenericSchools",
                 nameof(Schools), GetSchoolsSearchPageBreadcrumbs(searchParams.Search));
             var searchResult = from result in PerformEstablishmentSearch(searchParams, scopeInfo, pageNumber,
@@ -102,7 +101,7 @@ namespace ASP.Web.Areas.School
             return View("SchoolSearchResults", model);
         }
 
-        private Task<Result<SchoolsPageViewModel>> GetSchoolsPageViewModel(string? page = null)
+        private Task<Result<SchoolsPageSearchViewModel>> GetSchoolsPageViewModel(string? page = null)
         {
             var pageNumber = PageHelper.ParsePageNumber(page);
 
@@ -112,20 +111,20 @@ namespace ASP.Web.Areas.School
                 from results in GetAllEstablishments(ScopeType.All, Optional<string>.None, pageNumber)
                 select DefaultViewModel(
                     results,
-                    new SchoolsPageParameters("All schools", $"{results.TotalResults:N0} schools",
+                    new SchoolsPageSearchParameters("All schools", $"{results.TotalResults:N0} schools",
                         $"/schools/", GetSchoolsPageBreadcrumbs("All schools"),
-                        "GenericSchools", nameof(Search), searchSuggestionsUrl));
+                        "GenericSchools", nameof(Schools), searchSuggestionsUrl));
             return result;
         }
 
-        private SchoolsPageViewModel GetEmptySchoolsPageViewModel()
+        private SchoolsPageSearchViewModel GetEmptySchoolsPageViewModel()
         {
             var searchSuggestionsUrl = $"/search/suggestions/";
             return DefaultViewModel(
                 new ScopedResultsPage<EstablishmentListingDTO>(),
-                new SchoolsPageParameters("All schools", "0 schools",
+                new SchoolsPageSearchParameters("All schools", "0 schools",
                     $"/schools/", GetSchoolsPageBreadcrumbs("All schools"),
-                    "GenericSchools", nameof(Search), searchSuggestionsUrl));
+                    "GenericSchools", nameof(Schools), searchSuggestionsUrl));
         }
     }
 }

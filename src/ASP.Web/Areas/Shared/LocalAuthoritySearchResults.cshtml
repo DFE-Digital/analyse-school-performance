@@ -1,8 +1,7 @@
-﻿@using ASP.Web.Areas.Shared.EstablishmentListing
+﻿@using ASP.Web.Areas.Shared.LocalAuthorityListing
 @using ASP.Web.Areas.Shared.Search
-@using ASP.Web.Areas.Shared.Search.School
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model ASP.Web.Areas.Shared.Search.School.SchoolSearchViewModel
+@model ASP.Web.Areas.Shared.Search.LocalAuthority.LocalAuthoritySearchViewModel
 @{
     ViewData["Title"] = Model.TotalCount == 0 ? $"We found no matches for \"{Model.SearchTerm}\"" : $"Search results for \"{Model.SearchTerm}\"";
 }
@@ -36,7 +35,7 @@
         @if (Model.TotalCount > 0)
         {
             <div class="govuk-grid-column-two-thirds">
-                @await Html.PartialAsync("~/Areas/Shared/EstablishmentListing/_EstablishmentListingPartial.cshtml", new EstablishmentListingViewModel(Model.EstablishmentListingsModel))
+                @await Html.PartialAsync("~/Areas/Shared/LocalAuthorityListing/_LocalAuthoritiesListingPartial.cshtml", new LocalAuthoritiesListingViewModel(Model.LocalAuthoritiesListingModel))
                 @if (Model.PaginationModel != null)
                 {
                     <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Footer"))/>

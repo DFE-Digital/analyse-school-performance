@@ -1,10 +1,10 @@
 ﻿@using ASP.Web.Areas.LocalAuthority
-@model ASP.Web.Areas.LocalAuthority.Shared.LocalAuthoritiesListingViewModel
+@model ASP.Web.Areas.Shared.LocalAuthorityListing.LocalAuthoritiesListingViewModel
 @{
     var counter = 1;
 }
 <ul class="govuk-list">
-    @foreach (var item in Model.LocalAuthorities)
+    @foreach (var item in Model.LocalAuthoritiesListingModel)
     {
         <li>
             <div class="app-listing-result-tile">

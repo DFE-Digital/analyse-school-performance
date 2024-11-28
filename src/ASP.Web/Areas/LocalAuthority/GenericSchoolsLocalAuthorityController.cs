@@ -38,7 +38,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 from laName in GetLocalAuthorityName(laCode)
                 select DefaultViewModel(
                     results,
-                    new SchoolsPageParameters("All schools", $"{laName} - {results.TotalResults:N0} schools",
+                    new SchoolsPageSearchParameters("All schools", $"{laName} - {results.TotalResults:N0} schools",
                         $"/local-authority/{laCode}/schools/", GetSchoolsPageBreadcrumbs("All schools", laCode, laName),
                         "GenericSchoolsLocalAuthority", nameof(Schools), searchSuggestionsUrl)
                 );

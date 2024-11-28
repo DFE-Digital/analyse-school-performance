@@ -48,7 +48,7 @@ namespace ASP.Web.Areas.School
                 from results in GetAllEstablishments(scopeInfo.ScopeType, scopeInfo.ScopeId, pageNumber)
                 select DefaultViewModel(
                     results,
-                    new SchoolsPageParameters("My schools", $"{organisationName} - {results.TotalResults:N0} schools",
+                    new SchoolsPageSearchParameters("My schools", $"{organisationName} - {results.TotalResults:N0} schools",
                         $"/my-schools/", GetSchoolsPageBreadcrumbs("My schools"),
                         "MySchools", nameof(Schools), searchSuggestionsUrl));
 

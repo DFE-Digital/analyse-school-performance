@@ -1,12 +1,12 @@
-﻿namespace ASP.Web.Areas.Shared.Search.School;
+﻿namespace ASP.Web.Areas.Shared.Search;
 
-public class SchoolSearchResultNotFoundModel
+public class SearchResultNotFoundModel
 {
     public string SearchTerm { get; }
     public string SearchUrl { get; }
     public int TotalCount { get; }
 
-    public SchoolSearchResultNotFoundModel(string searchTerm, string searchUrl, int totalCount)
+    public SearchResultNotFoundModel(string searchTerm, string searchUrl, int totalCount)
     {
         SearchTerm = searchTerm;
         SearchUrl = searchUrl;

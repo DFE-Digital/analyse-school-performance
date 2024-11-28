@@ -1698,7 +1698,7 @@
         """
         When I navigate to /schools/?search=Primary&page=<page>
         Then the page title should be "Search results for "Primary" | Analyse school performance"
-	    And the element "[data-testid="school-search-results-sub-title"]" should have the text content "2 schools"
+	    And the element "[data-testid="search-results-sub-title"]" should have the text content "2 schools"
         And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
         And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/schools/?search=Primary&page=1"
 
@@ -1717,7 +1717,7 @@
         When I navigate to /schools/?page=50&search=Primary
         Then the page title should be "Search results for "Primary" | Analyse school performance"
         And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 26 of 26 schools"
-	    And the element "[data-testid="school-search-results-sub-title"]" should have the text content "26 schools"
+	    And the element "[data-testid="search-results-sub-title"]" should have the text content "26 schools"
         And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/schools/?search=Primary&page=1"
         And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
         And the element "*[data-testid='establishment-listing-name-26']" should have the text content "Primary School 100026"

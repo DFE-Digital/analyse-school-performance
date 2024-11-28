@@ -1,7 +1,6 @@
-﻿@using ASP.Core
-@using ASP.Web.Areas.Shared.Search
+﻿@using ASP.Web.Areas.Shared.Search
 @using ASP.Web.Extensions
-@model ASP.Web.Areas.Shared.Search.School.SchoolSearchFormModel
+@model ASP.Web.Areas.Shared.Search.SearchFormModel
 @{
     var hasSearchTermError = ViewData.ModelState.HasError(nameof(SearchParams.Search));
 }
@@ -13,7 +12,7 @@
             <div class="govuk-form-group">
 
                 <label for="searchTerm" class="govuk-label govuk-body">
-                    @Constants.SchoolSearchFormSearchTermInputLabel
+                    @Model.InputLabel
                 </label>
 
                 <div asp-validation-group-for="searchTerm" data-testid="searchTermValidationGroup">
@@ -21,7 +20,7 @@
                     @if (hasSearchTermError)
                     {
                         <span id="searchTerm-input-error" class="govuk-error-message">
-                            @Constants.SchoolSearchTermInputValidationMessage
+                            @Model.InputValidationMessage
                         </span>
                     }
                     <div class="search-input-container">

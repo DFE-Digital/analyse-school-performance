@@ -1,7 +1,7 @@
 ﻿@using ASP.Web.Areas.Shared.EstablishmentListing
-@using ASP.Web.Areas.Shared.Search.School
+@using ASP.Web.Areas.Shared.Search
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model ASP.Web.Areas.Shared.SchoolsPageViewModel
+@model ASP.Web.Areas.Shared.Search.School.SchoolsPageSearchViewModel
 @{
     ViewData["Title"] = Model.Title;
 }
@@ -11,11 +11,11 @@
 </div>
 
 <div class="govuk-width-container govuk-main-wrapper">
-    @await Html.PartialAsync("~/Areas/Shared/Search/School/_SchoolSearchErrorSummaryPartial.cshtml")
+    @await Html.PartialAsync("~/Areas/Shared/Search/_SearchErrorSummaryPartial.cshtml")
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-4" data-testid="schools-title">@Model.Title</h1>
     <h2 class="govuk-heading-m" data-testid="schools-subtitle">@Model.SubTitle</h2>
-    @await Html.PartialAsync("~/Areas/Shared/Search/School/_SchoolSearchFormPartial.cshtml",
-        new SchoolSearchFormModel(Model.Controller, Model.ControllerAction, Model.SearchSuggestionUrl))
+    @await Html.PartialAsync("~/Areas/Shared/Search/_SearchFormPartial.cshtml",
+        new SearchFormModel(Model.Controller, Model.ControllerAction, Model.SearchSuggestionUrl, Model.InputLabel, Model.InputValidationMessage))
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (Model.TotalCount == 0)

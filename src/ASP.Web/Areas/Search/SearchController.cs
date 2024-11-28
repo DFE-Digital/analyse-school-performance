@@ -115,10 +115,12 @@ public class SearchController : Controller
             result.SearchTerm,
             result.TotalResults,
             breadcrumbTrail,
+            "Search",
+            nameof(Index),
             "/search/",
             "/search/suggestions/",
-            "Search",
-            nameof(Index)
+            Constants.SchoolSearchFormSearchTermInputLabel,
+            Constants.SchoolSearchTermInputValidationMessage
         );
     }
 
@@ -128,15 +130,17 @@ public class SearchController : Controller
                 .AddBreadcrumb("Search", "/search");
 
         return new SchoolSearchViewModel(
-            new List<EstablishmentListingModel>(),
-            null,
-            searchParams.Search ?? "",
-            0,
-            breadcrumbTrail,
-            "/search/",
-            "/search/suggestions/",
-            "Search",
-            nameof(Index)
+            establishmentListingsModel: new List<EstablishmentListingModel>(),
+            paginationModel: null,
+            searchTerm: searchParams.Search ?? "",
+            totalCount: 0,
+            breadcrumbs: breadcrumbTrail,
+            controller: "Search",
+            controllerAction: nameof(Index),
+            searchUrl: "/search/",
+            searchSuggestionUrl: "/search/suggestions/",
+            Constants.SchoolSearchFormSearchTermInputLabel,
+            Constants.SchoolSearchTermInputValidationMessage
         );
     }
 

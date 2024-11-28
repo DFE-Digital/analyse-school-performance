@@ -28,6 +28,12 @@ public static class Constants
 
     public const string SchoolSearchFormSearchTermInputLabel =
         "Enter school name, address, URN (Unique Reference Number) or\n LAESTAB (Local Authority Establishment Number)";
+    
+    public const string LaSearchTermInputValidationMessage =
+        "Please enter a local authority name or code";
+
+    public const string LaSearchFormSearchTermInputLabel =
+        "Enter local authority name or code";
 
     public const string AcademicYearToDownldValidationErrorMessage = "Please choose an academic year to download";
     

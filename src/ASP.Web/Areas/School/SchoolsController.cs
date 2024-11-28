@@ -9,7 +9,6 @@ using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
-using ASP.Web.Areas.Shared;
 using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Areas.Shared.Pagination;
 using ASP.Web.Areas.Shared.Search;
@@ -48,22 +47,24 @@ public abstract class SchoolsController : Controller
                 new ScopedResultsPage<EstablishmentListingDTO>());
     }
 
-    protected SchoolsPageViewModel DefaultViewModel(ScopedResultsPage<EstablishmentListingDTO> result,
-        SchoolsPageParameters parameters)
+    protected SchoolsPageSearchViewModel DefaultViewModel(ScopedResultsPage<EstablishmentListingDTO> result,
+        SchoolsPageSearchParameters searchParameters)
     {
-        var paginationModel = CreatePaginationModel(result, parameters.PaginationUrl);
+        var paginationModel = CreatePaginationModel(result, searchParameters.PaginationUrl);
         var establishmentListings = MapEstablishmentListings(result.Results);
 
-        return new SchoolsPageViewModel(
-            title: parameters.Title,
-            subTitle: parameters.SubTitle,
+        return new SchoolsPageSearchViewModel(
+            title: searchParameters.Title,
+            subTitle: searchParameters.SubTitle,
             totalCount: result.TotalResults,
             paginationModel: paginationModel,
-            breadcrumbs: parameters.BreadcrumbTrailViewModel,
+            breadcrumbs: searchParameters.Breadcrumbs!,
             establishmentListingsModel: establishmentListings,
-            controller: parameters.Controller,
-            controllerAction: parameters.ControllerAction,
-            searchSuggestionUrl: parameters.SearchSuggestionUrl
+            controller: searchParameters.Controller,
+            controllerAction: searchParameters.ControllerAction,
+            searchSuggestionUrl: searchParameters.SearchSuggestionUrl,
+            inputLabel: searchParameters.InputLabel,
+            inputValidationMessage: searchParameters.InputValidationMessage
         );
     }
     
@@ -101,15 +102,17 @@ public abstract class SchoolsController : Controller
         string controller, string controllerAction)
     {
         return new SchoolSearchViewModel(
-            new List<EstablishmentListingModel>(),
-            null,
-            searchParams.Search ?? "",
-            0,
-            breadcrumbTrail,
-            searchUrl,
-            searchSuggestionUrl,
-            controller,
-            controllerAction
+            establishmentListingsModel: new List<EstablishmentListingModel>(),
+            paginationModel: null,
+            searchTerm: searchParams.Search ?? "",
+            totalCount: 0,
+            breadcrumbs: breadcrumbTrail,
+            controller: controller,
+            controllerAction: controllerAction,
+            searchUrl: searchUrl,
+            searchSuggestionUrl: searchSuggestionUrl,
+            Constants.SchoolSearchFormSearchTermInputLabel,
+            Constants.SchoolSearchTermInputValidationMessage
         );
     }
     
@@ -128,11 +131,13 @@ public abstract class SchoolsController : Controller
             paginationModel: CreatePaginationModel(result, parameters.SearchUrl),
             searchTerm: result.SearchTerm,
             result.TotalResults,
-            breadcrumbs: parameters.BreadcrumbTrail,
-            parameters.SearchUrl,
-            searchSuggestionUrl: parameters.SearchSuggestionUrl,
+            breadcrumbs: parameters.Breadcrumbs!,
             controller: parameters.Controller,
             controllerAction: parameters.ControllerAction,
+            parameters.SearchUrl,
+            searchSuggestionUrl: parameters.SearchSuggestionUrl,
+            inputLabel: parameters.InputLabel,
+            inputValidationMessage: parameters.InputValidationMessage,
             FormatResultsTitle(result.TotalResults)
         );
     }

@@ -28,6 +28,7 @@ using MAT = ASP.Application.UseCases.MultiAcademyTrusts.DTO;
 using ASP.Application.UseCases.BlobStorageDemoFileDownload;
 using ASP.Application.UseCases.BlobStorageDemoZipFileDownload;
 using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
+using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearch;
 
 namespace ASP.Infrastructure.Api
 {
@@ -266,6 +267,25 @@ namespace ASP.Infrastructure.Api
                 .Add("filepath", request.Filepath);
 
             return ApiGetFileStream(url, queryString);
+        }
+
+        public Task<Result<SearchResultsPage<LA.LocalAuthorityDTO>>> LocalAuthoritySearch(
+            LocalAuthoritySearchRequest request)
+        {
+            var url = "/api/LocalAuthoritySearch";
+            var queryString = QueryString.Create("searchTerm", request.SearchTerm);
+            
+            request.Page.IfSome(value =>
+            {
+                queryString = queryString.Add("page", value.ToString());
+            });
+
+            request.ResultsPerPage.IfSome(value =>
+            {
+                queryString = queryString.Add("resultsPerPage", value.ToString());
+            });
+            
+            return ApiGet<SearchResultsPage<LA.LocalAuthorityDTO>>(url, queryString);
         }
 
         private async Task<Result<T>> ApiGet<T>(string url, QueryString? queryString)
