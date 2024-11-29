@@ -22,6 +22,8 @@ namespace ASP.Web.Areas.School
     [Authorize(Policy = Policy.AccessToAllSchools)]
     public class GenericSchoolsController : SchoolsController
     {
+        private const string SearchSuggestionsUrl = $"/schools/suggestions/";
+        
         public GenericSchoolsController(
             IAspApiClient api,
             IHostEnvironment hostEnvironment
@@ -57,17 +59,29 @@ namespace ASP.Web.Areas.School
             var scopeInfo = new ScopeInfo(ScopeType.All, Optional<string>.None);
             
             var searchUrlForNoResults = $"/schools/";
-            var searchSuggestionsUrl = $"/search/suggestions/";
             var noResultsVm = NoResultsViewModel(searchParams,
                 GetSchoolsSearchNoResultsPageBreadcrumbs(searchParams.Search), searchUrlForNoResults,
-                searchSuggestionsUrl, "GenericSchools", nameof(Schools));
-            var schoolSearchParameters = new SchoolSearchParameters(nameof(Schools), searchSuggestionsUrl, "GenericSchools",
+                SearchSuggestionsUrl, "GenericSchools", nameof(Schools));
+            var schoolSearchParameters = new SchoolSearchParameters(nameof(Schools), SearchSuggestionsUrl, "GenericSchools",
                 nameof(Schools), GetSchoolsSearchPageBreadcrumbs(searchParams.Search));
             var searchResult = from result in PerformEstablishmentSearch(searchParams, scopeInfo, pageNumber,
                     schoolSearchParameters, noResultsVm)
                 select result;
 
             return await searchResult.ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
+        }
+        
+        [HttpGet("suggestions")]
+        public async Task<IActionResult> SchoolsSearchSuggestions(SearchParams searchParams)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Schools));
+            }
+        
+            var searchResult = await PerformEstablishmentSearchSuggestions(searchParams);
+
+            return searchResult.ToActionResult(Json, _hostEnvironment);
         }
         
         private BreadcrumbTrailViewModel GetSchoolsPageBreadcrumbs(string currentPage)
@@ -104,8 +118,6 @@ namespace ASP.Web.Areas.School
         private Task<Result<SchoolsPageSearchViewModel>> GetSchoolsPageViewModel(string? page = null)
         {
             var pageNumber = PageHelper.ParsePageNumber(page);
-
-            var searchSuggestionsUrl = $"/search/suggestions/";
             
             var result =
                 from results in GetAllEstablishments(ScopeType.All, Optional<string>.None, pageNumber)
@@ -113,18 +125,17 @@ namespace ASP.Web.Areas.School
                     results,
                     new SchoolsPageSearchParameters("All schools", $"{results.TotalResults:N0} schools",
                         $"/schools/", GetSchoolsPageBreadcrumbs("All schools"),
-                        "GenericSchools", nameof(Schools), searchSuggestionsUrl));
+                        "GenericSchools", nameof(Schools), SearchSuggestionsUrl));
             return result;
         }
 
         private SchoolsPageSearchViewModel GetEmptySchoolsPageViewModel()
         {
-            var searchSuggestionsUrl = $"/search/suggestions/";
             return DefaultViewModel(
                 new ScopedResultsPage<EstablishmentListingDTO>(),
                 new SchoolsPageSearchParameters("All schools", "0 schools",
                     $"/schools/", GetSchoolsPageBreadcrumbs("All schools"),
-                    "GenericSchools", nameof(Schools), searchSuggestionsUrl));
+                    "GenericSchools", nameof(Schools), SearchSuggestionsUrl));
         }
     }
 }

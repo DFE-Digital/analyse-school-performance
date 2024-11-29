@@ -82,10 +82,12 @@ public abstract class SchoolsController : Controller
 
         return model.DefaultIf(e => e is NotFoundError, noResultsViewModel);
     }
-    
+
     protected Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> PerformEstablishmentSearchSuggestions(
-        SearchParams searchParams, ScopeInfo scopeInfo)
+        SearchParams searchParams)
     {
+        var scopeInfo = new ScopeInfo(ScopeType.All, Optional<string>.None);
+
         var request = new EstablishmentSearchSuggestionsRequest(
             searchParams.Search ?? "",
             scopeInfo.ScopeType,
