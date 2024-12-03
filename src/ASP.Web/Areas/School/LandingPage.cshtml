@@ -1,162 +1,150 @@
 ﻿@using ASP.Web.Areas.Shared.OfstedRating
 @model ASP.Web.Areas.School.ViewModels.SchoolLandingPageViewModel
 @{
-    ViewData["Title"] = Model.SchoolPage.Title;
+    Layout = "~/Areas/School/_SchoolPageLayout.cshtml";
+    ViewBag.SchoolPageLayoutModel = Model.SchoolPage;
 }
 
-<div class="govuk-width-container app-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.SchoolPage.Breadcrumbs)
-</div>
+<details id="app-school-page-details" class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            <span data-testid="school-page-details-state-closed" class="app-school-details-closed">Show</span>
+            <span data-testid="school-page-details-state-open" class="app-school-details-open">Hide</span>
+            school details
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key app-school-details-summary-heading">
+                    Detail type
+                </dt>
+                <dd class="govuk-summary-list__value app-school-details-summary-heading">
+                    School details
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-address-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Address
+                </dt>
+                <dd data-testid="school-details-address-value" class="govuk-summary-list__value">
+                    @Model.EstablishmentDetails.Address?.ToString()
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-school-type-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    School type
+                </dt>
+                <dd data-testid="school-details-school-type-value" class="govuk-summary-list__value">
+                    @(Model.EstablishmentDetails.EstablishmentType == null
+                        ? string.Empty
+                        : Model.EstablishmentDetails.EstablishmentType.Name)
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-education-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Education phase
+                </dt>
+                <dd data-testid="school-details-education-value" class="govuk-summary-list__value">
+                    @Model.EstablishmentDetails.PhaseOfEducation
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-gender-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Gender of entry
+                </dt>
+                <dd data-testid="school-details-gender-value" class="govuk-summary-list__value">
+                    @(Model.EstablishmentDetails.Gender == null
+                        ? string.Empty
+                        : Model.EstablishmentDetails.Gender.Name)
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-ofsted-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Ofsted rating
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @await Html.PartialAsync("OfstedRating/_OfstedRatingPartial", new OfstedRatingModel()
+                {
+                    OfstedRating = Model.EstablishmentDetails.OfstedRating,
+                    Urn = Model.EstablishmentDetails.Urn
+                })
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-la-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Local authority
+                </dt>
+                <dd data-testid="school-details-la-value" class="govuk-summary-list__value">
+                    @(Model.EstablishmentDetails.LocalAuthority == null
+                        ? string.Empty
+                        : Model.EstablishmentDetails.LocalAuthority.Name)
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-principal-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Headteacher / Principal
+                </dt>
+                <dd data-testid="school-details-principal-value" class="govuk-summary-list__value">
+                    @(Model.EstablishmentDetails.HeadTeacher == null
+                        ? string.Empty
+                        : $"{Model.EstablishmentDetails.HeadTeacher.Title} {Model.EstablishmentDetails.HeadTeacher.FirstName} {Model.EstablishmentDetails.HeadTeacher.LastName}")
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-age-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Age range
+                </dt>
+                <dd data-testid="school-details-age-value" class="govuk-summary-list__value">
+                    @(Model.EstablishmentDetails.AgeRange == null
+                        ? string.Empty
+                        : ((string.IsNullOrEmpty(Model.EstablishmentDetails.AgeRange.Low) && (String.IsNullOrEmpty(Model.EstablishmentDetails.AgeRange.High))
+                        ? string.Empty
+                        : $"{Model.EstablishmentDetails.AgeRange.Low} to {Model.EstablishmentDetails.AgeRange.High}")))
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-religious-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Religious character
+                </dt>
+                <dd data-testid="school-details-religious-value" class="govuk-summary-list__value">
+                    @(Model.EstablishmentDetails.ReligiousDenomination == null
+                        ? string.Empty
+                        : Model.EstablishmentDetails.ReligiousDenomination.Name)
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-admission-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Admissions policy
+                </dt>
+                <dd data-testid="school-details-admission-value" class="govuk-summary-list__value">
+                    @(Model.EstablishmentDetails.AdmissionsPolicy == null
+                        ? string.Empty
+                        : Model.EstablishmentDetails.AdmissionsPolicy.Name)
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-provision-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    SEN unit or resourced provision
+                </dt>
+                <dd data-testid="school-details-provision-value" class="govuk-summary-list__value">
+                    @(Model.EstablishmentDetails.ResourcedProvisionType == null
+                        ? string.Empty
+                        : Model.EstablishmentDetails.ResourcedProvisionType.Name)
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-pupils-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Number of pupils
+                </dt>
+                <dd data-testid="school-details-pupils-value" class="govuk-summary-list__value">
+                    @(Model.EstablishmentDetails.NoOfPupils.ToString() ?? string.Empty)
+                </dd>
+            </div>
+        </dl>
+    </div>
+</details>
 
-<div class="govuk-width-container govuk-main-wrapper">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.SchoolPage.Title</h1>
-    <div>
-        <h2 data-testid="school-page-school-name" id="app-school-name-heading" class="govuk-heading-l">
-            @Html.Raw(Model.SchoolPage.SubTitle)
-        </h2>
-    </div>
-    <details id="app-school-page-details" class="govuk-details">
-        <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-                <span data-testid="school-page-details-state-closed" class="app-school-details-closed">Show</span>
-                <span data-testid="school-page-details-state-open" class="app-school-details-open">Hide</span>
-                school details
-            </span>
-        </summary>
-        <div class="govuk-details__text">
-            <dl class="govuk-summary-list">
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key app-school-details-summary-heading">
-                        Detail type
-                    </dt>
-                    <dd class="govuk-summary-list__value app-school-details-summary-heading">
-                        School details
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-address-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Address
-                    </dt>
-                    <dd data-testid="school-details-address-value" class="govuk-summary-list__value">
-                        @Model.EstablishmentDetails.Address?.ToString()
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-school-type-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        School type
-                    </dt>
-                    <dd data-testid="school-details-school-type-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.EstablishmentType == null
-                            ? string.Empty
-                            : Model.EstablishmentDetails.EstablishmentType.Name)
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-education-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Education phase
-                    </dt>
-                    <dd data-testid="school-details-education-value" class="govuk-summary-list__value">
-                        @Model.EstablishmentDetails.PhaseOfEducation
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-gender-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Gender of entry
-                    </dt>
-                    <dd data-testid="school-details-gender-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.Gender == null
-                            ? string.Empty
-                            : Model.EstablishmentDetails.Gender.Name)
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-ofsted-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Ofsted rating
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                        @await Html.PartialAsync("OfstedRating/_OfstedRatingPartial", new OfstedRatingModel()
-                   {
-                       OfstedRating = Model.EstablishmentDetails.OfstedRating,
-                       Urn = Model.EstablishmentDetails.Urn
-                   })
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-la-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Local authority
-                    </dt>
-                    <dd data-testid="school-details-la-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.LocalAuthority == null
-                            ? string.Empty
-                            : Model.EstablishmentDetails.LocalAuthority.Name)
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-principal-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Headteacher / Principal
-                    </dt>
-                    <dd data-testid="school-details-principal-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.HeadTeacher == null
-                            ? string.Empty
-                            : $"{Model.EstablishmentDetails.HeadTeacher.Title} {Model.EstablishmentDetails.HeadTeacher.FirstName} {Model.EstablishmentDetails.HeadTeacher.LastName}")
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-age-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Age range
-                    </dt>
-                    <dd data-testid="school-details-age-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.AgeRange == null
-                            ? string.Empty
-                            : ((string.IsNullOrEmpty(Model.EstablishmentDetails.AgeRange.Low) && (String.IsNullOrEmpty(Model.EstablishmentDetails.AgeRange.High))
-                            ? string.Empty
-                            : $"{Model.EstablishmentDetails.AgeRange.Low} to {Model.EstablishmentDetails.AgeRange.High}")))
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-religious-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Religious character
-                    </dt>
-                    <dd data-testid="school-details-religious-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.ReligiousDenomination == null
-                            ? string.Empty
-                            : Model.EstablishmentDetails.ReligiousDenomination.Name)
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-admission-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Admissions policy
-                    </dt>
-                    <dd data-testid="school-details-admission-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.AdmissionsPolicy == null
-                            ? string.Empty
-                            : Model.EstablishmentDetails.AdmissionsPolicy.Name)
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-provision-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        SEN unit or resourced provision
-                    </dt>
-                    <dd data-testid="school-details-provision-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.ResourcedProvisionType == null
-                            ? string.Empty
-                            : Model.EstablishmentDetails.ResourcedProvisionType.Name)
-                    </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                    <dt data-testid="school-details-pupils-key" class="govuk-summary-list__key app-school-details-summary-key">
-                        Number of pupils
-                    </dt>
-                    <dd data-testid="school-details-pupils-value" class="govuk-summary-list__value">
-                        @(Model.EstablishmentDetails.NoOfPupils.ToString() ?? string.Empty)
-                    </dd>
-                </div>
-            </dl>
-        </div>
-    </details>
-    <div class="govuk-width-container">
-        <div id="app-card-container" class="app-grid-container-four-column app-grid-container--wider govuk-!-margin-top-5">
-            @await Html.PartialAsync("~/Features/ContentTemplates/ContentTemplateView.cshtml", Model.ContentTemplate)
-        </div>
-    </div>
+<div id="app-card-container" class="app-grid-container-four-column app-grid-container--wider govuk-!-margin-top-5">
+    <partial name="~/Features/ContentTemplates/ContentTemplateView.cshtml" model=@Model.ContentTemplate />
 </div>

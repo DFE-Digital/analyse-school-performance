@@ -9,7 +9,7 @@
         <li>
             <div class="app-listing-result-tile">
                 <h3 class="govuk-heading-s">
-                    <a class="govuk-link" data-testid="all-local-authorities-listing-name-@counter" href="@Url.Action(nameof(GenericLocalAuthorityController.LandingPage), "GenericLocalAuthority", new { Area = "LocalAuthority", laCode = item.Code })">
+                    <a class="govuk-link" data-testid="all-local-authorities-listing-name-@counter" href="@item.Url">
                         @item.Name
                     </a>
                 </h3>

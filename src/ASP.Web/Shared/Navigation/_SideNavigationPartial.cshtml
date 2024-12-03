@@ -1,0 +1,11 @@
+﻿@using ASP.Web.Shared.Navigation
+@model NavigationViewModel
+
+<nav class="app-side-navigation" aria-label="Side navigation">
+    <ul class="app-side-navigation__list" data-testid="side-navigation">
+        @foreach (var item in Model.NavigationItems)
+        {
+            <partial name="Navigation/_SideNavigationItemPartial" model=@(item) />
+        }
+    </ul>
+</nav>

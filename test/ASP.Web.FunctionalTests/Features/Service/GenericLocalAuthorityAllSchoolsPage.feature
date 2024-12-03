@@ -1,4 +1,4 @@
-﻿Feature: Generic All Schools Local Authority page
+﻿Feature: Generic Local authority > All schools page
 
     @Javascript:disabled
     Scenario Outline: The 'NotAccessToAllSchools' user should not be able to access 'Generic All schools page for Local Authority' page.
@@ -31,11 +31,11 @@
         }
         """
         And I am a <AccessToAllSchools> user
-        When I navigate to /local-authority/999/schools
+        When I navigate to /local-authority/999/schools/
         Then I should get a 200 response
         Then the page title should be "All schools | Analyse school performance"
-        Then the element "*[data-testid='schools-title']" should have the text content "All schools"
-        Then the element "*[data-testid='schools-subtitle']" should have the text content "Test LA - 251 schools"
+        Then the element "#app-page-title" should have the text content "All schools"
+        Then the element "#app-page-subtitle" should have the text content "Test LA - 251 schools"
 
         Examples:
           | AccessToAllSchools |
@@ -67,13 +67,12 @@
         When I navigate to /local-authority/999/schools
         Then I should get a 200 response
         Then the page title should be "All schools | Analyse school performance"
-        And the element "[data-testid='breadcrumb-home']" should have the href "/"
-        And the element "[data-testid='breadcrumb-home']" should have the text content "Home"
-        And the element "[data-testid='breadcrumb-all-local-authorities']" should have the href "/local-authorities"
-        And the element "[data-testid='breadcrumb-all-local-authorities']" should have the text content "All local authorities"
-        And the element "[data-testid='breadcrumb-oxfordshire']" should have the href "/local-authority/999"
-        And the element "[data-testid='breadcrumb-oxfordshire']" should have the text content "Oxfordshire"
-        And the element "[data-testid='breadcrumb-current-page']" should have the text content "All schools"
+    	And the breadcrumb trail should be:
+		    | text                  | href                  | current |
+		    | Home                  | /                     |         |
+		    | All local authorities | /local-authorities/   |         |
+		    | Oxfordshire           | /local-authority/999/ |         |
+		    | All schools           |                       | true    |
 
         Examples:
           | AccessToAllSchools |

@@ -13,8 +13,15 @@ public abstract class SearchFormParameters : SearchBaseModel
         string searchSuggestionUrl,
         string inputLabel,
         string inputValidationMessage,
-        BreadcrumbTrailViewModel breadcrumbTrail)
-        : base(controller, controllerAction, searchSuggestionUrl, inputLabel, inputValidationMessage, breadcrumbTrail)
+        BreadcrumbTrailViewModel breadcrumbTrail
+    ) : base(
+        controller, 
+        controllerAction, 
+        searchSuggestionUrl, 
+        inputLabel, 
+        inputValidationMessage, 
+        breadcrumbTrail
+    )
     {
         SearchUrl = searchUrl;
     }

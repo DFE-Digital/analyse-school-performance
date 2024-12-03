@@ -78,13 +78,13 @@
             <button type="button" class="govuk-header__menu-button app-header__menu-button govuk-js-header-toggle" aria-controls="navigation" hidden>Menu</button>
         </div>
 
-        <partial name="_TopNavigationPartial" model=@Context.Request.Path />
+        <partial name="Navigation/_TopNavigationPartial" model=@Context.Request.Path />
     </header>
 
     <partial name="_PhaseBannerPartial" />
 
 
-    <main id="main-content" role="main">
+    <div>
         <!-- Hide until implemented
            <a href="#" class="govuk-back-link">Back</a>
         -->
@@ -94,7 +94,7 @@
         <div class="govuk-width-container app-width-container app-print-hidden">
             <partial name="_ImproveAspPartial" />
         </div>
-    </main>
+    </div>
 
     <partial name="_FooterPartial" />
 

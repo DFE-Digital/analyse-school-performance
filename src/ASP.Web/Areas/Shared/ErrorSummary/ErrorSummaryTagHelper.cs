@@ -13,7 +13,7 @@ namespace ASP.Web.Areas.Shared.ErrorSummary
             output.Content.SetHtmlContent(
                $$"""
                 <div class="govuk-error-summary" data-module="govuk-error-summary">
-                    <div role="alert">
+                    <div data-testid="app-error-summary" role="alert">
                         <h2 class="govuk-error-summary__title">
                             There is a problem
                         </h2>

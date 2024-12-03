@@ -1,4 +1,4 @@
-﻿Feature: My schools
+﻿Feature: My schools page
 
 @Javascript:disabled
 Scenario: School Named user is denied access to my-schools page 
@@ -295,7 +295,8 @@ Scenario: Page should show a breadcrumb trail
     When I navigate to /my-schools/
     Then I should get a 200 response
     And the page title should be "My schools | Analyse school performance"
-    And the element "h1.govuk-heading-xl" should have the text content "My schools"
-    And the element "[data-testid='breadcrumb-home']" should have the href "/"
-    And the element "[data-testid='breadcrumb-home']" should have the text content "Home"
-    And the element "[data-testid='breadcrumb-current-page']" should have the text content "My schools"    
+    And the element "#app-page-title" should have the text content "My schools"
+    And the breadcrumb trail should be:
+		| text       | href | current |
+		| Home       | /    |         |
+		| My schools |      | true    |

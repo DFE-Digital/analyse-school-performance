@@ -4,28 +4,34 @@
     ViewData["Title"] = "Edit: " + Model.PageTitle;
 }
 
-<div class="govuk-width-container govuk-!-static-padding-top-5">
-    <form method="POST">
-        <input type="hidden" data-testid="update-revision" asp-for="Revision" value="@Model.UpdateRevision" />
-        <div class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">
-                    Page title
-                </h1>
-            </legend>
-            <div class="govuk-form-group">
-                <label for="@Html.IdFor(m => m.PageTitle)" class="govuk-label govuk-!-font-weight-bold">
-                    Text
-                </label>
-                <input type="text" data-testid="content-edit-page-title" asp-for="PageTitle" class="govuk-input">
-            </div>
+<div class="govuk-width-container app-width-container">
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+
+    <main id="main-content" role="main" class="govuk-main-wrapper">
+        <div class="govuk-width-container govuk-!-static-padding-top-5">
+            <form method="POST">
+                <input type="hidden" data-testid="update-revision" asp-for="Revision" value="@Model.UpdateRevision" />
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            Page title
+                        </h1>
+                    </legend>
+                    <div class="govuk-form-group">
+                        <label for="@Html.IdFor(m => m.PageTitle)" class="govuk-label govuk-!-font-weight-bold">
+                            Text
+                        </label>
+                        <input type="text" data-testid="content-edit-page-title" asp-for="PageTitle" class="govuk-input">
+                    </div>
+                </fieldset>
+
+                @await Html.PartialAsync("~/Features/ContentTemplates/ContentTemplateEdit.cshtml", Model)
+
+                <button data-testid="content-edit-save" class="govuk-button" type="submit">Save</button>
+                <a data-testid="content-edit-cancel" asp-route="app-route-help-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">
+                    Cancel
+                </a>
+            </form>
         </div>
-
-        @await Html.PartialAsync("~/Features/ContentTemplates/ContentTemplateEdit.cshtml", Model)
-
-        <button data-testid="content-edit-save" class="govuk-button" type="submit">Save</button>
-        <a data-testid="content-edit-cancel" asp-route="app-route-help-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">
-            Cancel
-        </a>
-    </form>
+    </main>
 </div>

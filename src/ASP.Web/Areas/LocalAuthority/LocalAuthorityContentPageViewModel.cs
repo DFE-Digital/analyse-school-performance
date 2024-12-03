@@ -1,14 +1,15 @@
 ﻿using ASP.Web.Core.Templating;
+using ASP.Web.Shared;
 
 namespace ASP.Web.Areas.LocalAuthority;
 
 public class LocalAuthorityContentPageViewModel
 {
-    public LocalAuthorityPageViewModel Page { get; }
+    public PageViewModel Page { get; }
     public ContentTemplateViewModel ContentTemplate { get; }
 
     public LocalAuthorityContentPageViewModel(
-        LocalAuthorityPageViewModel page, 
+        PageViewModel page, 
         ContentTemplateViewModel contentTemplate
     )
     {

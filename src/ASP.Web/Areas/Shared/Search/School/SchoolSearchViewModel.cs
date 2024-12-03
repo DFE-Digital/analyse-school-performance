@@ -7,15 +7,36 @@ namespace ASP.Web.Areas.Shared.Search.School;
 public class SchoolSearchViewModel : SearchViewModel
 {
     public List<EstablishmentListingModel> EstablishmentListingsModel { get; }
+    public Func<string, string?> CreateSchoolUrl { get; }
 
-    public SchoolSearchViewModel(List<EstablishmentListingModel> establishmentListingsModel,
-        PaginationModel? paginationModel, string searchTerm, int totalCount,
-        BreadcrumbTrailViewModel breadcrumbs, string controller, string controllerAction, string searchUrl,
+    public SchoolSearchViewModel(
+        List<EstablishmentListingModel> establishmentListingsModel,
+        PaginationModel? paginationModel, 
+        string searchTerm, 
+        int totalCount,
+        BreadcrumbTrailViewModel breadcrumbs, 
+        string controller, 
+        string controllerAction, 
+        string searchUrl,
         string searchSuggestionUrl,
-        string inputLabel, string inputValidationMessage, string? subTitle = null) : base(
-         searchTerm, searchUrl, totalCount, paginationModel, controller, controllerAction, searchSuggestionUrl,
-        inputLabel, inputValidationMessage, breadcrumbs, subTitle)
+        string inputLabel, 
+        string inputValidationMessage,
+        Func<string, string?> createSchoolUrl,
+        string? subTitle = null
+    ) : base(
+        searchTerm, 
+        searchUrl, 
+        totalCount, 
+        paginationModel, 
+        controller, 
+        controllerAction, 
+        searchSuggestionUrl,
+        inputLabel, 
+        inputValidationMessage, 
+        breadcrumbs, 
+        subTitle)
     {
         EstablishmentListingsModel = establishmentListingsModel;
+        CreateSchoolUrl = createSchoolUrl;
     }
 }

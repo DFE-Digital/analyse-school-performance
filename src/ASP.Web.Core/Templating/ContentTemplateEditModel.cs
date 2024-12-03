@@ -1,6 +1,7 @@
 ﻿using ASP.Core.Helpers;
 using ASP.Core.Results;
 using ASP.Core.Templating;
+using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Core.Templating
 {
@@ -11,6 +12,7 @@ namespace ASP.Web.Core.Templating
         public string UpdateRevision { get; set; } = "";
         public string PageTitle { get; set; } = "";
         public List<TemplateComponentEditModel> Views { get; set; } = new();
+        public BreadcrumbTrailViewModel? Breadcrumbs { get; set; } = default!;
 
         public Result<ContentTemplate> ToTemplate()
         {
@@ -35,7 +37,8 @@ namespace ASP.Web.Core.Templating
                 // If revision doesn't exist yet or is published (we can't edit published revisions), create a new revision id
                 UpdateRevision = revision == null || template.IsPublished ? Guid.NewGuid().ToString() : revision,
                 PageTitle = template.PageTitle ?? "",
-                Views = views.Select(editModelFactory.CreateTemplateComponentEditModel).ToList()
+                Views = views.Select(editModelFactory.CreateTemplateComponentEditModel).ToList(),
+                Breadcrumbs = new BreadcrumbTrailViewModel(!string.IsNullOrWhiteSpace(template.PageTitle) ? template.PageTitle : "Missing page title")
             };
         }
     }

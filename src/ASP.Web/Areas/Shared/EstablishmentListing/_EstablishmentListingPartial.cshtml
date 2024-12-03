@@ -11,7 +11,7 @@
         <li>
             <div class="app-listing-result-tile">
                 <h3 class="govuk-heading-s">
-                    <a class="govuk-link" data-testid="establishment-listing-name-@counter" href="@Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn = item.Urn })">
+                    <a class="govuk-link" data-testid="establishment-listing-name-@counter" href="@item.Url">
                         @item.Name
                     </a>
                 </h3>

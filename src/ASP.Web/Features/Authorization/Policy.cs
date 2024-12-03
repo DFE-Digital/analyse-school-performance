@@ -13,7 +13,6 @@ public static class Policy
     public const string AccessToMyLaSchools = "AccessToMyLaSchools";
     public const string AccessToMyMatSchools = "AccessToMyMatSchools";
     public const string AccessToAllSchools = "AccessToAllSchools";
-    public const string AccessToGenericSchool = "AccessToGenericSchool";
     public const string AccessToAllLocalAuthorities = "AccessToAllLocalAuthorities";
     public const string AccessToMyDioceseSchools = "AccessToMyDioceseSchools";
     public const string AccessToGuidance = "AccessToGuidance";
@@ -46,9 +45,6 @@ public static class Policy
         options.AddPolicy(AccessToAllSchools, policy =>
             policy.RequireRole(Role.AccessToAllSchools));
         
-        options.AddPolicy(AccessToGenericSchool, policy =>
-            policy.RequireRole(Role.AccessToGenericSchool));
-
         options.AddPolicy(AccessToMyLocalAuthority, policy =>
             policy.RequireRole(Role.AccessToMyLocalAuthority));
 

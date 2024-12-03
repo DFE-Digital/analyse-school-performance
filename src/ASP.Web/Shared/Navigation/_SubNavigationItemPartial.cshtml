@@ -1,0 +1,14 @@
+﻿@using ASP.Web.Shared.Navigation
+@model NavigationItemViewModel
+
+@{
+    var current = Model.IsCurrent ? "page" : null;
+    var testId = Model.TestId != null ? $"app-header-navigation-item-{Model.TestId}" : null;
+}
+
+<li authorization-policy="@Model.Policy"
+    data-testid="@testId" class="app-sub-navigation__item">
+    <a class="app-sub-navigation__link" href="@Model.Path" aria-current="@current">
+        @Model.Name
+    </a>
+</li>

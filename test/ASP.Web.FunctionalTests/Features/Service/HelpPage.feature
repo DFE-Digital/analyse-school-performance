@@ -140,5 +140,7 @@ Scenario: Page should show a breadcrumb trail
 	"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-	And the element "[data-testid="breadcrumb-home"]" should have the href "/"
-    And the element "[data-testid="breadcrumb-current-page"]" should have the text content "Current page"
+    And the breadcrumb trail should be:
+		| text         | href | current |
+		| Home         | /    |         |
+		| Current page |      | true    |

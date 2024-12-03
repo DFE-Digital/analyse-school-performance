@@ -1,5 +1,7 @@
+using AngleSharp.Dom;
 using ASP.Test.Core;
 using ASP.Web.FunctionalTests.Drivers;
+using System.Xml.Linq;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit.Sdk;
 
@@ -130,7 +132,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         {
             var element = await _web.CurrentPage.ElementAsync(selector);
 
-            if(criteria == "exist")
+            if (criteria == "exist")
             {
                 await element.ShouldExistAsync($@"Could not find an element with the selector ""{selector}"".");
             }
@@ -254,7 +256,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             int index = 0;
             var elements = await _web.CurrentPage.ElementsAsync(selector);
             await elements.ShouldHaveCountAsync(content.RowCount, actual => $"Expected {content.RowCount} elements but found {actual}");
-            
+
             var values = valueTypes switch {
                 "text contents" => await elements.TextContentsAsync(),
                 "tag name" => await elements.TagNamesAsync(),
@@ -287,7 +289,65 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
 
             Assert.All(value, c => Assert.Equal(expectedValue, c));
         }
-        
+
+        [Then("the top navigation should be:")]
+        public async Task ThenTheTopNavigationShouldBe(Table navigationItems)
+        {
+            await AssertNavigation("#navigation", "Top navigation item", navigationItems);
+        }
+
+        [Then("the breadcrumb trail should be:")]
+        public async Task ThenTheBreadcrumbTrailShouldBe(Table breadcrumbs)
+        {
+            await AssertNavigation("[data-testid='breadcrumbs']", "Breadcrumb", breadcrumbs);
+        }
+
+        [Then("the sub-navigation should be:")]
+        public async Task ThenTheSubnavigationShouldBe(Table navigationItems)
+        {
+            await AssertNavigation("[data-testid='sub-navigation']", "Sub-navigation item", navigationItems);
+        }
+
+        [Then("the side navigation should be:")]
+        public async Task ThenTheSideNavigationShouldBe(Table navigationItems)
+        {
+            await AssertNavigation("[data-testid='side-navigation']", "Side navigation item", navigationItems);
+        }
+
+        [Then("the available download formats should be:")]
+        public async Task ThenTheAvailableDownloadFormatsShouldBe(Table navigationItems)
+        {
+            await AssertNavigation("[data-testid='available-downloads-formats']", "Download format", navigationItems);
+        }
+
+        private async Task AssertNavigation(string selector, string itemName, Table navigationItems)
+        {
+            for (var i = 0; i < navigationItems.RowCount; i++)
+            {
+                var row = navigationItems.Rows[i];
+
+                var element = await _web.CurrentPage.ElementAsync($"{selector} > li:nth-child({i + 1})");
+                await element.ShouldExistAsync($"{itemName} {i + 1} does not exist");
+
+                if (row.ContainsKey("href") && !string.IsNullOrWhiteSpace(row["href"]))
+                {
+                    element = element.Element(":scope > a");
+                    await element.ShouldExistAsync($"{itemName} {i + 1} link does not exist");
+                    var href = await element.AttributeAsync("href");
+                    Assert.Equal(row["href"], href.Trim());
+                }
+                
+                var text = await element.TextContentAsync();
+                Assert.Equal(row["text"], text.Trim());
+
+                if (row.ContainsKey("current") && !string.IsNullOrWhiteSpace(row["current"]) && bool.TryParse(row["current"], out var isCurrent) && isCurrent)
+                {
+                    var ariaCurrent = await element.AttributeAsync("aria-current");
+                    Assert.Equal("page", ariaCurrent);
+                }
+            }
+        }
+
         private string ResolveVariable(string variableName)
         {
             if (!_scenarioContext.ContainsKey(variableName))

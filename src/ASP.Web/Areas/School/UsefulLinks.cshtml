@@ -1,33 +1,17 @@
 ﻿@model ASP.Web.Areas.School.ViewModels.SchoolContentPageViewModel
 @{
-    ViewData["Title"] = "Useful links";
+    Layout = "~/Areas/School/_SchoolPageLayout.cshtml";
+    ViewBag.SchoolPageLayoutModel = Model.SchoolPage;
 }
 
-<div class="govuk-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.SchoolPage.Breadcrumbs)
-
-    <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
-        <h1 class="govuk-heading-xl">Useful links</h1>
-        <h2 id="school-name-heading" class="govuk-heading-m">
-            @Model.SchoolPage.SchoolName <span class="govuk-!-font-weight-regular">(URN: @Model.SchoolPage.SchoolUrn)</span>
-        </h2>
-        @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SchoolPage.SubNavigation)
-        <div class="govuk-width-container">
-            <main class="govuk-main-wrapper main-asp">
-                <div class="page-content js-content-target">
-                    <ul class="app-links-list">
-                        @if (Model.ContentTemplate.Views != null)
-                        {
-                            foreach (var view in Model.ContentTemplate.Views)
-                            {
-                                <li>
-                                    @await Html.PartialAsync("~/Components/Link/View.cshtml", view)
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-            </main>
-        </div>
-    </main>
-</div>
+<ul class="app-links-list">
+    @if (Model.ContentTemplate.Views != null)
+    {
+        foreach (var view in Model.ContentTemplate.Views)
+        {
+            <li>
+                <partial name="~/Components/Link/View.cshtml" model=@view />
+            </li>
+        }
+    }
+</ul>

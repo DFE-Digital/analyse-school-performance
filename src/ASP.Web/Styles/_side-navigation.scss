@@ -50,73 +50,72 @@
 }
 
 .app-side-navigation__item {
-
     @include govuk-media-query($until: tablet) {
         display: flex;
     }
 
-    a,
-    a:link,
-    a:visited {
-        background-color: inherit;
-        color: $govuk-link-colour;
-        display: block;
-        text-decoration: none;
-
-        @include govuk-media-query($until: tablet) {
-            border-bottom: 4px solid transparent;
-            padding: govuk-spacing(3);
-            padding-bottom: govuk-spacing(3) - 4px; // Compensate for 4px border
-        }
-
-        @include govuk-media-query($from: tablet) {
+    a {
+        &:link,
+        &:visited {
             background-color: inherit;
-            border-left: 4px solid transparent;
-            padding: govuk-spacing(2);
-        }
-    }
+            color: $govuk-link-colour;
+            display: block;
+            text-decoration: none;
 
-    a:hover {
-        color: $govuk-link-hover-colour;
-    }
+            @include govuk-media-query($until: tablet) {
+                border-bottom: 4px solid transparent;
+                padding: govuk-spacing(3);
+                padding-bottom: govuk-spacing(3) - 4px; // Compensate for 4px border
+            }
 
-    a:focus {
-        color: $govuk-focus-text-colour;
-        background-color: $govuk-focus-colour;
-        border-color: $govuk-focus-text-colour;
-        position: relative;
-    }
-}
-
-.app-side-navigation__item--current {
-
-    a:link,
-    a:visited {
-        border-color: $govuk-link-colour;
-        color: $govuk-link-colour;
-        font-weight: bold;
-    }
-
-    a:hover {
-        color: $govuk-link-hover-colour;
-        border-color: $govuk-link-hover-colour;
-    }
-
-    a:focus {
-        color: $govuk-focus-text-colour;
-        background-color: $govuk-focus-colour;
-        border-color: $govuk-focus-text-colour;
-    }
-
-    @include govuk-media-query($from: tablet) {
-        a:link,
-        a:visited {
-            background-color: govuk-colour("light-grey");
+            @include govuk-media-query($from: tablet) {
+                background-color: inherit;
+                border-left: 4px solid transparent;
+                padding: govuk-spacing(2);
+            }
         }
 
-        a:focus {
+        &:hover {
+            color: $govuk-link-hover-colour;
+        }
+
+        &:focus {
             color: $govuk-focus-text-colour;
             background-color: $govuk-focus-colour;
+            border-color: $govuk-focus-text-colour;
+            position: relative;
+        }
+
+        &[aria-current="page"] {
+            &:link,
+            &:visited {
+                border-color: $govuk-link-colour;
+                color: $govuk-link-colour;
+                font-weight: bold;
+            }
+
+            &:hover {
+                color: $govuk-link-hover-colour;
+                border-color: $govuk-link-hover-colour;
+            }
+
+            &:focus {
+                color: $govuk-focus-text-colour;
+                background-color: $govuk-focus-colour;
+                border-color: $govuk-focus-text-colour;
+            }
+
+            @include govuk-media-query($from: tablet) {
+                &:link,
+                &:visited {
+                    background-color: govuk-colour("light-grey");
+                }
+
+                &:focus {
+                    color: $govuk-focus-text-colour;
+                    background-color: $govuk-focus-colour;
+                }
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ public class LocalAuthoritiesListingViewModel
 {
     public List<LocalAuthoritiesListingModel> LocalAuthoritiesListingModel { get; }
 
+
     public LocalAuthoritiesListingViewModel(List<LocalAuthoritiesListingModel> localAuthoritiesListingModel)
     {
         LocalAuthoritiesListingModel = localAuthoritiesListingModel;

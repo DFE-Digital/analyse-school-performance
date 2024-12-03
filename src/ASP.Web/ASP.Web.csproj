@@ -79,7 +79,7 @@
 	<ItemGroup>
 		<None Remove="CurrentCommit.txt" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
 		<Content Include="CurrentCommit.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -11,9 +11,12 @@ Scenario Outline: Other reports page should be accessible when valid urn is prov
     And I am a School Named user for Establishment "136028"
     When I navigate to /my-school/other-reports/
     Then I should get a 200 response
-    And the element "h1.govuk-heading-xl" should have the text content "Other reports"
-    And the element "[data-testid='sub-navigation-item-other-reports']" should have the text content "Other reports"
-    And the element "[data-testid='sub-navigation-item-other-reports'] a" should have the attribute "aria-current" set to "page"
+    And the element "#app-page-title" should have the text content "Other reports"
+	And the sub-navigation should be:
+		| text          | href                      | current |
+		| Download data | /my-school/download-data/ |         |
+		| Other reports | /my-school/other-reports/ | true    |
+		| Useful links  | /my-school/useful-links/  |         |
 
 @Javascript:disabled
 Scenario Outline: Other reports page should be accessible when valid urn is provided (Generic school page)
@@ -26,9 +29,36 @@ Scenario Outline: Other reports page should be accessible when valid urn is prov
     And I am a DfE Named user
     When I navigate to /school/136028/other-reports/
     Then I should get a 200 response
-    And the element "h1.govuk-heading-xl" should have the text content "Other reports"
-    And the element "[data-testid='sub-navigation-item-other-reports']" should have the text content "Other reports"
-    And the element "[data-testid='sub-navigation-item-other-reports'] a" should have the attribute "aria-current" set to "page"
+    And the element "#app-page-title" should have the text content "Other reports"
+	And the sub-navigation should be:
+		| text          | href                          | current |
+		| Download data | /school/136028/download-data/ |         |
+		| Other reports | /school/136028/other-reports/ | true    |
+		| Useful links  | /school/136028/useful-links/  |         |
+
+@Javascript:disabled
+Scenario Outline: Other reports page should be accessible when valid urn is provided (My schools > School page)
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And Local Authority "301" exists:
+	"""
+	{
+        "name": "Test LA"
+    }
+	"""
+    And I am a LA Named user for Local Authority "301"
+    When I navigate to /my-schools/136028/other-reports/
+    Then I should get a 200 response
+    And the element "#app-page-title" should have the text content "Other reports"
+	And the sub-navigation should be:
+		| text          | href                              | current |
+		| Download data | /my-schools/136028/download-data/ |         |
+		| Other reports | /my-schools/136028/other-reports/ | true    |
+		| Useful links  | /my-schools/136028/useful-links/  |         |
 
 @Javascript:disabled
 Scenario: Other reports page should show the accordion component when javascript disabled

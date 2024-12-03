@@ -51,7 +51,7 @@ public abstract class SchoolsController : Controller
         SchoolsPageSearchParameters searchParameters)
     {
         var paginationModel = CreatePaginationModel(result, searchParameters.PaginationUrl);
-        var establishmentListings = MapEstablishmentListings(result.Results);
+        var establishmentListings = MapEstablishmentListings(result.Results, searchParameters.CreateSchoolUrl);
 
         return new SchoolsPageSearchViewModel(
             title: searchParameters.Title,
@@ -67,18 +67,19 @@ public abstract class SchoolsController : Controller
             inputValidationMessage: searchParameters.InputValidationMessage
         );
     }
-    
+
     protected Task<Result<SchoolSearchViewModel>> PerformEstablishmentSearch(
         SearchParams searchParams,
         ScopeInfo scopeInfo,
         int pageNumber,
         SchoolSearchParameters parameters,
-        SchoolSearchViewModel noResultsViewModel)
+        SchoolSearchViewModel noResultsViewModel
+    )
     {
         var searchRequest = CreateSearchRequest(searchParams, scopeInfo, pageNumber);
 
         var model = from searchResults in _api.EstablishmentSearch(searchRequest)
-            select GetSchoolSearchViewModel(searchResults, parameters);
+                    select GetSchoolSearchViewModel(searchResults, parameters);
 
         return model.DefaultIf(e => e is NotFoundError, noResultsViewModel);
     }
@@ -98,10 +99,15 @@ public abstract class SchoolsController : Controller
         return _api.EstablishmentSearchSuggestions(request);
     }
 
-    protected SchoolSearchViewModel NoResultsViewModel(SearchParams searchParams,
+    protected SchoolSearchViewModel NoResultsViewModel(
+        SearchParams searchParams,
         BreadcrumbTrailViewModel breadcrumbTrail,
-        string searchUrl, string searchSuggestionUrl,
-        string controller, string controllerAction)
+        string searchUrl, 
+        string searchSuggestionUrl,
+        string controller, 
+        string controllerAction, 
+        Func<string, string?> createSchoolUrl
+    )
     {
         return new SchoolSearchViewModel(
             establishmentListingsModel: new List<EstablishmentListingModel>(),
@@ -114,22 +120,26 @@ public abstract class SchoolsController : Controller
             searchUrl: searchUrl,
             searchSuggestionUrl: searchSuggestionUrl,
             Constants.SchoolSearchFormSearchTermInputLabel,
-            Constants.SchoolSearchTermInputValidationMessage
+            Constants.SchoolSearchTermInputValidationMessage,
+            createSchoolUrl
         );
     }
-    
+
     private List<EstablishmentListingModel> MapEstablishmentListings(
-        IEnumerable<EstablishmentListingDTO> results)
+        IEnumerable<EstablishmentListingDTO> results,
+        Func<string, string?> createSchoolUrl
+    )
     {
-        return EstablishmentListingModel.FromEstablishmentListingDto(results);
+        return EstablishmentListingModel.FromEstablishmentListingDto(results, createSchoolUrl);
     }
-    
+
     private SchoolSearchViewModel GetSchoolSearchViewModel(
         ScopedSearchResultsPage<EstablishmentListingDTO> result,
-        SchoolSearchParameters parameters)
+        SchoolSearchParameters parameters
+    )
     {
         return new SchoolSearchViewModel(
-            MapEstablishmentListings(result.Results),
+            MapEstablishmentListings(result.Results, parameters.CreateSchoolUrl),
             paginationModel: CreatePaginationModel(result, parameters.SearchUrl),
             searchTerm: result.SearchTerm,
             result.TotalResults,
@@ -140,16 +150,17 @@ public abstract class SchoolsController : Controller
             searchSuggestionUrl: parameters.SearchSuggestionUrl,
             inputLabel: parameters.InputLabel,
             inputValidationMessage: parameters.InputValidationMessage,
+            createSchoolUrl: parameters.CreateSchoolUrl,
             FormatResultsTitle(result.TotalResults)
         );
     }
-    
+
     private PaginationModel CreatePaginationModel(
         ScopedSearchResultsPage<EstablishmentListingDTO> result,
         string searchUrl)
     {
         var paginationUrl = Url.Action(searchUrl, new { search = result.SearchTerm }) ?? string.Empty;
-    
+
         return new PaginationModel(
             paginationUrl,
             currentPage: result.Page,
@@ -177,9 +188,9 @@ public abstract class SchoolsController : Controller
             resultsPerPage: Optional<int>.Some(Constants.SearchResultPageSize)
         );
     }
-    
+
     private PaginationModel CreatePaginationModel(
-        ScopedResultsPage<EstablishmentListingDTO> result, 
+        ScopedResultsPage<EstablishmentListingDTO> result,
         string paginationUrl)
     {
         return new PaginationModel(
@@ -191,5 +202,4 @@ public abstract class SchoolsController : Controller
             "schools"
         );
     }
-    
 }

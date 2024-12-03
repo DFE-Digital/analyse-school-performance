@@ -8,9 +8,12 @@ public class EstablishmentListingModel
     public string Address { get; set; } = "";
     public string Urn { get; set; } = "";
     public string LaEstab { get; set; } = "";
+    public string Url { get; set; } = "";
 
     public static List<EstablishmentListingModel> FromEstablishmentListingDto(
-        IEnumerable<EstablishmentListingDTO> establishmentListingDto)
+        IEnumerable<EstablishmentListingDTO> establishmentListingDto,
+        Func<string, string?> createSchoolUrl
+    )
     {
         var result = establishmentListingDto.Select(x =>
         {
@@ -19,7 +22,8 @@ public class EstablishmentListingModel
                 Name = x.Name,
                 Address = !string.IsNullOrEmpty(x.Address) ? x.Address : "No address available",
                 Urn = x.Urn,
-                LaEstab = !string.IsNullOrEmpty(x.Laestab) ? x.Laestab : "No data available"
+                LaEstab = !string.IsNullOrEmpty(x.Laestab) ? x.Laestab : "No data available",
+                Url = createSchoolUrl(x.Urn) ?? ""
             };
             return model;
         }).ToList();

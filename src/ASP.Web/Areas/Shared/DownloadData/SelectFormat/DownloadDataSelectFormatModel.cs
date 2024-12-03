@@ -1,25 +1,19 @@
-﻿using ASP.Web.Areas.Shared.Navigation;
-using ASP.Web.Core.BreadcrumbTrail;
+﻿namespace ASP.Web.Areas.Shared.DownloadData.SelectFormat;
 
-namespace ASP.Web.Areas.Shared.DownloadData.SelectFormat;
-
-public class DownloadDataSelectFormatModel : BaseDownloadDataModel
+public class DownloadDataSelectFormatModel
 {
-    public string LinkText { get; }
-    public string FileType { get; }
-    public List<string> SelectedFiles { get; }
     public string SchoolOrLaLevel { get; }
+    public List<(string Text, string? Link)> DownloadLinks { get; }
+    public string DownloadOtherDatesUrl { get; }
 
-    public DownloadDataSelectFormatModel(BreadcrumbTrailViewModel breadcrumbs, NavigationViewModel? subNavigation,
-        NavigationViewModel? sideNavigation, string title,
-        string subTitle, string contentTitle, string contentTitleCaption, string controllerName, string controllerActionName, string linkText,
-        string fileType, List<string> selectedFiles, string schoolOrLaLevel) : base(breadcrumbs,
-        subNavigation, sideNavigation, title, subTitle, contentTitle, contentTitleCaption, controllerName,
-        controllerActionName)
+    public DownloadDataSelectFormatModel(
+        string schoolOrLaLevel,
+        List<(string Text, string? Link)> downloadLinks,
+        string downloadOtherDatesUrl
+    )
     {
-        LinkText = linkText;
-        FileType = fileType;
-        SelectedFiles = selectedFiles;
         SchoolOrLaLevel = schoolOrLaLevel;
+        DownloadLinks = downloadLinks;
+        DownloadOtherDatesUrl = downloadOtherDatesUrl;
     }
 }

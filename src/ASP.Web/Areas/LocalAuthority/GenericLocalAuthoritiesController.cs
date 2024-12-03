@@ -104,7 +104,8 @@ namespace ASP.Web.Areas.LocalAuthority
                 Optional<int>.Some(Constants.SearchResultPageSize)
             );
 
-            return _api.GetAllLocalAuthorities(request).MapError(e => e is NotFoundError ? Error.Unexpected(e.Message, null): e);
+            return _api.GetAllLocalAuthorities(request)
+                .MapError(e => e is NotFoundError ? Error.Unexpected(e.Message, null): e);
         }
         
         private BreadcrumbTrailViewModel GetLocalAuthoritiesPageBreadcrumbs(string currentPage)
@@ -266,7 +267,10 @@ namespace ASP.Web.Areas.LocalAuthority
         private List<LocalAuthoritiesListingModel> MapLocalAuthoritiesListings(
             IEnumerable<LocalAuthorityDTO> results)
         {
-            return LocalAuthoritiesListingModel.FromLocalAuthoritiesListingDto(results);
+            return LocalAuthoritiesListingModel.FromLocalAuthoritiesListingDto(
+                results,
+                laCode => Url.Action(nameof(GenericLocalAuthorityController.LandingPage), "GenericLocalAuthority", new { Area = "LocalAuthority", laCode })
+            );
         }
         
         private string FormatResultsTitle(int totalResults)

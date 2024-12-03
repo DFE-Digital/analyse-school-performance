@@ -48,9 +48,15 @@ namespace ASP.Web.Areas.School
                 from results in GetAllEstablishments(scopeInfo.ScopeType, scopeInfo.ScopeId, pageNumber)
                 select DefaultViewModel(
                     results,
-                    new SchoolsPageSearchParameters("My schools", $"{organisationName} - {results.TotalResults:N0} schools",
-                        $"/my-schools/", GetSchoolsPageBreadcrumbs("My schools"),
-                        "MySchools", nameof(Schools), searchSuggestionsUrl));
+                    new SchoolsPageSearchParameters(
+                        "My schools", 
+                    	$"{organisationName} - {results.TotalResults:N0} schools",
+                        $"/my-schools/", 
+                        GetSchoolsPageBreadcrumbs("My schools"),
+                        "MySchools", 
+                        nameof(Schools), 
+                        searchSuggestionsUrl,
+                        urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { Area = "School", urn })));
 
             return result.ToActionResult(View, _hostEnvironment);
         }

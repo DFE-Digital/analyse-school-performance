@@ -6,12 +6,13 @@
     ViewData["Title"] = Model.Title;
 }
 
-<div class="govuk-width-container">
+<div class="govuk-width-container app-width-container">
     @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
-    <div class="govuk-width-container govuk-main-wrapper">
+
+    <main id="main-content" role="main" class="govuk-main-wrapper">
         @await Html.PartialAsync("~/Areas/Shared/Search/_SearchErrorSummaryPartial.cshtml")
-        <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.Title</h1>
-        <h2 class="govuk-heading-m">@Model.SubTitle</h2>
+        <h1 id="app-page-title" class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.Title</h1>
+        <h2 id="app-page-subtitle" class="govuk-heading-m">@Model.SubTitle</h2>
         @await Html.PartialAsync("~/Areas/Shared/Search/_SearchFormPartial.cshtml",
             new SearchFormModel(Model.Controller, Model.ControllerAction, Model.SearchSuggestionUrl, Model.InputLabel, Model.InputValidationMessage))
         <div class="govuk-grid-row">
@@ -26,5 +27,5 @@
                 </div>
             }
         </div>
-    </div>
+    </main>
 </div>

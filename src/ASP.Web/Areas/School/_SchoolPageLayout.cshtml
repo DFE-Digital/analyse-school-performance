@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "~/Shared/_PageLayout.cshtml";
+    var layoutModel = (ASP.Web.Areas.School.ViewModels.SchoolPageViewModel)ViewBag.SchoolPageLayoutModel;
+    ViewBag.PageLayoutModel = layoutModel.Page;
+}
+
+@section PageTitle {
+    <h1 id="app-page-title" class="govuk-heading-xl govuk-!-margin-bottom-4">
+        @layoutModel.Page.Title
+    </h1>
+    <h2 id="app-page-subtitle" class="govuk-heading-m">
+        @layoutModel.Page.Subtitle
+        <span class="govuk-!-font-weight-regular">(URN: @layoutModel.Urn)</span>
+    </h2>
+}
+
+@RenderBody()

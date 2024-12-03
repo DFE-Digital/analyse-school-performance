@@ -99,11 +99,13 @@ public class SearchController : Controller
     private SchoolSearchViewModel DefaultViewModel(ScopedSearchResultsPage<EstablishmentListingDTO> result)
     {
         var breadcrumbTrail = new BreadcrumbTrailViewModel($"Search results for \"{result.SearchTerm}\"")
-            .AddBreadcrumb("Search", "/search");
+            .AddBreadcrumb("Search", "/search/");
         
         return new SchoolSearchViewModel(
-            EstablishmentListingModel
-                .FromEstablishmentListingDto(result.Results),
+            EstablishmentListingModel.FromEstablishmentListingDto(
+                result.Results,
+                urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
+            ),
             new PaginationModel(
                 Url.Action(nameof(Index), new { search = result.SearchTerm }) ?? "",
                 result.Page,
@@ -120,14 +122,15 @@ public class SearchController : Controller
             "/search/",
             "/search/suggestions/",
             Constants.SchoolSearchFormSearchTermInputLabel,
-            Constants.SchoolSearchTermInputValidationMessage
+            Constants.SchoolSearchTermInputValidationMessage,
+            urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
         );
     }
 
     private SchoolSearchViewModel NoResultsViewModel(SearchParams searchParams)
     {
         var breadcrumbTrail = new BreadcrumbTrailViewModel($"We found no matches for \"{searchParams.Search}\"")
-                .AddBreadcrumb("Search", "/search");
+                .AddBreadcrumb("Search", "/search/");
 
         return new SchoolSearchViewModel(
             establishmentListingsModel: new List<EstablishmentListingModel>(),
@@ -140,7 +143,8 @@ public class SearchController : Controller
             searchUrl: "/search/",
             searchSuggestionUrl: "/search/suggestions/",
             Constants.SchoolSearchFormSearchTermInputLabel,
-            Constants.SchoolSearchTermInputValidationMessage
+            Constants.SchoolSearchTermInputValidationMessage,
+            urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
         );
     }
 

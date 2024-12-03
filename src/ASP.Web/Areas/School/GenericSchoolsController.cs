@@ -59,13 +59,33 @@ namespace ASP.Web.Areas.School
             var scopeInfo = new ScopeInfo(ScopeType.All, Optional<string>.None);
             
             var searchUrlForNoResults = $"/schools/";
-            var noResultsVm = NoResultsViewModel(searchParams,
-                GetSchoolsSearchNoResultsPageBreadcrumbs(searchParams.Search), searchUrlForNoResults,
-                SearchSuggestionsUrl, "GenericSchools", nameof(Schools));
-            var schoolSearchParameters = new SchoolSearchParameters(nameof(Schools), SearchSuggestionsUrl, "GenericSchools",
-                nameof(Schools), GetSchoolsSearchPageBreadcrumbs(searchParams.Search));
-            var searchResult = from result in PerformEstablishmentSearch(searchParams, scopeInfo, pageNumber,
-                    schoolSearchParameters, noResultsVm)
+
+            var noResultsVm = NoResultsViewModel(
+                searchParams,
+                GetSchoolsSearchNoResultsPageBreadcrumbs(searchParams.Search), 
+                searchUrlForNoResults,
+                SearchSuggestionsUrl, 
+                "GenericSchools", 
+                nameof(Schools),
+                urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
+            );
+				
+            var schoolSearchParameters = new SchoolSearchParameters(
+                nameof(Schools),
+                SearchSuggestionsUrl,
+				"GenericSchools",
+                nameof(Schools),
+                GetSchoolsSearchPageBreadcrumbs(searchParams.Search),
+                urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
+            );
+
+            var searchResult = 
+                from result in PerformEstablishmentSearch(
+                    searchParams, 
+                    scopeInfo, 
+                    pageNumber,
+                    schoolSearchParameters, 
+                    noResultsVm)
                 select result;
 
             return await searchResult.ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
@@ -123,9 +143,17 @@ namespace ASP.Web.Areas.School
                 from results in GetAllEstablishments(ScopeType.All, Optional<string>.None, pageNumber)
                 select DefaultViewModel(
                     results,
-                    new SchoolsPageSearchParameters("All schools", $"{results.TotalResults:N0} schools",
-                        $"/schools/", GetSchoolsPageBreadcrumbs("All schools"),
-                        "GenericSchools", nameof(Schools), SearchSuggestionsUrl));
+                    new SchoolsPageSearchParameters(
+                        "All schools", 
+                        $"{results.TotalResults:N0} schools",
+                        $"/schools/", 
+                        GetSchoolsPageBreadcrumbs("All schools"),
+                        "GenericSchools", 
+                        nameof(Schools), 
+                        SearchSuggestionsUrl,
+                        urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
+                ));
+
             return result;
         }
 
@@ -133,9 +161,16 @@ namespace ASP.Web.Areas.School
         {
             return DefaultViewModel(
                 new ScopedResultsPage<EstablishmentListingDTO>(),
-                new SchoolsPageSearchParameters("All schools", "0 schools",
-                    $"/schools/", GetSchoolsPageBreadcrumbs("All schools"),
-                    "GenericSchools", nameof(Schools), SearchSuggestionsUrl));
+                new SchoolsPageSearchParameters(
+                    "All schools",
+                    "0 schools",
+                    $"/schools/",
+                    GetSchoolsPageBreadcrumbs("All schools"),
+                    "GenericSchools",
+                    nameof(Schools),
+                    SearchSuggestionsUrl,
+                    urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
+                ));
         }
     }
 }

@@ -1,4 +1,7 @@
 Feature: Generic School page
+
+Background:
+    Given I am a DfE Named user
  
 @Javascript:disabled
 Scenario: A School user should not be able to access the generic 'School' page, even if it's for their own School. Instead, they should see a 403 Access not allowed page.
@@ -16,7 +19,6 @@ Scenario: School page should throw page not found if Establishment is not curren
         "name": "Thursby Primary School"
     }
 	"""
-    And I am a DfE Named user
     When I navigate to /school/111111
     Then I should get a 404 response
     Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: Establishment with URN "111111" is not currently visible."
@@ -29,7 +31,6 @@ Scenario: School page should throw page not found if Establishment is deleted
         "name": "Thursby Primary School"
     }
 	"""
-    And I am a DfE Named user
     When I navigate to /school/111111/
     Then I should get a 404 response
     Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: Establishment with URN "111111" has been deleted."
@@ -42,7 +43,6 @@ Scenario: School page should display page not found page if School URN is invali
         "name": "Thursby Primary School"
     }
     """
-    And I am a DfE Named user
     When I navigate to /school/222222/
     Then I should get a 404 response
     And the page title should be "Page not found | Analyse school performance"
@@ -134,7 +134,6 @@ Scenario: School page should contain seven app card container element
              }
         }
     """
-    And I am a DfE Named user
     When I navigate to /school/123456/
     Then the element "#app-card-container" class should contain "app-grid-container-four-column"
     And the elements "#app-card-container .app-card" should total 7
@@ -170,73 +169,71 @@ Scenario: School page should contain seven app card container element
 @Javascript:disabled
 Scenario: School page should be accessible when provided urn
   Given Establishment "123456" exists:
-		"""
-		{
-            "name": "Hollinswood Primary School",
-            "localAuthority": {
-        	   "code": "999",
-               "name": "Test LA"
-            }
+	"""
+	{
+        "name": "Hollinswood Primary School",
+        "localAuthority": {
+        	"code": "999",
+            "name": "Test LA"
         }
-		"""
-    And I am a DfE Named user
+    }
+	"""
     When I navigate to /school/123456/
 	Then I should get a 200 response
 	Then the page title should be "Hollinswood Primary School | Analyse school performance"
-	Then the element "h1.govuk-heading-xl" should have the text content "Hollinswood Primary School" 
-    Then the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 123456)"
+	Then the element "#app-page-title" should have the text content "Hollinswood Primary School" 
+    Then the element "#app-page-subtitle" should have the text content "(URN: 123456)"
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
     Given Establishment "123456" exists:
-		"""
-		{
-            "isPost16": false,
-            "isPrimary": true,
-            "isSecondary": false,
-            "address": {
-                "street": "Dale Acre Way",
-                "town": "Telford",
-                "postCode": "TF3 2EP"
-            },
-            "admissionsPolicy": {
-                "name": "Not applicable",
-            },
-            "ageRange": {
-                "low": 3,
-                "high": 11
-            },
-            "establishmentType": {
-                "name": "Community school",
-            },
-            "gender": {
-                "name": "Mixed",
-            },
-            "headteacher": {
-                "title": "Mrs",
-                "firstName": "Kath",
-                "lastName": "Osborne"
-            },
-            "localAuthority": {
-                "name": "Telford and Wrekin",
-                "code": "999"
-            },
-            "name": "Hollinswood Primary School",
-            "noOfPupils": 404,
-            "ofstedLastInspectionDate": "2020-01-22T00:00:00",
-            "ofstedRating": {
-                "code": "2",
-                "name": "Good",
-            },
-            "religiousDenomination": {
-                "name": "Does not apply",
-            },
-            "resourcedProvisionType": {
-                "name": "Not recorded",
-            }
+	"""
+	{
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": false,
+        "address": {
+            "street": "Dale Acre Way",
+            "town": "Telford",
+            "postCode": "TF3 2EP"
+        },
+        "admissionsPolicy": {
+            "name": "Not applicable",
+        },
+        "ageRange": {
+            "low": 3,
+            "high": 11
+        },
+        "establishmentType": {
+            "name": "Community school",
+        },
+        "gender": {
+            "name": "Mixed",
+        },
+        "headteacher": {
+            "title": "Mrs",
+            "firstName": "Kath",
+            "lastName": "Osborne"
+        },
+        "localAuthority": {
+            "name": "Telford and Wrekin",
+            "code": "999"
+        },
+        "name": "Hollinswood Primary School",
+        "noOfPupils": 404,
+        "ofstedLastInspectionDate": "2020-01-22T00:00:00",
+        "ofstedRating": {
+            "code": "2",
+            "name": "Good",
+        },
+        "religiousDenomination": {
+            "name": "Does not apply",
+        },
+        "resourcedProvisionType": {
+            "name": "Not recorded",
         }
-		"""
-    And I am a DfE Named user
+    }
+	"""
     When I navigate to /school/123456/
     Then I should get a 200 response
     And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
@@ -273,30 +270,29 @@ Scenario: School page should contain a school details disclosure element
 @Javascript:disabled
 Scenario: School page should show if values are null
     Given Establishment "123456" exists:
-		"""
-		{
-            "isPost16": null,
-            "isPrimary": null,
-            "isSecondary": null,
-            "address": null,
-            "admissionsPolicy": null,
-            "ageRange": null,
-            "establishmentType": null,
-            "gender": null,
-            "headteacher": null,
-            "localAuthority": {
-              	"code": "999",
-                "name": "Test LA"
-            },
-            "name": "Hollinswood Primary School",
-            "noOfPupils": null,
-            "ofstedLastInspectionDate": null,
-            "ofstedRating": null,
-            "religiousDenomination": null,
-            "resourcedProvisionType": null
-        }
-		"""
-    And I am a DfE Named user
+	"""
+	{
+        "isPost16": null,
+        "isPrimary": null,
+        "isSecondary": null,
+        "address": null,
+        "admissionsPolicy": null,
+        "ageRange": null,
+        "establishmentType": null,
+        "gender": null,
+        "headteacher": null,
+        "localAuthority": {
+            "code": "999",
+            "name": "Test LA"
+        },
+        "name": "Hollinswood Primary School",
+        "noOfPupils": null,
+        "ofstedLastInspectionDate": null,
+        "ofstedRating": null,
+        "religiousDenomination": null,
+        "resourcedProvisionType": null
+    }
+	"""
     When I navigate to /school/123456/
     Then I should get a 200 response
     And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
@@ -330,54 +326,53 @@ Scenario: School page should show if values are null
 @Javascript:disabled
 Scenario: School page should show if values are null case 2
     Given Establishment "123456" exists:
-		"""
-		{
-            "name": "Hollinswood Primary School",
-            "isPost16": null,
-            "isPrimary": null,
-            "isSecondary": null,
-            "address": {
-                "street": null,
-                "town": null,
-                "postCode": null
-            },
-            "admissionsPolicy": {
-                "name": null,
-            },
-            "ageRange": {
-                "low": null,
-                "high": null
-            },
-            "establishmentType": {
-                "name": null,
-            },
-            "gender": {
-                "name": null,
-            },
-            "headteacher": {
-                "title": null,
-                "firstName": null,
-                "lastName": null
-            },
-            "localAuthority": {
-        		"code": "999",
-              	"name": "Test LA"
-        	},
-            "noOfPupils": null,
-            "ofstedLastInspectionDate": null,
-            "ofstedRating": {
-                "code": null,
-                "name": null,
-            },
-            "religiousDenomination": {
-                "name": null,
-            },
-            "resourcedProvisionType": {
-                "name": null,
-            }
+	"""
+	{
+        "name": "Hollinswood Primary School",
+        "isPost16": null,
+        "isPrimary": null,
+        "isSecondary": null,
+        "address": {
+            "street": null,
+            "town": null,
+            "postCode": null
+        },
+        "admissionsPolicy": {
+            "name": null,
+        },
+        "ageRange": {
+            "low": null,
+            "high": null
+        },
+        "establishmentType": {
+            "name": null,
+        },
+        "gender": {
+            "name": null,
+        },
+        "headteacher": {
+            "title": null,
+            "firstName": null,
+            "lastName": null
+        },
+        "localAuthority": {
+        	"code": "999",
+            "name": "Test LA"
+        },
+        "noOfPupils": null,
+        "ofstedLastInspectionDate": null,
+        "ofstedRating": {
+            "code": null,
+            "name": null,
+        },
+        "religiousDenomination": {
+            "name": null,
+        },
+        "resourcedProvisionType": {
+            "name": null,
         }
-		"""
-    And I am a DfE Named user
+    }
+	"""
     When I navigate to /school/123456/
     Then I should get a 200 response
     And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
@@ -421,7 +416,6 @@ Scenario: Details disclosure element text should read 'Show school details' when
     	}
     }
 	"""
-    And I am a DfE Named user
     When I navigate to /school/123456/
     Then the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
     
@@ -439,89 +433,40 @@ Scenario Outline: Page should show a breadcrumb trail for 'AccessToAllSchools' u
         }
     """
     When I navigate to /school/111111/
-    Then I should get a 200 response
-    And the page title should be "Test School 1 | Analyse school performance"
-    And the element "h1.govuk-heading-xl" should have the text content "Test School 1"
-    And the element "[data-testid='breadcrumb-home']" should have the href "/"
-    And the element "[data-testid='breadcrumb-home']" should have the text content "Home"
-    And the element "[data-testid='breadcrumb-all-local-authorities']" should have the href "/local-authorities"
-    And the element "[data-testid='breadcrumb-all-local-authorities']" should have the text content "All local authorities"
-    And the element "[data-testid='breadcrumb-oxfordshire']" should have the href "/local-authority/931"
-    And the element "[data-testid='breadcrumb-oxfordshire']" should have the text content "Oxfordshire"
-    And the element "[data-testid='breadcrumb-all-schools']" should have the href "/local-authority/931/schools"
-    And the element "[data-testid='breadcrumb-all-schools']" should have the text content "All schools"
-    And the element "[data-testid='breadcrumb-current-page']" should have the text content "Test School 1" 
+    Then the page title should be "Test School 1 | Analyse school performance"
+    And the element "#app-page-title" should have the text content "Test School 1"
+    And the breadcrumb trail should be:
+		| text                  | href                          | current |
+		| Home                  | /                             |         |
+		| All local authorities | /local-authorities/           |         |
+		| Oxfordshire           | /local-authority/931/         |         |
+		| All schools           | /local-authority/931/schools/ |         |
+		| Test School 1         |                               | true    |
 Examples:
   | AccessToAllSchools |
   | DfE Named          |
   | DfE Unnamed        |
   | Ofsted Unnamed     |
   | Super Admin        |    
-    
-@Javascript:disabled
-Scenario Outline: Page should show a breadcrumb trail for 'AccessToMySchools' user
-    Given I am a <AccessToMySchools> user 
-    And Establishment "123456" exists:
-    """
-        {
-         "name": "Test School 1",
-          "multiAcademyTrust": {
-              "uid": "1234"
-          },
-          "localAuthority":
-           {
-           	 "code": "999"
-           },
-          "diocese": {
-             "code": "1000",
-             "name": "Test Diocese1",
-             "lname": "test diocese1",
-             "isNullish": false
-          }
-        }
-    """
-    When I navigate to /school/123456/
-    Then I should get a 200 response
-    And the page title should be "My schools | Analyse school performance"
-    And the element "h1.govuk-heading-xl" should have the text content "My schools"
-    And the element "[data-testid='breadcrumb-home']" should have the href "/"
-    And the element "[data-testid='breadcrumb-home']" should have the text content "Home"
-    And the element "[data-testid='breadcrumb-my-schools']" should have the href "/my-schools"
-    And the element "[data-testid='breadcrumb-my-schools']" should have the text content "My schools"
-    And the element "[data-testid='breadcrumb-current-page']" should have the text content "Test School 1"  
-Examples:
-  | AccessToMySchools |
-  | LA Named          |
-  | LA Unnamed        |
-  | MAT Named         |
-  | MAT Unnamed       |
-  | MAT Governor      |
-  | Diocese Named     |
-  | Diocese Unnamed   |  
-    
+
 @Javascript:disabled
 Scenario Outline: School page should have the correct title and subtitle for 'AccessToAllSchools' users
     Given Establishment "123456" exists:
     """
-        {
-           "name": "Hollinswood Primary School",
-           "localAuthority": {
-              "code": "999",
-        	  "name": "Test LA"
-            }
+    {
+        "name": "Hollinswood Primary School",
+        "localAuthority": {
+            "code": "931",
+        	"name": "Oxfordshire"
         }
+    }
     """
     And I am a <AccessToAllSchools> user
     When I navigate to /school/123456/
     Then I should get a 200 response
     Then the page title should be "Hollinswood Primary School | Analyse school performance"
-    Then the element "h1.govuk-heading-xl" should have the text content "Hollinswood Primary School" 
-    Then the element "h2.govuk-heading-l" should have the outer HTML:
-    """
-    <h2 data-testid="school-page-school-name" id="app-school-name-heading" class="govuk-heading-l">
-         <span>(URN: 123456)</span>
-     </h2>
-    """
+    Then the element "#app-page-title" should have the text content "Hollinswood Primary School" 
+    Then the element "#app-page-subtitle" should have the text content "(URN: 123456)"
 Examples:
   | AccessToAllSchools |
   | DfE Named          |
@@ -530,33 +475,269 @@ Examples:
   | Super Admin        |
           
 @Javascript:disabled
-Scenario Outline: School page should have the correct title and subtitle for 'AccessToMySchools' user
-    Given I am a <AccessToMySchools> user 
-    And Establishment "111111" exists:
-    """
-        {
-           "name": "Hollinswood Primary School",
-            "multiAcademyTrust": {
-              "uid": "1111"
-            }
+Scenario: Data downloads 'Dates available for download' - page should be accessible when valid urn is provided
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    When I navigate to /school/136028/download-data
+    Then the element "#app-page-title" should have the text content "Download data"
+    And the sub-navigation should be:
+		| text          | href                          | current |
+		| Download data | /school/136028/download-data/ | true    |
+		| Other reports | /school/136028/other-reports/ |         |
+		| Useful links  | /school/136028/useful-links/  |         |
+    And the side navigation should be:
+		| text                           | href                          | current |
+		| Dagenham Park CofE School data | /school/136028/download-data/ | true    |
+    And the element "#app-subpage-title" should have the text content "Dagenham Park CofE School data Dates available for download"
+    And the element "#app-subpage-title-caption" should have the text content "Dagenham Park CofE School data"
+  
+@Javascript:disabled
+Scenario: Data downloads 'Dates Available for Download' - page should show a breadcrumb trail
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School",
+        "localAuthority": {
+            "code": "931",
+        	"name": "Oxfordshire"
         }
-    """
-    When I navigate to /school/111111/
-    Then I should get a 200 response
-    Then the page title should be "My schools | Analyse school performance"
-    Then the element "h1.govuk-heading-xl" should have the text content "My schools" 
-    Then the element "h2.govuk-heading-l" should have the outer HTML:
-    """
-    <h2 data-testid="school-page-school-name" id="app-school-name-heading" class="govuk-heading-l"> Hollinswood Primary School
-         <span>(URN: 111111)</span>
-     </h2>
-    """    
+    }
+	"""
+    When I navigate to /school/136028/download-data
+	Then I should get a 200 response
+	And the page title should be "Download data | Analyse school performance"
+	And the breadcrumb trail should be:
+		| text                      | href                          | current |
+		| Home                      | /                             |         |
+		| All local authorities     | /local-authorities/           |         |
+		| Oxfordshire               | /local-authority/931/         |         |
+		| All schools               | /local-authority/931/schools/ |         |
+		| Dagenham Park CofE School | /school/136028/               |         |
+		| Download data             |                               | true    |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Dates available for download' - page should contain three radio buttons
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    When I navigate to /school/136028/download-data
+    Then the element "[data-testid='available-downloads-dates-<year>-label']" should have the text content "<label>"
 Examples:
-  | AccessToMySchools |
-  | LA Named          |
-  | LA Unnamed        |
-  | MAT Named         |
-  | MAT Unnamed       |
-  | MAT Governor      |
-  | Diocese Named     |
-  | Diocese Unnamed   |       
+	| year | label        |
+	| 2022 | 2021 to 2022 |
+	| 2023 | 2022 to 2023 |
+	| 2024 | 2023 to 2024 |
+
+@Javascript:disabled
+Scenario: Data downloads 'Dates available for download' - when no date is selected and Continue button clicked, should show validation error
+    Given Establishment "123456" exists:
+    """
+     {
+        "name": "Hollinswood Primary School"
+     }
+    """
+    When I navigate to /school/123456/download-data/
+    And I click the button "*[data-testid='selectedYearSubmit']"
+    Then the path should be /school/123456/download-data/
+    And the element "*[data-testid='app-error-summary'] h2" should have the text content "There is a problem"
+    And the element "*[data-testid='app-error-summary-selectedYear']" should have the text content "Please choose an academic year to download"
+    And the element "*[data-testid='app-error-summary-selectedYear']" should have the href "#app-field-selectedYear"
+    And the element "*[data-testid='app-field-selectedYear-error']" should have the text content "Please choose an academic year to download"
+
+@Javascript:disabled
+Scenario: Data downloads 'Dates available for download' - when date is selected and Continue button clicked, should move to next step
+    Given Establishment "123456" exists:
+    """
+     {
+        "name": "Hollinswood Primary School"
+     }
+    """
+    When I navigate to /school/123456/download-data/
+    And I update the element "#app-available-downloads-dates-2022" to be checked
+    And I click the button "*[data-testid='selectedYearSubmit']"
+    Then the path should be /school/123456/download-data/select-files/?selectedYear=2022
+
+@Javascript:disabled
+Scenario: Data downloads 'Data files available for download' - page should be accessible when valid urn is provided
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    When I navigate to /school/136028/download-data/select-files/?selectedYear=2022
+    Then the element "#app-page-title" should have the text content "Download data"
+	And the sub-navigation should be:
+		| text          | href                          | current |
+		| Download data | /school/136028/download-data/ | true    |
+		| Other reports | /school/136028/other-reports/ |         |
+		| Useful links  | /school/136028/useful-links/  |         |
+	And the side navigation should be:
+		| text                           | href                          | current |
+		| Dagenham Park CofE School data | /school/136028/download-data/ | true    |
+    And the element "#app-subpage-title" should have the text content "Dagenham Park CofE School data Data files available for download"
+    And the element "#app-subpage-title-caption" should have the text content "Dagenham Park CofE School data"
+
+@Javascript:disabled
+Scenario: Download data 'Data files available for download' - page should show a breadcrumb trail
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School",
+        "localAuthority": {
+            "code": "931",
+        	"name": "Oxfordshire"
+        }
+    }
+	"""
+    When I navigate to /school/136028/download-data/select-files/?selectedYear=2022
+	Then the page title should be "Download data | Analyse school performance"
+	And the breadcrumb trail should be:
+		| text                              | href                          | current |
+		| Home                              | /                             |         |
+		| All local authorities             | /local-authorities/           |         |
+		| Oxfordshire                       | /local-authority/931/         |         |
+		| All schools                       | /local-authority/931/schools/ |         |
+		| Dagenham Park CofE School         | /school/136028/               |         |
+		| Download data                     | /school/136028/download-data/ |         |
+		| Data files available for download |                               | true    |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Data files available for download' - page should contain three checkbox groups
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    When I navigate to /school/136028/download-data/select-files/?selectedYear=2022
+    Then the element "[data-testid='available-downloads-file-group-<group>']" should have the text content "<text>"
+Examples:
+	| group       | text        |
+	| Key stage 2 | Key stage 2 |
+	| Key stage 4 | Key stage 4 |
+	| Phonics     | Phonics     |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Data files available for download' - page should contain five checkboxes
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    When I navigate to /school/136028/download-data/select-files/?selectedYear=2022
+    Then the element "[data-testid='available-downloads-file-<fileid>-label']" should have the text content "<label>"
+Examples:
+	| fileid                                 | label                                                  |
+	| kts-136028-ks2-2022-final-school       | Key stage 2 (Final) (Key to success)                   |
+	| asp-136028-ks2-2022-provisional-school | Key stage 2 (Provisional) (Analyse school performance) |
+	| kts-136028-ks4-2022-final-pupil        | Key stage 4 (Final) (Key to success)                   |
+	| asp-136028-ks4-2022-final-pupil        | Key stage 4 (Final) (Analyse school performance)       |
+	| kts-136028-phonics-2022-final-pupil    | Phonics (Final) (Key to success)                       |
+
+@Javascript:disabled
+Scenario: Data downloads 'Data files available for download' - when no files are selected and Continue button clicked, should show validation error
+    Given Establishment "123456" exists:
+    """
+    {
+        "name": "Hollinswood Primary School"
+    }
+    """
+    When I navigate to /school/123456/download-data/select-files/?selectedYear=2022
+    And I click the button "*[data-testid='selectedFilesSubmit']"
+    Then the path should be /school/123456/download-data/select-files/?selectedYear=2022
+    And the element "*[data-testid='app-error-summary'] h2" should have the text content "There is a problem"
+    And the element "*[data-testid='app-error-summary-selectedFiles']" should have the text content "Please choose one or more data files to download"
+    And the element "*[data-testid='app-error-summary-selectedFiles']" should have the href "#app-field-selectedFiles"
+    And the element "*[data-testid='app-field-selectedFiles-error']" should have the text content "Please choose one or more data files to download"
+
+@Javascript:disabled
+Scenario: Data downloads 'Data files available for download' - when files are selected and Continue button clicked, should move to next step
+    Given Establishment "123456" exists:
+    """
+    {
+        "name": "Hollinswood Primary School"
+    }
+    """
+    When I navigate to /school/123456/download-data/select-files/?selectedYear=2022
+    And I update the element "#app-available-downloads-file-kts-123456-ks2-2022-final-school" to be checked
+    And I click the button "*[data-testid='selectedFilesSubmit']"
+    Then the path should be /school/123456/download-data/select-format/?selectedYear=2022&selectedFiles=kts-123456-ks2-2022-final-school
+
+@Javascript:disabled
+Scenario: Data downloads "Download school data' page should be accessible when valid urn is provided
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    When I navigate to /school/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school
+    Then the element "#app-page-title" should have the text content "Download data"
+	And the sub-navigation should be:
+		| text          | href                          | current |
+		| Download data | /school/136028/download-data/ | true    |
+		| Other reports | /school/136028/other-reports/ |         |
+		| Useful links  | /school/136028/useful-links/  |         |
+	And the side navigation should be:
+		| text                           | href                          | current |
+		| Dagenham Park CofE School data | /school/136028/download-data/ | true    |
+    And the element "#app-subpage-title" should have the text content "Dagenham Park CofE School data Download Dagenham Park CofE School data"
+    And the element "#app-subpage-title-caption" should have the text content "Dagenham Park CofE School data"
+
+@Javascript:disabled
+Scenario: Download data 'Download pupil level and aggregated LA data' - page should show a breadcrumb trail
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School",
+        "localAuthority": {
+            "code": "931",
+        	"name": "Oxfordshire"
+        }
+    }
+	"""
+    When I navigate to /school/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school
+	Then the page title should be "Download data | Analyse school performance"
+	And the breadcrumb trail should be:
+		| text                                    | href                                                         | current |
+		| Home                                    | /                                                            |         |
+		| All local authorities                   | /local-authorities/                                          |         |
+		| Oxfordshire                             | /local-authority/931/                                        |         |
+		| All schools                             | /local-authority/931/schools/                                |         |
+		| Dagenham Park CofE School               | /school/136028/                                              |         |
+		| Download data                           | /school/136028/download-data/                                |         |
+		| Data files available for download       | /school/136028/download-data/select-files/?selectedYear=2022 |         |
+		| Download Dagenham Park CofE School data |                                                              | true    |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Download school data' page should contain three links
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    When I navigate to /school/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school
+    Then the available download formats should be:
+    	| text               | href                                                                                                                                                           |
+    	| Data in CSV format | /school/136028/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Download school data' - Download other dates link should link back to first step
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    When I navigate to /school/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school
+    Then the element "[data-testid="available-downloads-other-dates"]" should have the href "/school/136028/download-data/"

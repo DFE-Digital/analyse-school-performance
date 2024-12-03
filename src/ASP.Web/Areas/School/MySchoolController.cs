@@ -1,13 +1,14 @@
 using ASP.Application;
-using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Core;
 using ASP.Core.Authorization;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Utilities;
 using ASP.Web.Areas.School.ViewModels;
-using ASP.Web.Areas.Shared.DownloadData;
-using ASP.Web.Areas.Shared.Navigation;
+using ASP.Web.Areas.Shared.DownloadData.SelectFiles;
+using ASP.Web.Areas.Shared.DownloadData.SelectFormat;
+using ASP.Web.Areas.Shared.DownloadData.SelectYear;
+using ASP.Web.Shared.Navigation;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
@@ -21,7 +22,7 @@ namespace ASP.Web.Areas.School
     [Route("my-school")]
     [ServiceFilter<TermsOfUseActionFilter>]
     [Authorize(Policy = Policy.AccessToMySchool)]
-    public class MySchoolController : SchoolController
+    public class MySchoolController : BaseSchoolController
     {
         public MySchoolController(
             IAspApiClient api,
@@ -35,10 +36,23 @@ namespace ASP.Web.Areas.School
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
-                from model in base.LandingPage(urn, revision)
-                select model;
-            
-            return result.ToActionResult(View, _hostEnvironment);
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
+                let schoolPage = new SchoolPageViewModel(
+                    urn,
+                    new Web.Shared.PageViewModel(
+                        new BreadcrumbTrailViewModel(GetBaseBreadcrumbTrail(), "My school"),
+                        "My school",
+                        establishmentDetails.Name
+                ))
+                select new SchoolLandingPageViewModel(
+                    schoolPage,
+                    establishmentDetails,
+                    contentTemplate
+                );
+
+            return result
+                .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("other-reports")]
@@ -46,10 +60,23 @@ namespace ASP.Web.Areas.School
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
-                from model in base.OtherReports(urn, revision, schoolName => new([], "Other reports"))
-                select model;
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
+                let schoolPage = new SchoolPageViewModel(
+                    urn,
+                    new Web.Shared.PageViewModel(
+                        new BreadcrumbTrailViewModel(GetChildPageBaseBreadcrumbTrail(), "Other reports"),
+                        "Other reports",
+                        establishmentDetails.Name,
+                        GetSubNavigation()
+                ))
+                select new SchoolContentPageViewModel(
+                    schoolPage,
+                    contentTemplate
+                );
 
-            return result.ToActionResult(View, _hostEnvironment);
+            return result
+                .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("useful-links")]
@@ -57,21 +84,50 @@ namespace ASP.Web.Areas.School
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
-                from model in base.UsefulLinks(urn, revision, _ => new([], "Useful links"))
-                select model;
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
+                let schoolPage = new SchoolPageViewModel(
+                    urn,
+                    new Web.Shared.PageViewModel(
+                        new BreadcrumbTrailViewModel(GetChildPageBaseBreadcrumbTrail(), "Useful links"),
+                        "Useful links",
+                        establishmentDetails.Name,
+                        GetSubNavigation()
+                ))
+                select new SchoolContentPageViewModel(
+                    schoolPage,
+                    contentTemplate
+                );
 
-            return result.ToActionResult(View, _hostEnvironment);
+            return result
+                .ToActionResult(View, _hostEnvironment);
         }
+
         [HttpGet("download-data")]
-        public async Task<IActionResult> DownloadDataSelectYear()
+        public Task<IActionResult> DownloadDataSelectYear()
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
-                from model in base.DownloadDataSelectYear(urn, _ => new([], 
-                    "Download data"), nameof(DownloadDataSelectYear))
-                select model;
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from availableDownloads in GetAvailableDownloads(urn, Optional<int>.None)
+                let schoolPage = new SchoolPageViewModel(
+                    urn,
+                    new Web.Shared.PageViewModel(
+                        new BreadcrumbTrailViewModel(GetChildPageBaseBreadcrumbTrail(), "Download data"),
+                        "Download data",
+                        establishmentDetails.Name,
+                        GetSubNavigation(),
+                        GetDownloadDataSideNavigation(establishmentDetails.Name),
+                        "Dates available for download",
+                        $"{establishmentDetails.Name} data"
+                ))
+                select new SchoolDownloadDataSelectYearViewModel(
+                    schoolPage,
+                    new DownloadDataSelectYearModel(availableDownloads.AvailableDates)
+                );
 
-            return await result.ToActionResult(View, _hostEnvironment);
+            return result
+                .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpPost("download-data")]
@@ -79,186 +135,136 @@ namespace ASP.Web.Areas.School
         {
             if (!selectedYear.HasValue)
             {
-                ModelState.AddModelError(Constants.ModelErrorKeySelectedYear, 
+                ModelState.AddModelError(Constants.ModelErrorKeySelectedYear,
                     Constants.AcademicYearToDownldValidationErrorMessage);
-            
-                // Reload the view with the error
-                var result =
-                    from urn in User.GetEstablishmentUrn()
-                    from model in base.DownloadDataSelectYear(urn, _ => new([], 
-                        "Download data"), nameof(DownloadDataSelectYear))
-                    select model;
 
-                return await result.ToActionResult(View, _hostEnvironment);
+                // Reload the view with the error
+                return await DownloadDataSelectYear();
             }
 
             // Redirect to files selection if year is valid
-            return RedirectToAction(nameof(DownloadDataSelectFiles), 
-                new { selectedYear = selectedYear });
+            return RedirectToAction(nameof(DownloadDataSelectFiles),
+                new { selectedYear });
         }
 
         [HttpGet("download-data/select-files")]
-        public async Task<IActionResult> DownloadDataSelectFiles(int? selectedYear)
+        public Task<IActionResult> DownloadDataSelectFiles(int? selectedYear)
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
-                from model in base.DownloadDataSelectFiles(
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                from availableDownloads in GetAvailableDownloads(urn, Optional.FromNullable(selectedYear))
+                let schoolPage = new SchoolPageViewModel(
                     urn,
-                    Optional.FromNullable(selectedYear),
-                    schoolName => new([
-                        new("Download data", $"/my-school/download-data/")
-                    ], "Data files available for download"), nameof(DownloadDataSelectFiles))
-                select model;
-            
-            return await result.ToActionResult(View, _hostEnvironment);
+                    new Web.Shared.PageViewModel(
+                        new BreadcrumbTrailViewModel(GetChildPageBaseBreadcrumbTrail().Concat([
+                            new("Download data", Action(nameof(DownloadDataSelectYear), 
+                                new { selectedYear = "", selectedFiles = "" })),
+                        ]), "Data files available for download"),
+                        "Download data",
+                        establishmentDetails.Name,
+                        GetSubNavigation(),
+                        GetDownloadDataSideNavigation(establishmentDetails.Name),
+                        "Data files available for download",
+                        $"{establishmentDetails.Name} data"
+                ))
+                select new SchoolDownloadDataSelectFilesViewModel(
+                    schoolPage,
+                    new DownloadDataSelectFilesModel(availableDownloads.Downloads)
+                );
+
+            return result
+                .ToActionResult(View, _hostEnvironment);
         }
-        
+
         [HttpPost("download-data/select-files")]
         public async Task<IActionResult> DownloadDataSelectFiles(int? selectedYear, List<string> selectedFiles)
         {
-            var result =
-                from urn in User.GetEstablishmentUrn()
-                from model in base.DownloadDataSelectFiles(
-                    urn,
-                    Optional.FromNullable(selectedYear),
-                    schoolName => new([
-                        new("Download data", $"/my-school/download-data/")
-                    ], "Data files available for download"), nameof(DownloadDataSelectFiles))
-                select model;
-            
             if (!selectedFiles.Any())
             {
-                ModelState.AddModelError(Constants.ModelErrorKeySelectedFiles, 
+                ModelState.AddModelError(Constants.ModelErrorKeySelectedFiles,
                     Constants.DataFilesAvialableForDownlodValidationErrorMessage);
-                return await result.ToActionResult(View, _hostEnvironment);
+
+                return await DownloadDataSelectFiles(selectedYear);
             }
+
             // Redirect to data select format page if year is valid
-            return RedirectToAction(nameof(DownloadDataSelectFormat), 
-                new { selectedYear = selectedYear, selectedFiles= selectedFiles });
+            return RedirectToAction(nameof(DownloadDataSelectFormat),
+                new { selectedYear, selectedFiles });
         }
 
         [HttpGet("download-data/select-format")]
-        public Task<IActionResult> DownloadDataSelectFormat(int selectedYear, List<string> selectedFiles)
+        public Task<IActionResult> DownloadDataSelectFormat(int? selectedYear, List<string> selectedFiles)
         {
             var result =
                 from urn in User.GetEstablishmentUrn()
-                from model in base.DownloadDataSelectFormat(
+                from establishmentDetails in GetEstablishmentDetails(urn)
+                let schoolPage = new SchoolPageViewModel(
                     urn,
-                    selectedYear,
-                    selectedFiles,
-                    schoolName => new([
-                        new("Download data", $"/my-school/download-data/"),
-                        new("Data files available for download", $"/my-school/download-data/select-files/?selectedYear={selectedYear}")
-                    ], $"Download {schoolName ?? "school"} data"),
-                    "Data in CSV format", nameof(DownloadDataAsZip))
-                select model;
+                    new Web.Shared.PageViewModel(
+                        new BreadcrumbTrailViewModel(GetChildPageBaseBreadcrumbTrail().Concat([
+                            new("Download data", Action(nameof(DownloadDataSelectYear), 
+                                new { selectedYear = "", selectedFiles = "" })),
+                            new("Data files available for download", Action(nameof(DownloadDataSelectFiles), 
+                                new { selectedYear, selectedFiles = "" }))
+                        ]), $"Download {establishmentDetails.Name} data"),
+                        "Download data",
+                        establishmentDetails.Name,
+                        GetSubNavigation(),
+                        GetDownloadDataSideNavigation(establishmentDetails.Name),
+                        $"Download {establishmentDetails.Name} data",
+                        $"{establishmentDetails.Name} data"
+                ))
+                select new SchoolDownloadDataSelectFormatViewModel(
+                    schoolPage,
+                    new DownloadDataSelectFormatModel(
+                        "school",
+                        [("Data in CSV format", Action(nameof(DownloadDataAsZip), 
+                            new { fileType = "CSV", selectedFiles }))],
+                        Action(nameof(DownloadDataSelectYear), 
+                            new { selectedYear = "", selectedFiles = "" })
+                    )
+                );
 
-            return result.ToActionResult(View, _hostEnvironment);
+            return result
+                .ToActionResult(View, _hostEnvironment);
         }
 
         [HttpGet("download-data/download-as-zip")]
-        public Task<IActionResult> DownloadDataAsZip(FileType fileType, List<string> selectedFiles)
+        public new Task<IActionResult> DownloadDataAsZip(FileType fileType, List<string> selectedFiles)
         {
-            return base.GetDownloadsAsZipFile(fileType, selectedFiles)
+            return base.DownloadDataAsZip(fileType, selectedFiles)
                 .ToActionResult(_hostEnvironment);
         }
 
-        protected override BreadcrumbTrailViewModel GetLandingPageBreadcrumbs(string schoolName, LocalAuthorityDTO? localAuthority) => 
-            new([], "My school");
-
-        protected override IEnumerable<BreadcrumbItem> GetChildPageBreadcrumbs(string urn, string schoolName) => [
-            new("My school", $"/my-school/"),
-        ];
-
-        protected override NavigationViewModel GetSubNavigation(
-            EstablishmentDetailsViewModel establishmentDetails, 
-            PathString requestPath)
+        protected override Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
         {
-            return new NavigationViewModel(new([
-                new("download-data", "Download data", $"/my-school/download-data/", requestPath),
-                new("other-reports", "Other reports", $"/my-school/other-reports/", requestPath),
-                new("useful-links", "Useful links", $"/my-school/useful-links/", requestPath)
-            ]));
-        }
-
-        protected override NavigationViewModel GetSideNavigation(
-            EstablishmentDetailsViewModel establishmentDetails, 
-            PathString requestPath)
-        {
-            return new NavigationViewModel(new([
-                new("name", $"{establishmentDetails.Name ?? "school"} data", $"/my-school/download-data/", requestPath)
-            ]));
-        }
-
-        protected override Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string laCode)
-        {
-            return base.GetEstablishmentDetails(laCode)
+            return base.GetEstablishmentDetails(urn)
                 .MapError(error => error is NotFoundError
                     ? Error.Unexpected(error.Message, null)
                     : error);
         }
 
-        protected override Task<Result<SchoolPageViewModel>> GetSchoolPage(
-            EstablishmentDetailsViewModel establishmentDetails,
-            BreadcrumbTrailViewModel breadcrumb,
-            NavigationViewModel? subNavigation,
-            NavigationViewModel? sideNavigation)
-        {
-            var subTitle = $"{establishmentDetails.Name} <span>(URN: {establishmentDetails.Urn})</span>";
-            var schoolPage = new SchoolPageViewModel(
-                "MySchool",
-                "My school",
-                subTitle,
-                establishmentDetails.Name,
-                establishmentDetails.Urn,
-                breadcrumb,
-                subNavigation,
-                sideNavigation
-            );
+        private IEnumerable<BreadcrumbItem> GetBaseBreadcrumbTrail() => [];
+        private IEnumerable<BreadcrumbItem> GetChildPageBaseBreadcrumbTrail() => 
+            GetBaseBreadcrumbTrail().Concat([
+                new("My school", Action(nameof(LandingPage))),
+            ]);
 
-            return Task.FromResult(Result.Success(schoolPage));
-        }
+        private NavigationViewModel GetSubNavigation() =>
+            new([
+                new("Download data", Action(nameof(DownloadDataSelectYear), 
+                    new { selectedYear = "", selectedFiles = "" }), Request.Path),
+                new("Other reports", Action(nameof(OtherReports)), Request.Path),
+                new("Useful links", Action(nameof(UsefulLinks)), Request.Path)
+            ]);
 
-        protected override Task<Result<BaseDownloadDataModel>> GetDownloadDataPage(
-            EstablishmentDetailsViewModel establishmentDetails,
-            BreadcrumbTrailViewModel breadcrumb,
-            string currentActionName,
-            NavigationViewModel? subNavigation = null,
-            NavigationViewModel? sideNavigation = null)
-        {
-            var title = "Download data";
-            var subtitle =
-                $@"{establishmentDetails.Name} <span class=""govuk-!-font-weight-regular"">(URN: {establishmentDetails.Urn})</span>";
+        private NavigationViewModel GetDownloadDataSideNavigation(string name) =>
+            new([
+                new($"{name} data", Action(nameof(DownloadDataSelectYear), 
+                    new { selectedYear = "", selectedFiles = "" }), Request.Path)
+            ]);
 
-            var (contentTitle, contentTitleCaption) = currentActionName switch
-            {
-                nameof(DownloadDataSelectYear) => (
-                    "Dates available for download",
-                    $"{establishmentDetails.Name} data"
-                ),
-                nameof(DownloadDataSelectFiles) => (
-                    "Data files available for download",
-                    $"{establishmentDetails.Name} data"
-                ),
-                nameof(DownloadDataSelectFormat) => (
-                    $"Download {establishmentDetails.Name} data",
-                    $"{establishmentDetails.Name} data"
-                ),
-                _ => ("", "") // Default case
-            };
-
-            var downloadDataPage = new BaseDownloadDataModel(
-                breadcrumb,
-                subNavigation,
-                sideNavigation,
-                title,
-                subtitle,
-                contentTitle,
-                contentTitleCaption,
-                "MySchool",
-                ""
-            );
-            return Task.FromResult(Result.Success(downloadDataPage));
-        }
+        private string Action(string action, object? values = null) => Url.Action(action, values) ?? "";
     }
 }

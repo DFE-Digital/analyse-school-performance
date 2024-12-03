@@ -5,77 +5,41 @@
 @{
     var hasSelectedYearError = ViewData.ModelState.HasError(Constants.ModelErrorKeySelectedYear);
 }
-<div class="govuk-width-container app-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
-</div>
 
-<div class="govuk-main-wrapper govuk-width-container">
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <asp-error-summary>
-            @{
-                var selectedYearError = ViewData.ModelState.GetFirstErrorForKey(Constants.ModelErrorKeySelectedYear);
-                if (selectedYearError != null)
+<form id="app-available-download-dates-form" action="" method="post">
+    <div class="govuk-form-group @(hasSelectedYearError ? "govuk-form-group--error" : "")">
+        <fieldset class="govuk-fieldset" aria-describedby="app-available-downloads-dates-hint">
+            <legend id="app-available-downloads-dates-hint" class="govuk-fieldset__legend">
+                Select one option
+            </legend>
+            <div class="govuk-radios" id="app-field-@Constants.ModelErrorKeySelectedYear" data-module="govuk-radios">
+                @if (hasSelectedYearError)
                 {
-                    <li>
-                        <a href="#app-available-downloads-dates-select-option" data-testid="app-available-downloads-dates-select-option">@selectedYearError.ErrorMessage</a>
-                    </li>
+                    <span data-testid="app-field-@Constants.ModelErrorKeySelectedYear-error" class="govuk-error-message">
+                        @Constants.AcademicYearToDownldValidationErrorMessage
+                    </span>
                 }
-            }
-        </asp-error-summary>
-    }
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.Title</h1>
-    <h2 class="govuk-heading-m">
-        @Html.Raw(Model.SubTitle)
-    </h2>
-    @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SubNavigation)
-
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third app-side-navigation-width">
-            @await Html.PartialAsync("~/Areas/Shared/Navigation/_SideMenuNavigationPartial.cshtml", Model.SideNavigation)
-        </div>
-        <div class="govuk-grid-column-two-thirds">
-            <h2 data-testid="available-downloads-dates-heading" class="govuk-heading-l app-downloads">
-                <span data-testid="available-downloads-caption" class="govuk-caption-l">@Model.ContentTitleCaption</span>
-                @Model.ContentTitle
-            </h2>
-            <form id="app-available-download-dates-form" asp-controller="@Model.ControllerName" asp-action="@Model.ControllerActionName" method="post">
-                <div class="govuk-form-group @(hasSelectedYearError ? "govuk-form-group--error" : "")">
-                    <fieldset class="govuk-fieldset" aria-describedby="app-available-downloads-dates-hint">
-                        <legend id="app-available-downloads-dates-hint" class="govuk-fieldset__legend">
-                            Select one option
-                        </legend>
-                        <div class="govuk-radios" data-module="govuk-radios" id="app-available-downloads-dates-select-option">
-                            @if (hasSelectedYearError)
-                            {
-                                <span id="app-available-downloads-dates-select-option-error" data-testid="app-available-downloads-dates-select-option-error" class="govuk-error-message">
-                                    @Constants.AcademicYearToDownldValidationErrorMessage
-                                </span>
-                            }
-                            @foreach (var year in Model.AvailableDates)
-                            {
-                                <div class="govuk-radios__item">
-                                    <input data-testid="available-downloads-dates-@year.Year" id="app-available-downloads-dates-@year.Year" class="govuk-radios__input" name="selectedYear"
-                                           type="radio"
-                                           value=@year.Year
-                                           aria-describedby="app-available-downloads-dates-@year.Year-label">
-                                    <label data-testid="available-downloads-dates-@year.Year-label"
-                                           id="app-available-downloads-dates-@year.Year-label"
-                                           class="govuk-label govuk-radios__label"
-                                           for=app-available-downloads-dates-@year.Year>
-                                        @year.StartToEndYears
-                                    </label>
-                                </div>
-                            }
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="govuk-button-group govuk-!-padding-top-5">
-                    <button id="selectedYearSubmit" data-testid="selectedYearSubmit" type="submit" class="govuk-button" data-module="govuk-button">
-                        Continue
-                    </button>
-                </div>
-            </form>
-        </div>
+                @foreach (var year in Model.AvailableDates)
+                {
+                    <div class="govuk-radios__item">
+                        <input id="app-available-downloads-dates-@year.Year" class="govuk-radios__input" name="selectedYear"
+                                type="radio"
+                                value=@year.Year
+                                aria-describedby="app-available-downloads-dates-@year.Year-label">
+                        <label data-testid="available-downloads-dates-@year.Year-label"
+                                id="app-available-downloads-dates-@year.Year-label"
+                                class="govuk-label govuk-radios__label"
+                                for=app-available-downloads-dates-@year.Year>
+                            @year.StartToEndYears
+                        </label>
+                    </div>
+                }
+            </div>
+        </fieldset>
     </div>
-</div>
+    <div class="govuk-button-group govuk-!-padding-top-5">
+        <button id="selectedYearSubmit" data-testid="selectedYearSubmit" type="submit" class="govuk-button" data-module="govuk-button">
+            Continue
+        </button>
+    </div>
+</form>

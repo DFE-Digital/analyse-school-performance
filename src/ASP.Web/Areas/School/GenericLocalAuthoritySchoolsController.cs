@@ -3,7 +3,6 @@ using ASP.Core.Helpers;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
-using ASP.Web.Areas.School;
 using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
@@ -12,15 +11,15 @@ using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ASP.Web.Areas.LocalAuthority
+namespace ASP.Web.Areas.School
 {
-    [Area("LocalAuthority")]
+    [Area("School")]
     [Route("local-authority/{laCode}/schools")]
     [ServiceFilter<TermsOfUseActionFilter>]
     [Authorize(Policy = Policy.AccessToAllSchools)]
-    public class GenericSchoolsLocalAuthorityController : SchoolsController
+    public class GenericLocalAuthoritySchoolsController : SchoolsController
     {
-        public GenericSchoolsLocalAuthorityController(
+        public GenericLocalAuthoritySchoolsController(
             IAspApiClient api,
             IHostEnvironment hostEnvironment
         ) : base(api, hostEnvironment)
@@ -38,9 +37,15 @@ namespace ASP.Web.Areas.LocalAuthority
                 from laName in GetLocalAuthorityName(laCode)
                 select DefaultViewModel(
                     results,
-                    new SchoolsPageSearchParameters("All schools", $"{laName} - {results.TotalResults:N0} schools",
-                        $"/local-authority/{laCode}/schools/", GetSchoolsPageBreadcrumbs("All schools", laCode, laName),
-                        "GenericSchoolsLocalAuthority", nameof(Schools), searchSuggestionsUrl)
+                    new SchoolsPageSearchParameters(
+                        "All schools", 
+                    	$"{laName} - {results.TotalResults:N0} schools",
+                        $"/local-authority/{laCode}/schools/", 
+                        GetSchoolsPageBreadcrumbs("All schools", laCode, laName),
+                        "GenericSchoolsLocalAuthority", 
+                        nameof(Schools), 
+                        searchSuggestionsUrl,
+                        urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn }))
                 );
 
             return result.ToActionResult(View, _hostEnvironment);
@@ -50,8 +55,8 @@ namespace ASP.Web.Areas.LocalAuthority
         {
             List<BreadcrumbItem> breadcrumbs =
             [
-                new("All local authorities", $"/local-authorities"),
-                new(laName, $"/local-authority/{laCode}")
+                new("All local authorities", $"/local-authorities/"),
+                new(laName, $"/local-authority/{laCode}/")
             ];
             return new BreadcrumbTrailViewModel(breadcrumbs, currentPage);
         }

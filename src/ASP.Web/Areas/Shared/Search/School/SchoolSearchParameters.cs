@@ -5,11 +5,25 @@ namespace ASP.Web.Areas.Shared.Search.School;
 
 public class SchoolSearchParameters : SearchFormParameters
 {
-    public SchoolSearchParameters(string searchUrl, string searchSuggestionUrl, string controller,
-        string controllerAction, BreadcrumbTrailViewModel breadcrumbTrail) : base(searchUrl, controller,
-        controllerAction,
-        searchSuggestionUrl, Constants.SchoolSearchFormSearchTermInputLabel,
-        Constants.SchoolSearchTermInputValidationMessage, breadcrumbTrail)
+    public Func<string, string?> CreateSchoolUrl { get; }
+
+    public SchoolSearchParameters(
+		string searchUrl, 
+		string searchSuggestionUrl, 
+		string controller,
+        string controllerAction, 
+		BreadcrumbTrailViewModel breadcrumbTrail,
+		Func<string, string?> createSchoolUrl
+	) : base(
+		searchUrl, 
+		controller,
+		controllerAction,
+		searchSuggestionUrl, 
+		Constants.SchoolSearchFormSearchTermInputLabel,
+		Constants.SchoolSearchTermInputValidationMessage,
+		breadcrumbTrail
+    )
     {
+        CreateSchoolUrl = createSchoolUrl;
     }
 }

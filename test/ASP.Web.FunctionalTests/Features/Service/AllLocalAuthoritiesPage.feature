@@ -1,5 +1,4 @@
-﻿Feature: Generic Local Authorities page
-
+﻿Feature: All local authorities page
     Background:
         Given I am a DfE Named user
 
@@ -23,6 +22,24 @@
         When I navigate to /local-authorities/
         Then I should get a 403 response
         And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
+
+    @Javascript:disabled
+    Scenario: Page should show a breadcrumb trail
+        Given I am a DfE Named user
+        And Local Authority "301" exists:
+        """
+        {
+            "Name": "Test Name"
+        }
+        """
+        When I navigate to /local-authorities/
+        Then I should get a 200 response
+        And the page title should be "All local authorities | Analyse school performance"
+        And the element "#app-page-title" should have the text content "All local authorities"
+        And the breadcrumb trail should be:
+		    | text                  | href | current |
+		    | Home                  | /    |         |
+		    | All local authorities |      | true    |
 
     @Javascript:disabled
     Scenario: DfE Named user should see Generic Local Authorities page
@@ -118,22 +135,6 @@
         And the element "*[data-testid='all-local-authorities-listing-code-5']" should have the text content "205"
 
     @Javascript:disabled
-    Scenario: Page should show a breadcrumb trail
-        Given Local Authority "301" exists:
-        """
-        {
-            "name": "Test Name"
-        }
-        """
-        When I navigate to /local-authorities/
-        Then I should get a 200 response
-        And the page title should be "All local authorities | Analyse school performance"
-        And the element "h1.govuk-heading-xl" should have the text content "All local authorities"
-        And the element "[data-testid='breadcrumb-home']" should have the href "/"
-        And the element "[data-testid='breadcrumb-home']" should have the text content "Home"
-        And the element "[data-testid='breadcrumb-current-page']" should have the text content "All local authorities"
-
-    @Javascript:disabled
     Scenario: Page title should show correct text when search returns results
         Given Local Authority "301" exists:
         """
@@ -171,9 +172,11 @@
         And I update the textbox "#searchTerm" to have the value "Test"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=Test
-        And the element "[data-testid='breadcrumb-home']" should have the href "/"
-        And the element "[data-testid='breadcrumb-all-local-authorities']" should have the text content "All local authorities"
-        And the element "[data-testid='breadcrumb-current-page']" should have the text content "Search results for "Test""
+        And the breadcrumb trail should be:
+            | text                      | href                | current |
+            | Home                      | /                   |         |
+            | All local authorities     | /local-authorities/ |         |
+            | Search results for "Test" |                     | true    |
 
     @Javascript:enabled
     Scenario: Page should show a breadcrumb trail when search returns results (JS)
@@ -193,9 +196,11 @@
         And I update the textbox "#searchTerm" to have the value "Test"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=Test
-        And the element "[data-testid='breadcrumb-home']" should have the href "/"
-        And the element "[data-testid='breadcrumb-all-local-authorities']" should have the text content "All local authorities"
-        And the element "[data-testid='breadcrumb-current-page']" should have the text content "Search results for "Test""
+        And the breadcrumb trail should be:
+            | text                      | href                | current |
+            | Home                      | /                   |         |
+            | All local authorities     | /local-authorities/ |         |
+            | Search results for "Test" |                     | true    |
 
     @Javascript:disabled
     Scenario: Page should show a breadcrumb trail when search returns no results
@@ -215,9 +220,11 @@
         And I update the textbox "#searchTerm" to have the value "Testtt"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=Testtt
-        And the element "[data-testid='breadcrumb-home']" should have the href "/"
-        And the element "[data-testid='breadcrumb-all-local-authorities']" should have the text content "All local authorities"
-        And the element "[data-testid='breadcrumb-current-page']" should have the text content "We found no matches for "Testtt""
+        And the breadcrumb trail should be:
+            | text                             | href                | current |
+            | Home                             | /                   |         |
+            | All local authorities            | /local-authorities/ |         |
+            | We found no matches for "Testtt" |                     | true    |
 
     @Javascript:enabled
     Scenario: Page should show a breadcrumb trail when search returns no results (JS)
@@ -237,9 +244,11 @@
         And I update the textbox "#searchTerm" to have the value "Testtt"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=Testtt
-        And the element "[data-testid='breadcrumb-home']" should have the href "/"
-        And the element "[data-testid='breadcrumb-all-local-authorities']" should have the text content "All local authorities"
-        And the element "[data-testid='breadcrumb-current-page']" should have the text content "We found no matches for "Testtt""
+        And the breadcrumb trail should be:
+            | text                             | href                | current |
+            | Home                             | /                   |         |
+            | All local authorities            | /local-authorities/ |         |
+            | We found no matches for "Testtt" |                     | true    |
 
     @Javascript:disabled
     Scenario: Search Term Validation
@@ -453,7 +462,7 @@
         And I update the textbox "#searchTerm" to have the value "301"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/301/
-        And the element "[data-testid="all-school-in-la-sub-title"]" should have the text content "All schools within Some Test LA Name"
+        And the element "#app-page-subtitle" should have the text content "All schools within Some Test LA Name"
 
     @Javascript:enabled
     Scenario: Matching LA Code search should redirect to LA landing page (JS)
@@ -467,7 +476,7 @@
         And I update the textbox "#searchTerm" to have the value "301"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/301/
-        And the element "[data-testid="all-school-in-la-sub-title"]" should have the text content "All schools within Some Test LA Name"
+        And the element "#app-page-subtitle" should have the text content "All schools within Some Test LA Name"
 
     @Javascript:disabled
     Scenario: LA search successful for 3-digit LA Code
@@ -481,7 +490,7 @@
         And I update the textbox "#searchTerm" to have the value "301"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/301/
-        And the element "[data-testid="all-school-in-la-sub-title"]" should have the text content "All schools within Some Test LA Name"
+        And the element "#app-page-subtitle" should have the text content "All schools within Some Test LA Name"
 
     @Javascript:enabled
     Scenario: LA search successful for 3-digit LA Code (JS)
@@ -495,7 +504,7 @@
         And I update the textbox "#searchTerm" to have the value "301"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/301/
-        And the element "[data-testid="all-school-in-la-sub-title"]" should have the text content "All schools within Some Test LA Name"
+        And the element "#app-page-subtitle" should have the text content "All schools within Some Test LA Name"
 
     @Javascript:disabled
     Scenario Outline: LA search with less than 3 digits does not match on LA Code

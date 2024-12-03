@@ -73,13 +73,8 @@ Scenario: School page should be accessible if user's Establishment exists
     When I navigate to /my-school/
 	Then I should get a 200 response
 	Then the page title should be "My school | Analyse school performance"
-	Then the element "h1.govuk-heading-xl" should have the text content "My school" 
-    Then the element "h2.govuk-heading-l" should have the outer HTML:
-       """
-       <h2 data-testid="school-page-school-name" id="app-school-name-heading" class="govuk-heading-l"> Hollinswood Primary School
-            <span>(URN: 123456)</span>
-        </h2>
-       """
+	Then the element "#app-page-title" should have the text content "My school" 
+    Then the element "#app-page-subtitle" should have the text content "Hollinswood Primary School (URN: 123456)"
 
 @Javascript:disabled
 Scenario: School page should contain eight app card container elements
@@ -435,10 +430,129 @@ Scenario: Details disclosure element text should read 'Show school details' when
     And I am a School Named user for Establishment "123456"
     When I navigate to /my-school/
     Then the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
-    
+  
+@Javascript:disabled
+Scenario Outline: My school page should show a breadcrumb trail for School user
+    Given I am a <School> user for Establishment "123456"
+    And Establishment "123456" exists:
+    """
+        {
+         "name": "Test School 1",
+          "multiAcademyTrust": {
+              "uid": "1234"
+          },
+          "localAuthority":
+           {
+           	 "code": "999"
+           },
+          "diocese": {
+             "code": "1000",
+             "name": "Test Diocese1",
+             "lname": "test diocese1",
+             "isNullish": false
+          }
+        }
+    """
+    When I navigate to /my-school/
+    Then the page title should be "My school | Analyse school performance"
+    And the element "#app-page-title" should have the text content "My school"
+    And the breadcrumb trail should be:
+		| text      | href | current |
+		| Home      | /    |         |
+		| My school |      | true    |
+Examples:
+  | School          |
+  | School Named    |
+  | School Unnamed  |
+  | School Governor |
     
 @Javascript:disabled
-Scenario: Errors on the Download Data page, in the Dates Available for Download step
+Scenario Outline: My school page should have the correct title and subtitle for School user
+    Given I am a <School> user for Establishment "111111"
+    And Establishment "111111" exists:
+    """
+        {
+           "name": "Hollinswood Primary School",
+            "multiAcademyTrust": {
+              "uid": "1111"
+            }
+        }
+    """
+	And Local Authority "301" exists:
+	"""
+		{
+		    "name": "Test LA"
+		}
+	"""
+    When I navigate to /my-school/
+    Then the page title should be "My school | Analyse school performance"
+    Then the element "#app-page-title" should have the text content "My school" 
+    Then the element "#app-page-subtitle" should have the text content "Hollinswood Primary School (URN: 111111)"
+Examples:
+  | School          |
+  | School Named    |
+  | School Unnamed  |
+  | School Governor |
+
+@Javascript:disabled
+Scenario: Data downloads 'Dates available for download' page should be accessible when valid urn is provided
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data
+    Then the element "#app-page-title" should have the text content "Download data"
+	And the sub-navigation should be:
+		| text          | href                      | current |
+		| Download data | /my-school/download-data/ | true    |
+		| Other reports | /my-school/other-reports/ |         |
+		| Useful links  | /my-school/useful-links/  |         |
+    And the side navigation should be:
+		| text                           | href                      | current |
+		| Dagenham Park CofE School data | /my-school/download-data/ | true    |
+    And the element "#app-subpage-title" should have the text content "Dagenham Park CofE School data Dates available for download"
+    And the element "#app-subpage-title-caption" should have the text content "Dagenham Park CofE School data"
+
+@Javascript:disabled
+Scenario: Data downloads 'Dates Available for Download' - page should show a breadcrumb trail
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data
+	Then the page title should be "Download data | Analyse school performance"
+	And the breadcrumb trail should be:
+		| text          | href        | current |
+		| Home          | /           |         |
+		| My school     | /my-school/ |         |
+		| Download data |             | true    |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Dates available for download' - page should contain three radio buttons
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data
+    Then I should get a 200 response
+    And the element "[data-testid='available-downloads-dates-<year>-label']" should have the text content "<label>"
+Examples:
+	| year | label        |
+	| 2022 | 2021 to 2022 |
+	| 2023 | 2022 to 2023 |
+	| 2024 | 2023 to 2024 |
+
+@Javascript:disabled
+Scenario: Data downloads 'Dates available for download' - when no date is selected and Continue button clicked, should show validation error
     Given Establishment "123456" exists:
     """
      {
@@ -449,12 +563,13 @@ Scenario: Errors on the Download Data page, in the Dates Available for Download 
     When I navigate to /my-school/download-data/
     And I click the button "*[data-testid='selectedYearSubmit']"
     Then the path should be /my-school/download-data/
-    And the element "*[data-testid='app-available-downloads-dates-select-option-error']" should have the text content "Please choose an academic year to download"
-    And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-    And the element "*[data-testid='app-available-downloads-dates-select-option']" should have the text content "Please choose an academic year to download" 
-    
+    And the element "*[data-testid='app-error-summary'] h2" should have the text content "There is a problem"
+    And the element "*[data-testid='app-error-summary-selectedYear']" should have the text content "Please choose an academic year to download"
+    And the element "*[data-testid='app-error-summary-selectedYear']" should have the href "#app-field-selectedYear"
+    And the element "*[data-testid='app-field-selectedYear-error']" should have the text content "Please choose an academic year to download"
+
 @Javascript:disabled
-Scenario: Errors On the Download data page, in the Data files available for download step
+Scenario: Data downloads 'Dates available for download' - when date is selected and Continue button clicked, should move to next step
     Given Establishment "123456" exists:
     """
      {
@@ -462,9 +577,181 @@ Scenario: Errors On the Download data page, in the Data files available for down
      }
     """
     And I am a School Named user for Establishment "123456"
-    When I navigate to /my-school/download-data/select-files/
+    When I navigate to /my-school/download-data/
+    And I update the element "#app-available-downloads-dates-2022" to be checked
+    And I click the button "*[data-testid='selectedYearSubmit']"
+    Then the path should be /my-school/download-data/select-files/?selectedYear=2022
+
+@Javascript:disabled
+Scenario: Data downloads "Data files available for download' - page should be accessible when valid urn is provided
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data/select-files/?selectedYear=2022
+    Then the element "#app-page-title" should have the text content "Download data"
+	And the sub-navigation should be:
+		| text          | href                      | current |
+		| Download data | /my-school/download-data/ | true    |
+		| Other reports | /my-school/other-reports/ |         |
+		| Useful links  | /my-school/useful-links/  |         |
+    And the side navigation should be:
+		| text                           | href                      | current |
+		| Dagenham Park CofE School data | /my-school/download-data/ | true    |
+    And the element "#app-subpage-title" should have the text content "Dagenham Park CofE School data Data files available for download"
+    And the element "#app-subpage-title-caption" should have the text content "Dagenham Park CofE School data"
+
+@Javascript:disabled
+Scenario: Download data 'Data files available for download' - page should show a breadcrumb trail
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data/select-files/?selectedYear=2022
+	Then the page title should be "Download data | Analyse school performance"
+	And the breadcrumb trail should be:
+		| text                              | href                      | current |
+		| Home                              | /                         |         |
+		| My school                         | /my-school/               |         |
+		| Download data                     | /my-school/download-data/ |         |
+		| Data files available for download |                           | true    |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Data files available for download' - page should contain three checkbox groups
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data/select-files/?selectedYear=2022
+    Then the element "[data-testid='available-downloads-file-group-<group>']" should have the text content "<text>"
+Examples:
+	| group       | text        |
+	| Key stage 2 | Key stage 2 |
+	| Key stage 4 | Key stage 4 |
+	| Phonics     | Phonics     |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Data files available for download' - page should contain five checkboxes
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data/select-files/?selectedYear=2022
+    Then the element "[data-testid='available-downloads-file-<fileid>-label']" should have the text content "<label>"
+Examples:
+	| fileid                                 | label                                                  |
+	| kts-136028-ks2-2022-final-school       | Key stage 2 (Final) (Key to success)                   |
+	| asp-136028-ks2-2022-provisional-school | Key stage 2 (Provisional) (Analyse school performance) |
+	| kts-136028-ks4-2022-final-pupil        | Key stage 4 (Final) (Key to success)                   |
+	| asp-136028-ks4-2022-final-pupil        | Key stage 4 (Final) (Analyse school performance)       |
+	| kts-136028-phonics-2022-final-pupil    | Phonics (Final) (Key to success)                       |
+
+@Javascript:disabled
+Scenario: Data downloads 'Data files available for download' - when no files are selected and Continue button clicked, should show validation error
+    Given Establishment "123456" exists:
+    """
+     {
+        "name": "Hollinswood Primary School"
+     }
+    """
+    And I am a School Named user for Establishment "123456"
+    When I navigate to /my-school/download-data/select-files/?selectedYear=2022
     And I click the button "*[data-testid='selectedFilesSubmit']"
-    Then the path should be /my-school/download-data/select-files/
-    And the element "*[data-testid='app-available-downloads-files-error']" should have the text content "Please choose one or more data files to download"
-    And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-    And the element "*[data-testid='app-available-downloads-files']" should have the text content "Please choose one or more data files to download"       
+    Then the path should be /my-school/download-data/select-files/?selectedYear=2022
+    And the element "*[data-testid='app-error-summary'] h2" should have the text content "There is a problem"
+    And the element "*[data-testid='app-error-summary-selectedFiles']" should have the text content "Please choose one or more data files to download"
+    And the element "*[data-testid='app-error-summary-selectedFiles']" should have the href "#app-field-selectedFiles"
+    And the element "*[data-testid='app-field-selectedFiles-error']" should have the text content "Please choose one or more data files to download"
+
+@Javascript:disabled
+Scenario: Data downloads 'Data files available for download' - when files are selected and Continue button clicked, should move to next step
+    Given Establishment "123456" exists:
+    """
+     {
+        "name": "Hollinswood Primary School"
+     }
+    """
+    And I am a School Named user for Establishment "123456"
+    When I navigate to /my-school/download-data/select-files/?selectedYear=2022
+    And I update the element "#app-available-downloads-file-kts-123456-ks2-2022-final-school" to be checked
+    And I click the button "*[data-testid='selectedFilesSubmit']"
+    Then the path should be /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-123456-ks2-2022-final-school
+
+@Javascript:disabled
+Scenario: Data downloads "Download school data' - page should be accessible when valid urn is provided
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-800200-ks2-2022-final-school&selectedFiles=asp-800200-ks2-2022-provisional-school
+    Then the element "#app-page-title" should have the text content "Download data"
+	And the sub-navigation should be:
+		| text          | href                      | current |
+		| Download data | /my-school/download-data/ | true    |
+		| Other reports | /my-school/other-reports/ |         |
+		| Useful links  | /my-school/useful-links/  |         |
+    And the side navigation should be:
+		| text                           | href                      | current |
+		| Dagenham Park CofE School data | /my-school/download-data/ | true    |
+    And the element "#app-subpage-title" should have the text content "Dagenham Park CofE School data Download Dagenham Park CofE School data"
+    And the element "#app-subpage-title-caption" should have the text content "Dagenham Park CofE School data"
+
+@Javascript:disabled
+Scenario: Download data 'Download school data' - page should show a breadcrumb trail
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school
+	Then the page title should be "Download data | Analyse school performance"
+	And the breadcrumb trail should be:
+		| text                                    | href                                                     | current |
+		| Home                                    | /                                                        |         |
+		| My school                               | /my-school/                                              |         |
+		| Download data                           | /my-school/download-data/                                |         |
+		| Data files available for download       | /my-school/download-data/select-files/?selectedYear=2022 |         |
+		| Download Dagenham Park CofE School data |                                                          | true    |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Download school data' page should contain three links
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school
+    Then the available download formats should be:
+    	| text               | href                                                                                                                                                       |
+    	| Data in CSV format | /my-school/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school |
+
+@Javascript:disabled
+Scenario Outline: Data downloads 'Download school data' - Download other dates link should link back to first step
+    Given Establishment "136028" exists:
+	"""
+	{
+        "name": "Dagenham Park CofE School"
+    }
+	"""
+    And I am a School Named user for Establishment "136028"
+    When I navigate to /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school
+    Then the element "[data-testid="available-downloads-other-dates"]" should have the href "/my-school/download-data/"

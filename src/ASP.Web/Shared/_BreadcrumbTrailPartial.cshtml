@@ -2,7 +2,7 @@
 @model BreadcrumbTrailViewModel
 
 <div class="govuk-breadcrumbs govuk-breadcrumbs--collapse-on-mobile">
-    <ol class="govuk-breadcrumbs__list">
+    <ol class="govuk-breadcrumbs__list" data-testid="breadcrumbs">
         <li class="govuk-breadcrumbs__list-item">
             <a data-testid="breadcrumb-home" href="/" class="govuk-breadcrumbs__link">Home</a>
         </li>
@@ -10,8 +10,7 @@
         @foreach (var breadcrumb in Model.Breadcrumbs)
         {
             <li class="govuk-breadcrumbs__list-item">
-                <a data-testid="breadcrumb-@breadcrumb.TitleId"
-                   href="@breadcrumb.Url"
+                <a href="@breadcrumb.Url"
                    class="govuk-breadcrumbs__link">@breadcrumb.Title</a>
             </li>
         }

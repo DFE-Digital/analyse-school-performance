@@ -6,80 +6,42 @@
     var hasSelectedFilesError = ViewData.ModelState.HasError(Constants.ModelErrorKeySelectedFiles);
 }
 
-<div class="govuk-width-container app-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
-</div>
-
-<div class="govuk-main-wrapper govuk-width-container">
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <asp-error-summary>
-            @{
-                var selectedFilesError = ViewData.ModelState.GetFirstErrorForKey(Constants.ModelErrorKeySelectedFiles);
-                if (selectedFilesError != null)
+<form id="app-available-downloads-files-form" action="" method="post">
+    <div class="govuk-form-group @(hasSelectedFilesError ? "govuk-form-group--error" : "")">
+        <fieldset class="govuk-fieldset" aria-describedby="app-available-downloads-files-hint">
+            <legend id="app-available-downloads-files-hint" class="govuk-fieldset__legend">
+                Select all that apply.
+            </legend>
+            <div id="app-field-@Constants.ModelErrorKeySelectedFiles" class="govuk-checkboxes" data-module="govuk-checkboxes">
+                @if (hasSelectedFilesError)
                 {
-                    <li>
-                        <a href="#app-available-downloads-files" data-testid="app-available-downloads-files">@selectedFilesError.ErrorMessage</a>
-                    </li>
+                    <span data-testid="app-field-@Constants.ModelErrorKeySelectedFiles-error" class="govuk-error-message">
+                        @Constants.DataFilesAvialableForDownlodValidationErrorMessage
+                    </span>
                 }
-            }
-        </asp-error-summary>
-    }
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">@Model.Title</h1>
-    <h2 class="govuk-heading-m">
-        @Html.Raw(Model.SubTitle)
-    </h2>
-    @await Html.PartialAsync("~/Areas/Shared/Navigation/_SubMenuNavigationPartial.cshtml", Model.SubNavigation)
+                @foreach (var group in Model.AvailableDownloads.GroupBy(x => x.DatasetType).OrderBy(x => x.Key))
+                {
+                    <h3 data-testid="available-downloads-file-group-@group.Key" class="govuk-heading-s govuk-!-font-weight-regular govuk-!-margin-top-6 govuk-!-margin-bottom-3">@group.Key</h3>
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third app-side-navigation-width">
-            @await Html.PartialAsync("~/Areas/Shared/Navigation/_SideMenuNavigationPartial.cshtml", Model.SideNavigation)
-        </div>
-        <div class="govuk-grid-column-two-thirds">
-            <h2 data-testid="available-downloads-files-heading" class="govuk-heading-l app-downloads">
-                <span data-testid="available-downloads-caption" class="govuk-caption-l">@Model.ContentTitleCaption</span>
-                @Model.ContentTitle
-            </h2>
-            <form id="app-available-downloads-files-form" asp-controller="@Model.ControllerName" asp-action="@Model.ControllerActionName" method="post">
-                @Html.Hidden("selectedYear", Model.AvailableDownloads.FirstOrDefault())
-                <div class="govuk-form-group @(hasSelectedFilesError ? "govuk-form-group--error" : "")">
-                    <fieldset class="govuk-fieldset" aria-describedby="app-available-downloads-files-hint">
-                        <legend id="app-available-downloads-files-hint" class="govuk-fieldset__legend">
-                            Select all that apply.
-                        </legend>
-                        <div class="govuk-checkboxes" data-module="govuk-checkboxes" id="app-available-downloads-files">
-                            @if (hasSelectedFilesError)
-                            {
-                                <span id="app-available-downloads-files-error" data-testid="app-available-downloads-files-error" class="govuk-error-message">
-                                    @Constants.DataFilesAvialableForDownlodValidationErrorMessage
-                                </span>
-                            }
-                            @foreach (var group in Model.AvailableDownloads.GroupBy(x => x.DatasetType).OrderBy(x => x.Key))
-                            {
-                                <h3 data-testid="available-downloads-file-group-@group.Key" class="govuk-heading-s govuk-!-font-weight-regular govuk-!-margin-top-6 govuk-!-margin-bottom-3">@group.Key</h3>
-
-                                @foreach (var file in group)
-                                {
-                                    <div class="govuk-checkboxes__item">
-                                        <input data-testid="available-downloads-file-@file.Id" id="app-available-downloads-file-@file.Id" class="govuk-checkboxes__input" name="selectedFiles"
-                                               type="checkbox"
-                                               value="@file.Id"
-                                               aria-describedby="app-available-downloads-file-@file.Id-label">
-                                        <label data-testid="available-downloads-file-@file.Id-label" id="app-available-downloads-file-@file.Id-label" class="govuk-label govuk-checkboxes__label" for="app-available-downloads-file-@file.Id">
-                                            @($"{file.DatasetType} ({file.Version}) ({file.Source})")
-                                        </label>
-                                    </div>
-                                }
-                            }
+                    @foreach (var file in group)
+                    {
+                        <div class="govuk-checkboxes__item">
+                            <input id="app-available-downloads-file-@file.Id" class="govuk-checkboxes__input" name="selectedFiles"
+                                    type="checkbox"
+                                    value="@file.Id"
+                                    aria-describedby="app-available-downloads-file-@file.Id-label">
+                            <label data-testid="available-downloads-file-@file.Id-label" id="app-available-downloads-file-@file.Id-label" class="govuk-label govuk-checkboxes__label" for="app-available-downloads-file-@file.Id">
+                                @($"{file.DatasetType} ({file.Version}) ({file.Source})")
+                            </label>
                         </div>
-                    </fieldset>
-                </div>
-                <div class="govuk-button-group">
-                    <button type="submit" id="selectedFilesSubmit" data-testid="selectedFilesSubmit" class="govuk-button" data-module="govuk-button">
-                        Continue
-                    </button>
-                </div>
-            </form>
-        </div>
+                    }
+                }
+            </div>
+        </fieldset>
     </div>
-</div>
+    <div class="govuk-button-group">
+        <button type="submit" data-testid="selectedFilesSubmit" class="govuk-button" data-module="govuk-button">
+            Continue
+        </button>
+    </div>
+</form>

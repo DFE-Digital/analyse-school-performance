@@ -151,9 +151,11 @@ Scenario: Page should show a breadcrumb trail when search returns results
 	And I update the textbox "#searchTerm" to have the value "Primary"
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=Primary
-	And the element "[data-testid='breadcrumb-home']" should have the href "/"
-	And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
-	And the element "[data-testid='breadcrumb-current-page']" should have the text content "Search results for "Primary""
+	And the breadcrumb trail should be:
+		| text                         | href     | current |
+		| Home                         | /        |         |
+		| Search                       | /search/ |         |
+		| Search results for "Primary" |          |         |
 
 @Javascript:enabled
 Scenario: Page should show a breadcrumb trail when search returns results (JS)
@@ -183,9 +185,11 @@ Scenario: Page should show a breadcrumb trail when search returns results (JS)
 	And I update the textbox "#searchTerm" to have the value "Primary"
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=Primary
-	And the element "[data-testid='breadcrumb-home']" should have the href "/"
-	And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
-	And the element "[data-testid='breadcrumb-current-page']" should have the text content "Search results for "Primary""
+	And the breadcrumb trail should be:
+		| text                         | href     | current |
+		| Home                         | /        |         |
+		| Search                       | /search/ |         |
+		| Search results for "Primary" |          | true    |
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns no results
@@ -215,9 +219,11 @@ Scenario: Page should show a breadcrumb trail when search returns no results
 	And I update the textbox "#searchTerm" to have the value "Secondary"
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=Secondary
-	And the element "[data-testid='breadcrumb-home']" should have the href "/"
-	And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
-	And the element "[data-testid='breadcrumb-current-page']" should have the text content "We found no matches for "Secondary""
+	And the breadcrumb trail should be:
+		| text                                | href     | current |
+		| Home                                | /        |         |
+		| Search                              | /search/ |         |
+		| We found no matches for "Secondary" |          |         |
 
 @Javascript:enabled
 Scenario: Page should show a breadcrumb trail when search returns no results (JS)
@@ -247,9 +253,11 @@ Scenario: Page should show a breadcrumb trail when search returns no results (JS
 	And I update the textbox "#searchTerm" to have the value "Secondary"
 	And I click the button "#searchSubmit"
 	Then the path should be /search/?search=Secondary
-	And the element "[data-testid='breadcrumb-home']" should have the href "/"
-	And the element "[data-testid='breadcrumb-search']" should have the text content "Search"
-	And the element "[data-testid='breadcrumb-current-page']" should have the text content "We found no matches for "Secondary""
+	And the breadcrumb trail should be:
+		| text                                | href     | current |
+		| Home                                | /        |         |
+		| Search                              | /search/ |         |
+		| We found no matches for "Secondary" |          | true    |
  
 @Javascript:disabled
 Scenario: Search Term Validation
@@ -347,7 +355,7 @@ Scenario: Matching URN search should redirect to school landing page
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: Matching URN search should redirect to school landing page (JS)
@@ -365,7 +373,7 @@ Scenario: Matching URN search should redirect to school landing page (JS)
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: Partial match for school name should redirect to school landing page
@@ -383,7 +391,7 @@ Scenario: Partial match for school name should redirect to school landing page
 	And I update the textbox "#searchTerm" to have the value "PRiMaRY"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: Partial match for school name should redirect to school landing page (JS)
@@ -401,7 +409,7 @@ Scenario: Partial match for school name should redirect to school landing page (
 	And I update the textbox "#searchTerm" to have the value "PRiMaRY"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: Partial street match should redirect to school landing page
@@ -683,7 +691,7 @@ Scenario: School search successful for 6-digit URN
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: School search successful for 6-digit URN (JS)
@@ -701,7 +709,7 @@ Scenario: School search successful for 6-digit URN (JS)
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario Outline: School search with less than 6 digits does not match on URN
@@ -772,7 +780,7 @@ Scenario Outline: School search with less than 6 digits matches on school addres
 	And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/222222/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 222222)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 222222)"
 Examples: 
 | SearchTerm |
 | 1          |
@@ -808,7 +816,7 @@ Scenario Outline: School search with less than 6 digits matches on school addres
 	And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/222222/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 222222)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 222222)"
 Examples: 
 | SearchTerm |
 | 1          |
@@ -844,7 +852,7 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search (JS)
@@ -873,7 +881,7 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search (JS
 	And I update the textbox "#searchTerm" to have the value "111111"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (with forward slash)
@@ -892,7 +900,7 @@ Scenario: Search term matching establishment LAESTAB code (with forward slash)
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit" 
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: Search term matching establishment LAESTAB code (with forward slash) (JS)
@@ -911,7 +919,7 @@ Scenario: Search term matching establishment LAESTAB code (with forward slash) (
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit" 
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (without forward slash)
@@ -930,7 +938,7 @@ Scenario: Search term matching establishment LAESTAB code (without forward slash
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: Search term matching establishment LAESTAB code (without forward slash) (JS)
@@ -949,7 +957,7 @@ Scenario: Search term matching establishment LAESTAB code (without forward slash
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (LA part)
@@ -1152,7 +1160,7 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields) (JS)
@@ -1183,7 +1191,7 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 	And I update the textbox "#searchTerm" to have the value "8942200"
 	And I click the button "#searchSubmit"
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields)
@@ -1214,7 +1222,7 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields) (JS)
@@ -1245,7 +1253,7 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 	And I update the textbox "#searchTerm" to have the value "894/2200"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields)
@@ -1276,7 +1284,7 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 	And I update the textbox "#searchTerm" to have the value "894"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields) (JS)
@@ -1307,7 +1315,7 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 	And I update the textbox "#searchTerm" to have the value "894"
 	And I click the button "#searchSubmit"  
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields)
@@ -1338,7 +1346,7 @@ Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code sea
 	And I update the textbox "#searchTerm" to have the value "2200"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:enabled
 Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields) (JS)
@@ -1369,7 +1377,7 @@ Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code sea
 	And I update the textbox "#searchTerm" to have the value "2200"
 	And I click the button "#searchSubmit"   
 	Then the path should be /school/111111/
-	And the element "[data-testid="school-page-school-name"]" should have the text content "(URN: 111111)"
+	And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct search results
