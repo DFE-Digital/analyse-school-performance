@@ -143,7 +143,7 @@ public abstract class SchoolsController : Controller
             parameters.SearchUrl,
             searchSuggestionUrl: parameters.SearchSuggestionUrl,
             createSchoolUrl: parameters.CreateSchoolUrl,
-            FormatResultsTitle(result.TotalResults)
+            FormatResultsTitle(result.TotalResults, parameters.Subtitle)
         );
     }
 
@@ -163,9 +163,11 @@ public abstract class SchoolsController : Controller
         );
     }
 
-    private string FormatResultsTitle(int totalResults)
+    private string FormatResultsTitle(int totalResults, string subtitle)
     {
-        return $"{totalResults:N0} schools";
+        return !string.IsNullOrEmpty(subtitle)
+            ? $"{subtitle} - {totalResults:N0} schools"
+            : $"{totalResults:N0} schools";
     }
     private EstablishmentSearchRequest CreateSearchRequest(
         SearchParams searchParams,

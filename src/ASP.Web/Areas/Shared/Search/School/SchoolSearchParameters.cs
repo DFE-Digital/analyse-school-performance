@@ -4,6 +4,7 @@ namespace ASP.Web.Areas.Shared.Search.School;
 
 public class SchoolSearchParameters : SearchFormParameters
 {
+    public string Subtitle { get; }
     public Func<string, string?> CreateSchoolUrl { get; }
     public BreadcrumbTrailViewModel? BreadcrumbTrail { get; }
 
@@ -13,7 +14,7 @@ public class SchoolSearchParameters : SearchFormParameters
 		string controller,
         string controllerAction, 
 		BreadcrumbTrailViewModel breadcrumbTrail,
-		Func<string, string?> createSchoolUrl
+		Func<string, string?> createSchoolUrl, string subtitle = ""
 	) : base(
 		searchUrl, 
 		controller,
@@ -22,6 +23,7 @@ public class SchoolSearchParameters : SearchFormParameters
     )
     {
         CreateSchoolUrl = createSchoolUrl;
+        Subtitle = subtitle;
         BreadcrumbTrail = breadcrumbTrail;
     }
 }
