@@ -13,11 +13,13 @@ using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearch;
+using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
 using LA = ASP.Application.UseCases.LocalAuthorities.DTO;
 using MAT = ASP.Application.UseCases.MultiAcademyTrusts.DTO;
 using ASP.Core.Establishments.Search;
 using ASP.Core.Establishments.SearchSuggestions;
+using ASP.Core.LocalAuthorities.LocalAuthoritySearchSuggestions;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
 using ASP.Core.Templating;
@@ -43,5 +45,6 @@ namespace ASP.Application
         Task<Result<FileStreamResponse>> BlobStorageDemoFileDownload(BlobStorageDemoFileDownloadRequest request);
         Task<Result<FileStreamResponse>> BlobStorageDemoZipFileDownload(BlobStorageDemoZipFileDownloadRequest request);
         Task<Result<SearchResultsPage<LA.LocalAuthorityDTO>>> LocalAuthoritySearch(LocalAuthoritySearchRequest request);
+        Task<Result<LocalAuthoritySearchSuggestionsResult<LA.LocalAuthorityDTO>>> LocalAuthoritySearchSuggestions(LocalAuthoritySearchSuggestionsRequest request);
     }
 }

@@ -29,6 +29,8 @@ using ASP.Application.UseCases.BlobStorageDemoFileDownload;
 using ASP.Application.UseCases.BlobStorageDemoZipFileDownload;
 using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
 using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearch;
+using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
+using ASP.Core.LocalAuthorities.LocalAuthoritySearchSuggestions;
 
 namespace ASP.Infrastructure.Api
 {
@@ -286,6 +288,20 @@ namespace ASP.Infrastructure.Api
             });
             
             return ApiGet<SearchResultsPage<LA.LocalAuthorityDTO>>(url, queryString);
+        }
+
+        public Task<Result<LocalAuthoritySearchSuggestionsResult<LA.LocalAuthorityDTO>>>
+            LocalAuthoritySearchSuggestions(LocalAuthoritySearchSuggestionsRequest request)
+        {
+            var url = "/api/LocalAuthoritySearchSuggestions";
+            var queryString = QueryString.Create("searchTerm", request.SearchTerm);
+            
+            request.MaxSuggestions.IfSome(value =>
+            {
+                queryString = queryString.Add("maxSuggestions", value.ToString());
+            });
+            
+            return ApiGet<LocalAuthoritySearchSuggestionsResult<LA.LocalAuthorityDTO>>(url, queryString);
         }
 
         private async Task<Result<T>> ApiGet<T>(string url, QueryString? queryString)

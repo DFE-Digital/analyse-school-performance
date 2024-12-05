@@ -23,7 +23,7 @@ namespace ASP.Web.Areas.School
     public class GenericSchoolsController : SchoolsController
     {
         private const string SearchSuggestionsUrl = $"/schools/suggestions/";
-        
+
         public GenericSchoolsController(
             IAspApiClient api,
             IHostEnvironment hostEnvironment
@@ -53,11 +53,11 @@ namespace ASP.Web.Areas.School
                 var result = await GetSchoolsPageViewModel(searchParams.Page);
                 return View(nameof(Schools), result.GetValueOrDefault(GetEmptySchoolsPageViewModel()));
             }
-            
+
             var pageNumber = PageHelper.ParsePageNumber(searchParams.Page);
 
             var scopeInfo = new ScopeInfo(ScopeType.All, Optional<string>.None);
-            
+
             var searchUrlForNoResults = $"/schools/";
 
             var noResultsVm = NoResultsViewModel(
@@ -90,7 +90,7 @@ namespace ASP.Web.Areas.School
 
             return await searchResult.ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
         }
-        
+
         [HttpGet("suggestions")]
         public async Task<IActionResult> SchoolsSearchSuggestions(SearchParams searchParams)
         {
@@ -98,25 +98,25 @@ namespace ASP.Web.Areas.School
             {
                 return View(nameof(Schools));
             }
-        
+
             var searchResult = await PerformEstablishmentSearchSuggestions(searchParams);
 
             return searchResult.ToActionResult(Json, _hostEnvironment);
         }
-        
+
         private BreadcrumbTrailViewModel GetSchoolsPageBreadcrumbs(string currentPage)
         {
             var breadcrumbTrail = new BreadcrumbTrailViewModel(currentPage);
             return breadcrumbTrail;
         }
-        
+
         private BreadcrumbTrailViewModel GetSchoolsSearchPageBreadcrumbs(string searchTerm)
         {
             var breadcrumbTrail = new BreadcrumbTrailViewModel($"Search results for \"{searchTerm}\"")
                 .AddBreadcrumb("All schools", "/schools/");
             return breadcrumbTrail;
         }
-        
+
         private BreadcrumbTrailViewModel GetSchoolsSearchNoResultsPageBreadcrumbs(string searchTerm)
         {
             var breadcrumbTrail = new BreadcrumbTrailViewModel($"We found no matches for \"{searchTerm}\"")
@@ -138,20 +138,21 @@ namespace ASP.Web.Areas.School
         private Task<Result<SchoolsPageSearchViewModel>> GetSchoolsPageViewModel(string? page = null)
         {
             var pageNumber = PageHelper.ParsePageNumber(page);
-            
+
             var result =
                 from results in GetAllEstablishments(ScopeType.All, Optional<string>.None, pageNumber)
                 select DefaultViewModel(
                     results,
                     new SchoolsPageSearchParameters(
-                        "All schools", 
+                        "All schools",
                         $"{results.TotalResults:N0} schools",
-                        $"/schools/", 
+                        $"/schools/",
                         GetSchoolsPageBreadcrumbs("All schools"),
-                        "GenericSchools", 
-                        nameof(Schools), 
-                        SearchSuggestionsUrl,
-                        urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
+                        urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
+                            new { Area = "School", urn },
+                            "GenericSchools",
+                            nameof(Schools)),
+                        SearchSuggestionsUrl
                 ));
 
             return result;
@@ -166,10 +167,8 @@ namespace ASP.Web.Areas.School
                     "0 schools",
                     $"/schools/",
                     GetSchoolsPageBreadcrumbs("All schools"),
-                    "GenericSchools",
-                    nameof(Schools),
-                    SearchSuggestionsUrl,
-                    urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
+                    urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn }),
+                    SearchSuggestionsUrl
                 ));
         }
     }

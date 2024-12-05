@@ -1,11 +1,11 @@
-﻿using ASP.Core;
-using ASP.Web.Core.BreadcrumbTrail;
+﻿using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Areas.Shared.Search.School;
 
 public class SchoolSearchParameters : SearchFormParameters
 {
     public Func<string, string?> CreateSchoolUrl { get; }
+    public BreadcrumbTrailViewModel? BreadcrumbTrail { get; }
 
     public SchoolSearchParameters(
 		string searchUrl, 
@@ -18,12 +18,10 @@ public class SchoolSearchParameters : SearchFormParameters
 		searchUrl, 
 		controller,
 		controllerAction,
-		searchSuggestionUrl, 
-		Constants.SchoolSearchFormSearchTermInputLabel,
-		Constants.SchoolSearchTermInputValidationMessage,
-		breadcrumbTrail
+		searchSuggestionUrl
     )
     {
         CreateSchoolUrl = createSchoolUrl;
+        BreadcrumbTrail = breadcrumbTrail;
     }
 }

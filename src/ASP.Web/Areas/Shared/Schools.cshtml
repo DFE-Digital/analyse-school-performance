@@ -7,14 +7,18 @@
 }
 
 <div class="govuk-width-container app-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.BreadcrumbTrail)
 
     <main id="main-content" role="main" class="govuk-main-wrapper govuk-main-wrapper--auto-spacing">
         @await Html.PartialAsync("~/Areas/Shared/Search/_SearchErrorSummaryPartial.cshtml")
         <h1 id="app-page-title" class="govuk-heading-xl govuk-!-margin-bottom-4" data-testid="schools-title">@Model.Title</h1>
         <h2 id="app-page-subtitle" class="govuk-heading-m" data-testid="schools-subtitle">@Model.SubTitle</h2>
         @await Html.PartialAsync("~/Areas/Shared/Search/_SearchFormPartial.cshtml",
-            new SearchFormModel(Model.Controller, Model.ControllerAction, Model.SearchSuggestionUrl, Model.InputLabel, Model.InputValidationMessage))
+            new SearchFormModel(
+                Model.SearchSuggestionUrl,
+                Model.AlpineComponentName,
+                Model.InputLabel,
+                Model.InputValidationMessage))
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 @if (Model.TotalCount == 0)

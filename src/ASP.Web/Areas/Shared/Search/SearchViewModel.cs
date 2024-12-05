@@ -1,5 +1,4 @@
 ﻿using ASP.Web.Areas.Shared.Pagination;
-using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Areas.Shared.Search;
 
@@ -7,6 +6,9 @@ public abstract class SearchViewModel : BaseSearchViewModel
 {
     public string SearchTerm { get; }
     public string SearchUrl { get; }
+    public string AlpineComponentName { get; }
+    public string InputLabel { get; }
+    public string InputValidationMessage { get; }
 
     protected SearchViewModel(
         string searchTerm,
@@ -16,14 +18,21 @@ public abstract class SearchViewModel : BaseSearchViewModel
         string controller,
         string controllerAction,
         string searchSuggestionUrl,
+        string alpineComponentName,
         string inputLabel,
         string inputValidationMessage,
-        BreadcrumbTrailViewModel breadcrumbs,
         string? subTitle = null)
-        : base(totalCount, paginationModel, controller, controllerAction, searchSuggestionUrl,
-            inputLabel, inputValidationMessage, breadcrumbs, subTitle)
+        : base(totalCount,
+            searchSuggestionUrl,
+            paginationModel,
+            controller,
+            controllerAction,
+            subTitle)
     {
         SearchTerm = searchTerm;
         SearchUrl = searchUrl;
+        AlpineComponentName = alpineComponentName;
+        InputLabel = inputLabel;
+        InputValidationMessage = inputValidationMessage;
     }
 }

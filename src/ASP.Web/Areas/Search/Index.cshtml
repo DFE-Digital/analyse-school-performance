@@ -9,5 +9,10 @@
     <h1 id="search-page-heading" class="govuk-heading-l govuk-!-margin-bottom-4">Search for a school</h1>
     <h2 class="govuk-heading-s asp-search-heading">School</h2>
     @await Html.PartialAsync("~/Areas/Shared/Search/_SearchFormPartial.cshtml",
-        new SearchFormModel(Model.Controller, Model.ControllerAction, Model.SearchSuggestionUrl, Model.InputLabel, Model.InputValidationMessage))
+        new SearchFormModel(Model.SearchSuggestionUrl,
+            Model.AlpineComponentName,
+            Model.InputLabel,
+            Model.InputValidationMessage,
+            Model.Controller,
+            Model.ControllerAction))
 </div>

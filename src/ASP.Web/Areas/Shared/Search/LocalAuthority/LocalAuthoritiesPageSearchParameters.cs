@@ -1,16 +1,23 @@
-﻿using ASP.Core;
-using ASP.Web.Core.BreadcrumbTrail;
+﻿using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Areas.Shared.Search.LocalAuthority;
 
 public class LocalAuthoritiesPageSearchParameters : SearchFormPageParameters
 {
-    public LocalAuthoritiesPageSearchParameters(string title, string subTitle, string paginationUrl,
-        BreadcrumbTrailViewModel breadcrumbTrailViewModel, string controller, string controllerAction,
-        string searchSuggestionUrl) : base(title, subTitle,
-        paginationUrl, controller, controllerAction, searchSuggestionUrl,
-        Constants.LaSearchFormSearchTermInputLabel,
-        Constants.LaSearchTermInputValidationMessage, breadcrumbTrailViewModel)
+    public BreadcrumbTrailViewModel? BreadcrumbTrail { get; }
+    public LocalAuthoritiesPageSearchParameters(
+        string title,
+        string subTitle,
+        string paginationUrl,
+        BreadcrumbTrailViewModel breadcrumbTrail,
+        string searchSuggestionUrl)
+        : base(title,
+            subTitle,
+            paginationUrl,
+            null,
+            null,
+            searchSuggestionUrl)
     {
+        BreadcrumbTrail = breadcrumbTrail;
     }
 }

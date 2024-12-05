@@ -1,33 +1,29 @@
-﻿using ASP.Core;
-using ASP.Web.Core.BreadcrumbTrail;
+﻿using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Areas.Shared.Search.School;
 
 public class SchoolsPageSearchParameters : SearchFormPageParameters
 {
     public Func<string, string?> CreateSchoolUrl { get; }
+    public BreadcrumbTrailViewModel? BreadcrumbTrail { get; }
 
     public SchoolsPageSearchParameters(
         string title, 
         string subTitle, 
         string paginationUrl,
-        BreadcrumbTrailViewModel breadcrumbTrailViewModel, 
-        string controller, 
-        string controllerAction,
-        string searchSuggestionUrl,
-        Func<string, string?> createSchoolUrl
+        BreadcrumbTrailViewModel breadcrumbTrail, 
+        Func<string, string?> createSchoolUrl,
+        string searchSuggestionUrl
     ) : base(
         title, 
         subTitle,
         paginationUrl, 
-        controller, 
-        controllerAction, 
-        searchSuggestionUrl,
-        Constants.SchoolSearchFormSearchTermInputLabel,
-        Constants.SchoolSearchTermInputValidationMessage, 
-        breadcrumbTrailViewModel
+        null, 
+        null, 
+        searchSuggestionUrl
     )
     {
+        BreadcrumbTrail = breadcrumbTrail;
         CreateSchoolUrl = createSchoolUrl;
     }
 }

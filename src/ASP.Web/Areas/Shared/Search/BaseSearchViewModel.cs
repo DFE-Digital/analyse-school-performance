@@ -1,5 +1,4 @@
 ﻿using ASP.Web.Areas.Shared.Pagination;
-using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Areas.Shared.Search;
 
@@ -11,15 +10,12 @@ public abstract class BaseSearchViewModel : SearchBaseModel
 
     protected BaseSearchViewModel(
         int totalCount,
-        PaginationModel? paginationModel,
-        string controller,
-        string controllerAction,
         string searchSuggestionUrl,
-        string inputLabel,
-        string inputValidationMessage,
-        BreadcrumbTrailViewModel breadcrumbs,
+        PaginationModel? paginationModel,
+        string? controller,
+        string? controllerAction,
         string? subTitle = null)
-        : base(controller, controllerAction, searchSuggestionUrl, inputLabel, inputValidationMessage, breadcrumbs)
+        : base(searchSuggestionUrl, controller, controllerAction)
     {
         TotalCount = totalCount;
         PaginationModel = paginationModel;

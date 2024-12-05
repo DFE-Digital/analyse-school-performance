@@ -1,6 +1,4 @@
-﻿using ASP.Web.Core.BreadcrumbTrail;
-
-namespace ASP.Web.Areas.Shared.Search;
+﻿namespace ASP.Web.Areas.Shared.Search;
 
 public abstract class SearchFormPageParameters : SearchBaseModel
 {
@@ -12,13 +10,14 @@ public abstract class SearchFormPageParameters : SearchBaseModel
         string title,
         string subTitle,
         string paginationUrl,
-        string controller,
-        string controllerAction,
-        string searchSuggestionUrl,
-        string inputLabel,
-        string inputValidationMessage,
-        BreadcrumbTrailViewModel breadcrumbTrail)
-        : base(controller, controllerAction, searchSuggestionUrl, inputLabel, inputValidationMessage, breadcrumbTrail)
+        string? controller,
+        string? controllerAction,
+        string searchSuggestionUrl)
+        : base(
+            searchSuggestionUrl,
+            controller,
+            controllerAction
+        )
     {
         Title = title;
         SubTitle = subTitle;

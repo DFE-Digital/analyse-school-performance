@@ -58,13 +58,9 @@ public abstract class SchoolsController : Controller
             subTitle: searchParameters.SubTitle,
             totalCount: result.TotalResults,
             paginationModel: paginationModel,
-            breadcrumbs: searchParameters.Breadcrumbs!,
+            breadcrumbTrail: searchParameters.BreadcrumbTrail!,
             establishmentListingsModel: establishmentListings,
-            controller: searchParameters.Controller,
-            controllerAction: searchParameters.ControllerAction,
-            searchSuggestionUrl: searchParameters.SearchSuggestionUrl,
-            inputLabel: searchParameters.InputLabel,
-            inputValidationMessage: searchParameters.InputValidationMessage
+            searchSuggestionUrl: searchParameters.SearchSuggestionUrl
         );
     }
 
@@ -114,13 +110,11 @@ public abstract class SchoolsController : Controller
             paginationModel: null,
             searchTerm: searchParams.Search ?? "",
             totalCount: 0,
-            breadcrumbs: breadcrumbTrail,
+            breadcrumbTrail: breadcrumbTrail,
             controller: controller,
             controllerAction: controllerAction,
             searchUrl: searchUrl,
             searchSuggestionUrl: searchSuggestionUrl,
-            Constants.SchoolSearchFormSearchTermInputLabel,
-            Constants.SchoolSearchTermInputValidationMessage,
             createSchoolUrl
         );
     }
@@ -143,13 +137,11 @@ public abstract class SchoolsController : Controller
             paginationModel: CreatePaginationModel(result, parameters.SearchUrl),
             searchTerm: result.SearchTerm,
             result.TotalResults,
-            breadcrumbs: parameters.Breadcrumbs!,
-            controller: parameters.Controller,
-            controllerAction: parameters.ControllerAction,
+            breadcrumbTrail: parameters.BreadcrumbTrail!,
+            controller: parameters.Controller!,
+            controllerAction: parameters.ControllerAction!,
             parameters.SearchUrl,
             searchSuggestionUrl: parameters.SearchSuggestionUrl,
-            inputLabel: parameters.InputLabel,
-            inputValidationMessage: parameters.InputValidationMessage,
             createSchoolUrl: parameters.CreateSchoolUrl,
             FormatResultsTitle(result.TotalResults)
         );

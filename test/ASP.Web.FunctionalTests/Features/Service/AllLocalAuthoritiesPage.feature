@@ -649,3 +649,85 @@
         And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authorities/?search=Test&page=1"
         And the element "*[data-testid='all-local-authorities-listing-name-1']" should have the text content "ASP Test LA Named 101"
         And the element "*[data-testid='all-local-authorities-listing-name-26']" should have the text content "ASP Test LA Named 126"
+
+    @Javascript:enabled
+    Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
+        Given Local Authority "111" exists:
+        """
+        {
+        	"name": "Some Test LA Name 111"
+        }
+        """
+        Given Local Authority "222" exists:
+        """
+        {
+        	"name": "Some Other Test LA Name 222"
+        }
+        """
+        Given Local Authority "333" exists:
+        """
+        {
+        	"name": "A Different Test LA Name 333"
+        }
+        """
+        And Local Authority "444" exists:
+        """
+        {
+            "name": "The Training Centre"
+        }
+        """
+        When I navigate to /local-authorities/
+        And I update the textbox "#searchTerm" to have the value "test"
+        Then the autocomplete results should appear
+        Then there should be 3 autocomplete items
+        Then the elements ".autocomplete__option strong" should have the text contents:
+          | Highlighted Values |
+          | Test               |
+          | Test               |
+          | Test               |
+        Then the elements ".autocomplete__option" should have the text contents:
+          | Autocomplete Items                    |
+          | A Different Test LA Name 333 Code:333 |
+          | Some Other Test LA Name 222 Code:222  |
+          | Some Test LA Name 111 Code:111        |
+
+    @Javascript:enabled
+    Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered Sort By Code
+        Given Local Authority "001" exists:
+        """
+        {
+        	"name": "Some Test LA Name"
+        }
+        """
+        Given Local Authority "004" exists:
+        """
+        {
+        	"name": "Some Other Test LA Name"
+        }
+        """
+        Given Local Authority "003" exists:
+        """
+        {
+        	"name": "A Different Test LA Name"
+        }
+        """
+        And Local Authority "123" exists:
+        """
+        {
+            "name": "The Training Centre"
+        }
+        """
+        When I navigate to /local-authorities/
+        And I update the textbox "#searchTerm" to have the value "00"
+        Then the autocomplete results should appear
+        Then there should be 3 autocomplete items
+        Then the elements ".autocomplete__option strong" should have the text contents:
+          | Highlighted Values |
+          | 00                 |
+          | 00                 |
+          | 00                 |
+        Then the elements ".autocomplete__option" should have the text contents:
+          | Autocomplete Items                |
+          | Some Test LA Name Code:001        |
+          | A Different Test LA Name Code:003 |
+          | Some Other Test LA Name Code:004  |

@@ -1,4 +1,4 @@
-import { getRegex, highlightText } from "../js/searchHelper";
+﻿import { getRegex, highlightText } from "../js/searchHelper";
 import { searchSuggestions }  from "../js/searchAutoCompleteSetup";
 
 // Template functions
@@ -13,13 +13,11 @@ export const nameSuggestionTemplate = (value, query) => {
     if (!regex) return "";
 
     const name = highlightText(value.name, regex);
-    const address = highlightText(value.address, regex);
-    const urn = highlightText(value.urn, regex);
-    const laestab = highlightText(value.laestab, regex);
+    const code = highlightText(value.code, regex);
 
-    return `${name}<br> Address:${address} <br>URN:${urn}, LAESTAB:${laestab}`;
+    return `${name}<br> Code:${code}`;
 };
 
 document.addEventListener('alpine:init', () => {
-    Alpine.data('schoolSearchSuggestions', () => searchSuggestions(nameInputTemplate, nameSuggestionTemplate));
+    Alpine.data('laSearchSuggestions', () => searchSuggestions(nameInputTemplate, nameSuggestionTemplate));
 });

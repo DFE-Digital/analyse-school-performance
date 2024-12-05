@@ -42,10 +42,8 @@ namespace ASP.Web.Areas.School
                     	$"{laName} - {results.TotalResults:N0} schools",
                         $"/local-authority/{laCode}/schools/", 
                         GetSchoolsPageBreadcrumbs("All schools", laCode, laName),
-                        "GenericSchoolsLocalAuthority", 
-                        nameof(Schools), 
-                        searchSuggestionsUrl,
-                        urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn }))
+                        urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn }),
+                        searchSuggestionsUrl)
                 );
 
             return result.ToActionResult(View, _hostEnvironment);

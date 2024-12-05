@@ -53,10 +53,8 @@ namespace ASP.Web.Areas.School
                     	$"{organisationName} - {results.TotalResults:N0} schools",
                         $"/my-schools/", 
                         GetSchoolsPageBreadcrumbs("My schools"),
-                        "MySchools", 
-                        nameof(Schools), 
-                        searchSuggestionsUrl,
-                        urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { Area = "School", urn })));
+                        urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { Area = "School", urn }),
+                        searchSuggestionsUrl));
 
             return result.ToActionResult(View, _hostEnvironment);
         }

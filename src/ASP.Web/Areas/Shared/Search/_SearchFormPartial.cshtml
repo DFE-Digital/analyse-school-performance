@@ -5,9 +5,9 @@
     var hasSearchTermError = ViewData.ModelState.HasError(nameof(SearchParams.Search));
 }
 
-<div class="govuk-grid-row" x-data="searchSuggestions">
+<div class="govuk-grid-row" x-data="@Model.AlpineComponentName">
     <div class="govuk-grid-column-one-half">
-        <input type="hidden" id="suggestionUrn" name="suggestionUrn" x-model="suggestionUrn"/>
+        <input type="hidden" id="suggestion" name="suggestion" x-model="suggestion"/>
         <form id="searchForm" asp-controller="@Model.Controller" asp-action="@Model.ControllerAction" method="get" x-on:submit="handleSubmit">
             <div class="govuk-form-group">
 

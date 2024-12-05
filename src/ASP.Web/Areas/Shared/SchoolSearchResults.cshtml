@@ -8,7 +8,7 @@
 }
 
 <div class="govuk-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.BreadcrumbTrail)
 </div>
 <div class="govuk-width-container govuk-main-wrapper">
     @await Html.PartialAsync("~/Areas/Shared/Search/_SearchErrorSummaryPartial.cshtml")
@@ -23,8 +23,13 @@
             <h2 class="govuk-heading-m" data-testid="search-results-sub-title">@Model.SubTitle</h2>
         }
 
-        @await Html.PartialAsync("~/Areas/Shared/Search/_SearchFormPartial.cshtml", 
-            new SearchFormModel(Model.Controller, Model.ControllerAction, Model.SearchSuggestionUrl, Model.InputLabel, Model.InputValidationMessage))
+        @await Html.PartialAsync("~/Areas/Shared/Search/_SearchFormPartial.cshtml",
+            new SearchFormModel(Model.SearchSuggestionUrl,
+                Model.AlpineComponentName,
+                Model.InputLabel,
+                Model.InputValidationMessage,
+                Model.Controller,
+                Model.ControllerAction))
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

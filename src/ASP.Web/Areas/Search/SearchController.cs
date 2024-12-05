@@ -121,8 +121,6 @@ public class SearchController : Controller
             nameof(Index),
             "/search/",
             "/search/suggestions/",
-            Constants.SchoolSearchFormSearchTermInputLabel,
-            Constants.SchoolSearchTermInputValidationMessage,
             urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
         );
     }
@@ -137,13 +135,11 @@ public class SearchController : Controller
             paginationModel: null,
             searchTerm: searchParams.Search ?? "",
             totalCount: 0,
-            breadcrumbs: breadcrumbTrail,
+            breadcrumbTrail: breadcrumbTrail,
             controller: "Search",
             controllerAction: nameof(Index),
             searchUrl: "/search/",
             searchSuggestionUrl: "/search/suggestions/",
-            Constants.SchoolSearchFormSearchTermInputLabel,
-            Constants.SchoolSearchTermInputValidationMessage,
             urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
         );
     }

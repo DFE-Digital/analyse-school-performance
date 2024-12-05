@@ -1,4 +1,5 @@
-﻿using ASP.Web.Areas.Shared.EstablishmentListing;
+﻿using ASP.Core;
+using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Areas.Shared.Pagination;
 using ASP.Web.Core.BreadcrumbTrail;
 
@@ -8,21 +9,20 @@ public class SchoolSearchViewModel : SearchViewModel
 {
     public List<EstablishmentListingModel> EstablishmentListingsModel { get; }
     public Func<string, string?> CreateSchoolUrl { get; }
+    public BreadcrumbTrailViewModel? BreadcrumbTrail { get; }
 
     public SchoolSearchViewModel(
         List<EstablishmentListingModel> establishmentListingsModel,
         PaginationModel? paginationModel, 
         string searchTerm, 
         int totalCount,
-        BreadcrumbTrailViewModel breadcrumbs, 
+        BreadcrumbTrailViewModel breadcrumbTrail, 
         string controller, 
         string controllerAction, 
         string searchUrl,
         string searchSuggestionUrl,
-        string inputLabel, 
-        string inputValidationMessage,
         Func<string, string?> createSchoolUrl,
-        string? subTitle = null
+        string? subtitle = null
     ) : base(
         searchTerm, 
         searchUrl, 
@@ -31,12 +31,13 @@ public class SchoolSearchViewModel : SearchViewModel
         controller, 
         controllerAction, 
         searchSuggestionUrl,
-        inputLabel, 
-        inputValidationMessage, 
-        breadcrumbs, 
-        subTitle)
+        Constants.AlpineComponentSchoolSearchSuggestions,
+        Constants.SchoolSearchFormSearchTermInputLabel,
+        Constants.SchoolSearchTermInputValidationMessage,
+        subtitle)
     {
         EstablishmentListingsModel = establishmentListingsModel;
         CreateSchoolUrl = createSchoolUrl;
+        BreadcrumbTrail = breadcrumbTrail;
     }
 }
