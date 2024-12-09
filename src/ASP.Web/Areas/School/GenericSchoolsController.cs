@@ -149,9 +149,7 @@ namespace ASP.Web.Areas.School
                         $"/schools/",
                         GetSchoolsPageBreadcrumbs("All schools"),
                         urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
-                            new { Area = "School", urn },
-                            "GenericSchools",
-                            nameof(Schools)),
+                            new { Area = "School", urn }),
                         SearchSuggestionsUrl
                 ));
 

@@ -63,13 +63,14 @@
         Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 4 of 4 schools"
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
+	    And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
     Examples:
-      | Counter | URN    | Name                       | Address                        |
-      | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT |
-      | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      |
-      | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA |
-      | 4       | 444444 | The Training Centre        | No address available           |
+      | Counter | URN    | Name                       | Address                        | Href            |
+      | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /school/333333/ |
+      | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /school/222222/ |
+      | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /school/111111/ |
+      | 4       | 444444 | The Training Centre        | No address available           | /school/444444/ |
 
     @Javascript:disabled
     Scenario: Pagination in all schools
@@ -795,12 +796,12 @@
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
 
-        Examples:
-          | Counter | URN    | Name                       | Address                        |
-          | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT |
-          | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      |
-          | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA |
-          | 4       | 444444 | The Training Centre        | No address available           |
+	    Examples:
+	      | Counter | URN    | Name                       | Address                        | Href             |
+	      | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT |  /school/333333/ |
+	      | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      |  /school/222222/ |
+	      | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA |  /school/111111/ |
+	      | 4       | 444444 | The Training Centre        | No address available           |  /school/444444/ |
 
     @Javascript:enabled
     Scenario Outline: Results page should show partial name and address matches (JS)
@@ -866,13 +867,14 @@
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
+	    And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
         Examples:
-          | Counter | URN    | Name                       | Address                        |
-          | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT |
-          | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      |
-          | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA |
-          | 4       | 444444 | The Training Centre        | No address available           |
+          | Counter | URN    | Name                       | Address                        | Href             |
+          | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT |  /school/333333/ |
+          | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      |  /school/222222/ |
+          | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA |  /school/111111/ |
+          | 4       | 444444 | The Training Centre        | No address available           |  /school/444444/ |
 
     @Javascript:disabled
     Scenario: School search successful for 6-digit URN
@@ -1186,10 +1188,10 @@
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
-        Examples:
-          | Counter | URN    | LAESTAB  | Name                      |
-          | 2       | 111111 | 894/2200 | Some Primary School       |
-          | 1       | 222222 | 894/1234 | Some Other Primary School |
+	    Examples:
+	      | Counter | URN    | LAESTAB  | Name                      | Href            |
+	      | 2       | 111111 | 894/2200 | Some Primary School       | /school/111111/ |
+	      | 1       | 222222 | 894/1234 | Some Other Primary School | /school/222222/ |
 
     @Javascript:enabled
     Scenario Outline: School results page shows multiple partial LAESTAB matches (LA part) (JS)
@@ -1214,11 +1216,12 @@
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	    And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
         Examples:
-          | Counter | URN    | LAESTAB  | Name                      |
-          | 2       | 111111 | 894/2200 | Some Primary School       |
-          | 1       | 222222 | 894/1234 | Some Other Primary School |
+          | Counter | URN    | LAESTAB  | Name                      | Href            |
+          | 2       | 111111 | 894/2200 | Some Primary School       | /school/111111/ |
+          | 1       | 222222 | 894/1234 | Some Other Primary School | /school/222222/ |
 
     @Javascript:disabled
     Scenario Outline: School results page shows multiple partial LAESTAB matches (ESTAB part)
@@ -1243,11 +1246,12 @@
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	    And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
         Examples:
-          | Counter | URN    | LAESTAB  | Name                      |
-          | 2       | 111111 | 894/2200 | Some Primary School       |
-          | 1       | 222222 | 600/2200 | Some Other Primary School |
+          | Counter | URN    | LAESTAB  | Name                      | Href            |
+          | 2       | 111111 | 894/2200 | Some Primary School       | /school/111111/ |
+          | 1       | 222222 | 600/2200 | Some Other Primary School | /school/222222/ |
 
     @Javascript:enabled
     Scenario Outline: School results page shows multiple partial LAESTAB matches (ESTAB part) (JS)
@@ -1273,10 +1277,10 @@
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
-        Examples:
-          | Counter | URN    | LAESTAB  | Name                      |
-          | 2       | 111111 | 894/2200 | Some Primary School       |
-          | 1       | 222222 | 600/2200 | Some Other Primary School |
+	    Examples:
+	      | Counter | URN    | LAESTAB  | Name                      | Href            |
+	      | 2       | 111111 | 894/2200 | Some Primary School       | /school/111111/ |
+	      | 1       | 222222 | 600/2200 | Some Other Primary School | /school/222222/ |
 
     @Javascript:disabled
     Scenario: Partial LAESTAB (LA part) match should show no matching results

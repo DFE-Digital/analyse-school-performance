@@ -84,6 +84,83 @@
           | Ofsted Unnamed     |
           | Super Admin        |
 
+	@Javascript:disabled
+	Scenario: DfE Named user should see All schools
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School",
+			"address": {
+				"street": "13 The Street",
+				"town": "SomeTown",
+				"postCode": "B1 1AA"
+			},
+			"localAuthority": {
+				"code": "999",
+		       	"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Establishment "222222" exists:
+		"""
+		{
+			"name": "Some Other Primary School",
+			"address": {
+				"street": "13 The Road",
+				"town": "Tring",
+				"postCode": "B1 1AA"
+			},
+			"localAuthority": {
+				"code": "999",
+		       	"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Establishment "333333" exists:
+		"""
+		{
+			"name": "A Different Primary School",
+			"address": {
+				"street": "13 The Road",
+				"town": "SomeTown",
+				"postCode": "TR18 3JT"
+			},
+			"localAuthority": {
+				"code": "999",
+		       	"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Establishment "444444" exists:
+		"""
+		{
+			"name": "The Training Centre",
+			"localAuthority": {
+				"code": "999",
+			    "name": "Oxfordshire"
+			}
+		}
+		"""
+		And Local Authority "999" exists:
+		"""
+		{
+		    "Name": "Oxfordshire",
+		    "Code": "999"
+		}
+		"""
+		When I navigate to /local-authority/999/schools/
+		Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 4 of 4 schools"
+		And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
+		And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
+		And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
+
+	Examples:
+	  | Counter | URN    | Name                       | Address                        | Href            |
+	  | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /school/333333/ |
+	  | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /school/222222/ |
+	  | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /school/111111/ |
+	  | 4       | 444444 | The Training Centre        | No address available           | /school/444444/ |
+
     @Javascript:disabled
     Scenario Outline: Pagination in Generic Local authority > All schools page for 'AccessToAllSchools' users
         Given I am a <AccessToAllSchools> user
@@ -1025,13 +1102,14 @@
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
+	    And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
         Examples:
-          | Counter | URN    | Name                       | Address                        |
-          | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT |
-          | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      |
-          | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA |
-          | 4       | 444444 | The Training Centre        | No address available           |
+          | Counter | URN    | Name                       | Address                        | Href            |
+          | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /school/333333/ |
+          | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /school/222222/ |
+          | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /school/111111/ |
+          | 4       | 444444 | The Training Centre        | No address available           | /school/444444/ |
 
     @Javascript:enabled
     Scenario Outline: Results page should show partial name and address matches (JS)
@@ -1105,12 +1183,12 @@
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
 
-        Examples:
-          | Counter | URN    | Name                       | Address                        |
-          | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT |
-          | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      |
-          | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA |
-          | 4       | 444444 | The Training Centre        | No address available           |
+	    Examples:
+	      | Counter | URN    | Name                       | Address                        | Href            |
+	      | 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /school/333333/ |
+	      | 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /school/222222/ |
+	      | 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /school/111111/ |
+	      | 4       | 444444 | The Training Centre        | No address available           | /school/444444/ |
 
     @Javascript:disabled
     Scenario: School search successful for 6-digit URN
@@ -1546,11 +1624,12 @@
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	    And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
         Examples:
-          | Counter | URN    | LAESTAB  | Name                      |
-          | 2       | 111111 | 894/2200 | Some Primary School       |
-          | 1       | 222222 | 894/1234 | Some Other Primary School |
+          | Counter | URN    | LAESTAB  | Name                      | Href             |
+          | 2       | 111111 | 894/2200 | Some Primary School       | /school/111111/  |
+          | 1       | 222222 | 894/1234 | Some Other Primary School | /school/222222/  |
 
     @Javascript:enabled
     Scenario Outline: School results page shows multiple partial LAESTAB matches (LA part) (JS)
@@ -1591,10 +1670,10 @@
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
-        Examples:
-          | Counter | URN    | LAESTAB  | Name                      |
-          | 2       | 111111 | 894/2200 | Some Primary School       |
-          | 1       | 222222 | 894/1234 | Some Other Primary School |
+	    Examples:
+	      | Counter | URN    | LAESTAB  | Name                      | Href            |
+	      | 2       | 111111 | 894/2200 | Some Primary School       | /school/111111/ |
+	      | 1       | 222222 | 894/1234 | Some Other Primary School | /school/222222/ |
 
     @Javascript:disabled
     Scenario Outline: School results page shows multiple partial LAESTAB matches (ESTAB part)
@@ -2196,12 +2275,13 @@
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
+	    And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
         Examples:
-          | Counter | URN    | Name     | Address                                   |
-          | 1       | 111111 | School A | 13 The Street AB12 3CD                    |
-          | 2       | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB |
-          | 3       | 333333 | School C | 34 Long Road, Sheffield                   |
+          | Counter | URN    | Name     | Address                                   | Href            |
+          | 1       | 111111 | School A | 13 The Street AB12 3CD                    | /school/111111/ |
+          | 2       | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB | /school/222222/ |
+          | 3       | 333333 | School C | 34 Long Road, Sheffield                   | /school/333333/ |
 
     @Javascript:enabled
     Scenario Outline: Multiple successful school name matches show correct search results (JS)
@@ -2263,11 +2343,11 @@
         And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
         And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
 
-        Examples:
-          | Counter | URN    | Name     | Address                                   |
-          | 1       | 111111 | School A | 13 The Street AB12 3CD                    |
-          | 2       | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB |
-          | 3       | 333333 | School C | 34 Long Road, Sheffield                   |
+	    Examples:
+	      | Counter | URN    | Name     | Address                                   | Href            |
+	      | 1       | 111111 | School A | 13 The Street AB12 3CD                    | /school/111111/ |
+	      | 2       | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB | /school/222222/ |
+	      | 3       | 333333 | School C | 34 Long Road, Sheffield                   | /school/333333/ |
 
     @Javascript:disabled
     Scenario Outline: The PageNo parameter should handle invalid values with a default value of 1
