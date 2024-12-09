@@ -56,7 +56,13 @@ namespace ASP.Web.Areas.LocalAuthority
         }
 
         [HttpGet("download-data")]
-        public Task<IActionResult> DownloadDataSelectYear()
+        public IActionResult DownloadData()
+        {
+            return RedirectToActionPermanent(nameof(DownloadPupilLevelAggregatedLADataSelectYear));
+        }
+
+        [HttpGet("download-data/pupil-level-aggregated-la-data")]
+        public Task<IActionResult> DownloadPupilLevelAggregatedLADataSelectYear()
         {
             var result =
                 from laCode in User.GetLocalAuthorityCode()
@@ -83,24 +89,24 @@ namespace ASP.Web.Areas.LocalAuthority
                 .ToActionResult(View, _hostEnvironment);
         }
 
-        [HttpPost("download-data")]
-        public async Task<IActionResult> DownloadDataSelectYear(int? selectedYear)
+        [HttpPost("download-data/pupil-level-aggregated-la-data")]
+        public async Task<IActionResult> DownloadPupilLevelAggregatedLADataSelectYear(int? selectedYear)
         {
             if (!selectedYear.HasValue)
             {
                 ModelState.AddModelError(Constants.ModelErrorKeySelectedYear,
                     Constants.AcademicYearToDownldValidationErrorMessage);
 
-                return await DownloadDataSelectYear();
+                return await DownloadPupilLevelAggregatedLADataSelectYear();
             }
 
             // Redirect to files selection if year is valid
-            return RedirectToAction(nameof(DownloadDataSelectFiles),
+            return RedirectToAction(nameof(DownloadPupilLevelAggregatedLADataSelectFiles),
                 new { selectedYear });
         }
 
-        [HttpGet("download-data/select-files")]
-        public Task<IActionResult> DownloadDataSelectFiles(int? selectedYear)
+        [HttpGet("download-data/pupil-level-aggregated-la-data/select-files")]
+        public Task<IActionResult> DownloadPupilLevelAggregatedLADataSelectFiles(int? selectedYear)
         {
             var result =
                 from laCode in User.GetLocalAuthorityCode()
@@ -109,8 +115,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 let page = new PageViewModel(
                     new BreadcrumbTrailViewModel(
                         GetChildPageBaseBreadcrumbTrail().Concat([
-                            new("Download data", Action(nameof(DownloadDataSelectYear),
-                                new { selectedYear = "", selectedFiles = "" })),
+                            new("Download data", Action(nameof(DownloadData)))
                         ]), 
                         "Data files available for download"
                     ),
@@ -130,24 +135,24 @@ namespace ASP.Web.Areas.LocalAuthority
                 .ToActionResult(View, _hostEnvironment);
         }
 
-        [HttpPost("download-data/select-files")]
-        public async Task<IActionResult> DownloadDataSelectFiles(int? selectedYear, List<string> selectedFiles)
+        [HttpPost("download-data/pupil-level-aggregated-la-data/select-files")]
+        public async Task<IActionResult> DownloadPupilLevelAggregatedLADataSelectFiles(int? selectedYear, List<string> selectedFiles)
         {
             if (!selectedFiles.Any())
             {
                 ModelState.AddModelError(Constants.ModelErrorKeySelectedFiles,
                     Constants.DataFilesAvialableForDownlodValidationErrorMessage);
 
-                return await DownloadDataSelectFiles(selectedYear);
+                return await DownloadPupilLevelAggregatedLADataSelectFiles(selectedYear);
             }
 
             // Redirect to data select format page if year is valid
-            return RedirectToAction(nameof(DownloadDataSelectFormat),
+            return RedirectToAction(nameof(DownloadPupilLevelAggregatedLADataSelectFormat),
                 new { selectedYear, selectedFiles });
         }
 
-        [HttpGet("download-data/select-format")]
-        public Task<IActionResult> DownloadDataSelectFormat(int? selectedYear, List<string> selectedFiles)
+        [HttpGet("download-data/pupil-level-aggregated-la-data/select-format")]
+        public Task<IActionResult> DownloadPupilLevelAggregatedLADataSelectFormat(int? selectedYear, List<string> selectedFiles)
         {
             var result =
                 from laCode in User.GetLocalAuthorityCode()
@@ -155,9 +160,8 @@ namespace ASP.Web.Areas.LocalAuthority
                 let page = new PageViewModel(
                     new BreadcrumbTrailViewModel(
                         GetChildPageBaseBreadcrumbTrail().Concat([
-                            new("Download data", Action(nameof(DownloadDataSelectYear),
-                                new { selectedYear = "", selectedFiles = "" })),
-                            new("Data files available for download", Action(nameof(DownloadDataSelectFiles),
+                            new("Download data", Action(nameof(DownloadData))),
+                            new("Data files available for download", Action(nameof(DownloadPupilLevelAggregatedLADataSelectFiles),
                                 new { selectedYear, selectedFiles = "" }))
                         ]),
                         "Download pupil level and aggregated LA data"
@@ -175,7 +179,7 @@ namespace ASP.Web.Areas.LocalAuthority
                         "LA",
                         [("Data in CSV format", Url.Action(nameof(DownloadDataAsZip), 
                             new { fileType = "CSV", selectedFiles }))],
-                        Action(nameof(DownloadDataSelectYear), 
+                        Action(nameof(DownloadPupilLevelAggregatedLADataSelectYear), 
                             new { selectedYear = "", selectedFiles = "" })
                     )
                 );
@@ -184,15 +188,8 @@ namespace ASP.Web.Areas.LocalAuthority
                 .ToActionResult(View, _hostEnvironment);
         }
 
-        [HttpGet("download-data/download-as-zip")]
-        public new Task<IActionResult> DownloadDataAsZip(FileType fileType, List<string> selectedFiles)
-        {
-            return base.DownloadDataAsZip(fileType, selectedFiles)
-                .ToActionResult(_hostEnvironment);
-        }
-
         [HttpGet("download-data/individual-school-data")]
-        public Task<IActionResult> IndividualSchoolData()
+        public Task<IActionResult> DownloadIndividualSchoolDataSelectYear()
         {
             var result =
                 from laCode in User.GetLocalAuthorityCode()
@@ -200,8 +197,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 let page = new PageViewModel(
                     new BreadcrumbTrailViewModel(
                         GetChildPageBaseBreadcrumbTrail().Concat([
-                            new("Download data", Action(nameof(DownloadDataSelectYear),
-                                new { selectedYear = "", selectedFiles = "" })),
+                            new("Download data", Action(nameof(DownloadData)))
                         ]),
                         "Search for a school"
                     ),
@@ -221,6 +217,13 @@ namespace ASP.Web.Areas.LocalAuthority
                 .ToActionResult(View, _hostEnvironment);
         }
 
+        [HttpGet("download-data/download-as-zip")]
+        public new Task<IActionResult> DownloadDataAsZip(FileType fileType, List<string> selectedFiles)
+        {
+            return base.DownloadDataAsZip(fileType, selectedFiles)
+                .ToActionResult(_hostEnvironment);
+        }
+
         protected override Task<Result<string>> GetLocalAuthorityName(string laCode)
         {
             return base.GetLocalAuthorityName(laCode)
@@ -237,15 +240,14 @@ namespace ASP.Web.Areas.LocalAuthority
 
         private NavigationViewModel GetSubNavigation() =>
             new([
-                new("Download data", Action(nameof(DownloadDataSelectYear), 
-                    new { selectedYear = "", selectedFiles = "" }), Request.Path),
+                new("Download data", Action(nameof(DownloadData)), Request.Path),
             ]);
 
         private NavigationViewModel GetDownloadDataSideNavigation() =>
             new([
-                new("Pupil level and aggregated LA data", Action(nameof(DownloadDataSelectYear), 
+                new("Pupil level and aggregated LA data", Action(nameof(DownloadPupilLevelAggregatedLADataSelectYear), 
                     new { selectedYear = "", selectedFiles = "" }), Request.Path),
-                new("Individual school data", Action(nameof(IndividualSchoolData)), Request.Path)
+                new("Individual school data", Action(nameof(DownloadIndividualSchoolDataSelectYear)), Request.Path)
             ]);
 
         private string Action(string action, object? values = null) => Url.Action(action, values) ?? "";

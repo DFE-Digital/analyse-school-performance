@@ -1,62 +1,72 @@
 ﻿/* ==========================================================================
-   #SIDE NAVIGATION
-   #Adapted from the MOJ design system
-   #https://github.com/ministryofjustice/moj-frontend/blob/main/src/moj/components/side-navigation/_side-navigation.scss
+   #SUB-NAVIGATION
    ========================================================================== */
 
 @import '/node_modules/govuk-frontend/dist/govuk/settings/_media-queries.scss';
 @import '/node_modules/govuk-frontend/dist/govuk/helpers/_media-queries.scss';
 @import '/node_modules/govuk-frontend/dist/govuk/helpers/_colour.scss';
 @import '/node_modules/govuk-frontend/dist/govuk/settings/_colours-applied.scss';
-@import '/node_modules/govuk-frontend/dist/govuk/helpers/_spacing.scss';
-@import '/node_modules/govuk-frontend/dist/govuk/settings/_spacing.scss';
-@import '/node_modules/govuk-frontend/dist/govuk/helpers/_font-faces.scss';
-@import '/node_modules/govuk-frontend/dist/govuk/helpers/_typography.scss';
-@import '/node_modules/govuk-frontend/dist/govuk/settings/_typography-font.scss';
-@import '/node_modules/govuk-frontend/dist/govuk/settings/_typography-responsive.scss';
 
-.app-side-navigation {
-    @include govuk-font(16);
-    display: block;
-    padding: govuk-spacing(4) 0 0;
+.app-sub-navigation {
+    margin-bottom: 40px;
 }
 
-.app-side-navigation-width {
-    @include govuk-media-query($from: tablet) {
-        width: 22%;
-    }
-}
-
-.app-side-navigation__list {
+.app-sub-navigation__list {
+    font-size: 0;
     list-style: none;
     margin: 0;
     padding: 0;
 
-    @include govuk-media-query($until: tablet) {
-        margin: 0;
-        white-space: nowrap;
-    }
-
     @include govuk-media-query($from: tablet) {
-        margin-bottom: govuk-spacing(4);
+        box-shadow: inset 0 -1px 0 govuk-colour("mid-grey");
+        width: 100%;
     }
 }
 
-.app-side-navigation__item {
+.app-sub-navigation__item {
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.25;
+    margin-top: -1px;
+
     @include govuk-media-query($until: tablet) {
         box-shadow: inset 0 -1px 0 govuk-colour("mid-grey");
+    }
+
+    @include govuk-media-query($from: tablet) {
+        display: inline-block;
+        margin-right: 20px;
+        margin-top: 0;
+        font-size: 19px;
+        font-size: 1.1875rem;
+        line-height: 1.3157894737;
+        box-shadow: none;
     }
 
     a {
         &,
         &:link,
         &:visited {
-            background-color: inherit;
-            color: $govuk-link-colour;
+            font-family: "GDS Transport", arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            text-underline-offset: 0.1578em;
             display: block;
+            padding-top: 12px;
+            padding-bottom: 12px;
             text-decoration: none;
-            border-left: 4px solid transparent;
-            padding: govuk-spacing(2);
+            color: govuk-colour("blue");
+
+            @include govuk-media-query($until: tablet) {
+                border-left: 4px solid transparent;
+                padding-left: 10px;
+            }
+
+            @include govuk-media-query($from: tablet) {
+                border-bottom: 4px solid transparent;
+            }
         }
 
         &:hover {
@@ -77,8 +87,8 @@
             &,
             &:link,
             &:visited {
-                border-color: $govuk-link-colour;
-                color: $govuk-link-colour;
+                color: govuk-colour("black");
+                position: relative;
                 font-weight: bold;
             }
 
@@ -94,17 +104,12 @@
                 border-color: $govuk-focus-text-colour;
             }
 
-            @include govuk-media-query($from: tablet) {
-                &:link,
-                &:visited {
-                    background-color: govuk-colour("light-grey");
-                }
+            @include govuk-media-query($until: tablet) {
+                border-left: 4px solid govuk-colour("blue");
+            }
 
-                &:focus,
-                &:active {
-                    color: $govuk-focus-text-colour;
-                    background-color: $govuk-focus-colour;
-                }
+            @include govuk-media-query(tablet) {
+                border-color: govuk-colour("blue");
             }
         }
     }
