@@ -1,12 +1,6 @@
 using ASP.Application;
-using ASP.Core;
-using ASP.Core.Optionality;
 using ASP.Core.Results;
-using ASP.Core.Utilities;
 using ASP.Web.Areas.School.ViewModels;
-using ASP.Web.Areas.Shared.DownloadData.SelectFiles;
-using ASP.Web.Areas.Shared.DownloadData.SelectFormat;
-using ASP.Web.Areas.Shared.DownloadData.SelectYear;
 using ASP.Web.Shared.Navigation;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
@@ -15,6 +9,7 @@ using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ASP.Web.Features.DataDownloads;
 
 namespace ASP.Web.Areas.School
 {
@@ -109,141 +104,39 @@ namespace ASP.Web.Areas.School
                 .ToActionResult(View, _hostEnvironment);
         }
 
-        [HttpGet("download-data")]
-        public Task<IActionResult> DownloadDataSelectYear(string urn)
+        [HttpGet($"download-data/{DownloadDataStepController.SubRouteTemplate}")]
+        [HttpPost($"download-data/{DownloadDataStepController.SubRouteTemplate}")]
+        public Task<IActionResult> DownloadData(string urn, DownloadDataStepParameters parameters)
         {
+            var downloadData = new DownloadDataStepController(DownloadDataScope.School, ControllerContext, Url, _api);
+
             var result =
                 from establishmentDetails in GetEstablishmentDetails(urn)
-                from availableDownloads in GetAvailableDownloads(establishmentDetails.Urn, Optional<int>.None)
-                let schoolPage = new SchoolPageViewModel(
+                from actionResult in downloadData.HandleStep(
+                    parameters,
                     urn,
-                    new PageViewModel(
-                        new BreadcrumbTrailViewModel(
-                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name), 
-                            "Download data"
-                        ),
-                        "Download data",
-                        establishmentDetails.Name,
-                        GetSubNavigation(urn),
-                        GetDownloadDataSideNavigation(urn, establishmentDetails.Name),
-                        "Dates available for download",
-                        $"{establishmentDetails.Name} data"
-                ))
-                select new SchoolDownloadDataSelectYearViewModel(
-                    schoolPage,
-                    new DownloadDataSelectYearModel(availableDownloads.AvailableDates)
-                );
+                    GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name)
+                        .Append(new("Download data", Action(nameof(DownloadData),
+                            DownloadDataStepController.InitialRouteValues.Merge(new { urn })))),
+                    stepModel => View(new SchoolDownloadDataPageViewModel(
+                        new SchoolPageViewModel(
+                            urn,
+                            new PageViewModel(
+                                stepModel.BreadcrumbTrail,
+                                "Download data",
+                                establishmentDetails.Name,
+                                GetSubNavigation(urn),
+                                GetDownloadDataSideNavigation(urn, establishmentDetails.Name),
+                                stepModel.StepTitle,
+                                $"{establishmentDetails.Name} data"
+                        )),
+                        stepModel.DownloadData
+                    )),
+                    new() { [DownloadDataStepType.SelectFormat] = $"Download {establishmentDetails.Name} data" }
+                )
+                select actionResult;
 
             return result
-                .ToActionResult(View, _hostEnvironment);
-        }
-
-        [HttpPost("download-data")]
-        public async Task<IActionResult> DownloadDataSelectYear(string urn, int? selectedYear)
-        {
-            if (!selectedYear.HasValue)
-            {
-                ModelState.AddModelError(Constants.ModelErrorKeySelectedYear, Constants.AcademicYearToDownldValidationErrorMessage);
-
-                // Reload the view with the error
-                return await DownloadDataSelectYear(urn);
-            }
-
-            // Redirect to files selection if year is valid
-            return RedirectToAction(nameof(DownloadDataSelectFiles), new { urn, selectedYear });
-        }
-
-        [HttpGet("download-data/select-files")]
-        public Task<IActionResult> DownloadDataSelectFiles(string urn, int? selectedYear)
-        {
-            var result =
-                from establishmentDetails in GetEstablishmentDetails(urn)
-                from availableDownloads in GetAvailableDownloads(establishmentDetails.Urn, Optional.FromNullable(selectedYear))
-                let schoolPage = new SchoolPageViewModel(
-                    urn,
-                    new PageViewModel(
-                        new BreadcrumbTrailViewModel(
-                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name).Concat([
-                                new("Download data", Action(nameof(DownloadDataSelectYear), 
-                                    new { urn, selectedYear = "", selectedFiles = "" })),
-                            ]), 
-                            "Data files available for download"
-                        ),
-                        "Download data",
-                        establishmentDetails.Name,
-                        GetSubNavigation(urn),
-                        GetDownloadDataSideNavigation(urn, establishmentDetails.Name),
-                        "Data files available for download",
-                        $"{establishmentDetails.Name} data"
-                ))
-                select new SchoolDownloadDataSelectFilesViewModel(
-                    schoolPage,
-                    new DownloadDataSelectFilesModel(availableDownloads.Downloads)
-                );
-
-            return result
-                .ToActionResult(View, _hostEnvironment);
-        }
-
-        [HttpPost("download-data/select-files")]
-        public async Task<IActionResult> DownloadDataSelectFiles(string urn, int? selectedYear, List<string> selectedFiles)
-        {
-            if (!selectedFiles.Any())
-            {
-                ModelState.AddModelError(Constants.ModelErrorKeySelectedFiles, 
-                    Constants.DataFilesAvialableForDownlodValidationErrorMessage);
-
-                return await DownloadDataSelectFiles(urn, selectedYear);
-            }
-
-            // Redirect to data select format page if year is valid
-            return RedirectToAction(nameof(DownloadDataSelectFormat),
-                new { urn, selectedYear, selectedFiles });
-        }
-
-        [HttpGet("download-data/select-format")]
-        public Task<IActionResult> DownloadDataSelectFormat(string urn, int selectedYear, List<string> selectedFiles)
-        {
-            var result =
-                from establishmentDetails in GetEstablishmentDetails(urn)
-                let schoolPage = new SchoolPageViewModel(
-                    urn,
-                    new PageViewModel(
-                        new BreadcrumbTrailViewModel(
-                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name).Concat([
-                                new("Download data", Action(nameof(DownloadDataSelectYear), 
-                                    new { urn, selectedYear = "", selectedFiles = "" })),
-                                new("Data files available for download", Action(nameof(DownloadDataSelectFiles), 
-                                    new { urn, selectedYear, selectedFiles = "" }))
-                            ]), 
-                            $"Download {establishmentDetails.Name} data"
-                        ),
-                        "Download data",
-                        establishmentDetails.Name,
-                        GetSubNavigation(urn),
-                        GetDownloadDataSideNavigation(urn, establishmentDetails.Name),
-                        $"Download {establishmentDetails.Name} data",
-                        $"{establishmentDetails.Name} data"
-                ))
-                select new SchoolDownloadDataSelectFormatViewModel(
-                    schoolPage,
-                    new DownloadDataSelectFormatModel(
-                        "school",
-                        [("Data in CSV format", Action(nameof(DownloadDataAsZip), 
-                            new { urn, fileType = "CSV", selectedFiles }))],
-                        Action(nameof(DownloadDataSelectYear), 
-                            new { urn, selectedYear = "", selectedFiles = "" })
-                    )
-                );
-
-            return result
-                .ToActionResult(View, _hostEnvironment);
-        }
-
-        [HttpGet("download-data/download-as-zip")]
-        public Task<IActionResult> DownloadDataAsZip(string urn, FileType fileType, List<string> selectedFiles)
-        {
-            return base.DownloadDataAsZip(fileType, selectedFiles)
                 .ToActionResult(_hostEnvironment);
         }
 
@@ -260,8 +153,8 @@ namespace ASP.Web.Areas.School
 
         private NavigationViewModel GetSubNavigation(string urn) =>
             new([
-                new("Download data", Action(nameof(DownloadDataSelectYear), 
-                    new { urn, selectedYear = "", selectedFiles = "" }), Request.Path),
+                new("Download data", Action(nameof(DownloadData),
+                    DownloadDataStepController.InitialRouteValues.Merge(new { urn })), Request.Path),
                 new("Other reports", Action(nameof(OtherReports), 
                     new { urn }), Request.Path),
                 new("Useful links", Action(nameof(UsefulLinks),
@@ -270,10 +163,8 @@ namespace ASP.Web.Areas.School
 
         private NavigationViewModel GetDownloadDataSideNavigation(string urn, string name) =>
             new([
-                new($"{name} data", Action(nameof(DownloadDataSelectYear), 
-                    new { urn, selectedYear = "", selectedFiles = "" }), Request.Path)
+                new($"{name} data", Action(nameof(DownloadData),
+                    DownloadDataStepController.InitialRouteValues.Merge(new { urn })), Request.Path)
             ]);
-
-        private string Action(string action, object? values = null) => Url.Action(action, values) ?? "";
     }
 }

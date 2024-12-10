@@ -1,6 +1,7 @@
 using AngleSharp.Dom;
 using ASP.Test.Core;
 using ASP.Web.FunctionalTests.Drivers;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit.Sdk;
@@ -329,23 +330,53 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
                 var element = await _web.CurrentPage.ElementAsync($"{selector} > li:nth-child({i + 1})");
                 await element.ShouldExistAsync($"{itemName} {i + 1} does not exist");
 
-                if (row.ContainsKey("href") && !string.IsNullOrWhiteSpace(row["href"]))
+                if (TryGetRowKey("Href", row, out var expectedHref) && !string.IsNullOrWhiteSpace(expectedHref))
                 {
                     element = element.Element(":scope > a");
-                    await element.ShouldExistAsync($"{itemName} {i + 1} link does not exist");
-                    var href = await element.AttributeAsync("href");
-                    Assert.Equal(row["href"], href.Trim());
+                    var rowName = row.ContainsKey("text") ? $"(\"{row["text"]}\")" : "";
+                    await element.ShouldExistAsync($"Link element for {itemName} {i + 1} {rowName} does not exist");
+                    var actualHref = await element.AttributeAsync("href");
+                    Assert.Equal(expectedHref, actualHref.Trim());
                 }
-                
-                var text = await element.TextContentAsync();
-                Assert.Equal(row["text"], text.Trim());
 
-                if (row.ContainsKey("current") && !string.IsNullOrWhiteSpace(row["current"]) && bool.TryParse(row["current"], out var isCurrent) && isCurrent)
+                if (TryGetRowKey("Text", row, out var expectedText))
                 {
+                    var actualText = await element.TextContentAsync();
+                    Assert.Equal(expectedText, actualText.Trim());
+                }
+
+                if (TryGetRowKey("Current", row, out var currentString))
+                {
+                    var expectedIsCurrent = bool.TryParse(currentString, out var val) && val;
                     var ariaCurrent = await element.AttributeAsync("aria-current");
-                    Assert.Equal("page", ariaCurrent);
+                    if (expectedIsCurrent)
+                    {
+                        Assert.Equal("page", ariaCurrent);
+                    }
+                    else
+                    {
+                        Assert.NotEqual("page", ariaCurrent);
+                    }
                 }
             }
+        }
+
+        private bool TryGetRowKey(string key, TableRow row, [NotNullWhen(true)] out string? value)
+        {
+            if(row.ContainsKey(key))
+            {
+                value = row[key];
+                return true;
+            }
+
+            if (row.ContainsKey(key.ToLowerInvariant()))
+            {
+                value = row[key.ToLowerInvariant()];
+                return true;
+            }
+
+            value = null;
+            return false;
         }
 
         private string ResolveVariable(string variableName)

@@ -155,7 +155,7 @@ Scenario: Page should show a breadcrumb trail when search returns results
 		| text                         | href     | current |
 		| Home                         | /        |         |
 		| Search                       | /search/ |         |
-		| Search results for "Primary" |          |         |
+		| Search results for "Primary" |          | true    |
 
 @Javascript:enabled
 Scenario: Page should show a breadcrumb trail when search returns results (JS)
@@ -223,7 +223,7 @@ Scenario: Page should show a breadcrumb trail when search returns no results
 		| text                                | href     | current |
 		| Home                                | /        |         |
 		| Search                              | /search/ |         |
-		| We found no matches for "Secondary" |          |         |
+		| We found no matches for "Secondary" |          | true    |
 
 @Javascript:enabled
 Scenario: Page should show a breadcrumb trail when search returns no results (JS)

@@ -144,11 +144,13 @@ Scenario: Data downloads 'Dates Available for Download' - page should show a bre
 	Then I should get a 200 response
 	And the page title should be "Download data | Analyse school performance"
 	And the breadcrumb trail should be:
-		| text                  | href                  | current |
-		| Home                  | /                     |         |
-		| All local authorities | /local-authorities/   |         |
-		| Test LA               | /local-authority/301/ |         |
-		| Download data         |                       | true    |
+		| text                         | href                                | current |
+		| Home                         | /                                   |         |
+		| All local authorities        | /local-authorities/                 |         |
+		| Test LA                      | /local-authority/301/               |         |
+		| Download data                | /local-authority/301/download-data/ |         |
+		| Dates available for download |                                     | true    |
+
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Dates Available for Download' - page should contain three radio buttons
@@ -229,12 +231,13 @@ Scenario: Data downloads 'Data files available for download' - page should show 
 	Then I should get a 200 response
 	And the page title should be "Download data | Analyse school performance"
 	And the breadcrumb trail should be:
-		| text                              | href                                | current |
-		| Home                              | /                                   |         |
-		| All local authorities             | /local-authorities/                 |         |
-		| Test LA                           | /local-authority/301/               |         |
-		| Download data                     | /local-authority/301/download-data/ |         |
-		| Data files available for download |                                     | true    |
+		| text                              | href                                                               | current |
+		| Home                              | /                                                                  |         |
+		| All local authorities             | /local-authorities/                                                |         |
+		| Test LA                           | /local-authority/301/                                              |         |
+		| Download data                     | /local-authority/301/download-data/                                |         |
+		| Dates available for download      | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |         |
+		| Data files available for download |                                                                    | true    |
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Data files available for download' - page should contain three checkbox groups
@@ -340,6 +343,7 @@ Scenario: Data downloads 'Download pupil level and aggregated LA data' - page sh
 		| All local authorities                       | /local-authorities/                                                                               |         |
 		| Test LA                                     | /local-authority/301/                                                                             |         |
 		| Download data                               | /local-authority/301/download-data/                                                               |         |
+		| Dates available for download                | /local-authority/301/download-data/pupil-level-aggregated-la-data/                                |         |
 		| Data files available for download           | /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022 |         |
 		| Download pupil level and aggregated LA data |                                                                                                   | true    |
 
@@ -353,9 +357,10 @@ Scenario Outline: Data downloads 'Download pupil level and aggregated LA data' -
 	"""
     When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional
     Then I should get a 200 response
+	And the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your LA."
 	And the available download formats should be:
     	| text               | href                                                                                                                                                   |
-    	| Data in CSV format | /local-authority/301/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional |
+    	| Data in CSV format | /local-authority/301/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=CSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional |
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Download school data' - Download other dates link should link back to first step

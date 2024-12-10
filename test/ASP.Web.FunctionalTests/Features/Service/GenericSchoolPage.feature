@@ -511,13 +511,14 @@ Scenario: Data downloads 'Dates Available for Download' - page should show a bre
 	Then I should get a 200 response
 	And the page title should be "Download data | Analyse school performance"
 	And the breadcrumb trail should be:
-		| text                      | href                          | current |
-		| Home                      | /                             |         |
-		| All local authorities     | /local-authorities/           |         |
-		| Oxfordshire               | /local-authority/931/         |         |
-		| All schools               | /local-authority/931/schools/ |         |
-		| Dagenham Park CofE School | /school/136028/               |         |
-		| Download data             |                               | true    |
+		| text                         | href                          | current |
+		| Home                         | /                             |         |
+		| All local authorities        | /local-authorities/           |         |
+		| Oxfordshire                  | /local-authority/931/         |         |
+		| All schools                  | /local-authority/931/schools/ |         |
+		| Dagenham Park CofE School    | /school/136028/               |         |
+		| Download data                | /school/136028/download-data/ |         |
+		| Dates available for download |                               | true    |
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Dates available for download' - page should contain three radio buttons
@@ -607,6 +608,7 @@ Scenario: Download data 'Data files available for download' - page should show a
 		| All schools                       | /local-authority/931/schools/ |         |
 		| Dagenham Park CofE School         | /school/136028/               |         |
 		| Download data                     | /school/136028/download-data/ |         |
+		| Dates available for download      | /school/136028/download-data/ |         |
 		| Data files available for download |                               | true    |
 
 @Javascript:disabled
@@ -715,6 +717,7 @@ Scenario: Download data 'Download pupil level and aggregated LA data' - page sho
 		| All schools                             | /local-authority/931/schools/                                |         |
 		| Dagenham Park CofE School               | /school/136028/                                              |         |
 		| Download data                           | /school/136028/download-data/                                |         |
+		| Dates available for download            | /school/136028/download-data/                                |         |
 		| Data files available for download       | /school/136028/download-data/select-files/?selectedYear=2022 |         |
 		| Download Dagenham Park CofE School data |                                                              | true    |
 
@@ -727,7 +730,8 @@ Scenario Outline: Data downloads 'Download school data' page should contain thre
     }
 	"""
     When I navigate to /school/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school
-    Then the available download formats should be:
+	Then the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your school."
+    And the available download formats should be:
     	| text               | href                                                                                                                                                           |
     	| Data in CSV format | /school/136028/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school |
 

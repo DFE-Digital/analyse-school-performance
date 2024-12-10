@@ -1,5 +1,6 @@
 ﻿using ASP.Web.FunctionalTests.Drivers;
 using BoDi;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.Support
 {
@@ -10,11 +11,12 @@ namespace ASP.Web.FunctionalTests.Support
     public class WebDriverSupport
     {
         private readonly IObjectContainer _objectContainer;
+        private readonly ISpecFlowOutputHelper _outputHelper;
 
-        public WebDriverSupport(IObjectContainer objectContainer)
+        public WebDriverSupport(IObjectContainer objectContainer, ISpecFlowOutputHelper outputHelper)
         {
             _objectContainer = objectContainer;
-
+            _outputHelper = outputHelper;
             ConfigureErrorWebDriver();
         }
 

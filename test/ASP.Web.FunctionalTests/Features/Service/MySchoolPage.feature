@@ -528,10 +528,12 @@ Scenario: Data downloads 'Dates Available for Download' - page should show a bre
     When I navigate to /my-school/download-data
 	Then the page title should be "Download data | Analyse school performance"
 	And the breadcrumb trail should be:
-		| text          | href        | current |
-		| Home          | /           |         |
-		| My school     | /my-school/ |         |
-		| Download data |             | true    |
+		| text                         | href                      | current |
+		| Home                         | /                         |         |
+		| My school                    | /my-school/               |         |
+		| Download data                | /my-school/download-data/ |         |
+		| Dates available for download |                           | true    |
+
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Dates available for download' - page should contain three radio buttons
@@ -620,6 +622,7 @@ Scenario: Download data 'Data files available for download' - page should show a
 		| Home                              | /                         |         |
 		| My school                         | /my-school/               |         |
 		| Download data                     | /my-school/download-data/ |         |
+		| Dates available for download      | /my-school/download-data/ |         |
 		| Data files available for download |                           | true    |
 
 @Javascript:disabled
@@ -679,9 +682,9 @@ Scenario: Data downloads 'Data files available for download' - when no files are
 Scenario: Data downloads 'Data files available for download' - when files are selected and Continue button clicked, should move to next step
     Given Establishment "123456" exists:
     """
-     {
+    {
         "name": "Hollinswood Primary School"
-     }
+    }
     """
     And I am a School Named user for Establishment "123456"
     When I navigate to /my-school/download-data/select-files/?selectedYear=2022
@@ -727,6 +730,7 @@ Scenario: Download data 'Download school data' - page should show a breadcrumb t
 		| Home                                    | /                                                        |         |
 		| My school                               | /my-school/                                              |         |
 		| Download data                           | /my-school/download-data/                                |         |
+		| Dates available for download            | /my-school/download-data/                                |         |
 		| Data files available for download       | /my-school/download-data/select-files/?selectedYear=2022 |         |
 		| Download Dagenham Park CofE School data |                                                          | true    |
 
@@ -740,7 +744,8 @@ Scenario Outline: Data downloads 'Download school data' page should contain thre
 	"""
     And I am a School Named user for Establishment "136028"
     When I navigate to /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school
-    Then the available download formats should be:
+	Then the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your school."
+    And the available download formats should be:
     	| text               | href                                                                                                                                                       |
     	| Data in CSV format | /my-school/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school |
 

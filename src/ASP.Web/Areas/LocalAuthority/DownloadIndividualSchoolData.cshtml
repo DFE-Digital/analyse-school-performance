@@ -1,0 +1,7 @@
+﻿@model ASP.Web.Areas.LocalAuthority.LocalAuthorityDownloadDataPageViewModel
+@{
+    Layout = "~/Areas/LocalAuthority/_LocalAuthorityPageLayout.cshtml";
+    ViewBag.LayoutModel = Model.Page;
+}
+
+<partial name="~/Features/DataDownloads/_DownloadDataPartial.cshtml" model=@Model.DownloadData/>

@@ -579,7 +579,7 @@ Scenario: Data downloads 'Dates available for download' - page should be accessi
 		| Other reports | /my-schools/136028/other-reports/ |         |
 		| Useful links  | /my-schools/136028/useful-links/  |         |
     And the side navigation should be:
-		| text                           | href                      | current |
+		| text                           | href                              | current |
 		| Dagenham Park CofE School data | /my-schools/136028/download-data/ | true    |
     And the element "#app-subpage-title" should have the text content "Dagenham Park CofE School data Dates available for download"
     And the element "#app-subpage-title-caption" should have the text content "Dagenham Park CofE School data"
@@ -601,11 +601,12 @@ Scenario: Data downloads 'Dates Available for Download' - page should show a bre
     When I navigate to /my-schools/136028/download-data
 	Then the page title should be "Download data | Analyse school performance"
 	And the breadcrumb trail should be:
-		| text                      | href                | current |
-		| Home                      | /                   |         |
-		| My schools                | /my-schools/        |         |
-		| Dagenham Park CofE School | /my-schools/136028/ |         |
-		| Download data             |                     | true    |
+		| text                         | href                              | current |
+		| Home                         | /                                 |         |
+		| My schools                   | /my-schools/                      |         |
+		| Dagenham Park CofE School    | /my-schools/136028/               |         |
+		| Download data                | /my-schools/136028/download-data/ |         |
+		| Dates available for download |                                   | true    |
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Dates available for download' - page should contain three radio buttons
@@ -720,6 +721,7 @@ Scenario: Download data 'Data files available for download' - page should show a
 		| My schools                        | /my-schools/                      |         |
 		| Dagenham Park CofE School         | /my-schools/136028/               |         |
 		| Download data                     | /my-schools/136028/download-data/ |         |
+		| Dates available for download      | /my-schools/136028/download-data/ |         |
 		| Data files available for download |                                   | true    |
 
 @Javascript:disabled
@@ -858,6 +860,7 @@ Scenario: Download data 'Download school data' - page should show a breadcrumb t
 		| My schools                              | /my-schools/                                                     |         |
 		| Dagenham Park CofE School               | /my-schools/136028/                                              |         |
 		| Download data                           | /my-schools/136028/download-data/                                |         |
+		| Dates available for download            | /my-schools/136028/download-data/                                |         |
 		| Data files available for download       | /my-schools/136028/download-data/select-files/?selectedYear=2022 |         |
 		| Download Dagenham Park CofE School data |                                                                  | true    |
 
@@ -876,7 +879,8 @@ Scenario Outline: Data downloads 'Download school data' - page should contain th
 	}
 	"""
     When I navigate to /my-schools/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school
-    Then the available download formats should be:
+	Then the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your school."
+    And the available download formats should be:
     	| text               | href                                                                                                                                                               |
     	| Data in CSV format | /my-schools/136028/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school |
 

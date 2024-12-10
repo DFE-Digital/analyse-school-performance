@@ -1,0 +1,16 @@
+﻿@using ASP.Web.Features.DataDownloads;
+
+@model DownloadDataViewModel
+
+@if (Model is DownloadDataSelectYearViewModel selectYear)
+{
+    <partial name="~/Features/DataDownloads/_DownloadDataSelectYearPartial.cshtml" model=@selectYear />
+}
+else if (Model is DownloadDataSelectFilesViewModel selectFiles)
+{
+    <partial name="~/Features/DataDownloads/_DownloadDataSelectFilesPartial.cshtml" model=@selectFiles />
+}
+else if (Model is DownloadDataSelectFormatViewModel selectFormat)
+{
+    <partial name="~/Features/DataDownloads/_DownloadDataSelectFormatPartial.cshtml" model=@selectFormat />
+}

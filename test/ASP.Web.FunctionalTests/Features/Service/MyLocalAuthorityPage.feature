@@ -118,10 +118,11 @@ Scenario: Download data 'Dates Available for Download' - page should show a brea
 	Then I should get a 200 response
 	And the page title should be "Download data | Analyse school performance"
 	And the breadcrumb trail should be:
-		| text               | href                 | current |
-		| Home               | /                    |         |
-		| My local authority | /my-local-authority/ |         |
-		| Download data      |                      | true    |
+		| text                         | href                               | current |
+		| Home                         | /                                  |         |
+		| My local authority           | /my-local-authority/               |         |
+		| Download data                | /my-local-authority/download-data/ |         |
+		| Dates available for download |                                    | true    |
 
 @Javascript:disabled
 Scenario Outline: Download data 'Dates Available for Download' - page should contain three radio buttons
@@ -211,11 +212,12 @@ Scenario: Download data 'Data files available for download' - page should show a
 	Then I should get a 200 response
 	And the page title should be "Download data | Analyse school performance"
 	And the breadcrumb trail should be:
-		| text                              | href                               | current |
-		| Home                              | /                                  |         |
-		| My local authority                | /my-local-authority/               |         |
-		| Download data                     | /my-local-authority/download-data/ |         |
-		| Data files available for download |                                    | true    |
+		| text                              | href                                                              | current |
+		| Home                              | /                                                                 |         |
+		| My local authority                | /my-local-authority/                                              |         |
+		| Download data                     | /my-local-authority/download-data/                                |         |
+		| Dates available for download      | /my-local-authority/download-data/pupil-level-aggregated-la-data/ |         |
+		| Data files available for download |                                                                   | true    |
 
 @Javascript:disabled
 Scenario Outline: Download data 'Data files available for download' - page should contain three checkbox groups
@@ -326,6 +328,7 @@ Scenario: Download data 'Download pupil level and aggregated LA data' - page sho
 		| Home                                        | /                                                                                                |         |
 		| My local authority                          | /my-local-authority/                                                                             |         |
 		| Download data                               | /my-local-authority/download-data/                                                               |         |
+		| Dates available for download                | /my-local-authority/download-data/pupil-level-aggregated-la-data/                                |         |
 		| Data files available for download           | /my-local-authority/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022 |         |
 		| Download pupil level and aggregated LA data |                                                                                                  | true    |
 
@@ -341,9 +344,10 @@ Scenario Outline: Download data - 'Download pupil level and aggregated LA data' 
 	And I am a LA Named user for Local Authority "301"
     When I navigate to /my-local-authority/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional
     Then I should get a 200 response
+	And the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your LA."
     And the available download formats should be:
     	| text               | href                                                                                                                                                  |
-    	| Data in CSV format | /my-local-authority/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional |
+    	| Data in CSV format | /my-local-authority/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=CSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional |
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Download school data' - Download other dates link should link back to first step

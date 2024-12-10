@@ -1,7 +1,7 @@
-@model ASP.Web.Areas.Shared.DownloadData.SelectFormat.DownloadDataSelectFormatModel
+@model ASP.Web.Features.DataDownloads.DownloadDataSelectFormatViewModel
 
 <p class="govuk-body">You can download your requested data in CSV format.</p>
-<p class="govuk-body">The data included in your download is the pupil level / aggregated data for your @Model.SchoolOrLaLevel.</p>
+<p class="govuk-body" data-testid="select-format-description">The data included in your download is the pupil level / aggregated data for your @Model.SchoolOrLaLevel.</p>
 <ul class="govuk-list" data-testid="available-downloads-formats">
     @foreach (var (text, link) in Model.DownloadLinks)
     {
