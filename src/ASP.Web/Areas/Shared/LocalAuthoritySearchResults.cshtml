@@ -1,51 +1,19 @@
-﻿@using ASP.Web.Areas.Shared.LocalAuthorityListing
-@using ASP.Web.Areas.Shared.Search
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model ASP.Web.Areas.Shared.Search.LocalAuthority.LocalAuthoritySearchViewModel
-@{
-    ViewData["Title"] = Model.TotalCount == 0 ? $"We found no matches for \"{Model.SearchTerm}\"" : $"Search results for \"{Model.SearchTerm}\"";
-}
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ASP.Web.Areas.Shared.Search.LocalAuthority.LocalAuthoritySearchResultsPageViewModel  
+@{  
+    Layout = "~/Areas/Shared/Search/Layout/SearchResultsPageLayout/_SearchResultsPageLayout.cshtml";  
+    ViewBag.PageLayoutModel = Model.SearchResultsPage;  
+}  
 
-<div class="govuk-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.BreadcrumbTrail)
-</div>
-<div class="govuk-width-container govuk-main-wrapper">
-    @await Html.PartialAsync("~/Areas/Shared/Search/_SearchErrorSummaryPartial.cshtml")
-    @if (Model.TotalCount > 0)
-    {
-        <h1 id="search-results-some-results-title" data-testid="search-results-some-results-title"
-            class="govuk-heading-xl govuk-!-margin-bottom-4">
-            Search results for "@Model.SearchTerm"
-        </h1>
-        @if (Model.SubTitle != null)
-        {
-            <h2 class="govuk-heading-m" data-testid="search-results-sub-title">@Model.SubTitle</h2>
-        }
+<div class="govuk-grid-row">  
+    @if (Model.LocalAuthorityListings.Count > 0)  
+    {  
+        <div class="govuk-grid-column-two-thirds">  
+            <partial name="~/Areas/Shared/LocalAuthorityListing/_LocalAuthoritiesListingPartial.cshtml"   
+                     model="Model.LocalAuthorityListings" />
 
-        @await Html.PartialAsync("~/Areas/Shared/Search/_SearchFormPartial.cshtml",
-            new SearchFormModel(Model.SearchSuggestionUrl, 
-                Model.AlpineComponentName,
-                Model.InputLabel,
-                Model.InputValidationMessage,
-                Model.Controller, 
-                Model.ControllerAction))
-    }
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            @await Html.PartialAsync("~/Areas/Shared/Search/_SearchResultNotFoundPartial.cshtml",
-                new SearchResultNotFoundModel(Model.SearchTerm, Model.SearchUrl, Model.TotalCount))
-        </div>
-    </div>
-    <div class="govuk-grid-row">
-        @if (Model.TotalCount > 0)
-        {
-            <div class="govuk-grid-column-two-thirds">
-                @await Html.PartialAsync("~/Areas/Shared/LocalAuthorityListing/_LocalAuthoritiesListingPartial.cshtml", new LocalAuthoritiesListingViewModel(Model.LocalAuthoritiesListingModel))
-                @if (Model.PaginationModel != null)
-                {
-                    <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml" model=@((Model.PaginationModel, "Footer"))/>
-                }
-            </div>
-        }
-    </div>
-</div>
+            <partial name="~/Areas/Shared/Pagination/_PaginationPartial.cshtml"
+                     model="@((Model.SearchResultsPage.Pagination, "Footer"))" />
+        </div>  
+    }  
+</div> 

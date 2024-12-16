@@ -12,7 +12,7 @@ export const searchSuggestions = (inputTemplate, suggestionTemplate) => ({
     initializeAutocomplete() {
         const container = document.getElementById('suggestionSearchTermContainer');
         if (container) {
-            const existingInput = document.getElementById('searchTerm');
+            const existingInput = document.getElementById('app-field-Search');
             if (existingInput) {
                 existingInput.parentElement.removeChild(existingInput);
             }
@@ -32,7 +32,7 @@ export const searchSuggestions = (inputTemplate, suggestionTemplate) => ({
                 // If the user selects a School/LA from the autocomplete dropdown and then starts typing in the search box again,
                 // we want to reset the previously selected suggestion (URN/code). Otherwise, if they click the search button, 
                 // they may be directed to the wrong School/LA.
-                const newInput = document.getElementById('searchTerm');
+                const newInput = document.getElementById('app-field-Search');
                 newInput.addEventListener('input', () => {
                     this.suggestion = '';
                 });
@@ -51,7 +51,7 @@ export const searchSuggestions = (inputTemplate, suggestionTemplate) => ({
         
         if (!this.suggestion) return;
 
-        const input = document.getElementById('searchTerm');
+        const input = document.getElementById('app-field-Search');
         if (!input) return;
 
         if ('URLSearchParams' in window) {

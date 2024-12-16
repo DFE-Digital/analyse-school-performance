@@ -23,7 +23,8 @@
             </asp-error-summary>
         }
 
-        @RenderSection("PageTitle")
+
+        @await RenderSectionAsync("PageTitle", false)
 
         @if (layoutModel.SubNavigation != null)
         {

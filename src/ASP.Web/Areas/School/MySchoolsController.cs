@@ -5,11 +5,14 @@ using ASP.Core.LocalAuthorities;
 using ASP.Core.MultiAcademyTrusts;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
+using ASP.Web.Areas.Shared.Search;
+using ASP.Web.Areas.Shared.Search.Layout.SearchPageLayout;
 using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
+using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,21 +44,27 @@ namespace ASP.Web.Areas.School
             var pageNumber = PageHelper.ParsePageNumber(page);
             var organisationName = User.FindFirst(CustomClaimTypes.OrganisationName)?.Value;
             var searchSuggestionsUrl = $"/search/suggestions/";
-
+            
+            var searchConfig = SearchConfiguration.ForSchools(  
+                searchSuggestionUrl: searchSuggestionsUrl 
+            ); 
             var result =
                 from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository,
                     _multiAcademyTrustRepository)
-                from results in GetAllEstablishments(scopeInfo.ScopeType, scopeInfo.ScopeId, pageNumber)
-                select DefaultViewModel(
-                    results,
-                    new SchoolsPageSearchParameters(
-                        "My schools", 
-                    	$"{organisationName} - {results.TotalResults:N0} schools",
-                        $"/my-schools/", 
-                        GetSchoolsPageBreadcrumbs("My schools"),
-                        urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { Area = "School", urn }),
-                        searchSuggestionsUrl));
-
+                from establishments in GetAllEstablishments(scopeInfo.ScopeType, scopeInfo.ScopeId, pageNumber)
+                select new SchoolSearchPageViewModel(
+                    new SearchPageLayoutModel(
+                        new PageViewModel(
+                            GetSchoolsPageBreadcrumbs("My schools"),
+                            "My schools",
+                            $"{organisationName} - {establishments.TotalResults:N0} schools"
+                        ),
+                        searchConfig.SearchForm,
+                        CreatePaginationModel(establishments,$"/my-schools/")
+                    ),
+                    MapEstablishmentListings(establishments.Results,urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage),
+                        "MySchoolsSchool", new { Area = "School", urn }))
+                );
             return result.ToActionResult(View, _hostEnvironment);
         }
 

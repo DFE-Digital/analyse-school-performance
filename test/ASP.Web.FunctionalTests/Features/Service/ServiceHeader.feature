@@ -50,7 +50,6 @@ Scenario Outline: LA user top navigation
 		| Home                  | /                        |
 		| My local authority    | /my-local-authority/     |
 		| My schools            | /my-schools/             |
-		| Search                | /search/                 |
 		| Release timetable     | /help/release-timetable/ |
 		| Guidance              | /help/guidance/          |
 Examples: 
@@ -66,7 +65,6 @@ Scenario Outline: MAT/Diocese user top navigation
 		| text                  | href                     |
 		| Home                  | /                        |
 		| My schools            | /my-schools/             |
-		| Search                | /search/                 |
 		| Release timetable     | /help/release-timetable/ |
 		| Guidance              | /help/guidance/          |
 Examples: 
@@ -86,7 +84,6 @@ Scenario Outline: All schools user top navigation
 		| Home                  | /                        |
 		| All local authorities | /local-authorities/      |
 		| All schools           | /schools/                |
-		| Search                | /search/                 |
 		| Release timetable     | /help/release-timetable/ |
 		| Guidance              | /help/guidance/          |
 Examples: 

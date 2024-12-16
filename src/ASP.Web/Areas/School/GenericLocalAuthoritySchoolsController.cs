@@ -5,12 +5,16 @@ using ASP.Core.Helpers;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
+using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Areas.Shared.Search;
+using ASP.Web.Areas.Shared.Search.Layout.SearchPageLayout;
+using ASP.Web.Areas.Shared.Search.Layout.SearchResultsPageLayout;
 using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
+using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,8 +26,6 @@ namespace ASP.Web.Areas.School
     [Authorize(Policy = Policy.AccessToAllSchools)]
     public class GenericLocalAuthoritySchoolsController : SchoolsController
     {
-        private const string CurrentControllerName = "GenericLocalAuthoritySchools";
-        
         public GenericLocalAuthoritySchoolsController(
             IAspApiClient api,
             IHostEnvironment hostEnvironment
@@ -61,28 +63,64 @@ namespace ASP.Web.Areas.School
             var scopeInfo = new ScopeInfo(ScopeType.LA, Optional<string>.Some(laCode));
 
             var searchUrlForNoResults = $"/local-authority/{laCode}/schools/";
-            var searchSuggestionsUrl = $"/search/suggestions/";
-            var noResultsVm = NoResultsViewModel(searchParams,
-                GetSchoolsSearchBreadcrumbs(searchParams.Search, laCode, laName, false),
-                searchUrlForNoResults,
-                searchSuggestionsUrl,
-                CurrentControllerName,
-                nameof(Schools),
-                urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
-                    new { Area = "School", urn }));
-            var schoolSearchParameters = new SchoolSearchParameters(nameof(Schools),
-                searchSuggestionsUrl,
-                CurrentControllerName,
-                nameof(Schools),
-                GetSchoolsSearchBreadcrumbs(searchParams.Search, laCode, laName),
-                urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
-                    new { Area = "School", urn }),
-                laName);
-            var searchResult = from result in PerformEstablishmentSearch(searchParams, scopeInfo, pageNumber,
-                    schoolSearchParameters, noResultsVm)
-                select result;
+            var searchSuggestionsUrl = $"/local-authority/{laCode}/schools/suggestions";
 
-            return await searchResult.ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
+            var searchConfig = SearchConfiguration.ForSchools(
+                searchSuggestionUrl: searchSuggestionsUrl
+            );
+            var noResultsViewModel = new SchoolSearchResultsPageViewModel
+            (
+                new SearchResultsPageLayoutModel(
+                    new PageViewModel(
+                        GetSchoolsSearchBreadcrumbs(searchParams.Search, laCode, laName, false),
+                        $"We found no matches for \"{searchParams.Search}\""
+                    ),
+                    searchConfig.SearchForm,
+                    searchParams.Search,
+                    searchUrlForNoResults
+                ),
+                new List<EstablishmentListingModel>());
+
+            var searchResult =
+                from establishments in PerformEstablishmentSearch(
+                    searchParams,
+                    scopeInfo,
+                    pageNumber)
+                select new SchoolSearchResultsPageViewModel(
+                    new SearchResultsPageLayoutModel(
+                        new PageViewModel(
+                            GetSchoolsSearchBreadcrumbs(searchParams.Search, laCode, laName),
+                            $"Search results for \"{searchParams.Search}\"",
+                            FormatResultsSubtitle(establishments.TotalResults, laName)
+                        ),
+                        searchConfig.SearchForm,
+                        searchParams.Search,
+                        nameof(Schools),
+                        CreatePaginationModel(establishments, nameof(Schools))
+                    ),
+                    MapEstablishmentListings(establishments.Results, urn =>
+                        Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
+                            new { Area = "School", urn })));
+
+            return await searchResult.DefaultIf(e => e is NotFoundError, noResultsViewModel)
+                .ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
+        }
+
+
+        [HttpGet("suggestions")]
+        public async Task<IActionResult> GenericLocalAuthoritySchoolsSearchSuggestions(string laCode,
+            SearchParams searchParams)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(Schools));
+            }
+
+            var scopeInfo = new ScopeInfo(ScopeType.LA, Optional<string>.Some(laCode));
+
+            var searchResult = await PerformEstablishmentSearchSuggestions(searchParams, scopeInfo);
+
+            return searchResult.ToActionResult(Json, _hostEnvironment);
         }
 
         private BreadcrumbTrailViewModel GetSchoolsPageBreadcrumbs(string currentPage, string laCode, string laName)
@@ -115,52 +153,65 @@ namespace ASP.Web.Areas.School
             return new BreadcrumbTrailViewModel(breadcrumbs, currentPage);
         }
 
-        private IActionResult RedirectToSchoolLandingPageIfSingleResult(SchoolSearchViewModel model)
+        private IActionResult RedirectToSchoolLandingPageIfSingleResult(SchoolSearchResultsPageViewModel model)
         {
-            if (model.TotalCount == 1)
+            if (model.SearchResultsPage.Pagination?.TotalResults == 1)
             {
                 return RedirectToAction(nameof(GenericSchoolController.LandingPage), "GenericSchool",
-                    new { area = "School", urn = model.EstablishmentListingsModel.FirstOrDefault()!.Urn });
+                    new { area = "School", urn = model.EstablishmentListings.FirstOrDefault()!.Urn });
             }
 
             return View("SchoolSearchResults", model);
         }
 
-        private Task<Result<SchoolsPageSearchViewModel>> GetSchoolsPageViewModel(string laCode, string laName,
+        private Task<Result<SchoolSearchPageViewModel>> GetSchoolsPageViewModel(string laCode, string laName,
             string? page = null)
         {
             var pageNumber = PageHelper.ParsePageNumber(page);
+            var searchSuggestionsUrl = $"/local-authority/{laCode}/schools/suggestions";
 
-            var searchSuggestionsUrl = $"/search/suggestions/";
+            var searchConfig = SearchConfiguration.ForSchools(
+                searchSuggestionUrl: searchSuggestionsUrl
+            );
 
             var result =
-                from results in GetAllEstablishments(ScopeType.LA, Optional<string>.Some(laCode), pageNumber)
-                select DefaultViewModel(
-                    results,
-                    new SchoolsPageSearchParameters(
-                        "All schools",
-                        $"{laName} - {results.TotalResults:N0} schools",
-                        $"/local-authority/{laCode}/schools/",
-                        GetSchoolsPageBreadcrumbs("All schools", laCode, laName),
-                        urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
-                            new { Area = "School", urn }),
-                        searchSuggestionsUrl));
+                from establishments in GetAllEstablishments(ScopeType.LA, Optional<string>.Some(laCode), pageNumber)
+                select new SchoolSearchPageViewModel(
+                    new SearchPageLayoutModel(
+                        new PageViewModel(
+                            GetSchoolsPageBreadcrumbs("All schools", laCode, laName),
+                            "All schools",
+                            $"{laName} - {establishments.TotalResults:N0} schools"
+                        ),
+                        searchConfig.SearchForm,
+                        CreatePaginationModel(establishments, $"/local-authority/{laCode}/schools/")
+                    ),
+                    MapEstablishmentListings(establishments.Results, urn =>
+                        Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
+                            new { Area = "School", urn }))
+                );
             return result;
         }
 
-        private SchoolsPageSearchViewModel GetEmptySchoolsPageViewModel(string laCode, string laName)
+        private SchoolSearchPageViewModel GetEmptySchoolsPageViewModel(string laCode, string laName)
         {
-            var searchSuggestionsUrl = $"/search/suggestions/";
-            return DefaultViewModel(
-                new ScopedResultsPage<EstablishmentListingDTO>(),
-                new SchoolsPageSearchParameters(
-                    "All schools",
-                    "0 schools",
-                    $"/local-authority/{laCode}/schools/",
-                    GetSchoolsPageBreadcrumbs("All schools", laCode, laName),
-                    urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
-                        new { Area = "School", urn }),
-                    searchSuggestionsUrl));
+            var searchSuggestionsUrl = $"/local-authority/{laCode}/schools/suggestions";
+            var searchConfig = SearchConfiguration.ForSchools(
+                searchSuggestionUrl: searchSuggestionsUrl
+            );
+
+            return new SchoolSearchPageViewModel(
+                new SearchPageLayoutModel(
+                    new PageViewModel(
+                        GetSchoolsPageBreadcrumbs("All schools", laCode, laName),
+                        "All schools"
+                    ),
+                    searchConfig.SearchForm,
+                    CreatePaginationModel(new ScopedResultsPage<EstablishmentListingDTO>(),
+                        $"/local-authority/{laCode}/schools/")
+                ),
+                new List<EstablishmentListingModel>()
+            );
         }
 
         private Task<Result<string>> GetLocalAuthorityName(string laCode)

@@ -5,12 +5,16 @@ using ASP.Core.Helpers;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
+using ASP.Web.Areas.Shared.EstablishmentListing;
 using ASP.Web.Areas.Shared.Search;
+using ASP.Web.Areas.Shared.Search.Layout.SearchPageLayout;
+using ASP.Web.Areas.Shared.Search.Layout.SearchResultsPageLayout;
 using ASP.Web.Areas.Shared.Search.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
+using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,35 +64,46 @@ namespace ASP.Web.Areas.School
 
             var searchUrlForNoResults = $"/schools/";
 
-            var noResultsVm = NoResultsViewModel(
-                searchParams,
-                GetSchoolsSearchNoResultsPageBreadcrumbs(searchParams.Search), 
-                searchUrlForNoResults,
-                SearchSuggestionsUrl, 
-                "GenericSchools", 
-                nameof(Schools),
-                urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
-            );
-				
-            var schoolSearchParameters = new SchoolSearchParameters(
-                nameof(Schools),
-                SearchSuggestionsUrl,
-				"GenericSchools",
-                nameof(Schools),
-                GetSchoolsSearchPageBreadcrumbs(searchParams.Search),
-                urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn })
+            var searchConfig = SearchConfiguration.ForSchools(
+                searchSuggestionUrl: SearchSuggestionsUrl
             );
 
-            var searchResult = 
-                from result in PerformEstablishmentSearch(
-                    searchParams, 
-                    scopeInfo, 
-                    pageNumber,
-                    schoolSearchParameters, 
-                    noResultsVm)
-                select result;
+            var noResultsViewModel = new SchoolSearchResultsPageViewModel
+            (
+                new SearchResultsPageLayoutModel(
+                    new PageViewModel(
+                        GetSchoolsSearchNoResultsPageBreadcrumbs(searchParams.Search),
+                        $"We found no matches for \"{searchParams.Search}\""
+                    ),
+                    searchConfig.SearchForm,
+                    searchParams.Search,
+                    searchUrlForNoResults
+                ),
+                new List<EstablishmentListingModel>());
 
-            return await searchResult.ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
+            var searchResult =
+                from establishments in PerformEstablishmentSearch(
+                    searchParams,
+                    scopeInfo,
+                    pageNumber)
+                select new SchoolSearchResultsPageViewModel(
+                    new SearchResultsPageLayoutModel(
+                        new PageViewModel(
+                            GetSchoolsSearchPageBreadcrumbs(searchParams.Search),
+                            $"Search results for \"{searchParams.Search}\"",
+                            FormatResultsSubtitle(establishments.TotalResults)
+                        ),
+                        searchConfig.SearchForm,
+                        searchParams.Search,
+                        nameof(Schools),
+                        CreatePaginationModel(establishments, nameof(Schools))
+                    ),
+                    MapEstablishmentListings(establishments.Results, urn =>
+                        Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
+                            new { Area = "School", urn })));
+
+            return await searchResult.DefaultIf(e => e is NotFoundError, noResultsViewModel)
+                .ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
         }
 
         [HttpGet("suggestions")]
@@ -99,7 +114,9 @@ namespace ASP.Web.Areas.School
                 return View(nameof(Schools));
             }
 
-            var searchResult = await PerformEstablishmentSearchSuggestions(searchParams);
+            var scopeInfo = new ScopeInfo(ScopeType.All, Optional<string>.None);
+
+            var searchResult = await PerformEstablishmentSearchSuggestions(searchParams, scopeInfo);
 
             return searchResult.ToActionResult(Json, _hostEnvironment);
         }
@@ -124,50 +141,62 @@ namespace ASP.Web.Areas.School
             return breadcrumbTrail;
         }
 
-        private IActionResult RedirectToSchoolLandingPageIfSingleResult(SchoolSearchViewModel model)
+        private IActionResult RedirectToSchoolLandingPageIfSingleResult(SchoolSearchResultsPageViewModel model)
         {
-            if (model.TotalCount == 1)
+            if (model.SearchResultsPage.Pagination?.TotalResults == 1)
             {
                 return RedirectToAction(nameof(GenericSchoolController.LandingPage), "GenericSchool",
-                    new { area = "School", urn = model.EstablishmentListingsModel.FirstOrDefault()!.Urn });
+                    new { area = "School", urn = model.EstablishmentListings.FirstOrDefault()!.Urn });
             }
 
             return View("SchoolSearchResults", model);
         }
 
-        private Task<Result<SchoolsPageSearchViewModel>> GetSchoolsPageViewModel(string? page = null)
+        private Task<Result<SchoolSearchPageViewModel>> GetSchoolsPageViewModel(string? page = null)
         {
             var pageNumber = PageHelper.ParsePageNumber(page);
 
+            var searchConfig = SearchConfiguration.ForSchools(
+                searchSuggestionUrl: SearchSuggestionsUrl
+            );
+
             var result =
-                from results in GetAllEstablishments(ScopeType.All, Optional<string>.None, pageNumber)
-                select DefaultViewModel(
-                    results,
-                    new SchoolsPageSearchParameters(
-                        "All schools",
-                        $"{results.TotalResults:N0} schools",
-                        $"/schools/",
-                        GetSchoolsPageBreadcrumbs("All schools"),
-                        urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
-                            new { Area = "School", urn }),
-                        SearchSuggestionsUrl
-                ));
+                from establishments in GetAllEstablishments(ScopeType.All, Optional<string>.None, pageNumber)
+                select new SchoolSearchPageViewModel(
+                    new SearchPageLayoutModel(
+                        new PageViewModel(
+                            GetSchoolsPageBreadcrumbs("All schools"),
+                            "All schools",
+                            $"{establishments.TotalResults:N0} schools"
+                        ),
+                        searchConfig.SearchForm,
+                        CreatePaginationModel(establishments, $"/schools/")
+                    ),
+                    MapEstablishmentListings(establishments.Results, urn =>
+                        Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool",
+                            new { Area = "School", urn }))
+                );
 
             return result;
         }
 
-        private SchoolsPageSearchViewModel GetEmptySchoolsPageViewModel()
+        private SchoolSearchPageViewModel GetEmptySchoolsPageViewModel()
         {
-            return DefaultViewModel(
-                new ScopedResultsPage<EstablishmentListingDTO>(),
-                new SchoolsPageSearchParameters(
-                    "All schools",
-                    "0 schools",
-                    $"/schools/",
-                    GetSchoolsPageBreadcrumbs("All schools"),
-                    urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { Area = "School", urn }),
-                    SearchSuggestionsUrl
-                ));
+            var searchConfig = SearchConfiguration.ForSchools(
+                searchSuggestionUrl: SearchSuggestionsUrl
+            );
+
+            return new SchoolSearchPageViewModel(
+                new SearchPageLayoutModel(
+                    new PageViewModel(
+                        GetSchoolsPageBreadcrumbs("All schools"),
+                        "All schools"
+                    ),
+                    searchConfig.SearchForm,
+                    CreatePaginationModel(new ScopedResultsPage<EstablishmentListingDTO>(), $"/schools/")
+                ),
+                new List<EstablishmentListingModel>()
+            );
         }
     }
 }

@@ -1,0 +1,38 @@
+﻿@using ASP.Web.Areas.Shared.Search.Layout.SearchResultsPageLayout
+@using ASP.Web.Areas.Shared.Search.Partial.SearchResultNotFound
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Shared/_PageLayout.cshtml";
+    var layoutModel = (SearchResultsPageLayoutModel)ViewBag.PageLayoutModel;
+    ViewBag.PageLayoutModel = layoutModel.Page;
+}
+
+@if (layoutModel.Pagination?.TotalResults > 0)
+{
+    @section PageTitle {
+        <h1 id="app-page-title" class="govuk-heading-xl govuk-!-margin-bottom-4">
+            @layoutModel.Page.Title
+        </h1>
+
+        @if (!string.IsNullOrEmpty(layoutModel.Page.Subtitle))
+        {
+            <h2 id="app-page-subtitle" class="govuk-heading-m">
+                @layoutModel.Page.Subtitle
+            </h2>
+        }
+    }
+
+    <partial name="~/Areas/Shared/Search/Partial/SearchForm/_SearchFormPartial.cshtml"
+             model='layoutModel.SearchForm'/>
+}
+else
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <partial name="~/Areas/Shared/Search/Partial/SearchResultNotFound/_SearchResultNotFoundPartial.cshtml"
+                     model='new SearchResultNotFoundModel(layoutModel.Page.Title, layoutModel.SearchUrl, 0)'/>
+        </div>
+    </div>
+}
+
+@RenderBody()

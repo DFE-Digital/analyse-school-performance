@@ -1,4 +1,3 @@
-@using ASP.Web.Features.Authorization
 @using ASP.Web.Shared.Navigation
 @model PathString
 
@@ -11,7 +10,6 @@
             <partial name="Navigation/_TopNavigationItemPartial" model=@(new NavigationItemViewModel("All schools", "/schools/", Model, Policy.AccessToAllSchools)) />
             <partial name="Navigation/_TopNavigationItemPartial" model=@(new NavigationItemViewModel("My schools", "/my-schools/", Model, Policy.AccessToMySchools)) />
             <partial name="Navigation/_TopNavigationItemPartial" model=@(new NavigationItemViewModel("My school", "/my-school/", Model, Policy.AccessToMySchool, testId: "my-school")) />
-            <partial name="Navigation/_TopNavigationItemPartial" model=@(new NavigationItemViewModel("Search", "/search/", Model, Policy.AccessToSearch)) />
             <partial name="Navigation/_TopNavigationItemPartial" model=@(new NavigationItemViewModel("Release timetable", "/help/release-timetable/", Model)) />
             <partial name="Navigation/_TopNavigationItemPartial" model=@(new NavigationItemViewModel("Guidance", "/help/guidance/", Model)) />
         </ul>

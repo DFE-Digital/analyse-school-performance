@@ -269,7 +269,7 @@
         }
         """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "Primary"
+        And I update the textbox "#app-field-Search" to have the value "Primary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=Primary
         And the page title should be "Search results for "Primary" | Analyse school performance"
@@ -304,7 +304,7 @@
         }
         """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "Primary"
+        And I update the textbox "#app-field-Search" to have the value "Primary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=Primary
         And the page title should be "Search results for "Primary" | Analyse school performance"
@@ -339,7 +339,7 @@
         }
         """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "Primary"
+        And I update the textbox "#app-field-Search" to have the value "Primary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=Primary
 	    And the breadcrumb trail should be:
@@ -380,7 +380,7 @@
         }
         """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "Primary"
+        And I update the textbox "#app-field-Search" to have the value "Primary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=Primary
 	    And the breadcrumb trail should be:
@@ -421,7 +421,7 @@
         }
         """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "Secondary"
+        And I update the textbox "#app-field-Search" to have the value "Secondary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=Secondary
 	    And the breadcrumb trail should be:
@@ -462,7 +462,7 @@
         }
         """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "Secondary"
+        And I update the textbox "#app-field-Search" to have the value "Secondary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=Secondary
 	    And the breadcrumb trail should be:
@@ -492,18 +492,18 @@
         When I navigate to /local-authority/999/schools/
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=
-        And the element "#searchTerm-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+        And the element "#app-field-Search-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
         And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-        And the element "*[data-testid='searchTerm']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+        And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 
     @Javascript:enabled
     Scenario: Errors in Search Term Validation (JS)
         When I navigate to /local-authority/999/schools/
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=
-        And the element "#searchTerm-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+        And the element "#app-field-Search-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
         And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-        And the element "*[data-testid='searchTerm']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+        And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
         
      @Javascript:disabled
     Scenario: School search page should show correct message when there is no data
@@ -516,7 +516,7 @@
 	     }
 	     """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "primary"
+        And I update the textbox "#app-field-Search" to have the value "primary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=primary
         And the element "h1" should have the text content "We found no matches for "primary""
@@ -532,10 +532,10 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "primary"
+        And I update the textbox "#app-field-Search" to have the value "primary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=primary
-        And the element "h1" should have the text content "We found no matches for "primary""
+        And the element "#app-page-title" should have the text content "We found no matches for "primary""
 
     @Javascript:disabled
     Scenario: School search page should show correct message for search term with no matches
@@ -557,7 +557,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "secondary"
+        And I update the textbox "#app-field-Search" to have the value "secondary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=secondary
         And the element "[data-testid="result-not-found-search-url"]" should have the href "/local-authority/999/schools/"
@@ -583,11 +583,11 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "secondary"
+        And I update the textbox "#app-field-Search" to have the value "secondary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=secondary
         And the element "[data-testid="result-not-found-search-url"]" should have the href "/local-authority/999/schools/"
-        And the element "h1" should have the text content "We found no matches for "secondary""
+        And the element "#app-page-title" should have the text content "We found no matches for "secondary""
 
 	@Javascript:disabled
 	Scenario: Pagination in Search Validation
@@ -771,7 +771,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "111111"
+        And I update the textbox "#app-field-Search" to have the value "111111"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -796,7 +796,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "111111"
+	    And I update the textbox "#app-field-Search" to have the value "111111"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -821,7 +821,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "PRiMaRY"
+        And I update the textbox "#app-field-Search" to have the value "PRiMaRY"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -846,7 +846,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "PRiMaRY"
+	    And I update the textbox "#app-field-Search" to have the value "PRiMaRY"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -876,7 +876,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "str"
+        And I update the textbox "#app-field-Search" to have the value "str"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -906,7 +906,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "str"
+	    And I update the textbox "#app-field-Search" to have the value "str"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -936,7 +936,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "some"
+        And I update the textbox "#app-field-Search" to have the value "some"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -966,7 +966,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "some"
+	    And I update the textbox "#app-field-Search" to have the value "some"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -996,7 +996,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "tr1"
+        And I update the textbox "#app-field-Search" to have the value "tr1"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -1026,7 +1026,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "tr1"
+	    And I update the textbox "#app-field-Search" to have the value "tr1"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -1096,7 +1096,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "tr"
+        And I update the textbox "#app-field-Search" to have the value "tr"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=tr
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1176,7 +1176,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "tr"
+	    And I update the textbox "#app-field-Search" to have the value "tr"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /local-authority/999/schools/?search=tr
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1210,7 +1210,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "111111"
+        And I update the textbox "#app-field-Search" to have the value "111111"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -1235,7 +1235,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "111111"
+	    And I update the textbox "#app-field-Search" to have the value "111111"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -1260,7 +1260,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+        And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=<SearchTerm>
         And the element "h1" should have the text content "We found no matches for "<SearchTerm>""
@@ -1293,10 +1293,10 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+	    And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /local-authority/999/schools/?search=<SearchTerm>
-        And the element "h1" should have the text content "We found no matches for "<SearchTerm>""
+        And the element "#app-page-title" should have the text content "We found no matches for "<SearchTerm>""
 
         Examples:
           | SearchTerm |
@@ -1341,7 +1341,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+        And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
         And I click the button "#searchSubmit"
         Then the path should be /school/222222/
         And the element "#app-page-subtitle" should have the text content "(URN: 222222)"
@@ -1389,7 +1389,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+	    And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/222222/
         And the element "#app-page-subtitle" should have the text content "(URN: 222222)"
@@ -1437,7 +1437,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "111111"
+        And I update the textbox "#app-field-Search" to have the value "111111"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -1477,7 +1477,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "111111"
+	    And I update the textbox "#app-field-Search" to have the value "111111"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -1503,7 +1503,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "894/2200"
+        And I update the textbox "#app-field-Search" to have the value "894/2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -1529,7 +1529,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "894/2200"
+	    And I update the textbox "#app-field-Search" to have the value "894/2200"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -1555,7 +1555,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "8942200"
+        And I update the textbox "#app-field-Search" to have the value "8942200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -1581,7 +1581,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "8942200"
+	    And I update the textbox "#app-field-Search" to have the value "8942200"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -1618,7 +1618,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "894"
+        And I update the textbox "#app-field-Search" to have the value "894"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=894
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1663,7 +1663,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "894"
+	    And I update the textbox "#app-field-Search" to have the value "894"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /local-authority/999/schools/?search=894
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1707,7 +1707,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "2200"
+        And I update the textbox "#app-field-Search" to have the value "2200"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=2200
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1751,7 +1751,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "2200"
+	    And I update the textbox "#app-field-Search" to have the value "2200"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /local-authority/999/schools/?search=2200
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1795,7 +1795,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "89"
+        And I update the textbox "#app-field-Search" to have the value "89"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=89
         And the element "h1" should have the text content "We found no matches for "89""
@@ -1821,10 +1821,10 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "89"
+        And I update the textbox "#app-field-Search" to have the value "89"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=89
-        And the element "h1" should have the text content "We found no matches for "89""
+        And the element "#app-page-title" should have the text content "We found no matches for "89""
 
     @Javascript:disabled
     Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
@@ -1847,7 +1847,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "22"
+        And I update the textbox "#app-field-Search" to have the value "22"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=22
         And the element "h1" should have the text content "We found no matches for "22""
@@ -1873,10 +1873,10 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "22"
+	    And I update the textbox "#app-field-Search" to have the value "22"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /local-authority/999/schools/?search=22
-        And the element "h1" should have the text content "We found no matches for "22""
+        And the element "#app-page-title" should have the text content "We found no matches for "22""
 
     @Javascript:disabled
     Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields)
@@ -1915,7 +1915,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "8942200"
+        And I update the textbox "#app-field-Search" to have the value "8942200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -1957,7 +1957,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "8942200"
+	    And I update the textbox "#app-field-Search" to have the value "8942200"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -2000,7 +2000,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "894/2200"
+        And I update the textbox "#app-field-Search" to have the value "894/2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -2043,7 +2043,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "894/2200"
+        And I update the textbox "#app-field-Search" to have the value "894/2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -2085,7 +2085,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "894"
+        And I update the textbox "#app-field-Search" to have the value "894"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -2127,7 +2127,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "894"
+        And I update the textbox "#app-field-Search" to have the value "894"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -2169,7 +2169,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "2200"
+        And I update the textbox "#app-field-Search" to have the value "2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -2211,7 +2211,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "2200"
+        And I update the textbox "#app-field-Search" to have the value "2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle" should have the text content "(URN: 111111)"
@@ -2269,7 +2269,7 @@
 	    }
 	    """
         When I navigate to /local-authority/999/schools/
-        And I update the textbox "#searchTerm" to have the value "School"
+        And I update the textbox "#app-field-Search" to have the value "School"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/999/schools/?search=School
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -2336,7 +2336,7 @@
 	    }
 	    """
 	    When I navigate to /local-authority/999/schools/
-	    And I update the textbox "#searchTerm" to have the value "School"
+	    And I update the textbox "#app-field-Search" to have the value "School"
 	    And I click the button "#searchSubmit"
 	    Then the path should be /local-authority/999/schools/?search=School
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -2390,7 +2390,7 @@
 	    """
         When I navigate to /local-authority/999/schools/?search=Primary&page=<page>
         Then the page title should be "Search results for "Primary" | Analyse school performance"
-	    And the element "[data-testid="search-results-sub-title"]" should have the text content "Test LA - 2 schools"
+	    And the element "#app-page-subtitle" should have the text content "Test LA - 2 schools"
         And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
         And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/999/schools/?search=Primary&page=1"
 
@@ -2416,7 +2416,277 @@
         When I navigate to /local-authority/999/schools/?page=50&search=Primary
         Then the page title should be "Search results for "Primary" | Analyse school performance"
         And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 26 of 26 schools"
-	    And the element "[data-testid="search-results-sub-title"]" should have the text content "Test LA - 26 schools"
+	    And the element "#app-page-subtitle" should have the text content "Test LA - 26 schools"
         And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/999/schools/?search=Primary&page=1"
         And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-        And the element "*[data-testid='establishment-listing-name-26']" should have the text content "Primary School 100026"    
+        And the element "*[data-testid='establishment-listing-name-26']" should have the text content "Primary School 100026" 
+        
+    @Javascript:enabled
+    Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
+        Given Establishment "111111" exists:
+        """
+        {
+        	"name": "Some Primary School",
+        	"address": {
+        		"street": "13 The Street",
+        		"town": "SomeTown",
+        		"postCode": "B1 1AA"
+        	},
+            "laestab": "894/2200",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+        And Establishment "222222" exists:
+        """
+        {
+        	"name": "Some Other Primary School",
+        	"address": {
+        		"street": "13 The Road",
+        		"town": "Tring",
+        		"postCode": "B1 1AA"
+        	},
+            "laestab": "894/2201",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+        And Establishment "333333" exists:
+        """
+        {
+        	"name": "A Different Primary School",
+        	"address": {
+        		"street": "13 The Road",
+        		"town": "SomeTown",
+        		"postCode": "TR18 3JT"
+        	},
+            "laestab": "894/2202",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+        And Establishment "444444" exists:
+        """
+        {
+        	"name": "Some Secondary School",
+        	"address": {
+        		"street": "13 The Road",
+        		"town": "SomeTown",
+        		"postCode": "TR18 3JT"
+        	},
+            "laestab": "894/2203",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+	    And Local Authority "999" exists:
+	    """
+	    {
+	        "name": "Test LA",
+	        "code": "999"
+	    }
+	    """
+        When I navigate to /local-authority/999/schools/
+        And I update the textbox "#app-field-Search" to have the value "primary"
+        Then the autocomplete results should appear
+        Then there should be 3 autocomplete items
+        Then the elements ".autocomplete__option strong" should have the text contents:
+          | Highlighted Values |
+          | Primary            |
+          | Primary            |
+          | Primary            |
+        Then the elements ".autocomplete__option" should have the text contents:
+          | Autocomplete Items                                                                             |
+          | A Different Primary School Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
+          | Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201       |
+          | Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200        |
+
+    @Javascript:enabled
+    Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting Name and Address
+        Given Establishment "111111" exists:
+        """
+        {
+        	"name": "Some Primary School",
+        	"address": {
+        		"street": "13 The Street",
+        		"town": "SomeTown",
+        		"postCode": "B1 1AA"
+        	},
+            "laestab": "894/2200",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+        And Establishment "222222" exists:
+        """
+        {
+        	"name": "Some Other Primary School",
+        	"address": {
+        		"street": "13 The Road",
+        		"town": "Tring",
+        		"postCode": "B1 1AA"
+        	},
+            "laestab": "894/2201",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+        And Establishment "333333" exists:
+        """
+        {
+        	"name": "A Different Primary School Centre",
+        	"address": {
+        		"street": "13 The Road",
+        		"town": "SomeTown",
+        		"postCode": "TR18 3JT"
+        	},
+            "laestab": "894/2202",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+        And Establishment "444444" exists:
+        """
+        {
+        	"name": "Some Secondary School",
+        	"address": {
+        		"street": "13 The Road",
+        		"town": "SomeTown",
+        		"postCode": "TR18 3JT"
+        	},
+            "laestab": "894/2203",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+	    And Local Authority "999" exists:
+	    """
+	    {
+	        "name": "Test LA",
+	        "code": "999"
+	    }
+	    """
+        When I navigate to /local-authority/999/schools/
+        And I update the textbox "#app-field-Search" to have the value "tr"
+        Then the autocomplete results should appear
+        Then there should be 4 autocomplete items
+        Then the elements ".autocomplete__option strong" should have the text contents:
+          | Highlighted Values |
+          | tr                 |
+          | TR                 |
+          | Tr                 |
+          | tr                 |
+          | TR                 |
+        Then the elements ".autocomplete__option" should have the text contents:
+          | Autocomplete Items                                                                                    |
+          | A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
+          | Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201              |
+          | Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200               |
+          | Some Secondary School Address:13 The Road, SomeTown TR18 3JT URN:444444, LAESTAB:894/2203             |
+
+    @Javascript:enabled
+    Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting URN and LaEstab
+        Given Establishment "111111" exists:
+        """
+        {
+        	"name": "Some Primary School",
+        	"address": {
+        		"street": "13 The Street",
+        		"town": "SomeTown",
+        		"postCode": "B1 1AA"
+        	},
+            "laestab": "894/2200",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+        And Establishment "222222" exists:
+        """
+        {
+        	"name": "Some Other Primary School",
+        	"address": {
+        		"street": "13 The Road",
+        		"town": "Tring",
+        		"postCode": "B1 1AA"
+        	},
+            "laestab": "894/2201",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+        And Establishment "333333" exists:
+        """
+        {
+        	"name": "A Different Primary School Centre",
+        	"address": {
+        		"street": "13 The Road",
+        		"town": "SomeTown",
+        		"postCode": "TR18 3JT"
+        	},
+            "laestab": "894/2202",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+        And Establishment "444442" exists:
+        """
+        {
+        	"name": "Some Secondary School",
+        	"address": {
+        		"street": "13 The Road",
+        		"town": "SomeTown",
+        		"postCode": "TR18 3JT"
+        	},
+            "laestab": "894/2203",
+            "localAuthority": {
+        		"code": "999",
+         		"name": "Test LA"
+        	}
+        }
+        """
+	    And Local Authority "999" exists:
+	    """
+	    {
+	        "name": "Test LA",
+	        "code": "999"
+	    }
+	    """
+        When I navigate to /local-authority/999/schools/
+        And I update the textbox "#app-field-Search" to have the value "42"
+        Then the autocomplete results should appear
+        Then there should be 4 autocomplete items
+        Then the elements ".autocomplete__option strong" should have the text contents:
+          | Highlighted Values |
+          | 42                 |
+          | 4/2                |
+          | 4/2                |
+          | 4/2                |
+          | 4/2                |
+        Then the elements ".autocomplete__option" should have the text contents:
+          | Autocomplete Items                                                                                    |
+          | Some Secondary School Address:13 The Road, SomeTown TR18 3JT URN:444442, LAESTAB:894/2203             |
+          | Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200               |
+          | Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201              |
+          | A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |       

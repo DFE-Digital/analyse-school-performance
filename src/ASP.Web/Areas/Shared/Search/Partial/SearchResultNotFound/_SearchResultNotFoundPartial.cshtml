@@ -1,8 +1,8 @@
-﻿@model ASP.Web.Areas.Shared.Search.SearchResultNotFoundModel
+﻿@model ASP.Web.Areas.Shared.Search.Partial.SearchResultNotFound.SearchResultNotFoundModel
 
 @if (Model.TotalCount == 0)
 {
-    <h1 id="school-search-results-no-results-heading" class="govuk-heading-l school-name-heading">We found no matches for "@(Model.SearchTerm)"</h1>
+    <h1 id="app-page-title" class="govuk-heading-l govuk-!-margin-bottom-4">@Model.Title</h1>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
     <p class="govuk-body">You can:</p>
     <p class="govuk-body"><a data-testid="result-not-found-search-url" class="govuk-link" href="@(Model.SearchUrl)">try searching again</a> using different spelling or words</p>

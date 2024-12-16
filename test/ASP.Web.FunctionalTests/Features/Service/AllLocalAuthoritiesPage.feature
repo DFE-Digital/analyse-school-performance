@@ -149,7 +149,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "Test"
+        And I update the textbox "#app-field-Search" to have the value "Test"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=Test
         And the page title should be "Search results for "Test" | Analyse school performance"
@@ -169,7 +169,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "Test"
+        And I update the textbox "#app-field-Search" to have the value "Test"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=Test
         And the breadcrumb trail should be:
@@ -193,7 +193,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "Test"
+        And I update the textbox "#app-field-Search" to have the value "Test"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=Test
         And the breadcrumb trail should be:
@@ -217,7 +217,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "Testtt"
+        And I update the textbox "#app-field-Search" to have the value "Testtt"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=Testtt
         And the breadcrumb trail should be:
@@ -241,7 +241,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "Testtt"
+        And I update the textbox "#app-field-Search" to have the value "Testtt"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=Testtt
         And the breadcrumb trail should be:
@@ -269,24 +269,24 @@
         When I navigate to /local-authorities/
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=
-        And the element "#searchTerm-input-error" should have the text content "Please enter a local authority name or code"
+        And the element "#app-field-Search-input-error" should have the text content "Please enter a local authority name or code"
         And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-        And the element "*[data-testid='searchTerm']" should have the text content "Please enter a local authority name or code"
+        And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a local authority name or code"
 
     @Javascript:enabled
     Scenario: Errors in Search Term Validation (JS)
         When I navigate to /local-authorities/
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=
-        And the element "#searchTerm-input-error" should have the text content "Please enter a local authority name or code"
+        And the element "#app-field-Search-input-error" should have the text content "Please enter a local authority name or code"
         And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-        And the element "*[data-testid='searchTerm']" should have the text content "Please enter a local authority name or code"
+        And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a local authority name or code"
 
     @Javascript:disabled
     Scenario: Generic Local Authorities search page should show correct message when there is no data
         Given no Local Authorities exist
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "primary"
+        And I update the textbox "#app-field-Search" to have the value "primary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=primary
         And the element "h1" should have the text content "We found no matches for "primary""
@@ -295,10 +295,10 @@
     Scenario: Generic Local Authorities search page should show correct message when there is no data (JS)
         Given no Local Authorities exist
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "primary"
+        And I update the textbox "#app-field-Search" to have the value "primary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=primary
-        And the element "h1" should have the text content "We found no matches for "primary""
+        And the element "#app-page-title" should have the text content "We found no matches for "primary""
 
     @Javascript:disabled
     Scenario: Generic Local Authorities search page should show correct message for search term with no matches
@@ -309,7 +309,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "secondary"
+        And I update the textbox "#app-field-Search" to have the value "secondary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=secondary
         And the element "[data-testid="result-not-found-search-url"]" should have the href "/local-authorities/"
@@ -324,11 +324,11 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "secondary"
+        And I update the textbox "#app-field-Search" to have the value "secondary"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=secondary
         And the element "[data-testid="result-not-found-search-url"]" should have the href "/local-authorities/"
-        And the element "h1" should have the text content "We found no matches for "secondary""
+        And the element "#app-page-title" should have the text content "We found no matches for "secondary""
 
     @Javascript:disabled
     Scenario: Pagination in Search Validation
@@ -459,7 +459,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "301"
+        And I update the textbox "#app-field-Search" to have the value "301"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/301/
         And the element "#app-page-subtitle" should have the text content "All schools within Some Test LA Name"
@@ -473,7 +473,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "301"
+        And I update the textbox "#app-field-Search" to have the value "301"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/301/
         And the element "#app-page-subtitle" should have the text content "All schools within Some Test LA Name"
@@ -487,7 +487,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "301"
+        And I update the textbox "#app-field-Search" to have the value "301"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/301/
         And the element "#app-page-subtitle" should have the text content "All schools within Some Test LA Name"
@@ -501,7 +501,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "301"
+        And I update the textbox "#app-field-Search" to have the value "301"
         And I click the button "#searchSubmit"
         Then the path should be /local-authority/301/
         And the element "#app-page-subtitle" should have the text content "All schools within Some Test LA Name"
@@ -515,7 +515,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+        And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=<SearchTerm>
         And the element "h1" should have the text content "We found no matches for "<SearchTerm>""
@@ -534,10 +534,10 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+        And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=<SearchTerm>
-        And the element "h1" should have the text content "We found no matches for "<SearchTerm>""
+        And the element "#app-page-title" should have the text content "We found no matches for "<SearchTerm>""
 
         Examples:
           | SearchTerm |
@@ -565,7 +565,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "LA"
+        And I update the textbox "#app-field-Search" to have the value "LA"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=LA
         And the element "[data-testid="all-local-authorities-listing-code-<Counter>"]" should have the text content "<Code>"
@@ -598,7 +598,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "LA"
+        And I update the textbox "#app-field-Search" to have the value "LA"
         And I click the button "#searchSubmit"
         Then the path should be /local-authorities/?search=LA
         And the element "[data-testid="all-local-authorities-listing-code-<Counter>"]" should have the text content "<Code>"
@@ -626,7 +626,7 @@
         """
         When I navigate to /local-authorities/?search=LA&page=<page>
         Then the page title should be "Search results for "LA" | Analyse school performance"
-        And the element "[data-testid="search-results-sub-title"]" should have the text content "2 local authorities"
+        And the element "#app-page-subtitle" should have the text content "2 local authorities"
         And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 local authorities"
         And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authorities/?search=LA&page=1"
 
@@ -645,7 +645,7 @@
         When I navigate to /local-authorities/?page=50&search=Test
         Then the page title should be "Search results for "Test" | Analyse school performance"
         And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 26 of 26 local authorities"
-        And the element "[data-testid="search-results-sub-title"]" should have the text content "26 local authorities"
+        And the element "#app-page-subtitle" should have the text content "26 local authorities"
         And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authorities/?search=Test&page=1"
         And the element "*[data-testid='all-local-authorities-listing-name-1']" should have the text content "ASP Test LA Named 101"
         And the element "*[data-testid='all-local-authorities-listing-name-26']" should have the text content "ASP Test LA Named 126"
@@ -677,7 +677,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "test"
+        And I update the textbox "#app-field-Search" to have the value "test"
         Then the autocomplete results should appear
         Then there should be 3 autocomplete items
         Then the elements ".autocomplete__option strong" should have the text contents:
@@ -718,7 +718,7 @@
         }
         """
         When I navigate to /local-authorities/
-        And I update the textbox "#searchTerm" to have the value "00"
+        And I update the textbox "#app-field-Search" to have the value "00"
         Then the autocomplete results should appear
         Then there should be 3 autocomplete items
         Then the elements ".autocomplete__option strong" should have the text contents:

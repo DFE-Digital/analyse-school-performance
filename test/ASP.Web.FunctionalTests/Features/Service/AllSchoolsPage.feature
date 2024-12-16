@@ -166,7 +166,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "Primary"
+        And I update the textbox "#app-field-Search" to have the value "Primary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=Primary
         And the page title should be "Search results for "Primary" | Analyse school performance"
@@ -196,7 +196,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "Primary"
+        And I update the textbox "#app-field-Search" to have the value "Primary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=Primary
         And the page title should be "Search results for "Primary" | Analyse school performance"
@@ -226,7 +226,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "Primary"
+        And I update the textbox "#app-field-Search" to have the value "Primary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=Primary
         And the breadcrumb trail should be:
@@ -260,7 +260,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "Primary"
+        And I update the textbox "#app-field-Search" to have the value "Primary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=Primary
         And the breadcrumb trail should be:
@@ -294,7 +294,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "Secondary"
+        And I update the textbox "#app-field-Search" to have the value "Secondary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=Secondary
         And the breadcrumb trail should be:
@@ -328,7 +328,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "Secondary"
+        And I update the textbox "#app-field-Search" to have the value "Secondary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=Secondary
         And the breadcrumb trail should be:
@@ -356,24 +356,24 @@
         When I navigate to /schools/
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=
-        And the element "#searchTerm-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+        And the element "#app-field-Search-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
         And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-        And the element "*[data-testid='searchTerm']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+        And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 
     @Javascript:enabled
     Scenario: Errors in Search Term Validation (JS)
         When I navigate to /schools/
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=
-        And the element "#searchTerm-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+        And the element "#app-field-Search-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
         And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
-        And the element "*[data-testid='searchTerm']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
+        And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 
     @Javascript:disabled
     Scenario: School search page should show correct message when there is no data
         Given no Establishments exist
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "primary"
+        And I update the textbox "#app-field-Search" to have the value "primary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=primary
         And the element "h1" should have the text content "We found no matches for "primary""
@@ -382,10 +382,10 @@
     Scenario: School search page should show correct message when there is no data (JS)
         Given no Establishments exist
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "primary"
+        And I update the textbox "#app-field-Search" to have the value "primary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=primary
-        And the element "h1" should have the text content "We found no matches for "primary""
+        And the element "#app-page-title" should have the text content "We found no matches for "primary""
 
     @Javascript:disabled
     Scenario: School search page should show correct message for search term with no matches
@@ -396,11 +396,11 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "secondary"
+        And I update the textbox "#app-field-Search" to have the value "secondary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=secondary
         And the element "[data-testid="result-not-found-search-url"]" should have the href "/schools/"
-        And the element "h1" should have the text content "We found no matches for "secondary""
+        And the element "#app-page-title" should have the text content "We found no matches for "secondary""
 
     @Javascript:enabled
     Scenario: School search page should show correct message for search term with no matches (JS)
@@ -411,11 +411,11 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "secondary"
+        And I update the textbox "#app-field-Search" to have the value "secondary"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=secondary
         And the element "[data-testid="result-not-found-search-url"]" should have the href "/schools/"
-        And the element "h1" should have the text content "We found no matches for "secondary""
+        And the element "#app-page-title" should have the text content "We found no matches for "secondary""
 
     @Javascript:disabled
     Scenario: Pagination in Search Validation
@@ -550,7 +550,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "111111"
+        And I update the textbox "#app-field-Search" to have the value "111111"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -568,7 +568,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "111111"
+        And I update the textbox "#app-field-Search" to have the value "111111"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -586,7 +586,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "PRiMaRY"
+        And I update the textbox "#app-field-Search" to have the value "PRiMaRY"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -604,7 +604,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "PRiMaRY"
+        And I update the textbox "#app-field-Search" to have the value "PRiMaRY"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -627,7 +627,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "str"
+        And I update the textbox "#app-field-Search" to have the value "str"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -650,7 +650,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "str"
+        And I update the textbox "#app-field-Search" to have the value "str"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -673,7 +673,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "some"
+        And I update the textbox "#app-field-Search" to have the value "some"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -696,7 +696,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "some"
+        And I update the textbox "#app-field-Search" to have the value "some"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -719,7 +719,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "tr1"
+        And I update the textbox "#app-field-Search" to have the value "tr1"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -742,7 +742,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "tr1"
+        And I update the textbox "#app-field-Search" to have the value "tr1"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "[data-testid="school-details-address-value"]" should have the text content "13 The Street, SomeTown TR18 3JT"
@@ -789,7 +789,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "tr"
+        And I update the textbox "#app-field-Search" to have the value "tr"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=tr
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -861,7 +861,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "tr"
+        And I update the textbox "#app-field-Search" to have the value "tr"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=tr
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -889,7 +889,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "111111"
+        And I update the textbox "#app-field-Search" to have the value "111111"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -907,7 +907,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "111111"
+        And I update the textbox "#app-field-Search" to have the value "111111"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -921,7 +921,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+        And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=<SearchTerm>
         And the element "h1" should have the text content "We found no matches for "<SearchTerm>""
@@ -943,10 +943,10 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+        And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=<SearchTerm>
-        And the element "h1" should have the text content "We found no matches for "<SearchTerm>""
+        And the element "#app-page-title" should have the text content "We found no matches for "<SearchTerm>""
 
         Examples:
           | SearchTerm |
@@ -980,7 +980,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+        And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
         And I click the button "#searchSubmit"
         Then the path should be /school/222222/
         And the element "#app-page-subtitle span" should have the text content "(URN: 222222)"
@@ -1017,7 +1017,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "<SearchTerm>"
+        And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
         And I click the button "#searchSubmit"
         Then the path should be /school/222222/
         And the element "#app-page-subtitle span" should have the text content "(URN: 222222)"
@@ -1054,7 +1054,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "111111"
+        And I update the textbox "#app-field-Search" to have the value "111111"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1083,7 +1083,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "111111"
+        And I update the textbox "#app-field-Search" to have the value "111111"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1102,7 +1102,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "894/2200"
+        And I update the textbox "#app-field-Search" to have the value "894/2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1121,7 +1121,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "894/2200"
+        And I update the textbox "#app-field-Search" to have the value "894/2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1140,7 +1140,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "8942200"
+        And I update the textbox "#app-field-Search" to have the value "8942200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1159,7 +1159,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "8942200"
+        And I update the textbox "#app-field-Search" to have the value "8942200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1181,7 +1181,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "894"
+        And I update the textbox "#app-field-Search" to have the value "894"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=894
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1210,7 +1210,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "894"
+        And I update the textbox "#app-field-Search" to have the value "894"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=894
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1240,7 +1240,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "2200"
+        And I update the textbox "#app-field-Search" to have the value "2200"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=2200
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1270,7 +1270,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "2200"
+        And I update the textbox "#app-field-Search" to have the value "2200"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=2200
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1292,7 +1292,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "89"
+        And I update the textbox "#app-field-Search" to have the value "89"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=89
         And the element "h1" should have the text content "We found no matches for "89""
@@ -1307,10 +1307,10 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "89"
+        And I update the textbox "#app-field-Search" to have the value "89"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=89
-        And the element "h1" should have the text content "We found no matches for "89""
+        And the element "#app-page-title" should have the text content "We found no matches for "89""
 
     @Javascript:disabled
     Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
@@ -1322,7 +1322,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "22"
+        And I update the textbox "#app-field-Search" to have the value "22"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=22
         And the element "h1" should have the text content "We found no matches for "22""
@@ -1337,10 +1337,10 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "22"
+        And I update the textbox "#app-field-Search" to have the value "22"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=22
-        And the element "h1" should have the text content "We found no matches for "22""
+        And the element "#app-page-title" should have the text content "We found no matches for "22""
 
     @Javascript:disabled
     Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields)
@@ -1368,7 +1368,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "8942200"
+        And I update the textbox "#app-field-Search" to have the value "8942200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1399,7 +1399,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "8942200"
+        And I update the textbox "#app-field-Search" to have the value "8942200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1430,7 +1430,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "894/2200"
+        And I update the textbox "#app-field-Search" to have the value "894/2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1461,7 +1461,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "894/2200"
+        And I update the textbox "#app-field-Search" to have the value "894/2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1492,7 +1492,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "894"
+        And I update the textbox "#app-field-Search" to have the value "894"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1523,7 +1523,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "894"
+        And I update the textbox "#app-field-Search" to have the value "894"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1554,7 +1554,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "2200"
+        And I update the textbox "#app-field-Search" to have the value "2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1585,7 +1585,7 @@
         } 
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "2200"
+        And I update the textbox "#app-field-Search" to have the value "2200"
         And I click the button "#searchSubmit"
         Then the path should be /school/111111/
         And the element "#app-page-subtitle span" should have the text content "(URN: 111111)"
@@ -1624,7 +1624,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "School"
+        And I update the textbox "#app-field-Search" to have the value "School"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=School
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1671,7 +1671,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "School"
+        And I update the textbox "#app-field-Search" to have the value "School"
         And I click the button "#searchSubmit"
         Then the path should be /schools/?search=School
         And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
@@ -1710,7 +1710,7 @@
         """
         When I navigate to /schools/?search=Primary&page=<page>
         Then the page title should be "Search results for "Primary" | Analyse school performance"
-        And the element "[data-testid="search-results-sub-title"]" should have the text content "2 schools"
+        And the element "#app-page-subtitle" should have the text content "2 schools"
         And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
         And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/schools/?search=Primary&page=1"
 
@@ -1729,7 +1729,7 @@
         When I navigate to /schools/?page=50&search=Primary
         Then the page title should be "Search results for "Primary" | Analyse school performance"
         And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 26 of 26 schools"
-        And the element "[data-testid="search-results-sub-title"]" should have the text content "26 schools"
+        And the element "#app-page-subtitle" should have the text content "26 schools"
         And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/schools/?search=Primary&page=1"
         And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
         And the element "*[data-testid='establishment-listing-name-26']" should have the text content "Primary School 100026"
@@ -1785,7 +1785,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "primary"
+        And I update the textbox "#app-field-Search" to have the value "primary"
         Then the autocomplete results should appear
         Then there should be 3 autocomplete items
         Then the elements ".autocomplete__option strong" should have the text contents:
@@ -1850,7 +1850,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "tr"
+        And I update the textbox "#app-field-Search" to have the value "tr"
         Then the autocomplete results should appear
         Then there should be 4 autocomplete items
         Then the elements ".autocomplete__option strong" should have the text contents:
@@ -1918,7 +1918,7 @@
         }
         """
         When I navigate to /schools/
-        And I update the textbox "#searchTerm" to have the value "42"
+        And I update the textbox "#app-field-Search" to have the value "42"
         Then the autocomplete results should appear
         Then there should be 4 autocomplete items
         Then the elements ".autocomplete__option strong" should have the text contents:

@@ -1,12 +1,11 @@
-﻿@using ASP.Web.Areas.School
-@model ASP.Web.Areas.Shared.EstablishmentListing.EstablishmentListingViewModel
+﻿@model List<ASP.Web.Areas.Shared.EstablishmentListing.EstablishmentListingModel>
 
 @{
     var counter = 1;
 }
 
 <ul class="govuk-list">
-    @foreach (var item in Model.EstablishmentListingModel)
+    @foreach (var item in Model)
     {
         <li>
             <div class="app-listing-result-tile">
