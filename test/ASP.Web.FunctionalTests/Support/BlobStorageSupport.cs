@@ -24,7 +24,7 @@ namespace ASP.Web.FunctionalTests.Support
         [BeforeScenario]
         public async Task ClearDownData()
         {
-            await _web.BlobStorage.Clear();
+            await _web.BlobStorage.ClearAsync();
         }
     }
 }

@@ -56,6 +56,10 @@ public abstract class Optional<TValue>
 
     public abstract Task IfNone(Task actionIfNone);
 
+    public abstract TValue? ToNullable();
+
+    protected abstract bool Equals(Optional<TValue> other);
+
     public override bool Equals(object? other)
         => other is Optional<TValue> result && Equals(result);
 
@@ -64,8 +68,6 @@ public abstract class Optional<TValue>
 
     public override string? ToString()
         => base.ToString();
-
-    protected abstract bool Equals(Optional<TValue> other);
 
     public static Optional<TValue> Some(TValue value)
         => new Some<TValue>(value);

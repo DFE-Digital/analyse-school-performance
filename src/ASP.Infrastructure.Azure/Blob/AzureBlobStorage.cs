@@ -29,7 +29,8 @@ namespace ASP.Infrastructure.Azure.Blob
             }
             else
             {
-                var credentialOptions = new DefaultAzureCredentialOptions {
+                var credentialOptions = new DefaultAzureCredentialOptions
+                {
                     ManagedIdentityClientId = _options.ManagedIdentityClientId
                 };
                 var credential = new DefaultAzureCredential(credentialOptions);
@@ -38,6 +39,7 @@ namespace ASP.Infrastructure.Azure.Blob
                     credential);
             }
         }
+
 
         public async Task<Result<List<string>>> ListAsync(string container, string basePath, CancellationToken cancellationToken = default)
         {
@@ -49,19 +51,19 @@ namespace ASP.Infrastructure.Azure.Blob
 
                 var result = new List<string>();
 
-                await foreach (var item in blobs)
+                await foreach (BlobItem item in blobs)
                 {
                     result.Add(item.Name);
                 }
 
-                if(!result.Any())
+                if (!result.Any())
                 {
                     return Error.NotFound($@"Could not find any blobs in container ""{container}"" starting with prefix ""{basePath}"".");
                 }
 
                 return result;
             }
-            catch(RequestFailedException ex)
+            catch (RequestFailedException ex)
             {
                 return Error.Unexpected("Azure request failed: " + ex.Message, ex.StackTrace);
             }
@@ -80,7 +82,7 @@ namespace ASP.Infrastructure.Azure.Blob
                     .GetBlobClient(path)
                     .DownloadToAsync(stream, cancellationToken: cancellationToken);
 
-                if(response.Status == 404)
+                if (response.Status == 404)
                 {
                     return Error.NotFound($@"Could not find a blob in container ""{container}"" with path ""{path}"".");
                 }
@@ -175,7 +177,7 @@ namespace ASP.Infrastructure.Azure.Blob
             }
         }
 
-        public Task<Result<Done>> Clear()
+        public Task<Result<Done>> ClearAsync()
         {
             throw new NotImplementedException("Clear should not be implemented in a real blob store.");
         }

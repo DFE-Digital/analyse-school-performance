@@ -118,7 +118,7 @@ namespace ASP.Infrastructure.Api
             GetAvailableLADownloadsRequest request)
         {
             var url = "/api/GetAvailableLADownloads";
-            var queryString = QueryString.Create("laCode", request.LaCode);
+            var queryString = QueryString.Create("code", request.Code);
 
             request.Year.IfSome(value =>
             {

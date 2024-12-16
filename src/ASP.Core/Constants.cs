@@ -42,7 +42,6 @@ public static class Constants
     public const string ModelErrorKeySelectedYear = "selectedYear";
     
     public const string ModelErrorKeySelectedFiles = "selectedFiles";
-
     public const string AlpineComponentSchoolSearchSuggestions = "schoolSearchSuggestions";
     
     public const string AlpineComponentLaSearchSuggestions = "laSearchSuggestions";

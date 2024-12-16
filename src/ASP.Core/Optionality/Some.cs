@@ -57,6 +57,9 @@ public class Some<TValue> : Optional<TValue>
     public override Task IfNone(Task actionIfNone)
         => Task.CompletedTask;
 
+    public override TValue? ToNullable()
+        => Value;
+
     protected override bool Equals(Optional<TValue> opt)
         => opt is Some<TValue> other && other.Value.Equals(Value);
 

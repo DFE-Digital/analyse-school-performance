@@ -38,5 +38,13 @@
     },
     "BlobStorage": {
         "InMemory": false
+    },
+    "DataDownloads": {
+        "DownloadsConfigContainerName": "config",
+        "DownloadsConfigFileName": "downloads-config.json",
+        "SourceContainerNames": {
+            "ASP": "downloads-asp",
+            "KTS": "downloads-kts"
+        }
     }
 }

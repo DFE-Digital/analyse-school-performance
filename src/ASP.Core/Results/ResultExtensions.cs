@@ -216,6 +216,39 @@ namespace ASP.Core.Results
             return Result.Success(values);
         }
 
+        public static async Task<Result<IEnumerable<TValue>>> Combine<TValue>(this Task<IEnumerable<Result<TValue>>> resultsTask)
+        {
+            var results = await resultsTask;
+
+            return results.Combine();
+        }
+
+        public static async Task<Result<IEnumerable<TValue>>> Combine<TValue>(this IEnumerable<Task<Result<TValue>>> resultsTasks)
+        {
+            var results = await Task.WhenAll(resultsTasks);
+
+            return results.Combine();
+        }
+
+        public static Result<List<TValue>> Combine<TValue>(this List<Result<TValue>> results)
+        {
+            return results.AsEnumerable().Combine().Map(Enumerable.ToList);
+        }
+
+        public static async Task<Result<List<TValue>>> Combine<TValue>(this Task<List<Result<TValue>>> resultsTask)
+        {
+            var results = await resultsTask;
+
+            return results.Combine();
+        }
+
+        public static async Task<Result<List<TValue>>> Combine<TValue>(this List<Task<Result<TValue>>> resultsTasks)
+        {
+            var results = await Task.WhenAll(resultsTasks);
+
+            return results.ToList().Combine();
+        }
+
         public static Result<Optional<TNewValue>> Then<TValue, TNewValue>(this Result<Optional<TValue>> result, Func<TValue, Result<TNewValue>> mapFunction)
             where TValue : notnull
             where TNewValue : notnull

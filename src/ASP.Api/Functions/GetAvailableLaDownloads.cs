@@ -34,7 +34,7 @@ public class GetAvailableLADownloads : ApiFunction
 
     [Function("GetAvailableLADownloads")]
     [OpenApiOperation(operationId: "GetAvailableLADownloads", tags: ["Downloads"], Description = "Retrieves available downloads for specific local authority based on the code.")]
-    [OpenApiParameter(name: "laCode", In = ParameterLocation.Query, Required = true, Description = "The local authority code (3 digits).")]
+    [OpenApiParameter(name: "code", In = ParameterLocation.Query, Required = true, Description = "The local authority code (3 digits).")]
     [OpenApiParameter(name: "year", In = ParameterLocation.Query, Required = false, Description = "The requested year for downloads.")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(GetAvailableLADownloadsResponse), Description = "Available local authority downloads for the specified code and year.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid parameters provided.")]
@@ -50,9 +50,9 @@ public class GetAvailableLADownloads : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from laCode in request.ValidateParameter("laCode", p => p.IsRequired().IsDigits().HasLength(3))
+            from code in request.ValidateParameter("code", p => p.IsRequired().IsDigits().HasLength(3))
             from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
-            from response in _useCase.HandleRequest(new GetAvailableLADownloadsRequest(laCode, year))
+            from response in _useCase.HandleRequest(new GetAvailableLADownloadsRequest(code, year))
             select response;
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);

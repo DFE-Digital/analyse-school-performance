@@ -1,213 +1,908 @@
 Feature: GetAvailableLADownloads
- 
- Scenario: Should not accept POST method
-    When I send a POST request to /api/GetAvailableLADownloads
-    Then I should get a 405 response
-    And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
-    And the response should include the header "Allow: GET"
 
- Scenario: Should return BadRequest (400) response if searchTerm parameter is missing
-    When I send a GET request to /api/GetAvailableLADownloads
-    Then I should get a 400 response
-    And the response should be the message "Bad request: The parameter "laCode" is missing."
+Scenario: Should not accept POST method
+	When I send a POST request to /api/GetAvailableLADownloads
+	Then I should get a 405 response
+	And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
+	And the response should include the header "Allow: GET"
 
-Scenario: Should return BadRequest (400) response if searchTerm parameter is empty string
-    When I send a GET request to /api/GetAvailableLADownloads?laCode=
-    Then I should get a 400 response
-    And the response should be the message "Bad request: The parameter "laCode" should not be empty."
+Scenario: Should return BadRequest (400) response if code parameter is missing
+	When I send a GET request to /api/GetAvailableLADownloads
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "code" is missing."
 
-Scenario Outline: Should return 200 response with laCode reports response
-    When I send a GET request to /api/GetAvailableLADownloads?laCode=123
-    Then I should get a 200 response
-    And the response should be an object containing these properties excluding null:
-    """
-    {
-        "LaCode": "123",
-        "Downloads": [
-            {
-                "Id": "kts-123-phonics-la-2022-final-pupil",
-                "Label": "Phonics LA pupil data",
-                "Source": "Key to success",
-                "Year": 2022,
-                "DatasetType": "Phonics",
-                "Version": "Final"
-            },
-            {
-                "Id": "kts-123-phonics-la-2023-final-pupil",
-                "Label": "Phonics LA pupil data",
-                "Source": "Key to success",
-                "Year": 2023,
-                "DatasetType": "Phonics",
-                "Version": "Final"
-            },
-            {
-                "Id": "kts-123-phonics-la-2024-provisional-pupil",
-                "Label": "Phonics LA pupil data",
-                "Source": "Key to success",
-                "Year": 2024,
-                "DatasetType": "Phonics",
-                "Version": "Provisional"
-            },
-            {
-                "Id": "asp-123-phonics-la-2024-revised-pupil",
-                "Label": "Phonics LA pupil data",
-                "Source": "Analyse school performance",
-                "Year": 2024,
-                "DatasetType": "Phonics",
-                "Version": "Revised"
-            },
-            {
-                "Id": "kts-123-ks2-la-2022-final",
-                "Label": "Key stage 2 LA data",
-                "Source": "Key to success",
-                "Year": 2022,
-                "DatasetType": "Key stage 2",
-                "Version": "Final"
-            },
-            {
-                "Id": "kts-123-ks2-la-2023-final",
-                "Label": "Key stage 2 LA data",
-                "Source": "Key to success",
-                "Year": 2023,
-                "DatasetType": "Key stage 2",
-                "Version": "Final"
-            },
-            {
-                "Id": "kts-123-ks2-la-2024-revised",
-                "Label": "Key stage 2 LA data",
-                "Source": "Key to success",
-                "Year": 2024,
-                "DatasetType": "Key stage 2",
-                "Version": "Revised"
-            },
-            {
-                "Id": "asp-123-ks2-la-2022-provisional",
-                "Label": "Key stage 2 LA data",
-                "Source": "Analyse school performance",
-                "Year": 2022,
-                "DatasetType": "Key stage 2",
-                "Version": "Provisional"
-            },
-            {
-                "Id": "asp-123-ks2-la-2023-provisional",
-                "Label": "Key stage 2 LA data",
-                "Source": "Analyse school performance",
-                "Year": 2023,
-                "DatasetType": "Key stage 2",
-                "Version": "Provisional"
-            },
-            {
-                "Id": "kts-123-ks4-la-2022-final-pupil",
-                "Label": "Key stage 4 LA pupil data",
-                "Source": "Key to success",
-                "Year": 2022,
-                "DatasetType": "Key stage 4",
-                "Version": "Final"
-            },
-            {
-                "Id": "kts-123-ks4-la-2023-revised-pupil",
-                "Label": "Key stage 4 LA pupil data",
-                "Source": "Key to success",
-                "Year": 2023,
-                "DatasetType": "Key stage 4",
-                "Version": "Revised"
-            },
-            {
-                "Id": "asp-123-ks4-la-2022-final-pupil",
-                "Label": "Key stage 4 LA pupil data",
-                "Source": "Analyse school performance",
-                "Year": 2022,
-                "DatasetType": "Key stage 4",
-                "Version": "Final"
-            },
-            {
-                "Id": "asp-123-ks4-la-2023-final-pupil",
-                "Label": "Key stage 4 LA pupil data",
-                "Source": "Analyse school performance",
-                "Year": 2023,
-                "DatasetType": "Key stage 4",
-                "Version": "Final"
-            },
-            {
-                "Id": "asp-123-ks4-la-2024-provisional-pupil",
-                "Label": "Key stage 4 LA pupil data",
-                "Source": "Analyse school performance",
-                "Year": 2024,
-                "DatasetType": "Key stage 4",
-                "Version": "Provisional"
-            }
-        ]
-    }
-    """
-Scenario Outline: Should return 200 response with LA download data with year parameter filter 
-    When I send a GET request to /api/GetAvailableLADownloads?laCode=123&year=2023
-    Then I should get a 200 response
-    And the response should be an object containing these properties excluding null:
-    """
-    {
-        "LaCode": "123",
-        "Year": 2023,
-        "Downloads": [
-            {
-                "Id": "kts-123-phonics-la-2023-final-pupil",
-                "Label": "Phonics LA pupil data",
-                "Source": "Key to success",
-                "Year": 2023,
-                "DatasetType": "Phonics",
-                "Version": "Final"
-            },
-            {
-                "Id": "kts-123-ks2-la-2023-final",
-                "Label": "Key stage 2 LA data",
-                "Source": "Key to success",
-                "Year": 2023,
-                "DatasetType": "Key stage 2",
-                "Version": "Final"
-            },
-            {
-                "Id": "asp-123-ks2-la-2023-provisional",
-                "Label": "Key stage 2 LA data",
-                "Source": "Analyse school performance",
-                "Year": 2023,
-                "DatasetType": "Key stage 2",
-                "Version": "Provisional"
-            },
-            {
-                "Id": "kts-123-ks4-la-2023-revised-pupil",
-                "Label": "Key stage 4 LA pupil data",
-                "Source": "Key to success",
-                "Year": 2023,
-                "DatasetType": "Key stage 4",
-                "Version": "Revised"
-            },
-            {
-                "Id": "asp-123-ks4-la-2023-final-pupil",
-                "Label": "Key stage 4 LA pupil data",
-                "Source": "Analyse school performance",
-                "Year": 2023,
-                "DatasetType": "Key stage 4",
-                "Version": "Final"
-            }
-        ]
-    }
-    """
-    
-Scenario: Should return BadRequest (400) response if year parameter is not a number
-    When I send a GET request to /api/GetAvailableLADownloads?laCode=301&year=xxxx
-    Then I should get a 400 response
-    And the response should be the message "Bad request: The parameter "year" should be a whole number greater than or equal to 1."
+Scenario: Should return BadRequest (400) response if code parameter is empty string
+	When I send a GET request to /api/GetAvailableLADownloads?code=
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "code" should not be empty."
 
-Scenario: Should return BadRequest (400) response if year parameter is not 4 characters
-    When I send a GET request to /api/GetAvailableLADownloads?laCode=301&year=<year>
-    Then I should get a 400 response
-    And the response should be the message "Bad request: The parameter "year" must be exactly 4 characters long."
+Scenario: Should return BadRequest (400) response if code parameter is not digits
+	Given no Local Authorities exist
+	When I send a GET request to /api/GetAvailableLADownloads?code=xyz
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "code" must contain only digits."
 
+Scenario: Should return BadRequest (400) response if code parameter is not 3 digits long
+	Given no Local Authorities exist
+	When I send a GET request to /api/GetAvailableLADownloads?code=<code>
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "code" must be exactly 3 characters long."
 Examples:
-  | year |
-  | 123  |
-  | 12345 |  
-  
+	| code |
+	| 12   |
+	| 1234 |
+
+Scenario: Should return BadRequest (400) response if year parameter is not digits
+	When I send a GET request to /api/GetAvailableLADownloads?code=301&year=xxxx
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "year" should be a whole number greater than or equal to 1."
+
+Scenario: Should return BadRequest (400) response if year parameter is not 4 digits long
+	When I send a GET request to /api/GetAvailableLADownloads?code=301&year=<year>
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "year" must be exactly 4 characters long."
+Examples:
+	| year  |
+	| 123   |
+	| 12345 |
+
+Scenario: Should return NotFound (404) response if LA does not exist
+	Given no Local Authorities exist
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{}
+	]
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=101
+	Then I should get a 404 response
+	And the response should be the message "Not found: Could not find Local Authority with code "101"."
+
+Scenario: Should return ServerError (500) response if Downloads config is not valid JSON
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	Hello
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 500 response
+	And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"The configuration file 'downloads-config.json' contained invalid JSON.","MessagePrefix":"Unexpected: "}"
+
+Scenario: Should return ServerError (500) response if Downloads config is empty
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+	]
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 500 response
+	And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"The configuration file 'downloads-config.json' was empty.","MessagePrefix":"Unexpected: "}"
+
+Scenario: Should return ServerError (500) response if config source is invalid
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "test",
+			"source": "XYZ",
+			"scope": "LocalAuthority",
+			"dataSetType": "test",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/file_{version}.{filetype}"
+		}
+	]
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 500 response
+	And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"The downloads source 'XYZ' was not recognised.","MessagePrefix":"Unexpected: "}"
+
+Scenario: Should return NotFound (404) response if no downloads exist
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "test",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "test",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/file_{version}.{filetype}"
+		}
+	]
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 404 response
+	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
+
 Scenario: Should return NotFound (404) response if no downloads exist for the given year
-    When I send a GET request to /api/GetAvailableLADownloads?laCode=301&year=2000
-    Then I should get a 404 response
-    And the response should be the message "Not found: there are no downloads available for Local Authority "301" for the given year."    
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-la-ks2-pupil",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2022/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2023/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100&year=2000
+	Then I should get a 404 response
+	And the response should be the message "Not found: There are no downloads available for Local Authority "100" for the year 2000."
+
+Scenario: Should return NotFound (404) response if files exist at School level but not LocalAuthority
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-la-ks2-pupil",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/123456/2024/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 404 response
+	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
+
+Scenario: Should return NotFound (404) response if files exist at LocalAuthority level but not for LA
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/101/2024/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/102/2024/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 404 response
+	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
+
+Scenario: Should return NotFound (404) response if files exist for LA but don't match config filepath pattern
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-la-ks2-pupil",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2024/csv/ks4_pupil_provisional.csv exists in KTS container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/csv/ks2_pupil_x_provisional.csv exists in KTS container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 404 response
+	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
+
+Scenario: Should return KTS downloads for LA for all matching years
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-la-ks2-pupil",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2023/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": null,
+		"Downloads": [
+			{
+				"Id": "kts-la-ks2-pupil-100-2023-provisional",
+				"Source": "Key to success",
+				"Label": "KS2 pupil",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2023,
+				"Version": "Provisional"
+			},
+			{
+				"Id": "kts-la-ks2-pupil-100-2024-provisional",
+				"Source": "Key to success",
+				"Label": "KS2 pupil",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2024,
+				"Version": "Provisional"
+			},
+		]
+	}
+	"""
+
+Scenario: Should ignore any non-matching files
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-la-ks2-pupil",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2024/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file Hello-there/ignore-me.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": null,
+		"Downloads": [
+			{
+				"Id": "kts-la-ks2-pupil-100-2024-provisional",
+				"Source": "Key to success",
+				"Label": "KS2 pupil",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2024,
+				"Version": "Provisional"
+			}
+		]
+	}
+	"""
+
+Scenario: Should ignore different filetypes within LA for the same year
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-la-ks2-pupil",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2023/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2023/tsv/ks2_pupil_provisional.tsv exists in downloads-kts container:
+	"""
+	Column A\tColumn B\tColumn C
+	1\t2\t3
+	"""
+	And blob storage file LA/100/2024/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/tsv/ks2_pupil_provisional.tsv exists in downloads-kts container:
+	"""
+	Column A\tColumn B\tColumn C
+	1\t2\t3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": null,
+		"Downloads": [
+			{
+				"Id": "kts-la-ks2-pupil-100-2023-provisional",
+				"Source": "Key to success",
+				"Label": "KS2 pupil",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2023,
+				"Version": "Provisional"
+			},
+			{
+				"Id": "kts-la-ks2-pupil-100-2024-provisional",
+				"Source": "Key to success",
+				"Label": "KS2 pupil",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2024,
+				"Version": "Provisional"
+			}
+		]
+	}
+	"""
+
+Scenario: Should return user-friendly text for different dataset types
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "test-asp",
+			"source": "ASP",
+			"scope": "LocalAuthority",
+			"dataSetType": "<dataSetType>",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/test/file_{version}.{filetype}"
+		},
+		{
+			"id": "test-kts",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "<dataSetType>",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/file_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2024/test/file_provisional.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/csv/file_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": null,
+		"Downloads": [
+			{
+				"Id": "test-asp-100-2024-provisional",
+				"Source": "Analyse school performance",
+				"Label": "Test",
+				"DatasetType": "<userFriendlyDataSetType>",
+				"Year": 2024,
+				"Version": "Provisional"
+				},
+			{
+				"Id": "test-kts-100-2024-provisional",
+				"Source": "Key to success",
+				"Label": "Test",
+				"DatasetType": "<userFriendlyDataSetType>",
+				"Year": 2024,
+				"Version": "Provisional"
+			}
+		]
+	}
+	"""
+Examples:
+	| dataSetType           | userFriendlyDataSetType          |
+	| KeyStage2             | Key stage 2 (KS2)                |
+	| KeyStage4             | Key stage 4 (KS4)                |
+	| Post16                | 16-18                            |
+	| QLA                   | QLA (year 6 only)                |
+	| SchoolCharacteristics | School characteristics           |
+	| Absence               | Absence                          |
+	| Exclusions            | Exclusions                       |
+	| MTC                   | Multiplication table check (MTC) |
+	| Phonics               | Phonics                          |
+
+Scenario: Should return user-friendly text for different versions
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "test-asp",
+			"source": "ASP",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/test/file_{version}.{filetype}"
+		},
+		{
+			"id": "test-kts",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/file_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2024/test/file_<version>.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/csv/file_<version>.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": null,
+		"Downloads": [
+			{
+				"Id": "test-asp-100-2024-<versionDashed>",
+				"Source": "Analyse school performance",
+				"Label": "Test",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2024,
+				"Version": "<userFriendlyVersion>"
+			},
+			{
+				"Id": "test-kts-100-2024-<versionDashed>",
+				"Source": "Key to success",
+				"Label": "Test",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2024,
+				"Version": "<userFriendlyVersion>"
+			}
+		]
+	}
+	"""
+Examples:
+	| version                 | versionDashed           | userFriendlyVersion      |
+	| provisional             | provisional             | Provisional              |
+	| provisional_without_cla | provisional-without-cla | Provisional, without CLA |
+	| provisional_with_cla    | provisional-with-cla    | Provisional, with CLA    |
+	| revised                 | revised                 | Revised                  |
+	| revised_without_cla     | revised-without-cla     | Revised, without CLA     |
+	| revised_with_cla        | revised-with-cla        | Revised, with CLA        |
+	| final                   | final                   | Final                    |
+	| final_without_cla       | final-without-cla       | Final, without CLA       |
+	| final_with_cla          | final-with-cla          | Final, with CLA          |
+
+Scenario: Should ignore different file type casing
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-la-ks2-pupil",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2024/csv/ks2_pupil_provisional.<fileType> exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": null,
+		"Downloads": [
+			{
+				"Id": "kts-la-ks2-pupil-100-2024-provisional",
+				"Source": "Key to success",
+				"Label": "KS2 pupil",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2024,
+				"Version": "Provisional"
+			}
+		]
+	}
+	"""
+Examples:
+	| fileType |
+	| csv      |
+	| CSV      |
+	| CsV      |
+
+Scenario: Should return KTS downloads filtered by year
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-la-ks2-pupil",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 pupil",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2022/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2023/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100&year=2023
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": 2023,
+		"Downloads": [
+			{
+				"Id": "kts-la-ks2-pupil-100-2023-provisional",
+				"Source": "Key to success",
+				"Label": "KS2 pupil",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2023,
+				"Version": "Provisional"
+			}
+		]
+	}
+	"""
+
+Scenario: Should return ASP downloads filtered by year
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "asp-la-ks2-la",
+			"source": "ASP",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "KS2 LA",
+			"filePathPattern": "LA/{code}/{year}/ks2/ks2_la.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2022/ks2/ks2_la.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2023/ks2/ks2_la.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/ks2/ks2_la.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100&year=2023
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": 2023,
+		"Downloads": [
+			{
+				"Id": "asp-la-ks2-la-100-2023",
+				"Source": "Analyse school performance",
+				"Label": "KS2 LA",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2023,
+				"Version": null
+			}
+		]
+	}
+	"""
+
+Scenario: Should return latest KTS and ASP versions
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "asp-la-mtc-pupil",
+			"source": "ASP",
+			"scope": "LocalAuthority",
+			"dataSetType": "MTC",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/MTC/mtc_pupil.{filetype}"
+		},
+		{
+			"id": "kts-la-ks2-pupil",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2024/mtc/mtc_pupil.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/csv/ks2_pupil_provisional.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file LA/100/2024/csv/ks2_pupil_revised.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": null,
+		"Downloads": [
+			{
+				"Id": "asp-la-mtc-pupil-100-2024",
+				"Source": "Analyse school performance",
+				"Label": "Test",
+				"DatasetType": "Multiplication table check (MTC)",
+				"Year": 2024,
+				"Version": null
+			},
+			{
+				"Id": "kts-la-ks2-pupil-100-2024-revised",
+				"Source": "Key to success",
+				"Label": "Test",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2024,
+				"Version": "Revised"
+			}
+		]
+	}
+	"""
+
+Scenario: Download configs for different sources that use the same file path pattern should match up correctly
+	Given Local Authority "100" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "asp-la-duplicate-file",
+			"source": "ASP",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/file_{version}.{filetype}"
+		},
+		{
+			"id": "kts-la-duplicate-file",
+			"source": "KTS",
+			"scope": "LocalAuthority",
+			"dataSetType": "KeyStage2",
+			"label": "Test",
+			"filePathPattern": "LA/{code}/{year}/{filetype}/file_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file LA/100/2024/csv/file_revised.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C,Source
+	1,2,3,ASP
+	"""
+	And blob storage file LA/100/2024/csv/file_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C,Source
+	1,2,3,KTS
+	"""
+	When I send a GET request to /api/GetAvailableLADownloads?code=100
+	Then I should get a 200 response
+	And the response should be an object containing these properties:
+	"""
+	{
+		"Code": "100",
+		"Year": null,
+		"Downloads": [
+			{
+				"Id": "asp-la-duplicate-file-100-2024-revised",
+				"Source": "Analyse school performance",
+				"Label": "Test",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2024,
+				"Version": "Revised"
+			},
+			{
+				"Id": "kts-la-duplicate-file-100-2024-final",
+				"Source": "Key to success",
+				"Label": "Test",
+				"DatasetType": "Key stage 2 (KS2)",
+				"Year": 2024,
+				"Version": "Final"
+			}
+		]
+	}
+	"""

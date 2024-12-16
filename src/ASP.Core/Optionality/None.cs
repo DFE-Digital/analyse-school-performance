@@ -48,6 +48,9 @@ public class None<TValue> : Optional<TValue>
     public override Task IfNone(Task actionIfNone)
         => actionIfNone;
 
+    public override TValue? ToNullable()
+        => default;
+
     protected override bool Equals(Optional<TValue> opt)
         => opt is None<TValue>;
 

@@ -58,7 +58,7 @@ namespace ASP.Infrastructure.InMemory
             var results = _memoryStore.GetAll(container)
                 .Map(r => r
                     .Where(i => i.Key.StartsWith(basePath))
-                    .Select(i => i.Contents)
+                    .Select(i => i.Key)
                     .ToList());
 
             return Task.FromResult(results);
@@ -71,7 +71,7 @@ namespace ASP.Infrastructure.InMemory
             return Task.FromResult(Result.Success(Result.Done));
         }
 
-        public Task<Result<Done>> Clear()
+        public Task<Result<Done>> ClearAsync()
         {
             _memoryStore.Clear();
 

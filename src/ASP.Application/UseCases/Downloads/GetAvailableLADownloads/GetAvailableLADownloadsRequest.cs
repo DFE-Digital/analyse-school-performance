@@ -4,12 +4,12 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableLADownloads
 {
     public class GetAvailableLADownloadsRequest
     {
-        public string LaCode { get; set; }
+        public string Code { get; set; }
         public Optional<int> Year { get; set; }
 
-        public GetAvailableLADownloadsRequest(string LaCodeParam, Optional<int> year)
+        public GetAvailableLADownloadsRequest(string code, Optional<int> year)
         {
-            LaCode = LaCodeParam;
+            Code = code;
             Year = year;
         }
     }

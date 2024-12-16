@@ -14,7 +14,7 @@
         public static Error NotFound(string message)
             => new NotFoundError(message);
 
-        public static Error Unexpected(string message, string? stackTrace)
+        public static Error Unexpected(string message, string? stackTrace = null)
             => new UnexpectedError(message, stackTrace);
 
         public static Error Invalid(string message)

@@ -25,6 +25,7 @@ public partial class LocalAuthorityStepDefinitions
     [Given(@"no Local Authorities exist")]
     public void GivenNoLocalAuthorityExists()
     {
+
     }
     
     [Given(@"Local Authority ""([^""]+)"" exists:")]
