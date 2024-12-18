@@ -1,7 +1,6 @@
 ﻿@model ContentTemplateViewModel
 
 @{
-    ViewData["Title"] = "Home";
     var heroDescription = Model.PageContent?.HeroDescription switch
     {
         null => "Service description goes here...",

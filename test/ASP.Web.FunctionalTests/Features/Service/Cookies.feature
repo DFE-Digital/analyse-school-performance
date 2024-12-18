@@ -30,13 +30,13 @@ Scenario: Analytics cookie preference set to 'Use/Do not use' based on cookie ch
 			]
 		}
 		"""
-     When the cookie "AnalyticsTracking" has been set to "Accepted"
+	 When the cookie "AnalyticsTracking" has been set to "Accepted"
 	 And I navigate to /help/cookies
 	 Then the element "#app-accept-analytics" should be checked
 
 @Javascript:disabled
 Scenario: Cookie preference is retained when "Save cookie settings" is clicked
-    Given Content Template "help-cookies" exists:
+	Given Content Template "help-cookies" exists:
 		"""
 		{
 			"Views": [

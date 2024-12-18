@@ -4,6 +4,8 @@
 @{
     TrackingPreferencesModel preferences = ViewData["AnalyticsTrackingPreferences"] as TrackingPreferencesModel 
         ?? new TrackingPreferencesModel();
+
+    var pageTitle = ViewData["Title"] != null ? $"{ViewData["Title"]} | Analyse school performance" : "Analyse school performance";
 }
 
 <!DOCTYPE html>
@@ -11,7 +13,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>@ViewData["Title"] | Analyse school performance</title>
+    <title>@pageTitle</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="theme-color" content="blue">
     <link rel="icon" sizes="48x48" href="/assets/images/favicon.ico">

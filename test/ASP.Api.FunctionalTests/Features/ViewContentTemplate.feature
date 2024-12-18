@@ -45,7 +45,7 @@ Scenario: Should return NotFound (404) response if Content Template exists but i
 	Given unpublished Content Template with id "test-content" and contentId "test-content" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	When I send a GET request to /api/ViewContentTemplate?id=test-content
@@ -56,7 +56,7 @@ Scenario: Should return NotFound (404) response if revision does not exist
 	Given published Content Template with id "test-content" and contentId "test-content" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	When I send a GET request to /api/ViewContentTemplate?id=test-content&revision=revision1
@@ -94,7 +94,7 @@ Scenario: Should return template object if unpublished Content Template exists a
 	Given unpublished Content Template with id "test-content" and contentId "test-content" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	When I send a GET request to /api/ViewContentTemplate?id=test-content&revision=test-content
@@ -102,7 +102,7 @@ Scenario: Should return template object if unpublished Content Template exists a
 	And the response should be an object containing these properties:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 
@@ -110,13 +110,13 @@ Scenario: Should return template object if revision exists
 	Given published Content Template with id "test-content" and contentId "test-content" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	And unpublished Content Template with id "revision1" and contentId "test-content" exists:
 	"""
 	{
-	  "PageTitle": "Test title (revised)"
+		"PageTitle": "Test title (revised)"
 	}
 	"""
 	When I send a GET request to /api/ViewContentTemplate?id=test-content&revision=revision1
@@ -124,7 +124,7 @@ Scenario: Should return template object if revision exists
 	And the response should be an object containing these properties:
 	"""
 	{
-	  "PageTitle": "Test title (revised)"
+		"PageTitle": "Test title (revised)"
 	}
 	"""
 
@@ -132,13 +132,13 @@ Scenario: Should return template object for published revision
 	Given unpublished Content Template with id "test-content" and contentId "test-content" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	And published Content Template with id "revision1" and contentId "test-content" exists:
 	"""
 	{
-	  "PageTitle": "Test title (revised)"
+		"PageTitle": "Test title (revised)"
 	}
 	"""
 	When I send a GET request to /api/ViewContentTemplate?id=test-content
@@ -146,6 +146,6 @@ Scenario: Should return template object for published revision
 	And the response should be an object containing these properties:
 	"""
 	{
-	  "PageTitle": "Test title (revised)"
+		"PageTitle": "Test title (revised)"
 	}
 	"""

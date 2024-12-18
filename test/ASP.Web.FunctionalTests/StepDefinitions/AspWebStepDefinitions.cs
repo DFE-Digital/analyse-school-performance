@@ -1,6 +1,7 @@
 using AngleSharp.Dom;
 using ASP.Test.Core;
 using ASP.Web.FunctionalTests.Drivers;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using TechTalk.SpecFlow.Infrastructure;
@@ -123,9 +124,46 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then(@"the page title should be ""(.*)""")]
         public async Task ThenThePageTitleShouldBe(string expected)
         {
-            var actual = await _web.CurrentPage.TitleAsync();
+            var browserTitle = await _web.CurrentPage.TitleAsync();
 
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected == "Analyse school performance" ? expected : (expected + " | Analyse school performance"), browserTitle);
+
+            var pageTitleElement = await _web.CurrentPage.ElementAsync("#app-page-title");
+            var pageTitle = await pageTitleElement.TextContentAsync();
+
+            Assert.Equal(expected.Trim().ReplaceLineEndings(" "), pageTitle.Trim().ReplaceLineEndings(" "), "Page titles differ", ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true, ignoreAllWhiteSpace: true);
+        }
+
+        [Then(@"the page subtitle should be ""(.*)""")]
+        public async Task ThenThePageSubtitleShouldBe(string expected)
+        {
+            var subtitleElement = await _web.CurrentPage.ElementAsync("#app-page-subtitle");
+            var subtitle = await subtitleElement.TextContentAsync();
+
+            Assert.Equal(expected.Trim().ReplaceLineEndings(" "), subtitle.Trim().ReplaceLineEndings(" "), "Page subtitles differ", ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Then(@"the sub-page title should be ""(.+)"" with no caption")]
+        public async Task ThenTheSubpageTitleShouldBe(string expected)
+        {
+            var subpageTitleElement = await _web.CurrentPage.ElementAsync("#app-subpage-title");
+            var subpageTitle = await subpageTitleElement.TextContentAsync();
+
+            Assert.Equal(expected.Trim().ReplaceLineEndings(" "), subpageTitle.Trim().ReplaceLineEndings(" "), "Sub-page titles differ", ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+            var captionElement = await _web.CurrentPage.ElementAsync("#app-subpage-title-caption");
+            await captionElement.ShouldNotExistAsync("Expected the subpage title not to have a caption");
+        }
+
+        [Then(@"the sub-page title should be ""(.+)"" with caption ""(.*)""")]
+        public async Task ThenTheSubpageTitleShouldBe(string expectedTitle, string expectedCaption)
+        {
+            var subpageTitleElement = await _web.CurrentPage.ElementAsync("#app-subpage-title");
+            var captionElement = await _web.CurrentPage.ElementAsync("#app-subpage-title-caption");
+            var subpageTitle = await subpageTitleElement.TextContentAsync();
+            var caption = await captionElement.TextContentAsync();
+
+            Assert.Equal(expectedCaption.Trim().ReplaceLineEndings(" "), caption.Trim().ReplaceLineEndings(" "), "Sub-page title captions differ", ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true, ignoreAllWhiteSpace: true);
+            Assert.Equal($"{expectedCaption.Trim().ReplaceLineEndings(" ")} {expectedTitle.Trim().ReplaceLineEndings(" ")}", subpageTitle.Trim().ReplaceLineEndings(" "), "Sub-page titles differ", ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true, ignoreAllWhiteSpace: true);
         }
 
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should (exist|not exist)")]
@@ -210,7 +248,8 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
                 _ => throw new NotImplementedException("We shouldn't have got here")
             };
 
-            Assert.HtmlEqual(expectedValue.Trim(), value.Trim(), _outputHelper.WriteLine);
+            var isTextContent = valueType == "text content";
+            Assert.Equal(expectedValue.Trim().ReplaceLineEndings(" "), value.Trim().ReplaceLineEndings(" "), ignoreLineEndingDifferences: isTextContent, ignoreWhiteSpaceDifferences: isTextContent);
         }
 
         [Then(@"the (element|textbox|input|hidden input|button) ""(.+)"" should be (checked|unchecked)")]
@@ -269,7 +308,8 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
 
             foreach (var item in content.Rows)
             {
-                Assert.Equal(item.Values.First().Trim(), values[index].Trim());
+                var isTextContent = valueTypes == "text contents";
+                Assert.Equal(item.Values.First().Trim().ReplaceLineEndings(" "), values[index].Trim().ReplaceLineEndings(" "), ignoreLineEndingDifferences: isTextContent, ignoreWhiteSpaceDifferences: isTextContent);
                 index++;
             }
         }
@@ -288,7 +328,8 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
                 _ => throw new NotImplementedException("We shouldn't have got here")
             };
 
-            Assert.All(value, c => Assert.Equal(expectedValue, c));
+            var isTextContent = valueType == "text content";
+            Assert.All(value, c => Assert.Equal(expectedValue.Trim().ReplaceLineEndings(" "), c.Trim().ReplaceLineEndings(" "), ignoreLineEndingDifferences: isTextContent, ignoreWhiteSpaceDifferences: isTextContent));
         }
 
         [Then("the top navigation should be:")]

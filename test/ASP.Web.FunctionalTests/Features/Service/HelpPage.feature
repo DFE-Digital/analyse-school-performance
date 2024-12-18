@@ -30,7 +30,7 @@ Scenario: Page should not be found if Content Template exists but is unpublished
 	Given unpublished Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	When I navigate to /help/test
@@ -41,7 +41,7 @@ Scenario: Page should not be found if revision doesn't exist
 	Given published Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	When I navigate to /help/test?revision=revision1
@@ -64,7 +64,7 @@ Scenario: Page should be visible if unpublished Content Template exists and revi
 	Given unpublished Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	When I navigate to /help/test?revision=help-test
@@ -76,13 +76,13 @@ Scenario: Page should be visible if revision exists but is unpublished
 	Given published Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	And unpublished Content Template with id "revision1" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title (revised)"
+		"PageTitle": "Test title (revised)"
 	}
 	"""
 	When I navigate to /help/test?revision=revision1
@@ -94,13 +94,13 @@ Scenario: Page should display published revision
 	Given unpublished Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	And published Content Template with id "revision1" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title (revised)"
+		"PageTitle": "Test title (revised)"
 	}
 	"""
 	When I navigate to /help/test
@@ -140,7 +140,7 @@ Scenario: Page should show a breadcrumb trail
 	"""
 	When I navigate to /help/test
 	Then I should get a 200 response
-    And the breadcrumb trail should be:
+	And the breadcrumb trail should be:
 		| text         | href | current |
 		| Home         | /    |         |
 		| Current page |      | true    |

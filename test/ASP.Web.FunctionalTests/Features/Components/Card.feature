@@ -7,7 +7,7 @@ Scenario: Home page cards should contain correct titles
 	{
 		"ViewId": "Card",
 		"ViewContent": {
-		    "AuthorisationPolicy": "Any",
+			"AuthorisationPolicy": "Any",
 			"Title": "Title1"
 		}
 	}
@@ -24,7 +24,7 @@ Scenario: Home page cards should contain correct link URLs
 	{
 		"ViewId": "Card",
 		"ViewContent": {
-		    "AuthorisationPolicy": "Any",
+			"AuthorisationPolicy": "Any",
 			"LinkUrl": "/link1/"
 		}
 	}
@@ -41,7 +41,7 @@ Scenario: Home page cards should contain correct text
 	{
 		"ViewId": "Card",
 		"ViewContent": {
-		    "AuthorisationPolicy": "Any",
+			"AuthorisationPolicy": "Any",
 			"Text": "Text1"
 		}
 	}
@@ -58,7 +58,7 @@ Scenario Outline: Card should be shown if user is authorized
 	{
 		"ViewId": "Card",
 		"ViewContent": {
-		    "AuthorizationPolicy": "AccessToMySchool",
+			"AuthorizationPolicy": "AccessToMySchool",
 			"Title": "Title1"
 		}
 	}
@@ -76,7 +76,7 @@ Scenario Outline: Card should not be shown if user is not authorized
 	{
 		"ViewId": "Card",
 		"ViewContent": {
-		    "AuthorizationPolicy": "AccessToMySchool",
+			"AuthorizationPolicy": "AccessToMySchool",
 			"Title": "Title1"
 		}
 	}
@@ -94,7 +94,7 @@ Scenario Outline: Card should be shown if the AuthorizationPolicy property is an
 	{
 		"ViewId": "Card",
 		"ViewContent": {
-		    "AuthorizationPolicy": "",
+			"AuthorizationPolicy": "",
 			"Title": "Title1"
 		}
 	}
@@ -102,7 +102,7 @@ Scenario Outline: Card should be shown if the AuthorizationPolicy property is an
 	And I am a LA Named user
 	When I view the component on the page
 	Then there should be no errors
-    And the element "a.app-card-link" within the component should have the text content "Title1"
+	And the element "a.app-card-link" within the component should have the text content "Title1"
 
 
 @Javascript:disabled
@@ -119,4 +119,4 @@ Scenario Outline: Card should shown if the AuthorizationPolicy property is missi
 	And I am a LA Named user
 	When I view the component on the page
 	Then there should be no errors
-    And the element "a.app-card-link" within the component should have the text content "Title1"
+	And the element "a.app-card-link" within the component should have the text content "Title1"

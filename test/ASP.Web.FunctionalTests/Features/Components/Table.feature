@@ -130,23 +130,23 @@ Scenario: Table content should display html correctly with headings and rows whe
 			"ViewContent": {
 				"Headings": [
 					"Bold Text",
-		                  "Italic Text",
-		                  "Link Text"
+							"Italic Text",
+							"Link Text"
 				],
 				"Rows": [
 					[
 						"**bold text**",
-		                "*italic text*"
+						"*italic text*"
 					],
 					[
 						"__bold text__",
-		                "_italic text_"
+						"_italic text_"
 					],
 					[
-		                "",
-		                "",
-		                "[link text](https://google.com)"
-		            ]
+						"",
+						"",
+						"[link text](https://google.com)"
+					]
 				]
 			}
 		}

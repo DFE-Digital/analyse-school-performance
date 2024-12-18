@@ -24,7 +24,7 @@ Scenario: Edit button should not show when user does not have admin role
 	}
 	"""
 	And I am a <Role> user
-    When I navigate to /help/test
+	When I navigate to /help/test
 	Then the element "[data-testid="content-edit"]" should not exist
 Examples: 
 	| Role            |
@@ -48,8 +48,8 @@ Scenario: A admin user should be able to access the 'edit' page.
 	}
 	"""
 	And I am a Super Admin user
-    When I navigate to /help/test/edit
-    Then I should get a 200 response
+	When I navigate to /help/test/edit
+	Then I should get a 200 response
 
 @Javascript:disabled
 Scenario: Page should not be found if Content Template doesn't exist 
@@ -75,7 +75,7 @@ Scenario: Page should not be found if Content Template exists but is unpublished
 	Given unpublished Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	And I am a Super Admin user
@@ -112,7 +112,7 @@ Scenario: Page should be visible if unpublished Content Template exists and revi
 	Given unpublished Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	And I am a Super Admin user
@@ -125,7 +125,7 @@ Scenario: Page should be visible if revision exists but is unpublished
 	Given published Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	Given unpublished Content Template with id "revision1" and contentId "help-test" exists:
@@ -144,13 +144,13 @@ Scenario: Page should display published revision
 	Given unpublished Content Template with id "help-test" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title"
+		"PageTitle": "Test title"
 	}
 	"""
 	And published Content Template with id "revision1" and contentId "help-test" exists:
 	"""
 	{
-	  "PageTitle": "Test title (revised)"
+		"PageTitle": "Test title (revised)"
 	}
 	"""
 	And I am a Super Admin user
@@ -276,11 +276,11 @@ Scenario: Editing a published revision should create a new revision
 		
 @Javascript:disabled
 Scenario: A non-admin user should not be able to access the 'edit' page. Instead, they should see a 403 Access not allowed page.
-        And I am a <Role> user
-        When I navigate to /help/test/edit
-        Then I should get a 403 response
-        And the page title should be "Access not allowed | Analyse school performance"
-        And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
+		And I am a <Role> user
+		When I navigate to /help/test/edit
+		Then I should get a 403 response
+		And the page title should be "Access not allowed"
+		And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 Examples: 
 	| Role            |
 	| DfE Named       |

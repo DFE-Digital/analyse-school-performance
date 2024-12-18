@@ -8,7 +8,7 @@ Scenario: A user with no access to all Local Authorities should not be able to a
 	Given I am a MAT Named user for Multi-Academy Trust "1234"
 	When I navigate to /local-authority/301/
 	Then I should get a 403 response
-	And the page title should be "Access not allowed | Analyse school performance"
+	And the page title should be "Access not allowed"
 	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
@@ -16,7 +16,7 @@ Scenario: An LA user should not be able to access the generic 'Local authority' 
 	Given I am a LA Named user for Local Authority "301"
 	When I navigate to /local-authority/301/
 	Then I should get a 403 response
-	And the page title should be "Access not allowed | Analyse school performance"
+	And the page title should be "Access not allowed"
 	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
@@ -24,28 +24,27 @@ Scenario: Local authority page should not be found when invalid code is provided
 	And Local Authority "301" exists:
 		"""
 		{
-		    "Name": "Test LA",
+			"Name": "Test LA",
 		}
 		"""
 	When I navigate to /local-authority/302/
 	Then I should get a 404 response
-	And the page title should be "Page not found | Analyse school performance"
+	And the page title should be "Page not found"
 	And the element "h1.govuk-heading-l" should have the text content "Page not found"
 
 @Javascript:disabled
-Scenario: Local authority page should be accessible when valid code is provided
+Scenario: Local authority landing page - common page elements
 	Given I am a DfE Named user
 	And Local Authority "301" exists:
 		"""
 		{
-		    "Name": "Test LA",
+			"Name": "Test LA",
 		}
 		"""
 	When I navigate to /local-authority/301/
 	Then I should get a 200 response
-	And the page title should be "Test LA | Analyse school performance"
-	And the element "#app-page-title" should have the text content "Test LA"
-	And the element "#app-page-subtitle" should have the text content "All schools within Test LA"
+	And the page title should be "Test LA"
+	And the page subtitle should be "All schools within Test LA"
 	And the breadcrumb trail should be:
 		| text                  | href                | current |
 		| Home                  | /                   |         |
@@ -53,36 +52,36 @@ Scenario: Local authority page should be accessible when valid code is provided
 		| Test LA               |                     | true    |
 
 @Javascript:disabled
-Scenario: Local authority page cards should be populated from the "la-landing-page" content template
+Scenario: Local authority landing page cards should be populated from the "la-landing-page" content template
 	Given Content Template "la-landing-page" exists:
 		"""
 		{
-		    "Views": [
-		    	{
-		            "ViewId": "Card",
-		            "ViewContent": {
-		                "Id": "app-card-la-all-schools",
-		                "Title": "All schools",
-		                "LinkUrl": "schools/",
-		                "Text": "All schools found in this LA."
-		            }
-		        },
-		        {
-		            "ViewId": "Card",
-		            "ViewContent": {
-		                "Id": "app-card-la-download",
-		                "Title": "Download data",
-		                "LinkUrl": "download-data/",
-		                "Text": "Download data for Analyse school performance and Key to success."
-		            }
-		        }
-		    ]
+			"Views": [
+				{
+					"ViewId": "Card",
+					"ViewContent": {
+						"Id": "app-card-la-all-schools",
+						"Title": "All schools",
+						"LinkUrl": "schools/",
+						"Text": "All schools found in this LA."
+					}
+				},
+				{
+					"ViewId": "Card",
+					"ViewContent": {
+						"Id": "app-card-la-download",
+						"Title": "Download data",
+						"LinkUrl": "download-data/",
+						"Text": "Download data for Analyse school performance and Key to success."
+					}
+				}
+			]
 		}
 		"""
 	And Local Authority "302" exists:
 		"""
 		{
-		    "Name": "Test LA",
+			"Name": "Test LA",
 		}
 		"""
 	When I navigate to /local-authority/302/
@@ -92,27 +91,9 @@ Scenario: Local authority page cards should be populated from the "la-landing-pa
 	Then the element "#app-card-la-download h2 a" should have the href "download-data/"
 	And the element "#app-card-la-download h2 a" should have the text content "Download data"
 	And the element "#app-card-la-download p" should have the text content "Download data for Analyse school performance and Key to success."
-    
-@Javascript:disabled
-Scenario: Page should show a breadcrumb trail
-	Given Local Authority "301" exists:
-		"""
-		{
-		    "Name": "Test LA",
-		}
-		"""
-	When I navigate to /local-authority/301/
-	Then I should get a 200 response
-	And the page title should be "Test LA | Analyse school performance"
-	And the element "#app-page-subtitle" should have the text content "All schools within Test LA"
-	And the breadcrumb trail should be:
-		| text                  | href                | current |
-		| Home                  | /                   |         |
-		| All local authorities | /local-authorities/ |         |
-		| Test LA               |                     | true    |
 
 @Javascript:disabled
-Scenario: Data downloads 'Dates Available for Download' - page should be accessible with a valid laCode
+Scenario: Data downloads 'Dates Available for Download' - common page elements
 	Given Local Authority "301" exists:
 		"""
 		{
@@ -122,14 +103,14 @@ Scenario: Data downloads 'Dates Available for Download' - page should be accessi
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-			  {
+				{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
+				}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -139,46 +120,7 @@ Scenario: Data downloads 'Dates Available for Download' - page should be accessi
 		"""
 	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/
 	Then I should get a 200 response
-	And the element "#app-page-title" should have the text content "Download data"
-	And the sub-navigation should be:
-		| text          | href                                | current |
-		| Download data | /local-authority/301/download-data/ | true    |
-	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true    |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |         |
-	And the element "#app-subpage-title" should have the text content "Pupil level and aggregated LA data Dates available for download"
-	And the element "#app-subpage-title-caption" should have the text content "Pupil level and aggregated LA data"
-
-@Javascript:disabled
-Scenario: Data downloads 'Dates Available for Download' - page should show a breadcrumb trail
-	Given Local Authority "301" exists:
-		"""
-		{
-			"Name": "Test LA",
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			  {
-				"id": "kts-la-ks2-pupil",
-				"source": "KTS",
-				"scope": "LocalAuthority",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
-		]
-		"""
-	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/
-	Then I should get a 200 response
-	And the page title should be "Download data | Analyse school performance"
+	And the page title should be "Download data"
 	And the breadcrumb trail should be:
 		| text                         | href                                | current |
 		| Home                         | /                                   |         |
@@ -186,7 +128,14 @@ Scenario: Data downloads 'Dates Available for Download' - page should show a bre
 		| Test LA                      | /local-authority/301/               |         |
 		| Download data                | /local-authority/301/download-data/ |         |
 		| Dates available for download |                                     | true    |
-
+	And the sub-navigation should be:
+		| text          | href                                | current |
+		| Download data | /local-authority/301/download-data/ | true    |
+	And the side navigation should be:
+		| text                               | href                                                               | current |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true    |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |         |
+	And the sub-page title should be "Dates available for download" with caption "Pupil level and aggregated LA data"
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Dates Available for Download' - page should contain multiple radio buttons
@@ -199,14 +148,14 @@ Scenario Outline: Data downloads 'Dates Available for Download' - page should co
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-			  {
+				{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
+				}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -244,14 +193,14 @@ Scenario: Data downloads 'Dates available for download' - when no date is select
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-			  {
+				{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
+				}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -261,7 +210,7 @@ Scenario: Data downloads 'Dates available for download' - when no date is select
 		"""
 	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/
 	And I click the button "*[data-testid='selectedYearSubmit']"
-        Then the path should be /local-authority/301/download-data/pupil-level-aggregated-la-data/
+		Then the path should be /local-authority/301/download-data/pupil-level-aggregated-la-data/
 	And the element "*[data-testid='app-error-summary'] h2" should have the text content "There is a problem"
 	And the element "*[data-testid='app-error-summary-selectedYear']" should have the text content "Please choose an academic year to download"
 	And the element "*[data-testid='app-error-summary-selectedYear']" should have the href "#app-field-selectedYear"
@@ -278,14 +227,14 @@ Scenario: Data downloads 'Dates available for download' - when date is selected 
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-			  {
+				{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
+				}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -297,10 +246,10 @@ Scenario: Data downloads 'Dates available for download' - when date is selected 
 	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/
 	And I update the element "#app-available-downloads-dates-2022" to be checked
 	And I click the button "*[data-testid='selectedYearSubmit']"
-        Then the path should be /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
+		Then the path should be /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
 
 @Javascript:disabled
-Scenario: Data downloads 'Data files available for download' - page should be accessible when a valid laCode
+Scenario: Data downloads 'Data files available for download' - common page elements
 	Given Local Authority "301" exists:
 		"""
 		{
@@ -310,14 +259,14 @@ Scenario: Data downloads 'Data files available for download' - page should be ac
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-			  {
+				{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
+				}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -328,46 +277,7 @@ Scenario: Data downloads 'Data files available for download' - page should be ac
 
 	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
 	Then I should get a 200 response
-	And the element "#app-page-title" should have the text content "Download data"
-	And the sub-navigation should be:
-		| text          | href                                | current |
-		| Download data | /local-authority/301/download-data/ | true    |
-	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true    |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |         |
-	And the element "#app-subpage-title" should have the text content "Pupil level and aggregated LA data Data files available for download"
-	And the element "#app-subpage-title-caption" should have the text content "Pupil level and aggregated LA data"
-
-@Javascript:disabled
-Scenario: Data downloads 'Data files available for download' - page should show a breadcrumb trail
-	Given Local Authority "301" exists:
-		"""
-		{
-			"Name": "Test LA",
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			  {
-				"id": "kts-la-ks2-pupil",
-				"source": "KTS",
-				"scope": "LocalAuthority",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
-		]
-		"""
-	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
-	Then I should get a 200 response
-	And the page title should be "Download data | Analyse school performance"
+	And the page title should be "Download data"
 	And the breadcrumb trail should be:
 		| text                              | href                                                               | current |
 		| Home                              | /                                                                  |         |
@@ -376,6 +286,14 @@ Scenario: Data downloads 'Data files available for download' - page should show 
 		| Download data                     | /local-authority/301/download-data/                                |         |
 		| Dates available for download      | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |         |
 		| Data files available for download |                                                                    | true    |
+	And the sub-navigation should be:
+		| text          | href                                | current |
+		| Download data | /local-authority/301/download-data/ | true    |
+	And the side navigation should be:
+		| text                               | href                                                               | current |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true    |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |         |
+	And the sub-page title should be "Data files available for download" with caption "Pupil level and aggregated LA data"
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Data files available for download' - page should contain multiple checkbox groups
@@ -395,15 +313,15 @@ Scenario Outline: Data downloads 'Data files available for download' - page shou
 				"dataSetType": "KeyStage4",
 				"label": "Key stage 4 (KS4)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks4_pupil_{version}.{filetype}"
-			  },
-			  {
+				},
+				{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
+				}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -435,30 +353,30 @@ Scenario Outline: Data downloads 'Data files available for download' - page shou
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-			  {
+				{
 				"id": "asp-la-mtc-pupil",
 				"source": "ASP",
 				"scope": "LocalAuthority",
 				"dataSetType": "MTC",
 				"label": "Test",
 				"filePathPattern": "LA/{code}/{year}/MTC/mtc_pupil_{version}.{filetype}"
-			  },
-			  {
+				},
+				{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  },
-			  {
+				},
+				{
 				"id": "kts-la-ks4-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage4",
 				"label": "Key stage 4 (KS4)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks4_pupil_{version}.{filetype}"
-			  }
+				}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -476,7 +394,7 @@ Scenario Outline: Data downloads 'Data files available for download' - page shou
 		Column A,Column B,Column C
 		1,2,3
 		"""
-    When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
+	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
 	Then I should get a 200 response
 	And the element "[data-testid='available-downloads-file-<fileid>-label']" should have the text content "<label>"
 
@@ -497,14 +415,14 @@ Scenario: Data downloads 'Data files available for download' - when no files are
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-			  {
+				{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
+				}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -512,9 +430,9 @@ Scenario: Data downloads 'Data files available for download' - when no files are
 		Column A,Column B,Column C
 		1,2,3
 		"""
-    When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
+	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
 	And I click the button "*[data-testid='selectedFilesSubmit']"
-    Then the path should be /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
+	Then the path should be /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
 	And the element "*[data-testid='app-error-summary'] h2" should have the text content "There is a problem"
 	And the element "*[data-testid='app-error-summary-selectedFiles']" should have the text content "Please choose one or more data files to download"
 	And the element "*[data-testid='app-error-summary-selectedFiles']" should have the href "#app-field-selectedFiles"
@@ -531,14 +449,14 @@ Scenario: Data downloads 'Data files available for download' - when files are se
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-			  {
+				{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			  }
+				}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -546,43 +464,22 @@ Scenario: Data downloads 'Data files available for download' - when files are se
 		Column A,Column B,Column C
 		1,2,3
 		"""
-    When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
+	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
 	And I update the element "#app-available-downloads-file-kts-la-ks2-pupil-301-2022-final" to be checked
 	And I click the button "*[data-testid='selectedFilesSubmit']"
-    Then the path should be /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-la-ks2-pupil-301-2022-final
+	Then the path should be /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-la-ks2-pupil-301-2022-final
 
 @Javascript:disabled
-Scenario: Data downloads 'Download pupil level and aggregated LA data' - page should be accessible with a valid laCode
+Scenario: Data downloads 'Download pupil level and aggregated LA data' - common page elements
 	Given Local Authority "301" exists:
 		"""
 		{
 			"Name": "Test LA",
 		}
 		"""
-    When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional
+	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional
 	Then I should get a 200 response
-	And the element "#app-page-title" should have the text content "Download data"
-	And the sub-navigation should be:
-		| text          | href                                | current |
-		| Download data | /local-authority/301/download-data/ | true    |
-	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true    |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |         |
-	And the element "#app-subpage-title" should have the text content "Pupil level and aggregated LA data Download pupil level and aggregated LA data"
-	And the element "#app-subpage-title-caption" should have the text content "Pupil level and aggregated LA data"
-
-@Javascript:disabled
-Scenario: Data downloads 'Download pupil level and aggregated LA data' - page should show a breadcrumb trail
-	Given Local Authority "301" exists:
-		"""
-		{
-			"Name": "Test LA",
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-004-phonics-la-2022-final-pupil
-	Then I should get a 200 response
-	And the page title should be "Download data | Analyse school performance"
+	And the page title should be "Download data"
 	And the breadcrumb trail should be:
 		| text                                        | href                                                                                              | current |
 		| Home                                        | /                                                                                                 |         |
@@ -592,6 +489,14 @@ Scenario: Data downloads 'Download pupil level and aggregated LA data' - page sh
 		| Dates available for download                | /local-authority/301/download-data/pupil-level-aggregated-la-data/                                |         |
 		| Data files available for download           | /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022 |         |
 		| Download pupil level and aggregated LA data |                                                                                                   | true    |
+	And the sub-navigation should be:
+		| text          | href                                | current |
+		| Download data | /local-authority/301/download-data/ | true    |
+	And the side navigation should be:
+		| text                               | href                                                               | current |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true    |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |         |
+	And the sub-page title should be "Download pupil level and aggregated LA data" with caption "Pupil level and aggregated LA data"
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Download pupil level and aggregated LA data' - page should contain three links
@@ -601,12 +506,12 @@ Scenario Outline: Data downloads 'Download pupil level and aggregated LA data' -
 			"Name": "Test LA",
 		}
 		"""
-        When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional
+		When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional
 	Then I should get a 200 response
 	And the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your LA."
 	And the available download formats should be:
-    	| text               | href                                                                                                                                                           |
-    	| Data in CSV format | /local-authority/301/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=CSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional |
+		| text               | href                                                                                                                                                           |
+		| Data in CSV format | /local-authority/301/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=CSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional |
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Download school data' - Download other dates link should link back to first step

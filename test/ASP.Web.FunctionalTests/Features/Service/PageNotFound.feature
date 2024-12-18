@@ -7,7 +7,7 @@ Background:
 Scenario: Application displays a page not found error page
 	When I navigate to /not-found
 	Then I should get a 404 response
-	And the page title should be "Page not found | Analyse school performance"
+	And the page title should be "Page not found"
 	And the element "h1.govuk-heading-l" should have the text content "Page not found"
 	And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
 	And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
@@ -17,7 +17,7 @@ Scenario: Application displays a page not found error page
 Scenario: Application displays a page not found error page with an error message
 	When the application returns a 404 with error message "this is a test error."
 	Then I should get a 404 response
-	And the page title should be "Page not found | Analyse school performance"
+	And the page title should be "Page not found"
 	And the element "h1.govuk-heading-l" should have the text content "Page not found"
 	And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
 	And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."

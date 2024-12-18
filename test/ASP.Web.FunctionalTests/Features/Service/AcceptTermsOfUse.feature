@@ -31,9 +31,9 @@ Scenario: Should not be redirected to accept terms when Accepted terms cookie is
 	"""
 	{
 		"name": "Some Primary School",
-	    "localAuthority": {
+		"localAuthority": {
 			"code": "999",
-	       	"name": "Test LA"
+			 	"name": "Test LA"
 		}
 	}
 	"""
@@ -159,9 +159,9 @@ Scenario: Should redirect to the correct referrer
 	"""
 	{
 		"name": "Some Primary School",
-	    "localAuthority": {
-		    "code": "999",
-	        "name": "Test LA"
+		"localAuthority": {
+			"code": "999",
+			"name": "Test LA"
 		}
 	}
 	"""

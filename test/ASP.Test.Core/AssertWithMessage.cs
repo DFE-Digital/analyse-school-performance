@@ -11,9 +11,9 @@ namespace Xunit
             {
                 NotNull(@object);
             }
-            catch(XunitException)
+            catch (XunitException ex)
             {
-                throw new XunitException(message);
+                throw new XunitException($"{message}{Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -23,9 +23,9 @@ namespace Xunit
             {
                 Null(@object);
             }
-            catch (XunitException)
+            catch (XunitException ex)
             {
-                throw new XunitException(message);
+                throw new XunitException($"{message}{Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -35,9 +35,9 @@ namespace Xunit
             {
                 NotEmpty(@string);
             }
-            catch (XunitException)
+            catch (XunitException ex)
             {
-                throw new XunitException(message);
+                throw new XunitException($"{message}{Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -47,9 +47,9 @@ namespace Xunit
             {
                 Empty(@string);
             }
-            catch (XunitException)
+            catch (XunitException ex)
             {
-                throw new XunitException(message);
+                throw new XunitException($"{message}{Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -59,9 +59,25 @@ namespace Xunit
             {
                 return IsAssignableFrom<T>(@object);
             }
-            catch(XunitException)
+            catch (XunitException ex)
             {
-                throw new XunitException(message);
+                throw new XunitException($"{message}{Environment.NewLine}{ex.Message}");
+            }
+        }
+
+        public static void Equal(string expected, string actual, string message,
+            bool ignoreCase = false,
+            bool ignoreLineEndingDifferences = false,
+            bool ignoreWhiteSpaceDifferences = false,
+            bool ignoreAllWhiteSpace = false)
+        {
+            try
+            {
+                Equal(expected, actual, ignoreCase, ignoreLineEndingDifferences, ignoreWhiteSpaceDifferences, ignoreAllWhiteSpace);
+            }
+            catch (XunitException ex)
+            {
+                throw new XunitException($"{message}{Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -71,9 +87,9 @@ namespace Xunit
             {
                 Equal(expected, actual);
             }
-            catch (XunitException)
+            catch (XunitException ex)
             {
-                throw new XunitException(message);
+                throw new XunitException($"{message}{Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -83,9 +99,9 @@ namespace Xunit
             {
                 NotEqual(expected, actual);
             }
-            catch (XunitException)
+            catch (XunitException ex)
             {
-                throw new XunitException(message);
+                throw new XunitException($"{message}{Environment.NewLine}{ex.Message}");
             }
         }
     }

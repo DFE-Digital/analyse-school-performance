@@ -14,11 +14,11 @@ Scenario: Navigation item should be selected if current page is equal to or sub-
 	And Establishment "123456" exists:
 	"""
 	{
-    }
+	}
 	"""
 	When I navigate to <Path>
-    Then the element "[data-testid='app-header-navigation-item-home']" class should contain "app-header__navigation-item--<HomeClass>"
-    And the element "[data-testid='app-header-navigation-item-my-school']" class should contain "app-header__navigation-item--<MySchoolClass>"
+	Then the element "[data-testid='app-header-navigation-item-home']" class should contain "app-header__navigation-item--<HomeClass>"
+	And the element "[data-testid='app-header-navigation-item-my-school']" class should contain "app-header__navigation-item--<MySchoolClass>"
 Examples: 
 	| Path                      | HomeClass    | MySchoolClass |
 	| /                         | current      | not-selected  |
@@ -28,7 +28,7 @@ Examples:
 @Javascript:disabled
 Scenario Outline: School user top navigation
 	Given I am a <Role> user
-    When I navigate to /
+	When I navigate to /
 	Then the top navigation should be:
 		| text                  | href                     |
 		| Home                  | /                        |
@@ -44,7 +44,7 @@ Examples:
 @Javascript:disabled
 Scenario Outline: LA user top navigation
 	Given I am a <Role> user
-    When I navigate to /
+	When I navigate to /
 	Then the top navigation should be:
 		| text                  | href                     |
 		| Home                  | /                        |
@@ -60,7 +60,7 @@ Examples:
 @Javascript:disabled
 Scenario Outline: MAT/Diocese user top navigation
 	Given I am a <Role> user
-    When I navigate to /
+	When I navigate to /
 	Then the top navigation should be:
 		| text                  | href                     |
 		| Home                  | /                        |
@@ -69,7 +69,7 @@ Scenario Outline: MAT/Diocese user top navigation
 		| Guidance              | /help/guidance/          |
 Examples: 
 	| Role            |
-    | MAT Named       |
+	| MAT Named       |
 	| MAT Unnamed     |
 	| MAT Governor    |
 	| Diocese Named   |
@@ -78,7 +78,7 @@ Examples:
 @Javascript:disabled
 Scenario Outline: All schools user top navigation
 	Given I am a <Role> user
-    When I navigate to /
+	When I navigate to /
 	Then the top navigation should be:
 		| text                  | href                     |
 		| Home                  | /                        |
