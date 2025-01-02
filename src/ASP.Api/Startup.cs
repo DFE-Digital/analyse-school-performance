@@ -26,6 +26,7 @@ namespace ASP.Api
                         .ConfigureBlobStorage(context.Configuration)
                         .RegisterUseCases()
                         .RegisterRepositories()
+                        .ConfigureDataDownloads(context.Configuration)
                         .AddScoped<ApiResultConverter>()
                         .ConfigureCurrentTime()
                         .AddOpenApiConfiguration();

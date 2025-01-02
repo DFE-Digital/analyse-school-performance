@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ASP.Web.Features.DataDownloads;
 using ASP.Web.Shared;
+using ASP.Core.DataDownloads;
 
 namespace ASP.Web.Areas.School
 {
@@ -22,8 +23,9 @@ namespace ASP.Web.Areas.School
     {
         public MySchoolController(
             IAspApiClient api,
+            IDataDownloadsScopeValidator scopeValidator,
             IHostEnvironment hostEnvironment
-        ) : base(api, hostEnvironment)
+        ) : base(api, scopeValidator, hostEnvironment)
         {
         }
 
@@ -99,11 +101,11 @@ namespace ASP.Web.Areas.School
                 .ToActionResult(View, _hostEnvironment);
         }
 
-        [HttpGet($"download-data/{DownloadDataStepController.SubRouteTemplate}")]
-        [HttpPost($"download-data/{DownloadDataStepController.SubRouteTemplate}")]
+        [HttpGet($"download-data/{DownloadDataController.SubRouteTemplate}")]
+        [HttpPost($"download-data/{DownloadDataController.SubRouteTemplate}")]
         public Task<IActionResult> DownloadData(DownloadDataStepParameters parameters)
         {
-            var downloadData = new DownloadDataStepController(DownloadDataScope.School, ControllerContext, Url, _api);
+            var downloadData = new DownloadDataController(DataDownloadsScopeType.School, ControllerContext, Url, _api, _scopeValidator);
 
             var result =
                 from urn in User.GetEstablishmentUrn()
@@ -113,7 +115,7 @@ namespace ASP.Web.Areas.School
                     urn,
                     GetChildPageBaseBreadcrumbTrail()
                         .Append(new("Download data", Action(nameof(DownloadData), 
-                            DownloadDataStepController.InitialRouteValues))),
+                            DownloadDataController.InitialRouteValues))),
                     stepModel => View(new SchoolDownloadDataPageViewModel(
                         new SchoolPageViewModel(
                             urn,
@@ -128,7 +130,7 @@ namespace ASP.Web.Areas.School
                         )),
                         stepModel.DownloadData
                     )),
-                    new() { [DownloadDataStepType.SelectFormat] = $"Download {establishmentDetails.Name} data" }
+                    new() { [DownloadDataStepType.SelectFormat] = new() { Title = $"Download {establishmentDetails.Name} data" } }
                 )
                 select actionResult;
 
@@ -153,7 +155,7 @@ namespace ASP.Web.Areas.School
         private NavigationViewModel GetSubNavigation() =>
             new([
                 new("Download data", Action(nameof(DownloadData), 
-                    DownloadDataStepController.InitialRouteValues), Request.Path),
+                    DownloadDataController.InitialRouteValues), Request.Path),
                 new("Other reports", Action(nameof(OtherReports)), Request.Path),
                 new("Useful links", Action(nameof(UsefulLinks)), Request.Path)
             ]);
@@ -161,7 +163,7 @@ namespace ASP.Web.Areas.School
         private NavigationViewModel GetDownloadDataSideNavigation(string name) =>
             new([
                 new($"{name} data", Action(nameof(DownloadData),
-                    DownloadDataStepController.InitialRouteValues), Request.Path)
+                    DownloadDataController.InitialRouteValues), Request.Path)
             ]);
     }
 }

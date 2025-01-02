@@ -1,10 +1,10 @@
-﻿namespace ASP.Application.UseCases.Downloads
+﻿namespace ASP.Core.DataDownloads
 {
     public class AcademicYear
     {
         public int Year { get; set; }
         public string StartToEndYears { get; set; } = "";
-        
+
         /// <summary>
         /// Converts a list of years into a list of AcademicYear objects with formatted year ranges.
         /// </summary>
@@ -17,8 +17,7 @@
 
             return years
                 .Distinct()
-                .Select(year => new AcademicYear
-                {
+                .Select(year => new AcademicYear {
                     Year = year,
                     StartToEndYears = $"{year - 1} to {year}"
                 })

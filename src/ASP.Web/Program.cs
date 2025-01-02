@@ -1,5 +1,6 @@
 using ASP.Core.Time;
 using ASP.Infrastructure.Api;
+using ASP.Infrastructure.Blob;
 using ASP.Infrastructure.TableStorage;
 using ASP.Web.Components;
 using ASP.Web.Core.Templating;
@@ -46,7 +47,8 @@ public class Program
             .ConfigureAnalyticsTrackingPreferences()
             .ConfigureTemplateComponents()
             .ConfigureLogging()
-            .ConfigureCurrentTime();
+            .ConfigureCurrentTime()
+            .ConfigureDataDownloads(builder.Configuration);
 
         WebApplication app = builder.Build();
 

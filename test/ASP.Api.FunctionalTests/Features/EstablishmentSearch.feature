@@ -40,6 +40,35 @@ Feature: Establishment Search
 			| 0              |
 			| -1             |
 
+	Scenario: Should return BadRequest (400) response if scope parameter is missing
+		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz
+		Then I should get a 400 response
+		And the response should be the message "Bad request: The parameter "scope" is missing."
+
+	Scenario: Should return BadRequest (400) response if scope parameter is empty string
+		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=
+		Then I should get a 400 response
+		And the response should be the message "Bad request: The parameter "scope" should not be empty."
+
+	Scenario: Should return BadRequest (400) response if scope parameter is invalid
+		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=xyz
+		Then I should get a 400 response
+		And the response should be the message "Bad request: "xyz" is not a valid scope."
+
+	Scenario Outline: Should return BadRequest (400) response if scopeIdentifier parameter is missing
+		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=<Scope>
+		Then I should get a 400 response
+		And the response should be the message "Bad request: The parameter "scopeIdentifier" is missing."
+
+		Examples:
+			| Scope   |
+			| LA      |
+			| la      |
+			| MAT     |
+			| mat     |
+			| Diocese |
+			| diocese |	
+
 	Scenario: Should return NotFound (404) response if no matches found for the searchTerm
 		Given no Establishments exist
 		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x
@@ -997,35 +1026,6 @@ Feature: Establishment Search
 			]
 		}
 		"""
-
-	Scenario: Should return BadRequest (400) response if scope parameter is missing
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "scope" is missing."
-
-	Scenario: Should return BadRequest (400) response if scope parameter is empty string
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "scope" should not be empty."
-
-	Scenario: Should return BadRequest (400) response if scope parameter is invalid
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=xyz
-		Then I should get a 400 response
-		And the response should be the message "Bad request: "xyz" is not a valid "scope"."
-
-	Scenario Outline: Should return BadRequest (400) response if scopeIdentifier parameter is missing
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=<Scope>
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "scopeIdentifier" is missing."
-
-		Examples:
-			| Scope   |
-			| LA      |
-			| la      |
-			| MAT     |
-			| mat     |
-			| Diocese |
-			| diocese |
 
 	Scenario: Should return BadRequest (400) response if Local Authority with code does not exist
 		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100

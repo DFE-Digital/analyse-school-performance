@@ -239,7 +239,7 @@ Feature: Establishment Search Suggestions
 	Scenario: Should return BadRequest (400) response when "xyz" is not a valid scope
 		When I send a GET request to /api/EstablishmentSearchSuggestions?searchTerm=xyz&scope=xyz
 		Then I should get a 400 response
-		And the response should be the message "Bad request: "xyz" is not a valid "scope"."
+		And the response should be the message "Bad request: "xyz" is not a valid scope."
 
 	Scenario Outline: Should return BadRequest (400) response if scopeIdentifier parameter is missing
 		When I send a GET request to /api/EstablishmentSearchSuggestions?searchTerm=xyz&scope=<Scope>

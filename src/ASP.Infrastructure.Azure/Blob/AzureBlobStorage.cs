@@ -45,16 +45,31 @@ namespace ASP.Infrastructure.Azure.Blob
         {
             try
             {
-                var blobs = _client
+                var pages = _client
                     .GetBlobContainerClient(container)
-                    .GetBlobsAsync(prefix: basePath, cancellationToken: cancellationToken);
+                    .GetBlobsAsync(prefix: basePath, cancellationToken: cancellationToken)
+                    .AsPages();
 
                 var result = new List<string>();
 
-                await foreach (BlobItem item in blobs)
+                //// Call the listing operation and return pages of the specified size.
+                //var resultSegment = blobContainerClient.GetBlobsAsync()
+                //    .AsPages(default, segmentSize);
+
+                // Enumerate the blobs returned for each page.
+                await foreach (Page<BlobItem> blobPage in pages)
                 {
-                    result.Add(item.Name);
+                    foreach (BlobItem blobItem in blobPage.Values)
+                    {
+                        result.Add(blobItem.Name);
+                        //Console.WriteLine("Blob name: {0}", blobItem.Name);
+                    }
                 }
+
+                //await foreach (BlobItem item in blobs)
+                //{
+                //    result.Add(item.Name);
+                //}
 
                 if (!result.Any())
                 {

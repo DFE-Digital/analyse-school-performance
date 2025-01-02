@@ -1,4 +1,4 @@
-﻿namespace ASP.Application.UseCases.Downloads
+﻿namespace ASP.Core.DataDownloads
 {
     public class Source
     {
@@ -11,16 +11,14 @@
 
         private string? Normalize(string? value)
         {
-            return value?.Trim() switch
-            {
+            return value?.Trim() switch {
                 "KTS" => "KTS",
                 "ASP" => "ASP",
                 _ => null
             };
         }
 
-        public string ToFriendlyName() => RawValue switch
-        {
+        public string ToFriendlyName() => RawValue switch {
             "KTS" => "Key to success",
             "ASP" => "Analyse school performance",
             _ => throw new InvalidOperationException($"Unexpected source value: {RawValue}")

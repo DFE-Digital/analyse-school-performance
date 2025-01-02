@@ -14,3 +14,7 @@ else if (Model is DownloadDataSelectFormatViewModel selectFormat)
 {
     <partial name="~/Features/DataDownloads/_DownloadDataSelectFormatPartial.cshtml" model=@selectFormat />
 }
+else if (Model is DownloadDataNoDownloadsAvailableViewModel noDownloads)
+{
+    <partial name="~/Features/DataDownloads/_DownloadDataNoDownloadsAvailablePartial.cshtml" model=@noDownloads />
+}

@@ -103,14 +103,14 @@ Scenario: Data downloads 'Dates Available for Download' - common page elements
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-				{
+			{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-				}
+			}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:

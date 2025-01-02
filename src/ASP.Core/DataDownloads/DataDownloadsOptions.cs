@@ -1,4 +1,4 @@
-﻿namespace ASP.Core
+﻿namespace ASP.Core.DataDownloads
 {
     public class DataDownloadsOptions
     {

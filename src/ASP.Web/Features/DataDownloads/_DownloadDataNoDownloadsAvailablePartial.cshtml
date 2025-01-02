@@ -1,0 +1,14 @@
+@model ASP.Web.Features.DataDownloads.DownloadDataNoDownloadsAvailableViewModel
+@{ 
+    var year = Model.Year != null ? $" for {Model.Year}" : "";
+}
+
+<p class="govuk-body" data-testid="no-downloads-description">There were no data files available to download for your @Model.SchoolOrLaLevel@year.</p>
+
+@if(Model.DownloadOtherDatesUrl != null) { 
+    <a role="button" href="@Model.DownloadOtherDatesUrl"
+       data-testid="no-downloads-other-dates"
+       class="govuk-button govuk-button--secondary govuk-!-margin-top-4">
+        Download other dates
+    </a>
+}

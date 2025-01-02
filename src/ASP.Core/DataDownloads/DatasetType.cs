@@ -1,4 +1,4 @@
-﻿namespace ASP.Application.UseCases.Downloads
+﻿namespace ASP.Core.DataDownloads
 {
     public class DatasetType
     {
@@ -11,8 +11,7 @@
 
         private string? Normalize(string? value)
         {
-            return value?.Trim() switch
-            {
+            return value?.Trim() switch {
                 "Absence" => "Absence",
                 "Exclusions" => "Exclusions",
                 "KeyStage2" => "KeyStage2",
@@ -26,8 +25,7 @@
             };
         }
 
-        public string ToFriendlyName() => RawValue switch
-        {
+        public string ToFriendlyName() => RawValue switch {
             "Absence" => "Absence",
             "Exclusions" => "Exclusions",
             "KeyStage2" => "Key stage 2 (KS2)",

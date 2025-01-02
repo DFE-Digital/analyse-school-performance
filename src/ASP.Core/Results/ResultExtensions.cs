@@ -202,7 +202,7 @@ namespace ASP.Core.Results
 
         public static Result<IEnumerable<TValue>> Combine<TValue>(this IEnumerable<Result<TValue>> results)
         {
-            // It looks like there may be a bug in the analyser for CA2021 - see https://github.com/dotnet/roslyn-analyzers/issues?q=is%3Aissue%20state%3Aopen%20CA2021
+// It looks like there may be a bug in the analyser for CA2021 - see https://github.com/dotnet/roslyn-analyzers/issues?q=is%3Aissue%20state%3Aopen%20CA2021
 #pragma warning disable CA2021
             var error = results.OfType<ErrorResult<TValue>>().FirstOrDefault();
 

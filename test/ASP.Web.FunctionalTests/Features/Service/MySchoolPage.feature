@@ -64,11 +64,11 @@ Scenario: School page should display server error page if user's Establishment d
 @Javascript:disabled
 Scenario: School page should be accessible if user's Establishment exists
 	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School"
-		}
-		"""
+	"""
+	{
+		"name": "Hollinswood Primary School"
+	}
+	"""
 	And I am a School Named user for Establishment "123456"
 	When I navigate to /my-school/
 	Then I should get a 200 response
@@ -204,52 +204,52 @@ Scenario: School page should contain eight app card container elements
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
 	Given Establishment "123456" exists:
-		"""
-		{
-			"isPost16": false,
-			"isPrimary": true,
-			"isSecondary": false,
-			"address": {
-				"street": "Dale Acre Way",
-				"town": "Telford",
-				"postCode": "TF3 2EP"
-			},
-			"admissionsPolicy": {
-				"name": "Not applicable",
-			},
-			"ageRange": {
-				"low": 3,
-				"high": 11
-			},
-			"establishmentType": {
-				"name": "Community school",
-			},
-			"gender": {
-				"name": "Mixed",
-			},
-			"headteacher": {
-				"title": "Mrs",
-				"firstName": "Kath",
-				"lastName": "Osborne"
-			},
-			"localAuthority": {
-				"name": "Telford and Wrekin",
-			},
-			"name": "Hollinswood Primary School",
-			"noOfPupils": 404,
-			"ofstedLastInspectionDate": "2020-01-22T00:00:00",
-			"ofstedRating": {
-				"code": "2",
-				"name": "Good",
-			},
-			"religiousDenomination": {
-				"name": "Does not apply",
-			},
-			"resourcedProvisionType": {
-				"name": "Not recorded",
-			}
+	"""
+	{
+		"isPost16": false,
+		"isPrimary": true,
+		"isSecondary": false,
+		"address": {
+			"street": "Dale Acre Way",
+			"town": "Telford",
+			"postCode": "TF3 2EP"
+		},
+		"admissionsPolicy": {
+			"name": "Not applicable",
+		},
+		"ageRange": {
+			"low": 3,
+			"high": 11
+		},
+		"establishmentType": {
+			"name": "Community school",
+		},
+		"gender": {
+			"name": "Mixed",
+		},
+		"headteacher": {
+			"title": "Mrs",
+			"firstName": "Kath",
+			"lastName": "Osborne"
+		},
+		"localAuthority": {
+			"name": "Telford and Wrekin",
+		},
+		"name": "Hollinswood Primary School",
+		"noOfPupils": 404,
+		"ofstedLastInspectionDate": "2020-01-22T00:00:00",
+		"ofstedRating": {
+			"code": "2",
+			"name": "Good",
+		},
+		"religiousDenomination": {
+			"name": "Does not apply",
+		},
+		"resourcedProvisionType": {
+			"name": "Not recorded",
 		}
-		"""
+	}
+	"""
 	And I am a School Named user for Establishment "123456"
 	When I navigate to /my-school/
 	Then I should get a 200 response
@@ -286,27 +286,27 @@ Scenario: School page should contain a school details disclosure element
 
 @Javascript:disabled
 Scenario: School page should show if values are null
-	Given Establishment "123456" exists:
-		"""
-		{
-			"isPost16": null,
-			"isPrimary": null,
-			"isSecondary": null,
-			"address": null,
-			"admissionsPolicy": null,
-			"ageRange": null,
-			"establishmentType": null,
-			"gender": null,
-			"headteacher": null,
-			"localAuthority": null,
-			"name": "Hollinswood Primary School",
-			"noOfPupils": null,
-			"ofstedLastInspectionDate": null,
-			"ofstedRating": null,
-			"religiousDenomination": null,
-			"resourcedProvisionType": null
-		}
-		"""
+Given Establishment "123456" exists:
+	"""
+	{
+		"isPost16": null,
+		"isPrimary": null,
+		"isSecondary": null,
+		"address": null,
+		"admissionsPolicy": null,
+		"ageRange": null,
+		"establishmentType": null,
+		"gender": null,
+		"headteacher": null,
+		"localAuthority": null,
+		"name": "Hollinswood Primary School",
+		"noOfPupils": null,
+		"ofstedLastInspectionDate": null,
+		"ofstedRating": null,
+		"religiousDenomination": null,
+		"resourcedProvisionType": null
+	}
+	"""
 	And I am a School Named user for Establishment "123456"
 	When I navigate to /my-school/
 	Then I should get a 200 response
@@ -341,52 +341,52 @@ Scenario: School page should show if values are null
 @Javascript:disabled
 Scenario: School page should show if values are null case 2
 	Given Establishment "123456" exists:
-		"""
-		{
-			"isPost16": null,
-			"isPrimary": null,
-			"isSecondary": null,
-			"address": {
-				"street": null,
-				"town": null,
-				"postCode": null
-			},
-			"admissionsPolicy": {
-				"name": null,
-			},
-			"ageRange": {
-				"low": null,
-				"high": null
-			},
-			"establishmentType": {
-				"name": null,
-			},
-			"gender": {
-				"name": null,
-			},
-			"headteacher": {
-				"title": null,
-				"firstName": null,
-				"lastName": null
-			},
-			"localAuthority": {
-				"name": null,
-			},
+	"""
+	{
+		"isPost16": null,
+		"isPrimary": null,
+		"isSecondary": null,
+		"address": {
+			"street": null,
+			"town": null,
+			"postCode": null
+		},
+		"admissionsPolicy": {
 			"name": null,
-			"noOfPupils": null,
-			"ofstedLastInspectionDate": null,
-			"ofstedRating": {
-				"code": null,
-				"name": null,
-			},
-			"religiousDenomination": {
-				"name": null,
-			},
-			"resourcedProvisionType": {
-				"name": null,
-			}
+		},
+		"ageRange": {
+			"low": null,
+			"high": null
+		},
+		"establishmentType": {
+			"name": null,
+		},
+		"gender": {
+			"name": null,
+		},
+		"headteacher": {
+			"title": null,
+			"firstName": null,
+			"lastName": null
+		},
+		"localAuthority": {
+			"name": null,
+		},
+		"name": null,
+		"noOfPupils": null,
+		"ofstedLastInspectionDate": null,
+		"ofstedRating": {
+			"code": null,
+			"name": null,
+		},
+		"religiousDenomination": {
+			"name": null,
+		},
+		"resourcedProvisionType": {
+			"name": null,
 		}
-		"""
+	}
+	"""
 	And I am a School Named user for Establishment "123456"
 	When I navigate to /my-school/
 	Then I should get a 200 response
@@ -436,9 +436,9 @@ Scenario Outline: My school page - common page elements
 	Given I am a <School> user for Establishment "123456"
 	And Establishment "123456" exists:
 	"""
-	 {
+	{
 		"name": "Hollinswood Primary School"
-	 }
+	}
 	"""
 	When I navigate to /my-school/
 	Then the page title should be "My school"
@@ -462,6 +462,24 @@ Scenario: Data downloads 'Dates available for download' page - common page eleme
 	}
 	"""
 	And I am a School Named user for Establishment "136028"
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/136028/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
 	When I navigate to /my-school/download-data
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
@@ -488,6 +506,34 @@ Scenario Outline: Data downloads 'Dates available for download' - page should co
 		"name": "Dagenham Park CofE School"
 	}
 	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/136028/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2023/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2024/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
 	And I am a School Named user for Establishment "136028"
 	When I navigate to /my-school/download-data
 	Then I should get a 200 response
@@ -502,9 +548,37 @@ Examples:
 Scenario: Data downloads 'Dates available for download' - when no date is selected and Continue button clicked, should show validation error
 	Given Establishment "123456" exists:
 	"""
-	 {
+	{
 		"name": "Hollinswood Primary School"
-	 }
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/123456/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2023/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2024/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
 	"""
 	And I am a School Named user for Establishment "123456"
 	When I navigate to /my-school/download-data/
@@ -519,9 +593,37 @@ Scenario: Data downloads 'Dates available for download' - when no date is select
 Scenario: Data downloads 'Dates available for download' - when date is selected and Continue button clicked, should move to next step
 	Given Establishment "123456" exists:
 	"""
-	 {
+	{
 		"name": "Hollinswood Primary School"
-	 }
+	}
+	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/123456/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2023/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2024/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
 	"""
 	And I am a School Named user for Establishment "123456"
 	When I navigate to /my-school/download-data/
@@ -538,6 +640,50 @@ Scenario: Data downloads "Data files available for download' - common page eleme
 	}
 	"""
 	And I am a School Named user for Establishment "136028"
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-ks4-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-ks4-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "Phonics",
+			"label": "Phonics",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/phonics_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/136028/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/ks4_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/phonics_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
 	When I navigate to /my-school/download-data/select-files/?selectedYear=2022
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
@@ -566,13 +712,57 @@ Scenario Outline: Data downloads 'Data files available for download' - page shou
 	}
 	"""
 	And I am a School Named user for Establishment "136028"
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-ks4-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-phonics-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "Phonics",
+			"label": "Phonics",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/phonics_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/136028/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/ks4_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/phonics_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
 	When I navigate to /my-school/download-data/select-files/?selectedYear=2022
 	Then the element "[data-testid='available-downloads-file-group-<group>']" should have the text content "<text>"
 Examples:
 	| group       | text        |
-	| Key stage 2 | Key stage 2 |
-	| Key stage 4 | Key stage 4 |
-	| Phonics     | Phonics     |
+	| Key stage 2 (KS2) | Key stage 2 (KS2) |
+	| Key stage 4 (KS4) | Key stage 4 (KS4) |
+	| Phonics           | Phonics           |
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Data files available for download' - page should contain five checkboxes
@@ -582,26 +772,166 @@ Scenario Outline: Data downloads 'Data files available for download' - page shou
 		"name": "Dagenham Park CofE School"
 	}
 	"""
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-ks4-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-phonics-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "Phonics",
+			"label": "Phonics",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/phonics_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "asp-school-ks2-school",
+			"source": "ASP",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_school_{version}.{filetype}"
+		},
+		{
+			"id": "asp-school-ks4-school",
+			"source": "ASP",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_school_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/136028/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/ks4_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/phonics_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/ks2_school_provisional.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/ks4_school_final.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
 	And I am a School Named user for Establishment "136028"
 	When I navigate to /my-school/download-data/select-files/?selectedYear=2022
 	Then the element "[data-testid='available-downloads-file-<fileid>-label']" should have the text content "<label>"
 Examples:
-	| fileid                                 | label                                                  |
-	| kts-136028-ks2-2022-final-school       | Key stage 2 (Final) (Key to success)                   |
-	| asp-136028-ks2-2022-provisional-school | Key stage 2 (Provisional) (Analyse school performance) |
-	| kts-136028-ks4-2022-final-pupil        | Key stage 4 (Final) (Key to success)                   |
-	| asp-136028-ks4-2022-final-pupil        | Key stage 4 (Final) (Analyse school performance)       |
-	| kts-136028-phonics-2022-final-pupil    | Phonics (Final) (Key to success)                       |
+	| fileid                                        | label                                                        |
+	| kts-school-ks2-pupil-136028-2022-final        | Key stage 2 (KS2) (Final) (Key to success)                   |
+	| asp-school-ks2-school-136028-2022-provisional | Key stage 2 (KS2) (Provisional) (Analyse school performance) |
+	| kts-school-ks4-pupil-136028-2022-final        | Key stage 4 (KS4) (Final) (Key to success)                   |
+	| asp-school-ks4-school-136028-2022-final       | Key stage 4 (KS4) (Final) (Analyse school performance)       |
+	| kts-school-phonics-pupil-136028-2022-final    | Phonics (Final) (Key to success)                             |
 
 @Javascript:disabled
 Scenario: Data downloads 'Data files available for download' - when no files are selected and Continue button clicked, should show validation error
 	Given Establishment "123456" exists:
 	"""
-	 {
+	{
 		"name": "Hollinswood Primary School"
-	 }
+	}
 	"""
 	And I am a School Named user for Establishment "123456"
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-ks4-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-phonics-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "Phonics",
+			"label": "Phonics",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/phonics_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "asp-school-ks2-school",
+			"source": "ASP",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_school_{version}.{filetype}"
+		},
+		{
+			"id": "asp-school-ks4-school",
+			"source": "ASP",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_school_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/123456/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2022/csv/ks4_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2022/csv/phonics_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2022/csv/ks2_school_provisional.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2022/csv/ks4_school_final.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
 	When I navigate to /my-school/download-data/select-files/?selectedYear=2022
 	And I click the button "*[data-testid='selectedFilesSubmit']"
 	Then the path should be /my-school/download-data/select-files/?selectedYear=2022
@@ -619,13 +949,83 @@ Scenario: Data downloads 'Data files available for download' - when files are se
 	}
 	"""
 	And I am a School Named user for Establishment "123456"
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-ks4-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-phonics-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "Phonics",
+			"label": "Phonics",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/phonics_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "asp-school-ks2-school",
+			"source": "ASP",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_school_{version}.{filetype}"
+		},
+		{
+			"id": "asp-school-ks4-school",
+			"source": "ASP",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_school_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/123456/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2022/csv/ks4_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2022/csv/phonics_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2022/csv/ks2_school_provisional.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/123456/2022/csv/ks4_school_final.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
 	When I navigate to /my-school/download-data/select-files/?selectedYear=2022
-	And I update the element "#app-available-downloads-file-kts-123456-ks2-2022-final-school" to be checked
+	And I update the element "#app-available-downloads-file-asp-school-ks2-school-123456-2022-provisional" to be checked
 	And I click the button "*[data-testid='selectedFilesSubmit']"
-	Then the path should be /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-123456-ks2-2022-final-school
+	Then the path should be /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=asp-school-ks2-school-123456-2022-provisional
 
 @Javascript:disabled
-Scenario: Data downloads "Download school data' - common page elements
+Scenario: Data downloads 'Download school data' - common page elements
 	Given Establishment "136028" exists:
 	"""
 	{
@@ -633,6 +1033,76 @@ Scenario: Data downloads "Download school data' - common page elements
 	}
 	"""
 	And I am a School Named user for Establishment "136028"
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-ks4-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "kts-school-phonics-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "Phonics",
+			"label": "Phonics",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/phonics_pupil_{version}.{filetype}"
+		},
+		{
+			"id": "asp-school-ks2-school",
+			"source": "ASP",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_school_{version}.{filetype}"
+		},
+		{
+			"id": "asp-school-ks4-school",
+			"source": "ASP",
+			"scope": "School",
+			"dataSetType": "KeyStage4",
+			"label": "Key stage 4 (KS4)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks4_school_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/136028/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/ks4_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/phonics_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/ks2_school_provisional.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
+	And blob storage file School/136028/2022/csv/ks4_school_final.csv exists in downloads-asp container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
 	When I navigate to /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-800200-ks2-2022-final-school&selectedFiles=asp-800200-ks2-2022-provisional-school
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
@@ -662,5 +1132,23 @@ Scenario Outline: Data downloads 'Download school data' - Download other dates l
 	}
 	"""
 	And I am a School Named user for Establishment "136028"
+	And blob storage file downloads-config.json exists in config container:
+	"""
+	[
+		{
+			"id": "kts-school-ks2-pupil",
+			"source": "KTS",
+			"scope": "School",
+			"dataSetType": "KeyStage2",
+			"label": "Key stage 2 (KS2)",
+			"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		}
+	]
+	"""
+	And blob storage file School/136028/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+	"""
+	Column A,Column B,Column C
+	1,2,3
+	"""
 	When I navigate to /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school
 	Then the element "[data-testid="available-downloads-other-dates"]" should have the href "/my-school/download-data/"

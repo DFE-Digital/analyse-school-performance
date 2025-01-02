@@ -31,7 +31,12 @@
                                     value="@file.Id"
                                     aria-describedby="app-available-downloads-file-@file.Id-label">
                             <label data-testid="available-downloads-file-@file.Id-label" id="app-available-downloads-file-@file.Id-label" class="govuk-label govuk-checkboxes__label" for="app-available-downloads-file-@file.Id">
-                                @($"{file.DatasetType} ({file.Version}) ({file.Source})")
+                                @file.DatasetType
+                                @if (file.Version != null)
+                                {
+                                    <text>(@file.Version)</text>
+                                }
+                                (@file.Source)
                             </label>
                         </div>
                     }

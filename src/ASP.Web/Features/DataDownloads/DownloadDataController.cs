@@ -1,21 +1,21 @@
 ﻿using ASP.Application;
-using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
+using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
 using ASP.Application.UseCases.Downloads.DownloadAsZip;
-using ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads;
 using ASP.Core;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Utilities;
 using ASP.Web.Core.BreadcrumbTrail;
 using Microsoft.AspNetCore.Mvc;
+using ASP.Core.DataDownloads;
 
 namespace ASP.Web.Features.DataDownloads
 {
     /// <summary>
     /// <para>
-    ///     <c>DownloadDataStepController</c> is a sub-controller that can be hosted within a controller action, 
+    ///     <c>DownloadDataController</c> is a sub-controller that can be hosted within a controller action, 
     ///     allowing its routing and authorization to be determined by the hosting controller. 
-    ///     The controller action specifies its route using attribute routing, but then delegates to the `DownloadDataStepController` 
+    ///     The controller action specifies its route using attribute routing, but then delegates to the `DownloadDataController` 
     ///     to resolve and handle the download step based on the sub-route and query string parameters. 
     /// </para>
     /// </summary>
@@ -25,8 +25,8 @@ namespace ASP.Web.Features.DataDownloads
     /// <code>
     /// <![CDATA[
     /// // Adds download step as a catch-all route parameter to the route template e.g. "download-data/{**step}"
-    /// [HttpGet($"download-data/{DownloadDataStepController.SubRouteTemplate}")]
-    /// [HttpPost($"download-data/{DownloadDataStepController.SubRouteTemplate}")]
+    /// [HttpGet($"download-data/{DownloadDataController.SubRouteTemplate}")]
+    /// [HttpPost($"download-data/{DownloadDataController.SubRouteTemplate}")]
     /// public Task<IActionResult> DownloadData(DownloadDataStepParameters parameters)
     /// {
     ///     ...
@@ -34,29 +34,29 @@ namespace ASP.Web.Features.DataDownloads
     /// ]]>
     /// </code>
     /// <para>
-    ///     <c>DownloadDataStepController</c> has a <c>HandleStep()</c> method that returns a <c>Result&lt;IActionResult&gt;</c> - 
+    ///     <c>DownloadDataController</c> has a <c>HandleStep()</c> method that returns a <c>Result&lt;IActionResult&gt;</c> - 
     ///     this can then be incorporated in a <c>Result&lt;&gt;</c> chain along with other <c>Result&lt;&gt;</c> actions 
     ///     that may be needed to build up the page.
     /// </para>
     /// <para>
     ///     This needs to be passed a base breadcrumb trail that can be added to as the download steps are navigated, and a 
-    ///     <c>showPageView</c> function to be called to render the page. This is so that the <c>DownloadDataStepController</c> 
+    ///     <c>showPageView</c> function to be called to render the page. This is so that the <c>DownloadDataController</c> 
     ///     can take control of handling the download step logic, including validation errors, not found errors (if the step part 
     ///     of the route is invalid), and returning a file download response, rendering the page by calling the 
     ///     <c>showPageView</c> function as needed.
     /// </para>
     /// <code>
     /// <![CDATA[
-    /// [HttpGet($"download-data/{DownloadDataStepController.SubRouteTemplate}")]
-    /// [HttpPost($"download-data/{DownloadDataStepController.SubRouteTemplate}")]
+    /// [HttpGet($"download-data/{DownloadDataController.SubRouteTemplate}")]
+    /// [HttpPost($"download-data/{DownloadDataController.SubRouteTemplate}")]
     /// public Task<IActionResult> DownloadData(DownloadDataStepParameters parameters)
     /// {
-    ///     var downloadData = new DownloadDataStepController(DownloadDataScope.School, ControllerContext, Url, _api);
+    ///     var downloadData = new DownloadDataController(DataDownloadsScopeType.School, ControllerContext, Url, _api);
     ///     var result =
     ///     from urn in ...       // get school URN from somewhere
     ///     from otherData in ... // get other data needed to build the page
     ///     
-    ///     // delegate to the DownloadDataStepController to handle validation, error cases etc 
+    ///     // delegate to the DownloadDataController to handle validation, error cases etc 
     ///     // and call the showPageView function to render the page
     ///     from actionResult in downloadData.HandleStep(
     ///     parameters,    // step parameters model-bound from route values/query string parameters
@@ -99,29 +99,29 @@ namespace ASP.Web.Features.DataDownloads
     /// </code>
     /// </remarks>
     [NonController]
-    public class DownloadDataStepController
+    public class DownloadDataController
     {
         public const string SubRouteTemplate = "{**step}";
         public static readonly RouteValueDictionary InitialRouteValues = new RouteValueDictionary(new { step = "", selectedYear = "", selectedFiles = "" });
 
         private readonly Dictionary<DownloadDataStepType, DownloadDataStep> _steps = new();
 
-        public DownloadDataStepController(DownloadDataScope scope, ControllerContext context, IUrlHelper url, IAspApiClient api)
+        public DownloadDataController(DataDownloadsScopeType scopeType, ControllerContext context, IUrlHelper url, IAspApiClient api, IDataDownloadsScopeValidator scopeValidator)
         {
             DownloadDataStep GetStep(DownloadDataStepType stepType) => _steps[stepType];
 
             _steps = new() {
                 [DownloadDataStepType.SelectYear] =
-                    new SelectYearStep("", "Dates available for download", scope, context, url, api, GetStep),
+                    new SelectYearStep("", "Dates available for download", scopeType, context, url, api, scopeValidator, GetStep),
 
                 [DownloadDataStepType.SelectFiles] = 
-                    new SelectFilesStep("select-files/", "Data files available for download", scope, context, url, api, GetStep),
+                    new SelectFilesStep("select-files/", "Data files available for download", scopeType, context, url, api, scopeValidator, GetStep),
 
                 [DownloadDataStepType.SelectFormat] = 
-                    new SelectFormatStep("select-format/", "Download data", scope, context, url, api, GetStep),
+                    new SelectFormatStep("select-format/", "Download data", scopeType, context, url, api, scopeValidator, GetStep),
 
                 [DownloadDataStepType.DownloadAsZip] = 
-                    new DownloadAsZipStep("download-as-zip/", "Download as Zip file", scope, context, url, api, GetStep)
+                    new DownloadAsZipStep("download-as-zip/", "Download as Zip file", scopeType, context, url, api, scopeValidator, GetStep)
             };
         }
 
@@ -132,25 +132,33 @@ namespace ASP.Web.Features.DataDownloads
         /// </para>
         /// </summary>
         /// <param name="parameters">Download data step parameters model-bound from route values/query string parameters</param>
-        /// <param name="urnOrLACode">URN or LA code to look up available downloads</param>
+        /// <param name="scopeIdentifier">URN or LA code to look up available downloads</param>
         /// <param name="baseBreadcrumbTrail">Base breadcrumb trail for the page that can be added to as the download steps are navigated</param>
         /// <param name="showPageView">Function to render a page view (displaying a download step, including any validation errors) based on a <c>DownloadDataStepModel</c></param>
-        /// <param name="stepTitleOverrides">Dictionary of overrides for titles of any steps that need to be given different titles</param>
+        /// <param name="stepConfig">Dictionary of overrides for any steps that need to be given different titles or paths</param>
         /// <returns>a <c>Result&lt;IActionResult&gt;</c> that can then be incorporated in a <c>Result&lt;&gt;</c> chain along with other <c>Result&lt;&gt;</c> actions that may be needed to build up the page</returns>
         public Task<Result<IActionResult>> HandleStep(
             DownloadDataStepParameters parameters,
-            string urnOrLACode,
+            string scopeIdentifier,
             IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
             Func<DownloadDataStepViewModel, IActionResult> showPageView,
-            Dictionary<DownloadDataStepType, string>? stepTitleOverrides = null
+            Dictionary<DownloadDataStepType, DownloadDataStepConfig>? stepConfig = null
         )
         {
-            // Step titles can be overridden if needed
-            if(stepTitleOverrides != null)
+            // Step titles/paths can be overridden if needed
+            if(stepConfig != null)
             {
-                foreach((var key, var value) in stepTitleOverrides)
+                foreach((var key, var value) in stepConfig)
                 {
-                    _steps[key].Title = value;
+                    if (value.Title != null)
+                    {
+                        _steps[key].Title = value.Title;
+                    }
+
+                    if (value.Path != null)
+                    {
+                        _steps[key].Path = value.Path;
+                    }
                 }
             }
 
@@ -164,30 +172,36 @@ namespace ASP.Web.Features.DataDownloads
                 return Task.FromResult(Result.NotFound<IActionResult>($"Download data step \"{stepPath}\" was not recognised."));
             }
 
-            return step.Handle(parameters, urnOrLACode, baseBreadcrumbTrail, showPageView);
+            return step.Handle(parameters, scopeIdentifier, baseBreadcrumbTrail, showPageView);
         }
 
         private abstract class DownloadDataStep
         {
-            public string Path { get; }
+            private readonly IDataDownloadsScopeValidator _scopeValidator;
+
+            public string Path { get; set; }
             public string Title { get; set; }
-            protected DownloadDataScope Scope { get; }
+            protected DataDownloadsScopeType ScopeType { get; }
             protected ControllerContext Context { get; }
             protected IUrlHelper Url { get; }
             protected IAspApiClient Api { get; }
             protected Func<DownloadDataStepType, DownloadDataStep> GetStep { get; }
 
-            public DownloadDataStep(string path,
+            public DownloadDataStep(
+                string path,
                 string title,
-                DownloadDataScope scope,
+                DataDownloadsScopeType scopeType,
                 ControllerContext context,
                 IUrlHelper url,
                 IAspApiClient api,
+                IDataDownloadsScopeValidator scopeValidator,
                 Func<DownloadDataStepType, DownloadDataStep> getStep)
             {
+                _scopeValidator = scopeValidator;
+                
                 Path = path;
                 Title = title;
-                Scope = scope;
+                ScopeType = scopeType;
                 Context = context;
                 Url = url;
                 Api = api;
@@ -198,20 +212,21 @@ namespace ASP.Web.Features.DataDownloads
 
             public abstract Task<Result<IActionResult>> Handle(
                 DownloadDataStepParameters parameters,
-                string urnOrLACode,
+                string scopeIdentifier,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail, 
                 Func<DownloadDataStepViewModel, IActionResult> showPageView
             );
 
-            protected Task<Result<AvailableDownloadsViewModel>> GetAvailableDownloads(string urnOrlaCode, Optional<int> year)
+            protected Task<Result<AvailableDownloadsViewModel>> GetAvailableDownloads(string scopeIdentifier, Optional<int> year)
             {
-                return Scope == DownloadDataScope.LocalAuthority
-
-                    ? from downloads in Api.GetAvailableLaDownloads(new GetAvailableLADownloadsRequest(urnOrlaCode, year))
-                      select AvailableDownloadsViewModel.FromAvailableLADownloads(downloads)
-
-                    : from downloads in Api.GetAvailableSchoolDownloads(new GetAvailableSchoolDownloadsRequest(urnOrlaCode, year))
-                      select AvailableDownloadsViewModel.FromAvailableSchoolDownloads(downloads);
+                return
+                    from scope in _scopeValidator.ValidateScope(
+                        ScopeType,
+                        scopeIdentifier,
+                        year
+                    )
+                    from downloads in Api.GetAvailableDownloads(new GetAvailableDownloadsRequest(scope.ScopeType, scope.Identifier, scope.Year))
+                    select AvailableDownloadsViewModel.FromAvailableDownloads(downloads);
             }
 
             protected string Action(string action, object? values = null)
@@ -231,12 +246,13 @@ namespace ASP.Web.Features.DataDownloads
             public SelectYearStep(
                 string path,
                 string title,
-                DownloadDataScope scope,
+                DataDownloadsScopeType scopeType,
                 ControllerContext context,
                 IUrlHelper url,
                 IAspApiClient api,
+                IDataDownloadsScopeValidator scopeValidator,
                 Func<DownloadDataStepType, DownloadDataStep> getStep) 
-                : base(path, title, scope, context, url, api, getStep)
+                : base(path, title, scopeType, context, url, api, scopeValidator, getStep)
             {
             }
 
@@ -245,7 +261,7 @@ namespace ASP.Web.Features.DataDownloads
 
             public override async Task<Result<IActionResult>> Handle(
                 DownloadDataStepParameters parameters,
-                string urnOrLACode,
+                string scopeIdentifier,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<DownloadDataStepViewModel, IActionResult> showPageView)
             {
@@ -262,14 +278,23 @@ namespace ASP.Web.Features.DataDownloads
                 }
 
                 return
-                    from availableDownloads in await GetAvailableDownloads(urnOrLACode, Optional<int>.None)
+                    from availableDownloads in await GetAvailableDownloads(scopeIdentifier, Optional<int>.None)
+                        .DefaultIf(e => e is NotFoundError, new())
+                    let title = availableDownloads.Downloads.Any() 
+                        ? Title
+                        : "We could not find any data downloads"
+                    let downloadDataModel = availableDownloads.Downloads.Any()
+                        ? (DownloadDataViewModel)new DownloadDataSelectYearViewModel(availableDownloads.AvailableDates)
+                        : new DownloadDataNoDownloadsAvailableViewModel(
+                            ScopeType == DataDownloadsScopeType.LA ? "LA" : "school"
+                          )
                     let model = new DownloadDataStepViewModel(
-                        Title,
+                        title,
                         new BreadcrumbTrailViewModel(
                             baseBreadcrumbTrail,
-                            Title
+                            title
                         ),
-                        new DownloadDataSelectYearViewModel(availableDownloads.AvailableDates)
+                        downloadDataModel
                     )
                     select showPageView(model);
             }
@@ -280,12 +305,13 @@ namespace ASP.Web.Features.DataDownloads
             public SelectFilesStep(
                 string path,
                 string title,
-                DownloadDataScope scope,
+                DataDownloadsScopeType scopeType,
                 ControllerContext context,
                 IUrlHelper url,
                 IAspApiClient api,
+                IDataDownloadsScopeValidator scopeValidator,
                 Func<DownloadDataStepType, DownloadDataStep> getStep) 
-                : base(path, title, scope, context, url, api, getStep)
+                : base(path, title, scopeType, context, url, api, scopeValidator, getStep)
             {
             }
 
@@ -294,7 +320,7 @@ namespace ASP.Web.Features.DataDownloads
 
             public override async Task<Result<IActionResult>> Handle(
                 DownloadDataStepParameters parameters,
-                string urnOrLACode,
+                string scopeIdentifier,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<DownloadDataStepViewModel, IActionResult> showPageView)
             {
@@ -315,16 +341,27 @@ namespace ASP.Web.Features.DataDownloads
                 var selectYearStep = GetStep(DownloadDataStepType.SelectYear);
 
                 return
-                    from availableDownloads in await GetAvailableDownloads(urnOrLACode, Optional.FromNullable(parameters.SelectedYear))
+                    from availableDownloads in await GetAvailableDownloads(scopeIdentifier, Optional.FromNullable(parameters.SelectedYear))
+                        .DefaultIf(e => e is NotFoundError, new())
+                    let title = availableDownloads.Downloads.Any()
+                        ? Title
+                        : "We could not find any data downloads"
+                    let downloadDataModel = availableDownloads.Downloads.Any()
+                        ? (DownloadDataViewModel)new DownloadDataSelectFilesViewModel(availableDownloads.Downloads)
+                        : new DownloadDataNoDownloadsAvailableViewModel(
+                            ScopeType == DataDownloadsScopeType.LA ? "LA" : "school",
+                            parameters.SelectedYear,
+                            Action(GetStep(DownloadDataStepType.SelectYear).GetRouteValues(parameters))
+                          )
                     let model = new DownloadDataStepViewModel(
-                        Title,
+                        title,
                         new BreadcrumbTrailViewModel(
                             baseBreadcrumbTrail.Concat([
                                 new(selectYearStep.Title, Action(selectYearStep.GetRouteValues(parameters))),
                             ]),
-                            Title
+                            title
                         ),
-                        new DownloadDataSelectFilesViewModel(availableDownloads.Downloads)
+                        downloadDataModel
                     )
                     select showPageView(model);
             }
@@ -335,12 +372,13 @@ namespace ASP.Web.Features.DataDownloads
             public SelectFormatStep(
                 string path,
                 string title,
-                DownloadDataScope scope,
+                DataDownloadsScopeType scopeType,
                 ControllerContext context,
                 IUrlHelper url,
                 IAspApiClient api,
+                IDataDownloadsScopeValidator scopeValidator,
                 Func<DownloadDataStepType, DownloadDataStep> getStep) 
-                : base(path, title, scope, context, url, api, getStep)
+                : base(path, title, scopeType, context, url, api, scopeValidator, getStep)
             {
             }
 
@@ -349,7 +387,7 @@ namespace ASP.Web.Features.DataDownloads
 
             public override Task<Result<IActionResult>> Handle(
                 DownloadDataStepParameters parameters,
-                string urnOrLACode,
+                string scopeIdentifier,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<DownloadDataStepViewModel, IActionResult> showPageView)
             {
@@ -367,7 +405,7 @@ namespace ASP.Web.Features.DataDownloads
                         Title
                     ),
                     new DownloadDataSelectFormatViewModel(
-                        Scope == DownloadDataScope.LocalAuthority ? "LA" : "school",
+                        ScopeType == DataDownloadsScopeType.LA ? "LA" : "school",
                         [("Data in CSV format", Action(downloadAsZipStep.GetRouteValues(parameters with { FileType = FileType.CSV })))],
                         Action(selectYearStep.GetRouteValues(parameters))
                     )
@@ -382,12 +420,13 @@ namespace ASP.Web.Features.DataDownloads
             public DownloadAsZipStep(
                 string path,
                 string title,
-                DownloadDataScope scope,
+                DataDownloadsScopeType scopeType,
                 ControllerContext context,
                 IUrlHelper url,
                 IAspApiClient api,
-                Func<DownloadDataStepType, DownloadDataStep> getStep) 
-                : base(path, title, scope, context, url, api, getStep)
+                IDataDownloadsScopeValidator scopeValidator,
+                Func<DownloadDataStepType, DownloadDataStep> getStep)
+                : base(path, title, scopeType, context, url, api, scopeValidator, getStep)
             {
             }
 
@@ -396,7 +435,7 @@ namespace ASP.Web.Features.DataDownloads
 
             public override async Task<Result<IActionResult>> Handle(
                 DownloadDataStepParameters parameters,
-                string urnOrLACode,
+                string scopeIdentifier,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<DownloadDataStepViewModel, IActionResult> showPageView)
             {

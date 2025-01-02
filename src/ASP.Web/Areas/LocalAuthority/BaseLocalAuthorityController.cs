@@ -1,4 +1,5 @@
 ﻿using ASP.Application;
+using ASP.Core.DataDownloads;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
@@ -11,11 +12,16 @@ namespace ASP.Web.Areas.LocalAuthority
         protected const string LANDING_PAGE_CONTENT_TEMPLATE_ID = "la-landing-page";
 
         protected readonly IAspApiClient _api;
+        protected readonly IDataDownloadsScopeValidator _scopeValidator;
         protected readonly IHostEnvironment _hostEnvironment;
 
-        protected BaseLocalAuthorityController(IAspApiClient api, IHostEnvironment hostEnvironment)
+        protected BaseLocalAuthorityController(
+            IAspApiClient api,
+            IDataDownloadsScopeValidator scopeValidator, 
+            IHostEnvironment hostEnvironment)
         {
             _api = api ?? throw new ArgumentNullException(nameof(api));
+            _scopeValidator = scopeValidator ?? throw new ArgumentNullException(nameof(scopeValidator));
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 

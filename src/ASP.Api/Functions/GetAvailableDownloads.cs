@@ -1,4 +1,5 @@
-﻿using ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads;
+﻿using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
+using ASP.Core.DataDownloads;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,15 +11,15 @@ using System.Net;
 
 namespace ASP.Api.Functions;
 
-public class GetAvailableSchoolDownloads : ApiFunction
+public class GetAvailableDownloads : ApiFunction
 {
-    private readonly ILogger<GetAvailableSchoolDownloads> _logger;
-    private readonly IGetAvailableSchoolDownloads _useCase;
+    private readonly ILogger<GetAvailableDownloads> _logger;
+    private readonly IGetAvailableDownloads _useCase;
     private readonly ApiResultConverter _resultConverter;
 
-    public GetAvailableSchoolDownloads(
-        ILogger<GetAvailableSchoolDownloads> logger,
-        IGetAvailableSchoolDownloads useCase,
+    public GetAvailableDownloads(
+        ILogger<GetAvailableDownloads> logger,
+        IGetAvailableDownloads useCase,
         ApiResultConverter resultConverter
     )
     {
@@ -32,13 +33,13 @@ public class GetAvailableSchoolDownloads : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
-    [Function("GetAvailableSchoolDownloads")]
-    [OpenApiOperation(operationId: "GetAvailableSchoolDownloads", tags: ["Downloads"], Description = "Retrieves available downloads for specific school based on URN.")]
-    [OpenApiParameter(name: "urn", In = ParameterLocation.Query, Required = true, Description = "The URN of the school.")]
+    [Function("GetAvailableDownloads")]
+    [OpenApiOperation(operationId: "GetAvailableDownloads", tags: ["Downloads"], Description = "Retrieves available downloads for specific local authority based on the code.")]
+    [OpenApiParameter(name: "code", In = ParameterLocation.Query, Required = true, Description = "The local authority code (3 digits).")]
     [OpenApiParameter(name: "year", In = ParameterLocation.Query, Required = false, Description = "The requested year for downloads.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(GetAvailableSchoolDownloadsResponse), Description = "Available school downloads for the specified URN and year.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(GetAvailableDownloadsResponse), Description = "Available local authority downloads for the specified code and year.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid parameters provided.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No available downloads for the specified URN.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No available downloads for the specified code.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
@@ -46,13 +47,14 @@ public class GetAvailableSchoolDownloads : ApiFunction
         CancellationToken cancellationToken
     )
     {
-        _logger.LogInformation($"{request.Method} {request.Path + request.QueryString}");
+        _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from urn in request.ValidateParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
+            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadsScopeType>())
+            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequired())
             from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
-            from response in _useCase.HandleRequest(new GetAvailableSchoolDownloadsRequest(urn, year))
+            from response in _useCase.HandleRequest(new GetAvailableDownloadsRequest(scope, scopeIdentifier, year))
             select response;
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);

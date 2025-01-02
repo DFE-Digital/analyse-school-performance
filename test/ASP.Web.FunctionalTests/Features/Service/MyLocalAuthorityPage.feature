@@ -83,13 +83,49 @@ Scenario: My local authority page cards should be populated from the "la-landing
 	And the element "#app-card-download-data p" should have the text content "Download data for Analyse school performance and Key to success."
 
 @Javascript:disabled
-Scenario: Download data 'Dates available for Download' - common page elements
+Scenario: Download data 'Dates available for Download' - no data files available
 	Given Local Authority "301" exists:
 		"""
+		{
+			"Name": "Test Name",
+			"Code": "301"
+		}
+		"""
+	And blob storage file downloads-config.json exists in config container:
+		"""
+		[
 			{
-				"Name": "Test Name",
-				"Code": "301"
+				"id": "kts-la-ks2-pupil",
+				"source": "KTS",
+				"scope": "LocalAuthority",
+				"dataSetType": "KeyStage2",
+				"label": "Key stage 2 (KS2)",
+				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
 			}
+		]
+		"""
+	And I am a LA Named user for Local Authority "301"
+	When I navigate to /my-local-authority/download-data/pupil-level-aggregated-la-data/
+	Then I should get a 200 response
+	And the page title should be "Download data"
+	And the sub-page title should be "We could not find any data downloads" with caption "Pupil level and aggregated LA data"
+	And the element "[data-testid="no-downloads-description"]" should have the text content "There were no data files available to download for your LA."
+	And the element "[data-testid="no-downloads-other-dates"]" should not exist
+	And the breadcrumb trail should be:
+		| text                                 | href                               | current |
+		| Home                                 | /                                  |         |
+		| My local authority                   | /my-local-authority/               |         |
+		| Download data                        | /my-local-authority/download-data/ |         |
+		| We could not find any data downloads |                                    | true    |
+	
+@Javascript:disabled
+Scenario: Download data 'Dates available for Download' - common page elements 
+	Given Local Authority "301" exists:
+		"""
+		{
+			"Name": "Test Name",
+			"Code": "301"
+		}
 		"""
 	And blob storage file downloads-config.json exists in config container:
 		"""
@@ -131,22 +167,22 @@ Scenario: Download data 'Dates available for Download' - common page elements
 Scenario Outline: Download data 'Dates Available for Download' - page should contain multiple radio buttons
 	Given Local Authority "301" exists:
 		"""
-			{
-				"Name": "Test Name",
-				"Code": "301"
-			}
+		{
+			"Name": "Test Name",
+			"Code": "301"
+		}
 		"""
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-				{
+			{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-				}
+			}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -178,22 +214,22 @@ Examples:
 Scenario: Data downloads 'Dates available for download' - when no date is selected and Continue button clicked, should show validation error
 	Given Local Authority "301" exists:
 		"""
-			{
-				"Name": "Test Name",
-				"Code": "301"
-			}
+		{
+			"Name": "Test Name",
+			"Code": "301"
+		}
 		"""
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-				{
+			{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-				}
+			}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -214,22 +250,22 @@ Scenario: Data downloads 'Dates available for download' - when no date is select
 Scenario: Data downloads 'Dates available for download' - when date is selected and Continue button clicked, should move to next step
 	Given Local Authority "301" exists:
 		"""
-			{
-				"Name": "Test Name",
-				"Code": "301"
-			}
+		{
+			"Name": "Test Name",
+			"Code": "301"
+		}
 		"""
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-				{
+			{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-				}
+			}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
@@ -241,7 +277,44 @@ Scenario: Data downloads 'Dates available for download' - when date is selected 
 	When I navigate to /my-local-authority/download-data/pupil-level-aggregated-la-data/
 	And I update the element "#app-available-downloads-dates-2022" to be checked
 	And I click the button "*[data-testid='selectedYearSubmit']"
-		Then the path should be /my-local-authority/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
+	Then the path should be /my-local-authority/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
+
+@Javascript:disabled
+Scenario: Download data 'Data files available for download' - no data files available
+	Given Local Authority "301" exists:
+		"""
+		{
+			"Name": "Test Name",
+			"Code": "301"
+		}
+		"""
+	And blob storage file downloads-config.json exists in config container:
+		"""
+		[
+			{
+				"id": "kts-la-ks2-pupil",
+				"source": "KTS",
+				"scope": "LocalAuthority",
+				"dataSetType": "KeyStage2",
+				"label": "Key stage 2 (KS2)",
+				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+			}
+		]
+		"""
+	And I am a LA Named user for Local Authority "301"
+	When I navigate to /my-local-authority/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022
+	Then I should get a 200 response
+	And the page title should be "Download data"
+	And the sub-page title should be "We could not find any data downloads" with caption "Pupil level and aggregated LA data"
+	And the element "[data-testid="no-downloads-description"]" should have the text content "There were no data files available to download for your LA for 2022."
+	And the element "[data-testid="no-downloads-other-dates"]" should have the href "/my-local-authority/download-data/pupil-level-aggregated-la-data/"
+	And the breadcrumb trail should be:
+		| text                                 | href                                                              | current |
+		| Home                                 | /                                                                 |         |
+		| My local authority                   | /my-local-authority/                                              |         |
+		| Download data                        | /my-local-authority/download-data/                                |         |
+		| Dates available for download         | /my-local-authority/download-data/pupil-level-aggregated-la-data/ |         |
+		| We could not find any data downloads |                                                                   | true    |
 
 @Javascript:disabled
 Scenario: Download data 'Data files available for download' - common page elements
@@ -255,14 +328,14 @@ Scenario: Download data 'Data files available for download' - common page elemen
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
-				{
+			{
 				"id": "kts-la-ks2-pupil",
 				"source": "KTS",
 				"scope": "LocalAuthority",
 				"dataSetType": "KeyStage2",
 				"label": "Key stage 2 (KS2)",
 				"filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-				}
+			}
 		]
 		"""
 	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:

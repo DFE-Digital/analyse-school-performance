@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ASP.Application.UseCases.Downloads
+namespace ASP.Core.DataDownloads
 {
     public class DownloadConfig
     {

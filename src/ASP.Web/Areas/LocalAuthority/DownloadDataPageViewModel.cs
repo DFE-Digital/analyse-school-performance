@@ -3,12 +3,12 @@ using ASP.Web.Shared;
 
 namespace ASP.Web.Areas.LocalAuthority;
 
-public class LocalAuthorityDownloadDataPageViewModel
+public class DownloadDataPageViewModel
 {
     public PageViewModel Page { get; }
     public DownloadDataViewModel DownloadData { get; }
 
-    public LocalAuthorityDownloadDataPageViewModel(
+    public DownloadDataPageViewModel(
         PageViewModel page,
         DownloadDataViewModel downloadData
     )

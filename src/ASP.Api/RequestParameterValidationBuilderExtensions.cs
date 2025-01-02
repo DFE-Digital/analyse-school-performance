@@ -178,7 +178,7 @@ public static class RequestParameterValidationBuilderExtensions
                 // Check if the parsed value is defined in the enum
                 && Enum.IsDefined(typeof(TEnum), result)
             ? Result.Success(result)
-            : Error.Invalid($@"""{value}"" is not a valid ""{parameterName}"".");
+            : Error.Invalid($@"""{value}"" is not a valid {parameterName}.");
     }
 
     private static Result<int> ValidateNumeric(this string value, string parameterName)

@@ -3,7 +3,6 @@ using ASP.Application;
 using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Application.UseCases.Downloads.DownloadAsZip;
-using ASP.Application.UseCases.Downloads.GetAvailableSchoolDownloads;
 using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
@@ -27,7 +26,7 @@ using LA = ASP.Application.UseCases.LocalAuthorities.DTO;
 using MAT = ASP.Application.UseCases.MultiAcademyTrusts.DTO;
 using ASP.Application.UseCases.BlobStorageDemoFileDownload;
 using ASP.Application.UseCases.BlobStorageDemoZipFileDownload;
-using ASP.Application.UseCases.Downloads.GetAvailableLADownloads;
+using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
 using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearch;
 using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
 using ASP.Core.LocalAuthorities.LocalAuthoritySearchSuggestions;
@@ -101,31 +100,20 @@ namespace ASP.Infrastructure.Api
             return ApiPost<Done>(url, queryString, request.ContentTemplate);
         }
 
-        public Task<Result<GetAvailableSchoolDownloadsResponse>> GetAvailableSchoolDownloads(GetAvailableSchoolDownloadsRequest request)
+        public Task<Result<GetAvailableDownloadsResponse>> GetAvailableDownloads(
+            GetAvailableDownloadsRequest request)
         {
-            var url = "/api/GetAvailableSchoolDownloads";
-            var queryString = QueryString.Create("urn", request.Urn);
-
-            request.Year.IfSome(value =>
-            {
-               queryString = queryString.Add("year", value.ToString());
-            });
-
-            return ApiGet<GetAvailableSchoolDownloadsResponse>(url, queryString);
-        }
-
-        public Task<Result<GetAvailableLADownloadsResponse>> GetAvailableLaDownloads(
-            GetAvailableLADownloadsRequest request)
-        {
-            var url = "/api/GetAvailableLADownloads";
-            var queryString = QueryString.Create("code", request.Code);
+            var url = "/api/GetAvailableDownloads";
+            var queryString = QueryString
+                .Create("scope", request.ScopeType.ToString())
+                .Add("scopeIdentifier", request.ScopeIdentifier);
 
             request.Year.IfSome(value =>
             {
                 queryString = queryString.Add("year", value.ToString());
             });
 
-            return ApiGet<GetAvailableLADownloadsResponse>(url, queryString);
+            return ApiGet<GetAvailableDownloadsResponse>(url, queryString);
         }
 
         public Task<Result<FileStreamResponse>> DownloadAsZipFile(DownloadAsZipFileRequest request)

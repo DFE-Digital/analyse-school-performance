@@ -18,7 +18,7 @@ Examples:
 Scenario: Should return BadRequest (400) response if file type is invalid	
 	When I send a GET request to /api/DownloadAsZipFile?fileType=<fileType>&downloadId=abc
 	Then I should get a 400 response
-	And the response should be the message "Bad request: "<fileType>" is not a valid "fileType"."
+	And the response should be the message "Bad request: "<fileType>" is not a valid fileType."
 Examples:
 	| fileType |
 	| xlsx     |

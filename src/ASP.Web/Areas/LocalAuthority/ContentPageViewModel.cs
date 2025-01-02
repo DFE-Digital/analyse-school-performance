@@ -3,12 +3,12 @@ using ASP.Web.Shared;
 
 namespace ASP.Web.Areas.LocalAuthority;
 
-public class LocalAuthorityContentPageViewModel
+public class ContentPageViewModel
 {
     public PageViewModel Page { get; }
     public ContentTemplateViewModel ContentTemplate { get; }
 
-    public LocalAuthorityContentPageViewModel(
+    public ContentPageViewModel(
         PageViewModel page, 
         ContentTemplateViewModel contentTemplate
     )
