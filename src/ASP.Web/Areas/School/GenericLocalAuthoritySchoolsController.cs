@@ -41,21 +41,24 @@ namespace ASP.Web.Areas.School
             if (!Request.Query.Keys.Any(k =>
                     k.Equals(nameof(searchParams.Search), StringComparison.InvariantCultureIgnoreCase)))
             {
-                var result = await GetSchoolsPageViewModel(laCode, laName, searchParams.Page);
-                return View(nameof(Schools), result.GetValueOrDefault(GetEmptySchoolsPageViewModel(laCode, laName)));
+                return await GetSchoolsPageViewModel(laCode, laName, searchParams.Page)
+                    .DefaultIf(e => e is NotFoundError, GetEmptySchoolsPageViewModel(laCode, laName))
+                    .ToActionResult(View, _hostEnvironment);
             }
 
             if (!ModelState.IsValid)
             {
-                var result = await GetSchoolsPageViewModel(laCode, laName, searchParams.Page);
-                return View(nameof(Schools), result.GetValueOrDefault(GetEmptySchoolsPageViewModel(laCode, laName)));
+                return await GetSchoolsPageViewModel(laCode, laName, searchParams.Page)
+                    .DefaultIf(e => e is NotFoundError, GetEmptySchoolsPageViewModel(laCode, laName))
+                    .ToActionResult(View, _hostEnvironment);
             }
 
             if (string.IsNullOrEmpty(searchParams.Search))
             {
                 ModelState.AddModelError(nameof(searchParams.Search), Constants.SchoolSearchTermInputValidationMessage);
-                var result = await GetSchoolsPageViewModel(laCode, laName, searchParams.Page);
-                return View(nameof(Schools), result.GetValueOrDefault(GetEmptySchoolsPageViewModel(laCode, laName)));
+                return await GetSchoolsPageViewModel(laCode, laName, searchParams.Page)
+                    .DefaultIf(e => e is NotFoundError, GetEmptySchoolsPageViewModel(laCode, laName))
+                    .ToActionResult(View, _hostEnvironment);
             }
 
             var pageNumber = PageHelper.ParsePageNumber(searchParams.Page);

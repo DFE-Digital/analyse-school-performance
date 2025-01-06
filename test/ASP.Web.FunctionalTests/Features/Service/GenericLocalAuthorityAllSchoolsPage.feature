@@ -443,6 +443,13 @@
 
 	@Javascript:disabled
 	Scenario: Search Term Validation
+		Given Local Authority "999" exists:
+		"""
+		{
+			"Name": "Oxfordshire",
+			"Code": "999"
+		}
+		"""
 		When I navigate to /local-authority/999/schools/
 		Then I should get a 200 response
 		And the page title should be "All schools"
@@ -450,6 +457,13 @@
 
 	@Javascript:enabled
 	Scenario: Search Term Validation (JS)
+		Given Local Authority "999" exists:
+		"""
+		{
+			"Name": "Oxfordshire",
+			"Code": "999"
+		}
+		"""
 		When I navigate to /local-authority/999/schools/
 		Then I should get a 200 response
 		And the page title should be "All schools"
@@ -457,6 +471,13 @@
 
 	@Javascript:disabled
 	Scenario: Errors in Search Term Validation
+		Given Local Authority "999" exists:
+		"""
+		{
+			"Name": "Oxfordshire",
+			"Code": "999"
+		}
+		"""
 		When I navigate to /local-authority/999/schools/
 		And I click the button "#searchSubmit"
 		Then the path should be /local-authority/999/schools/?search=
@@ -466,6 +487,13 @@
 
 	@Javascript:enabled
 	Scenario: Errors in Search Term Validation (JS)
+		Given Local Authority "999" exists:
+		"""
+		{
+			"Name": "Oxfordshire",
+			"Code": "999"
+		}
+		"""
 		When I navigate to /local-authority/999/schools/
 		And I click the button "#searchSubmit"
 		Then the path should be /local-authority/999/schools/?search=
