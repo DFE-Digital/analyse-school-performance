@@ -2,6 +2,7 @@
 
 export const searchSuggestions = (inputTemplate, suggestionTemplate) => ({
     suggestion: '',
+    autoCompleteInstance: null, // Store the AutoComplete instance for cleanup
 
     init() {
         this.$nextTick(() => {
@@ -16,16 +17,18 @@ export const searchSuggestions = (inputTemplate, suggestionTemplate) => ({
             if (existingInput) {
                 existingInput.parentElement.removeChild(existingInput);
             }
-            new AutoComplete(
-                'suggestionSearchTermContainer',
-                existingInput.id,
-                existingInput.name,
-                inputTemplate,
-                suggestionTemplate,
-                this.setHiddenField.bind(this),
-                'search',
-                'suggestions'
-            );
+
+            // Create a new AutoComplete instance and store it
+            this.autoCompleteInstance = new AutoComplete({
+                containerId: 'suggestionSearchTermContainer',
+                targetInputElementId: existingInput.id,
+                targetInputElementName: existingInput.name,
+                inputTemplate: inputTemplate,
+                suggestionTemplate: suggestionTemplate,
+                setHiddenField: this.setHiddenField.bind(this),
+                queryParameter: 'search',
+                resultDataProperty: 'suggestions'
+            });
 
             // Wait until this execution queue is finished to ensure the new input has been created.
             setTimeout(() => {
@@ -48,7 +51,7 @@ export const searchSuggestions = (inputTemplate, suggestionTemplate) => ({
     handleSubmit(e) {
         // If the user selects a School/LA from the autocomplete dropdown, its URN/Code should be added to the hidden suggestion input.
         // We prefer this approach because searching by URN/Code is faster than searching by text.
-        
+
         if (!this.suggestion) return;
 
         const input = document.getElementById('app-field-Search');
@@ -65,6 +68,14 @@ export const searchSuggestions = (inputTemplate, suggestionTemplate) => ({
             // search box to display the suggestion visibly while the form is being submitted but this will only happen on old
             // browsers.
             input.value = this.suggestion;
+        }
+    },
+
+    destroyed() {
+        // Call the cleanup method when the component is destroyed
+        if (this.autoCompleteInstance) {
+            this.autoCompleteInstance.cleanup();
+            this.autoCompleteInstance = null; // Clear the reference
         }
     }
 });

@@ -1,155 +1,275 @@
-import accessibleAutocomplete from 'accessible-autocomplete'
+import accessibleAutocomplete from 'accessible-autocomplete';
 
 export default class AutoComplete {
-    constructor(containerId, targetInputElementId, targetInputElementName, inputTemplate, suggestionTemplate, setHiddenField,
-                queryParameter, resultDataProperty, searchRegenerateDelay = 500, minLength = 2) {
-        this.containerId = containerId;
-        this.targetInputElementId = targetInputElementId;
-        this.targetInputElementName = targetInputElementName;
-        this.inputTemplate = inputTemplate;
-        this.suggestionTemplate = suggestionTemplate;
-        this.setHiddenField = setHiddenField;
-        this.minLength = minLength;
-        this.queryParameter = queryParameter;
-        this.resultDataProperty = resultDataProperty;
-        this.searchRegenerateDelay = searchRegenerateDelay;
+    // Regular properties with underscore prefix for "internal" use
+    _currentRequestController = null;
+    _observer = null;
+    _debounceTimers = new Map();
+    _lastConfirmedSearchTerm = '';
+    _previousResults = [];
+
+    constructor({
+                    containerId,
+                    targetInputElementId,
+                    targetInputElementName,
+                    inputTemplate,
+                    suggestionTemplate,
+                    setHiddenField,
+                    queryParameter,
+                    resultDataProperty,
+                    searchRegenerateDelay = 250,
+                    minLength = 2,
+                    authCheckEndpoint = '/account/auth/status/',
+                    loginRedirectUrl = '/account/login'
+                }) {
+        // Validate required parameters
+        this.validateConstructorParams(arguments[0]);
+
+        // Initialize properties
+        this.config = {
+            containerId,
+            targetInputElementId,
+            targetInputElementName,
+            inputTemplate,
+            suggestionTemplate,
+            setHiddenField,
+            queryParameter,
+            resultDataProperty,
+            searchRegenerateDelay,
+            minLength,
+            authCheckEndpoint,
+            loginRedirectUrl
+        };
+
         this.init();
     }
 
-    // function to hide menu
-    hideMenu = (container) => {
-        const menu = container.querySelector('[role="listbox"]');
-        if (menu) {
-            // Remove all list items
-            while (menu.firstChild) {
-                menu.removeChild(menu.firstChild);
+    validateConstructorParams(params) {
+        const requiredParams = [
+            'containerId',
+            'targetInputElementId',
+            'targetInputElementName',
+            'queryParameter',
+            'resultDataProperty'
+        ];
+
+        for (const param of requiredParams) {
+            if (!params[param]) {
+                throw new Error(`Missing required parameter: ${param}`);
             }
-            // Or simply set innerHTML to empty
-            menu.innerHTML = '';
-            menu.classList.add('autocomplete__menu--hidden');
+        }
+    }
+
+    hideMenu = (container) => {
+        try {
+            const menu = container.querySelector('[role="listbox"]');
+            if (menu) {
+                menu.innerHTML = '';
+                menu.classList.add('autocomplete__menu--hidden');
+            }
+        } catch (error) {
+            console.error('Error hiding menu:', error);
         }
     };
 
-    debounce(fn, delay = 500) {
-        let timer;
+    debounce(fn, delay) {
         return (...args) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => fn(...args), delay);
+            const key = fn.toString();
+            if (this._debounceTimers.has(key)) {
+                clearTimeout(this._debounceTimers.get(key));
+            }
+
+            const timer = setTimeout(() => {
+                this._debounceTimers.delete(key);
+                fn(...args);
+            }, delay);
+
+            this._debounceTimers.set(key, timer);
         };
     }
 
     async checkAuthStatus() {
         try {
-            const response = await fetch('/account/auth/status/');
+            const response = await fetch(this.config.authCheckEndpoint);
             return response.ok;
         } catch (error) {
-            console.error('Error checking auth status:', error);
+            console.error('Authentication check failed:', error);
             return false;
         }
     }
 
     search = async (query, populateResults, suggestUrl) => {
-        console.log(`Search triggered with query: ${query}`);
-
-        const isAuthenticated = await this.checkAuthStatus();
-        if (!isAuthenticated) {
-            console.log('Not authenticated. Redirecting to login...');
-            window.location.href = '/account/login?returnUrl=' + encodeURIComponent(window.location.pathname);
-            return;
-        }
-
-        const encodedQuery = encodeURIComponent(query);
-        const urlWithQuery = `${suggestUrl}?${this.queryParameter}=${encodedQuery}`;
-
-        if (this.currentRequestSignal) {
-            this.currentRequestSignal.abort();
-        }
-        const controller = new AbortController();
-        this.currentRequestSignal = controller;
-
+        
         try {
-            const response = await fetch(urlWithQuery, {
-                method: "GET",
-                headers: new Headers({"Content-Type": "application/json"}),
-                signal: controller.signal
-            });
-
-            if (!response.ok) {
-                console.error(`Network response was not ok: ${response.status} ${response.statusText}`);
-                populateResults([]);
+            // Authentication check
+            const isAuthenticated = await this.checkAuthStatus();
+            if (!isAuthenticated) {
+                const returnUrl = encodeURIComponent(window.location.pathname);
+                window.location.href = `${this.config.loginRedirectUrl}?returnUrl=${returnUrl}`;
                 return;
             }
 
-            const data = await response.json();
-            if (data && data[this.resultDataProperty]) {
-                populateResults(data[this.resultDataProperty]);
-            } else {
-                console.log('No results found or invalid data structure');
-                populateResults([]);
+            // Abort previous request if exists
+            if (this._currentRequestController) {
+                this._currentRequestController.abort();
             }
+
+            // Create new abort controller
+            this._currentRequestController = new AbortController();
+
+            const encodedQuery = encodeURIComponent(query);
+            const urlWithQuery = `${suggestUrl}?${this.config.queryParameter}=${encodedQuery}`;
+
+            if (this._previousResults.length > 0) {
+                populateResults(this._previousResults);
+            }
+
+            const response = await this.executeSearch(urlWithQuery);
+            await this.handleSearchResponse(response, populateResults, query);
+
         } catch (error) {
-            if (error.name === 'AbortError') {
-                console.log('Request was aborted');
+            this.handleSearchError(error, populateResults);
+        }
+    };
+
+    async executeSearch(url) {
+        return fetch(url, {
+            method: "GET",
+            headers: new Headers({"Content-Type": "application/json"}),
+            signal: this._currentRequestController.signal
+        });
+    }
+
+    async handleSearchResponse(response, populateResults, searchTerm) {
+        if (!response.ok && response.status !== 404) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Ensure the results are only displayed if the search term matches the latest input
+        const input = document.querySelector(`#${this.config.targetInputElementId}`);
+        if (input && input.value === searchTerm) {
+            if (data?.[this.config.resultDataProperty]?.length > 0) {
+                // Update both the displayed results and stored previous results
+                this._previousResults = data[this.config.resultDataProperty];
+                this._lastConfirmedSearchTerm = searchTerm;
+                populateResults(this._previousResults);
             } else {
-                console.error('Error fetching search data:', error);
+                // If no results, clear previous results and hide the dropdown
+                this._previousResults = [];
+                this._lastConfirmedSearchTerm = '';
+                this.hideMenu(document.querySelector(`#${this.config.containerId}`));
             }
-            populateResults([]);
         }
     }
+
+    handleSearchError(error, populateResults) {
+        if (error.name === 'AbortError') {
+            // Keep showing previous results on abort
+            if (this._previousResults.length > 0) {
+                populateResults(this._previousResults);
+                return;
+            }
+        }
+        this._previousResults = [];
+        this._lastConfirmedSearchTerm = '';
+        populateResults([]);
+    }
+
+    setupMutationObserver(container, input) {
+        this._observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    const menu = container.querySelector('[role="listbox"]');
+                    if (menu && (!input.value || input.value.length < this.config.minLength)) {
+                        this.hideMenu(container);
+                    }
+                }
+            });
+        });
+
+        const menu = container.querySelector('[role="listbox"]');
+        if (menu) {
+            this._observer.observe(menu, {childList: true, subtree: true});
+        }
+    }
+
     bindAutoSuggest() {
-        const container = document.querySelector(`#${this.containerId}`);
+        const container = document.querySelector(`#${this.config.containerId}`);
+        if (!container) {
+            throw new Error(`Container with ID '${this.config.containerId}' not found`);
+        }
+
         const suggestUrl = encodeURI(container.dataset.suggestUrl);
 
         accessibleAutocomplete({
             element: container,
-            id: this.targetInputElementId,
-            name: this.targetInputElementName,
+            id: this.config.targetInputElementId,
+            name: this.config.targetInputElementName,
             defaultValue: '',
-            minLength: this.minLength,
-            source: this.debounce((query, populateResults) => this.search(query, populateResults, suggestUrl), this.searchRegenerateDelay),
+            minLength: this.config.minLength,
+            source: this.debounce(
+                (query, populateResults) => this.search(query, populateResults, suggestUrl),
+                this.config.searchRegenerateDelay
+            ),
             templates: {
-                inputValue: this.inputTemplate,
-                suggestion: value => this.suggestionTemplate(value, document.querySelector(`#${this.containerId} #${this.targetInputElementId}`).value)
+                inputValue: this.config.inputTemplate,
+                suggestion: value => {
+                    // Use _lastConfirmedSearchTerm for highlighting instead of current input value
+                    return this.config.suggestionTemplate(value, this._lastConfirmedSearchTerm);
+                }
             },
-            onConfirm: value => this.setHiddenField(value),
+            onConfirm: this.config.setHiddenField,
             displayMenu: 'overlay',
             showNoOptionsFound: false
         });
 
-        const input = container.querySelector(`#${this.targetInputElementId}`);
+        this.setupEventListeners(container);
+    }
+
+    setupEventListeners(container) {
+        const input = container.querySelector(`#${this.config.targetInputElementId}`);
         if (input) {
             input.addEventListener('keydown', (event) => {
                 if (event.key === 'Backspace' || event.key === 'Delete') {
-                    // Check the length after the key press would take effect
                     const currentLength = event.target.value.length;
-                    if (currentLength <= this.minLength) {
+                    if (currentLength < this.config.minLength) {
                         this.hideMenu(container);
                     }
                 }
             });
 
-            // Override the default menu behavior
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'childList') {
-                        const menu = container.querySelector('[role="listbox"]');
-                        if (menu && (!input.value || input.value.length < this.minLength)) {
-                            this.hideMenu(container);
-                        }
-                    }
-                });
-            });
-
-            // Start observing the menu for changes
-            const menu = container.querySelector('[role="listbox"]');
-            if (menu) {
-                observer.observe(menu, {childList: true, subtree: true});
-            }
+            this.setupMutationObserver(container, input);
         }
     }
 
-    init() {
-        this.bindAutoSuggest();
+    cleanup() {
+        if (this._observer) {
+            this._observer.disconnect();
+        }
+
+        // Clear all debounce timers
+        for (const timer of this._debounceTimers.values()) {
+            clearTimeout(timer);
+        }
+        this._debounceTimers.clear();
+
+        // Abort any pending requests
+        if (this._currentRequestController) {
+            this._currentRequestController.abort();
+        }
+
+        this._lastConfirmedSearchTerm = '';
+        this._previousResults = [];
     }
 
+    init() {
+        try {
+            this.bindAutoSuggest();
+        } catch (error) {
+            console.error('Initialization failed:', error);
+            throw error;
+        }
+    }
 }
