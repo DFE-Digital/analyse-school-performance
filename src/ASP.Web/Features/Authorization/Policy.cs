@@ -25,39 +25,39 @@ public static class Policy
         options.AddPolicy(Any, policy =>
             policy.RequireRole(Role.Any));
 
-        options.AddPolicy(AccessToSearch, policy => 
+        options.AddPolicy(AccessToSearch, policy =>
             policy.RequireRole(Role.AccessToSearch));
 
-        options.AddPolicy(AccessToMySchool, policy => 
+        options.AddPolicy(AccessToMySchool, policy =>
             policy.RequireRole(Role.AccessToMySchool));
 
-        options.AddPolicy(AccessToMySchools, policy => 
+        options.AddPolicy(AccessToMySchools, policy =>
             policy.RequireRole(Role.AccessToMySchools));
-            
-        options.AddPolicy(AccessToMyLaSchools, policy => 
+
+        options.AddPolicy(AccessToMyLaSchools, policy =>
             policy.RequireRole(Role.AccessToMyLaSchools));
-            
-        options.AddPolicy(AccessToMyMatSchools, policy => 
+
+        options.AddPolicy(AccessToMyMatSchools, policy =>
             policy.RequireRole(Role.AccessToMyMatSchools));
-            
-        options.AddPolicy(AccessToMyDioceseSchools, policy => 
+
+        options.AddPolicy(AccessToMyDioceseSchools, policy =>
             policy.RequireRole(Role.AccessToMyDioceseSchools));
 
         options.AddPolicy(AccessToAllSchools, policy =>
             policy.RequireRole(Role.AccessToAllSchools));
-        
+
         options.AddPolicy(AccessToMyLocalAuthority, policy =>
             policy.RequireRole(Role.AccessToMyLocalAuthority));
 
         options.AddPolicy(AccessToAllLocalAuthorities, policy =>
             policy.RequireRole(Role.AccessToAllLocalAuthorities));
 
-        options.AddPolicy(AccessToEditPages, policy => 
+        options.AddPolicy(AccessToEditPages, policy =>
             policy.RequireRole(Role.AccessToEditPages));
 
         options.AddPolicy(AdminOnly, policy =>
             policy.RequireRole(Role.SuperAdmin));
-        
+
         options.AddPolicy(NamedData, policy =>
             policy.RequireRole(Role.NamedData));
 

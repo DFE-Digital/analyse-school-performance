@@ -156,7 +156,7 @@ public sealed class Role
         DioceseUnnamed,
         DioceseNamed,
     ];
-    
+
     public static readonly RoleCollection AccessToMyLaSchools =
     [
         LaUnnamed,

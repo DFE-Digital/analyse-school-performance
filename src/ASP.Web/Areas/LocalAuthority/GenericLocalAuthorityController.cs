@@ -51,6 +51,7 @@ namespace ASP.Web.Areas.LocalAuthority
         }
 
         [HttpGet("download-data")]
+        [Authorize(Policy = Policy.NamedData)]
         public IActionResult DownloadData(string laCode)
         {
             return RedirectToActionPermanent(nameof(DownloadLocalAuthorityData), new { laCode });
@@ -58,6 +59,7 @@ namespace ASP.Web.Areas.LocalAuthority
 
         [HttpGet($"download-data/pupil-level-aggregated-la-data/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/pupil-level-aggregated-la-data/{DownloadDataController.SubRouteTemplate}")]
+        [Authorize(Policy = Policy.NamedData)]
         public Task<IActionResult> DownloadLocalAuthorityData(string laCode, DownloadDataStepParameters parameters)
         {
             var downloadData = new DownloadDataController(DataDownloadsScopeType.LA, ControllerContext, Url, _api, _scopeValidator);
@@ -81,7 +83,8 @@ namespace ASP.Web.Areas.LocalAuthority
                         ),
                         stepModel.DownloadData
                     )),
-                    new() { 
+                    new()
+                    {
                         [DownloadDataStepType.SelectFormat] = new() { Title = "Download pupil level and aggregated LA data" }
                     }
                 )
@@ -93,6 +96,7 @@ namespace ASP.Web.Areas.LocalAuthority
 
         [HttpGet($"download-data/individual-school-data/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/individual-school-data/{DownloadDataController.SubRouteTemplate}")]
+        [Authorize(Policy = Policy.NamedData)]
         public Task<IActionResult> DownloadSchoolData(string laCode, DownloadDataStepParameters parameters)
         {
             var downloadData = new DownloadDataController(DataDownloadsScopeType.LA, ControllerContext, Url, _api, _scopeValidator);
@@ -116,7 +120,8 @@ namespace ASP.Web.Areas.LocalAuthority
                         ),
                         stepModel.DownloadData
                     )),
-                    new() {
+                    new()
+                    {
                         [DownloadDataStepType.SelectYear] = new() { Path = "select-year/" },
                         [DownloadDataStepType.SelectFormat] = new() { Title = "Download individual school data" }
                     }
@@ -127,7 +132,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 .ToActionResult(_hostEnvironment);
         }
 
-        private IEnumerable<BreadcrumbItem> GetBaseBreadcrumbTrail() => 
+        private IEnumerable<BreadcrumbItem> GetBaseBreadcrumbTrail() =>
             [
                 new("All local authorities", $"/local-authorities/")
             ];

@@ -37,7 +37,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
                 let page = new PageViewModel(
                     new BreadcrumbTrailViewModel(
-                        GetBaseBreadcrumbTrail(), 
+                        GetBaseBreadcrumbTrail(),
                         "My local authority"
                     ),
                     "My local authority",
@@ -53,6 +53,7 @@ namespace ASP.Web.Areas.LocalAuthority
         }
 
         [HttpGet("download-data")]
+        [Authorize(Policy = Policy.NamedData)]
         public IActionResult DownloadData()
         {
             return RedirectToActionPermanent(nameof(DownloadLocalAuthorityData));
@@ -60,6 +61,7 @@ namespace ASP.Web.Areas.LocalAuthority
 
         [HttpGet($"download-data/pupil-level-aggregated-la-data/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/pupil-level-aggregated-la-data/{DownloadDataController.SubRouteTemplate}")]
+        [Authorize(Policy = Policy.NamedData)]
         public Task<IActionResult> DownloadLocalAuthorityData(DownloadDataStepParameters parameters)
         {
             var downloadData = new DownloadDataController(DataDownloadsScopeType.LA, ControllerContext, Url, _api, _scopeValidator);
@@ -77,7 +79,7 @@ namespace ASP.Web.Areas.LocalAuthority
                             stepModel.BreadcrumbTrail,
                             "Download data",
                             "Pupil level and aggregated LA data",
-                            GetSubNavigation(), 
+                            GetSubNavigation(),
                             GetDownloadDataSideNavigation(),
                             stepModel.StepTitle,
                             "Pupil level and aggregated LA data"
@@ -94,9 +96,10 @@ namespace ASP.Web.Areas.LocalAuthority
 
         [HttpGet($"download-data/individual-school-data")]
         [HttpPost($"download-data/individual-school-data")]
+        [Authorize(Policy = Policy.NamedData)]
         public async Task<IActionResult> DownloadSchoolDataSearch()
         {
-            if(Request.Method == HttpMethods.Post)
+            if (Request.Method == HttpMethods.Post)
             {
                 return RedirectToAction(nameof(DownloadSchoolDataSearchResults));
             }
@@ -127,6 +130,7 @@ namespace ASP.Web.Areas.LocalAuthority
 
         [HttpGet($"download-data/individual-school-data/search-results")]
         [HttpPost($"download-data/individual-school-data/search-results")]
+        [Authorize(Policy = Policy.NamedData)]
         public async Task<IActionResult> DownloadSchoolDataSearchResults()
         {
             if (Request.Method == HttpMethods.Post)
@@ -161,6 +165,7 @@ namespace ASP.Web.Areas.LocalAuthority
 
         [HttpGet($"download-data/individual-school-data/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/individual-school-data/{DownloadDataController.SubRouteTemplate}")]
+        [Authorize(Policy = Policy.NamedData)]
         public Task<IActionResult> DownloadSchoolData(DownloadDataStepParameters parameters)
         {
             var downloadData = new DownloadDataController(DataDownloadsScopeType.LA, ControllerContext, Url, _api, _scopeValidator);
@@ -187,7 +192,8 @@ namespace ASP.Web.Areas.LocalAuthority
                         ),
                         stepModel.DownloadData
                     )),
-                    new() {
+                    new()
+                    {
                         [DownloadDataStepType.SelectYear] = new() { Path = "select-year/" },
                         [DownloadDataStepType.SelectFormat] = new() { Title = "Download individual school data" }
                     }
@@ -219,11 +225,11 @@ namespace ASP.Web.Areas.LocalAuthority
 
         private NavigationViewModel GetDownloadDataSideNavigation() =>
             new([
-                new("Pupil level and aggregated LA data", 
-                    Action(nameof(DownloadLocalAuthorityData), DownloadDataController.InitialRouteValues), 
+                new("Pupil level and aggregated LA data",
+                    Action(nameof(DownloadLocalAuthorityData), DownloadDataController.InitialRouteValues),
                     Request.Path),
-                new("Individual school data", 
-                    Action(nameof(DownloadSchoolDataSearch), DownloadDataController.InitialRouteValues), 
+                new("Individual school data",
+                    Action(nameof(DownloadSchoolDataSearch), DownloadDataController.InitialRouteValues),
                     Request.Path)
             ]);
     }

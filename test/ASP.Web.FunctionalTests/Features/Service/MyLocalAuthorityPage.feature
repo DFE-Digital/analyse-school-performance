@@ -119,7 +119,7 @@ Scenario: Download data 'Dates available for Download' - no data files available
 		| We could not find any data downloads |                                    | true    |
 	
 @Javascript:disabled
-Scenario: Download data 'Dates available for Download' - common page elements 
+Scenario: Download data 'Dates available for Download' - common page elements
 	Given Local Authority "301" exists:
 		"""
 		{
@@ -361,7 +361,7 @@ Scenario: Download data 'Data files available for download' - common page elemen
 	And the side navigation should be:
 		| text                               | href                                                              | current |
 		| Pupil level and aggregated LA data | /my-local-authority/download-data/pupil-level-aggregated-la-data/ | true    |
-	And the sub-page title should be "Data files available for download" with caption "Pupil level and aggregated LA data"	
+	And the sub-page title should be "Data files available for download" with caption "Pupil level and aggregated LA data"
 
 @Javascript:disabled
 Scenario Outline: Download data 'Data files available for download' - page should contain multiple checkbox groups
@@ -604,98 +604,280 @@ Scenario Outline: Data downloads 'Download school data' - Download other dates l
 @Javascript:disabled
 Scenario: LA Named user should see Download data card on LA landing page
 	Given Local Authority "301" exists:
-	"""
-		{
-			"Name": "Test Name"
-		}
-	"""
+		"""
+			{
+				"Name": "Test Name"
+			}
+		"""
 	And I am an LA Named user for Local Authority "301"
 	And Content Template "la-landing-page" exists:
-	"""
-	{
-	    "Views": [
-	        {
-	            "ViewId": "Card",
-	            "ViewContent": {
-	                "AuthorizationPolicy": "AccessToAllSchools",
-	                "Title": "All schools",
-	                "LinkUrl": "schools/",
-	                "Text": "All schools found in this LA."
-	            }
-	        },
-	        {
-	            "ViewId": "Card",
-	            "ViewContent": {
-	                "AuthorizationPolicy": "AccessToMySchools",
-	                "Title": "My schools",
-	                "LinkUrl": "/my-schools/",
-	                "Text": "All schools found in this LA."
-	            }
-	        },
-	        {
-	            "ViewId": "Card",
-	            "ViewContent": {
-	                "AuthorizationPolicy": "NamedData",
-	                "Title": "Download data",
-	                "LinkUrl": "download-data/",
-	                "Text": "Download data for Analyse school performance and Key to success."
-	            }
-	        }
-	    ]
-	}
-	"""
+		"""
+		{
+		    "Views": [
+		        {
+		            "ViewId": "Card",
+		            "ViewContent": {
+		                "AuthorizationPolicy": "AccessToAllSchools",
+		                "Title": "All schools",
+		                "LinkUrl": "schools/",
+		                "Text": "All schools found in this LA."
+		            }
+		        },
+		        {
+		            "ViewId": "Card",
+		            "ViewContent": {
+		                "AuthorizationPolicy": "AccessToMySchools",
+		                "Title": "My schools",
+		                "LinkUrl": "/my-schools/",
+		                "Text": "All schools found in this LA."
+		            }
+		        },
+		        {
+		            "ViewId": "Card",
+		            "ViewContent": {
+		                "AuthorizationPolicy": "NamedData",
+		                "Title": "Download data",
+		                "LinkUrl": "download-data/",
+		                "Text": "Download data for Analyse school performance and Key to success."
+		            }
+		        }
+		    ]
+		}
+		"""
 	When I navigate to /my-local-authority/
 	Then I should get a 200 response
 	And the landing page cards should be:
-	  | Title         | Url            | Content                                                          |
-	  | My schools    | /my-schools/   | All schools found in this LA.                                    |
-	  | Download data | download-data/ | Download data for Analyse school performance and Key to success. |
+		| Title         | Url            | Content                                                          |
+		| My schools    | /my-schools/   | All schools found in this LA.                                    |
+		| Download data | download-data/ | Download data for Analyse school performance and Key to success. |
    
 @Javascript:disabled
 Scenario: LA Unnamed user should not see Download data card on LA landing page
 	Given Local Authority "301" exists:
-	"""
-		{
-			"Name": "Test Name"
-		}
-	"""
+		"""
+			{
+				"Name": "Test Name"
+			}
+		"""
 	And I am an LA Unnamed user for Local Authority "301"
 	And Content Template "la-landing-page" exists:
-	"""
-	{
-	    "Views": [
-	        {
-	            "ViewId": "Card",
-	            "ViewContent": {
-	                "AuthorizationPolicy": "AccessToAllSchools",
-	                "Title": "All schools",
-	                "LinkUrl": "schools/",
-	                "Text": "All schools found in this LA."
-	            }
-	        },
-	        {
-	            "ViewId": "Card",
-	            "ViewContent": {
-	                "AuthorizationPolicy": "AccessToMySchools",
-	                "Title": "My schools",
-	                "LinkUrl": "/my-schools/",
-	                "Text": "All schools found in this LA."
-	            }
-	        },
-	        {
-	            "ViewId": "Card",
-	            "ViewContent": {
-	                "AuthorizationPolicy": "NamedData",
-	                "Title": "Download data",
-	                "LinkUrl": "download-data/",
-	                "Text": "Download data for Analyse school performance and Key to success."
-	            }
-	        }
-	    ]
-	}
-	"""
+		"""
+		{
+		    "Views": [
+		        {
+		            "ViewId": "Card",
+		            "ViewContent": {
+		                "AuthorizationPolicy": "AccessToAllSchools",
+		                "Title": "All schools",
+		                "LinkUrl": "schools/",
+		                "Text": "All schools found in this LA."
+		            }
+		        },
+		        {
+		            "ViewId": "Card",
+		            "ViewContent": {
+		                "AuthorizationPolicy": "AccessToMySchools",
+		                "Title": "My schools",
+		                "LinkUrl": "/my-schools/",
+		                "Text": "All schools found in this LA."
+		            }
+		        },
+		        {
+		            "ViewId": "Card",
+		            "ViewContent": {
+		                "AuthorizationPolicy": "NamedData",
+		                "Title": "Download data",
+		                "LinkUrl": "download-data/",
+		                "Text": "Download data for Analyse school performance and Key to success."
+		            }
+		        }
+		    ]
+		}
+		"""
 	When I navigate to /my-local-authority/
 	Then I should get a 200 response
 	And the landing page cards should be:
-	  | Title      | Url          | Content                       |
-	  | My schools | /my-schools/ | All schools found in this LA. |	
+		| Title      | Url          | Content                       |
+		| My schools | /my-schools/ | All schools found in this LA. |
+
+@Javascript:disabled
+Scenario: Should return (200) response if the LA Named user accesses /my-local-authority/download-data
+	Given I am a LA Named user for Local Authority "301"
+	And Local Authority "301" exists:
+		"""
+		{
+		    "name": "Test LA"
+		}
+		"""
+	And blob storage file downloads-config.json exists in config container:
+		"""
+		[
+		    {
+		        "id": "kts-la-ks2-pupil",
+		        "source": "KTS",
+		        "scope": "LocalAuthority",
+		        "dataSetType": "KeyStage2",
+		        "label": "Key stage 2 (KS2)",
+		        "filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		    },
+		    {
+		        "id": "kts-school-ks2-pupil",
+		        "source": "KTS",
+		        "scope": "School",
+		        "dataSetType": "KeyStage2",
+		        "label": "Key stage 2 (KS2)",
+		        "filePathPattern": "School/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		    }
+		]
+		"""
+	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+		"""
+		Column A,Column B,Column C
+		1,2,3
+		"""
+	When I navigate to /my-local-authority/download-data
+	Then I should get a 200 response
+
+
+@Javascript:disabled
+Scenario Outline: Should return (200) response if DfE Named or Super Admin user accesses /local-authority/301/download-data
+	Given I am a <userRole>
+	And Local Authority "301" exists:
+		"""
+		{
+		    "name": "Test LA"
+		}
+		"""
+	And blob storage file downloads-config.json exists in config container:
+		"""
+		[
+		    {
+		        "id": "kts-la-ks2-pupil",
+		        "source": "KTS",
+		        "scope": "LocalAuthority",
+		        "dataSetType": "KeyStage2",
+		        "label": "Key stage 2 (KS2)",
+		        "filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		    },
+		    {
+		        "id": "kts-school-ks2-pupil",
+		        "source": "KTS",
+		        "scope": "School",
+		        "dataSetType": "KeyStage2",
+		        "label": "Key stage 2 (KS2)",
+		        "filePathPattern": "School/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		    }
+		]
+		"""
+	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+		"""
+		Column A,Column B,Column C
+		1,2,3
+		"""
+	When I navigate to /local-authority/301/download-data
+	Then I should get a 200 response
+Examples:
+	| userRole         |
+	| DfE Named user   |
+	| Super Admin user |
+
+@Javascript:disabled
+Scenario Outline: Should return (403) response if the below mentioned user roles access /my-local-authority/download-data
+	Given I am a <userRole>
+	And Local Authority "301" exists:
+		"""
+		{
+		    "name": "Test LA"
+		}
+		"""
+	And blob storage file downloads-config.json exists in config container:
+		"""
+		[
+		    {
+		        "id": "kts-la-ks2-pupil",
+		        "source": "KTS",
+		        "scope": "LocalAuthority",
+		        "dataSetType": "KeyStage2",
+		        "label": "Key stage 2 (KS2)",
+		        "filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		    },
+		    {
+		        "id": "kts-school-ks2-pupil",
+		        "source": "KTS",
+		        "scope": "School",
+		        "dataSetType": "KeyStage2",
+		        "label": "Key stage 2 (KS2)",
+		        "filePathPattern": "School/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		    }
+		]
+		"""
+	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+		"""
+		Column A,Column B,Column C
+		1,2,3
+		"""
+	When I navigate to /my-local-authority/download-data
+	Then I should get a 403 response
+Examples:
+	| userRole                                         |
+	| LA Unnamed user for Local Authority "301"        |
+	| MAT Unnamed user for Multi-Academy Trust "1234"  |
+	| MAT Governor user for Multi-Academy Trust "1234" |
+	| Diocese Unnamed user for Diocese "Test Diocese"  |
+	| School Unnamed user for Establishment "123456"   |
+	| School Governor user for Establishment "123456"  |
+	| DfE Unnamed user                                 |
+	| Ofsted Unnamed user                              |
+
+
+@Javascript:disabled
+Scenario Outline: Should return (403) response if the below mentioned user roles access /local-authority/301/download-data
+	Given I am a <userRole>
+	And Local Authority "301" exists:
+		"""
+		{
+		    "name": "Test LA"
+		}
+		"""
+	And blob storage file downloads-config.json exists in config container:
+		"""
+		[
+		    {
+		        "id": "kts-la-ks2-pupil",
+		        "source": "KTS",
+		        "scope": "LocalAuthority",
+		        "dataSetType": "KeyStage2",
+		        "label": "Key stage 2 (KS2)",
+		        "filePathPattern": "LA/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		    },
+		    {
+		        "id": "kts-school-ks2-pupil",
+		        "source": "KTS",
+		        "scope": "School",
+		        "dataSetType": "KeyStage2",
+		        "label": "Key stage 2 (KS2)",
+		        "filePathPattern": "School/{code}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+		    }
+		]
+		"""
+	And blob storage file LA/301/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
+		"""
+		Column A,Column B,Column C
+		1,2,3
+		"""
+	When I navigate to /local-authority/301/download-data
+	Then I should get a 403 response
+Examples:
+	| userRole                                         |
+	| LA Named user for Local Authority "301"          |
+	| LA Unnamed user for Local Authority "301"        |
+	| MAT Named user for Multi-Academy Trust "1234"    |
+	| MAT Unnamed user for Multi-Academy Trust "1234"  |
+	| MAT Governor user for Multi-Academy Trust "1234" |
+	| Diocese Named user for Diocese "Test Diocese"    |
+	| Diocese Unnamed user for Diocese "Test Diocese"  |
+	| School Named user for Establishment "123456"     |
+	| School Unnamed user for Establishment "123456"   |
+	| School Governor user for Establishment "123456"  |
+	| DfE Unnamed user                                 |
+	| Ofsted Unnamed user                              |

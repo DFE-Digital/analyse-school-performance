@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ASP.Web.Features.DataDownloads;
 using ASP.Core.DataDownloads;
+using ASP.Core.Authorization;
 
 namespace ASP.Web.Areas.School
 {
@@ -38,10 +39,10 @@ namespace ASP.Web.Areas.School
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(
-                            GetBaseBreadcrumbTrail(), 
+                            GetBaseBreadcrumbTrail(),
                             establishmentDetails.Name
                         ),
-                        "My schools", 
+                        "My schools",
                         establishmentDetails.Name
                 ))
                 select new SchoolLandingPageViewModel(
@@ -57,14 +58,14 @@ namespace ASP.Web.Areas.School
         [HttpGet("other-reports")]
         public Task<IActionResult> OtherReports(string urn, string? revision)
         {
-            var result = 
+            var result =
                 from establishmentDetails in GetEstablishmentDetails(urn)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(
-                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name), 
+                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name),
                             "Other reports"
                         ),
                         "Other reports",
@@ -90,7 +91,7 @@ namespace ASP.Web.Areas.School
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(
-                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name), 
+                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name),
                             "Useful links"
                         ),
                         "Useful links",
@@ -108,6 +109,7 @@ namespace ASP.Web.Areas.School
 
         [HttpGet($"download-data/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/{DownloadDataController.SubRouteTemplate}")]
+        [Authorize(Policy = Policy.NamedData)]
         public Task<IActionResult> DownloadData(string urn, DownloadDataStepParameters parameters)
         {
             var downloadData = new DownloadDataController(DataDownloadsScopeType.School, ControllerContext, Url, _api, _scopeValidator);
@@ -142,7 +144,7 @@ namespace ASP.Web.Areas.School
                 .ToActionResult(_hostEnvironment);
         }
 
-        private IEnumerable<BreadcrumbItem> GetBaseBreadcrumbTrail() => 
+        private IEnumerable<BreadcrumbItem> GetBaseBreadcrumbTrail() =>
             [
                 new("My schools", "/my-schools/")
             ];
@@ -153,15 +155,24 @@ namespace ASP.Web.Areas.School
                     new { urn })),
             ]);
 
-        private NavigationViewModel GetSubNavigation(string urn) =>
-            new([
-                new("Download data", Action(nameof(DownloadData),
-                    DownloadDataController.InitialRouteValues.Merge(new { urn })), Request.Path),
-                new("Other reports", Action(nameof(OtherReports), 
-                    new { urn }), Request.Path),
-                new("Useful links", Action(nameof(UsefulLinks),
-                    new { urn }), Request.Path)
+        private NavigationViewModel GetSubNavigation(string urn)
+        {
+            List<NavigationItemViewModel> navigationItems = new();
+
+            if (User.HasRole(Role.NamedData))
+            {
+                navigationItems.Add(new NavigationItemViewModel("Download data", Action(nameof(DownloadData),
+                    DownloadDataController.InitialRouteValues.Merge(new { urn })), Request.Path));
+            }
+
+            navigationItems.AddRange(
+            [
+                new NavigationItemViewModel("Other reports", Action(nameof(OtherReports), new { urn }), Request.Path),
+                new NavigationItemViewModel("Useful links", Action(nameof(UsefulLinks), new { urn }), Request.Path)
             ]);
+
+            return new NavigationViewModel(navigationItems);
+        }
 
         private NavigationViewModel GetDownloadDataSideNavigation(string urn, string name) =>
             new([
