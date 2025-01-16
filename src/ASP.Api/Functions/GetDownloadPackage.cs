@@ -1,4 +1,3 @@
-using ASP.Application.UseCases.Downloads.DownloadAsZip;
 using ASP.Core.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,18 +7,19 @@ using ASP.Core.Results;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.OpenApi.Models;
 using System.Net;
+using ASP.Application.UseCases.Downloads.GetDownloadPackage;
 
 namespace ASP.Api.Functions;
 
-public class DownloadAsZipFile : ApiFunction
+public class GetDownloadPackage : ApiFunction
 {
-    private readonly ILogger<DownloadAsZipFile> _logger;
-    private readonly IDownloadAsZipFile _useCase;
+    private readonly ILogger<GetDownloadPackage> _logger;
+    private readonly IGetDownloadPackage _useCase;
     private readonly ApiResultConverter _resultConverter;
 
-    public DownloadAsZipFile(
-        ILogger<DownloadAsZipFile> logger,
-        IDownloadAsZipFile useCase,
+    public GetDownloadPackage(
+        ILogger<GetDownloadPackage> logger,
+        IGetDownloadPackage useCase,
         ApiResultConverter resultConverter
     )
     {
@@ -34,8 +34,8 @@ public class DownloadAsZipFile : ApiFunction
     }
 
 
-    [Function("DownloadAsZipFile")]
-    [OpenApiOperation(operationId: "DownloadAsZipFile", tags: ["Downloads"], Description = "Creates a ZIP archive of multiple downloads.")]
+    [Function("GetDownloadPackage")]
+    [OpenApiOperation(operationId: "GetDownloadPackage", tags: ["Downloads"], Description = "Creates a ZIP archive of multiple downloads.")]
     [OpenApiParameter(name: "fileType", In = ParameterLocation.Query, Required = true, Description = "Type of the file to be downloaded, examples: `csv`, `txt`, `xls`")]
     [OpenApiParameter(name: "downloadIds", In = ParameterLocation.Query, Required = true, Type = typeof(List<string>), Description = "List of file IDs to be downloaded as ZIP.", Explode = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/zip", bodyType: typeof(byte[]), Description = "The ZIP file containing the requested files.")]
@@ -53,7 +53,7 @@ public class DownloadAsZipFile : ApiFunction
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from fileType in request.ValidateParameter("fileType", p => p.IsRequired().IsEnum<FileType>())
             from downloadIds in request.ValidateParameter("downloadIds", p => p.IsRequiredMultiParameter())
-            from response in _useCase.HandleRequest(new DownloadAsZipFileRequest(fileType, downloadIds))
+            from response in _useCase.HandleRequest(new GetDownloadPackageRequest(fileType, downloadIds))
             select response;
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);

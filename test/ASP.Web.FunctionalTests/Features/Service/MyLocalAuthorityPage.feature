@@ -583,8 +583,10 @@ Scenario Outline: Download data - 'Download pupil level and aggregated LA data' 
 	Then I should get a 200 response
 	And the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your LA."
 	And the available download formats should be:
-		| text               | href                                                                                                                                                                                 |
-		| Data in CSV format | /my-local-authority/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=CSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional |
+		| text                | href                                                                                                                                                                                  |
+		| Data in CSV format  | /my-local-authority/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=CSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional  |
+		| Data in XLSX format | /my-local-authority/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=XLSX&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional |
+		| Data in TSV format  | /my-local-authority/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=TSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional  |
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Download school data' - Download other dates link should link back to first step

@@ -96,9 +96,9 @@ namespace ASP.Test.Web.Areas.BlobStorageTest
         }
 
         [HttpGet("api-download-as-zip-file")]
-        public async Task<IActionResult> ApiDownloadAsZipFile(List<string> downloadIds)
+        public async Task<IActionResult> ApiGetDownloadPackage(List<string> downloadIds)
         {
-            var result = await _api.DownloadAsZipFile(new(Core.Utilities.FileType.CSV, downloadIds));
+            var result = await _api.GetDownloadPackage(new(Core.Utilities.FileType.CSV, downloadIds));
             
             return result.ToActionResult(response => new FileStreamResult(response.Content, response.ContentType) {
                 FileDownloadName = response.FileName

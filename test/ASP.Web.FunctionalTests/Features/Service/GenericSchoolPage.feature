@@ -1151,8 +1151,11 @@ Scenario Outline: Data downloads 'Download school data' page should contain thre
 	When I navigate to /school/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-school-ks2-pupil-136028-2022-final
 	Then the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your school."
 	And the available download formats should be:
-		| text               | href                                                                                                            |
-		| Data in CSV format | /school/136028/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-school-ks2-pupil-136028-2022-final |
+		| text                | href                                                                                                             |
+		| Data in CSV format  | /school/136028/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-school-ks2-pupil-136028-2022-final  |
+		| Data in XLSX format | /school/136028/download-data/download-as-zip/?fileType=XLSX&selectedFiles=kts-school-ks2-pupil-136028-2022-final |
+		| Data in TSV format  | /school/136028/download-data/download-as-zip/?fileType=TSV&selectedFiles=kts-school-ks2-pupil-136028-2022-final  |
+
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Download school data' - Download other dates link should link back to first step

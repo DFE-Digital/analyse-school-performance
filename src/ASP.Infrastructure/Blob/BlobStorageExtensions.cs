@@ -31,6 +31,7 @@ namespace ASP.Infrastructure.Blob
         private static void ConfigureInMemory(IServiceCollection services, IConfiguration configuration)
         {
             services.ConfigureOptions<BlobStorageOptions>(configuration);
+            services.ConfigureOptions<DataDownloadsOptions>(configuration);
 
             services.RemoveAll<IBlobStorage>();
             services.TryAdd(new ServiceDescriptor(typeof(MemoryStore<string>), _store));

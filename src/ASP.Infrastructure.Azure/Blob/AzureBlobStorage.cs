@@ -7,6 +7,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.IO;
 
 namespace ASP.Infrastructure.Azure.Blob
 {
@@ -99,7 +100,7 @@ namespace ASP.Infrastructure.Azure.Blob
 
                 if (response.Status == 404)
                 {
-                    return Error.NotFound($@"Could not find a blob in container ""{container}"" with path ""{path}"".");
+                    return Error.NotFound($@"Blob storage file ""{path}"" does not exist in container ""{container}"".");
                 }
 
                 return Result.Done;
@@ -125,13 +126,18 @@ namespace ASP.Infrastructure.Azure.Blob
 
                 if (response.GetRawResponse().Status == 404)
                 {
-                    return Error.NotFound($@"Could not find a blob in container ""{container}"" with path ""{path}"".");
+                    return Error.NotFound($@"Blob storage file ""{path}"" does not exist in container ""{container}"".");
                 }
 
                 return response.Value.Content;
             }
             catch (RequestFailedException ex)
             {
+                if (ex.Status == 404)
+                {
+                    return Error.NotFound($@"Blob storage file ""{path}"" does not exist in container ""{container}"".");
+
+                }
                 return Error.Unexpected("Azure request failed: " + ex.Message, ex.StackTrace);
             }
             catch (Exception ex)
@@ -151,7 +157,7 @@ namespace ASP.Infrastructure.Azure.Blob
 
                 if (response.GetRawResponse().Status == 404)
                 {
-                    return Error.NotFound($@"Could not find a blob in container ""{container}"" with path ""{path}"".");
+                    return Error.NotFound($@"Blob storage file ""{path}"" does not exist in container ""{container}"".");
                 }
 
                 return response.Value.Content;
@@ -177,7 +183,7 @@ namespace ASP.Infrastructure.Azure.Blob
 
                 if (response.GetRawResponse().Status == 404)
                 {
-                    return Error.NotFound($@"Could not find a blob in container ""{container}"" with path ""{path}"".");
+                    return Error.NotFound($@"Blob storage file ""{path}"" does not exist in container ""{container}"".");
                 }
 
                 return Result.Done;
@@ -195,6 +201,11 @@ namespace ASP.Infrastructure.Azure.Blob
         public Task<Result<Done>> ClearAsync()
         {
             throw new NotImplementedException("Clear should not be implemented in a real blob store.");
+        }
+
+        public Task<Result<Done>> ClearContainer(string container)
+        {
+            throw new NotImplementedException("ClearContainer should not be implemented in a real blob store.");
         }
     }
 }

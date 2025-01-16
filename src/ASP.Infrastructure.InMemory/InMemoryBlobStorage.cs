@@ -15,6 +15,7 @@ namespace ASP.Infrastructure.InMemory
         public async Task<Result<Done>> DownloadToAsync(Stream stream, string container, string path, CancellationToken cancellationToken = default)
         {
             var result = await _memoryStore.Get(container, path)
+                .MapError(error => error is NotFoundError ? Error.NotFound($"Blob storage file \"{path}\" does not exist in container \"{container}\".") : error)
                 .Map(async r =>
                 {
                     using (var writer = new StreamWriter(stream, leaveOpen: true))
@@ -31,7 +32,8 @@ namespace ASP.Infrastructure.InMemory
         public Task<Result<BinaryData>> DownloadAsync(string container, string path, CancellationToken cancellationToken = default)
         {
             var result = _memoryStore.Get(container, path)
-                .Map(r => BinaryData.FromString(r.Contents));
+                                     .MapError(error => error is NotFoundError ? Error.NotFound($"Blob storage file \"{path}\" does not exist in container \"{container}\".") : error)
+                                     .Map(r => BinaryData.FromString(r.Contents));
 
             return Task.FromResult(result);
         }
@@ -74,6 +76,13 @@ namespace ASP.Infrastructure.InMemory
         public Task<Result<Done>> ClearAsync()
         {
             _memoryStore.Clear();
+
+            return Task.FromResult(Result.Success(Result.Done));
+        }
+
+        public Task<Result<Done>> ClearContainer(string container)
+        {
+            _memoryStore.ClearContainer(container);
 
             return Task.FromResult(Result.Success(Result.Done));
         }

@@ -48,7 +48,7 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
 
         private Task<Result<List<DownloadConfig>>> GetDownloadConfigs(DataDownloadsScope scope)
         {
-            return 
+            return
                 from binaryData in _blobStorage.DownloadAsync(
                     _options.DownloadsConfigContainerName, 
                     _options.DownloadsConfigFileName
@@ -66,7 +66,8 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
                 from downloadDtos in MatchFilesWithConfigs(scope, downloadFiles, downloadConfigs, request)
                 from filteredDownloads in FilterAndOrderDownloads(downloadDtos, request)
                 select filteredDownloads
-                    .Select(d => new DownloadDto {
+                    .Select(d => new DownloadDto
+                    {
                         DatasetType = d.DatasetType.ToFriendlyName(),
                         Id = d.Id,
                         Label = d.Label,
@@ -74,8 +75,7 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
                         Version = d.Version?.FriendlyName,
                         Year = d.Year
                     })
-                    .ToList()
-;
+                    .ToList();
         }
 
         private Result<List<DownloadConfig>> CheckConfigs(BinaryData binaryData)
@@ -107,6 +107,7 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
             var containerName = _options.SourceContainerNames[source];
 
             var path = scope.BuildPathPrefix(year);
+
             return await _blobStorage.ListAsync(containerName, path)
                 .DefaultIf(e => e is NotFoundError, new());
         }
@@ -115,14 +116,12 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
         {
 // It looks like there may be a bug in the analyser for CA2021 - see https://github.com/dotnet/roslyn-analyzers/issues?q=is%3Aissue%20state%3Aopen%20CA2021
 #pragma warning disable CA2021
-
             return files
                 .SelectMany(file => configs.Select(config => CreateDownloadIfMatch(scope, file, config)))
                 .OfType<SuccessResult<Download>>()
                 .ToList<Result<Download>>()
-                .Combine();
+                .Combine();               
 #pragma warning restore CA2021
-
         }
 
         private Result<List<Download>> FilterAndOrderDownloads(IEnumerable<Download> downloadFiles, GetAvailableDownloadsRequest request)

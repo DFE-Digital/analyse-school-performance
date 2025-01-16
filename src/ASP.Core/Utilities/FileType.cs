@@ -3,7 +3,7 @@
     public enum FileType
     {
         CSV,
-        XLS,
-        TXT
+        TSV,
+        XLSX
     }
 }

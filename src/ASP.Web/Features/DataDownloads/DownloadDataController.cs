@@ -1,6 +1,6 @@
 ﻿using ASP.Application;
 using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
-using ASP.Application.UseCases.Downloads.DownloadAsZip;
+using ASP.Application.UseCases.Downloads.GetDownloadPackage;
 using ASP.Core;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
@@ -406,7 +406,9 @@ namespace ASP.Web.Features.DataDownloads
                     ),
                     new DownloadDataSelectFormatViewModel(
                         ScopeType == DataDownloadsScopeType.LA ? "LA" : "school",
-                        [("Data in CSV format", Action(downloadAsZipStep.GetRouteValues(parameters with { FileType = FileType.CSV })))],
+                        [("Data in CSV format", Action(downloadAsZipStep.GetRouteValues(parameters with { FileType = FileType.CSV }))),
+                        ("Data in XLSX format", Action(downloadAsZipStep.GetRouteValues(parameters with { FileType = FileType.XLSX }))),
+                        ("Data in TSV format", Action(downloadAsZipStep.GetRouteValues(parameters with { FileType = FileType.TSV })))],
                         Action(selectYearStep.GetRouteValues(parameters))
                     )
                 );
@@ -443,7 +445,7 @@ namespace ASP.Web.Features.DataDownloads
                 var selectedFiles = parameters.SelectedFiles ?? new();
 
                 return
-                    from response in await Api.DownloadAsZipFile(new DownloadAsZipFileRequest(fileType, selectedFiles))
+                    from response in await Api.GetDownloadPackage(new GetDownloadPackageRequest(fileType, selectedFiles))
                     select (IActionResult)new FileStreamResult(response.Content, response.ContentType) {
                         FileDownloadName = response.FileName
                     };

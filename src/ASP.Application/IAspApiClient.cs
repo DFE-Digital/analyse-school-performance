@@ -2,8 +2,8 @@
 using ASP.Application.UseCases.BlobStorageDemoZipFileDownload;
 using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
 using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
-using ASP.Application.UseCases.Downloads.DownloadAsZip;
 using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
+using ASP.Application.UseCases.Downloads.GetDownloadPackage;
 using ASP.Application.UseCases.Establishments.DTO;
 using ASP.Application.UseCases.Establishments.EstablishmentSearch;
 using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
@@ -33,7 +33,7 @@ namespace ASP.Application
         Task<Result<List<ContentTemplate>>> GetAllContentTemplates();
         Task<Result<EstablishmentDetailsDTO>> GetEstablishmentDetails(GetEstablishmentDetailsRequest request);
         Task<Result<GetAvailableDownloadsResponse>> GetAvailableDownloads(GetAvailableDownloadsRequest request);
-        Task<Result<FileStreamResponse>> DownloadAsZipFile(DownloadAsZipFileRequest request);
+        Task<Result<FileStreamResponse>> GetDownloadPackage(GetDownloadPackageRequest request);
         Task<Result<ScopedSearchResultsPage<EstablishmentListingDTO>>> EstablishmentSearch(EstablishmentSearchRequest request);
         Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request);
         Task<Result<LA.LocalAuthorityDTO>> GetLocalAuthority(GetLocalAuthorityRequest request);

@@ -8,9 +8,9 @@ using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using Microsoft.Extensions.DependencyInjection;
 using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
 using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
+using ASP.Application.UseCases.Downloads.GetDownloadPackage;
 using ASP.Application.UseCases.Establishments.GetAllEstablishments;
 using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
-using ASP.Application.UseCases.Downloads.DownloadAsZip;
 using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
 using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearch;
 using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
@@ -36,7 +36,7 @@ public static class AspApplicationExtensions
         services.AddScoped<ILocalAuthoritySearchSuggestions, LocalAuthoritySearchSuggestions>();
         services.AddScoped<ILocalAuthoritySearch, LocalAuthoritySearch>();
         services.AddScoped<IGetMultiAcademyTrust, GetMultiAcademyTrust>();
-        services.AddScoped<IDownloadAsZipFile, DownloadAsZipFile>();
+        services.AddScoped<IGetDownloadPackage, GetDownloadPackage>();
         services.AddScoped<IBlobStorageDemoFileDownload, BlobStorageDemoFileDownload>();
         services.AddScoped<IBlobStorageDemoZipFileDownload, BlobStorageDemoZipFileDownload>();
         

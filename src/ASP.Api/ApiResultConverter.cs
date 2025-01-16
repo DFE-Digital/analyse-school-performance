@@ -43,8 +43,7 @@ public class ApiResultConverter
         if (cancellationToken.IsCancellationRequested)
         {
             return new ApiResult(444, "");
-        }
-
+        } 
         return result.Match(
             r => r is FileStreamResponse fileResult
                 ? (ActionResult)new FileApiResult(fileResult.Content, fileResult.ContentType, fileResult.FileName)

@@ -153,85 +153,108 @@ Scenario: Should be able to download a file from blob storage and then zip it vi
 	"""
 
 @Javascript:disabled
-Scenario: DownloadAsZipFile API endpoint should return a zip file containing 1 file when 1 downloadId is provided
-	# When DownloadAsZipFile endpoint is implemented properly, set up files in blob storage, e.g.:
-	# Given blob storage file test.csv exists in ASP container:
-	# """
-	# Column1,Column2,Column3
-	# 1,2,3
-	# A,B,C
-	# """
-	Given Content Template "blob-storage-demo" exists:
-	"""
-	{
-		"Views": [
-			{
-				"ViewId": "Paragraph",
-				"ViewContent": {
-					"Id": "download-link",
-					"Text": "[click to download](api-download-as-zip-file/?downloadIds=test)"
-				}
-			}
-		]
-	}
-	"""
-	And the current time is 2024/10/14 12:34:56
-	When I navigate to /blob-storage-demo
-	And I click the download link "#download-link a"
+Scenario: GetDownloadPackage API endpoint should return a zip file containing 1 file when 1 downloadId is provided
+    Given blob storage file test.csv exists in downloads-kts container:
+    """
+    Id,Name,Value
+    test,Test Name,123
+    test,Another Name,456
+    """
+    And blob storage file downloads-config.json exists in config container:
+    """
+    [
+        {
+            "id": "test",
+            "filePathPattern": "test.csv",
+            "source": "KTS"
+        }
+    ]
+    """
+    And Content Template "blob-storage-demo" exists:
+    """
+    {
+        "Views": [
+            {
+                "ViewId": "Paragraph",
+                "ViewContent": {
+                    "Id": "download-link",
+                    "Text": "[click to download](api-download-as-zip-file/?downloadIds=test-123456-2024)"
+                }
+            }
+        ]
+    }
+    """
+    And the current time is 2024/10/14 12:34:56
+    When I navigate to /blob-storage-demo
+    And I click the download link "#download-link a"
 	Then I should get a 200 response
-	And the response should be a ZIP file download with filename 20241014_123456_asp_download.zip
-	And the ZIP file download should contain 1 file
-	And the ZIP file download should contain the file test.csv with contents:
-	"""
-	Id,Name,Value
-	test,Test Name,123
-	test,Another Name,456
-	"""
+	And the response should be a ZIP file download with filename 20241014_123456_download.zip
+    And the ZIP file download should contain 1 file
+    And the ZIP file download should contain the file test.csv with contents:
+    """
+    Id,Name,Value
+    test,Test Name,123
+    test,Another Name,456
+    """
 
 @Javascript:disabled
-Scenario: DownloadAsZipFile API endpoint should return a zip file containing 2 files when 2 downloadIds are provided
-	# When DownloadAsZipFile endpoint is implemented properly, set up files in blob storage, e.g.:
-	# Given blob storage file test1.csv exists in ASP container:
-	# """
-	# Column1,Column2,Column3
-	# 1,2,3
-	# A,B,C
-	# """
-	# And blob storage file test2.csv exists in ASP container:
-	# """
-	# Column1,Column2,Column3
-	# 4,5,6
-	# D,E,F
-	# """
-	Given Content Template "blob-storage-demo" exists:
-	"""
-	{
-		"Views": [
-			{
-				"ViewId": "Paragraph",
-				"ViewContent": {
-					"Id": "download-link",
-					"Text": "[click to download](api-download-as-zip-file/?downloadIds=test1&downloadIds=test2)"
-				}
-			}
-		]
-	}
-	"""
-	And the current time is 2024/10/14 12:34:56
-	When I navigate to /blob-storage-demo
-	And I click the download link "#download-link a"
+Scenario: GetDownloadPackage API endpoint should return a zip file containing 2 files when 2 downloadIds are provided
+    Given blob storage file test1.csv exists in downloads-kts container:
+    """
+    Id,Name,Value
+    test1,Test Name,123
+    test1,Another Name,456
+    """
+    And blob storage file test2.csv exists in downloads-kts container:
+    """
+    Id,Name,Value
+    test2,Test Name,123
+    test2,Another Name,456
+    """
+    And blob storage file downloads-config.json exists in config container:
+    """
+    [
+        {
+            "id": "test1",
+            "filePathPattern": "test1.csv",
+            "source": "KTS"
+        },
+        {
+            "id": "test2",
+            "filePathPattern": "test2.csv",
+            "source": "KTS"
+        }
+    ]
+    """
+    And Content Template "blob-storage-demo" exists:
+    """
+    {
+        "Views": [
+            {
+                "ViewId": "Paragraph",
+                "ViewContent": {
+                    "Id": "download-link",
+                    "Text": "[click to download](api-download-as-zip-file/?downloadIds=test1-123456-2024&downloadIds=test2-123456-2024)"
+                }
+            }
+        ]
+    }
+    """
+    And the current time is 2024/10/14 12:34:56
+    When I navigate to /blob-storage-demo
+    And I click the download link "#download-link a"
 	Then I should get a 200 response
-	And the response should be a ZIP file download with filename 20241014_123456_asp_download.zip
-	And the ZIP file download should contain 2 files
-	And the ZIP file download should contain the file test1.csv with contents:
-	"""
-	Id,Name,Value
-	test1,Test Name,123
-	test1,Another Name,456
-	"""
-	And the ZIP file download should contain the file test2.csv with contents:
-	"""
-	Id,Name,Value
-	test2,Test Name,123
-	test2,Another Name,456
-	"""
+	And the response should be a ZIP file download with filename 20241014_123456_download.zip
+    And the ZIP file download should contain 2 files
+    And the ZIP file download should contain the file test1.csv with contents:
+    """
+    Id,Name,Value
+    test1,Test Name,123
+    test1,Another Name,456
+    """
+    And the ZIP file download should contain the file test2.csv with contents:
+    """
+    Id,Name,Value
+    test2,Test Name,123
+    test2,Another Name,456
+    """

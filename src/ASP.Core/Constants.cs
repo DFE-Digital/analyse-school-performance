@@ -23,6 +23,9 @@ public static class Constants
     // Matches exactly seven digits
     public static readonly Regex LaEstab7DigitRegex = new Regex(@"^\d{7}$", RegexOptions.Compiled);
 
+    //Matches download id from UI
+    public static readonly Regex DownloadIdRegex = new(@"(?<ConfigId>.+)-(?<Identifier>\d{3}|\d{6})-(?<Year>\d{4})(?:-(?<Version>.+))?$", RegexOptions.Compiled);
+
     public const string SchoolSearchTermInputValidationMessage =
         "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)";
 

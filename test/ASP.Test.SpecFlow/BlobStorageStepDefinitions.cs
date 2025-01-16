@@ -1,5 +1,6 @@
 ﻿using ASP.Core;
 using ASP.Core.Results;
+using System.IO;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit;
@@ -23,6 +24,13 @@ namespace ASP.Test.SpecFlow
         [Given(@"no files exist in blob storage")]
         public void GivenNoFilesExistInBlobStorage()
         {
+            _blobStorage.ClearAsync();
+        }
+
+        [Given(@"no blob storage files exist in (.+) container")]
+        public void GivenNoFilesExistInBlobStorage(string container)
+        {
+            _blobStorage.ClearContainer(container);
         }
 
         [Given(@"blob storage file (.+) exists in (.+) container:")]

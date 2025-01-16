@@ -56,5 +56,11 @@ namespace ASP.Core
         /// </summary>
         /// <returns>NotImplementedException.</returns>
         Task<Result<Done>> ClearAsync();
+
+        /// <summary>
+        /// Clears blobs in the specified container.
+        /// </summary>
+        /// <returns>A result indicating success, or an error if the operation fails.</returns>
+        Task<Result<Done>> ClearContainer(string container);
     }
 }
