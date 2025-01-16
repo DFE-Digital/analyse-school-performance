@@ -113,6 +113,16 @@ public sealed class Role
         SuperAdmin,
         TrainingUnnamed
     ];
+    
+    public static readonly RoleCollection NamedData =
+    [
+        DfeNamed,
+        DioceseNamed,
+        LaNamed,
+        MatNamed,
+        SchoolNamed,
+        SuperAdmin
+    ];
 
     public static readonly RoleCollection AccessToSearch =
     [

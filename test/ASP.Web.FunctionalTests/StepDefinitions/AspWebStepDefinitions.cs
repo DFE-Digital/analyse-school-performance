@@ -1,11 +1,6 @@
-using AngleSharp.Dom;
-using ASP.Test.Core;
 using ASP.Web.FunctionalTests.Drivers;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Xml.Linq;
 using TechTalk.SpecFlow.Infrastructure;
-using Xunit.Sdk;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
@@ -343,6 +338,12 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         {
             await AssertNavigation("[data-testid='breadcrumbs']", "Breadcrumb", breadcrumbs);
         }
+        
+        [Then("the landing page cards should be:")]
+        public async Task ThenTheLandingPageCardsShouldBe(Table cards)
+        {
+            await AssertLandingPageCards("Landing page card", cards);
+        }
 
         [Then("the sub-navigation should be:")]
         public async Task ThenTheSubnavigationShouldBe(Table navigationItems)
@@ -398,6 +399,43 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
                     {
                         Assert.NotEqual("page", ariaCurrent);
                     }
+                }
+            }
+        }
+        
+        private async Task AssertLandingPageCards(string itemName, Table cards)
+        {
+            for (var i = 0; i < cards.RowCount; i++)
+            {
+                var row = cards.Rows[i];
+        
+                // Select each card using nth-child
+                var element = await _web.CurrentPage.ElementAsync($".app-card:nth-child({i + 1})");
+                await element.ShouldExistAsync($"Card {i + 1} does not exist");
+                
+                var linkTitleElement = element.Element(":scope > .app-card-container > h2 > a");
+                var contentElement = element.Element(":scope > .app-card-container > p.govuk-body");
+
+                if (TryGetRowKey("Title", row, out var expectedTitle))
+                {
+                    await linkTitleElement.ShouldExistAsync($"Link element for {itemName} {i + 1} does not exist");
+                    var actualText = await linkTitleElement.TextContentAsync();
+                    Assert.Equal(expectedTitle, actualText.Trim());
+                }
+
+                if (TryGetRowKey("Url", row, out var expectedUrl))
+                {
+                    var rowName = row.ContainsKey("Title") ? $"(\"{row["Title"]}\")" : "";
+                    await linkTitleElement.ShouldExistAsync($"Link element for {itemName} {i + 1} {rowName} does not exist");
+                    var actualHref = await linkTitleElement.AttributeAsync("href");
+                    Assert.Equal(expectedUrl, actualHref.Trim());
+                }
+
+                if (TryGetRowKey("Content", row, out var expectedContent))
+                {
+                    await contentElement.ShouldExistAsync($"Content element for {itemName} {i + 1} does not exist");
+                    var actualContent = await contentElement.TextContentAsync();
+                    Assert.Equal(expectedContent, actualContent.Trim());
                 }
             }
         }

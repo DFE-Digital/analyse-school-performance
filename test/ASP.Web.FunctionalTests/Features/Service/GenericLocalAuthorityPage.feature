@@ -21,7 +21,7 @@ Scenario: An LA user should not be able to access the generic 'Local authority' 
 
 @Javascript:disabled
 Scenario: Local authority page should not be found when invalid code is provided
-	And Local Authority "301" exists:
+	Given Local Authority "301" exists:
 		"""
 		{
 			"Name": "Test LA",
@@ -523,3 +523,110 @@ Scenario Outline: Data downloads 'Download school data' - Download other dates l
 		"""
 	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-004-phonics-la-2022-final-pupil
 	Then the element "[data-testid="available-downloads-other-dates"]" should have the href "/local-authority/301/download-data/pupil-level-aggregated-la-data/"
+	
+@Javascript:disabled
+Scenario Outline: DfE Named/Super Admin users should see Download data card on LA landing page
+	Given I am a <userRole>
+	And Local Authority "301" exists:
+	"""
+	{
+	    "name": "Test LA"
+	}
+	"""
+	And Content Template "la-landing-page" exists:
+	"""
+	{
+	    "Views": [
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "AccessToAllSchools",
+	                "Title": "All schools",
+	                "LinkUrl": "schools/",
+	                "Text": "All schools found in this LA."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "AccessToMySchools",
+	                "Title": "My schools",
+	                "LinkUrl": "/my-schools/",
+	                "Text": "All schools found in this LA."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "NamedData",
+	                "Title": "Download data",
+	                "LinkUrl": "download-data/",
+	                "Text": "Download data for Analyse school performance and Key to success."
+	            }
+	        }
+	    ]
+	}
+	"""
+	When I navigate to /local-authority/301/
+	Then I should get a 200 response
+	And the landing page cards should be:
+	  | Title         | Url            | Content                                                          |
+	  | All schools   | schools/       | All schools found in this LA.                                    |
+	  | Download data | download-data/ | Download data for Analyse school performance and Key to success. |
+	Examples:
+	  | userRole         |
+	  | DfE Named user   |
+	  | Super Admin user |
+   
+@Javascript:disabled
+Scenario Outline: DfE Unnamed/Ofsted Unnamed users should not see Download data card on LA landing page
+	Given I am a <userRole>
+	And Local Authority "301" exists:
+	"""
+	{
+	    "name": "Test LA"
+	}
+	"""
+	And Content Template "la-landing-page" exists:
+	"""
+	{
+	    "Views": [
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "AccessToAllSchools",
+	                "Title": "All schools",
+	                "LinkUrl": "schools/",
+	                "Text": "All schools found in this LA."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "AccessToMySchools",
+	                "Title": "My schools",
+	                "LinkUrl": "/my-schools/",
+	                "Text": "All schools found in this LA."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "NamedData",
+	                "Title": "Download data",
+	                "LinkUrl": "download-data/",
+	                "Text": "Download data for Analyse school performance and Key to success."
+	            }
+	        }
+	    ]
+	}
+	"""
+	When I navigate to /local-authority/301/
+	Then I should get a 200 response
+	And the landing page cards should be:
+	  | Title       | Url      | Content                       |
+	  | All schools | schools/ | All schools found in this LA. |
+	Examples:
+	  | userRole            |
+	  | DfE Unnamed user    |
+	  | Ofsted Unnamed user |

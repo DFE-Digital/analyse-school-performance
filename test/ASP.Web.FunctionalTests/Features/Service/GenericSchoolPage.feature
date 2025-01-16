@@ -1182,3 +1182,108 @@ Scenario Outline: Data downloads 'Download school data' - Download other dates l
 	"""
 	When I navigate to /school/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school
 	Then the element "[data-testid="available-downloads-other-dates"]" should have the href "/school/136028/download-data/"
+	
+@Javascript:disabled
+Scenario: DfE Named/Super Admin users should see Download data card on School landing page
+	Given Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School"
+	}
+	"""
+	And Content Template "school-landing-page" exists:
+	"""
+	{
+	    "Views": [    
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "NamedData",
+	                "Title": "Download data",
+	                "LinkUrl": "download-data/",
+	                "Text": "Download data for Analyse school performance and Key to success."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "Title": "Other reports",
+	                "LinkUrl": "other-reports/",
+	                "Text": "View reports on school performance, Ofsted inspections, absence and exclusions and school characteristics."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "Title": "Useful links",
+	                "LinkUrl": "useful-links/",
+	                "Text": "View links to other services and published documents that may be useful."
+	            }
+	        }
+	    ]
+	}
+	"""
+	And I am a <userRole>
+	When I navigate to /school/123456/
+	Then I should get a 200 response
+	And the landing page cards should be:
+	  | Title         | Url            | Content                                                                                                    |
+	  | Download data | download-data/ | Download data for Analyse school performance and Key to success.                                           |
+	  | Other reports | other-reports/ | View reports on school performance, Ofsted inspections, absence and exclusions and school characteristics. |
+	  | Useful links  | useful-links/  | View links to other services and published documents that may be useful.                                   |
+Examples:
+  | userRole         |
+  | DfE Named user   |
+  | Super Admin user |
+  
+@Javascript:disabled
+Scenario: DfE Unnamed/Ofsted Unnamed users should not see Download data card on School landing page
+	Given Establishment "123456" exists:
+    	"""
+    	{
+    	    "name": "Test School"
+    	}
+    	"""
+	And Content Template "school-landing-page" exists:
+	"""
+	{
+	    "Views": [    
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "NamedData",
+	                "Title": "Download data",
+	                "LinkUrl": "download-data/",
+	                "Text": "Download data for Analyse school performance and Key to success."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "Title": "Other reports",
+	                "LinkUrl": "other-reports/",
+	                "Text": "View reports on school performance, Ofsted inspections, absence and exclusions and school characteristics."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "Title": "Useful links",
+	                "LinkUrl": "useful-links/",
+	                "Text": "View links to other services and published documents that may be useful."
+	            }
+	        }
+	    ]
+	}
+	"""
+	And I am a <userRole>
+	When I navigate to /school/123456/
+	Then I should get a 200 response
+	And the landing page cards should be:
+	  | Title         | Url            | Content                                                                                                    |
+	  | Other reports | other-reports/ | View reports on school performance, Ofsted inspections, absence and exclusions and school characteristics. |
+	  | Useful links  | useful-links/  | View links to other services and published documents that may be useful.                                   |
+Examples:
+  | userRole            |
+  | DfE Unnamed user    |
+  | Ofsted Unnamed user |

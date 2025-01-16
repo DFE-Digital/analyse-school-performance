@@ -598,3 +598,102 @@ Scenario Outline: Data downloads 'Download school data' - Download other dates l
 	And I am a LA Named user for Local Authority "301"
 	When I navigate to /my-local-authority/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional
 	Then the element "[data-testid="available-downloads-other-dates"]" should have the href "/my-local-authority/download-data/pupil-level-aggregated-la-data/"
+
+@Javascript:disabled
+Scenario: LA Named user should see Download data card on LA landing page
+	Given Local Authority "301" exists:
+	"""
+		{
+			"Name": "Test Name"
+		}
+	"""
+	And I am an LA Named user for Local Authority "301"
+	And Content Template "la-landing-page" exists:
+	"""
+	{
+	    "Views": [
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "AccessToAllSchools",
+	                "Title": "All schools",
+	                "LinkUrl": "schools/",
+	                "Text": "All schools found in this LA."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "AccessToMySchools",
+	                "Title": "My schools",
+	                "LinkUrl": "/my-schools/",
+	                "Text": "All schools found in this LA."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "NamedData",
+	                "Title": "Download data",
+	                "LinkUrl": "download-data/",
+	                "Text": "Download data for Analyse school performance and Key to success."
+	            }
+	        }
+	    ]
+	}
+	"""
+	When I navigate to /my-local-authority/
+	Then I should get a 200 response
+	And the landing page cards should be:
+	  | Title         | Url            | Content                                                          |
+	  | My schools    | /my-schools/   | All schools found in this LA.                                    |
+	  | Download data | download-data/ | Download data for Analyse school performance and Key to success. |
+   
+@Javascript:disabled
+Scenario: LA Unnamed user should not see Download data card on LA landing page
+	Given Local Authority "301" exists:
+	"""
+		{
+			"Name": "Test Name"
+		}
+	"""
+	And I am an LA Unnamed user for Local Authority "301"
+	And Content Template "la-landing-page" exists:
+	"""
+	{
+	    "Views": [
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "AccessToAllSchools",
+	                "Title": "All schools",
+	                "LinkUrl": "schools/",
+	                "Text": "All schools found in this LA."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "AccessToMySchools",
+	                "Title": "My schools",
+	                "LinkUrl": "/my-schools/",
+	                "Text": "All schools found in this LA."
+	            }
+	        },
+	        {
+	            "ViewId": "Card",
+	            "ViewContent": {
+	                "AuthorizationPolicy": "NamedData",
+	                "Title": "Download data",
+	                "LinkUrl": "download-data/",
+	                "Text": "Download data for Analyse school performance and Key to success."
+	            }
+	        }
+	    ]
+	}
+	"""
+	When I navigate to /my-local-authority/
+	Then I should get a 200 response
+	And the landing page cards should be:
+	  | Title      | Url          | Content                       |
+	  | My schools | /my-schools/ | All schools found in this LA. |	
