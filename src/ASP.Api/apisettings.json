@@ -6,7 +6,8 @@
         }
     },
     "AllowedHosts": "*",
-    "CosmosDb": {
+    "DocumentDatabase": {
+        "InMemory": false,
         "EndpointUri": "https://s192d01-cdb-dev.documents.azure.com:443/",
         "DatabaseId": "asp",
         "Containers": [
@@ -28,13 +29,11 @@
                     "PartitionKey": "/id"
                 }
             }
-        ]
+        ],
+        "ManagedIdentityClientId": "83a9dfa9-1d3a-42fd-86aa-9264ddf79ed0"
     },
     "ErrorHandling": {
         "ShowStackTrace": true
-    },
-    "DocumentDatabase": {
-        "InMemory": false
     },
     "BlobStorage": {
         "InMemory": false

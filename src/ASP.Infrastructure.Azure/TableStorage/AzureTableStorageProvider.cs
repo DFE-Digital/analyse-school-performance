@@ -21,7 +21,7 @@ namespace ASP.Infrastructure.Azure.TableStorage
 
             // We want to use Azure credentials for everything BUT local development.
             // For local development, we want to use the connection string for the _tableServiceClient.
-            if (hostEnvironment.IsLocalDevelopment())
+            if (_hostEnvironment.IsLocalDevelopment())
             {
                 _client = new TableServiceClient($"DefaultEndpointsProtocol=https;AccountName={_options.StorageAccountName};AccountKey={_options.PrimaryKey};EndpointSuffix=core.windows.net");
             }
