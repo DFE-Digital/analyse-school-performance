@@ -51,7 +51,7 @@ public class GetAvailableDownloads : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadsScopeType>())
+            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadScopeType>())
             from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequired())
             from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
             from response in _useCase.HandleRequest(new GetAvailableDownloadsRequest(scope, scopeIdentifier, year))

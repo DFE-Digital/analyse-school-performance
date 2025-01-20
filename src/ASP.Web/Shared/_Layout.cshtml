@@ -38,7 +38,7 @@
         document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
     </script>
 
-    <partial name="~/Features/AnalyticsTrackingPreferences/_CookieBannerPartial.cshtml" model="preferences" />
+    <partial name="Features/AnalyticsTrackingPreferences/_CookieBannerPartial" model="preferences" />
 
     <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
     <header class="govuk-header app-header" role="banner" data-module="govuk-header">

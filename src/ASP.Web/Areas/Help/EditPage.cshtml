@@ -5,7 +5,7 @@
 }
 
 <div class="govuk-width-container app-width-container">
-    @await Html.PartialAsync("_BreadcrumbTrailPartial", Model.Breadcrumbs)
+    <partial name="_BreadcrumbTrailPartial" model="Model.Breadcrumbs" />
 
     <main id="main-content" role="main" class="govuk-main-wrapper">
         <div class="govuk-width-container govuk-!-static-padding-top-5">
@@ -25,7 +25,7 @@
                     </div>
                 </fieldset>
 
-                @await Html.PartialAsync("~/Features/ContentTemplates/ContentTemplateEdit.cshtml", Model)
+                <partial name="Features/ContentTemplates/ContentTemplateEdit" model="Model" />
 
                 <button data-testid="content-edit-save" class="govuk-button" type="submit">Save</button>
                 <a data-testid="content-edit-cancel" asp-route="app-route-help-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">

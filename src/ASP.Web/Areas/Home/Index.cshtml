@@ -30,6 +30,6 @@
 
 <main id="main-content" role="main" class="govuk-width-container app-width-container govuk-main-wrapper">
     <div id="app-card-container" class="app-grid-container-three-column app-grid-container--wider govuk-!-margin-top-5">
-        @await Html.PartialAsync("~/Features/ContentTemplates/ContentTemplateView.cshtml", Model)
+        <partial name="Features/ContentTemplates/ContentTemplateView" model="Model" />
     </div>
 </main>

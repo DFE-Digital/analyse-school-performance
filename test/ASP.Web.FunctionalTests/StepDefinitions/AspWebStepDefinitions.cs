@@ -365,6 +365,9 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
 
         private async Task AssertNavigation(string selector, string itemName, Table navigationItems)
         {
+            var elements = await _web.CurrentPage.ElementsAsync($"{selector} > li");
+            var actualItemCount = await elements.CountAsync();
+            Assert.Equal(navigationItems.RowCount, actualItemCount, $"Expected {itemName} count to be {navigationItems.RowCount}, but was {actualItemCount}");
             for (var i = 0; i < navigationItems.RowCount; i++)
             {
                 var row = navigationItems.Rows[i];

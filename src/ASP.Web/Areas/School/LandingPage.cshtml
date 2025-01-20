@@ -1,7 +1,8 @@
-﻿@using ASP.Web.Areas.Shared.OfstedRating
-@model ASP.Web.Areas.School.ViewModels.SchoolLandingPageViewModel
+﻿@using ASP.Web.Areas.School
+@using ASP.Web.Areas.Shared.OfstedRating
+@model SchoolLandingPageViewModel
 @{
-    Layout = "~/Areas/School/_SchoolPageLayout.cshtml";
+    Layout = "_SchoolPageLayout";
     ViewBag.SchoolPageLayoutModel = Model.SchoolPage;
 }
 
@@ -64,11 +65,10 @@
                     Ofsted rating
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    @await Html.PartialAsync("OfstedRating/_OfstedRatingPartial", new OfstedRatingModel()
-                {
-                    OfstedRating = Model.EstablishmentDetails.OfstedRating,
-                    Urn = Model.EstablishmentDetails.Urn
-                })
+                    <partial name="OfstedRating/_OfstedRatingPartial" model="new OfstedRatingModel {
+                        OfstedRating = Model.EstablishmentDetails.OfstedRating,
+                        Urn = Model.EstablishmentDetails.Urn
+                    } " />
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
@@ -146,5 +146,5 @@
 </details>
 
 <div id="app-card-container" class="app-grid-container-four-column app-grid-container--wider govuk-!-margin-top-5">
-    <partial name="~/Features/ContentTemplates/ContentTemplateView.cshtml" model=@Model.ContentTemplate />
+    <partial name="Features/ContentTemplates/ContentTemplateView" model=@Model.ContentTemplate />
 </div>

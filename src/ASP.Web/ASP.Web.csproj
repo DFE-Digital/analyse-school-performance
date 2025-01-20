@@ -27,22 +27,18 @@
 	  <Compile Remove="Enums\**" />
 	  <Compile Remove="ExceptionHandlers\**" />
 	  <Compile Remove="Services\**" />
-	  <Compile Remove="Views\**" />
 	  <Content Remove="Components\**" />
 	  <Content Remove="Enums\**" />
 	  <Content Remove="ExceptionHandlers\**" />
 	  <Content Remove="Services\**" />
-	  <Content Remove="Views\**" />
 	  <EmbeddedResource Remove="Components\**" />
 	  <EmbeddedResource Remove="Enums\**" />
 	  <EmbeddedResource Remove="ExceptionHandlers\**" />
 	  <EmbeddedResource Remove="Services\**" />
-	  <EmbeddedResource Remove="Views\**" />
 	  <None Remove="Components\**" />
 	  <None Remove="Enums\**" />
 	  <None Remove="ExceptionHandlers\**" />
 	  <None Remove="Services\**" />
-	  <None Remove="Views\**" />
 	</ItemGroup>
 
 	<ItemGroup>

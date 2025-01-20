@@ -4,7 +4,6 @@ using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Core.DataDownloads;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
-using ASP.Web.Areas.School.ViewModels;
 using ASP.Web.Core.Templating;
 using Microsoft.AspNetCore.Mvc;
 

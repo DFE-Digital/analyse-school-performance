@@ -299,7 +299,7 @@ namespace ASP.Infrastructure.Api
             {
                 var response = await _transportLayer.ExecuteRequest(new HttpRequestMessage(HttpMethod.Get, $"https://localhost{url}{queryString}"));
 
-                return await ToResult<T>(response);
+                return await ToResult<T>(url, response);
             }
             catch (Exception ex)
             {
@@ -316,7 +316,7 @@ namespace ASP.Infrastructure.Api
                     Content = new StringContent(JsonHelper.Serialize(body))
                 });
 
-                return await ToResult<T>(response);
+                return await ToResult<T>(url, response);
             }
             catch (Exception ex)
             {
@@ -341,32 +341,33 @@ namespace ASP.Infrastructure.Api
             }
         }
 
-        private async Task<Result<T>> ToResult<T>(HttpResponseMessage response)
+        private async Task<Result<T>> ToResult<T>(string url, HttpResponseMessage response)
             where T : notnull
         {
             try
             {
                 var content = await response.Content.ReadAsStringAsync();
+                var prefix = $"{ApiError} {url} ";
 
                 return response.StatusCode switch
                 {
                     HttpStatusCode.OK => JsonHelper.DeserializeNotNull<T>(content),
 
                     HttpStatusCode.NotFound => Result.NotFound<T>(
-                        ApiError + StringHelper.RemoveFromStart(_notFoundPrefix, content)),
+                        prefix + StringHelper.RemoveFromStart(_notFoundPrefix, content)),
 
                     HttpStatusCode.BadRequest => Result.Invalid<T>(
-                        ApiError + StringHelper.RemoveFromStart(_invalidPrefix, content)),
+                        prefix + StringHelper.RemoveFromStart(_invalidPrefix, content)),
 
                     HttpStatusCode.Forbidden => Result.NotAllowed<T>(
-                        ApiError + StringHelper.RemoveFromStart(_notAllowedPrefix, content)),
+                        prefix + StringHelper.RemoveFromStart(_notAllowedPrefix, content)),
 
                     HttpStatusCode.MethodNotAllowed => Result.Invalid<T>(
-                        ApiError + StringHelper.RemoveFromStart(_methodNotAllowedPrefix, content)),
+                        prefix + StringHelper.RemoveFromStart(_methodNotAllowedPrefix, content)),
 
                     _ => JsonHelper.DeserializeNotNull<UnexpectedError>(content)
                         .Then(e => Result.Unexpected<T>(
-                            ApiError + StringHelper.RemoveFromStart(_unexpectedPrefix, e.Message),
+                            prefix + StringHelper.RemoveFromStart(_unexpectedPrefix, e.Message),
                             _options.ShowStackTrace ? e.StackTrace : null
                         ))
                 };

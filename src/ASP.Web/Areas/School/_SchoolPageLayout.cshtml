@@ -1,6 +1,7 @@
-﻿@{
-    Layout = "~/Shared/_PageLayout.cshtml";
-    var layoutModel = (ASP.Web.Areas.School.ViewModels.SchoolPageViewModel)ViewBag.SchoolPageLayoutModel;
+﻿@using ASP.Web.Areas.School
+@{
+    var layoutModel = (SchoolPageViewModel)ViewBag.SchoolPageLayoutModel;
+    Layout = "_PageLayout";
     ViewBag.PageLayoutModel = layoutModel.Page;
 }
 

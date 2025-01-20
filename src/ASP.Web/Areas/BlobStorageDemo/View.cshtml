@@ -14,7 +14,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @await Html.PartialAsync("~/Features/ContentTemplates/ContentTemplateView.cshtml", Model)
+            <partial name="Features/ContentTemplates/ContentTemplateView" model="Model" />
         </div>
     </div>
 </div>

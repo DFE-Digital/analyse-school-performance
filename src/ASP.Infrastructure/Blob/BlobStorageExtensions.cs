@@ -31,7 +31,6 @@ namespace ASP.Infrastructure.Blob
         private static void ConfigureInMemory(IServiceCollection services, IConfiguration configuration)
         {
             services.ConfigureOptions<BlobStorageOptions>(configuration);
-            services.ConfigureOptions<DataDownloadsOptions>(configuration);
 
             services.RemoveAll<IBlobStorage>();
             services.TryAdd(new ServiceDescriptor(typeof(MemoryStore<string>), _store));
@@ -51,8 +50,8 @@ namespace ASP.Infrastructure.Blob
     {
         public static IServiceCollection ConfigureDataDownloads(this IServiceCollection services, IConfiguration configuration)
         {
-            services.ConfigureOptions<DataDownloadsOptions>(configuration);
-            services.TryAddScoped<IDataDownloadsScopeValidator, DataDownloadsScope.Validator>();
+            services.ConfigureOptions<DataDownloadOptions>(configuration);
+            services.TryAddScoped<IDataDownloadsScopeValidator, DataDownloadScope.Validator>();
 
             return services;
         }

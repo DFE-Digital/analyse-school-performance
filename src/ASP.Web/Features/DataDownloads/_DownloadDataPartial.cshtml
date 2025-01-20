@@ -4,17 +4,17 @@
 
 @if (Model is DownloadDataSelectYearViewModel selectYear)
 {
-    <partial name="~/Features/DataDownloads/_DownloadDataSelectYearPartial.cshtml" model=@selectYear />
+    <partial name="Features/DataDownloads/_DownloadDataSelectYearPartial" model=@selectYear />
 }
 else if (Model is DownloadDataSelectFilesViewModel selectFiles)
 {
-    <partial name="~/Features/DataDownloads/_DownloadDataSelectFilesPartial.cshtml" model=@selectFiles />
+    <partial name="Features/DataDownloads/_DownloadDataSelectFilesPartial" model=@selectFiles />
 }
 else if (Model is DownloadDataSelectFormatViewModel selectFormat)
 {
-    <partial name="~/Features/DataDownloads/_DownloadDataSelectFormatPartial.cshtml" model=@selectFormat />
+    <partial name="Features/DataDownloads/_DownloadDataSelectFormatPartial" model=@selectFormat />
 }
 else if (Model is DownloadDataNoDownloadsAvailableViewModel noDownloads)
 {
-    <partial name="~/Features/DataDownloads/_DownloadDataNoDownloadsAvailablePartial.cshtml" model=@noDownloads />
+    <partial name="Features/DataDownloads/_DownloadDataNoDownloadsAvailablePartial" model=@noDownloads />
 }

@@ -17,11 +17,12 @@ $app-breakpoint-custom : 700px;
 }
 
 .app-icon-download {
-    position: relative;
-    left: 0px;
     width: 20px;
     height: 20px;
-    top: 5px;
+    aspect-ratio: auto 20 / 20;
+    position: relative;
+    left: 0px;
+    top: 4px;
 }
 
 .app-download-helptext {

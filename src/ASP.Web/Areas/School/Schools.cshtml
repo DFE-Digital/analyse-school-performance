@@ -1,0 +1,21 @@
+﻿@using ASP.Web.Areas.School
+@model SchoolSearchPageViewModel   
+@{
+    Layout = "_PageLayout";
+    ViewBag.PageLayoutModel = Model.Page;
+}
+
+@section PageTitle {
+    <h1 id="app-page-title" class="govuk-heading-xl govuk-!-margin-bottom-4">
+        @Model.Page.Title
+    </h1>
+    @if (!string.IsNullOrEmpty(Model.Page.Subtitle)) {
+        <h2 id="app-page-subtitle" class="govuk-heading-m">
+            @Model.Page.Subtitle
+        </h2>
+    }
+}
+
+<asp-search model="Model.Search" search-form-width="one-half">
+    <partial name="_EstablishmentListingPartial" model="Model.EstablishmentListings" />
+</asp-search>

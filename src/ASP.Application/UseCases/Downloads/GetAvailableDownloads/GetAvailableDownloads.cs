@@ -14,9 +14,9 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
     {
         private readonly IBlobStorage _blobStorage;
         private readonly IDataDownloadsScopeValidator _scopeValidator;
-        private readonly DataDownloadsOptions _options;
+        private readonly DataDownloadOptions _options;
 
-        public GetAvailableDownloads(IBlobStorage blobStorage, IDataDownloadsScopeValidator scopeValidator, IOptions<DataDownloadsOptions> options)
+        public GetAvailableDownloads(IBlobStorage blobStorage, IDataDownloadsScopeValidator scopeValidator, IOptions<DataDownloadOptions> options)
         {
             _blobStorage = blobStorage;
             _scopeValidator = scopeValidator;
@@ -46,7 +46,7 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
             return result;
         }
 
-        private Task<Result<List<DownloadConfig>>> GetDownloadConfigs(DataDownloadsScope scope)
+        private Task<Result<List<DownloadConfig>>> GetDownloadConfigs(DataDownloadScope scope)
         {
             return
                 from binaryData in _blobStorage.DownloadAsync(
@@ -59,7 +59,7 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
                     .ToList();
         }
 
-        private Task<Result<List<DownloadDto>>> FindMatchingDownloads(DataDownloadsScope scope, string source, IEnumerable<DownloadConfig> downloadConfigs, GetAvailableDownloadsRequest request)
+        private Task<Result<List<DownloadDto>>> FindMatchingDownloads(DataDownloadScope scope, string source, IEnumerable<DownloadConfig> downloadConfigs, GetAvailableDownloadsRequest request)
         {
             return
                 from downloadFiles in GetDownloadFiles(scope, source, request.Year)
@@ -97,7 +97,7 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
             }
         }
 
-        private async Task<Result<List<string>>> GetDownloadFiles(DataDownloadsScope scope, string source, Optional<int> year)
+        private async Task<Result<List<string>>> GetDownloadFiles(DataDownloadScope scope, string source, Optional<int> year)
         {
             if(!_options.SourceContainerNames.ContainsKey(source))
             {
@@ -112,7 +112,7 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
                 .DefaultIf(e => e is NotFoundError, new());
         }
 
-        private Result<List<Download>> MatchFilesWithConfigs(DataDownloadsScope scope, IEnumerable<string> files, IEnumerable<DownloadConfig> configs, GetAvailableDownloadsRequest request)
+        private Result<List<Download>> MatchFilesWithConfigs(DataDownloadScope scope, IEnumerable<string> files, IEnumerable<DownloadConfig> configs, GetAvailableDownloadsRequest request)
         {
 // It looks like there may be a bug in the analyser for CA2021 - see https://github.com/dotnet/roslyn-analyzers/issues?q=is%3Aissue%20state%3Aopen%20CA2021
 #pragma warning disable CA2021
@@ -144,7 +144,7 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
             return filteredFiles;
         }
 
-        private Result<Download> CreateDownloadIfMatch(DataDownloadsScope scope, string filePath, DownloadConfig config)
+        private Result<Download> CreateDownloadIfMatch(DataDownloadScope scope, string filePath, DownloadConfig config)
         {
             var pattern = ConvertToRegex(scope, config.FilePathPattern);
 
@@ -186,7 +186,7 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
             };
         }
 
-        private string ConvertToRegex(DataDownloadsScope scope, string filePathPattern)
+        private string ConvertToRegex(DataDownloadScope scope, string filePathPattern)
         {
             // Convert { and } into % so they don't get escaped - 
             // { and } are regex special characters but % isn't

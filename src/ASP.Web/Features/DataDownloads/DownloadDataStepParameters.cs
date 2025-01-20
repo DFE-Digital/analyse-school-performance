@@ -8,5 +8,8 @@ namespace ASP.Web.Features.DataDownloads
         public int? SelectedYear { get; set; }
         public List<string>? SelectedFiles { get; set; }
         public FileType? FileType { get; set; }
+
+        public RouteValueDictionary AsRouteValues()
+            => new(new { Step, SelectedYear, SelectedFiles, FileType });
     }
 }

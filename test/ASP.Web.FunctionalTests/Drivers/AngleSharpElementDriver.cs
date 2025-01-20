@@ -32,7 +32,7 @@ namespace ASP.Web.FunctionalTests.Drivers
         {
             get
             {
-                Assert.NotNull(_element, "Element does not exist on the page");
+                Assert.NotNull(_element, $"Element \"{_selector}\" does not exist on the page");
 
                 return _element;
             }

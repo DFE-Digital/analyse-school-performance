@@ -19,6 +19,34 @@
 		And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 	@Javascript:disabled
+    Scenario: No results when no schools exist
+		Given no Establishments exist
+        When I navigate to /schools/
+        Then the page title should be "We found no schools"
+
+	@Javascript:disabled
+	Scenario Outline: Generic Local authority > All schools page - common page elements
+		Given 251 Establishments exist with properties:
+			| urn          | name                        |
+			| (100000 + n) | Primary School (100000 + n) |
+		And I am a <AccessToAllSchools> user
+		When I navigate to /schools/
+		Then I should get a 200 response
+		Then the page title should be "All schools"
+		And the page subtitle should be "251 schools"
+		And the breadcrumb trail should be:
+			| text                  | href                  | current |
+			| Home                  | /                     |         |
+			| All schools           |                       | true    |
+
+		Examples:
+			| AccessToAllSchools |
+			| DfE Named          |
+			| DfE Unnamed        |
+			| Ofsted Unnamed     |
+			| Super Admin        |
+
+	@Javascript:disabled
 	Scenario: DfE Named user should see All schools
 		Given Establishment "111111" exists:
 		"""
@@ -139,6 +167,7 @@
 		And the breadcrumb trail should be:
 			| text        | href | current |
 			| Home        | /    |         |
+			| All schools |      | true    |
 
 	@Javascript:disabled
 	Scenario: Page title should show correct text when search returns results
@@ -338,6 +367,12 @@
 
 	@Javascript:disabled
 	Scenario: Search Term Validation
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School"
+		}
+		"""
 		When I navigate to /schools/
 		Then I should get a 200 response
 		And the page title should be "All schools"
@@ -345,6 +380,12 @@
 
 	@Javascript:enabled
 	Scenario: Search Term Validation (JS)
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School"
+		}
+		"""
 		When I navigate to /schools/
 		Then I should get a 200 response
 		And the page title should be "All schools"
@@ -352,6 +393,12 @@
 
 	@Javascript:disabled
 	Scenario: Errors in Search Term Validation
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School"
+		}
+		"""
 		When I navigate to /schools/
 		And I click the button "#searchSubmit"
 		Then the path should be /schools/?search=
@@ -361,30 +408,18 @@
 
 	@Javascript:enabled
 	Scenario: Errors in Search Term Validation (JS)
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School"
+		}
+		"""
 		When I navigate to /schools/
 		And I click the button "#searchSubmit"
 		Then the path should be /schools/?search=
 		And the element "#app-field-Search-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 		And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
 		And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
-
-	@Javascript:disabled
-	Scenario: School search page should show correct message when there is no data
-		Given no Establishments exist
-		When I navigate to /schools/
-		And I update the textbox "#app-field-Search" to have the value "primary"
-		And I click the button "#searchSubmit"
-		Then the path should be /schools/?search=primary
-		And the element "h1" should have the text content "We found no matches for "primary""
-
-	@Javascript:enabled
-	Scenario: School search page should show correct message when there is no data (JS)
-		Given no Establishments exist
-		When I navigate to /schools/
-		And I update the textbox "#app-field-Search" to have the value "primary"
-		And I click the button "#searchSubmit"
-		Then the path should be /schools/?search=primary
-		And the page title should be "We found no matches for "primary""
 
 	@Javascript:disabled
 	Scenario: School search page should show correct message for search term with no matches

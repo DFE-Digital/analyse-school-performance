@@ -20,6 +20,27 @@
 			| MAT Governor          |
 			| Diocese Named         |
 			| Diocese Unnamed       |
+	
+	@Javascript:disabled
+    Scenario: No results when Local Authority contains no schools
+        Given Local Authority "100" exists:
+        """
+            { 
+             "name": "Test LA"
+            }
+        """
+        And Establishment "111111" exists:
+        """
+            {
+                "name": "Test School 1",
+                "localAuthority":
+                 {
+                  "code": "999"
+                 }
+            }
+        """
+        When I navigate to /local-authority/100/schools/
+        Then the page title should be "We found no schools"
 
 	@Javascript:disabled
 	Scenario Outline: Generic Local authority > All schools page - common page elements
@@ -52,6 +73,54 @@
 			| Ofsted Unnamed     |
 			| Super Admin        |
 
+    @Javascript:disabled
+    Scenario: Should display only schools within the Local Authority
+        Given Local Authority "100" exists:
+        """
+            { 
+            "name": "Test LA"
+            }
+        """
+        And Establishment "111111" exists:
+        """
+            {
+             "name": "Test School 1",
+             "localAuthority":
+             {
+              "code": "100"
+             }
+            }
+        """
+        And Establishment "222222" exists:
+        """
+            {
+                "name": "Test School 2",
+                "localAuthority":
+                {
+                "code": "100"
+                }
+            }
+        """
+        And Establishment "333333" exists:
+        """
+            {
+            "name": "Test School 3",
+            "localAuthority":
+                {
+                "code": "999"
+                }
+            }
+        """
+        When I navigate to /local-authority/100/schools/
+        Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
+        And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
+        And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
+
+    Examples:
+      | Counter | URN    | Name          |
+      | 1       | 111111 | Test School 1 |
+      | 2       | 222222 | Test School 2 |
+
 	@Javascript:disabled
 	Scenario: DfE Named user should see All schools
 		Given Establishment "111111" exists:
@@ -65,7 +134,7 @@
 			},
 			"localAuthority": {
 				"code": "999",
-				 	"name": "Oxfordshire"
+				"name": "Oxfordshire"
 			}
 		}
 		"""
@@ -80,7 +149,7 @@
 			},
 			"localAuthority": {
 				"code": "999",
-				 	"name": "Oxfordshire"
+				"name": "Oxfordshire"
 			}
 		}
 		"""
@@ -95,7 +164,7 @@
 			},
 			"localAuthority": {
 				"code": "999",
-				 	"name": "Oxfordshire"
+				"name": "Oxfordshire"
 			}
 		}
 		"""
@@ -418,7 +487,7 @@
 			"name": "Some Other Primary School",
 			"localAuthority": {
 				"code": "999",
-				 	"name": "Oxfordshire"
+				"name": "Oxfordshire"
 			}
 		}
 		"""
@@ -443,7 +512,17 @@
 
 	@Javascript:disabled
 	Scenario: Search Term Validation
-		Given Local Authority "999" exists:
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School",
+			"localAuthority": {
+				"code": "999",
+				"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Local Authority "999" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -457,7 +536,17 @@
 
 	@Javascript:enabled
 	Scenario: Search Term Validation (JS)
-		Given Local Authority "999" exists:
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School",
+			"localAuthority": {
+				"code": "999",
+				"name": "Oxfordshire"
+			}
+		}
+		"""
+		And  Local Authority "999" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -471,7 +560,17 @@
 
 	@Javascript:disabled
 	Scenario: Errors in Search Term Validation
-		Given Local Authority "999" exists:
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School",
+			"localAuthority": {
+				"code": "999",
+				"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Local Authority "999" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -487,7 +586,17 @@
 
 	@Javascript:enabled
 	Scenario: Errors in Search Term Validation (JS)
-		Given Local Authority "999" exists:
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School",
+			"localAuthority": {
+				"code": "999",
+				"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Local Authority "999" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -500,39 +609,7 @@
 		And the element "#app-field-Search-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 		And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
 		And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
-		
-	 @Javascript:disabled
-	Scenario: School search page should show correct message when there is no data
-		Given no Establishments exist
-		 And Local Authority "999" exists:
-		 """
-		 {
-			 "Name": "Oxfordshire",
-			 "Code": "999"
-		 }
-		 """
-		When I navigate to /local-authority/999/schools/
-		And I update the textbox "#app-field-Search" to have the value "primary"
-		And I click the button "#searchSubmit"
-		Then the path should be /local-authority/999/schools/?search=primary
-		And the element "h1" should have the text content "We found no matches for "primary""
-
-	@Javascript:enabled
-	Scenario: School search page should show correct message when there is no data (JS)
-		Given no Establishments exist
-		And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Oxfordshire",
-			"Code": "999"
-		}
-		"""
-		When I navigate to /local-authority/999/schools/
-		And I update the textbox "#app-field-Search" to have the value "primary"
-		And I click the button "#searchSubmit"
-		Then the path should be /local-authority/999/schools/?search=primary
-		And the page title should be "We found no matches for "primary""
-
+	
 	@Javascript:disabled
 	Scenario: School search page should show correct message for search term with no matches
 		Given Establishment "111111" exists:

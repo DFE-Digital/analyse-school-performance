@@ -1,18 +1,22 @@
-﻿using ASP.Web.Shared;
+﻿using ASP.Web.Areas.School;
+using ASP.Web.Features.Search;
+using ASP.Web.Shared;
 
 namespace ASP.Web.Areas.LocalAuthority;
 
 public class DownloadSchoolDataSearchPageViewModel
 {
     public PageViewModel Page { get; }
-    public string SearchTerm { get; }
+    public SearchViewModel Search { get; }
+    public List<EstablishmentListingViewModel> EstablishmentListings { get; }
 
     public DownloadSchoolDataSearchPageViewModel(
         PageViewModel page,
-        string searchTerm
-    )
+        SearchViewModel search,
+        List<EstablishmentListingViewModel> establishmentListings)
     {
         Page = page;
-        SearchTerm = searchTerm;
+        Search = search;
+        EstablishmentListings = establishmentListings;
     }
 }

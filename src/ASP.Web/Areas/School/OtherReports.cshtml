@@ -1,6 +1,7 @@
-﻿@model ASP.Web.Areas.School.ViewModels.SchoolContentPageViewModel
+﻿@using ASP.Web.Areas.School
+@model SchoolContentPageViewModel
 @{
-    Layout = "~/Areas/School/_SchoolPageLayout.cshtml";
+    Layout = "_SchoolPageLayout";
     ViewBag.SchoolPageLayoutModel = Model.SchoolPage;
     ViewData["TextReplacements"] = new Dictionary<string, string> { { "{URN}", Model.SchoolPage.Urn } };
 }
@@ -25,29 +26,29 @@
             }
         </asp-accordion>
         <asp-accordion Title="School performance summary" title-data-test-id="2" body-data-test-id="summary-report-panel">
-                <ul class="govuk-list">
-                    <li>
-                        <a class="report-link govuk-link" href="#">School performance summary for 2022/2023</a>
-                    </li>
-                    <li>
-                        <a class="report-link govuk-link" href="#">School performance summary for 2021/2022</a>
-                    </li>
-                    <li>
-                        <a class="report-link govuk-link" href="#">School performance summary for 2020/2021</a>
-                    </li>
-                    <li>
-                        <a class="report-link govuk-link" href="#">School performance summary for 2018/2019</a>
-                    </li>
-                    <li>
-                        <a class="report-link govuk-link" href="#">School performance summary for 2017/2018</a>
-                    </li>
-                    <li>
-                        <a class="report-link govuk-link" href="#">School performance summary for 2016/2017</a>
-                    </li>
-                    <li>
-                        <a class="report-link govuk-link" href="#">School performance summary for 2015/2016</a>
-                    </li>
-                </ul>
+            <ul class="govuk-list">
+                <li>
+                    <a class="report-link govuk-link" href="#">School performance summary for 2022/2023</a>
+                </li>
+                <li>
+                    <a class="report-link govuk-link" href="#">School performance summary for 2021/2022</a>
+                </li>
+                <li>
+                    <a class="report-link govuk-link" href="#">School performance summary for 2020/2021</a>
+                </li>
+                <li>
+                    <a class="report-link govuk-link" href="#">School performance summary for 2018/2019</a>
+                </li>
+                <li>
+                    <a class="report-link govuk-link" href="#">School performance summary for 2017/2018</a>
+                </li>
+                <li>
+                    <a class="report-link govuk-link" href="#">School performance summary for 2016/2017</a>
+                </li>
+                <li>
+                    <a class="report-link govuk-link" href="#">School performance summary for 2015/2016</a>
+                </li>
+            </ul>
         </asp-accordion>
         <asp-accordion Title="Absence and exclusions" title-data-test-id="3" body-data-test-id="absence-exclusions-report-panel">
             <ul class="govuk-list">

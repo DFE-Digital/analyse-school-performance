@@ -1,24 +1,16 @@
 using ASP.Application;
-using ASP.Application.UseCases.Establishments.DTO;
-using ASP.Core;
-using ASP.Core.Authorization;
-using ASP.Core.Helpers;
 using ASP.Core.LocalAuthorities;
 using ASP.Core.MultiAcademyTrusts;
 using ASP.Core.Results;
 using ASP.Core.Scoping;
-using ASP.Web.Areas.Shared.EstablishmentListing;
-using ASP.Web.Areas.Shared.Search;
-using ASP.Web.Areas.Shared.Search.Layout.SearchPageLayout;
-using ASP.Web.Areas.Shared.Search.Layout.SearchResultsPageLayout;
-using ASP.Web.Areas.Shared.Search.School;
-using ASP.Web.Core.BreadcrumbTrail;
+using ASP.Web.Features.Search;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ASP.Web.Areas.School
 {
@@ -28,10 +20,9 @@ namespace ASP.Web.Areas.School
     [Authorize(Policy = Policy.AccessToMySchools)]
     public class MySchoolsController : SchoolsController
     {
-        private const string SearchSuggestionsUrl = $"/my-schools/suggestions/";
-        
         private readonly ILocalAuthorityRepository _localAuthorityRepository;
         private readonly IMultiAcademyTrustRepository _multiAcademyTrustRepository;
+        private readonly SchoolSearchController _schoolSearchController;
 
         public MySchoolsController(
             IAspApiClient api,
@@ -42,180 +33,42 @@ namespace ASP.Web.Areas.School
         {
             _localAuthorityRepository = localAuthorityRepository;
             _multiAcademyTrustRepository = multiAcademyTrustRepository;
+            _schoolSearchController = new SchoolSearchController(nameof(Schools), "MySchools", [], _api,
+                makeSchoolUrl: urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { urn }));
         }
 
-        [HttpGet("")]
-        public async Task<IActionResult> Schools(SearchParams searchParams)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!Request.Query.Keys.Any(k =>
-                    k.Equals(nameof(searchParams.Search), StringComparison.InvariantCultureIgnoreCase)))
-            {
-                return await GetSchoolsPageViewModel(searchParams.Page)
-                    .DefaultIf(e => e is NotFoundError, GetEmptySchoolsPageViewModel())
-                    .ToActionResult(View, _hostEnvironment);
-            }
+            base.OnActionExecuting(context);
 
-            if (!ModelState.IsValid)
-            {
-                return await GetSchoolsPageViewModel(searchParams.Page)
-                    .DefaultIf(e => e is NotFoundError, GetEmptySchoolsPageViewModel())
-                    .ToActionResult(View, _hostEnvironment);
-            }
-
-            if (string.IsNullOrEmpty(searchParams.Search))
-            {
-                ModelState.AddModelError(nameof(searchParams.Search), Constants.SchoolSearchTermInputValidationMessage);
-                return await GetSchoolsPageViewModel(searchParams.Page)
-                    .DefaultIf(e => e is NotFoundError, GetEmptySchoolsPageViewModel())
-                    .ToActionResult(View, _hostEnvironment);
-            }
-            
-            var pageNumber = PageHelper.ParsePageNumber(searchParams.Page);
-            var organisationName = User.FindFirst(CustomClaimTypes.OrganisationName)?.Value;
-            
-            var searchUrlForNoResults = $"/my-schools/";
-            
-            var searchConfig = SearchConfiguration.ForSchools(  
-                searchSuggestionUrl: SearchSuggestionsUrl 
-            ); 
-            var noResultsViewModel = new SchoolSearchResultsPageViewModel
-            (
-                new SearchResultsPageLayoutModel(
-                    new PageViewModel(
-                        GetSchoolsSearchBreadcrumbs(searchParams.Search, false),
-                        $"We found no matches for \"{searchParams.Search}\""
-                    ),
-                    searchConfig.SearchForm,
-                    searchParams.Search,
-                    searchUrlForNoResults
-                ),
-                new List<EstablishmentListingModel>());
-            
-            var searchResult =
-                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository,
-                    _multiAcademyTrustRepository)
-                from establishments in PerformEstablishmentSearch(
-                    searchParams,
-                    scopeInfo,
-                    pageNumber)
-                select new SchoolSearchResultsPageViewModel(
-                    new SearchResultsPageLayoutModel(
-                        new PageViewModel(
-                            GetSchoolsSearchBreadcrumbs(searchParams.Search),
-                            $"Search results for \"{searchParams.Search}\"",
-                            FormatResultsSubtitle(establishments.TotalResults, organisationName)
-                        ),
-                        searchConfig.SearchForm,
-                        searchParams.Search,
-                        nameof(Schools),
-                        CreatePaginationModel(establishments, nameof(Schools))
-                    ),
-                    MapEstablishmentListings(establishments.Results,urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage),
-                        "MySchoolsSchool", new { Area = "School", urn })));
-
-            return await searchResult.DefaultIf(e => e is NotFoundError, noResultsViewModel)
-                .ToActionResult(RedirectToSchoolLandingPageIfSingleResult, _hostEnvironment);
-        }
-        
-        [HttpGet("suggestions")]
-        public async Task<IActionResult> SchoolsSearchSuggestions(SearchParams searchParams)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(nameof(Schools));
-            }
-
-            var searchResult =
-                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository,
-                    _multiAcademyTrustRepository)
-                from searchSuggestions in PerformEstablishmentSearchSuggestions(searchParams, scopeInfo)
-                select searchSuggestions; 
-
-            return await searchResult.ToActionResult(Json, _hostEnvironment);
+            _schoolSearchController.BindContext(context);
         }
 
-        private BreadcrumbTrailViewModel GetSchoolsPageBreadcrumbs(string currentPage)
+        [HttpGet($"{SchoolSearchController.SubRouteTemplate}")]
+        public async Task<IActionResult> Schools(SearchParameters parameters)
         {
-            var breadcrumbTrail = new BreadcrumbTrailViewModel(currentPage);
-            return breadcrumbTrail;
-        }
-        
-        private BreadcrumbTrailViewModel GetSchoolsSearchBreadcrumbs(
-            string searchTerm,
-            bool hasResults = true)
-        {
-            List<BreadcrumbItem> breadcrumbs =
-            [
-                new("My schools", "/my-schools/"),
-            ];
-
-            var currentPage = hasResults
-                ? $"Search results for \"{searchTerm}\""
-                : $"We found no matches for \"{searchTerm}\"";
-
-            return new BreadcrumbTrailViewModel(breadcrumbs, currentPage);
-        }
-        
-        private SchoolSearchPageViewModel GetEmptySchoolsPageViewModel()
-        {
-            var searchConfig = SearchConfiguration.ForSchools(
-                searchSuggestionUrl: SearchSuggestionsUrl
-            );
-
-            return new SchoolSearchPageViewModel(
-                new SearchPageLayoutModel(
-                    new PageViewModel(
-                        GetSchoolsPageBreadcrumbs("My schools"),
-                        "My schools"
-                    ),
-                    searchConfig.SearchForm,
-                    CreatePaginationModel(new ScopedResultsPage<EstablishmentListingDTO>(), $"/my-schools/")
-                ),
-                new List<EstablishmentListingModel>()
-            );
-        }
-        
-        private IActionResult RedirectToSchoolLandingPageIfSingleResult(SchoolSearchResultsPageViewModel model)
-        {
-            if (model.SearchResultsPage.Pagination?.TotalResults == 1)
-            {
-                return RedirectToAction(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool",
-                    new { area = "School", urn = model.EstablishmentListings.FirstOrDefault()!.Urn });
-            }
-
-            return View("SchoolSearchResults", model);
-        }
-
-        
-        private Task<Result<SchoolSearchPageViewModel>> GetSchoolsPageViewModel(string? page = null)
-        {
-            var pageNumber = PageHelper.ParsePageNumber(page);
-            
-            var organisationName = User.FindFirst(CustomClaimTypes.OrganisationName)?.Value;
-
-            var searchConfig = SearchConfiguration.ForSchools(
-                searchSuggestionUrl: SearchSuggestionsUrl
-            );
-
             var result =
-                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository,
-                    _multiAcademyTrustRepository)
-                from establishments in GetAllEstablishments(scopeInfo.ScopeType, scopeInfo.ScopeId, pageNumber)
-                select new SchoolSearchPageViewModel(
-                    new SearchPageLayoutModel(
+                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+                from action in _schoolSearchController.Handle(
+                    scopeInfo,
+                    parameters,
+                    [],
+                    model => View(new SchoolSearchPageViewModel(
                         new PageViewModel(
-                            GetSchoolsPageBreadcrumbs("My schools"),
-                            "My schools",
-                            FormatResultsSubtitle(establishments.TotalResults, organisationName)
+                            model.BreadcrumbTrail,
+                            model.PageTitle,
+                            model.PageSubtitle
                         ),
-                        searchConfig.SearchForm,
-                        CreatePaginationModel(establishments, $"/my-schools/")
-                    ),
-                    MapEstablishmentListings(establishments.Results,urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage),
-                        "MySchoolsSchool", new { Area = "School", urn }))
-                );
+                        model.Search,
+                        model.Establishments
+                    )),
+                    new() {
+                        [SchoolSearchSubActionType.AllSchools] = new() { Title = "My schools" }
+                    })
+                select action;
 
-            return result;
+            return await result
+                .ToActionResult(_hostEnvironment);
         }
     }
 }

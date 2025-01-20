@@ -5,11 +5,11 @@ namespace ASP.Application.UseCases.Downloads.GetAvailableDownloads
 {
     public class GetAvailableDownloadsRequest
     {
-        public DataDownloadsScopeType ScopeType { get; set; }
+        public DataDownloadScopeType ScopeType { get; set; }
         public string ScopeIdentifier { get; set; }
         public Optional<int> Year { get; set; }
 
-        public GetAvailableDownloadsRequest(DataDownloadsScopeType scopeType, string scopeIdentifier, Optional<int> year)
+        public GetAvailableDownloadsRequest(DataDownloadScopeType scopeType, string scopeIdentifier, Optional<int> year)
         {
             ScopeType = scopeType;
             ScopeIdentifier = scopeIdentifier;

@@ -1,4 +1,5 @@
 ﻿using ASP.Application;
+using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Core.DataDownloads;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
@@ -32,6 +33,15 @@ namespace ASP.Web.Areas.LocalAuthority
                 select string.IsNullOrWhiteSpace(la.Name)
                     ? "Missing local authority name"
                     : la.Name;
+        }
+
+        protected virtual Task<Result<string>> GetEstablishmentName(string urn)
+        {
+            return
+                from school in _api.GetEstablishmentDetails(new GetEstablishmentDetailsRequest(urn))
+                select string.IsNullOrWhiteSpace(school.Name)
+                    ? "Missing school name"
+                    : school.Name;
         }
 
         protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentTemplateId, string? revision)

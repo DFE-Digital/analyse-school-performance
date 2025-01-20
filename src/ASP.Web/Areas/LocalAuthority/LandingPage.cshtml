@@ -1,9 +1,10 @@
-@model ASP.Web.Areas.LocalAuthority.ContentPageViewModel
+@using ASP.Web.Areas.LocalAuthority
+@model ContentPageViewModel
 @{
-    Layout = "~/Areas/LocalAuthority/_LocalAuthorityPageLayout.cshtml";
+    Layout = "_LocalAuthorityPageLayout";
     ViewBag.LayoutModel = Model.Page;
 }
 
 <div id="app-card-container" class="app-grid-container-three-column app-grid-container--wider govuk-!-margin-top-5">
-    <partial name="~/Features/ContentTemplates/ContentTemplateView.cshtml" model=@Model.ContentTemplate />
+    <partial name="Features/ContentTemplates/ContentTemplateView" model=@Model.ContentTemplate />
 </div>

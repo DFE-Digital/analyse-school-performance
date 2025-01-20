@@ -19,6 +19,6 @@
 <div id="test" style="border: 1px solid black; padding: 10px">
     <span>This is the test container</span>
     <div>
-        @await Html.PartialAsync("~/Features/ContentTemplates/ContentTemplateView.cshtml", Model)
+        <partial name="Features/ContentTemplates/ContentTemplateView" model="Model" />
     </div>
 </div>

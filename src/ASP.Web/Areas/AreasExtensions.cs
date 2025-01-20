@@ -13,6 +13,7 @@ namespace ASP.Web.Areas
             options.AreaViewLocationFormats.Add("/Areas/{2}/Views/{0}" + RazorViewEngine.ViewExtension);
             options.AreaViewLocationFormats.Add("/Areas/Shared/{0}" + RazorViewEngine.ViewExtension);
             options.AreaViewLocationFormats.Add("/Shared/{0}" + RazorViewEngine.ViewExtension);
+            options.AreaViewLocationFormats.Add("/{0}" + RazorViewEngine.ViewExtension);
 
             return options;
         }

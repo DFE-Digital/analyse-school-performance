@@ -10,11 +10,11 @@ namespace ASP.Application.UseCases.Downloads.GetDownloadPackage
 {
     public class GetDownloadPackage : IGetDownloadPackage
     {
-        private readonly DataDownloadsOptions _downloadStorageOptions;
+        private readonly DataDownloadOptions _downloadStorageOptions;
         private readonly CurrentTimeProvider _currentTimeProvider;
         private readonly IBlobStorage _blobStorage;
 
-        public GetDownloadPackage(IOptions<DataDownloadsOptions> downloadStorageOptions, CurrentTimeProvider currentTimeProvider, IBlobStorage blobStorage)
+        public GetDownloadPackage(IOptions<DataDownloadOptions> downloadStorageOptions, CurrentTimeProvider currentTimeProvider, IBlobStorage blobStorage)
         {
             _downloadStorageOptions = downloadStorageOptions.Value;
             _currentTimeProvider = currentTimeProvider;
@@ -41,7 +41,7 @@ namespace ASP.Application.UseCases.Downloads.GetDownloadPackage
         private static Result<FileLocation> CreateFileLocation(List<DownloadConfig> downloadConfig,
                                                    DownloadId downloadId,
                                                    FileType fileType,
-                                                   DataDownloadsOptions dataDownloadsOptions)
+                                                   DataDownloadOptions dataDownloadsOptions)
         {
             var config = downloadConfig.FirstOrDefault(id => id.Id == downloadId.ConfigId);
 

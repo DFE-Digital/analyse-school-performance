@@ -25,7 +25,7 @@ Scenario: Ofsted Unnamed user is denied access to my-schools page
 	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
-Scenario: Server error when accessing /my-schools/ with LA Named role
+    Scenario: Server error when accessing /my-schools/ with LA Named role when LA doesn't exist
 	Given I am a LA Named user for Local Authority "100"
 	When I navigate to /my-schools/
 	Then I should get a 500 response
@@ -51,7 +51,7 @@ Scenario: No results for LA Named user when no schools in their Local Authority
 		    }
 		"""
 	When I navigate to /my-schools/
-	Then the element "h1.govuk-heading-l" should have the text content "We found no schools."
+        Then the page title should be "We found no schools"
 
 @Javascript:disabled
 Scenario: Correct results displayed for LA Named user with schools in their Local Authority
@@ -103,7 +103,7 @@ Examples:
 	| 2       | 222222 | Test School 2 |
 
 @Javascript:disabled
-Scenario: Server error when MAT Named user accesses /my-schools/ page
+    Scenario: Server error when MAT Named user accesses /my-schools/ page and MAT doesn't exist
 	Given I am a MAT Named user for Multi-Academy Trust "1234"
 	When I navigate to /my-schools/
 	Then I should get a 500 response
@@ -125,7 +125,7 @@ Scenario: MAT Named user sees 'No schools found' message when MAT has no associa
 		    }
 		"""
 	When I navigate to /my-schools/
-	Then the element "h1.govuk-heading-l" should have the text content "We found no schools."
+        Then the page title should be "We found no schools"
 
 @Javascript:disabled
 Scenario: MAT Named user sees correct list of schools associated with their Multi-Academy Trust
@@ -199,7 +199,7 @@ Scenario: Diocese Named user sees 'No schools found' message when no schools are
 		    }
 		"""
 	When I navigate to /my-schools/
-	Then the element "h1.govuk-heading-l" should have the text content "We found no schools."
+        Then the page title should be "We found no schools"
 
 @Javascript:disabled
 Scenario: Diocese Named user sees correct list of schools associated with their diocese
@@ -280,32 +280,26 @@ Scenario: Pagination in my schools
 	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100004"
 	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100005"
 
-@Javascript:disabled
-Scenario: Page should show a breadcrumb trail
-	Given I am a MAT Named user for Multi-Academy Trust "1234"
+    @Javascript:disabled
+	Scenario Outline: My schools page - common page elements
+		Given 251 Establishments exist with properties:
+			| urn          | name                        | multiAcademyTrust |
+			| (100000 + n) | Primary School (100000 + n) | { "uid": 1234 }   |
 	And Multi Academy Trust "1234" exists:
 		"""
 		    { 
 		     "name": "Test MAT"
 		    }
 		"""
-	And Establishment "111111" exists:
-		"""
-		    {
-		     "name": "Test School 1",
-		      "multiAcademyTrust": {
-		          "uid": 1234
-		      }
-		    }
-		"""
-	When I navigate to /my-schools/
-	Then I should get a 200 response
-	And the page title should be "My schools"
-	And the element "#app-page-title" should have the text content "My schools"
-	And the breadcrumb trail should be:
-		| text       | href | current |
-		| Home       | /    |         |
-		| My schools |      | true    |
+        And I am a MAT Named user for Multi-Academy Trust "1234"
+        When I navigate to /my-schools/
+        Then I should get a 200 response
+		Then the page title should be "My schools"
+		And the page subtitle should be "251 schools"
+        And the breadcrumb trail should be:
+          | text       | href | current |
+          | Home       | /    |         |
+          | My schools |      | true    |
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns results
@@ -577,7 +571,17 @@ Scenario: Page should show a breadcrumb trail when search returns no results (JS
 
 @Javascript:disabled
 Scenario: Search Term Validation
-	Given Local Authority "100" exists:
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School",
+			"localAuthority": {
+				"code": "100",
+				"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Local Authority "100" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -591,7 +595,17 @@ Scenario: Search Term Validation
 
 @Javascript:enabled
 Scenario: Search Term Validation (JS)
-	Given Local Authority "100" exists:
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School",
+			"localAuthority": {
+				"code": "100",
+				"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Local Authority "100" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -605,7 +619,17 @@ Scenario: Search Term Validation (JS)
 
 @Javascript:disabled
 Scenario: Errors in Search Term Validation
-	Given Local Authority "100" exists:
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School",
+			"localAuthority": {
+				"code": "100",
+				"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Local Authority "100" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -621,7 +645,17 @@ Scenario: Errors in Search Term Validation
 
 @Javascript:enabled
 Scenario: Errors in Search Term Validation (JS)
-	Given Local Authority "100" exists:
+		Given Establishment "111111" exists:
+		"""
+		{
+			"name": "Some Primary School",
+			"localAuthority": {
+				"code": "100",
+				"name": "Oxfordshire"
+			}
+		}
+		"""
+		And Local Authority "100" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -634,26 +668,6 @@ Scenario: Errors in Search Term Validation (JS)
 	And the element "#app-field-Search-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 	And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
 	And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
-
-@Javascript:disabled
-Scenario: School search page should show correct message when there is no data
-	Given I am a Diocese Named user for Diocese "Test Diocese"
-	And no Establishments exist
-	When I navigate to /my-schools/
-	And I update the textbox "#app-field-Search" to have the value "primary"
-	And I click the button "#searchSubmit"
-	Then the path should be /my-schools/?search=primary
-	And the element "h1" should have the text content "We found no matches for "primary""
-
-@Javascript:enabled
-Scenario: School search page should show correct message when there is no data (JS)
-	Given I am a Diocese Named user for Diocese "Test Diocese"
-	And no Establishments exist
-	When I navigate to /my-schools/
-	And I update the textbox "#app-field-Search" to have the value "primary"
-	And I click the button "#searchSubmit"
-	Then the path should be /my-schools/?search=primary
-	And the element "#app-page-title" should have the text content "We found no matches for "primary""
 
 @Javascript:disabled
 Scenario: School search page should show correct message for search term with no matches
