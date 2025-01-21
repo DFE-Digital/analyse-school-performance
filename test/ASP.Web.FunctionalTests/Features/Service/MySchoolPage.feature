@@ -444,9 +444,8 @@ Scenario Outline: My school page - common page elements
 	Then the page title should be "My school"
 	And the page subtitle should be "Hollinswood Primary School (URN: 123456)"
 	And the breadcrumb trail should be:
-		| text      | href | current |
-		| Home      | /    |         |
-		| My school |      | true    |
+		| text | href |
+		| Home | /    |
 Examples:
 	| School          |
 	| School Named    |
@@ -483,11 +482,10 @@ Scenario: Data downloads 'Dates available for download' page - common page eleme
 	When I navigate to /my-school/download-data
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                         | href                      | current |
-		| Home                         | /                         |         |
-		| My school                    | /my-school/               |         |
-		| Download data                | /my-school/download-data/ |         |
-		| Dates available for download |                           | true    |
+		| text          | href                      |
+		| Home          | /                         |
+		| My school     | /my-school/               |
+		| Download data | /my-school/download-data/ |
 	And the sub-navigation should be:
 		| text          | href                      | current |
 		| Download data | /my-school/download-data/ | true    |
@@ -687,12 +685,11 @@ Scenario: Data downloads "Data files available for download' - common page eleme
 	When I navigate to /my-school/download-data/select-files/?selectedYear=2022
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                              | href                      | current |
-		| Home                              | /                         |         |
-		| My school                         | /my-school/               |         |
-		| Download data                     | /my-school/download-data/ |         |
-		| Dates available for download      | /my-school/download-data/ |         |
-		| Data files available for download |                           | true    |
+		| text                         | href                      |
+		| Home                         | /                         |
+		| My school                    | /my-school/               |
+		| Download data                | /my-school/download-data/ |
+		| Dates available for download | /my-school/download-data/ |
 	And the sub-navigation should be:
 		| text          | href                      | current |
 		| Download data | /my-school/download-data/ | true    |
@@ -1106,13 +1103,12 @@ Scenario: Data downloads 'Download school data' - common page elements
 	When I navigate to /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-800200-ks2-2022-final-school&selectedFiles=asp-800200-ks2-2022-provisional-school
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                                    | href                                                     | current |
-		| Home                                    | /                                                        |         |
-		| My school                               | /my-school/                                              |         |
-		| Download data                           | /my-school/download-data/                                |         |
-		| Dates available for download            | /my-school/download-data/                                |         |
-		| Data files available for download       | /my-school/download-data/select-files/?selectedYear=2022 |         |
-		| Download Dagenham Park CofE School data |                                                          | true    |
+		| text                              | href                                                     |
+		| Home                              | /                                                        |
+		| My school                         | /my-school/                                              |
+		| Download data                     | /my-school/download-data/                                |
+		| Dates available for download      | /my-school/download-data/                                |
+		| Data files available for download | /my-school/download-data/select-files/?selectedYear=2022 |
 	And the sub-navigation should be:
 		| text          | href                      | current |
 		| Download data | /my-school/download-data/ | true    |

@@ -168,7 +168,8 @@ namespace ASP.Web.Features.DataDownloads
             _api = api;
             _scopeValidator = scopeValidator;
 
-            _steps = new() {
+            _steps = new()
+            {
                 [DownloadDataStepType.SelectYear] =
                     new SelectYearStep(this, "", "Dates available for download"),
 
@@ -355,8 +356,7 @@ namespace ASP.Web.Features.DataDownloads
                     let model = new DownloadDataStepViewModel(
                         title,
                         new BreadcrumbTrailViewModel(
-                            baseBreadcrumbTrail,
-                            title
+                            baseBreadcrumbTrail
                         ),
                         downloadDataModel
                     )
@@ -415,8 +415,7 @@ namespace ASP.Web.Features.DataDownloads
                         new BreadcrumbTrailViewModel(
                             baseBreadcrumbTrail.Concat([
                                 Controller.GetBreadcrumbForStep(DownloadDataStepType.SelectYear, parameters)
-                            ]),
-                            title
+                            ])
                         ),
                         downloadDataModel
                     )
@@ -449,8 +448,7 @@ namespace ASP.Web.Features.DataDownloads
                         baseBreadcrumbTrail.Concat([
                             Controller.GetBreadcrumbForStep(DownloadDataStepType.SelectYear, parameters),
                             Controller.GetBreadcrumbForStep(DownloadDataStepType.SelectFiles, parameters)
-                        ]),
-                        Title
+                        ])
                     ),
                     new DownloadDataSelectFormatViewModel(
                         Controller.ScopeTypeLabel,
@@ -489,7 +487,8 @@ namespace ASP.Web.Features.DataDownloads
 
                 return
                     from response in await Controller._api.GetDownloadPackage(new GetDownloadPackageRequest(fileType, selectedFiles))
-                    select (IActionResult)new FileStreamResult(response.Content, response.ContentType) {
+                    select (IActionResult)new FileStreamResult(response.Content, response.ContentType)
+                    {
                         FileDownloadName = response.FileName
                     };
             }

@@ -38,7 +38,7 @@ namespace ASP.Web.Core.Templating
                 UpdateRevision = revision == null || template.IsPublished ? Guid.NewGuid().ToString() : revision,
                 PageTitle = template.PageTitle ?? "",
                 Views = views.Select(editModelFactory.CreateTemplateComponentEditModel).ToList(),
-                Breadcrumbs = new BreadcrumbTrailViewModel(!string.IsNullOrWhiteSpace(template.PageTitle) ? template.PageTitle : "Missing page title")
+                Breadcrumbs = new BreadcrumbTrailViewModel()
             };
         }
     }

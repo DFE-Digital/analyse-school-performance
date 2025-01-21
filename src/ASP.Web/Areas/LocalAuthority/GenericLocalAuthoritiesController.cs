@@ -63,27 +63,27 @@ namespace ASP.Web.Areas.LocalAuthority
                 var result = await GetLocalAuthoritiesPageViewModel(searchParams);
                 return View(result.GetValueOrDefault(GetEmptyLocalAuthoritiesPageViewModel()));
             }
-            
+
             var pageNumber = PageHelper.ParsePageNumber(searchParams.Page);
-            
+
             var searchUrlForNoResults = $"/local-authorities/";
-            
+
             var noResultsViewModel = new LocalAuthoritySearchPageViewModel
             (
                 new PageViewModel(
-                    GetLocalAuthoritiesSearchNoResultsPageBreadcrumbs(searchParams.Search),
+                    GetLocalAuthoritiesSearchPageBreadcrumbs(),
                     $"We found no matches for \"{searchParams.Search}\""
                 ),
                 new SearchResultsNotFoundViewModel(searchParams.Search, searchUrlForNoResults),
                 new List<LocalAuthoritiesListingModel>());
-            
+
             var searchResult =
                 from localAuthorities in PerformLocalAuthoritySearch(
                     searchParams,
                     pageNumber)
                 select new LocalAuthoritySearchPageViewModel(
                     new PageViewModel(
-                        GetLocalAuthoritiesSearchPageBreadcrumbs(searchParams.Search),
+                        GetLocalAuthoritiesSearchPageBreadcrumbs(),
                         $"Search results for \"{searchParams.Search}\"",
                         FormatResultsSubtitle(localAuthorities.TotalResults)
                     ),
@@ -97,7 +97,7 @@ namespace ASP.Web.Areas.LocalAuthority
             return await searchResult.DefaultIf(e => e is NotFoundError, noResultsViewModel)
                 .ToActionResult(RedirectToLocalAuthorityLandingPageIfSingleResult, _hostEnvironment);
         }
-        
+
         [HttpGet("suggestions")]
         public async Task<IActionResult> LocalAuthoritySearchSuggestions(SearchParameters searchParams)
         {
@@ -105,12 +105,12 @@ namespace ASP.Web.Areas.LocalAuthority
             {
                 return View(nameof(LocalAuthorities));
             }
-        
+
             var searchResult = await PerformLocalAuthoritySearchSuggestions(searchParams);
 
             return searchResult.ToActionResult(Json, _hostEnvironment);
         }
-        
+
         private Task<Result<ResultsPage<LocalAuthorityDTO>>> GetAllLocalAuthorities(int pageNumber)
         {
             var request = new GetAllLocalAuthoritiesRequest(
@@ -119,25 +119,18 @@ namespace ASP.Web.Areas.LocalAuthority
             );
 
             return _api.GetAllLocalAuthorities(request)
-                .MapError(e => e is NotFoundError ? Error.Unexpected(e.Message, null): e);
+                .MapError(e => e is NotFoundError ? Error.Unexpected(e.Message, null) : e);
         }
-        
-        private BreadcrumbTrailViewModel GetLocalAuthoritiesPageBreadcrumbs(string currentPage)
+
+        private BreadcrumbTrailViewModel GetLocalAuthoritiesPageBreadcrumbs()
         {
-            var breadcrumbTrail = new BreadcrumbTrailViewModel(currentPage);
+            var breadcrumbTrail = new BreadcrumbTrailViewModel();
             return breadcrumbTrail;
         }
-        
-        private BreadcrumbTrailViewModel GetLocalAuthoritiesSearchPageBreadcrumbs(string searchTerm)
+
+        private BreadcrumbTrailViewModel GetLocalAuthoritiesSearchPageBreadcrumbs()
         {
-            var breadcrumbTrail = new BreadcrumbTrailViewModel($"Search results for \"{searchTerm}\"")
-                .AddBreadcrumb("All local authorities", "/local-authorities/");
-            return breadcrumbTrail;
-        }
-        
-        private BreadcrumbTrailViewModel GetLocalAuthoritiesSearchNoResultsPageBreadcrumbs(string searchTerm)
-        {
-            var breadcrumbTrail = new BreadcrumbTrailViewModel($"We found no matches for \"{searchTerm}\"")
+            var breadcrumbTrail = new BreadcrumbTrailViewModel()
                 .AddBreadcrumb("All local authorities", "/local-authorities/");
             return breadcrumbTrail;
         }
@@ -156,7 +149,7 @@ namespace ASP.Web.Areas.LocalAuthority
 
             return View(nameof(LocalAuthorities), model);
         }
-        
+
         private Task<Result<SearchResultsPage<LocalAuthorityDTO>>> PerformLocalAuthoritySearch(
             SearchParameters searchParams,
             int pageNumber)
@@ -164,11 +157,11 @@ namespace ASP.Web.Areas.LocalAuthority
             var searchRequest = CreateSearchRequest(searchParams, pageNumber);
 
             var model = from searchResults in _api.LocalAuthoritySearch(searchRequest)
-                    select searchResults;
+                        select searchResults;
 
             return model;
         }
-        
+
         private LocalAuthoritySearchRequest CreateSearchRequest(
             SearchParameters searchParams,
             int pageNumber)
@@ -183,12 +176,12 @@ namespace ASP.Web.Areas.LocalAuthority
         private Task<Result<LocalAuthoritySearchPageViewModel>> GetLocalAuthoritiesPageViewModel(SearchParameters searchParams)
         {
             var pageNumber = PageHelper.ParsePageNumber(searchParams.Page);
-            
+
             var result =
                 from localAuthorities in GetAllLocalAuthorities(pageNumber)
                 select new LocalAuthoritySearchPageViewModel(
                     new PageViewModel(
-                        GetLocalAuthoritiesPageBreadcrumbs("All local authorities"),
+                        GetLocalAuthoritiesPageBreadcrumbs(),
                         "All local authorities",
                         $"{localAuthorities.TotalResults:N0} local authorities"
                     ),
@@ -207,7 +200,7 @@ namespace ASP.Web.Areas.LocalAuthority
         {
             return new LocalAuthoritySearchPageViewModel(
                 new PageViewModel(
-                    GetLocalAuthoritiesPageBreadcrumbs("All local authorities"),
+                    GetLocalAuthoritiesPageBreadcrumbs(),
                     "All local authorities"
                 ),
                 SearchFormViewModel.ForLocalAuthorities(
@@ -218,9 +211,9 @@ namespace ASP.Web.Areas.LocalAuthority
                 new List<LocalAuthoritiesListingModel>()
             );
         }
-        
+
         private PaginationViewModel CreatePaginationModel(
-            ResultsPage<LocalAuthorityDTO> result, 
+            ResultsPage<LocalAuthorityDTO> result,
             string searchUrl, string searchTerm)
         {
             var paginationUrl = Url.Action(searchUrl, new { search = searchTerm }) ?? string.Empty;
@@ -233,9 +226,9 @@ namespace ASP.Web.Areas.LocalAuthority
                 "local authorities"
             );
         }
-        
+
         private PaginationViewModel CreatePaginationModel(
-            ResultsPage<LocalAuthorityDTO> result, 
+            ResultsPage<LocalAuthorityDTO> result,
             string paginationUrl)
         {
             return new PaginationViewModel(
@@ -247,7 +240,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 "local authorities"
             );
         }
-        
+
         private List<LocalAuthoritiesListingModel> MapLocalAuthoritiesListings(
             IEnumerable<LocalAuthorityDTO> results)
         {
@@ -256,16 +249,16 @@ namespace ASP.Web.Areas.LocalAuthority
                 laCode => Url.Action(nameof(GenericLocalAuthorityController.LandingPage), "GenericLocalAuthority", new { Area = "LocalAuthority", laCode })
             );
         }
-        
+
         private string FormatResultsSubtitle(int totalResults)
         {
             return $"{totalResults:N0} local authorities";
         }
-        
+
         private Task<Result<LocalAuthoritySearchSuggestionsResult<LocalAuthorityDTO>>> PerformLocalAuthoritySearchSuggestions(
             SearchParameters searchParams)
         {
-            
+
             var request = new LocalAuthoritySearchSuggestionsRequest(
                 searchParams.Search ?? "",
                 Optional<int>.None

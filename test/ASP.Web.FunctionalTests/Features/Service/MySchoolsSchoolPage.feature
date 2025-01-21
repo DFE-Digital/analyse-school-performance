@@ -216,10 +216,9 @@ Scenario Outline: Landing page - common page elements
 	Then the page title should be "My schools"
 	And the page subtitle should be "Hollinswood Primary School (URN: 123456)"
 	And the breadcrumb trail should be:
-		| text                       | href         | current |
-		| Home                       | /            |         |
-		| My schools                 | /my-schools/ |         |
-		| Hollinswood Primary School |              | true    |
+		| text       | href         |
+		| Home       | /            |
+		| My schools | /my-schools/ |
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
@@ -513,12 +512,11 @@ Scenario: Data downloads 'Dates available for download' - common page elements
 	When I navigate to /my-schools/136028/download-data
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                         | href                              | current |
-		| Home                         | /                                 |         |
-		| My schools                   | /my-schools/                      |         |
-		| Dagenham Park CofE School    | /my-schools/136028/               |         |
-		| Download data                | /my-schools/136028/download-data/ |         |
-		| Dates available for download |                                   | true    |
+		| text                      | href                              |
+		| Home                      | /                                 |
+		| My schools                | /my-schools/                      |
+		| Dagenham Park CofE School | /my-schools/136028/               |
+		| Download data             | /my-schools/136028/download-data/ |
 	And the sub-navigation should be:
 		| text          | href                              | current |
 		| Download data | /my-schools/136028/download-data/ | true    |
@@ -737,13 +735,12 @@ Scenario: Data downloads "Data files available for download' - common page eleme
 	When I navigate to /my-schools/136028/download-data/select-files/?selectedYear=2022
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                              | href                              | current |
-		| Home                              | /                                 |         |
-		| My schools                        | /my-schools/                      |         |
-		| Dagenham Park CofE School         | /my-schools/136028/               |         |
-		| Download data                     | /my-schools/136028/download-data/ |         |
-		| Dates available for download      | /my-schools/136028/download-data/ |         |
-		| Data files available for download |                                   | true    |
+		| text                         | href                              |
+		| Home                         | /                                 |
+		| My schools                   | /my-schools/                      |
+		| Dagenham Park CofE School    | /my-schools/136028/               |
+		| Download data                | /my-schools/136028/download-data/ |
+		| Dates available for download | /my-schools/136028/download-data/ |
 	And the sub-navigation should be:
 		| text          | href                              | current |
 		| Download data | /my-schools/136028/download-data/ | true    |
@@ -1182,14 +1179,13 @@ Scenario: Data downloads 'Download school data' - common page elements
 	When I navigate to /my-schools/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school&selectedFiles=asp-136028-ks2-2022-provisional-school
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                                    | href                                                             | current |
-		| Home                                    | /                                                                |         |
-		| My schools                              | /my-schools/                                                     |         |
-		| Dagenham Park CofE School               | /my-schools/136028/                                              |         |
-		| Download data                           | /my-schools/136028/download-data/                                |         |
-		| Dates available for download            | /my-schools/136028/download-data/                                |         |
-		| Data files available for download       | /my-schools/136028/download-data/select-files/?selectedYear=2022 |         |
-		| Download Dagenham Park CofE School data |                                                                  | true    |
+		| text                              | href                                                             |
+		| Home                              | /                                                                |
+		| My schools                        | /my-schools/                                                     |
+		| Dagenham Park CofE School         | /my-schools/136028/                                              |
+		| Download data                     | /my-schools/136028/download-data/                                |
+		| Dates available for download      | /my-schools/136028/download-data/                                |
+		| Data files available for download | /my-schools/136028/download-data/select-files/?selectedYear=2022 |
 	And the sub-navigation should be:
 		| text          | href                              | current |
 		| Download data | /my-schools/136028/download-data/ | true    |

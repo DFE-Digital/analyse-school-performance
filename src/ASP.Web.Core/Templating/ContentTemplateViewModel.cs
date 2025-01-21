@@ -22,7 +22,7 @@ namespace ASP.Web.Core.Templating
                 PageTitle = template.PageTitle ?? "",
                 PageContent = template.PageContent,
                 Views = (template.Views ?? new List<TemplateComponent>()).Select(TemplateComponentViewModel.FromTemplateView).ToList(),
-                Breadcrumbs = new BreadcrumbTrailViewModel(!string.IsNullOrWhiteSpace(template.PageTitle) ? template.PageTitle : "Missing page title")
+                Breadcrumbs = new BreadcrumbTrailViewModel()
             };
         }
     }

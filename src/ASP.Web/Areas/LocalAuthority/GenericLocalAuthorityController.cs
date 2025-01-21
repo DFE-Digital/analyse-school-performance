@@ -61,10 +61,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 from laName in GetLocalAuthorityName(laCode)
                 from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
                 let page = new PageViewModel(
-                    new BreadcrumbTrailViewModel(
-                        GetBaseBreadcrumbTrail(),
-                        laName
-                    ),
+                    new BreadcrumbTrailViewModel(GetBaseBreadcrumbTrail()),
                     laName,
                     $"All schools within {laName}"
                 )

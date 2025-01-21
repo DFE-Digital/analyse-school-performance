@@ -176,7 +176,8 @@ namespace ASP.Web.Areas.School
             _api = api;
             _makeSchoolUrl = makeSchoolUrl;
 
-            _subActions = new() {
+            _subActions = new()
+            {
                 [SchoolSearchSubActionType.AllSchools] =
                     new AllSchools(this, "", "All schools", ""),
 
@@ -354,8 +355,7 @@ namespace ASP.Web.Areas.School
                 title,
                 $"{subtitle}{establishments.TotalResults:N0} schools",
                 new BreadcrumbTrailViewModel(
-                    baseBreadcrumbTrail,
-                    title
+                    baseBreadcrumbTrail
                 ),
                 SearchFormViewModel.ForSchools(
                     parameters.Search ?? "",
@@ -372,8 +372,7 @@ namespace ASP.Web.Areas.School
                 title,
                 "",
                 new BreadcrumbTrailViewModel(
-                    baseBreadcrumbTrail,
-                    title
+                    baseBreadcrumbTrail
                 ),
                 new SearchResultsNotFoundViewModel(
                     searchTerm ?? "",

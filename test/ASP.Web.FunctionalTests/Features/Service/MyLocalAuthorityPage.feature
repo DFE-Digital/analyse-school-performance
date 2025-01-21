@@ -232,9 +232,8 @@ Scenario: My local authority page should be accessible if user's LA exists
 	And the page title should be "My local authority"
 	And the page subtitle should be "All schools within Test Name"
 	And the breadcrumb trail should be:
-		| text               | href | current |
-		| Home               | /    |         |
-		| My local authority |      | true    |
+		| text | href |
+		| Home | /    |
 
 @Javascript:disabled
 Scenario: My local authority page cards should be populated from the "la-landing-page" content template
@@ -397,14 +396,13 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Dates available 
 	And the element "[data-testid="no-downloads-description"]" should have the text content "There were no data files available to download for your LA."
 	And the element "[data-testid="no-downloads-other-dates"]" should not exist
 	And the breadcrumb trail should be:
-		| text                                 | href                               | current |
-		| Home                                 | /                                  |         |
-		| My local authority                   | /my-local-authority/               |         |
-		| Download data                        | /my-local-authority/download-data/ |         |
-		| We could not find any data downloads |                                    | true    |
+		| text               | href                               |
+		| Home               | /                                  |
+		| My local authority | /my-local-authority/               |
+		| Download data      | /my-local-authority/download-data/ |
 	
 @Javascript:disabled
-Scenario: Data downloads > Pupil level and aggregated LA data > Dates available for Download - Common page elements 
+Scenario: Data downloads > Pupil level and aggregated LA data > Dates available for Download - Common page elements
 	Given Local Authority "301" exists:
 		"""
 		{
@@ -435,11 +433,10 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Dates available 
 	Then I should get a 200 response
 	And the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                         | href                               | current |
-		| Home                         | /                                  |         |
-		| My local authority           | /my-local-authority/               |         |
-		| Download data                | /my-local-authority/download-data/ |         |
-		| Dates available for download |                                    | true    |
+		| text               | href                               |
+		| Home               | /                                  |
+		| My local authority | /my-local-authority/               |
+		| Download data      | /my-local-authority/download-data/ |
 	And the sub-navigation should be:
 		| text          | href                               | current |
 		| Download data | /my-local-authority/download-data/ | true    |
@@ -595,12 +592,11 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Data files avail
 	And the element "[data-testid="no-downloads-description"]" should have the text content "There were no data files available to download for your LA for 2022."
 	And the element "[data-testid="no-downloads-other-dates"]" should have the href "/my-local-authority/download-data/pupil-level-aggregated-la-data/"
 	And the breadcrumb trail should be:
-		| text                                 | href                                                              | current |
-		| Home                                 | /                                                                 |         |
-		| My local authority                   | /my-local-authority/                                              |         |
-		| Download data                        | /my-local-authority/download-data/                                |         |
-		| Dates available for download         | /my-local-authority/download-data/pupil-level-aggregated-la-data/ |         |
-		| We could not find any data downloads |                                                                   | true    |
+		| text                         | href                                                              |
+		| Home                         | /                                                                 |
+		| My local authority           | /my-local-authority/                                              |
+		| Download data                | /my-local-authority/download-data/                                |
+		| Dates available for download | /my-local-authority/download-data/pupil-level-aggregated-la-data/ |
 
 @Javascript:disabled
 Scenario: Data downloads > Pupil level and aggregated LA data > Data files available for download - Common page elements
@@ -634,12 +630,12 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Data files avail
 	Then I should get a 200 response
 	And the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                              | href                                                              | current |
-		| Home                              | /                                                                 |         |
-		| My local authority                | /my-local-authority/                                              |         |
-		| Download data                     | /my-local-authority/download-data/                                |         |
-		| Dates available for download      | /my-local-authority/download-data/pupil-level-aggregated-la-data/ |         |
-		| Data files available for download |                                                                   | true    |
+		| text                         | href                                                              |
+		| Home                         | /                                                                 |
+		| My local authority           | /my-local-authority/                                              |
+		| Download data                | /my-local-authority/download-data/                                |
+		| Dates available for download | /my-local-authority/download-data/pupil-level-aggregated-la-data/ |
+
 	And the sub-navigation should be:
 		| text          | href                               | current |
 		| Download data | /my-local-authority/download-data/ | true    |
@@ -647,7 +643,7 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Data files avail
 		| text                               | href                                                              | current |
 		| Pupil level and aggregated LA data | /my-local-authority/download-data/pupil-level-aggregated-la-data/ | true    |
 		| Individual school data             | /my-local-authority/download-data/individual-school-data/         |         |
-	And the sub-page title should be "Data files available for download" with caption "Pupil level and aggregated LA data"	
+	And the sub-page title should be "Data files available for download" with caption "Pupil level and aggregated LA data"
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Pupil level and aggregated LA data > Data files available for download - Page should contain multiple checkbox groups
@@ -840,13 +836,12 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Download data - 
 	Then I should get a 200 response
 	And the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                                        | href                                                                                             | current |
-		| Home                                        | /                                                                                                |         |
-		| My local authority                          | /my-local-authority/                                                                             |         |
-		| Download data                               | /my-local-authority/download-data/                                                               |         |
-		| Dates available for download                | /my-local-authority/download-data/pupil-level-aggregated-la-data/                                |         |
-		| Data files available for download           | /my-local-authority/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022 |         |
-		| Download pupil level and aggregated LA data |                                                                                                  | true    |
+		| text                              | href                                                                                             |
+		| Home                              | /                                                                                                |
+		| My local authority                | /my-local-authority/                                                                             |
+		| Download data                     | /my-local-authority/download-data/                                                               |
+		| Dates available for download      | /my-local-authority/download-data/pupil-level-aggregated-la-data/                                |
+		| Data files available for download | /my-local-authority/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022 |
 	And the sub-navigation should be:
 		| text          | href                               | current |
 		| Download data | /my-local-authority/download-data/ | true    |
@@ -890,25 +885,24 @@ Scenario Outline: Data downloads > Pupil level and aggregated LA data > Download
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - No results when Local Authority contains no schools
-    Given Local Authority "301" exists:
+	Given Local Authority "301" exists:
 		"""
 		{ 
 			"name": "Test LA"
 		}
 		"""
-    When I navigate to /my-local-authority/download-data/individual-school-data/
+	When I navigate to /my-local-authority/download-data/individual-school-data/
 	Then I should get a 200 response
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                | href                                                      | current |
-		| Home                | /                                                         |         |
-		| My local authority  | /my-local-authority/                                      |         |
-		| Download data       | /my-local-authority/download-data/                        |         |
-		| Search for a school | /my-local-authority/download-data/individual-school-data/ |         |
-		| We found no schools |                                                           | true    |
+		| text                | href                                                      |
+		| Home                | /                                                         |
+		| My local authority  | /my-local-authority/                                      |
+		| Download data       | /my-local-authority/download-data/                        |
+		| Search for a school | /my-local-authority/download-data/individual-school-data/ |
 	And the sub-navigation should be:
-		| text          | href                                | current |
+		| text          | href                               | current |
 		| Download data | /my-local-authority/download-data/ | true    |
 	And the side navigation should be:
 		| text                               | href                                                              | current |
@@ -924,7 +918,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Common
 			"name": "Test LA",
 		}
 		"""
-    And Establishment "111111" exists:
+	And Establishment "111111" exists:
 		"""
 		{
 			"name": "Test School 1",
@@ -939,13 +933,12 @@ Scenario: Data downloads > Individual school data > Search for a school - Common
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                | href                               | current |
-		| Home                | /                                  |         |
-		| My local authority  | /my-local-authority/               |         |
-		| Download data       | /my-local-authority/download-data/ |         |
-		| Search for a school |                                    | true    |
+		| text               | href                               |
+		| Home               | /                                  |
+		| My local authority | /my-local-authority/               |
+		| Download data      | /my-local-authority/download-data/ |
 	And the sub-navigation should be:
-		| text          | href                                | current |
+		| text          | href                               | current |
 		| Download data | /my-local-authority/download-data/ | true    |
 	And the side navigation should be:
 		| text                               | href                                                              | current |
@@ -1171,12 +1164,11 @@ Scenario: Data downloads > Individual school data > Search for a school - Page s
 	And I click the button "#searchSubmit"
 	Then the path should be /my-local-authority/download-data/individual-school-data/?search=Primary
 	And the breadcrumb trail should be:
-		| text                         | href                                                      | current |
-		| Home                         | /                                                         |         |
-		| My local authority           | /my-local-authority/                                      |         |
-		| Download data                | /my-local-authority/download-data/                        |         |
-		| Search for a school          | /my-local-authority/download-data/individual-school-data/ |         |
-		| Search results for "Primary" |                                                           | true    |
+		| text                | href                                                      |
+		| Home                | /                                                         |
+		| My local authority  | /my-local-authority/                                      |
+		| Download data       | /my-local-authority/download-data/                        |
+		| Search for a school | /my-local-authority/download-data/individual-school-data/ |
 
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Page should show a breadcrumb trail when search returns results (JS)
@@ -1212,12 +1204,11 @@ Scenario: Data downloads > Individual school data > Search for a school - Page s
 	And I click the button "#searchSubmit"
 	Then the path should be /my-local-authority/download-data/individual-school-data/?search=Primary
 	And the breadcrumb trail should be:
-		| text                         | href                                                      | current |
-		| Home                         | /                                                         |         |
-		| My local authority           | /my-local-authority/                                      |         |
-		| Download data                | /my-local-authority/download-data/                        |         |
-		| Search for a school          | /my-local-authority/download-data/individual-school-data/ |         |
-		| Search results for "Primary" |                                                           | true    |
+		| text                | href                                                      |
+		| Home                | /                                                         |
+		| My local authority  | /my-local-authority/                                      |
+		| Download data       | /my-local-authority/download-data/                        |
+		| Search for a school | /my-local-authority/download-data/individual-school-data/ |
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Page should show a breadcrumb trail when search returns no results
@@ -1253,12 +1244,11 @@ Scenario: Data downloads > Individual school data > Search for a school - Page s
 	And I click the button "#searchSubmit"
 	Then the path should be /my-local-authority/download-data/individual-school-data/?search=Secondary
 	And the breadcrumb trail should be:
-		| text                                | href                                                      | current |
-		| Home                                | /                                                         |         |
-		| My local authority                  | /my-local-authority/                                      |         |
-		| Download data                       | /my-local-authority/download-data/                        |         |
-		| Search for a school                 | /my-local-authority/download-data/individual-school-data/ |         |
-		| We found no matches for "Secondary" |                                                           | true    |
+		| text                | href                                                      |
+		| Home                | /                                                         |
+		| My local authority  | /my-local-authority/                                      |
+		| Download data       | /my-local-authority/download-data/                        |
+		| Search for a school | /my-local-authority/download-data/individual-school-data/ |
 
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Page should show a breadcrumb trail when search returns no results (JS)
@@ -1294,12 +1284,11 @@ Scenario: Data downloads > Individual school data > Search for a school - Page s
 	And I click the button "#searchSubmit"
 	Then the path should be /my-local-authority/download-data/individual-school-data/?search=Secondary
 	And the breadcrumb trail should be:
-		| text                                | href                                                      | current |
-		| Home                                | /                                                         |         |
-		| My local authority                  | /my-local-authority/                                      |         |
-		| Download data                       | /my-local-authority/download-data/                        |         |
-		| Search for a school                 | /my-local-authority/download-data/individual-school-data/ |         |
-		| We found no matches for "Secondary" |                                                           | true    |
+		| text                | href                                                      |
+		| Home                | /                                                         |
+		| My local authority  | /my-local-authority/                                      |
+		| Download data       | /my-local-authority/download-data/                        |
+		| Search for a school | /my-local-authority/download-data/individual-school-data/ |
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Search Term Validation
@@ -1339,7 +1328,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 			}
 		}
 		"""
-	And  Local Authority "301" exists:
+	And Local Authority "301" exists:
 		"""
 		{
 			"name": "Oxfordshire",
@@ -2159,7 +2148,7 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
-	| Counter | URN    | Name                       | Address                        | Href                                                                          |
+	| Counter | URN    | Name                       | Address                        | Href                                                                         |
 	| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /my-local-authority/download-data/individual-school-data/333333/select-year/ |
 	| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /my-local-authority/download-data/individual-school-data/222222/select-year/ |
 	| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /my-local-authority/download-data/individual-school-data/111111/select-year/ |
@@ -2238,7 +2227,7 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
 
 Examples:
-	| Counter | URN    | Name                       | Address                        | Href                                                                          |
+	| Counter | URN    | Name                       | Address                        | Href                                                                         |
 	| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /my-local-authority/download-data/individual-school-data/333333/select-year/ |
 	| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /my-local-authority/download-data/individual-school-data/222222/select-year/ |
 	| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /my-local-authority/download-data/individual-school-data/111111/select-year/ |
@@ -2885,7 +2874,7 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
-	| Counter | URN    | LAESTAB  | Name                      | Href                                                                          |
+	| Counter | URN    | LAESTAB  | Name                      | Href                                                                         |
 	| 2       | 111111 | 894/2200 | Some Primary School       | /my-local-authority/download-data/individual-school-data/111111/select-year/ |
 	| 1       | 222222 | 894/1234 | Some Other Primary School | /my-local-authority/download-data/individual-school-data/222222/select-year/ |
 
@@ -2929,7 +2918,7 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
 Examples:
-	| Counter | URN    | LAESTAB  | Name                      | Href                                                                          |
+	| Counter | URN    | LAESTAB  | Name                      | Href                                                                         |
 	| 2       | 111111 | 894/2200 | Some Primary School       | /my-local-authority/download-data/individual-school-data/111111/select-year/ |
 	| 1       | 222222 | 894/1234 | Some Other Primary School | /my-local-authority/download-data/individual-school-data/222222/select-year/ |
 
@@ -3700,7 +3689,7 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
-	| Counter | URN    | Name     | Address                                   | Href                                                                          |
+	| Counter | URN    | Name     | Address                                   | Href                                                                         |
 	| 1       | 111111 | School A | 13 The Street AB12 3CD                    | /my-local-authority/download-data/individual-school-data/111111/select-year/ |
 	| 2       | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB | /my-local-authority/download-data/individual-school-data/222222/select-year/ |
 	| 3       | 333333 | School C | 34 Long Road, Sheffield                   | /my-local-authority/download-data/individual-school-data/333333/select-year/ |
@@ -3766,7 +3755,7 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
 
 Examples:
-	| Counter | URN    | Name     | Address                                   | Href                                                                          |
+	| Counter | URN    | Name     | Address                                   | Href                                                                         |
 	| 1       | 111111 | School A | 13 The Street AB12 3CD                    | /my-local-authority/download-data/individual-school-data/111111/select-year/ |
 	| 2       | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB | /my-local-authority/download-data/individual-school-data/222222/select-year/ |
 	| 3       | 333333 | School C | 34 Long Road, Sheffield                   | /my-local-authority/download-data/individual-school-data/333333/select-year/ |
@@ -3843,7 +3832,7 @@ Scenario: Data downloads > Individual school data > Search for a school - The Pa
 	And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 26 of 26 schools"
 	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/my-local-authority/download-data/individual-school-data/?search=Primary&page=1"
 	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='establishment-listing-name-26']" should have the text content "Primary School 100026" 
+	And the element "*[data-testid='establishment-listing-name-26']" should have the text content "Primary School 100026"
 		
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Autocomplete Should Populate Items When Two Or More Characters Entered
@@ -4113,7 +4102,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Autoco
 		| Some Secondary School Address:13 The Road, SomeTown TR18 3JT URN:444442, LAESTAB:894/2203             |
 		| Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200               |
 		| Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201              |
-		| A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |       
+		| A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Dates available for download - Common page elements
@@ -4166,14 +4155,13 @@ Scenario: Data downloads > Individual school data > Dates available for download
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                         | href                                                      | current |
-		| Home                         | /                                                         |         |
-		| My local authority           | /my-local-authority/                                      |         |
-		| Download data                | /my-local-authority/download-data/                        |         |
-		| Search for a school          | /my-local-authority/download-data/individual-school-data/ |         |
-		| Dates available for download |                                                           | true    |
+		| text                | href                                                      |
+		| Home                | /                                                         |
+		| My local authority  | /my-local-authority/                                      |
+		| Download data       | /my-local-authority/download-data/                        |
+		| Search for a school | /my-local-authority/download-data/individual-school-data/ |
 	And the sub-navigation should be:
-		| text          | href                                | current |
+		| text          | href                               | current |
 		| Download data | /my-local-authority/download-data/ | true    |
 	And the side navigation should be:
 		| text                               | href                                                              | current |
@@ -4403,20 +4391,19 @@ Scenario: Data downloads > Individual school data > Data files available for dow
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                              | href                                                                         | current |
-		| Home                              | /                                                                            |         |
-		| My local authority                | /my-local-authority/                                                         |         |
-		| Download data                     | /my-local-authority/download-data/                                           |         |
-		| Search for a school               | /my-local-authority/download-data/individual-school-data/                    |         |
-		| Dates available for download      | /my-local-authority/download-data/individual-school-data/111111/select-year/ |         |
-		| Data files available for download |                                                                              | true    |
+		| text                         | href                                                                         |
+		| Home                         | /                                                                            |
+		| My local authority           | /my-local-authority/                                                         |
+		| Download data                | /my-local-authority/download-data/                                           |
+		| Search for a school          | /my-local-authority/download-data/individual-school-data/                    |
+		| Dates available for download | /my-local-authority/download-data/individual-school-data/111111/select-year/ |
 	And the sub-navigation should be:
-		| text          | href                                | current |
+		| text          | href                               | current |
 		| Download data | /my-local-authority/download-data/ | true    |
 	And the side navigation should be:
-		| text                               | href                                                              | current |
-		| Pupil level and aggregated LA data | /my-local-authority/download-data/pupil-level-aggregated-la-data/ |         |
-		| Individual school data             | /my-local-authority/download-data/individual-school-data/         | true    |
+		| text                               | href                                                              |
+		| Pupil level and aggregated LA data | /my-local-authority/download-data/pupil-level-aggregated-la-data/ |
+		| Individual school data             | /my-local-authority/download-data/individual-school-data/         |
 	And the sub-page title should be "Data files available for download" with caption "Test School 1 (URN: 111111)"
 
 @Javascript:disabled
@@ -4707,14 +4694,13 @@ Scenario: Data downloads > Individual school data > Download data - Common page 
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                              | href                                                                                            | current |
-		| Home                              | /                                                                                               |         |
-		| My local authority                | /my-local-authority/                                                                            |         |
-		| Download data                     | /my-local-authority/download-data/                                                              |         |
-		| Search for a school               | /my-local-authority/download-data/individual-school-data/                                       |         |
-		| Dates available for download      | /my-local-authority/download-data/individual-school-data/111111/select-year/                    |         |
-		| Data files available for download | /my-local-authority/download-data/individual-school-data/111111/select-files/?selectedYear=2022 |         |
-		| Download individual school data   |                                                                                                 | true    |
+		| text                              | href                                                                                            |
+		| Home                              | /                                                                                               |
+		| My local authority                | /my-local-authority/                                                                            |
+		| Download data                     | /my-local-authority/download-data/                                                              |
+		| Search for a school               | /my-local-authority/download-data/individual-school-data/                                       |
+		| Dates available for download      | /my-local-authority/download-data/individual-school-data/111111/select-year/                    |
+		| Data files available for download | /my-local-authority/download-data/individual-school-data/111111/select-files/?selectedYear=2022 |
 	And the sub-navigation should be:
 		| text          | href                               | current |
 		| Download data | /my-local-authority/download-data/ | true    |

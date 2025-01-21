@@ -49,8 +49,7 @@ namespace ASP.Web.Areas.School
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(
-                            GetBaseBreadcrumbTrail(),
-                            establishmentDetails.Name
+                            GetBaseBreadcrumbTrail()
                         ),
                         "My schools",
                         establishmentDetails.Name
@@ -75,8 +74,7 @@ namespace ASP.Web.Areas.School
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(
-                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name),
-                            "Other reports"
+                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name)
                         ),
                         "Other reports",
                         establishmentDetails.Name,
@@ -101,8 +99,7 @@ namespace ASP.Web.Areas.School
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(
-                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name),
-                            "Useful links"
+                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name)
                         ),
                         "Useful links",
                         establishmentDetails.Name,

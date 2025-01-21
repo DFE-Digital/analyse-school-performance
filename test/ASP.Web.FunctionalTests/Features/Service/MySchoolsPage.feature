@@ -25,7 +25,7 @@ Scenario: Ofsted Unnamed user is denied access to my-schools page
 	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
-    Scenario: Server error when accessing /my-schools/ with LA Named role when LA doesn't exist
+Scenario: Server error when accessing /my-schools/ with LA Named role when LA doesn't exist
 	Given I am a LA Named user for Local Authority "100"
 	When I navigate to /my-schools/
 	Then I should get a 500 response
@@ -51,7 +51,7 @@ Scenario: No results for LA Named user when no schools in their Local Authority
 		    }
 		"""
 	When I navigate to /my-schools/
-        Then the page title should be "We found no schools"
+	Then the page title should be "We found no schools"
 
 @Javascript:disabled
 Scenario: Correct results displayed for LA Named user with schools in their Local Authority
@@ -103,7 +103,7 @@ Examples:
 	| 2       | 222222 | Test School 2 |
 
 @Javascript:disabled
-    Scenario: Server error when MAT Named user accesses /my-schools/ page and MAT doesn't exist
+Scenario: Server error when MAT Named user accesses /my-schools/ page and MAT doesn't exist
 	Given I am a MAT Named user for Multi-Academy Trust "1234"
 	When I navigate to /my-schools/
 	Then I should get a 500 response
@@ -125,7 +125,7 @@ Scenario: MAT Named user sees 'No schools found' message when MAT has no associa
 		    }
 		"""
 	When I navigate to /my-schools/
-        Then the page title should be "We found no schools"
+	Then the page title should be "We found no schools"
 
 @Javascript:disabled
 Scenario: MAT Named user sees correct list of schools associated with their Multi-Academy Trust
@@ -199,7 +199,7 @@ Scenario: Diocese Named user sees 'No schools found' message when no schools are
 		    }
 		"""
 	When I navigate to /my-schools/
-        Then the page title should be "We found no schools"
+	Then the page title should be "We found no schools"
 
 @Javascript:disabled
 Scenario: Diocese Named user sees correct list of schools associated with their diocese
@@ -280,26 +280,25 @@ Scenario: Pagination in my schools
 	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100004"
 	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100005"
 
-    @Javascript:disabled
-	Scenario Outline: My schools page - common page elements
-		Given 251 Establishments exist with properties:
-			| urn          | name                        | multiAcademyTrust |
-			| (100000 + n) | Primary School (100000 + n) | { "uid": 1234 }   |
+@Javascript:disabled
+Scenario Outline: My schools page - common page elements
+	Given 251 Establishments exist with properties:
+		| urn          | name                        | multiAcademyTrust |
+		| (100000 + n) | Primary School (100000 + n) | { "uid": 1234 }   |
 	And Multi Academy Trust "1234" exists:
 		"""
 		    { 
 		     "name": "Test MAT"
 		    }
 		"""
-        And I am a MAT Named user for Multi-Academy Trust "1234"
-        When I navigate to /my-schools/
-        Then I should get a 200 response
-		Then the page title should be "My schools"
-		And the page subtitle should be "251 schools"
-        And the breadcrumb trail should be:
-          | text       | href | current |
-          | Home       | /    |         |
-          | My schools |      | true    |
+	And I am a MAT Named user for Multi-Academy Trust "1234"
+	When I navigate to /my-schools/
+	Then I should get a 200 response
+	Then the page title should be "My schools"
+	And the page subtitle should be "251 schools"
+	And the breadcrumb trail should be:
+		| text | href |
+		| Home | /    |
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns results
@@ -426,10 +425,9 @@ Scenario: Page should show a breadcrumb trail when search returns results
 	And I click the button "#searchSubmit"
 	Then the path should be /my-schools/?search=Primary
 	And the breadcrumb trail should be:
-		| text                         | href         | current |
-		| Home                         | /            |         |
-		| My schools                   | /my-schools/ |         |
-		| Search results for "Primary" |              | true    |
+		| text       | href         |
+		| Home       | /            |
+		| My schools | /my-schools/ |
 
 @Javascript:enabled
 Scenario: Page should show a breadcrumb trail when search returns results (JS)
@@ -472,10 +470,9 @@ Scenario: Page should show a breadcrumb trail when search returns results (JS)
 	And I click the button "#searchSubmit"
 	Then the path should be /my-schools/?search=Primary
 	And the breadcrumb trail should be:
-		| text                         | href         | current |
-		| Home                         | /            |         |
-		| My schools                   | /my-schools/ |         |
-		| Search results for "Primary" |              | true    |
+		| text       | href         |
+		| Home       | /            |
+		| My schools | /my-schools/ |
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns no results
@@ -518,10 +515,9 @@ Scenario: Page should show a breadcrumb trail when search returns no results
 	And I click the button "#searchSubmit"
 	Then the path should be /my-schools/?search=Secondary
 	And the breadcrumb trail should be:
-		| text                                | href         | current |
-		| Home                                | /            |         |
-		| My schools                          | /my-schools/ |         |
-		| We found no matches for "Secondary" |              | true    |
+		| text       | href         |
+		| Home       | /            |
+		| My schools | /my-schools/ |
 
 @Javascript:enabled
 Scenario: Page should show a breadcrumb trail when search returns no results (JS)
@@ -564,14 +560,13 @@ Scenario: Page should show a breadcrumb trail when search returns no results (JS
 	And I click the button "#searchSubmit"
 	Then the path should be /my-schools/?search=Secondary
 	And the breadcrumb trail should be:
-		| text                                | href         | current |
-		| Home                                | /            |         |
-		| My schools                          | /my-schools/ |         |
-		| We found no matches for "Secondary" |              | true    |
+		| text       | href         |
+		| Home       | /            |
+		| My schools | /my-schools/ |
 
 @Javascript:disabled
 Scenario: Search Term Validation
-		Given Establishment "111111" exists:
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -581,7 +576,7 @@ Scenario: Search Term Validation
 			}
 		}
 		"""
-		And Local Authority "100" exists:
+	And Local Authority "100" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -595,7 +590,7 @@ Scenario: Search Term Validation
 
 @Javascript:enabled
 Scenario: Search Term Validation (JS)
-		Given Establishment "111111" exists:
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -605,7 +600,7 @@ Scenario: Search Term Validation (JS)
 			}
 		}
 		"""
-		And Local Authority "100" exists:
+	And Local Authority "100" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -619,7 +614,7 @@ Scenario: Search Term Validation (JS)
 
 @Javascript:disabled
 Scenario: Errors in Search Term Validation
-		Given Establishment "111111" exists:
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -629,7 +624,7 @@ Scenario: Errors in Search Term Validation
 			}
 		}
 		"""
-		And Local Authority "100" exists:
+	And Local Authority "100" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
@@ -645,7 +640,7 @@ Scenario: Errors in Search Term Validation
 
 @Javascript:enabled
 Scenario: Errors in Search Term Validation (JS)
-		Given Establishment "111111" exists:
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -655,7 +650,7 @@ Scenario: Errors in Search Term Validation (JS)
 			}
 		}
 		"""
-		And Local Authority "100" exists:
+	And Local Authority "100" exists:
 		"""
 		{
 			"Name": "Oxfordshire",
