@@ -149,9 +149,11 @@ namespace ASP.Web.Features.ErrorHandling
             }
 
             // Continue execution with the ErrorController
-            context.Request.Path = context.Response.StatusCode switch {
+            context.Request.Path = context.Response.StatusCode switch
+            {
                 (int)HttpStatusCode.NotFound => "/error/pagenotfound/",
                 (int)HttpStatusCode.Forbidden => "/error/accessdenied/",
+                (int)HttpStatusCode.MethodNotAllowed => "/error/methodnotallowed/",
                 _ => "/error/servererror/"
             };
             context.Request.QueryString = new QueryString();

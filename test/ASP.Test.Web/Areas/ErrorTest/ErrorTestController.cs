@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ASP.Core.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Test.Web.Areas.ErrorTest
@@ -23,6 +24,12 @@ namespace ASP.Test.Web.Areas.ErrorTest
         public IActionResult PageNotFoundError(string errorMessage)
         {
             return NotFound(errorMessage);
+        }
+        
+        [HttpPost("method-not-allowed-error")]
+        public IActionResult MethodNotAllowedError()
+        {
+            return MethodNotAllowedError();
         }
     }
 }

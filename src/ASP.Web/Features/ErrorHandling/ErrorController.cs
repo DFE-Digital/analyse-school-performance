@@ -70,5 +70,16 @@ namespace ASP.Web.Features.ErrorHandling
 
             return View(errorModel);
         }
+        
+        [HttpGet("methodnotallowed")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult MethodNotAllowed()
+        {
+            var errorModel = new ErrorViewModel {
+                ErrorCode = HttpContext.TraceIdentifier
+            };
+
+            return View(errorModel);
+        }
     }
 }

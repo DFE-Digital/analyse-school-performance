@@ -1,0 +1,52 @@
+@using ASP.Web.Features.ErrorHandling
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Method not allowed";
+}
+
+<div class="govuk-width-container">
+    <main id="main-content" role="main" class="govuk-main-wrapper govuk-main-wrapper--l">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <h1 id="app-page-title" class="govuk-heading-l">Method not allowed</h1>
+                <p class="govuk-body" data-testid="method-not-allowed-message">
+                    The action you tried to perform is not allowed.
+                </p>
+                <p class="govuk-body" data-testid="method-not-allowed-reason-intro">
+                    This might be because:
+                </p>
+                <ul class="govuk-list govuk-list--bullet" data-testid="method-not-allowed-reasons-list">
+                    <li data-testid="method-not-allowed-reason-method">
+                        The method (e.g., GET, POST) used to access this page is not supported.
+                    </li>
+                    <li data-testid="method-not-allowed-reason-access">
+                        You are trying to access a resource in a way that is not permitted.
+                    </li>
+                </ul>
+                <p class="govuk-body" data-testid="method-not-allowed-actions-intro">
+                    You can:
+                </p>
+                <ul class="govuk-list govuk-list--bullet" data-testid="method-not-allowed-actions-list">
+                    <li data-testid="method-not-allowed-action-back">
+                        Go back and try a different action.
+                    </li>
+                    <li data-testid="method-not-allowed-action-contact">
+                        Contact support if you believe this is an error.
+                    </li>
+                </ul>
+                @if (Model.ShowErrorCode)
+                {
+                    <p class="govuk-body" data-testid="error-display-code">
+                        <strong>Error code:</strong> <code class="govuk-body">@Model.ErrorCode</code>
+                    </p>
+                }
+                @if (Model.ShowErrorMessage)
+                {
+                    <p class="govuk-body" data-testid="error-display-message">
+                        <strong>Error message:</strong> <code class="govuk-body">@Model.ErrorMessage</code>
+                    </p>
+                }
+            </div>
+        </div>
+    </main>
+</div>
