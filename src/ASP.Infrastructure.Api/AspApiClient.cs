@@ -264,7 +264,7 @@ namespace ASP.Infrastructure.Api
         {
             var url = "/api/LocalAuthoritySearch";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
-            
+
             request.Page.IfSome(value =>
             {
                 queryString = queryString.Add("page", value.ToString());
@@ -274,7 +274,7 @@ namespace ASP.Infrastructure.Api
             {
                 queryString = queryString.Add("resultsPerPage", value.ToString());
             });
-            
+
             return ApiGet<SearchResultsPage<LA.LocalAuthorityDTO>>(url, queryString);
         }
 
@@ -283,12 +283,12 @@ namespace ASP.Infrastructure.Api
         {
             var url = "/api/LocalAuthoritySearchSuggestions";
             var queryString = QueryString.Create("searchTerm", request.SearchTerm);
-            
+
             request.MaxSuggestions.IfSome(value =>
             {
                 queryString = queryString.Add("maxSuggestions", value.ToString());
             });
-            
+
             return ApiGet<LocalAuthoritySearchSuggestionsResult<LA.LocalAuthorityDTO>>(url, queryString);
         }
 
@@ -312,7 +312,8 @@ namespace ASP.Infrastructure.Api
         {
             try
             {
-                var response = await _transportLayer.ExecuteRequest(new HttpRequestMessage(HttpMethod.Post, $"https://localhost{url}{queryString}") {
+                var response = await _transportLayer.ExecuteRequest(new HttpRequestMessage(HttpMethod.Post, $"https://localhost{url}{queryString}")
+                {
                     Content = new StringContent(JsonHelper.Serialize(body))
                 });
 
@@ -329,6 +330,12 @@ namespace ASP.Infrastructure.Api
             try
             {
                 var response = await _transportLayer.ExecuteRequest(new HttpRequestMessage(HttpMethod.Get, $"https://localhost{url}{queryString}"));
+
+                if (response.IsSuccessStatusCode is false)
+                {
+                    return await ToResult<FileStreamResponse>(url, response);
+                }
+
                 var filename = response.Content.Headers.ContentDisposition?.FileName ?? "";
                 var stream = await response.Content.ReadAsStreamAsync();
                 var contentType = response.Content.Headers.ContentType?.ToString() ?? "";
