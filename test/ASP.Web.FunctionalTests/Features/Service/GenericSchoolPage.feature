@@ -221,11 +221,6 @@ Scenario: School page should contain a school details disclosure element
 			},
 			"name": "Hollinswood Primary School",
 			"noOfPupils": 404,
-			"ofstedLastInspectionDate": "2020-01-22T00:00:00",
-			"ofstedRating": {
-				"code": "2",
-				"name": "Good",
-			},
 			"religiousDenomination": {
 				"name": "Does not apply",
 			},
@@ -246,10 +241,6 @@ Scenario: School page should contain a school details disclosure element
 	And the element "*[data-testid='school-details-education-value']" should have the text content "Primary"
 	And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
 	And the element "*[data-testid='school-details-gender-value']" should have the text content "Mixed"
-	And the element "*[data-testid='school-details-ofsted-key']" should have the text content "Ofsted rating"
-	And the element "*[data-testid='school-details-ofsted-code-value']" should have the text content "2"
-	And the element "*[data-testid='school-details-ofsted-name-value']" should have the text content "Good"
-	And the element "*[data-testid='school-details-ofsted-inspection-value']" should have the text content "Inspected 22 January 2020"
 	And the element "*[data-testid='school-details-la-key']" should have the text content "Local authority"
 	And the element "*[data-testid='school-details-la-value']" should have the text content "Telford and Wrekin"
 	And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
@@ -287,8 +278,6 @@ Scenario: School page should show if values are null
 			},
 			"name": "Hollinswood Primary School",
 			"noOfPupils": null,
-			"ofstedLastInspectionDate": null,
-			"ofstedRating": null,
 			"religiousDenomination": null,
 			"resourcedProvisionType": null
 		}
@@ -305,7 +294,6 @@ Scenario: School page should show if values are null
 	And the element "*[data-testid='school-details-education-value']" should have the text content ""
 	And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
 	And the element "*[data-testid='school-details-gender-value']" should have the text content ""
-	And the element "*[data-testid='school-details-ofsted-key']" should have the text content "Ofsted rating"
 	And the element "*[data-testid='school-details-la-key']" should have the text content "Local authority"
 	And the element "*[data-testid='school-details-la-value']" should have the text content "Test LA"
 	And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
@@ -360,11 +348,6 @@ Scenario: School page should show if values are null case 2
 				"name": "Test LA"
 			},
 			"noOfPupils": null,
-			"ofstedLastInspectionDate": null,
-			"ofstedRating": {
-				"code": null,
-				"name": null,
-			},
 			"religiousDenomination": {
 				"name": null,
 			},
@@ -385,7 +368,6 @@ Scenario: School page should show if values are null case 2
 	And the element "*[data-testid='school-details-education-value']" should have the text content ""
 	And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"
 	And the element "*[data-testid='school-details-gender-value']" should have the text content ""
-	And the element "*[data-testid='school-details-ofsted-key']" should have the text content "Ofsted rating"
 	And the element "*[data-testid='school-details-la-key']" should have the text content "Local authority"
 	And the element "*[data-testid='school-details-la-value']" should have the text content "Test LA"
 	And the element "*[data-testid='school-details-gender-key']" should have the text content "Gender of entry"

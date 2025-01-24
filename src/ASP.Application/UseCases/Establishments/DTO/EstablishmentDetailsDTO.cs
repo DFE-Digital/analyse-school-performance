@@ -8,7 +8,6 @@ public class EstablishmentDetailsDTO
     public string? EducationPhase { get; set; }
     public EstablishmentTypeDTO? EstablishmentType { get; set; }
     public GenderDTO? Gender { get; set; }
-    public OfstedRatingDTO? OfstedRating { get; set; }
     public LocalAuthorityDTO? LocalAuthority { get; set; }
     public HeadTeacherDTO? HeadTeacher { get; set; }
     public AgeRangeDTO? AgeRange { get; set; }

@@ -1,5 +1,4 @@
 ﻿@using ASP.Web.Areas.School
-@using ASP.Web.Areas.Shared.OfstedRating
 @model SchoolLandingPageViewModel
 @{
     Layout = "_SchoolPageLayout";
@@ -58,17 +57,6 @@
                     @(Model.EstablishmentDetails.Gender == null
                         ? string.Empty
                         : Model.EstablishmentDetails.Gender.Name)
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt data-testid="school-details-ofsted-key" class="govuk-summary-list__key app-school-details-summary-key">
-                    Ofsted rating
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <partial name="OfstedRating/_OfstedRatingPartial" model="new OfstedRatingModel {
-                        OfstedRating = Model.EstablishmentDetails.OfstedRating,
-                        Urn = Model.EstablishmentDetails.Urn
-                    } " />
                 </dd>
             </div>
             <div class="govuk-summary-list__row">

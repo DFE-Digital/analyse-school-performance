@@ -15,7 +15,7 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
 
     public override Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> Execute()
     {
-        return 
+        return
             from establishment in _repository.GetEstablishmentDetails(SearchTerm)
             select new ScopedSearchResultsPage<EstablishmentListing>(
                 SearchTerm,
@@ -31,8 +31,6 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
                     establishment.IsSecondary,
                     establishment.IsPost16,
                     establishment.Address,
-                    establishment.OfstedRating,
-                    establishment.OfstedLastInspectionDate,
                     establishment.Laestab
                 )]
             );

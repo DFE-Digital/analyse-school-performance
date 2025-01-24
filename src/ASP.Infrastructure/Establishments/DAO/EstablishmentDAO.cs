@@ -10,8 +10,6 @@
         public AddressDAO? Address { get; }
         public EstablishmentTypeDAO? EstablishmentType { get; }
         public GenderDAO? Gender { get; }
-        public OfstedRatingDAO? OfstedRating { get; }
-        public DateTime? OfstedLastInspectionDate { get; }
         public LocalAuthorityDAO? LocalAuthority { get; }
         public HeadTeacherDAO? HeadTeacher { get; }
         public AgeRangeDAO? AgeRange { get; }
@@ -33,8 +31,6 @@
             AddressDAO? address,
             EstablishmentTypeDAO? establishmentType,
             GenderDAO? gender,
-            OfstedRatingDAO? ofstedRating,
-            DateTime? ofstedLastInspectionDate,
             LocalAuthorityDAO? localAuthority,
             HeadTeacherDAO? headTeacher,
             AgeRangeDAO? ageRange,
@@ -54,8 +50,6 @@
             Address = address;
             EstablishmentType = establishmentType;
             Gender = gender;
-            OfstedRating = ofstedRating;
-            OfstedLastInspectionDate = ofstedLastInspectionDate;
             LocalAuthority = localAuthority;
             HeadTeacher = headTeacher;
             AgeRange = ageRange;

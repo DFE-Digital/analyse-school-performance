@@ -10,7 +10,6 @@
         public Address? Address { get; }
         public EstablishmentType? EstablishmentType { get; }
         public Gender? Gender { get; set; }
-        public OfstedRating? OfstedRating { get; }
         public DateTime? OfstedLastInspectionDate { get; }
         public LocalAuthority? LocalAuthority { get; }
         public HeadTeacher? HeadTeacher { get; }
@@ -21,10 +20,9 @@
         public int? NoOfPupils { get; }
         public string? Laestab { get; }
 
-        public EstablishmentDetails(string urn, string name, bool? isPrimary, bool? isSecondary, 
-            bool? isPost16, Address? address, EstablishmentType? establishmentType, 
-            Gender? gender, OfstedRating? ofstedRating, DateTime? ofstedLastInspectionDate,
-            LocalAuthority? localAuthority, HeadTeacher? headTeacher, AgeRange? ageRange, 
+        public EstablishmentDetails(string urn, string name, bool? isPrimary, bool? isSecondary,
+            bool? isPost16, Address? address, EstablishmentType? establishmentType,
+            Gender? gender, LocalAuthority? localAuthority, HeadTeacher? headTeacher, AgeRange? ageRange,
             ReligiousDenomination? religiousDenomination, AdmissionsPolicy? admissionsPolicy,
             ResourcedProvisionType? resourcedProvisionType,
             int? noOfPupils, string? laestab)
@@ -37,8 +35,6 @@
             Address = address;
             EstablishmentType = establishmentType;
             Gender = gender;
-            OfstedRating = ofstedRating;
-            OfstedLastInspectionDate = ofstedLastInspectionDate;
             LocalAuthority = localAuthority;
             HeadTeacher = headTeacher;
             AgeRange = ageRange;

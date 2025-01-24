@@ -13,8 +13,6 @@ public static class EstablishmentListingMapper
             details.IsSecondary,
             details.IsPost16,
             details.Address.MapToDomainEntityAddress(),
-            details.OfstedRating.MapToDomainEntityOfstedRating(),
-            details.OfstedLastInspectionDate,
             details.Laestab
         );
     }

@@ -7,15 +7,12 @@ public static class EstablishmentDetailsDTOMapper
 {
     public static EstablishmentDetailsDTO MapToEstablishmentDetailsDTO(this EstablishmentDetails details)
     {
-        return new EstablishmentDetailsDTO(
-        )
+        return new EstablishmentDetailsDTO()
         {
             Urn = details.Urn,
             Name = details.Name,
             Address = details.Address.MapToAddressDTO(),
-            EducationPhase = EducationPhase.GetPhaseOfEducation(details.IsPrimary,
-                details.IsSecondary, details.IsPost16),
-            OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(details.OfstedLastInspectionDate),
+            EducationPhase = EducationPhase.GetPhaseOfEducation(details.IsPrimary, details.IsSecondary, details.IsPost16),
             ReligiousDenomination = details.ReligiousDenomination.MapToReligiousDenominationDTO(),
             AdmissionsPolicy = details.AdmissionsPolicy.MapToAdmissionsPolicyDTO(),
             LocalAuthority = details.LocalAuthority.MapToLocalAuthorityDTO(),

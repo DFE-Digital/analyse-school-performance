@@ -1,143 +1,143 @@
 Feature: Establishment Search
 
-	Scenario: Should not accept POST method
-		When I send a POST request to /api/EstablishmentSearch
-		Then I should get a 405 response
-		And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
-		And the response should include the header "Allow: GET"
+Scenario: Should not accept POST method
+	When I send a POST request to /api/EstablishmentSearch
+	Then I should get a 405 response
+	And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
+	And the response should include the header "Allow: GET"
 
-	Scenario: Should return BadRequest (400) response if searchTerm parameter is missing
-		When I send a GET request to /api/EstablishmentSearch?scope=All
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "searchTerm" is missing."
+Scenario: Should return BadRequest (400) response if searchTerm parameter is missing
+	When I send a GET request to /api/EstablishmentSearch?scope=All
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "searchTerm" is missing."
 
-	Scenario: Should return BadRequest (400) response if searchTerm parameter is empty string
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "searchTerm" should not be empty."
+Scenario: Should return BadRequest (400) response if searchTerm parameter is empty string
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "searchTerm" should not be empty."
 
-	Scenario Outline: Should return BadRequest (400) response if page parameter is not a whole number greater than or equal to 1
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x&page=<page>
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "page" should be a whole number greater than or equal to 1."
+Scenario Outline: Should return BadRequest (400) response if page parameter is not a whole number greater than or equal to 1
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x&page=<page>
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "page" should be a whole number greater than or equal to 1."
 
-		Examples:
-			| page |
-			| y    |
-			| 1.5  |
-			| 0    |
-			| -1   |
+Examples:
+	| page |
+	| y    |
+	| 1.5  |
+	| 0    |
+	| -1   |
 
-	Scenario Outline: Should return BadRequest (400) response if resultsPerPage parameter is not a whole number greater than 1
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x&resultsPerPage=<resultsPerPage>
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "resultsPerPage" should be a whole number greater than or equal to 1."
+Scenario Outline: Should return BadRequest (400) response if resultsPerPage parameter is not a whole number greater than 1
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x&resultsPerPage=<resultsPerPage>
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "resultsPerPage" should be a whole number greater than or equal to 1."
 
-		Examples:
-			| resultsPerPage |
-			| y              |
-			| 1.5            |
-			| 0              |
-			| -1             |
+Examples:
+	| resultsPerPage |
+	| y              |
+	| 1.5            |
+	| 0              |
+	| -1             |
 
-	Scenario: Should return BadRequest (400) response if scope parameter is missing
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "scope" is missing."
+Scenario: Should return BadRequest (400) response if scope parameter is missing
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "scope" is missing."
 
-	Scenario: Should return BadRequest (400) response if scope parameter is empty string
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "scope" should not be empty."
+Scenario: Should return BadRequest (400) response if scope parameter is empty string
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "scope" should not be empty."
 
-	Scenario: Should return BadRequest (400) response if scope parameter is invalid
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=xyz
-		Then I should get a 400 response
-		And the response should be the message "Bad request: "xyz" is not a valid scope."
+Scenario: Should return BadRequest (400) response if scope parameter is invalid
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=xyz
+	Then I should get a 400 response
+	And the response should be the message "Bad request: "xyz" is not a valid scope."
 
-	Scenario Outline: Should return BadRequest (400) response if scopeIdentifier parameter is missing
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=<Scope>
-		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "scopeIdentifier" is missing."
+Scenario Outline: Should return BadRequest (400) response if scopeIdentifier parameter is missing
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=<Scope>
+	Then I should get a 400 response
+	And the response should be the message "Bad request: The parameter "scopeIdentifier" is missing."
 
-		Examples:
-			| Scope   |
-			| LA      |
-			| la      |
-			| MAT     |
-			| mat     |
-			| Diocese |
-			| diocese |	
+Examples:
+	| Scope   |
+	| LA      |
+	| la      |
+	| MAT     |
+	| mat     |
+	| Diocese |
+	| diocese |
 
-	Scenario: Should return NotFound (404) response if no matches found for the searchTerm
-		Given no Establishments exist
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x
-		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "x" within the given scope."
+Scenario: Should return NotFound (404) response if no matches found for the searchTerm
+	Given no Establishments exist
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x
+	Then I should get a 404 response
+	And the response should be the message "Not found: there were no matches for "x" within the given scope."
 
-	Scenario: Should return NotFound (404) response if there were no relevant matches for the given searchTerm
-		Given Establishment "111111" exists:
+Scenario: Should return NotFound (404) response if there were no relevant matches for the given searchTerm
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=secondary
-		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "secondary" within the given scope."
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=secondary
+	Then I should get a 404 response
+	And the response should be the message "Not found: there were no matches for "secondary" within the given scope."
 
-	Scenario: Should return a NotFound (404) response if the requested establishment has been deleted for the given searchTerm
-		Given deleted Establishment "222222" exists:
+Scenario: Should return a NotFound (404) response if the requested establishment has been deleted for the given searchTerm
+	Given deleted Establishment "222222" exists:
 		"""
 		{
 			"name": "Some Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=222222
-		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "222222" within the given scope."
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=222222
+	Then I should get a 404 response
+	And the response should be the message "Not found: there were no matches for "222222" within the given scope."
 
-	Scenario: Should return a NotFound (404) response if the requested establishment is not currently visible for the given searchTerm
-		Given non-visible Establishment "111111" exists:
+Scenario: Should return a NotFound (404) response if the requested establishment is not currently visible for the given searchTerm
+	Given non-visible Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "111111" within the given scope."
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	Then I should get a 404 response
+	And the response should be the message "Not found: there were no matches for "111111" within the given scope."
 
-	Scenario: Should not return 400 response if page = 1
-		Given Establishment "111111" exists:
+Scenario: Should not return 400 response if page = 1
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111&page=1
-		Then I should get a 200 response
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111&page=1
+	Then I should get a 200 response
 
-	Scenario: Should not return 400 response if resultsPerPage = 1
-		Given Establishment "111111" exists:
+Scenario: Should not return 400 response if resultsPerPage = 1
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111&resultsPerPage=1
-		Then I should get a 200 response
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111&resultsPerPage=1
+	Then I should get a 200 response
 
-	Scenario Outline: Should return 200 response with search results when matches are found for the given searchTerm
-		Given Establishment "111111" exists:
+Scenario Outline: Should return 200 response with search results when matches are found for the given searchTerm
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "<searchTerm>",
@@ -153,13 +153,13 @@ Feature: Establishment Search
 		}
 		"""
 
-		Examples:
-			| searchTerm |
-			| Prim       |
-			| PRiMaRY    |
+Examples:
+	| searchTerm |
+	| Prim       |
+	| PRiMaRY    |
 
-	Scenario Outline: Should return 200 response with search results when searchTerm matching establishment street, town and postcode partially
-		Given Establishment "111111" exists:
+Scenario Outline: Should return 200 response with search results when searchTerm matching establishment street, town and postcode partially
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -170,9 +170,9 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 			{
 				"SearchTerm": "<searchTerm>",
@@ -189,14 +189,14 @@ Feature: Establishment Search
 			}
 		"""
 
-		Examples:
-			| searchTerm |
-			| str        |
-			| some       |
-			| tr1        |
+Examples:
+	| searchTerm |
+	| str        |
+	| some       |
+	| tr1        |
 
-	Scenario: Should return 200 response with search results when searchTerm matching establishment name and address partially
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm matching establishment name and address partially
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -207,7 +207,7 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "Some Other Primary School",
@@ -218,7 +218,7 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		And Establishment "333333" exists:
+	And Establishment "333333" exists:
 		"""
 		{
 			"name": "A Different Primary School",
@@ -229,15 +229,15 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		And Establishment "444444" exists:
+	And Establishment "444444" exists:
 		"""
 		{
 			"name": "The Training Center"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=tr
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=tr
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "tr",
@@ -268,17 +268,17 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return 200 response with search results when searchTerm matching establishment URN
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm matching establishment URN
+	Given Establishment "111111" exists:
 		"""
 		{
 			"Urn": "111111",
 			"name": "Some Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "111111",
@@ -294,25 +294,25 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a NotFound (404) response if no relevant matches are found for the establishment URN based on the given searchTerm
-		Given Establishment "111111" exists:
+Scenario: Should return a NotFound (404) response if no relevant matches are found for the establishment URN based on the given searchTerm
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=11
-		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "11" within the given scope."
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=11
+	Then I should get a 404 response
+	And the response should be the message "Not found: there were no matches for "11" within the given scope."
 
-	Scenario: Should return 200 response with search results when searchTerm matches partially with the address street name
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm matches partially with the address street name
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "A Different Primary School",
@@ -323,9 +323,9 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=11
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=11
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "11",
@@ -342,14 +342,14 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return 200 response with search results when searchTerm is 6 digit number treat it as an exact URN search
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm is 6 digit number treat it as an exact URN search
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "A Different Primary School",
@@ -360,9 +360,9 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "111111",
@@ -378,17 +378,17 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario Outline: Should return 200 response with search results when searchTerm matching establishment LAESTAB code (with and without forward slash)
-		Given Establishment "111111" exists:
+Scenario Outline: Should return 200 response with search results when searchTerm matching establishment LAESTAB code (with and without forward slash)
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
 			"laestab": "894/2200",
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "<searchTerm>",
@@ -405,29 +405,29 @@ Feature: Establishment Search
 		}
 		"""
 
-		Examples:
-			| searchTerm |
-			| 894/2200   |
-			| 8942200    |
+Examples:
+	| searchTerm |
+	| 894/2200   |
+	| 8942200    |
 
-	Scenario: Should return 200 response with search results when searchTerm matches with LAESTAB 3 digit code partially
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm matches with LAESTAB 3 digit code partially
+	Given Establishment "111111" exists:
 		"""
 		{
 			"laestab": "894/2200",
 			"name": "Some Primary School"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"laestab": "894/1234",
 			"name": "Some Other Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=894
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=894
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 			{
 				"SearchTerm": "894",
@@ -447,27 +447,27 @@ Feature: Establishment Search
 					}
 				]
 			}    
-
+		
 		"""
 
-	Scenario: Should return 200 response with search results when searchTerm matches with LAESTAB 4 digit code partially
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm matches with LAESTAB 4 digit code partially
+	Given Establishment "111111" exists:
 		"""
 		{
 			"laestab": "894/2200",
 			"name": "Some Primary School"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"laestab": "123/2200",
 			"name": "Some Other Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=2200
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=2200
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "2200",
@@ -489,32 +489,32 @@ Feature: Establishment Search
 		}    
 		"""
 
-	Scenario Outline: Should return NotFound (404) response if there were no relevant matches for the given searchTerm associated with a LAESTAB code
-		Given Establishment "111111" exists:
+Scenario Outline: Should return NotFound (404) response if there were no relevant matches for the given searchTerm associated with a LAESTAB code
+	Given Establishment "111111" exists:
 		"""
 		{
 			"laestab": "894/2200",
 			"name": "Some Primary School"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
-		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "<searchTerm>" within the given scope."
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
+	Then I should get a 404 response
+	And the response should be the message "Not found: there were no matches for "<searchTerm>" within the given scope."
 
-		Examples:
-			| searchTerm |
-			| 89         |
-			| 22         |
+Examples:
+	| searchTerm |
+	| 89         |
+	| 22         |
 
-	Scenario: Should return 200 response with search results when searchTerm matching establishment 7 digits LAESTAB code ignoring other matching fields
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm matching establishment 7 digits LAESTAB code ignoring other matching fields
+	Given Establishment "111111" exists:
 		"""
 		{
 			"laestab": "894/2200",
 			"name": "Some Primary School",
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "Some Other Primary School",
@@ -525,9 +525,9 @@ Feature: Establishment Search
 			}
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=8942200
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=8942200
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "8942200",
@@ -544,15 +544,15 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return 200 response with search results when searchTerm matching establishment 7 digits LAESTAB code with forward slash ignoring other matching fields
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm matching establishment 7 digits LAESTAB code with forward slash ignoring other matching fields
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
 			"laestab": "894/2200"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "Some other Primary School",
@@ -563,9 +563,9 @@ Feature: Establishment Search
 			}  
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=894/2200
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=894/2200
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "894/2200",
@@ -582,15 +582,15 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return 200 response with search results when searchTerm matching establishment 3 digits LAESTAB code ignoring other matching fields
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm matching establishment 3 digits LAESTAB code ignoring other matching fields
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
 			"laestab": "894/2200"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "Some other Primary School",
@@ -601,9 +601,9 @@ Feature: Establishment Search
 			}  
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=894
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=894
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "894",
@@ -620,15 +620,15 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return 200 response with search results when searchTerm matching establishment 4 digits LAESTAB code ignoring other matching fields
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response with search results when searchTerm matching establishment 4 digits LAESTAB code ignoring other matching fields
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
 			"laestab": "894/2200"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "Some other Primary School",
@@ -639,9 +639,9 @@ Feature: Establishment Search
 			}  
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=2200
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=2200
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "2200",
@@ -658,28 +658,28 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Primary School 111111"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "Primary School 222222"
 		}
 		"""
-		And Establishment "333333" exists:
+	And Establishment "333333" exists:
 		"""
 		{
 			"name": "Primary School 333333"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "primary",
@@ -703,28 +703,28 @@ Feature: Establishment Search
 		}    
 		"""
 
-	Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm and resultsPerPage
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm and resultsPerPage
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Primary School 111111"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "Primary School 222222"
 		}
 		"""
-		And Establishment "333333" exists:
+	And Establishment "333333" exists:
 		"""
 		{
 			"name": "Primary School 333333"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary&resultsPerPage=2
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary&resultsPerPage=2
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "primary",
@@ -744,28 +744,28 @@ Feature: Establishment Search
 		}    
 		"""
 
-	Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm, resultsPerPage and page
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with search results and expected pagination for the given searchTerm, resultsPerPage and page
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Primary School 111111"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "Primary School 222222"
 		}
 		"""
-		And Establishment "333333" exists:
+	And Establishment "333333" exists:
 		"""
 		{
 			"name": "Primary School 333333"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary&resultsPerPage=2&page=2
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary&resultsPerPage=2&page=2
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "primary",
@@ -781,28 +781,28 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a 200 response with expected pagination and no results for the given searchTerm, resultsPerPage, and page
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with expected pagination and no results for the given searchTerm, resultsPerPage, and page
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Primary School 111111"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			"name": "Primary School 222222"
 		}
 		"""
-		And Establishment "333333" exists:
+	And Establishment "333333" exists:
 		"""
 		{
 			"name": "Primary School 333333"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary&resultsPerPage=2&page=3
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary&resultsPerPage=2&page=3
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "primary",
@@ -814,8 +814,8 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street, town and postcode
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street, town and postcode
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -826,9 +826,9 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "111111",
@@ -845,8 +845,8 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street and postcode
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street and postcode
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -856,9 +856,9 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "111111",
@@ -875,8 +875,8 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street and town
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with search results and a computed address field when the searchTerm matches the URN and given address has street and town
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -886,9 +886,9 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "111111",
@@ -905,8 +905,8 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isPrimary equal true
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isPrimary equal true
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -915,9 +915,9 @@ Feature: Establishment Search
 			"isSecondary": false
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "111111",
@@ -934,8 +934,8 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isSecondary equal true
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isSecondary equal true
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -944,9 +944,9 @@ Feature: Establishment Search
 			"isSecondary": true
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "111111",
@@ -963,8 +963,8 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isPost16 equal true
-		Given Establishment "111111" exists:
+Scenario: Should return a 200 response with search results and a computed educationPhase field when the searchTerm matches the URN and given educationPhase isPost16 equal true
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Some Primary School",
@@ -973,9 +973,9 @@ Feature: Establishment Search
 			"isSecondary": false
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "111111",
@@ -992,54 +992,19 @@ Feature: Establishment Search
 		}
 		"""
 
-	Scenario: Should return a 200 response with search results and a computed ofstedRating field when the searchTerm matches the URN
-		Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"ofstedLastInspectionDate": "2013-03-22T00:00:00",
-			"ofstedRating": {
-				"code": "2",
-				"name": "Good"
-			}
-		}
-		"""
-		When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
-		"""
-		{
-			"SearchTerm": "111111",
-			"TotalResults": 1,
-			"ResultsPerPage": 50,
-			"Page": 1,
-			"Results": [
-				{
-					"Urn": "111111", 
-					"Name": "Some Primary School",
-					"OfstedRating": {
-					"Code": "2",
-					"Name": "Good",
-					"LastInspected": "22 March 2013"
-					}
-				}
-			]
-		}
-		"""
+Scenario: Should return BadRequest (400) response if Local Authority with code does not exist
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100
+	Then I should get a 400 response
+	And the response should be the message "Bad request: Local Authority with code "100" does not exist."
 
-	Scenario: Should return BadRequest (400) response if Local Authority with code does not exist
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100
-		Then I should get a 400 response
-		And the response should be the message "Bad request: Local Authority with code "100" does not exist."
-
-	Scenario: Should return NotFound (404) response if Local Authority with code does not exist
-		Given Local Authority "100" exists:
+Scenario: Should return NotFound (404) response if Local Authority with code does not exist
+	Given Local Authority "100" exists:
 		"""
 		{
 			"Name": "Test LA"
 		}
 		"""
-		And Establishment "111111" exists:
+	And Establishment "111111" exists:
 		"""
 		{
 			"name": "Test School 1",
@@ -1048,18 +1013,18 @@ Feature: Establishment Search
 				}
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100
-		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "Test" within the given scope."
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100
+	Then I should get a 404 response
+	And the response should be the message "Not found: there were no matches for "Test" within the given scope."
 
-	Scenario: Should return 200 response if Local Authority with code exist within the given scope "LA"
-		Given Local Authority "100" exists:
+Scenario: Should return 200 response if Local Authority with code exist within the given scope "LA"
+	Given Local Authority "100" exists:
 		"""
 		{
 			"Name": "Test LA"
 		}
 		"""
-		And Establishment "111111" exists:
+	And Establishment "111111" exists:
 		"""
 		{
 			 "name": "Test School 1",
@@ -1068,7 +1033,7 @@ Feature: Establishment Search
 			}
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			 "name": "Test School 2",
@@ -1077,7 +1042,7 @@ Feature: Establishment Search
 			 }
 		}
 		"""
-		And Establishment "333333 " exists:
+	And Establishment "333333 " exists:
 		"""
 		{
 			 "name": "Test School 3",
@@ -1086,9 +1051,9 @@ Feature: Establishment Search
 			 }
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			"SearchTerm": "Test",
@@ -1110,36 +1075,36 @@ Feature: Establishment Search
 		}
 		"""
 	 
-	Scenario: Should return BadRequest (400) response if Multi Academy Trust with id does not exist
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=MAT&scopeIdentifier=1234
-		Then I should get a 400 response
-		And the response should be the message "Bad request: Multi-Academy Trust with UID "1234" does not exist."
+Scenario: Should return BadRequest (400) response if Multi Academy Trust with id does not exist
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=MAT&scopeIdentifier=1234
+	Then I should get a 400 response
+	And the response should be the message "Bad request: Multi-Academy Trust with UID "1234" does not exist."
 			 
-	Scenario: Should return NotFound (404) response if Multi Academy Trust with id does not exist
-		Given Multi Academy Trust "1234" exists:
+Scenario: Should return NotFound (404) response if Multi Academy Trust with id does not exist
+	Given Multi Academy Trust "1234" exists:
 		"""
 		{
 			"Name": "Test MAT"
 		}
 		"""
-		And Establishment "111111" exists:
+	And Establishment "111111" exists:
 		"""
 		{
 			"name": "Test School 1"
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=MAT&scopeIdentifier=1234
-		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "Test" within the given scope."    
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=MAT&scopeIdentifier=1234
+	Then I should get a 404 response
+	And the response should be the message "Not found: there were no matches for "Test" within the given scope."
 		
-	Scenario: Should return 200 response if Multi Academy Trust with id exist within the given scope "MAT"
-		Given Multi Academy Trust "1234" exists:
+Scenario: Should return 200 response if Multi Academy Trust with id exist within the given scope "MAT"
+	Given Multi Academy Trust "1234" exists:
 		"""
 		{
 			"Name": "Test MAT"
 		}
 		"""
-		And Establishment "111111" exists:
+	And Establishment "111111" exists:
 		"""
 		{
 			 "name": "Test School 1",
@@ -1149,13 +1114,13 @@ Feature: Establishment Search
 			 
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			 "name": "Test School 2"
 		}
 		"""
-		And Establishment "333333" exists:
+	And Establishment "333333" exists:
 		"""
 		{
 			 "name": "Test School 3",
@@ -1164,9 +1129,9 @@ Feature: Establishment Search
 			 }
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=MAT&scopeIdentifier=1234
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=MAT&scopeIdentifier=1234
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 			 "SearchTerm": "Test",
@@ -1188,8 +1153,8 @@ Feature: Establishment Search
 		}
 		"""
 		
-	Scenario: Should return NotFound (404) response if there are no matches for Diocese scope search
-		Given Establishment "111111" exists:
+Scenario: Should return NotFound (404) response if there are no matches for Diocese scope search
+	Given Establishment "111111" exists:
 		"""
 		{
 			"name": "Test School 1",
@@ -1199,26 +1164,26 @@ Feature: Establishment Search
 			 }
 		}
 		"""
-		And Establishment "222222 " exists:
+	And Establishment "222222 " exists:
 		"""
 		{
 			"name": "Test School 2",
 			 "diocese": null
 		}
 		"""
-		And Establishment "333333" exists:
+	And Establishment "333333" exists:
 		"""
 		{
 			"name": "Test School 3",
 		}
 		"""
 		
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=Diocese&scopeIdentifier=Test Diocese
-		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "Test" within the given scope." 
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=Diocese&scopeIdentifier=Test Diocese
+	Then I should get a 404 response
+	And the response should be the message "Not found: there were no matches for "Test" within the given scope."
 		
-	Scenario: Should return 200 response if there are matches for the search within the given scope "Diocese"
-		Given Establishment "111111" exists:
+Scenario: Should return 200 response if there are matches for the search within the given scope "Diocese"
+	Given Establishment "111111" exists:
 		"""
 		{
 			 "name": "Test School 1",
@@ -1228,7 +1193,7 @@ Feature: Establishment Search
 			 }
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			 "name": "Test School 2",
@@ -1238,7 +1203,7 @@ Feature: Establishment Search
 			 }
 		}
 		"""
-		And Establishment "333333" exists:
+	And Establishment "333333" exists:
 		"""
 		{
 			 "name": "Test School 3",
@@ -1248,9 +1213,9 @@ Feature: Establishment Search
 			 }
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=Diocese&scopeIdentifier=Test Diocese
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=Diocese&scopeIdentifier=Test Diocese
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 				"SearchTerm": "Test",
@@ -1270,16 +1235,16 @@ Feature: Establishment Search
 				}
 				]
 		}
-		"""   
+		"""
 		
-	Scenario: Should return 200 response if there are matches for the search within the given scope "All"
-		Given Local Authority "100" exists:
+Scenario: Should return 200 response if there are matches for the search within the given scope "All"
+	Given Local Authority "100" exists:
 		"""
 		{
 			"Name": "Test LA"
 		}
 		"""
-		And Establishment "111111" exists:
+	And Establishment "111111" exists:
 		"""
 		{
 			 "name": "Test School 1",
@@ -1288,19 +1253,19 @@ Feature: Establishment Search
 			} 
 		}
 		"""
-		Given Multi Academy Trust "1234" exists:
+	Given Multi Academy Trust "1234" exists:
 		"""
 		{
 			"Name": "Test MAT"
 		}
 		"""
-		And Establishment "222222" exists:
+	And Establishment "222222" exists:
 		"""
 		{
 			 "name": "Test School 2"
 		}
 		"""
-		And Establishment "333333" exists:
+	And Establishment "333333" exists:
 		"""
 		{
 			 "name": "Test School 3",
@@ -1310,9 +1275,9 @@ Feature: Establishment Search
 			 }
 		}
 		"""
-		When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=All
-		Then I should get a 200 response
-		And the response should be an object containing these properties excluding null:
+	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=All
+	Then I should get a 200 response
+	And the response should be an object containing these properties excluding null:
 		"""
 		{
 				"SearchTerm": "Test",
@@ -1335,4 +1300,4 @@ Feature: Establishment Search
 				}
 				]
 		}
-		"""            
+		"""

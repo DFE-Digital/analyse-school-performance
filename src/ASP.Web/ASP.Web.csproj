@@ -82,6 +82,10 @@
 		</Content>
 	</ItemGroup>
 	
+	<ItemGroup>
+	  <Folder Include="Areas\Shared\" />
+	</ItemGroup>
+	
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
 	  <Exec Command="git rev-parse HEAD &gt; &quot;$(ProjectDir)\CurrentCommit.txt&quot;" />
 	</Target>

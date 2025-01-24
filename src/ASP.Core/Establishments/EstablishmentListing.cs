@@ -8,8 +8,6 @@
         public bool? IsSecondary { get; }
         public bool? IsPost16 { get; }
         public Address? Address { get; }
-        public OfstedRating? OfstedRating { get; }
-        public DateTime? OfstedLastInspectionDate { get; }
         public string? Laestab { get; }
 
         public EstablishmentListing(
@@ -17,8 +15,6 @@
             string name,
             bool? isPrimary, bool? isSecondary,
             bool? isPost16, Address? address,
-            OfstedRating? ofstedRating,
-            DateTime? ofstedLastInspectionDate,
             string? laestab)
         {
             Urn = urn;
@@ -27,8 +23,6 @@
             IsSecondary = isSecondary;
             IsPost16 = isPost16;
             Address = address;
-            OfstedRating = ofstedRating;
-            OfstedLastInspectionDate = ofstedLastInspectionDate;
             Laestab = laestab;
         }
     }

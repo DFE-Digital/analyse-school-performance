@@ -10,7 +10,6 @@ namespace ASP.Web.Areas.School
         public EstablishmentTypeDTO? EstablishmentType { get; set; }
         public string? PhaseOfEducation { get; set; } = "";
         public GenderDTO? Gender { get; set; }
-        public OfstedRatingDTO? OfstedRating { get; set; }
         public LocalAuthorityDTO? LocalAuthority { get; set; }
         public HeadTeacherDTO? HeadTeacher { get; set; }
         public AgeRangeDTO? AgeRange { get; set; }
@@ -28,7 +27,6 @@ namespace ASP.Web.Areas.School
                 Address = establishmentDetailsDto.Address,
                 EstablishmentType = establishmentDetailsDto.EstablishmentType,
                 Gender = establishmentDetailsDto.Gender,
-                OfstedRating = establishmentDetailsDto.OfstedRating,
                 LocalAuthority = establishmentDetailsDto.LocalAuthority,
                 HeadTeacher = establishmentDetailsDto.HeadTeacher,
                 AgeRange = establishmentDetailsDto.AgeRange,

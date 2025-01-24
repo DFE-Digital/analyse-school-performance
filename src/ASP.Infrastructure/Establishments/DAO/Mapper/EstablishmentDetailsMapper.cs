@@ -14,8 +14,6 @@ public static class EstablishmentDetailsMapper
             details.Address.MapToDomainEntityAddress(),
             details.EstablishmentType.MapToDomainEntityEstablishmentType(),
             details.Gender.MapToDomainEntityGender(),
-            details.OfstedRating.MapToDomainEntityOfstedRating(),
-            details.OfstedLastInspectionDate,
             details.LocalAuthority.MapToDomainEntityLocalAuthority(),
             details.HeadTeacher.MapToDomainEntityHeadTeacher(),
             details.AgeRange.MapToDomainEntityAgeRange(),

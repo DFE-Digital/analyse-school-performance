@@ -13,9 +13,7 @@ public static class EstablishmentListingDTOMapper
             Urn = details.Urn,
             Name = details.Name,
             Address = details.Address.MapToAddressDTO(),
-            EducationPhase = EducationPhase.GetPhaseOfEducation(details.IsPrimary,
-                details.IsSecondary, details.IsPost16),
-            OfstedRating = details.OfstedRating.MapToOfstedRatingDTO(details.OfstedLastInspectionDate),
+            EducationPhase = EducationPhase.GetPhaseOfEducation(details.IsPrimary, details.IsSecondary, details.IsPost16),
             Laestab = details.Laestab
         };
     }
