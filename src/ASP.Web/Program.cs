@@ -15,6 +15,7 @@ using ASP.Web.Features.ContentTemplates;
 using ASP.Web.Features.Cookies;
 using ASP.Web.Features.ErrorHandling;
 using ASP.Web.Features.Logging;
+using ASP.Web.Features.Search;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Features.UrlRewriting;
 
@@ -48,7 +49,8 @@ public class Program
             .ConfigureTemplateComponents()
             .ConfigureLogging()
             .ConfigureCurrentTime()
-            .ConfigureDataDownloads(builder.Configuration);
+            .ConfigureDataDownloads(builder.Configuration)
+            .ConfigureSearch(builder.Configuration);
 
         WebApplication app = builder.Build();
 

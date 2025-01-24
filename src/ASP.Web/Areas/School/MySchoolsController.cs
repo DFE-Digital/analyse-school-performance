@@ -11,6 +11,7 @@ using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Options;
 
 namespace ASP.Web.Areas.School
 {
@@ -28,12 +29,13 @@ namespace ASP.Web.Areas.School
             IAspApiClient api,
             IHostEnvironment hostEnvironment,
             ILocalAuthorityRepository localAuthorityRepository,
-            IMultiAcademyTrustRepository multiAcademyTrustRepository
+            IMultiAcademyTrustRepository multiAcademyTrustRepository,
+            IOptions<SearchOptions> searchOptions
         ) : base(api, hostEnvironment)
         {
             _localAuthorityRepository = localAuthorityRepository;
             _multiAcademyTrustRepository = multiAcademyTrustRepository;
-            _schoolSearchController = new SchoolSearchController(nameof(Schools), "MySchools", [], _api,
+            _schoolSearchController = new SchoolSearchController(nameof(Schools), "MySchools", [], _api, searchOptions.Value,
                 makeSchoolUrl: urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { urn }));
         }
 

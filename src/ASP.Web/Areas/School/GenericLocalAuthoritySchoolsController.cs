@@ -10,6 +10,7 @@ using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Options;
 
 namespace ASP.Web.Areas.School
 {
@@ -23,11 +24,12 @@ namespace ASP.Web.Areas.School
 
         public GenericLocalAuthoritySchoolsController(
             IAspApiClient api,
-            IHostEnvironment hostEnvironment
+            IHostEnvironment hostEnvironment,
+            IOptions<SearchOptions> searchOptions
         ) : base(api, hostEnvironment)
         {
             _schoolSearchController = new SchoolSearchController(nameof(Schools), "GenericLocalAuthoritySchools", ["laCode"], _api,
-                makeSchoolUrl: urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }));
+                searchOptions.Value, makeSchoolUrl: urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }));
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

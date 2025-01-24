@@ -16,6 +16,7 @@ using ASP.Core.Scoping;
 using ASP.Web.Areas.School;
 using ASP.Web.Features.Search;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Options;
 
 namespace ASP.Web.Areas.LocalAuthority
 {
@@ -32,7 +33,8 @@ namespace ASP.Web.Areas.LocalAuthority
         public MyLocalAuthorityController(
             IAspApiClient api,
             IDataDownloadsScopeValidator scopeValidator,
-            IHostEnvironment hostEnvironment
+            IHostEnvironment hostEnvironment,
+            IOptions<SearchOptions> searchOptions
         ) : base(api, scopeValidator, hostEnvironment)
         {
             _localAuthorityDataDownloadController = new DownloadDataController(nameof(DownloadLocalAuthorityData), "MyLocalAuthority", [], DataDownloadScopeType.LA, _api, _scopeValidator);
@@ -43,7 +45,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 });
 
             _schoolSearchController = new SchoolSearchController(nameof(DownloadSchoolDataSearch), "MyLocalAuthority", [], _api,
-                makeSchoolUrl: urn => _individualSchoolDataDownloadController.GetInitialActionUrl(new { urn }));
+                searchOptions.Value, makeSchoolUrl: urn => _individualSchoolDataDownloadController.GetInitialActionUrl(new { urn }));
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

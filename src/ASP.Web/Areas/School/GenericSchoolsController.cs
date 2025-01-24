@@ -9,6 +9,7 @@ using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Options;
 
 namespace ASP.Web.Areas.School
 {
@@ -22,10 +23,11 @@ namespace ASP.Web.Areas.School
 
         public GenericSchoolsController(
             IAspApiClient api,
-            IHostEnvironment hostEnvironment
+            IHostEnvironment hostEnvironment,
+            IOptions<SearchOptions> searchOptions
         ) : base(api, hostEnvironment)
         {
-            _schoolSearchController = new SchoolSearchController(nameof(Schools), "GenericSchools", [], _api,
+            _schoolSearchController = new SchoolSearchController(nameof(Schools), "GenericSchools", [], _api, searchOptions.Value,
                 makeSchoolUrl: urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }));
         }
 

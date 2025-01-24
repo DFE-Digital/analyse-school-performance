@@ -19,6 +19,7 @@ using ASP.Web.Shared;
 using ASP.Web.Shared.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace ASP.Web.Areas.LocalAuthority
 {
@@ -31,14 +32,16 @@ namespace ASP.Web.Areas.LocalAuthority
         private const string SearchSuggestionsUrl = $"/local-authorities/suggestions/";
         private readonly IAspApiClient _api;
         private readonly IHostEnvironment _hostEnvironment;
+        private readonly SearchOptions _searchOptions;
 
         public GenericLocalAuthoritiesController(
             IAspApiClient api,
-            IHostEnvironment hostEnvironment
-        )
+            IHostEnvironment hostEnvironment, 
+            IOptions<SearchOptions> searchOptions)
         {
             _api = api ?? throw new ArgumentNullException(nameof(api));
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
+            _searchOptions = searchOptions.Value;
         }
 
         [HttpGet("")]
@@ -115,7 +118,7 @@ namespace ASP.Web.Areas.LocalAuthority
         {
             var request = new GetAllLocalAuthoritiesRequest(
                 Optional<int>.Some(pageNumber),
-                Optional<int>.Some(Constants.SearchResultPageSize)
+                Optional<int>.Some(_searchOptions.PageSize)
             );
 
             return _api.GetAllLocalAuthorities(request)
@@ -169,7 +172,7 @@ namespace ASP.Web.Areas.LocalAuthority
             return new LocalAuthoritySearchRequest(
                 searchTerm: searchParams.Search ?? string.Empty,
                 page: Optional<int>.Some(pageNumber),
-                resultsPerPage: Optional<int>.Some(Constants.SearchResultPageSize)
+                resultsPerPage: Optional<int>.Some(_searchOptions.PageSize)
             );
         }
 
@@ -261,7 +264,7 @@ namespace ASP.Web.Areas.LocalAuthority
 
             var request = new LocalAuthoritySearchSuggestionsRequest(
                 searchParams.Search ?? "",
-                Optional<int>.None
+                Optional<int>.Some(_searchOptions.MaxSearchSuggestions)
             );
 
             return _api.LocalAuthoritySearchSuggestions(request);

@@ -152,6 +152,7 @@ namespace ASP.Web.Areas.School
         private RouteValueDictionary? _hostActionRouteValues;
         private ActionContext? _context;
         private IUrlHelper? _urlHelper;
+        private readonly SearchOptions _searchOptions;
 
         /// <summary>
         /// Creates a <c>SchoolSearchController</c> instance to handle school searches.
@@ -160,6 +161,7 @@ namespace ASP.Web.Areas.School
         /// <param name="hostController">Controller the "host" action belongs to</param>
         /// <param name="hostActionRouteValueKeys">Keys of any route values the host action requires</param>
         /// <param name="api">API client instance</param>
+        /// <param name="searchOptions">searchOptions</param>
         /// <param name="makeSchoolUrl">Function to create a school page URL from a URN, to link to from the search results</param>
         /// <param name="subActionRouteConfig">Optional config to override the default paths for each sub-action</param>
         public SchoolSearchController(
@@ -167,6 +169,7 @@ namespace ASP.Web.Areas.School
             string hostController,
             List<string> hostActionRouteValueKeys,
             IAspApiClient api,
+            SearchOptions searchOptions,
             Func<string, string?> makeSchoolUrl,
             Dictionary<SchoolSearchSubActionType, SchoolSearchSubActionRouteConfig>? subActionRouteConfig = null)
         {
@@ -196,6 +199,8 @@ namespace ASP.Web.Areas.School
                     }
                 }
             }
+
+            _searchOptions = searchOptions;
         }
 
         /// <summary>
@@ -299,7 +304,7 @@ namespace ASP.Web.Areas.School
                 scope.ScopeType,
                 scope.ScopeId,
                 Optional<int>.Some(pageNumber),
-                Optional<int>.None
+                Optional<int>.Some(_searchOptions.PageSize)
             );
 
             return _api.GetAllEstablishments(request);
@@ -316,7 +321,7 @@ namespace ASP.Web.Areas.School
                 scopeType: scopeInfo.ScopeType,
                 scopeInfo.ScopeId,
                 page: Optional<int>.Some(pageNumber),
-                resultsPerPage: Optional<int>.None
+                resultsPerPage: Optional<int>.Some(_searchOptions.PageSize)
             );
 
             return _api.EstablishmentSearch(request);
@@ -329,7 +334,7 @@ namespace ASP.Web.Areas.School
                 searchParams.Search ?? "",
                 scopeInfo.ScopeType,
                 scopeInfo.ScopeId,
-                Optional<int>.None
+                Optional<int>.Some(_searchOptions.MaxSearchSuggestions)
             );
 
             return _api.EstablishmentSearchSuggestions(request);
