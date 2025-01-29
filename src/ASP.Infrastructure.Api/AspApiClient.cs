@@ -119,7 +119,10 @@ namespace ASP.Infrastructure.Api
         public Task<Result<FileStreamResponse>> GetDownloadPackage(GetDownloadPackageRequest request)
         {
             var url = "/api/GetDownloadPackage";
-            var queryString = QueryString.Create("fileType", request.FileType.ToString());
+            var queryString = QueryString
+                .Create("scope", request.ScopeType.ToString())
+                .Add("scopeIdentifier", request.ScopeIdentifier.ToString())
+                .Add("fileType", request.FileType.ToString());
 
             foreach (var id in request.DownloadIds)
             {

@@ -170,6 +170,21 @@ Scenario: GetDownloadPackage API endpoint should return a zip file containing 1 
         }
     ]
     """
+    And Local Authority "004" exists:
+    """
+    {
+        "name": "Test LA 1"
+    }
+    """    
+    And Establishment "123456" exists:
+    """
+    {
+        "name": "Test School 1",
+        "localAuthority": {
+            "code": "004"
+        }
+    }
+    """
     And Content Template "blob-storage-demo" exists:
     """
     {
@@ -225,6 +240,21 @@ Scenario: GetDownloadPackage API endpoint should return a zip file containing 2 
             "source": "KTS"
         }
     ]
+    """
+	And Local Authority "004" exists:
+    """
+    {
+        "name": "Test LA 1"
+    }
+    """    
+    And Establishment "123456" exists:
+    """
+    {
+        "name": "Test School 1",
+        "localAuthority": {
+            "code": "004"
+        }
+    }
     """
     And Content Template "blob-storage-demo" exists:
     """

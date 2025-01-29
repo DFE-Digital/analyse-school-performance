@@ -33,6 +33,15 @@ namespace ASP.Core.DataDownloads
                 _establishmentRepository = establishmentRepository;
             }
 
+            public Result<string> ValidateScopeIdentifier(string scopeIdentifier)
+            {
+                return Result.Success(scopeIdentifier)
+                    .ErrorIf(
+                        id => !Constants.ScopeIdentifierRegex.Match(id).Success,
+                        Error.Invalid($@"""{scopeIdentifier}"" is not a valid scopeIdentifier.")
+                    );
+            }
+
             public Task<Result<DataDownloadScope>> ValidateScope(DataDownloadScopeType scopeType, string scopeIdentifier, Optional<int> year)
             {
                 return scopeType switch {

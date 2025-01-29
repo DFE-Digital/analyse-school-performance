@@ -40,7 +40,8 @@ namespace ASP.Web.Areas.LocalAuthority
             _localAuthorityDataDownloadController = new DownloadDataController(nameof(DownloadLocalAuthorityData), "MyLocalAuthority", [], DataDownloadScopeType.LA, _api, _scopeValidator);
 
             _individualSchoolDataDownloadController = new DownloadDataController(nameof(DownloadSchoolData), "MyLocalAuthority", SearchParameters.RouteValueKeys, DataDownloadScopeType.School, _api, _scopeValidator,
-                stepRouteConfig: new() {
+                stepRouteConfig: new()
+                {
                     [DownloadDataStepType.SelectYear] = new() { Path = "select-year" },
                 });
 
@@ -144,8 +145,10 @@ namespace ASP.Web.Areas.LocalAuthority
                         model.Search,
                         model.Establishments
                     )),
-                    new() {
-                        [SchoolSearchSubActionType.AllSchools] = new() {
+                    new()
+                    {
+                        [SchoolSearchSubActionType.AllSchools] = new()
+                        {
                             Title = "Search for a school",
                         }
                     })
@@ -219,7 +222,7 @@ namespace ASP.Web.Areas.LocalAuthority
 
         private NavigationViewModel GetDownloadDataSideNavigation() =>
             new([
-                new("Pupil level and aggregated LA data", _localAuthorityDataDownloadController.GetInitialActionUrl(), 
+                new("Pupil level and aggregated LA data", _localAuthorityDataDownloadController.GetInitialActionUrl(),
                     Request.Path),
                 new("Individual school data", _schoolSearchController.GetInitialActionUrl(),
                     Request.Path)

@@ -5,6 +5,7 @@ namespace ASP.Core.DataDownloads
 {
     public interface IDataDownloadsScopeValidator
     {
+        Result<string> ValidateScopeIdentifier(string scopeIdentifier);
         Task<Result<DataDownloadScope>> ValidateScope(DataDownloadScopeType scopeType, string scopeIdentifier, Optional<int> year);
     }
 }

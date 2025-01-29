@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 using ASP.Web.Extensions;
+using ASP.Core.DataDownloads;
 
 namespace ASP.Test.Web.Areas.BlobStorageTest
 {
@@ -98,7 +99,7 @@ namespace ASP.Test.Web.Areas.BlobStorageTest
         [HttpGet("api-download-as-zip-file")]
         public async Task<IActionResult> ApiGetDownloadPackage(List<string> downloadIds)
         {
-            var result = await _api.GetDownloadPackage(new(Core.Utilities.FileType.CSV, downloadIds));
+            var result = await _api.GetDownloadPackage(new(Core.Utilities.FileType.CSV, downloadIds, DataDownloadScopeType.LA, "004"));
             
             return result.ToActionResult(response => new FileStreamResult(response.Content, response.ContentType) {
                 FileDownloadName = response.FileName

@@ -23,8 +23,10 @@ public class DownloadDataSelectFormatViewModel : DownloadDataViewModel
 
     private static string GetFileFormatList()
     {
+        var fileFormatCount = Enum.GetValues<FileType>().Length;
+
         var fileFormats = Enum.GetValues<FileType>();
-        var fileFormatList = string.Join(", ", fileFormats[..^1]) + " or " + fileFormats[^1];
+        var fileFormatList = string.Join(", ", fileFormats[..^1]) + (fileFormatCount == 1 ? fileFormats[^1] : " or " + fileFormats[^1]);
         return fileFormatList;
     }
 }

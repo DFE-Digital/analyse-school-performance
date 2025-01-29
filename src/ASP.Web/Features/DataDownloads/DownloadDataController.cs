@@ -442,6 +442,14 @@ namespace ASP.Web.Features.DataDownloads
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<DownloadDataStepViewModel, IActionResult> showPageView)
             {
+
+                List<(string, string?)> fileFormatList = [];
+
+                foreach (FileType fileType in Enum.GetValues<FileType>())
+                {
+                    fileFormatList.Add(($"Data in {fileType} format", Controller.GetUrlForStep(DownloadDataStepType.DownloadAsZip, parameters with { FileType = fileType })));
+                }
+
                 var model = new DownloadDataStepViewModel(
                     Title,
                     new BreadcrumbTrailViewModel(
@@ -452,9 +460,7 @@ namespace ASP.Web.Features.DataDownloads
                     ),
                     new DownloadDataSelectFormatViewModel(
                         Controller.ScopeTypeLabel,
-                        [("Data in CSV format", Controller.GetUrlForStep(DownloadDataStepType.DownloadAsZip, parameters with { FileType = FileType.CSV })),
-                        ("Data in XLSX format", Controller.GetUrlForStep(DownloadDataStepType.DownloadAsZip, parameters with { FileType = FileType.XLSX })),
-                        ("Data in TSV format", Controller.GetUrlForStep(DownloadDataStepType.DownloadAsZip, parameters with { FileType = FileType.TSV }))],
+                        fileFormatList,
                         Controller.GetUrlForStep(DownloadDataStepType.SelectYear, parameters)
                     )
                 );
@@ -486,7 +492,7 @@ namespace ASP.Web.Features.DataDownloads
                 var selectedFiles = parameters.SelectedFiles ?? new();
 
                 return
-                    from response in await Controller._api.GetDownloadPackage(new GetDownloadPackageRequest(fileType, selectedFiles))
+                    from response in await Controller._api.GetDownloadPackage(new GetDownloadPackageRequest(fileType, selectedFiles, Controller._scopeType, scopeIdentifier))
                     select (IActionResult)new FileStreamResult(response.Content, response.ContentType)
                     {
                         FileDownloadName = response.FileName

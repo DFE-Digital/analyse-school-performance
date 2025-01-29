@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.OpenApi.Models;
 using System.Net;
 using ASP.Application.UseCases.Downloads.GetDownloadPackage;
+using ASP.Core.DataDownloads;
 
 namespace ASP.Api.Functions;
 
@@ -36,6 +37,8 @@ public class GetDownloadPackage : ApiFunction
 
     [Function("GetDownloadPackage")]
     [OpenApiOperation(operationId: "GetDownloadPackage", tags: ["Downloads"], Description = "Creates a ZIP archive of multiple downloads.")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the request, e.g. 'LA' or 'School'.")]
+    [OpenApiParameter(name: "scopeIdentifier", In = ParameterLocation.Query, Required = true, Description = "An identifier for the selected scope, either a school URN or LA code")]
     [OpenApiParameter(name: "fileType", In = ParameterLocation.Query, Required = true, Description = "Type of the file to be downloaded, examples: `csv`, `txt`, `xlsx`")]
     [OpenApiParameter(name: "downloadIds", In = ParameterLocation.Query, Required = true, Type = typeof(List<string>), Description = "List of file IDs to be downloaded as ZIP.", Explode = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/zip", bodyType: typeof(byte[]), Description = "The ZIP file containing the requested files.")]
@@ -51,9 +54,11 @@ public class GetDownloadPackage : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
+            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadScopeType>())
+            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequired())
             from fileType in request.ValidateParameter("fileType", p => p.IsRequired().IsEnum<FileType>())
             from downloadIds in request.ValidateParameter("downloadIds", p => p.IsRequiredMultiParameter())
-            from response in _useCase.HandleRequest(new GetDownloadPackageRequest(fileType, downloadIds))
+            from response in _useCase.HandleRequest(new GetDownloadPackageRequest(fileType, downloadIds, scope, scopeIdentifier))
             select response;
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);

@@ -67,7 +67,7 @@ namespace ASP.Web.Areas.School
         [HttpGet("other-reports")]
         public Task<IActionResult> OtherReports(string urn, string? revision)
         {
-            var result = 
+            var result =
                 from establishmentDetails in GetEstablishmentDetails(urn)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(

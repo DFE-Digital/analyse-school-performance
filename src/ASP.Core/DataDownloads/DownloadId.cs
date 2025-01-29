@@ -23,7 +23,7 @@ namespace ASP.Core.DataDownloads
 
             if (!match.Success)
             {
-                return Error.Invalid($"Download ID: {downloadId} is not in the correct format.");
+                return Error.Invalid($"Download ID: {downloadId} is not in the format \"{{download-config.id}}-{{identifier}}-{{year}}[-{{version}}]\".\"");
             }
 
             return new DownloadId(
@@ -32,6 +32,7 @@ namespace ASP.Core.DataDownloads
               match.Groups["Year"].Value,
               match.Groups["Version"].Value
             );
+
         }
     }
 }
