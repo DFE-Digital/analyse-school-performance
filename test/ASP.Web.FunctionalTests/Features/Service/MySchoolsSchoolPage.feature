@@ -24,7 +24,10 @@ Scenario: School page should throw page not found if Establishment is not curren
 	Given non-visible Establishment "111111" exists:
 		"""
 		{
-			"name": "Thursby Primary School"
+			"name": "Thursby Primary School",
+	        "localAuthority": {
+		        "code": "301"
+		    }
 		}
 		"""
 	And Local Authority "301" exists:
@@ -42,7 +45,10 @@ Scenario: School page should throw page not found if Establishment is deleted
 	Given deleted Establishment "111111" exists:
 		"""
 		{
-			"name": "Thursby Primary School"
+			"name": "Thursby Primary School",
+	        "localAuthority": {
+		        "code": "301"
+		    }
 		}
 		"""
 	And Local Authority "301" exists:
@@ -60,7 +66,10 @@ Scenario: School page should display page not found page if School URN is invali
 	Given Establishment "111111" exists:
 		"""
 		{
-			"name": "Thursby Primary School"
+			"name": "Thursby Primary School",
+	        "localAuthority": {
+		        "code": "301"
+		    }
 		}
 		"""
 	And Local Authority "301" exists:
@@ -76,7 +85,7 @@ Scenario: School page should display page not found page if School URN is invali
 	And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
 	And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
 	And the element "*[data-testid='error-display-message']" should exist
-	And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/GetEstablishmentDetails Could not find Establishment with URN "222222"."
+	And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: School with URN "222222" does not exist."
 
 @Javascript:disabled
 Scenario: School page should contain seven app card container element
@@ -155,7 +164,7 @@ Scenario: School page should contain seven app card container element
 		{
 			"name": "Hollinswood Primary School",
 				"localAuthority": {
-				"code": "999",
+				"code": "301",
 				"name": "Test LA"
 				}
 		}
@@ -200,18 +209,21 @@ Scenario: School page should contain seven app card container element
 
 @Javascript:disabled
 Scenario Outline: Landing page - common page elements
-	And Establishment "123456" exists:
-		"""
+	Given Establishment "123456" exists:
+	"""
 		{
 			"name": "Hollinswood Primary School",
+	        "localAuthority": {
+		        "code": "301"
+		    }
 		}
-		"""
+	"""
 	And Local Authority "301" exists:
-		"""
+	"""
 		{
 			"name": "Test LA"
 		}
-		"""
+	"""
 	When I navigate to /my-schools/123456/
 	Then the page title should be "My schools"
 	And the page subtitle should be "Hollinswood Primary School (URN: 123456)"
@@ -253,7 +265,7 @@ Scenario: School page should contain a school details disclosure element
 			},
 			"localAuthority": {
 				"name": "Telford and Wrekin",
-				"code": "999"
+				"code": "301"
 			},
 			"name": "Hollinswood Primary School",
 			"noOfPupils": 404,
@@ -315,7 +327,7 @@ Scenario: School page should show if values are null
 			"gender": null,
 			"headteacher": null,
 			"localAuthority": {
-				"code": "999",
+				"code": "301",
 				"name": "Test LA"
 			},
 			"name": "Hollinswood Primary School",
@@ -392,8 +404,8 @@ Scenario: School page should show if values are null case 2
 				"lastName": null
 			},
 			"localAuthority": {
-				"code": "999",
-					"name": "Test LA"
+				"code": "301",
+				"name": "Test LA"
 			},
 			"noOfPupils": null,
 			"religiousDenomination": {
@@ -445,7 +457,7 @@ Scenario: Details disclosure element text should read 'Show school details' when
 		{
 			"name": "Hollinswood Primary School",
 			"localAuthority": {
-				"code": "999",
+				"code": "301",
 				"name": "Test LA"
 			}
 		}
@@ -464,7 +476,10 @@ Scenario: Data downloads 'Dates available for download' - common page elements
 	Given Establishment "136028" exists:
 		"""
 		{
-			"name": "Dagenham Park CofE School"
+			"name": "Dagenham Park CofE School",
+	        "localAuthority": {
+		        "code": "301"
+		    }
 		}
 		"""
 	And Local Authority "301" exists:
@@ -514,7 +529,10 @@ Scenario Outline: Data downloads 'Dates available for download' - page should co
 	Given Establishment "136028" exists:
 		"""
 		{
-			"name": "Dagenham Park CofE School"
+			"name": "Dagenham Park CofE School",
+	         "localAuthority": {
+		        "code": "301"
+		     },
 		}
 		"""
 	And Local Authority "301" exists:
@@ -564,7 +582,10 @@ Scenario: Data downloads 'Dates available for download' - when no date is select
 	Given Establishment "123456" exists:
 		"""
 		{
-			"name": "Hollinswood Primary School"
+			"name": "Hollinswood Primary School",
+			"localAuthority": {
+		        "code": "301"
+		    },
 		}
 		"""
 	And Local Authority "301" exists:
@@ -614,7 +635,10 @@ Scenario: Data downloads 'Dates available for download' - when date is selected 
 	Given Establishment "123456" exists:
 		"""
 		{
-			"name": "Hollinswood Primary School"
+			"name": "Hollinswood Primary School",
+	         "localAuthority": {
+		        "code": "301"
+		     },
 		}
 		"""
 	And Local Authority "301" exists:
@@ -661,7 +685,10 @@ Scenario: Data downloads "Data files available for download' - common page eleme
 	Given Establishment "136028" exists:
 		"""
 		{
-			"name": "Dagenham Park CofE School"
+			"name": "Dagenham Park CofE School",
+	         "localAuthority": {
+		        "code": "301"
+		     }
 		}
 		"""
 	And Local Authority "301" exists:
@@ -738,7 +765,10 @@ Scenario Outline: Data downloads 'Data files available for download' - page shou
 	Given Establishment "136028" exists:
 		"""
 		{
-			"name": "Dagenham Park CofE School"
+			"name": "Dagenham Park CofE School",
+	         "localAuthority": {
+		        "code": "301"
+		     },
 		}
 		"""
 	And Local Authority "301" exists:
@@ -804,7 +834,10 @@ Scenario Outline: Data downloads 'Data files available for download' - page shou
 	Given Establishment "136028" exists:
 		"""
 		{
-			"name": "Dagenham Park CofE School"
+			"name": "Dagenham Park CofE School",
+	         "localAuthority": {
+		        "code": "301"
+		     },
 		}
 		"""
 	And Local Authority "301" exists:
@@ -898,7 +931,10 @@ Scenario: Data downloads 'Data files available for download' - when no files are
 	Given Establishment "123456" exists:
 		"""
 		{
-			"name": "Hollinswood Primary School"
+			"name": "Hollinswood Primary School",
+	        "localAuthority": {
+		        "code": "301"
+		    }
 		}
 		"""
 	And Local Authority "301" exists:
@@ -990,7 +1026,10 @@ Scenario: Data downloads 'Data files available for download' - when files are se
 	Given Establishment "123456" exists:
 		"""
 		{
-			"name": "Hollinswood Primary School"
+			"name": "Hollinswood Primary School",
+	        "localAuthority": {
+		        "code": "301"
+		    }
 		}
 		"""
 	And Local Authority "301" exists:
@@ -1079,7 +1118,10 @@ Scenario: Data downloads 'Download school data' - common page elements
 	Given Establishment "136028" exists:
 		"""
 		{
-			"name": "Dagenham Park CofE School"
+			"name": "Dagenham Park CofE School",
+	         "localAuthority": {
+		        "code": "301"
+		     },
 		}
 		"""
 	And Local Authority "301" exists:
@@ -1183,7 +1225,10 @@ Scenario Outline: Data downloads 'Download school data' - page should contain th
 	Given Establishment "136028" exists:
 		"""
 		{
-			"name": "Dagenham Park CofE School"
+			"name": "Dagenham Park CofE School",
+	         "localAuthority": {
+		        "code": "301"
+		     },
 		}
 		"""
 	And Local Authority "301" exists:
@@ -1224,7 +1269,10 @@ Scenario Outline: Data downloads 'Download school data' - Download other dates l
 	Given Establishment "136028" exists:
 		"""
 		{
-			"name": "Dagenham Park CofE School"
+			"name": "Dagenham Park CofE School",
+	         "localAuthority": {
+		        "code": "301"
+		     },
 		}
 		"""
 	And Local Authority "301" exists:
@@ -1271,6 +1319,20 @@ Scenario Outline: My Schools users should see Download data card on School landi
 		    }
 		}
 		"""
+	And Local Authority "301" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And Multi Academy Trust "1234" exists:
+	"""
+	{
+		"multiAcademyTrust": {
+		    "uid": 1234
+		}
+	}
+	"""
 	And Content Template "school-landing-page" exists:
 		"""
 			{
@@ -1335,6 +1397,20 @@ Scenario Outline: My Schools users should not see Download data card on School l
 		    }
 		}
 		"""
+	And Local Authority "301" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And Multi Academy Trust "1234" exists:
+	"""
+	{
+		"multiAcademyTrust": {
+		    "uid": 1234
+		}
+	}
+	"""
 	And Content Template "school-landing-page" exists:
 		"""
 			{
@@ -1420,3 +1496,133 @@ Examples:
 	| Roles          |
 	| DfE Unnamed    |
 	| Ofsted Unnamed |
+ 
+@Javascript:disabled
+Scenario: LA user should not be able to access a school outside their Local Authority
+	Given I am an LA Named user for Local Authority "301"
+	And Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "localAuthority": {
+	        "code": "302"
+	    }
+	}
+	"""
+	And Local Authority "301" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	When I navigate to /my-schools/123456/
+	Then I should get a 403 response
+	And the page title should be "Access not allowed"
+	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
+	
+@Javascript:disabled
+Scenario: LA user should be able to access a school within their Local Authority
+	Given I am an LA Named user for Local Authority "301"
+	And Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "localAuthority": {
+	        "code": "301"
+	    }
+	}
+	"""
+	And Local Authority "301" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	When I navigate to /my-schools/123456/
+	Then I should get a 200 response
+	And the page title should be "My schools"
+	And the page subtitle should be "Test School (URN: 123456)"
+	
+@Javascript:disabled
+Scenario: Diocese user should not be able to access a school outside their Diocese
+	Given I am a Diocese Named user for Diocese "Test Diocese"
+	And Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "diocese": {
+	        "name": "Test Diocese 2"
+	    }
+	}
+	"""
+	When I navigate to /my-schools/123456/
+	Then I should get a 403 response
+	And the page title should be "Access not allowed"
+	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
+	
+@Javascript:disabled
+Scenario: Diocese user should be able to access a school within their Diocese
+	Given I am a Diocese Named user for Diocese "Test Diocese"
+	And Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "diocese": {
+	        "name": "Test Diocese"
+	    }
+	}
+	"""
+	When I navigate to /my-schools/123456/
+	Then I should get a 200 response
+	And the page title should be "My schools"
+	And the page subtitle should be "Test School (URN: 123456)"	
+	
+@Javascript:disabled
+Scenario: MAT user should not be able to access a school outside their Multi-Academy Trust
+	Given I am a MAT Named user for Multi-Academy Trust "1234"
+	And Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "multiAcademyTrust": {
+	        "uid": 4321
+	    }
+	}
+	"""
+	And Multi Academy Trust "1234" exists:
+	"""
+	{
+		"multiAcademyTrust": {
+		    "uid": 1234
+		}
+	}
+	"""
+	When I navigate to /my-schools/123456/
+	Then I should get a 403 response
+	And the page title should be "Access not allowed"
+	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
+	
+@Javascript:disabled
+Scenario: MAT user should be able to access a school within their Multi-Academy Trust
+	Given I am a MAT Named user for Multi-Academy Trust "1234"
+	And Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "multiAcademyTrust": {
+	        "uid": 1234
+	    }
+	}
+	"""
+	And Multi Academy Trust "1234" exists:
+	"""
+	{
+		"multiAcademyTrust": {
+		    "uid": 1234
+		}
+	}
+	"""
+	When I navigate to /my-schools/123456/
+	Then I should get a 200 response
+	And the page title should be "My schools"
+	And the page subtitle should be "Test School (URN: 123456)"							

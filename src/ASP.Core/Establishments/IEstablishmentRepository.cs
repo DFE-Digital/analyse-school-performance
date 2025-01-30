@@ -10,7 +10,12 @@ namespace ASP.Core.Establishments
         Task<Result<ScopedResultsPage<EstablishmentListing>>> GetAllEstablishments(
             Scope scope, int page, int resultsPerPage,
             CancellationToken cancellationToken = default);
+        
         Task<Result<EstablishmentDetails>> GetEstablishmentDetails(string urn);
+
+        Task<Result<bool>> IsEstablishmentVisibleWithinScope(string urn, Scope scope,
+            CancellationToken cancellationToken = default);
+        
         Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails);
 
         Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCode(

@@ -32,7 +32,31 @@ namespace ASP.Infrastructure.Establishments
                     .ErrorIf(estab => !estab.IsVisible, Error.NotFound($@"Establishment with URN ""{urn}"" is not currently visible."))
                 select dao.MapToEstablishmentDetails();
         }
+        
+        public Task<Result<bool>> IsEstablishmentVisibleWithinScope(string urn, Scope scope, CancellationToken cancellationToken = default)
+        {
+            return _documentDB.GetAsync<EstablishmentDAO>(ContainerKey, urn, urn, cancellationToken)
+                .MapError(e => e is NotFoundError
+                    ? Error.NotFound($@"School with URN ""{urn}"" does not exist.")
+                    : e)
+                .Then(result => 
+                {
+                    bool isInScope = scope.ScopeType switch
+                    {
+                        ScopeType.All => true,
+                        ScopeType.LA => result.LocalAuthority != null && 
+                                        result.LocalAuthority.Code.ToString() == scope.ScopeIdentifier,
+                        ScopeType.MAT => result.MultiAcademyTrust != null && 
+                                         result.MultiAcademyTrust.Uid.ToString() == scope.ScopeIdentifier,
+                        ScopeType.Diocese => result.Diocese != null && 
+                                             result.Diocese.Name == scope.ScopeIdentifier,
+                        _ => false // Default case returns false for any unhandled ScopeType
+                    };
 
+                    return Result.Success(isInScope);
+                });
+        }
+        
         public Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails)
         {
             return _documentDB.UpsertAsync(ContainerKey, contentId, establishmentDetails.Urn, establishmentDetails);
@@ -325,7 +349,7 @@ namespace ASP.Infrastructure.Establishments
                     .Take(maxSuggestions);
             };
         }
-
+        
         private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>> ApplyScopeAndSearchSuggestionsLaestabQuery(
             Scope scope,
             string searchTerm, 

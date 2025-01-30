@@ -41,7 +41,10 @@ Scenario Outline: Other reports page should be accessible when valid urn is prov
 	Given Establishment "136028" exists:
 	"""
 	{
-		"name": "Dagenham Park CofE School"
+		"name": "Dagenham Park CofE School",
+	    "localAuthority": {
+		   "code": "301"
+		},
 	}
 	"""
 	And Local Authority "301" exists:
@@ -59,13 +62,39 @@ Scenario Outline: Other reports page should be accessible when valid urn is prov
 		| Download data | /my-schools/136028/download-data/ |         |
 		| Other reports | /my-schools/136028/other-reports/ | true    |
 		| Useful links  | /my-schools/136028/useful-links/  |         |
-
+  
+@Javascript:disabled
+Scenario Outline: LA user should not be able to access the Other Reports page of a school with a valid URN outside their Local Authority (My schools > School page)
+	Given Establishment "136028" exists:
+	"""
+	{
+		"name": "Dagenham Park CofE School",
+	    "localAuthority": {
+		   "code": "302"
+		},
+	}
+	"""
+	And Local Authority "301" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And I am a LA Named user for Local Authority "301"
+	When I navigate to /my-schools/136028/other-reports/
+	Then I should get a 403 response
+	And the page title should be "Access not allowed"
+	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
+	
 @Javascript:disabled
 Scenario: Other reports page should show the accordion component when javascript disabled
 	Given Establishment "136028" exists:
 	"""
 	{
-		"name": "Dagenham Park CofE School"
+		"name": "Dagenham Park CofE School",
+	    "localAuthority": {
+		   "code": "301"
+		},
 	}
 	"""
 	And I am a <User>
