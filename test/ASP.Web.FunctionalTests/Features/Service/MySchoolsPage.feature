@@ -342,6 +342,102 @@ Scenario: Page title should show correct text when search returns results
 	Then the path should be /my-schools/?search=Primary
 	And the page title should be "Search results for "Primary""
 
+@Javascript:disabled
+Scenario: LA user sees 'No school found' message when searching for school URNs that are not associated with their LA
+	Given Local Authority "001" exists:
+		"""
+		    { 
+		    "name": "Test LA"
+		    }
+		"""
+	Given I am a LA Named user for Local Authority "001"
+	And Establishment "111111" exists:
+		"""
+		    {
+		    "name": "Test School 1",
+		    "localAuthority": {
+				  "code": "002",
+			  },
+		    }
+		"""
+	And Establishment "222222" exists:
+		"""
+		    {
+		    "name": "Test School 2",
+		    "localAuthority": {
+				  "code": "001",
+			  },
+		    }
+		"""
+	When I navigate to /my-schools/
+	And I update the textbox "#app-field-Search" to have the value "111111"
+	And I click the button "#searchSubmit"
+	Then the path should be /my-schools/?search=111111
+	Then the page title should be "We found no matches for "111111""
+
+
+@Javascript:disabled
+Scenario: Diocese user sees 'No school found' message when searching for school URNs that are not associated with their Diocese
+	Given I am a Diocese Named user for Diocese "Test Diocese"
+	And Establishment "111111" exists:
+		"""
+		    {
+		    "name": "Test School 1",
+		    "diocese": {
+				   "name": "Test Diocese 1"
+			   }
+		    }
+		"""
+	And Establishment "222222" exists:
+		"""
+		    {
+		    "name": "Test School",
+		    "diocese": {
+				   "name": "Test Diocese"
+			   }
+		    }
+		"""
+	When I navigate to /my-schools/
+	And I update the textbox "#app-field-Search" to have the value "111111"
+	And I click the button "#searchSubmit"
+	Then the path should be /my-schools/?search=111111
+	Then the page title should be "We found no matches for "111111""
+
+@Javascript:disabled
+Scenario: MAT user sees 'No school found' message when searching for school URNs that are not associated with their MAT
+	And Multi Academy Trust "1111" exists:
+		"""
+		{
+			"multiAcademyTrust": {
+			    "uid": 1111
+			}
+		}
+		"""
+	Given I am a MAT Named user for Multi-Academy Trust "1111"
+	And Establishment "111111" exists:
+		"""
+		    {
+		    "name": "Test School 1",
+		    "multiAcademyTrust": {
+					"uid": 2222
+				}
+		    }
+		"""
+	And Establishment "222222" exists:
+		"""
+		    {
+		    "name": "Test School",
+			"multiAcademyTrust": {
+					"uid": 1111
+				}
+		    }
+		"""
+	When I navigate to /my-schools/
+	And I update the textbox "#app-field-Search" to have the value "111111"
+	And I click the button "#searchSubmit"
+	Then the path should be /my-schools/?search=111111
+	Then the page title should be "We found no matches for "111111""
+
 @Javascript:enabled
 Scenario: Page title should show correct text when search returns results (JS)
 	Given Local Authority "100" exists:
