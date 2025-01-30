@@ -1,8 +1,8 @@
-using ASP.Application.UseCases.Establishments.DTO;
-using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
-using ASP.Core.Establishments.SearchSuggestions;
 using ASP.Core.Results;
-using ASP.Core.Scoping;
+using ASP.Domain.Establishments;
+using ASP.Domain.Establishments.SearchSuggestions;
+using ASP.Domain.Establishments.UseCases.DTO;
+using ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -56,8 +56,8 @@ public class EstablishmentSearchSuggestions : ApiFunction
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from searchTerm in request.ValidateParameter("searchTerm", p => p.IsRequired())
-            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<ScopeType>())
-            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequiredIf(scope != ScopeType.All))
+            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<EstablishmentScopeType>())
+            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequiredIf(scope != EstablishmentScopeType.All))
             from maxSuggestions in request.ValidateParameter("maxSuggestions", p => p.IsOptional().IsNumeric())
             from response in _useCase.HandleRequest(new EstablishmentSearchSuggestionsRequest(
                 searchTerm,

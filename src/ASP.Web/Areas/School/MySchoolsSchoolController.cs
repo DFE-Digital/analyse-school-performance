@@ -1,20 +1,17 @@
 using ASP.Application;
+using ASP.Core.Authorization;
 using ASP.Core.Results;
-using ASP.Web.Shared.Navigation;
+using ASP.Domain.DataDownloads;
+using ASP.Domain.Establishments;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
+using ASP.Web.Features.DataDownloads;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Shared;
+using ASP.Web.Shared.Navigation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ASP.Web.Features.DataDownloads;
-using ASP.Core.DataDownloads;
-using ASP.Core.Authorization;
-using ASP.Core.Establishments;
-using ASP.Core.LocalAuthorities;
-using ASP.Core.MultiAcademyTrusts;
-using ASP.Core.Scoping;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ASP.Web.Areas.School
@@ -26,23 +23,20 @@ namespace ASP.Web.Areas.School
     public class MySchoolsSchoolController : BaseSchoolController
     {
         private readonly DownloadDataController _downloadDataController;
-        private readonly ILocalAuthorityRepository _localAuthorityRepository;
-        private readonly IMultiAcademyTrustRepository _multiAcademyTrustRepository;
         private readonly IEstablishmentRepository _establishmentRepository;
+        private readonly IEstablishmentScopeValidator _establishmentScopeValidator;
 
         public MySchoolsSchoolController(
             IAspApiClient api,
-            IDataDownloadsScopeValidator scopeValidator,
             IHostEnvironment hostEnvironment,
             IEstablishmentRepository establishmentRepository,
-            ILocalAuthorityRepository localAuthorityRepository,
-            IMultiAcademyTrustRepository multiAcademyTrustRepository
-        ) : base(api, scopeValidator, hostEnvironment)
+            IDataDownloadsScopeValidator dataDownloadsScopeValidator,
+            IEstablishmentScopeValidator establishmentScopeValidator) 
+            : base(api, hostEnvironment)
         {
             _establishmentRepository = establishmentRepository;
-            _localAuthorityRepository = localAuthorityRepository;
-            _multiAcademyTrustRepository = multiAcademyTrustRepository;
-            _downloadDataController = new DownloadDataController(nameof(DownloadData), "MySchoolsSchool", ["urn"], DataDownloadScopeType.School, _api, _scopeValidator);
+            _establishmentScopeValidator = establishmentScopeValidator;
+            _downloadDataController = new DownloadDataController(nameof(DownloadData), "MySchoolsSchool", ["urn"], DataDownloadsScopeType.School, _api, dataDownloadsScopeValidator);
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -56,7 +50,7 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> LandingPage(string urn, string? revision)
         {
             var result =
-                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+                from scopeInfo in _establishmentScopeValidator.GetScopeInfoForRole(User)
                 from establishmentDetails in GetEstablishmentDetails(urn, scopeInfo)
                 from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
@@ -82,7 +76,7 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> OtherReports(string urn, string? revision)
         {
             var result = 
-                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+                from scopeInfo in _establishmentScopeValidator.GetScopeInfoForRole(User)
                 from establishmentDetails in GetEstablishmentDetails(urn, scopeInfo)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
@@ -108,7 +102,7 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> UsefulLinks(string urn, string? revision)
         {
             var result =
-                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+                from scopeInfo in _establishmentScopeValidator.GetScopeInfoForRole(User)
                 from establishmentDetails in GetEstablishmentDetails(urn, scopeInfo)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
@@ -136,7 +130,7 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> DownloadData(string urn, DownloadDataStepParameters parameters)
         {
             var result =
-                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+                from scopeInfo in _establishmentScopeValidator.GetScopeInfoForRole(User)
                 from establishmentDetails in GetEstablishmentDetails(urn, scopeInfo)
                 from actionResult in _downloadDataController.Handle(
                     parameters,
@@ -199,11 +193,11 @@ namespace ASP.Web.Areas.School
                 new($"{name} data", _downloadDataController.GetInitialActionUrl(), Request.Path)
             ]);
 
-        private Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn, ScopeInfo scopeInfo)
+        private Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn, EstablishmentScopeInfo scopeInfo)
         {
             return
                 from isVisible in _establishmentRepository.IsEstablishmentVisibleWithinScope(urn,
-                        new Scope(scopeInfo.ScopeType, scopeInfo.ScopeId.GetValueOrDefault("")))
+                        new EstablishmentScope(scopeInfo.ScopeType, scopeInfo.ScopeId.GetValueOrDefault("")))
                     .ErrorIf(exists => !exists, Error.NotAllowed($"User is not allowed to view School {urn}"))
                 from establishmentDetails in GetEstablishmentDetails(urn)
                 select establishmentDetails;

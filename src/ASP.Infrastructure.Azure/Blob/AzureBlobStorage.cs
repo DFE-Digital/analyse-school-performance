@@ -1,5 +1,6 @@
 ﻿using ASP.Core;
 using ASP.Core.Results;
+using ASP.Infrastructure.Blob;
 using ASP.Web.Core.Environment;
 using Azure;
 using Azure.Identity;

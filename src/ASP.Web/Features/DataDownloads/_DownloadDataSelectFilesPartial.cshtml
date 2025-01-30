@@ -1,5 +1,6 @@
 @using ASP.Core
 @using ASP.Web.Extensions
+@using Constants = ASP.Domain.Constants
 @model ASP.Web.Features.DataDownloads.DownloadDataSelectFilesViewModel
 
 @{
@@ -27,9 +28,9 @@
                     {
                         <div class="govuk-checkboxes__item">
                             <input id="app-available-downloads-file-@file.Id" class="govuk-checkboxes__input" name="selectedFiles"
-                                    type="checkbox"
-                                    value="@file.Id"
-                                    aria-describedby="app-available-downloads-file-@file.Id-label">
+                                   type="checkbox"
+                                   value="@file.Id"
+                                   aria-describedby="app-available-downloads-file-@file.Id-label">
                             <label data-testid="available-downloads-file-@file.Id-label" id="app-available-downloads-file-@file.Id-label" class="govuk-label govuk-checkboxes__label" for="app-available-downloads-file-@file.Id">
                                 @file.DatasetType
                                 @if (file.Version != null)

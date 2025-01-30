@@ -1,19 +1,19 @@
 ﻿using ASP.Application;
+using ASP.Core.Optionality;
 using ASP.Core.Results;
-using ASP.Web.Shared.Navigation;
+using ASP.Domain.DataDownloads;
+using ASP.Domain.Establishments;
+using ASP.Web.Areas.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
+using ASP.Web.Features.DataDownloads;
+using ASP.Web.Features.Search;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Shared;
+using ASP.Web.Shared.Navigation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ASP.Web.Features.DataDownloads;
-using ASP.Core.DataDownloads;
-using ASP.Core.Optionality;
-using ASP.Core.Scoping;
-using ASP.Web.Areas.School;
-using ASP.Web.Features.Search;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 
@@ -36,9 +36,9 @@ namespace ASP.Web.Areas.LocalAuthority
             IOptions<SearchOptions> searchOptions)
             : base(api, scopeValidator, hostEnvironment)
         {
-            _localAuthorityDataDownloadController = new DownloadDataController(nameof(DownloadLocalAuthorityData), "GenericLocalAuthority", ["laCode"], DataDownloadScopeType.LA, _api, _scopeValidator);
+            _localAuthorityDataDownloadController = new DownloadDataController(nameof(DownloadLocalAuthorityData), "GenericLocalAuthority", ["laCode"], DataDownloadsScopeType.LA, _api, _scopeValidator);
 
-            _individualSchoolDataDownloadController = new DownloadDataController(nameof(DownloadSchoolData), "GenericLocalAuthority", ["laCode", .. SearchParameters.RouteValueKeys], DataDownloadScopeType.School, _api, _scopeValidator,
+            _individualSchoolDataDownloadController = new DownloadDataController(nameof(DownloadSchoolData), "GenericLocalAuthority", ["laCode", .. SearchParameters.RouteValueKeys], DataDownloadsScopeType.School, _api, _scopeValidator,
                 stepRouteConfig: new()
                 {
                     [DownloadDataStepType.SelectYear] = new() { Path = "select-year" },
@@ -127,7 +127,7 @@ namespace ASP.Web.Areas.LocalAuthority
             var result =
                 from laName in GetLocalAuthorityName(laCode)
                 from action in _schoolSearchController.Handle(
-                    new ScopeInfo(ScopeType.LA, Optional<string>.Some(laCode)),
+                    new EstablishmentScopeInfo(EstablishmentScopeType.LA, Optional<string>.Some(laCode)),
                     parameters,
                     GetChildPageBaseBreadcrumbTrail(laCode, laName)
                         .Append(new("Download data", Action(nameof(DownloadData), new { laCode }))),

@@ -1,6 +1,6 @@
-using ASP.Application.UseCases.Establishments.DTO;
-using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
 using ASP.Core.Results;
+using ASP.Domain.Establishments.UseCases.DTO;
+using ASP.Domain.Establishments.UseCases.GetEstablishmentDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;

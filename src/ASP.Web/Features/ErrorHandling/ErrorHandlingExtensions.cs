@@ -1,4 +1,4 @@
-﻿using ASP.Infrastructure;
+﻿using ASP.Core.Configuration;
 using ASP.Web.Core.Environment;
 using ASP.Web.Core.ErrorHandling;
 

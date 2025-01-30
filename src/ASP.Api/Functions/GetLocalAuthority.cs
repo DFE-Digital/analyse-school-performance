@@ -1,5 +1,5 @@
-﻿using ASP.Application.UseCases.LocalAuthorities.DTO;
-using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
+﻿using ASP.Domain.LocalAuthorities.UseCases.DTO;
+using ASP.Domain.LocalAuthorities.UseCases.GetLocalAuthority;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

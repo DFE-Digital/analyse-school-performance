@@ -1,7 +1,7 @@
-﻿using ASP.Core.Templating;
+﻿using ASP.Core.Results;
+using ASP.Core.Text;
+using ASP.Domain.Templating;
 using Newtonsoft.Json.Linq;
-using ASP.Core.Helpers;
-using ASP.Core.Results;
 
 namespace ASP.Web.Core.Templating
 {

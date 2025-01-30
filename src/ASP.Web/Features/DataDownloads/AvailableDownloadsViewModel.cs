@@ -1,6 +1,6 @@
-﻿using ASP.Application.UseCases.Downloads.DTO;
-using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
-using ASP.Core.DataDownloads;
+﻿using ASP.Domain.DataDownloads;
+using ASP.Domain.DataDownloads.UseCases.DTO;
+using ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads;
 
 namespace ASP.Web.Features.DataDownloads
 {

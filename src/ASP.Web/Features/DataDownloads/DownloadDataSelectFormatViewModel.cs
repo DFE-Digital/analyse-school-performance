@@ -1,4 +1,4 @@
-﻿using ASP.Core.Utilities;
+﻿using ASP.Domain.DataDownloads;
 
 namespace ASP.Web.Features.DataDownloads;
 

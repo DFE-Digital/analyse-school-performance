@@ -1,4 +1,5 @@
 ﻿using ASP.Core;
+using ASP.Infrastructure.TableStorage;
 
 namespace ASP.Infrastructure.Azure.TableStorage
 {

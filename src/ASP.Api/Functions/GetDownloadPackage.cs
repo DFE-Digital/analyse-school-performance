@@ -1,4 +1,3 @@
-using ASP.Core.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -7,8 +6,8 @@ using ASP.Core.Results;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.OpenApi.Models;
 using System.Net;
-using ASP.Application.UseCases.Downloads.GetDownloadPackage;
-using ASP.Core.DataDownloads;
+using ASP.Domain.DataDownloads;
+using ASP.Domain.DataDownloads.UseCases.GetDownloadPackage;
 
 namespace ASP.Api.Functions;
 
@@ -54,7 +53,7 @@ public class GetDownloadPackage : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadScopeType>())
+            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadsScopeType>())
             from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequired())
             from fileType in request.ValidateParameter("fileType", p => p.IsRequired().IsEnum<FileType>())
             from downloadIds in request.ValidateParameter("downloadIds", p => p.IsRequiredMultiParameter())

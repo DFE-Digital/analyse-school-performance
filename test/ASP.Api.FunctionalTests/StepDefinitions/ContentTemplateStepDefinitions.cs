@@ -1,4 +1,4 @@
-﻿using ASP.Core;
+﻿using ASP.Infrastructure.DocumentDatabase;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Api.FunctionalTests.StepDefinitions

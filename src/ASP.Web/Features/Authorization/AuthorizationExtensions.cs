@@ -1,4 +1,4 @@
-﻿using ASP.Infrastructure;
+﻿using ASP.Core.Configuration;
 using ASP.Infrastructure.Dsi.DsiApiClient;
 using ASP.Infrastructure.Dsi.DsiApiClientProvider;
 

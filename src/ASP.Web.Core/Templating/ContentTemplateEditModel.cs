@@ -1,6 +1,6 @@
-﻿using ASP.Core.Helpers;
-using ASP.Core.Results;
-using ASP.Core.Templating;
+﻿using ASP.Core.Results;
+using ASP.Domain.Templating;
+using ASP.Core.Text;
 using ASP.Web.Core.BreadcrumbTrail;
 
 namespace ASP.Web.Core.Templating

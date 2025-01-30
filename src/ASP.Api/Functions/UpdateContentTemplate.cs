@@ -1,6 +1,6 @@
-using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
 using ASP.Core.Results;
-using ASP.Core.Templating;
+using ASP.Domain.Templating;
+using ASP.Domain.Templating.UseCases.UpdateContentTemplate;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;

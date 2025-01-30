@@ -1,5 +1,6 @@
 ﻿using ASP.Core;
 using ASP.Core.Results;
+using ASP.Infrastructure.TableStorage;
 using ASP.Web.Core.Environment;
 using Azure.Data.Tables;
 using Azure.Identity;

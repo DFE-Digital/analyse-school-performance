@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{446A54E3-2
 		test\Exclude Javascript tests.playlist = test\Exclude Javascript tests.playlist
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Application", "src\ASP.Application\ASP.Application.csproj", "{D1709BDE-D411-484C-9A03-631CCD575425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Domain", "src\ASP.Domain\ASP.Domain.csproj", "{D1709BDE-D411-484C-9A03-631CCD575425}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api", "src\ASP.Api\ASP.Api.csproj", "{671978FC-2579-484F-B2D0-9A18C5C51FD0}"
 EndProject
@@ -73,9 +73,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Core.UnitTests", "test\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Infrastructure.Api", "src\ASP.Infrastructure.Api\ASP.Infrastructure.Api.csproj", "{FD784CE4-18E2-4411-A302-4BC894E9CCE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.Infrastructure.InMemory", "src\ASP.Infrastructure.InMemory\ASP.Infrastructure.InMemory.csproj", "{971681BB-2484-4821-B631-113816071A86}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.Infrastructure.Azure", "src\ASP.Infrastructure.Azure\ASP.Infrastructure.Azure.csproj", "{96518660-9DF9-43C2-B26B-07F2FB717144}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.Domain.UnitTests", "test\ASP.Domain.UnitTests\ASP.Domain.UnitTests.csproj", "{D908A5CB-35AD-4D82-A292-59DFC32AC08C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,14 +147,14 @@ Global
 		{FD784CE4-18E2-4411-A302-4BC894E9CCE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD784CE4-18E2-4411-A302-4BC894E9CCE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD784CE4-18E2-4411-A302-4BC894E9CCE5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{971681BB-2484-4821-B631-113816071A86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{971681BB-2484-4821-B631-113816071A86}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{971681BB-2484-4821-B631-113816071A86}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{971681BB-2484-4821-B631-113816071A86}.Release|Any CPU.Build.0 = Release|Any CPU
 		{96518660-9DF9-43C2-B26B-07F2FB717144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{96518660-9DF9-43C2-B26B-07F2FB717144}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96518660-9DF9-43C2-B26B-07F2FB717144}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96518660-9DF9-43C2-B26B-07F2FB717144}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D908A5CB-35AD-4D82-A292-59DFC32AC08C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D908A5CB-35AD-4D82-A292-59DFC32AC08C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D908A5CB-35AD-4D82-A292-59DFC32AC08C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D908A5CB-35AD-4D82-A292-59DFC32AC08C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -179,8 +179,8 @@ Global
 		{1D288915-50F2-444E-AE96-5BCBFC35D5CF} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
 		{A6FD4398-3115-4F68-A2F4-9B8F7C75253E} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
 		{FD784CE4-18E2-4411-A302-4BC894E9CCE5} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
-		{971681BB-2484-4821-B631-113816071A86} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
 		{96518660-9DF9-43C2-B26B-07F2FB717144} = {5D420B01-4CD0-4812-9F34-FC80F521DF5B}
+		{D908A5CB-35AD-4D82-A292-59DFC32AC08C} = {446A54E3-2424-4278-8AF5-F0DD985D6C52}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4950C0DD-CDAE-42E7-8BCB-678C73C51298}

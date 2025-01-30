@@ -1,7 +1,6 @@
 using ASP.Core.Time;
 using ASP.Infrastructure.Api;
-using ASP.Infrastructure.Blob;
-using ASP.Infrastructure.TableStorage;
+using ASP.Infrastructure.Azure.TableStorage;
 using ASP.Web.Components;
 using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
@@ -49,7 +48,6 @@ public class Program
             .ConfigureTemplateComponents()
             .ConfigureLogging()
             .ConfigureCurrentTime()
-            .ConfigureDataDownloads(builder.Configuration)
             .ConfigureSearch(builder.Configuration);
 
         WebApplication app = builder.Build();

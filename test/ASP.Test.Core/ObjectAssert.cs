@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using ASP.Core.Helpers;
 using ASP.Core.Results;
+using ASP.Core.Text;
 
 namespace Xunit
 {

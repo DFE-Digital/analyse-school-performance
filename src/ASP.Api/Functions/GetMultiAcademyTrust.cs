@@ -1,5 +1,5 @@
-﻿using ASP.Application.UseCases.MultiAcademyTrusts.DTO;
-using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
+﻿using ASP.Domain.MultiAcademyTrusts.UseCases.DTO;
+using ASP.Domain.MultiAcademyTrusts.UseCases.GetMultiAcademyTrust;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

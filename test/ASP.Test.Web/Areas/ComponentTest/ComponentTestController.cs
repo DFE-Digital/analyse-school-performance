@@ -1,9 +1,8 @@
 ﻿using ASP.Application;
-using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
-using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
-using ASP.Web;
+using ASP.Domain.Templating.UseCases.UpdateContentTemplate;
+using ASP.Domain.Templating.UseCases.ViewContentTemplate;
 using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;

@@ -1,4 +1,4 @@
-﻿using ASP.Core.Templating;
+﻿using ASP.Domain.Templating;
 using MR;
 
 namespace ASP.Web.Core.Templating

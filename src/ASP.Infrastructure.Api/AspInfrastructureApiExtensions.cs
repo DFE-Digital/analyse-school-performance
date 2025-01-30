@@ -1,7 +1,9 @@
 ﻿using ASP.Api;
 using ASP.Application;
-using ASP.Infrastructure.Blob;
-using ASP.Infrastructure.DocumentDatabase;
+using ASP.Core.Configuration;
+using ASP.Domain;
+using ASP.Infrastructure.Azure.Blob;
+using ASP.Infrastructure.Azure.CosmosDb;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -45,7 +47,11 @@ namespace ASP.Infrastructure.Api
                 .ConfigureInProcessTransportLayer()
                 .ConfigureDocumentDatabase(configuration)
                 .ConfigureBlobStorage(configuration)
-                .RegisterUseCases()
+                .ConfigureContentTemplates()
+                .ConfigureEstablishments()
+                .ConfigureLocalAuthorities()
+                .ConfigureMultiAcademyTrusts()
+                .ConfigureDataDownloads(configuration)
                 .RegisterRepositories()
                 .AddScoped<ApiResultConverter>();
         }

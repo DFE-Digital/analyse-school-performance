@@ -1,6 +1,6 @@
 ﻿namespace ASP.Web.Features.Search;
 
-using Infrastructure;
+using ASP.Core.Configuration;
 
 public static class ConfigureSearchExtensions
 {

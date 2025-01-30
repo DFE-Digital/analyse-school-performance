@@ -1,16 +1,16 @@
 using ASP.Application;
 using ASP.Core.Authorization;
 using ASP.Core.Results;
-using ASP.Web.Shared.Navigation;
+using ASP.Domain.DataDownloads;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
+using ASP.Web.Features.DataDownloads;
 using ASP.Web.Features.TermsOfUse;
+using ASP.Web.Shared;
+using ASP.Web.Shared.Navigation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ASP.Web.Features.DataDownloads;
-using ASP.Web.Shared;
-using ASP.Core.DataDownloads;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ASP.Web.Areas.School
@@ -27,9 +27,9 @@ namespace ASP.Web.Areas.School
             IAspApiClient api,
             IDataDownloadsScopeValidator scopeValidator,
             IHostEnvironment hostEnvironment
-        ) : base(api, scopeValidator, hostEnvironment)
+        ) : base(api, hostEnvironment)
         {
-            _downloadDataController = new DownloadDataController(nameof(DownloadData), "MySchool", [], DataDownloadScopeType.School, _api, _scopeValidator);
+            _downloadDataController = new DownloadDataController(nameof(DownloadData), "MySchool", [], DataDownloadsScopeType.School, _api, scopeValidator);
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

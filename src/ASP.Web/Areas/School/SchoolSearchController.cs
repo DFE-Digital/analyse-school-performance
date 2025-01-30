@@ -1,22 +1,21 @@
 ﻿using ASP.Application;
-using ASP.Core;
 using ASP.Core.Optionality;
+using ASP.Core.Pagination;
 using ASP.Core.Results;
+using ASP.Domain.Establishments;
+using ASP.Domain.Establishments.Search;
+using ASP.Domain.Establishments.SearchSuggestions;
+using ASP.Domain.Establishments.UseCases.DTO;
+using ASP.Domain.Establishments.UseCases.EstablishmentSearch;
+using ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
+using ASP.Domain.Establishments.UseCases.GetAllEstablishments;
 using ASP.Web.Core.BreadcrumbTrail;
-using Microsoft.AspNetCore.Mvc;
-using ASP.Web.Features.Search;
-using ASP.Core.Helpers;
-using ASP.Core.Scoping;
-using ASP.Application.UseCases.Establishments.DTO;
-using ASP.Application.UseCases.Establishments.EstablishmentSearch;
-using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
-using ASP.Application.UseCases.Establishments.GetAllEstablishments;
-using ASP.Core.Establishments.Search;
-using ASP.Core.Establishments.SearchSuggestions;
-using ASP.Core.Utilities;
-using ASP.Web.Shared.Pagination;
 using ASP.Web.Extensions;
+using ASP.Web.Features.Search;
+using ASP.Web.Shared.Pagination;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Constants = ASP.Domain.Constants;
 
 namespace ASP.Web.Areas.School
 {
@@ -230,7 +229,7 @@ namespace ASP.Web.Areas.School
         }
 
         public Task<Result<IActionResult>> Handle(
-            ScopeInfo scope,
+            EstablishmentScopeInfo scope,
             SearchParameters parameters,
             IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
             Func<SchoolSearchSubActionViewModel, IActionResult> showPageView,
@@ -298,7 +297,7 @@ namespace ASP.Web.Areas.School
                 .Merge(_subActions[subActionType].GetRouteValues(parameters));
 
         private Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> GetAllEstablishments(
-            ScopeInfo scope, int pageNumber)
+            EstablishmentScopeInfo scope, int pageNumber)
         {
             var request = new GetAllEstablishmentsRequest(
                 scope.ScopeType,
@@ -311,7 +310,7 @@ namespace ASP.Web.Areas.School
         }
 
         private Task<Result<ScopedSearchResultsPage<EstablishmentListingDTO>>> PerformEstablishmentSearch(
-            ScopeInfo scopeInfo,
+            EstablishmentScopeInfo scopeInfo,
             SearchParameters searchParams,
             int pageNumber
         )
@@ -328,7 +327,7 @@ namespace ASP.Web.Areas.School
         }
 
         private Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> PerformEstablishmentSearchSuggestions(
-            SearchParameters searchParams, ScopeInfo scopeInfo)
+            SearchParameters searchParams, EstablishmentScopeInfo scopeInfo)
         {
             var request = new EstablishmentSearchSuggestionsRequest(
                 searchParams.Search ?? "",
@@ -402,7 +401,7 @@ namespace ASP.Web.Areas.School
                 => new { searchSubAction = "", search = parameters.Search };
 
             public override async Task<Result<IActionResult>> Handle(
-                ScopeInfo scope,
+                EstablishmentScopeInfo scope,
                 SearchParameters parameters,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<SchoolSearchSubActionViewModel, IActionResult> showPageView)
@@ -487,7 +486,7 @@ namespace ASP.Web.Areas.School
                 => new { searchSubAction = Path, search = parameters.Search };
 
             public override async Task<Result<IActionResult>> Handle(
-                ScopeInfo scope,
+                EstablishmentScopeInfo scope,
                 SearchParameters parameters,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<SchoolSearchSubActionViewModel, IActionResult> showPageView)
@@ -530,7 +529,7 @@ namespace ASP.Web.Areas.School
             }
 
             public abstract Task<Result<IActionResult>> Handle(
-                ScopeInfo scope,
+                EstablishmentScopeInfo scope,
                 SearchParameters parameters,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<SchoolSearchSubActionViewModel, IActionResult> showPageView

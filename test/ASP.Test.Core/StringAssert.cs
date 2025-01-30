@@ -1,4 +1,4 @@
-﻿using ASP.Core.Extensions;
+﻿using ASP.Core.Collections;
 
 namespace Xunit
 {

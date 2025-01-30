@@ -1,4 +1,4 @@
-﻿using ASP.Application.UseCases.LocalAuthorities.DTO;
+﻿using ASP.Domain.LocalAuthorities.UseCases.DTO;
 
 namespace ASP.Web.Areas.LocalAuthority;
 

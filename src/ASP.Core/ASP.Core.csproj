@@ -27,7 +27,10 @@
         <PackageReference Include="GracefulExpandoObject.Json" Version="1.6.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
     </ItemGroup>

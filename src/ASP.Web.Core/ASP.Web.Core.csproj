@@ -28,6 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\ASP.Domain\ASP.Domain.csproj" />
         <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
     </ItemGroup>
 

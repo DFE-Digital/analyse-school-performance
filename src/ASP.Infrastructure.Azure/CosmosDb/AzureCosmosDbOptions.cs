@@ -1,4 +1,5 @@
 ﻿using ASP.Core;
+using ASP.Infrastructure.DocumentDatabase;
 using Newtonsoft.Json;
 
 namespace ASP.Infrastructure.Azure.CosmosDb;

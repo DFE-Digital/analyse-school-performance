@@ -1,4 +1,5 @@
 ﻿using ASP.Core;
+using ASP.Infrastructure.Blob;
 
 namespace ASP.Infrastructure.Azure.Blob
 {

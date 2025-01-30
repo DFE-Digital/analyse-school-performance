@@ -1,11 +1,9 @@
 using ASP.Application;
-using ASP.Core.LocalAuthorities;
-using ASP.Core.MultiAcademyTrusts;
 using ASP.Core.Results;
-using ASP.Core.Scoping;
-using ASP.Web.Features.Search;
+using ASP.Domain.Establishments;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
+using ASP.Web.Features.Search;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -21,20 +19,17 @@ namespace ASP.Web.Areas.School
     [Authorize(Policy = Policy.AccessToMySchools)]
     public class MySchoolsController : SchoolsController
     {
-        private readonly ILocalAuthorityRepository _localAuthorityRepository;
-        private readonly IMultiAcademyTrustRepository _multiAcademyTrustRepository;
+        private readonly IEstablishmentScopeValidator _scopeValidator;
         private readonly SchoolSearchController _schoolSearchController;
 
         public MySchoolsController(
             IAspApiClient api,
             IHostEnvironment hostEnvironment,
-            ILocalAuthorityRepository localAuthorityRepository,
-            IMultiAcademyTrustRepository multiAcademyTrustRepository,
+            IEstablishmentScopeValidator scopeValidator,
             IOptions<SearchOptions> searchOptions
         ) : base(api, hostEnvironment)
         {
-            _localAuthorityRepository = localAuthorityRepository;
-            _multiAcademyTrustRepository = multiAcademyTrustRepository;
+            _scopeValidator = scopeValidator;
             _schoolSearchController = new SchoolSearchController(nameof(Schools), "MySchools", [], _api, searchOptions.Value,
                 makeSchoolUrl: urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { urn }));
         }
@@ -50,7 +45,7 @@ namespace ASP.Web.Areas.School
         public async Task<IActionResult> Schools(SearchParameters parameters)
         {
             var result =
-                from scopeInfo in Scope.GetScopeInfoForRole(User, _localAuthorityRepository, _multiAcademyTrustRepository)
+                from scopeInfo in _scopeValidator.GetScopeInfoForRole(User)
                 from action in _schoolSearchController.Handle(
                     scopeInfo,
                     parameters,

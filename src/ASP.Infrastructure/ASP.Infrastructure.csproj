@@ -31,8 +31,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
-        <ProjectReference Include="..\ASP.Infrastructure.Azure\ASP.Infrastructure.Azure.csproj" />
-        <ProjectReference Include="..\ASP.Infrastructure.InMemory\ASP.Infrastructure.InMemory.csproj" />
         <ProjectReference Include="..\ASP.Web.Core\ASP.Web.Core.csproj" />
     </ItemGroup>
 

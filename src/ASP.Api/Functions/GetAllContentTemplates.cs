@@ -1,6 +1,6 @@
-﻿using ASP.Application.UseCases.ContentPage.GetAllContentTemplates;
-using ASP.Core.Results;
-using ASP.Core.Templating;
+﻿using ASP.Core.Results;
+using ASP.Domain.Templating;
+using ASP.Domain.Templating.UseCases.GetAllContentTemplates;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;

@@ -2,7 +2,6 @@
 using TechTalk.SpecFlow.Infrastructure;
 using TechTalk.SpecFlow;
 using Xunit;
-using ASP.Core.Extensions;
 
 namespace ASP.Test.SpecFlow
 {

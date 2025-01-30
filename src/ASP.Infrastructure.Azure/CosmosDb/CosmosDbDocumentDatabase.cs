@@ -1,6 +1,7 @@
 ﻿using ASP.Core;
+using ASP.Core.Pagination;
 using ASP.Core.Results;
-using ASP.Core.Utilities;
+using ASP.Infrastructure.DocumentDatabase;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.Providers;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;

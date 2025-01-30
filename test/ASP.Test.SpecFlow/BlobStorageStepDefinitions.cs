@@ -1,6 +1,5 @@
-﻿using ASP.Core;
-using ASP.Core.Results;
-using System.IO;
+﻿using ASP.Core.Results;
+using ASP.Infrastructure.Blob;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Infrastructure;
 using Xunit;

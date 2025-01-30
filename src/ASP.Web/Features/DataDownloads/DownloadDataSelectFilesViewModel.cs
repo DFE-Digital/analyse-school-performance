@@ -1,4 +1,4 @@
-﻿using ASP.Application.UseCases.Downloads.DTO;
+﻿using ASP.Domain.DataDownloads.UseCases.DTO;
 
 namespace ASP.Web.Features.DataDownloads;
 

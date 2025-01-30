@@ -1,4 +1,4 @@
-﻿using ASP.Core.Helpers;
+﻿using ASP.Core.Text;
 using ASP.Test.Core;
 using ASP.Test.Web.Areas.ComponentTest;
 using ASP.Web.FunctionalTests.Drivers;

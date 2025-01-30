@@ -1,4 +1,4 @@
-﻿using ASP.Infrastructure;
+﻿using ASP.Core.Configuration;
 using ASP.Infrastructure.Azure.KeyVault;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Abstractions;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Configurations;

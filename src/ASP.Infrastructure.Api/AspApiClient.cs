@@ -1,35 +1,33 @@
 ﻿using ASP.Api;
 using ASP.Application;
-using ASP.Application.UseCases.ContentTemplates.UpdateContentTemplate;
-using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
-using ASP.Application.UseCases.Establishments.DTO;
-using ASP.Application.UseCases.Establishments.EstablishmentSearch;
-using ASP.Application.UseCases.Establishments.EstablishmentSearchSuggestions;
-using ASP.Application.UseCases.Establishments.GetAllEstablishments;
-using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
-using ASP.Application.UseCases.LocalAuthorities.GetLocalAuthority;
-using ASP.Application.UseCases.MultiAcademyTrusts.GetMultiAcademyTrust;
-using ASP.Core.Establishments.SearchSuggestions;
-using ASP.Core.Helpers;
+using ASP.Domain.LocalAuthorities.UseCases.GetAllLocalAuthorities;
+using ASP.Domain.LocalAuthorities.UseCases.GetLocalAuthority;
+using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearch;
+using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearchSuggestions;
+using ASP.Domain.MultiAcademyTrusts.UseCases.GetMultiAcademyTrust;
+using ASP.Core.Pagination;
 using ASP.Core.Results;
-using ASP.Core.Scoping;
-using ASP.Core.Templating;
+using ASP.Core.Text;
+using ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads;
+using ASP.Domain.DataDownloads.UseCases.GetDownloadPackage;
+using ASP.Domain.Establishments.Search;
+using ASP.Domain.Establishments.SearchSuggestions;
+using ASP.Domain.Establishments.UseCases.DTO;
+using ASP.Domain.Establishments.UseCases.EstablishmentSearch;
+using ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
+using ASP.Domain.Establishments.UseCases.GetAllEstablishments;
+using ASP.Domain.Establishments.UseCases.GetEstablishmentDetails;
+using ASP.Domain.LocalAuthorities.LocalAuthoritySearchSuggestions;
+using ASP.Domain.Templating;
+using ASP.Domain.Templating.UseCases.UpdateContentTemplate;
+using ASP.Domain.Templating.UseCases.ViewContentTemplate;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net;
-using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
-using ASP.Core.Establishments.Search;
-using ASP.Core.Utilities;
-using LA = ASP.Application.UseCases.LocalAuthorities.DTO;
-using MAT = ASP.Application.UseCases.MultiAcademyTrusts.DTO;
-using ASP.Application.UseCases.BlobStorageDemoFileDownload;
-using ASP.Application.UseCases.BlobStorageDemoZipFileDownload;
-using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
-using ASP.Application.UseCases.Downloads.GetDownloadPackage;
-using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearch;
-using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
-using ASP.Core.LocalAuthorities.LocalAuthoritySearchSuggestions;
+using LA = ASP.Domain.LocalAuthorities.UseCases.DTO;
+using MAT = ASP.Domain.MultiAcademyTrusts.UseCases.DTO;
+using ASP.Domain;
 
 namespace ASP.Infrastructure.Api
 {
@@ -242,24 +240,6 @@ namespace ASP.Infrastructure.Api
             var queryString = QueryString.Create("id", request.Id);
 
             return ApiGet<MAT.MultiAcademyTrustDTO>(url, queryString);
-        }
-
-        public Task<Result<FileStreamResponse>> BlobStorageDemoFileDownload(BlobStorageDemoFileDownloadRequest request)
-        {
-            var url = "/api/BlobStorageDemoFileDownload";
-            var queryString = QueryString.Create("container", request.Container)
-                .Add("filepath", request.Filepath);
-
-            return ApiGetFileStream(url, queryString);
-        }
-
-        public Task<Result<FileStreamResponse>> BlobStorageDemoZipFileDownload(BlobStorageDemoZipFileDownloadRequest request)
-        {
-            var url = "/api/BlobStorageDemoZipFileDownload";
-            var queryString = QueryString.Create("container", request.Container)
-                .Add("filepath", request.Filepath);
-
-            return ApiGetFileStream(url, queryString);
         }
 
         public Task<Result<SearchResultsPage<LA.LocalAuthorityDTO>>> LocalAuthoritySearch(

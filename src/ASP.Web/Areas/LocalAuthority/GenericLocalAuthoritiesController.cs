@@ -1,25 +1,23 @@
 using ASP.Application;
-using ASP.Application.UseCases.LocalAuthorities.DTO;
-using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
-using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearch;
-using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
-using ASP.Core;
-using ASP.Core.Helpers;
-using ASP.Core.LocalAuthorities.LocalAuthoritySearchSuggestions;
+using ASP.Domain.LocalAuthorities.UseCases.DTO;
+using ASP.Domain.LocalAuthorities.UseCases.GetAllLocalAuthorities;
+using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearch;
+using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearchSuggestions;
 using ASP.Core.Optionality;
+using ASP.Core.Pagination;
 using ASP.Core.Results;
-using ASP.Core.Scoping;
-using ASP.Core.Utilities;
-using ASP.Web.Features.Search;
+using ASP.Domain.LocalAuthorities.LocalAuthoritySearchSuggestions;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
+using ASP.Web.Features.Search;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Shared;
 using ASP.Web.Shared.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Constants = ASP.Domain.Constants;
 
 namespace ASP.Web.Areas.LocalAuthority
 {

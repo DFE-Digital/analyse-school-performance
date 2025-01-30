@@ -1,4 +1,4 @@
-using ASP.Core.Utilities;
+using ASP.Core.Pagination;
 
 namespace ASP.Infrastructure.Azure.CosmosDb
 {

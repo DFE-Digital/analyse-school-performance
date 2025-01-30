@@ -1,4 +1,4 @@
-﻿using ASP.Application.UseCases.Establishments.DTO;
+﻿using ASP.Domain.Establishments.UseCases.DTO;
 
 namespace ASP.Web.Areas.School;
 

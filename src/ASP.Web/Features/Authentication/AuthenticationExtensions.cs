@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using ASP.Core.Authorization;
-using ASP.Infrastructure;
+using ASP.Core.Configuration;
 using ASP.Infrastructure.Dsi;
 using ASP.Infrastructure.Dsi.DsiApiClient;
 using ASP.Infrastructure.Dsi.Models;

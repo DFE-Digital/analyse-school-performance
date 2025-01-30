@@ -1,5 +1,4 @@
-﻿using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
-using ASP.Core.DataDownloads;
+﻿using ASP.Domain.DataDownloads;
 using ASP.Core.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Net;
+using ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads;
 
 namespace ASP.Api.Functions;
 
@@ -51,7 +51,7 @@ public class GetAvailableDownloads : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadScopeType>())
+            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadsScopeType>())
             from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequired())
             from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
             from response in _useCase.HandleRequest(new GetAvailableDownloadsRequest(scope, scopeIdentifier, year))

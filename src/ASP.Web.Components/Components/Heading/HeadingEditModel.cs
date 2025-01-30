@@ -1,4 +1,4 @@
-﻿using ASP.Core.Templating;
+﻿using ASP.Domain.Templating;
 using ASP.Web.Core.Templating;
 
 namespace ASP.Web.Components.Heading

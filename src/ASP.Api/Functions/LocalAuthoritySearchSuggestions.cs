@@ -1,7 +1,7 @@
-﻿using ASP.Application.UseCases.LocalAuthorities.DTO;
-using ASP.Application.UseCases.LocalAuthorities.LocalAuthoritySearchSuggestions;
-using ASP.Core.LocalAuthorities.LocalAuthoritySearchSuggestions;
+﻿using ASP.Domain.LocalAuthorities.UseCases.DTO;
+using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearchSuggestions;
 using ASP.Core.Results;
+using ASP.Domain.LocalAuthorities.LocalAuthoritySearchSuggestions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;

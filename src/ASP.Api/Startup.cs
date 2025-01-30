@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Hosting;
-using ASP.Application;
+﻿using ASP.Core.Time;
+using ASP.Domain;
 using ASP.Infrastructure;
-using ASP.Infrastructure.Blob;
-using Microsoft.Extensions.DependencyInjection;
-using ASP.Infrastructure.DocumentDatabase;
-using ASP.Core.Time;
+using ASP.Infrastructure.Azure.Blob;
+using ASP.Infrastructure.Azure.CosmosDb;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ASP.Api
 {
@@ -24,9 +24,12 @@ namespace ASP.Api
                     services
                         .ConfigureDocumentDatabase(context.Configuration)
                         .ConfigureBlobStorage(context.Configuration)
-                        .RegisterUseCases()
-                        .RegisterRepositories()
+                        .ConfigureContentTemplates()
+                        .ConfigureEstablishments()
+                        .ConfigureLocalAuthorities()
+                        .ConfigureMultiAcademyTrusts()
                         .ConfigureDataDownloads(context.Configuration)
+                        .RegisterRepositories()
                         .AddScoped<ApiResultConverter>()
                         .ConfigureCurrentTime()
                         .AddOpenApiConfiguration();

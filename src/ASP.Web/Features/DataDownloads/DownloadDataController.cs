@@ -1,15 +1,14 @@
 ﻿using ASP.Application;
-using ASP.Application.UseCases.Downloads.GetAvailableDownloads;
-using ASP.Application.UseCases.Downloads.GetDownloadPackage;
-using ASP.Core;
+using ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads;
+using ASP.Domain.DataDownloads.UseCases.GetDownloadPackage;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
-using ASP.Core.Utilities;
+using ASP.Domain.DataDownloads;
 using ASP.Web.Core.BreadcrumbTrail;
-using Microsoft.AspNetCore.Mvc;
-using ASP.Core.DataDownloads;
 using ASP.Web.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Constants = ASP.Domain.Constants;
 
 namespace ASP.Web.Features.DataDownloads
 {
@@ -134,7 +133,7 @@ namespace ASP.Web.Features.DataDownloads
         private readonly string _hostAction;
         private readonly string _hostController;
         private readonly List<string> _hostActionRouteValueKeys;
-        private readonly DataDownloadScopeType _scopeType;
+        private readonly DataDownloadsScopeType _scopeType;
         private readonly IAspApiClient _api;
         private readonly IDataDownloadsScopeValidator _scopeValidator;
         private readonly Dictionary<DownloadDataStepType, DownloadDataStep> _steps = new();
@@ -156,7 +155,7 @@ namespace ASP.Web.Features.DataDownloads
             string hostAction,
             string hostController,
             List<string> hostActionRouteValueKeys,
-            DataDownloadScopeType scopeType,
+            DataDownloadsScopeType scopeType,
             IAspApiClient api,
             IDataDownloadsScopeValidator scopeValidator,
             Dictionary<DownloadDataStepType, DownloadDataStepRouteConfig>? stepRouteConfig = null)
@@ -271,7 +270,7 @@ namespace ASP.Web.Features.DataDownloads
             => _context?.HttpContext.Request.Method;
 
         private string ScopeTypeLabel
-            => _scopeType == DataDownloadScopeType.LA ? "LA" : "school";
+            => _scopeType == DataDownloadsScopeType.LA ? "LA" : "school";
 
         private void AddModelError(string key, string errorMessage)
             => _context?.ModelState.AddModelError(key, errorMessage);

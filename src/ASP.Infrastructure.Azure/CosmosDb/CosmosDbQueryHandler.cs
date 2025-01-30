@@ -1,5 +1,4 @@
-﻿using ASP.Core.Helpers;
-using ASP.Core.Utilities;
+﻿using ASP.Core.Pagination;
 using DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.Providers;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;

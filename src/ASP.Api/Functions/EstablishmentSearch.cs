@@ -1,8 +1,8 @@
-using ASP.Application.UseCases.Establishments.DTO;
-using ASP.Application.UseCases.Establishments.EstablishmentSearch;
-using ASP.Core.Establishments.Search;
 using ASP.Core.Results;
-using ASP.Core.Scoping;
+using ASP.Domain.Establishments;
+using ASP.Domain.Establishments.Search;
+using ASP.Domain.Establishments.UseCases.DTO;
+using ASP.Domain.Establishments.UseCases.EstablishmentSearch;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -57,8 +57,8 @@ public class EstablishmentSearch : ApiFunction
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from searchTerm in request.ValidateParameter("searchTerm", p => p.IsRequired())
-            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<ScopeType>())
-            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequiredIf(scope != ScopeType.All))
+            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<EstablishmentScopeType>())
+            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequiredIf(scope != EstablishmentScopeType.All))
             from page in request.ValidateParameter("page", p => p.IsOptional().IsNumeric())
             from resultsPerPage in request.ValidateParameter("resultsPerPage", p => p.IsOptional().IsNumeric())
             from response in _useCase.HandleRequest(new EstablishmentSearchRequest(

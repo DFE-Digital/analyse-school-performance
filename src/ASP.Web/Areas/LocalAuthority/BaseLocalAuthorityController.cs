@@ -1,8 +1,8 @@
 ﻿using ASP.Application;
-using ASP.Application.UseCases.Establishments.GetEstablishmentDetails;
-using ASP.Core.DataDownloads;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
+using ASP.Domain.DataDownloads;
+using ASP.Domain.Establishments.UseCases.GetEstablishmentDetails;
 using ASP.Web.Core.Templating;
 using Microsoft.AspNetCore.Mvc;
 

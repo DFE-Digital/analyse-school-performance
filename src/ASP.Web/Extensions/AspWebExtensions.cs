@@ -1,4 +1,4 @@
-﻿using ASP.Infrastructure;
+﻿using ASP.Core.Configuration;
 using ASP.Infrastructure.Azure.KeyVault;
 using ASP.Web.Areas;
 using ASP.Web.Features;

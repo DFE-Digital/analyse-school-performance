@@ -1,7 +1,7 @@
-﻿using ASP.Application.UseCases.LocalAuthorities.DTO;
-using ASP.Application.UseCases.LocalAuthorities.GetAllLocalAuthorities;
+﻿using ASP.Domain.LocalAuthorities.UseCases.DTO;
+using ASP.Domain.LocalAuthorities.UseCases.GetAllLocalAuthorities;
+using ASP.Core.Pagination;
 using ASP.Core.Results;
-using ASP.Core.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;

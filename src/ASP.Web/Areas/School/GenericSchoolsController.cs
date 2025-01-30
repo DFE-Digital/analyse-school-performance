@@ -1,9 +1,9 @@
 using ASP.Application;
 using ASP.Core.Optionality;
-using ASP.Core.Scoping;
-using ASP.Web.Features.Search;
+using ASP.Domain.Establishments;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
+using ASP.Web.Features.Search;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -42,7 +42,7 @@ namespace ASP.Web.Areas.School
         public async Task<IActionResult> Schools(SearchParameters parameters)
         {
             var result = await _schoolSearchController.Handle(
-                new ScopeInfo(ScopeType.All, Optional<string>.None),
+                new EstablishmentScopeInfo(EstablishmentScopeType.All, Optional<string>.None),
                 parameters,
                 [],
                 model => View(new SchoolSearchPageViewModel(

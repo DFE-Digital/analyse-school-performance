@@ -1,12 +1,12 @@
-﻿using ASP.Core.Results;
-using Microsoft.AspNetCore.Mvc;
-using ASP.Web.Core.Templating;
-using ASP.Application;
-using ASP.Application.UseCases.ContentTemplates.ViewContentTemplate;
-using Microsoft.AspNetCore.Authorization;
-using ASP.Web.Features.Authorization;
+﻿using ASP.Application;
 using ASP.Core.Optionality;
+using ASP.Core.Results;
+using ASP.Domain.Templating.UseCases.ViewContentTemplate;
+using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
+using ASP.Web.Features.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Areas.Help
 {
