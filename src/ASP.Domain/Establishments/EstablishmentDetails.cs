@@ -10,22 +10,24 @@
         public Address? Address { get; }
         public EstablishmentType? EstablishmentType { get; }
         public Gender? Gender { get; set; }
-        public DateTime? OfstedLastInspectionDate { get; }
         public LocalAuthority? LocalAuthority { get; }
         public HeadTeacher? HeadTeacher { get; }
         public AgeRange? AgeRange { get; }
         public ReligiousDenomination? ReligiousDenomination { get; }
         public AdmissionsPolicy? AdmissionsPolicy { get; }
         public ResourcedProvisionType? ResourcedProvisionType { get; }
+        public List<Link>? Links { get; }
         public int? NoOfPupils { get; }
         public string? Laestab { get; }
+        public DateTime? OpenDate { get; }
+        public DateTime? CloseDate { get; }
 
         public EstablishmentDetails(string urn, string name, bool? isPrimary, bool? isSecondary,
             bool? isPost16, Address? address, EstablishmentType? establishmentType,
             Gender? gender, LocalAuthority? localAuthority, HeadTeacher? headTeacher, AgeRange? ageRange,
             ReligiousDenomination? religiousDenomination, AdmissionsPolicy? admissionsPolicy,
-            ResourcedProvisionType? resourcedProvisionType,
-            int? noOfPupils, string? laestab)
+            ResourcedProvisionType? resourcedProvisionType, List<Link>? links,
+            int? noOfPupils, string? laestab, DateTime? openDate, DateTime? closeDate)
         {
             Urn = urn;
             Name = name;
@@ -41,8 +43,11 @@
             ReligiousDenomination = religiousDenomination;
             AdmissionsPolicy = admissionsPolicy;
             ResourcedProvisionType = resourcedProvisionType;
+            Links = links;
             NoOfPupils = noOfPupils;
             Laestab = laestab;
+            OpenDate = openDate;
+            CloseDate = closeDate;
         }
     }
 }

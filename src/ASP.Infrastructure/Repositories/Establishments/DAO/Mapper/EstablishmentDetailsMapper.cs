@@ -20,8 +20,11 @@ public static class EstablishmentDetailsMapper
             details.ReligiousDenomination.MapToDomainEntityReligiousDenomination(),
             details.AdmissionsPolicy.MapToDomainEntityAdmissionsPolicy(),
             details.ResourcedProvisionType.MapToDomainEntityResourcedProvisionType(),
+            details.Links.MapToDomainEntityLinks(),
             details.NoOfPupils,
-            details.Laestab
+            details.Laestab,
+            details.OpenDate,
+            details.CloseDate
         );
     }
 }

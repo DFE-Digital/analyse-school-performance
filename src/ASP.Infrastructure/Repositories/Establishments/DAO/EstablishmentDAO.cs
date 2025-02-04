@@ -18,10 +18,13 @@
         public ResourcedProvisionTypeDAO? ResourcedProvisionType { get; }
         public DioceseDAO? Diocese { get; }
         public MultiAcademyTrustDAO? MultiAcademyTrust { get; }
+        public List<LinkDAO>? Links { get; }
         public int? NoOfPupils { get; }
         public bool IsDeleted { get; }
         public string? Laestab { get; }
         public bool IsVisible { get; set; }
+        public DateTime? OpenDate { get; }
+        public DateTime? CloseDate { get; }
 
         public EstablishmentDAO(string urn,
             string name,
@@ -39,8 +42,10 @@
             ResourcedProvisionTypeDAO? resourcedProvisionType,
             DioceseDAO? diocese,
             MultiAcademyTrustDAO? multiAcademyTrust,
+            List<LinkDAO>? links,
             int? noOfPupils, bool isDeleted,
-            string? laestab, bool isVisible)
+            string? laestab, bool isVisible,
+            DateTime? openDate, DateTime? closeDate)
         {
             Urn = urn;
             Name = name;
@@ -58,10 +63,13 @@
             ResourcedProvisionType = resourcedProvisionType;
             Diocese = diocese;
             MultiAcademyTrust = multiAcademyTrust;
+            Links = links;
             NoOfPupils = noOfPupils;
             IsDeleted = isDeleted;
             Laestab = laestab;
             IsVisible = isVisible;
+            OpenDate = openDate;
+            CloseDate = closeDate;
         }
     }
 }

@@ -3,10 +3,12 @@ using ASP.Domain.DataDownloads;
 using ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads;
 using ASP.Domain.DataDownloads.UseCases.GetDownloadPackage;
 using ASP.Domain.Establishments;
+using ASP.Domain.Establishments.GetLinkedEstablishments;
 using ASP.Domain.Establishments.UseCases.EstablishmentSearch;
 using ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
 using ASP.Domain.Establishments.UseCases.GetAllEstablishments;
 using ASP.Domain.Establishments.UseCases.GetEstablishmentDetails;
+using ASP.Domain.Establishments.UseCases.GetLinkedEstablishments;
 using ASP.Domain.LocalAuthorities.UseCases.GetAllLocalAuthorities;
 using ASP.Domain.LocalAuthorities.UseCases.GetLocalAuthority;
 using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearch;
@@ -38,6 +40,9 @@ public static class AspDomainExtensions
         services.AddScoped<IGetEstablishmentDetails, GetEstablishmentDetails>();
         services.AddScoped<IEstablishmentSearch, EstablishmentSearch>();
         services.AddScoped<IEstablishmentSearchSuggestions, EstablishmentSearchSuggestions>();
+        services.AddScoped<IGetLinkedEstablishments, GetLinkedEstablishments>();
+        services.AddScoped<ILinkDescriptionGenerator, LinkDescriptionGenerator>();
+        services.AddScoped<ILinkedEstablishmentsService, LinkedEstablishmentsService>();
         services.TryAddScoped<IEstablishmentScopeValidator, EstablishmentScope.Validator>();
 
         return services;
