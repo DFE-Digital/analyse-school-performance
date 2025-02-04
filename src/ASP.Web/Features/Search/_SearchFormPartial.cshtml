@@ -7,8 +7,11 @@
 
 <div class="govuk-grid-row" x-data="@Model.AlpineComponentName">
     <div class="govuk-grid-column-@Model.Width">
-        <input type="hidden" id="suggestion" name="suggestion" x-model="suggestion"/>
-        <form id="searchForm" action="" method="get" x-on:submit="handleSubmit">
+        <input type="hidden" id="suggestion" name="suggestion" x-model="suggestion" />
+
+        <form id="searchForm" method="get"
+              x-on:submit="handleSubmit"
+              x-on:keydown.enter="handleSubmit">
             <div class="govuk-form-group">
 
                 <label for="app-field-Search" class="govuk-label govuk-body">
@@ -31,7 +34,7 @@
                         <input type="text" id="app-field-Search"
                                class="js-disabled govuk-input govuk-!-width-three-quarters @(hasSearchTermError ? "search-input--error" : "")"
                                aria-describedby="searchTerm-input-error"
-                               name="search" spellcheck="false" value="@Model.SearchTerm"/>
+                               name="search" spellcheck="false" value="@Model.SearchTerm" />
                         <button id="searchSubmit" type="submit" class="govuk-button app-search-button">
                             <span class="govuk-visually-hidden">Search</span>
                         </button>

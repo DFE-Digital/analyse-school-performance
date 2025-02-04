@@ -52,22 +52,22 @@ export const searchSuggestions = (inputTemplate, suggestionTemplate) => ({
         // If the user selects a School/LA from the autocomplete dropdown, its URN/Code should be added to the hidden suggestion input.
         // We prefer this approach because searching by URN/Code is faster than searching by text.
 
-        if (!this.suggestion) return;
-
         const input = document.getElementById('app-field-Search');
         if (!input) return;
+
+        const searchValue = this.suggestion || input.value // Use suggestion (URN|Code) if available, otherwise input value
 
         if ('URLSearchParams' in window) {
             // URLSearchParams is supported, update/set the search input query string param to the selected suggestion and redirect.
             e.preventDefault();
             const url = new URL(window.location);
-            url.searchParams.set(input.name, this.suggestion);
+            url.searchParams.set(input.name, searchValue);
             window.location = url;
         } else {
             // URLSearchParams isn't supported, just update the search box value to the selected suggestion, this will cause the
             // search box to display the suggestion visibly while the form is being submitted but this will only happen on old
             // browsers.
-            input.value = this.suggestion;
+            input.value = searchValue;
         }
     },
 
