@@ -9,19 +9,19 @@ export default class AutoComplete {
     _previousResults = [];
 
     constructor({
-                    containerId,
-                    targetInputElementId,
-                    targetInputElementName,
-                    inputTemplate,
-                    suggestionTemplate,
-                    setHiddenField,
-                    queryParameter,
-                    resultDataProperty,
-                    searchRegenerateDelay = 250,
-                    minLength = 2,
-                    authCheckEndpoint = '/account/auth/status/',
-                    loginRedirectUrl = '/account/login'
-                }) {
+        containerId,
+        targetInputElementId,
+        targetInputElementName,
+        inputTemplate,
+        suggestionTemplate,
+        setHiddenField,
+        queryParameter,
+        resultDataProperty,
+        searchRegenerateDelay = 250,
+        minLength = 2,
+        authCheckEndpoint = '/account/auth/status/',
+        loginRedirectUrl = '/account/login'
+    }) {
         // Validate required parameters
         this.validateConstructorParams(arguments[0]);
 
@@ -99,7 +99,6 @@ export default class AutoComplete {
     }
 
     search = async (query, populateResults, suggestUrl) => {
-        
         try {
             // Authentication check
             const isAuthenticated = await this.checkAuthStatus();
@@ -117,8 +116,7 @@ export default class AutoComplete {
             // Create new abort controller
             this._currentRequestController = new AbortController();
 
-            const encodedQuery = encodeURIComponent(query);
-            const urlWithQuery = `${suggestUrl}?${this.config.queryParameter}=${encodedQuery}`;
+            const urlWithQuery = this.buildUrl(suggestUrl, this.config.queryParameter, query);
 
             if (this._previousResults.length > 0) {
                 populateResults(this._previousResults);
@@ -132,10 +130,30 @@ export default class AutoComplete {
         }
     };
 
+    // Helper function to combine URL and query parameters
+    buildUrl(baseUrl, queryParam, query) {
+        // Split URL into path and query parts
+        const [path, existingQuery] = baseUrl.split('?');
+
+        // Create URLSearchParams from existing query (if any)
+        const searchParams = new URLSearchParams(existingQuery || '');
+
+        // Get the current value and decode it if it exists
+        const currentValue = searchParams.get(queryParam);
+        if (currentValue) {
+            searchParams.set(queryParam, decodeURIComponent(currentValue));
+        }
+
+        // Set the new query value
+        searchParams.set(queryParam, query);
+
+        return `${path}?${searchParams.toString()}`;
+    };
+
     async executeSearch(url) {
         return fetch(url, {
             method: "GET",
-            headers: new Headers({"Content-Type": "application/json"}),
+            headers: new Headers({ "Content-Type": "application/json" }),
             signal: this._currentRequestController.signal
         });
     }
@@ -191,7 +209,7 @@ export default class AutoComplete {
 
         const menu = container.querySelector('[role="listbox"]');
         if (menu) {
-            this._observer.observe(menu, {childList: true, subtree: true});
+            this._observer.observe(menu, { childList: true, subtree: true });
         }
     }
 
