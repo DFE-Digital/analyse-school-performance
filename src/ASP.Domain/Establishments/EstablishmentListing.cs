@@ -4,6 +4,7 @@
     {
         public string Urn { get; }
         public string Name { get; }
+        public EducationPhase EducationPhase { get; }
         public bool? IsPrimary { get; }
         public bool? IsSecondary { get; }
         public bool? IsPost16 { get; }
@@ -13,15 +14,13 @@
         public EstablishmentListing(
             string urn,
             string name,
-            bool? isPrimary, bool? isSecondary,
-            bool? isPost16, Address? address,
+            EducationPhase educationPhase, 
+            Address? address,
             string? laestab)
         {
             Urn = urn;
             Name = name;
-            IsPrimary = isPrimary;
-            IsSecondary = isSecondary;
-            IsPost16 = isPost16;
+            EducationPhase = educationPhase;
             Address = address;
             Laestab = laestab;
         }

@@ -1,4 +1,4 @@
-﻿using ASP.Domain.Templating;
+﻿using ASP.Api.Client.Templating;
 
 namespace ASP.Web.Core.Templating
 {

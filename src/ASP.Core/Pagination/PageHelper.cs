@@ -32,5 +32,4 @@ public static class PageHelper
     {
         return int.TryParse(page, out int intValue) && intValue >= 1 ? intValue : 1;
     }
-
 }

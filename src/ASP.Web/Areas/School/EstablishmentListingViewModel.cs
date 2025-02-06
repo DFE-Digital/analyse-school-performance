@@ -1,4 +1,4 @@
-﻿using ASP.Domain.Establishments.UseCases.DTO;
+﻿using ASP.Api.Client.Establishments;
 
 namespace ASP.Web.Areas.School;
 
@@ -11,7 +11,7 @@ public class EstablishmentListingViewModel
     public string Url { get; set; } = "";
 
     public static List<EstablishmentListingViewModel> FromEstablishmentListingDto(
-        IEnumerable<EstablishmentListingDTO> establishmentListingDto,
+        IEnumerable<EstablishmentListing> establishmentListingDto,
         Func<string, string?> createSchoolUrl
     )
     {

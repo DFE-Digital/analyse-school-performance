@@ -1,0 +1,11 @@
+﻿namespace ASP.Api.Client.DataDownloads;
+
+public class Download
+{
+    public required string Id { get; set; }
+    public required string Label { get; set; }
+    public required string Source { get; set; }
+    public required int Year { get; set; }
+    public required string DatasetType { get; set; }
+    public string? Version { get; set; }
+}

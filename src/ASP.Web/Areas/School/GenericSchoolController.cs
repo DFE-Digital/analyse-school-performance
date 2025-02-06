@@ -1,7 +1,7 @@
-using ASP.Application;
+using ASP.Api.Client;
+using ASP.Api.Client.DataDownloads;
 using ASP.Core.Authorization;
 using ASP.Core.Results;
-using ASP.Domain.DataDownloads;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
@@ -25,11 +25,15 @@ namespace ASP.Web.Areas.School
 
         public GenericSchoolController(
             IAspApiClient api,
-            IDataDownloadsScopeValidator scopeValidator,
             IHostEnvironment hostEnvironment
         ) : base(api, hostEnvironment)
         {
-            _downloadDataController = new DownloadDataController(nameof(DownloadData), "GenericSchool", ["urn"], DataDownloadsScopeType.School, _api, scopeValidator);
+            _downloadDataController = new DownloadDataController(
+                nameof(DownloadData),
+                "GenericSchool",
+                ["urn"],
+                DataDownloadsScopeType.School,
+                _api);
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

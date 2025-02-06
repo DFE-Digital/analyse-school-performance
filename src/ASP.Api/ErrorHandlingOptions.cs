@@ -1,9 +1,0 @@
-﻿namespace ASP.Api
-{
-    public class ErrorHandlingOptions
-    {
-        public const string SectionName = "ErrorHandling";
-
-        public bool ShowStackTrace { get; set; }
-    }
-}

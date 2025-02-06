@@ -1,8 +1,7 @@
-﻿using ASP.Core.Time;
-using ASP.Infrastructure.Api;
+﻿using ASP.Api.Client.InProcess;
+using ASP.Core.Time;
 using ASP.Infrastructure.Blob;
 using ASP.Infrastructure.DocumentDatabase;
-using FluentAssertions.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,7 +13,7 @@ namespace ASP.Api.FunctionalTests.Drivers
     public class AspApiContext
     {
         private static readonly IHost _host;
-        private static readonly ITransportLayer _transport;
+        private static readonly ASP.Api.Client.ITransportLayer _transport;
 
         private readonly ISpecFlowOutputHelper _outputHelper;
         private HttpRequestMessage? _lastRequest = null;
@@ -111,7 +110,7 @@ namespace ASP.Api.FunctionalTests.Drivers
                     .AddJsonFile("apisettings.Test.local.json", true);
             });
 
-            builder.ConfigureServices(services => services.ConfigureInProcessTransportLayer());
+            builder.ConfigureServices((context, services) => services.ConfigureApiClient(context.Configuration));
         }
     }
 }

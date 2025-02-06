@@ -1,4 +1,4 @@
-﻿using ASP.Domain.Templating;
+﻿using ASP.Api.Client.Templating;
 using ASP.Web.Core.BreadcrumbTrail;
 using MR;
 

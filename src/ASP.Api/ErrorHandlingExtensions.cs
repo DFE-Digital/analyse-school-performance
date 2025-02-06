@@ -4,6 +4,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ASP.Core.Configuration;
+using ASP.Api.Client;
 
 namespace ASP.Api
 {

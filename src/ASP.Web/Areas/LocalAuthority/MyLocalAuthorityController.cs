@@ -1,9 +1,7 @@
-﻿using ASP.Application;
-using ASP.Core.Authorization;
-using ASP.Core.Optionality;
+﻿using ASP.Api.Client;
+using ASP.Api.Client.DataDownloads;
+using ASP.Api.Client.Establishments;
 using ASP.Core.Results;
-using ASP.Domain.DataDownloads;
-using ASP.Domain.Establishments;
 using ASP.Web.Areas.School;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
@@ -32,21 +30,35 @@ namespace ASP.Web.Areas.LocalAuthority
 
         public MyLocalAuthorityController(
             IAspApiClient api,
-            IDataDownloadsScopeValidator scopeValidator,
             IHostEnvironment hostEnvironment,
             IOptions<SearchOptions> searchOptions
-        ) : base(api, scopeValidator, hostEnvironment)
+        ) : base(api, hostEnvironment)
         {
-            _localAuthorityDataDownloadController = new DownloadDataController(nameof(DownloadLocalAuthorityData), "MyLocalAuthority", [], DataDownloadsScopeType.LA, _api, _scopeValidator);
+            _localAuthorityDataDownloadController = new DownloadDataController(
+                nameof(DownloadLocalAuthorityData),
+                "MyLocalAuthority",
+                [],
+                DataDownloadsScopeType.LA,
+                _api);
 
-            _individualSchoolDataDownloadController = new DownloadDataController(nameof(DownloadSchoolData), "MyLocalAuthority", SearchParameters.RouteValueKeys, DataDownloadsScopeType.School, _api, _scopeValidator,
+            _individualSchoolDataDownloadController = new DownloadDataController(
+                nameof(DownloadSchoolData), 
+                "MyLocalAuthority", 
+                SearchParameters.RouteValueKeys, 
+                DataDownloadsScopeType.School, 
+                _api,
                 stepRouteConfig: new()
                 {
                     [DownloadDataStepType.SelectYear] = new() { Path = "select-year" },
                 });
 
-            _schoolSearchController = new SchoolSearchController(nameof(DownloadSchoolDataSearch), "MyLocalAuthority", [], _api,
-                searchOptions.Value, makeSchoolUrl: urn => _individualSchoolDataDownloadController.GetInitialActionUrl(new { urn }));
+            _schoolSearchController = new SchoolSearchController(
+                nameof(DownloadSchoolDataSearch),
+                "MyLocalAuthority",
+                [],
+                _api,
+                searchOptions.Value,
+                makeSchoolUrl: urn => _individualSchoolDataDownloadController.GetInitialActionUrl(new { urn }));
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -128,7 +140,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 from laCode in User.GetLocalAuthorityCode()
                 from laName in GetLocalAuthorityName(laCode)
                 from action in _schoolSearchController.Handle(
-                    new EstablishmentScopeInfo(EstablishmentScopeType.LA, Optional<string>.Some(laCode)),
+                    new EstablishmentScopeInfo(EstablishmentScopeType.LA, laCode),
                     parameters,
                     GetChildPageBaseBreadcrumbTrail()
                         .Append(new("Download data", Action(nameof(DownloadData)))),

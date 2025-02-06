@@ -1,11 +1,14 @@
 {
-  "CosmosDb": {
-    "DatabaseId": "test"
-  },
-  "DocumentDatabase": {
-    "InMemory": true
-  },
-  "BlobStorage": {
-    "InMemory": true
-  }
+    "CosmosDb": {
+        "DatabaseId": "test"
+    },
+    "DocumentDatabase": {
+        "InMemory": true
+    },
+    "BlobStorage": {
+        "InMemory": true
+    },
+    "Api": {
+        "InProcess": true
+    }
 }

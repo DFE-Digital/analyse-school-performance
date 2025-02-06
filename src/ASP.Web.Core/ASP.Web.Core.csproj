@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ASP.Domain\ASP.Domain.csproj" />
+        <ProjectReference Include="..\ASP.Api.Client\ASP.Api.Client.csproj" />
         <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
     </ItemGroup>
 

@@ -1,8 +1,7 @@
-using ASP.Application;
+using ASP.Api.Client;
+using ASP.Api.Client.DataDownloads;
 using ASP.Core.Authorization;
 using ASP.Core.Results;
-using ASP.Domain.DataDownloads;
-using ASP.Domain.Establishments;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
@@ -23,20 +22,18 @@ namespace ASP.Web.Areas.School
     public class MySchoolsSchoolController : BaseSchoolController
     {
         private readonly DownloadDataController _downloadDataController;
-        private readonly IEstablishmentRepository _establishmentRepository;
-        private readonly IEstablishmentScopeValidator _establishmentScopeValidator;
 
         public MySchoolsSchoolController(
             IAspApiClient api,
-            IHostEnvironment hostEnvironment,
-            IEstablishmentRepository establishmentRepository,
-            IDataDownloadsScopeValidator dataDownloadsScopeValidator,
-            IEstablishmentScopeValidator establishmentScopeValidator) 
+            IHostEnvironment hostEnvironment)
             : base(api, hostEnvironment)
         {
-            _establishmentRepository = establishmentRepository;
-            _establishmentScopeValidator = establishmentScopeValidator;
-            _downloadDataController = new DownloadDataController(nameof(DownloadData), "MySchoolsSchool", ["urn"], DataDownloadsScopeType.School, _api, dataDownloadsScopeValidator);
+            _downloadDataController = new DownloadDataController(
+                nameof(DownloadData),
+                "MySchoolsSchool",
+                ["urn"],
+                DataDownloadsScopeType.School,
+                _api);
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -50,8 +47,7 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> LandingPage(string urn, string? revision)
         {
             var result =
-                from scopeInfo in _establishmentScopeValidator.GetScopeInfoForRole(User)
-                from establishmentDetails in GetEstablishmentDetails(urn, scopeInfo)
+                from establishmentDetails in GetEstablishmentDetails(urn)
                 from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
@@ -76,8 +72,7 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> OtherReports(string urn, string? revision)
         {
             var result = 
-                from scopeInfo in _establishmentScopeValidator.GetScopeInfoForRole(User)
-                from establishmentDetails in GetEstablishmentDetails(urn, scopeInfo)
+                from establishmentDetails in GetEstablishmentDetails(urn)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
@@ -102,8 +97,7 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> UsefulLinks(string urn, string? revision)
         {
             var result =
-                from scopeInfo in _establishmentScopeValidator.GetScopeInfoForRole(User)
-                from establishmentDetails in GetEstablishmentDetails(urn, scopeInfo)
+                from establishmentDetails in GetEstablishmentDetails(urn)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
@@ -130,8 +124,7 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> DownloadData(string urn, DownloadDataStepParameters parameters)
         {
             var result =
-                from scopeInfo in _establishmentScopeValidator.GetScopeInfoForRole(User)
-                from establishmentDetails in GetEstablishmentDetails(urn, scopeInfo)
+                from establishmentDetails in GetEstablishmentDetails(urn)
                 from actionResult in _downloadDataController.Handle(
                     parameters,
                     urn,
@@ -193,13 +186,13 @@ namespace ASP.Web.Areas.School
                 new($"{name} data", _downloadDataController.GetInitialActionUrl(), Request.Path)
             ]);
 
-        private Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn, EstablishmentScopeInfo scopeInfo)
+        protected override Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
         {
             return
-                from isVisible in _establishmentRepository.IsEstablishmentVisibleWithinScope(urn,
-                        new EstablishmentScope(scopeInfo.ScopeType, scopeInfo.ScopeId.GetValueOrDefault("")))
-                    .ErrorIf(exists => !exists, Error.NotAllowed($"User is not allowed to view School {urn}"))
-                from establishmentDetails in GetEstablishmentDetails(urn)
+                from scopeInfo in User.GetScopeInfoForRole()
+                from _ in _api.IsEstablishmentAccessibleInScope(new(urn, scopeInfo.ScopeType, scopeInfo.ScopeId))
+                    .ErrorIf(response => !response.IsAccessible, Error.NotAllowed($"User is not allowed to view School {urn}"))
+                from establishmentDetails in base.GetEstablishmentDetails(urn)
                 select establishmentDetails;
         }
     }

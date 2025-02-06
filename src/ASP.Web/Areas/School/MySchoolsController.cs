@@ -1,6 +1,5 @@
-using ASP.Application;
+using ASP.Api.Client;
 using ASP.Core.Results;
-using ASP.Domain.Establishments;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.Search;
@@ -19,18 +18,20 @@ namespace ASP.Web.Areas.School
     [Authorize(Policy = Policy.AccessToMySchools)]
     public class MySchoolsController : SchoolsController
     {
-        private readonly IEstablishmentScopeValidator _scopeValidator;
         private readonly SchoolSearchController _schoolSearchController;
 
         public MySchoolsController(
             IAspApiClient api,
             IHostEnvironment hostEnvironment,
-            IEstablishmentScopeValidator scopeValidator,
             IOptions<SearchOptions> searchOptions
         ) : base(api, hostEnvironment)
         {
-            _scopeValidator = scopeValidator;
-            _schoolSearchController = new SchoolSearchController(nameof(Schools), "MySchools", [], _api, searchOptions.Value,
+            _schoolSearchController = new SchoolSearchController(
+                nameof(Schools),
+                "MySchools",
+                [],
+                _api,
+                searchOptions.Value,
                 makeSchoolUrl: urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { urn }));
         }
 
@@ -45,7 +46,7 @@ namespace ASP.Web.Areas.School
         public async Task<IActionResult> Schools(SearchParameters parameters)
         {
             var result =
-                from scopeInfo in _scopeValidator.GetScopeInfoForRole(User)
+                from scopeInfo in User.GetScopeInfoForRole()
                 from action in _schoolSearchController.Handle(
                     scopeInfo,
                     parameters,

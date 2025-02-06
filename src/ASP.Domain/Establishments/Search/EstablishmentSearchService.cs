@@ -1,4 +1,5 @@
-﻿using ASP.Core.Results;
+﻿using ASP.Core.Pagination;
+using ASP.Core.Results;
 
 namespace ASP.Domain.Establishments.Search
 {

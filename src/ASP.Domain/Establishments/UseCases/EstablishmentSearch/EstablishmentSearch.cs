@@ -1,7 +1,6 @@
-﻿using ASP.Core.Results;
+﻿using ASP.Core.Pagination;
+using ASP.Core.Results;
 using ASP.Domain.Establishments.Search;
-using ASP.Domain.Establishments.UseCases.DTO;
-using ASP.Domain.Establishments.UseCases.DTO.Mapper;
 
 namespace ASP.Domain.Establishments.UseCases.EstablishmentSearch;
 
@@ -20,7 +19,7 @@ public class EstablishmentSearch : IEstablishmentSearch
         _searchService = new EstablishmentSearchService(establishmentRepository);
     }
 
-    public Task<Result<ScopedSearchResultsPage<EstablishmentListingDTO>>> HandleRequest(
+    public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> HandleRequest(
         EstablishmentSearchRequest request)
     {
         var page = request.Page.GetValueOrDefault(1);
@@ -30,6 +29,6 @@ public class EstablishmentSearch : IEstablishmentSearch
         return
             from scope in _scopeValidator.ValidateScope(request.ScopeType, scopeIdentifier)
             from results in _searchService.Search(request.SearchTerm, scope, page, resultsPerPage)
-            select results.Map(r => r.MapToEstablishmentListingDTO());
+            select results;
     }
 }

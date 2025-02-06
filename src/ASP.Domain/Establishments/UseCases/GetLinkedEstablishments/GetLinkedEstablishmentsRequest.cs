@@ -1,11 +1,3 @@
 ﻿namespace ASP.Domain.Establishments.UseCases.GetLinkedEstablishments;
 
-public class GetLinkedEstablishmentsRequest
-{
-    public string Urn { get; set; }
-
-    public GetLinkedEstablishmentsRequest(string urn)
-    {
-        Urn = urn;
-    }
-}
+public record GetLinkedEstablishmentsRequest(string Urn);

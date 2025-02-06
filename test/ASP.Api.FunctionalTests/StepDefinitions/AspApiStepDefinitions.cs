@@ -1,5 +1,4 @@
 using ASP.Api.FunctionalTests.Drivers;
-using ASP.Infrastructure.Api;
 using ASP.Test.SpecFlow;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;

@@ -1,7 +1,6 @@
-﻿using ASP.Core.Results;
+﻿using ASP.Core.Pagination;
+using ASP.Core.Results;
 using ASP.Domain.Establishments.SearchSuggestions;
-using ASP.Domain.Establishments.UseCases.DTO;
-using ASP.Domain.Establishments.UseCases.DTO.Mapper;
 
 namespace ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
 
@@ -19,7 +18,7 @@ public class EstablishmentSearchSuggestions : IEstablishmentSearchSuggestions
         _searchService = new EstablishmentSearchSuggestionsService(establishmentRepository);
     }
 
-    public Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> HandleRequest(
+    public Task<Result<ScopedSearchSuggestionsList<EstablishmentSuggestion>>> HandleRequest(
         EstablishmentSearchSuggestionsRequest request
     )
     {
@@ -29,12 +28,6 @@ public class EstablishmentSearchSuggestions : IEstablishmentSearchSuggestions
         return
             from scope in _scopeValidator.ValidateScope(request.ScopeType, scopeIdentifier)
             from response in _searchService.Search(request.SearchTerm, scope, maxSuggestions)
-            select new SearchSuggestionsResult<EstablishmentSuggestionDTO> {
-                Suggestions = response.Suggestions.MapToListOfEstablishmentSuggestionDTO(),
-                MaxSuggestions = maxSuggestions,
-                SearchTerm = request.SearchTerm,
-                Scope = request.ScopeType.ToString(),
-                ScopeIdentifier = scopeIdentifier
-            };
+            select response;
     }
 }

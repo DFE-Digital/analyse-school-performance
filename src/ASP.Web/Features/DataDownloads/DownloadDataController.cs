@@ -1,14 +1,10 @@
-﻿using ASP.Application;
-using ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads;
-using ASP.Domain.DataDownloads.UseCases.GetDownloadPackage;
-using ASP.Core.Optionality;
+﻿using ASP.Api.Client;
+using ASP.Api.Client.DataDownloads;
 using ASP.Core.Results;
-using ASP.Domain.DataDownloads;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Constants = ASP.Domain.Constants;
 
 namespace ASP.Web.Features.DataDownloads
 {
@@ -135,7 +131,6 @@ namespace ASP.Web.Features.DataDownloads
         private readonly List<string> _hostActionRouteValueKeys;
         private readonly DataDownloadsScopeType _scopeType;
         private readonly IAspApiClient _api;
-        private readonly IDataDownloadsScopeValidator _scopeValidator;
         private readonly Dictionary<DownloadDataStepType, DownloadDataStep> _steps = new();
         private RouteValueDictionary? _hostActionRouteValues;
         private ActionContext? _context;
@@ -149,7 +144,6 @@ namespace ASP.Web.Features.DataDownloads
         /// <param name="hostActionRouteValueKeys">Keys of any route values the host action requires</param>
         /// <param name="scopeType">Whether the downloads are School or LA downloads</param>
         /// <param name="api">API client instance</param>
-        /// <param name="scopeValidator">Validator to validate DataDownloadScope</param>
         /// <param name="stepRouteConfig">Optional config to override the default paths for each step</param>
         public DownloadDataController(
             string hostAction,
@@ -157,7 +151,6 @@ namespace ASP.Web.Features.DataDownloads
             List<string> hostActionRouteValueKeys,
             DataDownloadsScopeType scopeType,
             IAspApiClient api,
-            IDataDownloadsScopeValidator scopeValidator,
             Dictionary<DownloadDataStepType, DownloadDataStepRouteConfig>? stepRouteConfig = null)
         {
             _hostAction = hostAction;
@@ -165,7 +158,6 @@ namespace ASP.Web.Features.DataDownloads
             _hostActionRouteValueKeys = hostActionRouteValueKeys;
             _scopeType = scopeType;
             _api = api;
-            _scopeValidator = scopeValidator;
 
             _steps = new()
             {
@@ -296,15 +288,10 @@ namespace ASP.Web.Features.DataDownloads
                 .Merge(initialRouteValues)
                 .Merge(_steps[stepType].GetRouteValues(parameters));
 
-        private Task<Result<AvailableDownloadsViewModel>> GetAvailableDownloads(string scopeIdentifier, Optional<int> year)
+        private Task<Result<AvailableDownloadsViewModel>> GetAvailableDownloads(string scopeIdentifier, int? year)
         {
             return
-                from scope in _scopeValidator.ValidateScope(
-                    _scopeType,
-                    scopeIdentifier,
-                    year
-                )
-                from downloads in _api.GetAvailableDownloads(new GetAvailableDownloadsRequest(scope.ScopeType, scope.Identifier, scope.Year))
+                from downloads in _api.GetAvailableDownloads(new GetAvailableDownloadsRequest(_scopeType, scopeIdentifier, year))
                 select AvailableDownloadsViewModel.FromAvailableDownloads(downloads);
         }
 
@@ -340,7 +327,7 @@ namespace ASP.Web.Features.DataDownloads
                 }
 
                 return
-                    from availableDownloads in await Controller.GetAvailableDownloads(scopeIdentifier, Optional<int>.None)
+                    from availableDownloads in await Controller.GetAvailableDownloads(scopeIdentifier, null)
                         .DefaultIf(e => e is NotFoundError, new())
                     let title = availableDownloads.Downloads.Any()
                         ? Title
@@ -397,7 +384,7 @@ namespace ASP.Web.Features.DataDownloads
                 }
 
                 return
-                    from availableDownloads in await Controller.GetAvailableDownloads(scopeIdentifier, Optional.FromNullable(parameters.SelectedYear))
+                    from availableDownloads in await Controller.GetAvailableDownloads(scopeIdentifier, parameters.SelectedYear)
                         .DefaultIf(e => e is NotFoundError, new())
                     let title = availableDownloads.Downloads.Any()
                         ? Title
@@ -444,7 +431,7 @@ namespace ASP.Web.Features.DataDownloads
 
                 List<(string, string?)> fileFormatList = [];
 
-                foreach (FileType fileType in Enum.GetValues<FileType>())
+                foreach (Api.Client.DataDownloads.FileType fileType in Enum.GetValues<Api.Client.DataDownloads.FileType>())
                 {
                     fileFormatList.Add(($"Data in {fileType} format", Controller.GetUrlForStep(DownloadDataStepType.DownloadAsZip, parameters with { FileType = fileType })));
                 }
@@ -487,7 +474,7 @@ namespace ASP.Web.Features.DataDownloads
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<DownloadDataStepViewModel, IActionResult> showPageView)
             {
-                var fileType = parameters.FileType ?? FileType.CSV;
+                var fileType = parameters.FileType ?? Api.Client.DataDownloads.FileType.CSV;
                 var selectedFiles = parameters.SelectedFiles ?? new();
 
                 return

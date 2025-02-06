@@ -1,4 +1,5 @@
-﻿using ASP.Domain.Establishments.UseCases.DTO;
+﻿using ASP.Api.Client;
+using ASP.Api.Client.Establishments;
 
 namespace ASP.Web.Areas.School
 {
@@ -7,18 +8,18 @@ namespace ASP.Web.Areas.School
         public string Urn { get; set; } = "";
         public string Name { get; set; } = "";
         public string? Address { get; set; }
-        public EstablishmentTypeDTO? EstablishmentType { get; set; }
+        public LookupValueWithCode? EstablishmentType { get; set; }
         public string? PhaseOfEducation { get; set; } = "";
-        public GenderDTO? Gender { get; set; }
-        public LocalAuthorityDTO? LocalAuthority { get; set; }
-        public HeadTeacherDTO? HeadTeacher { get; set; }
-        public AgeRangeDTO? AgeRange { get; set; }
-        public ReligiousDenominationDTO? ReligiousDenomination { get; set; }
-        public AdmissionsPolicyDTO? AdmissionsPolicy { get; set; }
-        public ResourcedProvisionTypeDTO? ResourcedProvisionType { get; set; }
+        public LookupValueWithCode? Gender { get; set; }
+        public LookupValueWithCode? LocalAuthority { get; set; }
+        public HeadTeacher? HeadTeacher { get; set; }
+        public AgeRange? AgeRange { get; set; }
+        public LookupValueWithCode? ReligiousDenomination { get; set; }
+        public LookupValueWithCode? AdmissionsPolicy { get; set; }
+        public LookupValueWithCode? ResourcedProvisionType { get; set; }
         public int? NoOfPupils { get; set; }
 
-        public static EstablishmentDetailsViewModel FromEstablishmentDetails(EstablishmentDetailsDTO establishmentDetailsDto)
+        public static EstablishmentDetailsViewModel FromEstablishmentDetails(EstablishmentDetails establishmentDetailsDto)
         {
             return new EstablishmentDetailsViewModel {
                 Urn = establishmentDetailsDto.Urn,

@@ -1,12 +1,12 @@
-﻿namespace ASP.Domain.Establishments
+﻿using ASP.Domain.Establishments.LinkedEstablishments;
+
+namespace ASP.Domain.Establishments
 {
     public class EstablishmentDetails
     {
         public string Urn { get; }
         public string Name { get; }
-        public bool? IsPrimary { get; }
-        public bool? IsSecondary { get; }
-        public bool? IsPost16 { get; }
+        public EducationPhase EducationPhase { get; }
         public Address? Address { get; }
         public EstablishmentType? EstablishmentType { get; }
         public Gender? Gender { get; set; }
@@ -22,8 +22,7 @@
         public DateTime? OpenDate { get; }
         public DateTime? CloseDate { get; }
 
-        public EstablishmentDetails(string urn, string name, bool? isPrimary, bool? isSecondary,
-            bool? isPost16, Address? address, EstablishmentType? establishmentType,
+        public EstablishmentDetails(string urn, string name, EducationPhase educationPhase, Address? address, EstablishmentType? establishmentType,
             Gender? gender, LocalAuthority? localAuthority, HeadTeacher? headTeacher, AgeRange? ageRange,
             ReligiousDenomination? religiousDenomination, AdmissionsPolicy? admissionsPolicy,
             ResourcedProvisionType? resourcedProvisionType, List<Link>? links,
@@ -31,9 +30,7 @@
         {
             Urn = urn;
             Name = name;
-            IsPrimary = isPrimary;
-            IsSecondary = isSecondary;
-            IsPost16 = isPost16;
+            EducationPhase = educationPhase;
             Address = address;
             EstablishmentType = establishmentType;
             Gender = gender;

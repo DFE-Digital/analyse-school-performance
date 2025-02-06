@@ -1,5 +1,4 @@
-﻿using ASP.Domain.Establishments.Search;
-using ASP.Domain.Establishments.SearchSuggestions;
+﻿using ASP.Domain.Establishments.SearchSuggestions;
 using ASP.Core.Pagination;
 using ASP.Core.Results;
 

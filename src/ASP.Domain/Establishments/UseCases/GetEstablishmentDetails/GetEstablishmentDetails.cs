@@ -1,6 +1,4 @@
 ﻿using ASP.Core.Results;
-using ASP.Domain.Establishments.UseCases.DTO;
-using ASP.Domain.Establishments.UseCases.DTO.Mapper;
 
 namespace ASP.Domain.Establishments.UseCases.GetEstablishmentDetails
 {
@@ -14,11 +12,11 @@ namespace ASP.Domain.Establishments.UseCases.GetEstablishmentDetails
                           throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public Task<Result<EstablishmentDetailsDTO>> HandleRequest(GetEstablishmentDetailsRequest request)
+        public Task<Result<EstablishmentDetails>> HandleRequest(GetEstablishmentDetailsRequest request)
         {
             return
                 from establishment in _repository.GetEstablishmentDetails(request.Urn)
-                select establishment.MapToEstablishmentDetailsDTO();
+                select establishment;
         }
     }
 }

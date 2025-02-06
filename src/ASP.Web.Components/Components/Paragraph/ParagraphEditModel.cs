@@ -1,4 +1,4 @@
-﻿using ASP.Domain.Templating;
+﻿using ASP.Api.Client.Templating;
 using ASP.Web.Core.Templating;
 
 namespace ASP.Web.Components.Paragraph

@@ -1,4 +1,4 @@
-﻿using ASP.Application;
+﻿using ASP.Api.Client;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.Web.Areas.School;

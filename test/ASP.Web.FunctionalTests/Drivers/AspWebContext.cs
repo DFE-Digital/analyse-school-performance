@@ -1,4 +1,5 @@
-﻿using ASP.Core.Time;
+﻿using ASP.Api.Client.InProcess;
+using ASP.Core.Time;
 using ASP.Infrastructure.Blob;
 using ASP.Infrastructure.DocumentDatabase;
 using ASP.Infrastructure.InMemory;
@@ -175,6 +176,11 @@ public class AspWebContext
             var testMode = Environment.GetEnvironmentVariable("ASP_Test_Mode") ?? "Development";
             var path = Path.GetDirectoryName(GetType().Assembly.GetAssemblyLocation());
 
+            builder.ConfigureServices((context, services) =>
+            {
+                services.ConfigureApiClient(context.Configuration);
+            });
+
             builder.ConfigureTestServices(services =>
             {
                 // Add component test controller and views from ASP.Test.Web for isolated testing of components
@@ -215,6 +221,7 @@ public class AspWebContext
 
                 // Add service that provides Roles for use in authorization tests
                 services.Add(new ServiceDescriptor(typeof(TestClaimsProvider), _testClaimsProvider));
+
             });
         }
     }

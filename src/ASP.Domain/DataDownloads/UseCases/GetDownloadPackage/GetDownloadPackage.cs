@@ -4,6 +4,7 @@ using ASP.Core.Results;
 using ASP.Core.Time;
 using Microsoft.Extensions.Options;
 using System.IO.Compression;
+using ASP.Core.Network;
 
 namespace ASP.Domain.DataDownloads.UseCases.GetDownloadPackage
 {

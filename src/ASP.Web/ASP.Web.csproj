@@ -23,18 +23,22 @@
     </PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Areas\Shared\**" />
 	  <Compile Remove="Components\**" />
 	  <Compile Remove="Enums\**" />
 	  <Compile Remove="ExceptionHandlers\**" />
 	  <Compile Remove="Services\**" />
+	  <Content Remove="Areas\Shared\**" />
 	  <Content Remove="Components\**" />
 	  <Content Remove="Enums\**" />
 	  <Content Remove="ExceptionHandlers\**" />
 	  <Content Remove="Services\**" />
+	  <EmbeddedResource Remove="Areas\Shared\**" />
 	  <EmbeddedResource Remove="Components\**" />
 	  <EmbeddedResource Remove="Enums\**" />
 	  <EmbeddedResource Remove="ExceptionHandlers\**" />
 	  <EmbeddedResource Remove="Services\**" />
+	  <None Remove="Areas\Shared\**" />
 	  <None Remove="Components\**" />
 	  <None Remove="Enums\**" />
 	  <None Remove="ExceptionHandlers\**" />
@@ -42,10 +46,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ASP.Domain\ASP.Domain.csproj" />
+		<ProjectReference Include="..\ASP.Api.Client.InProcess\ASP.Api.Client.InProcess.csproj" />
+		<ProjectReference Include="..\ASP.Api.Client\ASP.Api.Client.csproj" />
 		<ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
+		<ProjectReference Include="..\ASP.Infrastructure.Azure\ASP.Infrastructure.Azure.csproj" />
 		<ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
-		<ProjectReference Include="..\ASP.Infrastructure.Api\ASP.Infrastructure.Api.csproj" />
 		<ProjectReference Include="..\ASP.Web.Components\ASP.Web.Components.csproj" />
 		<ProjectReference Include="..\ASP.Web.Core\ASP.Web.Core.csproj" />
 	</ItemGroup>
@@ -80,10 +85,6 @@
 		<Content Include="CurrentCommit.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <Folder Include="Areas\Shared\" />
 	</ItemGroup>
 	
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">

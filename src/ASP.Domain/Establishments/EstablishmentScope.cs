@@ -1,8 +1,5 @@
-﻿using System.Security.Claims;
-using ASP.Core.Authorization;
-using ASP.Domain.LocalAuthorities;
+﻿using ASP.Domain.LocalAuthorities;
 using ASP.Domain.MultiAcademyTrusts;
-using ASP.Core.Optionality;
 using ASP.Core.Results;
 
 namespace ASP.Domain.Establishments;
@@ -77,54 +74,6 @@ public class EstablishmentScope
             }
 
             return new EstablishmentScope(scopeType, "");
-        }
-
-        public Task<Result<EstablishmentScopeInfo>> GetScopeInfoForRole(ClaimsPrincipal user)
-        {
-            if (user.Role()!.IsLaUser)
-            {
-                return
-                    from scopeId in GetScopeIdForLaUser(user)
-                    select new EstablishmentScopeInfo(EstablishmentScopeType.LA, scopeId);
-            }
-
-            if (user.Role()!.IsMatUser)
-            {
-                return
-                    from scopeId in GetScopeIdForMatUser(user)
-                    select new EstablishmentScopeInfo(EstablishmentScopeType.MAT, scopeId);
-            }
-
-            if (user.Role()!.IsDioceseUser)
-            {
-                return Task.FromResult(
-                    from name in user.GetDioceseName()
-                    let scopeId = Optional<string>.Some(name)
-                    select new EstablishmentScopeInfo(EstablishmentScopeType.Diocese, scopeId)
-                );
-            }
-
-            return Task.FromResult(Result.Success(
-                new EstablishmentScopeInfo(EstablishmentScopeType.All, Optional<string>.None)
-            ));
-        }
-
-        private Task<Result<Optional<string>>> GetScopeIdForLaUser(ClaimsPrincipal user)
-        {
-            return
-                from laCode in user.GetLocalAuthorityCode()
-                from _ in _localAuthorityRepository.GetLocalAuthority(laCode)
-                    .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
-                select Optional<string>.Some(laCode);
-        }
-
-        private Task<Result<Optional<string>>> GetScopeIdForMatUser(ClaimsPrincipal user)
-        {
-            return
-                from matUid in user.GetMatUid()
-                from _ in _multiAcademyTrustRepository.GetMultiAcademyTrust(matUid)
-                    .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
-                select Optional<string>.Some(matUid);
         }
     }
 }

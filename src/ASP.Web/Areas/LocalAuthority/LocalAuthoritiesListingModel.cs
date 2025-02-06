@@ -1,4 +1,4 @@
-﻿using ASP.Domain.LocalAuthorities.UseCases.DTO;
+﻿using ASP.Api.Client;
 
 namespace ASP.Web.Areas.LocalAuthority;
 
@@ -9,7 +9,7 @@ public class LocalAuthoritiesListingModel
     public string Url { get; set; } = "";
 
     public static List<LocalAuthoritiesListingModel> FromLocalAuthoritiesListingDto(
-        IEnumerable<LocalAuthorityDTO> localAuthoritiesListingDto,
+        IEnumerable<LookupValueWithCode> localAuthoritiesListingDto,
         Func<string, string?> createLocalAuthorityUrl)
     {
         var result = localAuthoritiesListingDto.Select(x =>

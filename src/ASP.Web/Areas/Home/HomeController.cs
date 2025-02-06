@@ -1,7 +1,6 @@
-using ASP.Application;
-using ASP.Core.Optionality;
+using ASP.Api.Client;
+using ASP.Api.Client.Templating;
 using ASP.Core.Results;
-using ASP.Domain.Templating.UseCases.ViewContentTemplate;
 using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
 using ASP.Web.Features.TermsOfUse;
@@ -44,7 +43,7 @@ namespace ASP.Web.Areas.Home
             };
 
             var result =
-                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID, Optional.FromNullable(revision)))
+                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID, revision))
                 select ContentTemplateViewModel.FromTemplate(CONTENT_TEMPLATE_ID, revision, template);
 
             return result

@@ -1,12 +1,3 @@
-﻿namespace ASP.Domain.Establishments.UseCases.GetEstablishmentDetails
-{
-    public class GetEstablishmentDetailsRequest
-    {
-        public string Urn { get; set; }
+﻿namespace ASP.Domain.Establishments.UseCases.GetEstablishmentDetails;
 
-        public GetEstablishmentDetailsRequest(string urn)
-        {
-            Urn = urn;
-        }
-    }
-}
+public record GetEstablishmentDetailsRequest(string Urn);

@@ -1,8 +1,7 @@
-﻿using ASP.Application;
-using ASP.Core.Optionality;
+﻿using ASP.Api.Client;
+using ASP.Api.Client.Establishments;
+using ASP.Api.Client.Templating;
 using ASP.Core.Results;
-using ASP.Domain.Establishments.UseCases.GetEstablishmentDetails;
-using ASP.Domain.Templating.UseCases.ViewContentTemplate;
 using ASP.Web.Core.Templating;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,7 +35,7 @@ namespace ASP.Web.Areas.School
         protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentId, string? revision)
         {
             return (
-                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(contentId, Optional.FromNullable(revision)))
+                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(contentId, revision))
                 select ContentTemplateViewModel.FromTemplate(contentId, revision, template)
             ).DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel());
         }

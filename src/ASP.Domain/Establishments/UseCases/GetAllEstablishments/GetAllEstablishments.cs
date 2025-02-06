@@ -1,7 +1,5 @@
 ﻿using ASP.Core.Pagination;
 using ASP.Core.Results;
-using ASP.Domain.Establishments.UseCases.DTO;
-using ASP.Domain.Establishments.UseCases.DTO.Mapper;
 
 namespace ASP.Domain.Establishments.UseCases.GetAllEstablishments;
 
@@ -18,7 +16,7 @@ public class GetAllEstablishments : IGetAllEstablishments
         _scopeValidator = scopeValidator ?? throw new ArgumentNullException(nameof(scopeValidator));
     }
 
-    public Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> HandleRequest(
+    public Task<Result<ScopedResultsPage<EstablishmentListing>>> HandleRequest(
         GetAllEstablishmentsRequest request)
     {
         var page = request.Page.GetValueOrDefault(1);
@@ -28,6 +26,6 @@ public class GetAllEstablishments : IGetAllEstablishments
         return
             from scope in _scopeValidator.ValidateScope(request.ScopeType, scopeIdentifier)
             from results in _repository.GetAllEstablishments(scope, page, resultsPerPage)
-            select results.Map(r => r.MapToEstablishmentListingDTO());
+            select results;
     }
 }

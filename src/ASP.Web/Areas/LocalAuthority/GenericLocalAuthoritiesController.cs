@@ -1,12 +1,5 @@
-using ASP.Application;
-using ASP.Domain.LocalAuthorities.UseCases.DTO;
-using ASP.Domain.LocalAuthorities.UseCases.GetAllLocalAuthorities;
-using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearch;
-using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearchSuggestions;
-using ASP.Core.Optionality;
 using ASP.Core.Pagination;
 using ASP.Core.Results;
-using ASP.Domain.LocalAuthorities.LocalAuthoritySearchSuggestions;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
@@ -17,7 +10,8 @@ using ASP.Web.Shared.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Constants = ASP.Domain.Constants;
+using ASP.Api.Client;
+using ASP.Api.Client.LocalAuthorities;
 
 namespace ASP.Web.Areas.LocalAuthority
 {
@@ -112,12 +106,9 @@ namespace ASP.Web.Areas.LocalAuthority
             return searchResult.ToActionResult(Json, _hostEnvironment);
         }
 
-        private Task<Result<ResultsPage<LocalAuthorityDTO>>> GetAllLocalAuthorities(int pageNumber)
+        private Task<Result<ResultsPage<LookupValueWithCode>>> GetAllLocalAuthorities(int pageNumber)
         {
-            var request = new GetAllLocalAuthoritiesRequest(
-                Optional<int>.Some(pageNumber),
-                Optional<int>.Some(_searchOptions.PageSize)
-            );
+            var request = new GetAllLocalAuthoritiesRequest(pageNumber, _searchOptions.PageSize);
 
             return _api.GetAllLocalAuthorities(request)
                 .MapError(e => e is NotFoundError ? Error.Unexpected(e.Message, null) : e);
@@ -151,7 +142,7 @@ namespace ASP.Web.Areas.LocalAuthority
             return View(nameof(LocalAuthorities), model);
         }
 
-        private Task<Result<SearchResultsPage<LocalAuthorityDTO>>> PerformLocalAuthoritySearch(
+        private Task<Result<SearchResultsPage<LookupValueWithCode>>> PerformLocalAuthoritySearch(
             SearchParameters searchParams,
             int pageNumber)
         {
@@ -168,9 +159,9 @@ namespace ASP.Web.Areas.LocalAuthority
             int pageNumber)
         {
             return new LocalAuthoritySearchRequest(
-                searchTerm: searchParams.Search ?? string.Empty,
-                page: Optional<int>.Some(pageNumber),
-                resultsPerPage: Optional<int>.Some(_searchOptions.PageSize)
+                SearchTerm: searchParams.Search ?? string.Empty,
+                Page: pageNumber,
+                ResultsPerPage: _searchOptions.PageSize
             );
         }
 
@@ -207,14 +198,14 @@ namespace ASP.Web.Areas.LocalAuthority
                 SearchFormViewModel.ForLocalAuthorities(
                     string.Empty,
                     SearchSuggestionsUrl,
-                    CreatePaginationModel(new ScopedResultsPage<LocalAuthorityDTO>(), $"/local-authorities/")
+                    CreatePaginationModel(new ScopedResultsPage<LookupValueWithCode>(), $"/local-authorities/")
                 ),
                 new List<LocalAuthoritiesListingModel>()
             );
         }
 
         private PaginationViewModel CreatePaginationModel(
-            ResultsPage<LocalAuthorityDTO> result,
+            ResultsPage<LookupValueWithCode> result,
             string searchUrl, string searchTerm)
         {
             var paginationUrl = Url.Action(searchUrl, new { search = searchTerm }) ?? string.Empty;
@@ -229,7 +220,7 @@ namespace ASP.Web.Areas.LocalAuthority
         }
 
         private PaginationViewModel CreatePaginationModel(
-            ResultsPage<LocalAuthorityDTO> result,
+            ResultsPage<LookupValueWithCode> result,
             string paginationUrl)
         {
             return new PaginationViewModel(
@@ -243,7 +234,7 @@ namespace ASP.Web.Areas.LocalAuthority
         }
 
         private List<LocalAuthoritiesListingModel> MapLocalAuthoritiesListings(
-            IEnumerable<LocalAuthorityDTO> results)
+            IEnumerable<LookupValueWithCode> results)
         {
             return LocalAuthoritiesListingModel.FromLocalAuthoritiesListingDto(
                 results,
@@ -256,13 +247,13 @@ namespace ASP.Web.Areas.LocalAuthority
             return $"{totalResults:N0} local authorities";
         }
 
-        private Task<Result<LocalAuthoritySearchSuggestionsResult<LocalAuthorityDTO>>> PerformLocalAuthoritySearchSuggestions(
+        private Task<Result<SearchSuggestionsList<LookupValueWithCode>>> PerformLocalAuthoritySearchSuggestions(
             SearchParameters searchParams)
         {
 
             var request = new LocalAuthoritySearchSuggestionsRequest(
                 searchParams.Search ?? "",
-                Optional<int>.Some(_searchOptions.MaxSearchSuggestions)
+                _searchOptions.MaxSearchSuggestions
             );
 
             return _api.LocalAuthoritySearchSuggestions(request);

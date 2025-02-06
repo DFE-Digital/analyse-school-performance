@@ -1,21 +1,13 @@
-﻿using ASP.Application;
-using ASP.Core.Optionality;
+﻿using ASP.Api.Client;
+using ASP.Api.Client.Establishments;
 using ASP.Core.Pagination;
 using ASP.Core.Results;
-using ASP.Domain.Establishments;
-using ASP.Domain.Establishments.Search;
-using ASP.Domain.Establishments.SearchSuggestions;
-using ASP.Domain.Establishments.UseCases.DTO;
-using ASP.Domain.Establishments.UseCases.EstablishmentSearch;
-using ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
-using ASP.Domain.Establishments.UseCases.GetAllEstablishments;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Search;
 using ASP.Web.Shared.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Constants = ASP.Domain.Constants;
 
 namespace ASP.Web.Areas.School
 {
@@ -229,7 +221,7 @@ namespace ASP.Web.Areas.School
         }
 
         public Task<Result<IActionResult>> Handle(
-            EstablishmentScopeInfo scope,
+            EstablishmentScopeInfo scopeInfo,
             SearchParameters parameters,
             IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
             Func<SchoolSearchSubActionViewModel, IActionResult> showPageView,
@@ -263,7 +255,7 @@ namespace ASP.Web.Areas.School
                 return Task.FromResult(Result.NotFound<IActionResult>($"School search sub-action \"{subActionPath}\" was not recognised."));
             }
 
-            return subAction.Handle(scope, parameters, baseBreadcrumbTrail, showPageView);
+            return subAction.Handle(scopeInfo, parameters, baseBreadcrumbTrail, showPageView);
         }
 
         private string? RequestMethod
@@ -296,51 +288,52 @@ namespace ASP.Web.Areas.School
                 .Merge(initialRouteValues)
                 .Merge(_subActions[subActionType].GetRouteValues(parameters));
 
-        private Task<Result<ScopedResultsPage<EstablishmentListingDTO>>> GetAllEstablishments(
-            EstablishmentScopeInfo scope, int pageNumber)
+        private Task<Result<ScopedResultsPage<EstablishmentListing>>> GetAllEstablishments(
+            EstablishmentScopeInfo scopeInfo, 
+            int pageNumber)
         {
             var request = new GetAllEstablishmentsRequest(
-                scope.ScopeType,
-                scope.ScopeId,
-                Optional<int>.Some(pageNumber),
-                Optional<int>.Some(_searchOptions.PageSize)
+                scopeInfo.ScopeType,
+                scopeInfo.ScopeId,
+                pageNumber,
+                _searchOptions.PageSize
             );
 
             return _api.GetAllEstablishments(request);
         }
 
-        private Task<Result<ScopedSearchResultsPage<EstablishmentListingDTO>>> PerformEstablishmentSearch(
+        private Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> PerformEstablishmentSearch(
             EstablishmentScopeInfo scopeInfo,
             SearchParameters searchParams,
-            int pageNumber
-        )
+            int pageNumber)
         {
             var request = new EstablishmentSearchRequest(
-                searchTerm: searchParams.Search ?? string.Empty,
-                scopeType: scopeInfo.ScopeType,
-                scopeInfo.ScopeId,
-                page: Optional<int>.Some(pageNumber),
-                resultsPerPage: Optional<int>.Some(_searchOptions.PageSize)
+                SearchTerm: searchParams.Search ?? string.Empty,
+                ScopeType: scopeInfo.ScopeType,
+                ScopeIdentifier: scopeInfo.ScopeId,
+                Page: pageNumber,
+                ResultsPerPage: _searchOptions.PageSize
             );
 
             return _api.EstablishmentSearch(request);
         }
 
-        private Task<Result<SearchSuggestionsResult<EstablishmentSuggestionDTO>>> PerformEstablishmentSearchSuggestions(
-            SearchParameters searchParams, EstablishmentScopeInfo scopeInfo)
+        private Task<Result<ScopedSearchSuggestionsList<EstablishmentSuggestion>>> PerformEstablishmentSearchSuggestions(
+            SearchParameters searchParams,
+            EstablishmentScopeInfo scopeInfo)
         {
             var request = new EstablishmentSearchSuggestionsRequest(
                 searchParams.Search ?? "",
                 scopeInfo.ScopeType,
                 scopeInfo.ScopeId,
-                Optional<int>.Some(_searchOptions.MaxSearchSuggestions)
+                _searchOptions.MaxSearchSuggestions
             );
 
             return _api.EstablishmentSearchSuggestions(request);
         }
 
         private PaginationViewModel CreatePaginationModel(
-            ResultsPage<EstablishmentListingDTO> result,
+            ResultsPage<EstablishmentListing> result,
             string paginationUrl)
         {
             return new PaginationViewModel(
@@ -353,7 +346,7 @@ namespace ASP.Web.Areas.School
             );
         }
 
-        private SchoolSearchSubActionViewModel GetResultsViewModel(string title, string subtitle, SearchParameters parameters, IEnumerable<BreadcrumbItem> baseBreadcrumbTrail, ResultsPage<EstablishmentListingDTO> establishments)
+        private SchoolSearchSubActionViewModel GetResultsViewModel(string title, string subtitle, SearchParameters parameters, IEnumerable<BreadcrumbItem> baseBreadcrumbTrail, ResultsPage<EstablishmentListing> establishments)
         {
             return new SchoolSearchSubActionViewModel(
                 title,
@@ -401,7 +394,7 @@ namespace ASP.Web.Areas.School
                 => new { searchSubAction = "", search = parameters.Search };
 
             public override async Task<Result<IActionResult>> Handle(
-                EstablishmentScopeInfo scope,
+                EstablishmentScopeInfo scopeInfo,
                 SearchParameters parameters,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<SchoolSearchSubActionViewModel, IActionResult> showPageView)
@@ -416,7 +409,7 @@ namespace ASP.Web.Areas.School
                     }
 
                     return
-                        from model in await Controller.GetAllEstablishments(scope, pageNumber)
+                        from model in await Controller.GetAllEstablishments(scopeInfo, pageNumber)
                             .Map(establishments => Controller.GetResultsViewModel(
                                 Title,
                                 Subtitle,
@@ -437,7 +430,7 @@ namespace ASP.Web.Areas.School
                 }
 
                 return
-                    from model in await Controller.PerformEstablishmentSearch(scope, parameters, pageNumber)
+                    from model in await Controller.PerformEstablishmentSearch(scopeInfo, parameters, pageNumber)
                         .Map(establishments => Controller.GetResultsViewModel(
                             $"Search results for \"{parameters.Search}\"",
                             Subtitle,
@@ -486,18 +479,18 @@ namespace ASP.Web.Areas.School
                 => new { searchSubAction = Path, search = parameters.Search };
 
             public override async Task<Result<IActionResult>> Handle(
-                EstablishmentScopeInfo scope,
+                EstablishmentScopeInfo scopeInfo,
                 SearchParameters parameters,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<SchoolSearchSubActionViewModel, IActionResult> showPageView)
             {
                 if (!Controller.ModelStateIsValid)
                 {
-                    return new JsonResult(new SearchSuggestionsResult<EstablishmentSuggestionDTO>());
+                    return new JsonResult(new SearchSuggestionsList<EstablishmentSuggestion>());
                 }
 
                 return
-                    from searchSuggestions in await Controller.PerformEstablishmentSearchSuggestions(parameters, scope)
+                    from searchSuggestions in await Controller.PerformEstablishmentSearchSuggestions(parameters, scopeInfo)
                     select (IActionResult)new JsonResult(searchSuggestions);
             }
         }
@@ -529,7 +522,7 @@ namespace ASP.Web.Areas.School
             }
 
             public abstract Task<Result<IActionResult>> Handle(
-                EstablishmentScopeInfo scope,
+                EstablishmentScopeInfo scopeInfo,
                 SearchParameters parameters,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
                 Func<SchoolSearchSubActionViewModel, IActionResult> showPageView

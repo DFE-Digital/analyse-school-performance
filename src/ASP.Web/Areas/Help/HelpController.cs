@@ -1,7 +1,6 @@
-﻿using ASP.Application;
-using ASP.Core.Optionality;
+﻿using ASP.Api.Client;
+using ASP.Api.Client.Templating;
 using ASP.Core.Results;
-using ASP.Domain.Templating.UseCases.ViewContentTemplate;
 using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
@@ -33,7 +32,7 @@ namespace ASP.Web.Areas.Help
         public Task<IActionResult> ViewPage(string contentId, string? revision)
         {
             string templateId = $"help-{contentId}".ToLower();
-            ViewContentTemplateRequest request = new(templateId, Optional.FromNullable(revision));
+            ViewContentTemplateRequest request = new(templateId, revision);
 
             var result =
                 from template in _api.ViewContentTemplate(request)
@@ -48,7 +47,7 @@ namespace ASP.Web.Areas.Help
         public Task<IActionResult> EditPage(string contentId, string? revision)
         {
             string templateId = $"help-{contentId}".ToLower();
-            ViewContentTemplateRequest request = new(templateId, Optional.FromNullable(revision));
+            ViewContentTemplateRequest request = new(templateId, revision);
 
             var result =
                 from template in _api.ViewContentTemplate(request)
@@ -65,7 +64,7 @@ namespace ASP.Web.Areas.Help
 
             var result =
                 from template in model.ToTemplate()
-                from done in _api.UpdateContentTemplate(new(templateId, Optional.FromNullable(revision), template))
+                from done in _api.UpdateContentTemplate(new(templateId, revision, template))
                 select done;
 
             return result.ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId, revision }), _hostEnvironment);

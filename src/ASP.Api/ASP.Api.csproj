@@ -36,6 +36,8 @@
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\ASP.Api.Client\ASP.Api.Client.csproj" />
+        <ProjectReference Include="..\ASP.Domain.Repositories\ASP.Domain.Repositories.csproj" />
         <ProjectReference Include="..\ASP.Domain\ASP.Domain.csproj" />
         <ProjectReference Include="..\ASP.Infrastructure.Azure\ASP.Infrastructure.Azure.csproj" />
         <ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />

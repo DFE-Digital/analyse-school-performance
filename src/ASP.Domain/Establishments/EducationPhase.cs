@@ -1,10 +1,21 @@
 ﻿namespace ASP.Domain.Establishments;
 
-public static class EducationPhase
+public class EducationPhase
 {
-    public static string? GetPhaseOfEducation(bool? isPrimary, bool? isSecondary, bool? isPost16)
+    public bool? IsPrimary { get; }
+    public bool? IsSecondary { get; }
+    public bool? IsPost16 { get; }
+
+    public EducationPhase(bool? isPrimary, bool? isSecondary, bool? isPost16)
     {
-        return (isPrimary, isSecondary, isPost16) switch {
+        IsPrimary = isPrimary;
+        IsSecondary = isSecondary;
+        IsPost16 = isPost16;
+    }
+
+    public override string? ToString()
+    {
+        return (IsPrimary, IsSecondary, IsPost16) switch {
             (true, _, _) => "Primary",
             (_, true, _) => "Secondary",
             (_, _, true) => "16 to 18",

@@ -1,13 +1,13 @@
-﻿using ASP.Domain.DataDownloads.UseCases.DTO;
+﻿using ASP.Api.Client.DataDownloads;
 
 namespace ASP.Web.Features.DataDownloads;
 
 public class DownloadDataSelectFilesViewModel : DownloadDataViewModel
 {
-    public List<DownloadDto> AvailableDownloads { get; }
+    public List<Download> AvailableDownloads { get; }
 
     public DownloadDataSelectFilesViewModel(
-        List<DownloadDto> availableDownloads
+        List<Download> availableDownloads
     )
     {
         AvailableDownloads = availableDownloads;

@@ -24,28 +24,4 @@ public static class Constants
 
     //Matches download id from UI
     public static readonly Regex DownloadIdRegex = new(@"(?<ConfigId>.+)-(?<Identifier>\d{3}|\d{6})-(?<Year>\d{4})(?:-(?<Version>.+))?$", RegexOptions.Compiled);
-
-    public const string SchoolSearchTermInputValidationMessage =
-        "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)";
-
-    public const string SchoolSearchFormSearchTermInputLabel =
-        "Enter school name, address, URN (Unique Reference Number) or\n LAESTAB (Local Authority Establishment Number)";
-    
-    public const string LaSearchTermInputValidationMessage =
-        "Please enter a local authority name or code";
-
-    public const string LaSearchFormSearchTermInputLabel =
-        "Enter local authority name or code";
-
-    public const string AcademicYearToDownldValidationErrorMessage = "Please choose an academic year to download";
-    
-    public const string DataFilesAvialableForDownlodValidationErrorMessage = "Please choose one or more data files to download";
-
-    public const string ModelErrorKeySelectedYear = "selectedYear";
-    
-    public const string ModelErrorKeySelectedFiles = "selectedFiles";
-    public const string AlpineComponentSchoolSearchSuggestions = "schoolSearchSuggestions";
-    
-    public const string AlpineComponentLaSearchSuggestions = "laSearchSuggestions";
-
 }

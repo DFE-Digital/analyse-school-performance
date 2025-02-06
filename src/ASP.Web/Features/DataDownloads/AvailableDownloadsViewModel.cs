@@ -1,12 +1,10 @@
-﻿using ASP.Domain.DataDownloads;
-using ASP.Domain.DataDownloads.UseCases.DTO;
-using ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads;
+﻿using ASP.Api.Client.DataDownloads;
 
 namespace ASP.Web.Features.DataDownloads
 {
     public class AvailableDownloadsViewModel
     {
-        public List<DownloadDto> Downloads { get; set; } = new();
+        public List<Download> Downloads { get; set; } = new();
         public List<AcademicYear> AvailableDates { get; set; } = new();
 
         public static AvailableDownloadsViewModel FromAvailableDownloads(GetAvailableDownloadsResponse response)
@@ -14,7 +12,7 @@ namespace ASP.Web.Features.DataDownloads
             return new AvailableDownloadsViewModel
             {
                 Downloads = response.Downloads,
-                AvailableDates = AcademicYear.ToAcademicYears(response.Downloads.Select(x => x.Year).Distinct()),
+                AvailableDates = response.AvailableDates,
             };
         }
     }

@@ -1,5 +1,5 @@
-﻿using ASP.Core.Results;
-using ASP.Domain.Templating;
+﻿using ASP.Api.Client.Templating;
+using ASP.Core.Results;
 using ASP.Core.Text;
 using ASP.Web.Core.BreadcrumbTrail;
 

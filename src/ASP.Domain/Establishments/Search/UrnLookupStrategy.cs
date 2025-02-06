@@ -1,4 +1,5 @@
-﻿using ASP.Core.Results;
+﻿using ASP.Core.Pagination;
+using ASP.Core.Results;
 
 namespace ASP.Domain.Establishments.Search;
 
@@ -28,9 +29,7 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
                 [new EstablishmentListing(
                     establishment.Urn,
                     establishment.Name,
-                    establishment.IsPrimary,
-                    establishment.IsSecondary,
-                    establishment.IsPost16,
+                    establishment.EducationPhase,
                     establishment.Address,
                     establishment.Laestab
                 )]

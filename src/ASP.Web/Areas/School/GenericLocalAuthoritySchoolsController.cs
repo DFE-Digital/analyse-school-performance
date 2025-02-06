@@ -1,7 +1,6 @@
-using ASP.Application;
-using ASP.Core.Optionality;
+using ASP.Api.Client;
+using ASP.Api.Client.Establishments;
 using ASP.Core.Results;
-using ASP.Domain.Establishments;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.Search;
@@ -28,8 +27,13 @@ namespace ASP.Web.Areas.School
             IOptions<SearchOptions> searchOptions
         ) : base(api, hostEnvironment)
         {
-            _schoolSearchController = new SchoolSearchController(nameof(Schools), "GenericLocalAuthoritySchools", ["laCode"], _api,
-                searchOptions.Value, makeSchoolUrl: urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }));
+            _schoolSearchController = new SchoolSearchController(
+                nameof(Schools),
+                "GenericLocalAuthoritySchools",
+                ["laCode"],
+                _api,
+                searchOptions.Value,
+                makeSchoolUrl: urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }));
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -45,7 +49,7 @@ namespace ASP.Web.Areas.School
             var result =
                 from laName in GetLocalAuthorityName(laCode)
                 from action in _schoolSearchController.Handle(
-                    new EstablishmentScopeInfo(EstablishmentScopeType.LA, Optional<string>.Some(laCode)),
+                    new EstablishmentScopeInfo(EstablishmentScopeType.LA, laCode),
                     parameters,
                     [
                         new("All local authorities", "/local-authorities/"),

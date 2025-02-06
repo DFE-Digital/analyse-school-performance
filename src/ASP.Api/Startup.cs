@@ -1,6 +1,6 @@
 ﻿using ASP.Core.Time;
 using ASP.Domain;
-using ASP.Infrastructure;
+using ASP.Domain.Repositories;
 using ASP.Infrastructure.Azure.Blob;
 using ASP.Infrastructure.Azure.CosmosDb;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;

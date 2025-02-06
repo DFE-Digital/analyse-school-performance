@@ -30,7 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ASP.Api\ASP.Api.csproj" />
     <ProjectReference Include="..\..\src\ASP.Core\ASP.Core.csproj" />
-    <ProjectReference Include="..\..\src\ASP.Infrastructure.Api\ASP.Infrastructure.Api.csproj" />
+    <ProjectReference Include="..\..\src\ASP.Api.Client.InProcess\ASP.Api.Client.InProcess.csproj" />
     <ProjectReference Include="..\ASP.Test.SpecFlow\ASP.Test.SpecFlow.csproj" />
     <ProjectReference Include="..\ASP.Test.Core\ASP.Test.Core.csproj" />
   </ItemGroup>

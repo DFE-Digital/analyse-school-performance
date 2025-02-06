@@ -1,6 +1,4 @@
-﻿@using ASP.Core
-@using ASP.Web.Extensions
-@using Constants = ASP.Domain.Constants
+﻿@using ASP.Web.Extensions
 @model ASP.Web.Features.DataDownloads.DownloadDataSelectYearViewModel
 
 @{
@@ -31,7 +29,7 @@
                                id="app-available-downloads-dates-@year.Year-label"
                                class="govuk-label govuk-radios__label"
                                for=app-available-downloads-dates-@year.Year>
-                            @year.StartToEndYears
+                            @year.Description
                         </label>
                     </div>
                 }

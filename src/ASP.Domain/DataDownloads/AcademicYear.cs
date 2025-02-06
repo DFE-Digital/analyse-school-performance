@@ -3,7 +3,7 @@
     public class AcademicYear
     {
         public int Year { get; set; }
-        public string StartToEndYears { get; set; } = "";
+        public string Description { get; set; } = "";
 
         /// <summary>
         /// Converts a list of years into a list of AcademicYear objects with formatted year ranges.
@@ -19,7 +19,7 @@
                 .Distinct()
                 .Select(year => new AcademicYear {
                     Year = year,
-                    StartToEndYears = $"{year - 1} to {year}"
+                    Description = $"{year - 1} to {year}"
                 })
                 .ToList();
         }

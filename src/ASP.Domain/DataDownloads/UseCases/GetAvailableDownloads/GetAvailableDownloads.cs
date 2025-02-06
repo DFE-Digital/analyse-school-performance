@@ -35,27 +35,19 @@ namespace ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads
                         year => $"There are no downloads available for {scope} for the year {year}.",
                         () => $"There are no downloads available for {scope}."
                     )))
-                select new GetAvailableDownloadsResponse(downloads, request.Year.ToNullable());
+                let availableDates = AcademicYear.ToAcademicYears(downloads.Select(x => x.Year).Distinct())
+                select new GetAvailableDownloadsResponse(downloads, request.Year.ToNullable(), availableDates);
 
             return result;
         }
 
-        private Task<Result<List<DownloadDto>>> FindMatchingDownloads(DataDownloadsScope scope, string source, IEnumerable<DownloadConfig> downloadConfigs, GetAvailableDownloadsRequest request)
+        private Task<Result<List<Download>>> FindMatchingDownloads(DataDownloadsScope scope, string source, IEnumerable<DownloadConfig> downloadConfigs, GetAvailableDownloadsRequest request)
         {
             return
                 from downloadFiles in _fileProvider.GetDownloadFiles(scope, source, request.Year)
                 from downloadDtos in MatchFilesWithConfigs(scope, downloadFiles, downloadConfigs, request)
                 from filteredDownloads in FilterAndOrderDownloads(downloadDtos, request)
-                select filteredDownloads
-                    .Select(d => new DownloadDto {
-                        DatasetType = d.DatasetType.ToFriendlyName(),
-                        Id = d.Id,
-                        Label = d.Label,
-                        Source = d.Source.ToFriendlyName(),
-                        Version = d.Version?.FriendlyName,
-                        Year = d.Year
-                    })
-                    .ToList();
+                select filteredDownloads;
         }
 
         private Result<List<Download>> MatchFilesWithConfigs(DataDownloadsScope scope, IEnumerable<string> files, IEnumerable<DownloadConfig> configs, GetAvailableDownloadsRequest request)

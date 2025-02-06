@@ -1,6 +1,5 @@
-using ASP.Application;
-using ASP.Core.Optionality;
-using ASP.Domain.Establishments;
+using ASP.Api.Client;
+using ASP.Api.Client.Establishments;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.Search;
@@ -27,7 +26,12 @@ namespace ASP.Web.Areas.School
             IOptions<SearchOptions> searchOptions
         ) : base(api, hostEnvironment)
         {
-            _schoolSearchController = new SchoolSearchController(nameof(Schools), "GenericSchools", [], _api, searchOptions.Value,
+            _schoolSearchController = new SchoolSearchController(
+                nameof(Schools),
+                "GenericSchools",
+                [],
+                _api,
+                searchOptions.Value,
                 makeSchoolUrl: urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }));
         }
 
@@ -42,7 +46,7 @@ namespace ASP.Web.Areas.School
         public async Task<IActionResult> Schools(SearchParameters parameters)
         {
             var result = await _schoolSearchController.Handle(
-                new EstablishmentScopeInfo(EstablishmentScopeType.All, Optional<string>.None),
+                new EstablishmentScopeInfo(EstablishmentScopeType.All, null),
                 parameters,
                 [],
                 model => View(new SchoolSearchPageViewModel(

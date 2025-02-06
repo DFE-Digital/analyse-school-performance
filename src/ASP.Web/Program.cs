@@ -1,6 +1,7 @@
+using ASP.Api.Client.InProcess;
 using ASP.Core.Time;
-using ASP.Infrastructure.Api;
-using ASP.Infrastructure.Azure.TableStorage;
+using ASP.Infrastructure.DocumentDatabase;
+using ASP.Infrastructure.TableStorage;
 using ASP.Web.Components;
 using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
@@ -38,6 +39,7 @@ public class Program
             .ConfigureAuthorization(builder.Configuration)
             .ConfigureErrorHandling(builder.Configuration, out var errorHandlingConfig)
             .ConfigureTableStorage(builder.Configuration)
+            .ConfigureDocumentDatabase(builder.Configuration)
             .ConfigureApiClient(builder.Configuration)
             .ConfigureContentTemplates()
             .ConfigureContentSecurityPolicy()

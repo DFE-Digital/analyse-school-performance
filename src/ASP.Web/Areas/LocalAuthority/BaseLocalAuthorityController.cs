@@ -1,8 +1,6 @@
-﻿using ASP.Application;
-using ASP.Core.Optionality;
+﻿using ASP.Api.Client;
+using ASP.Api.Client.Establishments;
 using ASP.Core.Results;
-using ASP.Domain.DataDownloads;
-using ASP.Domain.Establishments.UseCases.GetEstablishmentDetails;
 using ASP.Web.Core.Templating;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,16 +11,13 @@ namespace ASP.Web.Areas.LocalAuthority
         protected const string LANDING_PAGE_CONTENT_TEMPLATE_ID = "la-landing-page";
 
         protected readonly IAspApiClient _api;
-        protected readonly IDataDownloadsScopeValidator _scopeValidator;
         protected readonly IHostEnvironment _hostEnvironment;
 
         protected BaseLocalAuthorityController(
             IAspApiClient api,
-            IDataDownloadsScopeValidator scopeValidator, 
             IHostEnvironment hostEnvironment)
         {
             _api = api ?? throw new ArgumentNullException(nameof(api));
-            _scopeValidator = scopeValidator ?? throw new ArgumentNullException(nameof(scopeValidator));
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
@@ -47,7 +42,7 @@ namespace ASP.Web.Areas.LocalAuthority
         protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentTemplateId, string? revision)
         {
             var model =
-                from template in _api.ViewContentTemplate(new(contentTemplateId, Optional.FromNullable(revision)))
+                from template in _api.ViewContentTemplate(new(contentTemplateId, revision))
                 select ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template);
 
             return model

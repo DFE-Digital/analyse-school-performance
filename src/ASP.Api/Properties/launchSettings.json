@@ -1,9 +1,12 @@
 {
-  "profiles": {
-    "ASP.Api": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7116",
-      "launchBrowser": false
+    "profiles": {
+        "ASP.Api": {
+            "commandName": "Project",
+            "commandLineArgs": "--port 7116",
+            "launchBrowser": false,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Local"
+            }
+        }
     }
-  }
 }
