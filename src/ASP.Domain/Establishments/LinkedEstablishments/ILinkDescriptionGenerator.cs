@@ -1,6 +1,4 @@
-﻿using ASP.Domain.Establishments.LinkedEstablishments;
-
-namespace ASP.Domain.Establishments.GetLinkedEstablishments;
+﻿namespace ASP.Domain.Establishments.LinkedEstablishments;
 
 public interface ILinkDescriptionGenerator
 {

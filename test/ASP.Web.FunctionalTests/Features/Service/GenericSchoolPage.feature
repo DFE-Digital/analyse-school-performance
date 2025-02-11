@@ -440,7 +440,7 @@ Scenario: Details disclosure element text should read 'Show school details' when
 
 @Javascript:disabled
 Scenario Outline: Landing page - common page elements
-	And Establishment "123456" exists:
+	Given Establishment "123456" exists:
 		"""
 		{
 			"name": "Hollinswood Primary School",
@@ -1461,3 +1461,162 @@ Examples:
 	| School Governor user for Establishment "123456"  |
 	| DfE Unnamed user                                 |
 	| Ofsted Unnamed user                              |
+
+@Javascript:disabled
+Scenario Outline: Descriptions for link to multiple establishments with description text
+	Given Establishment "100001" exists:
+	"""
+	{ 
+	  "name": "Test School 1",
+	  "links": [
+	    {
+	      "linkedUrn": "100002",
+	      "establishedDate": <EstablishedDate>,
+	      "linkType": {
+	        "code": "<Code>",
+	        "name": "<Name>"
+	      }
+	    },
+	    {
+	      "linkedUrn": "100003",
+	      "establishedDate": <EstablishedDate>,
+	      "linkType": {
+	        "code": "<Code>",
+	        "name": "<Name>"
+	      }
+	    },
+	    {
+	      "linkedUrn": "100004",
+	      "establishedDate": <EstablishedDate>,
+	      "linkType": {
+	        "code": "<Code>",
+	        "name": "<Name>"
+	      }
+	    }
+	  ]
+	}
+	"""
+	And Establishment "100002" exists:
+	"""
+	{ 
+	  "name": "Test School 2"
+	}
+	"""
+	And Establishment "100003" exists:
+	"""
+	{ 
+	  "name": "Test School 3"
+	}
+	"""
+	And Establishment "100004" exists:
+	"""
+	{ 
+	  "name": "Test School 4"
+	}
+	"""
+	When I navigate to /school/100001/
+	Then I should get a 200 response
+	And the element "[data-testid="linked-establishment-description-1"]" should have the text content "<Description>"
+
+	Examples:
+	  | Code | Name                                                           | EstablishedDate | Description                                                                                                               |
+	  | 1    | Predecessor                                                    | null            | Test School 1 was previously Test School 2, Test School 3 and Test School 4.                                              |
+	  | 1    | Predecessor                                                    | "2020-10-01"    | Test School 1 was previously Test School 2, Test School 3 and Test School 4 up until 1 October 2020.                      |
+	  | 1F   | Predecessor - Split School                                     | null            | Test School 1 was created as the result of a split from Test School 2, Test School 3 and Test School 4.                   |
+	  | 1F   | Predecessor - Split School                                     | "2020-10-01"    | Test School 1 was created as the result of a split from Test School 2, Test School 3 and Test School 4 on 1 October 2020. |
+	  | 1I   | Closure                                                        | null            | Test School 1 was previously Test School 2, Test School 3 and Test School 4.                                              |
+	  | 1I   | Closure                                                        | "2020-10-01"    | Test School 1 was previously Test School 2, Test School 3 and Test School 4, which closed on 1 October 2020.              |
+	  | 1L   | Predecessor - merged                                           | null            | Test School 1 was merged with Test School 2, Test School 3 and Test School 4.                                             |
+	  | 1L   | Predecessor - merged                                           | "2020-10-01"    | Test School 1 was merged with Test School 2, Test School 3 and Test School 4 on 1 October 2020.                           |
+	  | 2    | Successor                                                      | null            | Test School 1 became Test School 2, Test School 3 and Test School 4.                                                      |
+	  | 2    | Successor                                                      | "2020-10-01"    | Test School 1 became Test School 2, Test School 3 and Test School 4 on 1 October 2020.                                    |
+	  | 2A   | Expansion                                                      | null            | Test School 1 became Test School 2, Test School 3 and Test School 4.                                                      |
+	  | 2A   | Expansion                                                      | "2020-10-01"    | Test School 1 became Test School 2, Test School 3 and Test School 4 on 1 October 2020.                                    |
+	  | 2F   | Successor - Split School                                       | null            | Test School 2, Test School 3 and Test School 4 were split off from Test School 1.                                         |
+	  | 2F   | Successor - Split School                                       | "2020-10-01"    | Test School 2, Test School 3 and Test School 4 were split off from Test School 1 on 1 October 2020.                       |
+	  | 2K   | Result of Amalgamation                                         | null            | Test School 1 was amalgamated into Test School 2, Test School 3 and Test School 4.                                        |
+	  | 2K   | Result of Amalgamation                                         | "2020-10-01"    | Test School 1 was amalgamated into Test School 2, Test School 3 and Test School 4 on 1 October 2020.                      |
+	  | 2O   | Merged - change in age range                                   | null            | Test School 1 was merged with Test School 2, Test School 3 and Test School 4.                                             |
+	  | 2O   | Merged - change in age range                                   | "2020-10-01"    | Test School 1 was merged with Test School 2, Test School 3 and Test School 4 on 1 October 2020.                           |
+	  | 2P   | Merged - expansion of school capacity                          | null            | Test School 1 was merged with Test School 2, Test School 3 and Test School 4.                                             |
+	  | 2P   | Merged - expansion of school capacity                          | "2020-10-01"    | Test School 1 was merged with Test School 2, Test School 3 and Test School 4 on 1 October 2020.                           |
+	  | 2Q   | Merged - expansion in school capacity and changer in age range | null            | Test School 1 was merged with Test School 2, Test School 3 and Test School 4.                                             |
+	  | 2Q   | Merged - expansion in school capacity and changer in age range | "2020-10-01"    | Test School 1 was merged with Test School 2, Test School 3 and Test School 4 on 1 October 2020.                           |
+	  | 6    | Successor - merged                                             | null            | Test School 1 was merged with Test School 2, Test School 3 and Test School 4.                                             |
+	  | 6    | Successor - merged                                             | "2020-10-01"    | Test School 1 was merged with Test School 2, Test School 3 and Test School 4 on 1 October 2020.                           |
+	  | 6.1  | Predecessor - amalgamated                                      | null            | Test School 1 was amalgamated with Test School 2, Test School 3 and Test School 4.                                        |
+	  | 6.1  | Predecessor - amalgamated                                      | "2020-10-01"    | Test School 1 was amalgamated with Test School 2, Test School 3 and Test School 4 on 1 October 2020.                      |
+	  | 6.2  | Successor - amalgamated                                        | null            | Test School 1 was amalgamated into Test School 2, Test School 3 and Test School 4.                                        |
+	  | 6.2  | Successor - amalgamated                                        | "2020-10-01"    | Test School 1 was amalgamated into Test School 2, Test School 3 and Test School 4 on 1 October 2020.                      |
+
+   
+@Javascript:disabled
+Scenario: Should provide default description if linkType is missing
+	Given Establishment "100001" exists:
+	"""
+	{ 
+	  "name": "Test School 1",
+	  "links": [
+	    {
+	      "linkedUrn": "100002"
+	    },
+	    {
+	      "linkedUrn": "100003",
+	      "establishedDate": "2020-03-01"
+	    }
+	  ]
+	}
+	"""
+	And Establishment "100002" exists:
+	"""
+	{ 
+	  "name": "Test School 2"
+	}
+	"""
+	And Establishment "100003" exists:
+	"""
+	{ 
+	  "name": "Test School 3"
+	}
+	"""
+	When I navigate to /school/100001/
+	Then I should get a 200 response 
+	And the element "[data-testid="linked-establishment-description-1"]" should have the text content "Test School 1 was linked to Test School 2."
+	And the element "[data-testid="linked-establishment-description-2"]" should have the text content "Test School 1 was linked to Test School 3 on 1 March 2020."			
+	
+@Javascript:disabled
+Scenario Outline: Display linked establishment descriptions with links and established dates
+	Given Establishment "100001" exists:
+	"""
+	{ 
+	  "name": "Test School 1",
+	  "links": [
+	    {
+	      "linkedUrn": "100002"
+	    },
+	    {
+	      "linkedUrn": "100003",
+	      "establishedDate": "2020-03-01"
+	    }
+	  ]
+	}
+	"""
+	And Establishment "100002" exists:
+	"""
+	{ 
+	  "name": "Test School 2"
+	}
+	"""
+	And Establishment "100003" exists:
+	"""
+	{ 
+	  "name": "Test School 3"
+	}
+	"""
+	When I navigate to /school/100001/
+	Then I should get a 200 response
+	And the linked establishment description should be:
+	  | Text                                                       | Href            |
+	  | Test School 1 was linked to Test School 2.                 | /school/100002/ |
+	  | Test School 1 was linked to Test School 3 on 1 March 2020. | /school/100003/ |
+	  

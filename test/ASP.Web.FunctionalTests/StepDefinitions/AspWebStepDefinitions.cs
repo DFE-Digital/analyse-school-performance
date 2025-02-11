@@ -362,6 +362,12 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         {
             await AssertNavigation("[data-testid='available-downloads-formats']", "Download format", navigationItems);
         }
+        
+        [Then("the linked establishment description should be:")]
+        public async Task ThenTheLinkedEstablishmentDescriptionShouldBe(Table navigationItems)
+        {
+            await AssertLinkedEstablishmentDescriptionNavigation("[data-testid='linked-establishment'] li", "Linked establishment description", navigationItems);
+        }
 
         private async Task AssertNavigation(string selector, string itemName, Table navigationItems)
         {
@@ -442,7 +448,35 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
                 }
             }
         }
+        
+        private async Task AssertLinkedEstablishmentDescriptionNavigation(string selector, string itemName, Table navigationItems)
+        {
+            var elements = await _web.CurrentPage.ElementsAsync(selector);
+            var actualItemCount = await elements.CountAsync();
+            Assert.Equal(navigationItems.RowCount, actualItemCount, $"Expected {itemName} count to be {navigationItems.RowCount}, but was {actualItemCount}");
 
+            for (var i = 0; i < navigationItems.RowCount; i++)
+            {
+                var row = navigationItems.Rows[i];
+                var element = await _web.CurrentPage.ElementAsync($"{selector}:nth-child({i + 1})");
+                await element.ShouldExistAsync($"{itemName} {i + 1} does not exist");
+
+                if (TryGetRowKey("Text", row, out var expectedText))
+                {
+                    var actualText = await element.TextContentAsync();
+                    Assert.Equal(expectedText.Trim(), actualText.Trim());
+                }
+
+                if (TryGetRowKey("Href", row, out var expectedHref) && !string.IsNullOrWhiteSpace(expectedHref))
+                {
+                    element = element.Element("a");
+                    var rowName = row.TryGetValue("text", out var value) ? $"(\"{value}\")" : "";
+                    await element.ShouldExistAsync($"Link element for {itemName} {i + 1} {rowName} does not exist");
+                    var actualHref = await element.AttributeAsync("href");
+                    Assert.Equal(expectedHref, actualHref.Trim());
+                }
+            }
+        }
         private bool TryGetRowKey(string key, TableRow row, [NotNullWhen(true)] out string? value)
         {
             if(row.ContainsKey(key))

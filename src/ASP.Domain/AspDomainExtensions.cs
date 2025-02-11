@@ -3,7 +3,7 @@ using ASP.Domain.DataDownloads;
 using ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads;
 using ASP.Domain.DataDownloads.UseCases.GetDownloadPackage;
 using ASP.Domain.Establishments;
-using ASP.Domain.Establishments.GetLinkedEstablishments;
+using ASP.Domain.Establishments.LinkedEstablishments;
 using ASP.Domain.Establishments.UseCases.EstablishmentSearch;
 using ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
 using ASP.Domain.Establishments.UseCases.GetAllEstablishments;

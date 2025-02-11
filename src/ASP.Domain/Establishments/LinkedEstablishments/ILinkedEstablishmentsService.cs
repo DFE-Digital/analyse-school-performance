@@ -1,7 +1,7 @@
 ﻿using ASP.Core.Results;
 using ASP.Domain.Establishments.UseCases.GetLinkedEstablishments;
 
-namespace ASP.Domain.Establishments.GetLinkedEstablishments;
+namespace ASP.Domain.Establishments.LinkedEstablishments;
 
 public interface ILinkedEstablishmentsService
 {

@@ -39,6 +39,14 @@ namespace ASP.Web.Areas.School
                 select ContentTemplateViewModel.FromTemplate(contentId, revision, template)
             ).DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel());
         }
+        
+        protected virtual Task<Result<LinkedEstablishmentsViewModel>> GetLinkedEstablishments(string urn, Func<string, string?> createSchoolUrl)
+        {
+            return (
+                from linkedEstablishment in _api.GetLinkedEstablishments(new GetLinkedEstablishmentsRequest(urn))
+                select new LinkedEstablishmentsViewModel(linkedEstablishment.Urn, linkedEstablishment.Links, createSchoolUrl)
+            );
+        }
 
         protected string Action(string action, object? values = null) 
             => Url.Action(action, values) 

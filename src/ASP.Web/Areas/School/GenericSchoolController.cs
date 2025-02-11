@@ -59,10 +59,13 @@ namespace ASP.Web.Areas.School
                         ),
                         establishmentDetails.Name
                 ))
+                from linkedEstablishments in GetLinkedEstablishments(urn, 
+                    urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }))
                 select new SchoolLandingPageViewModel(
                     schoolPage,
                     establishmentDetails,
-                    contentTemplate
+                    contentTemplate,
+                    linkedEstablishments
                 );
 
             return result

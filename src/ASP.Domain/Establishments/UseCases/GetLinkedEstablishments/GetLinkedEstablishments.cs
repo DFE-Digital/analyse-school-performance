@@ -1,5 +1,5 @@
 ﻿using ASP.Core.Results;
-using ASP.Domain.Establishments.GetLinkedEstablishments;
+using ASP.Domain.Establishments.LinkedEstablishments;
 
 namespace ASP.Domain.Establishments.UseCases.GetLinkedEstablishments;
 

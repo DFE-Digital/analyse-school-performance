@@ -1,8 +1,8 @@
-﻿using ASP.Domain.Establishments.Search;
-using ASP.Domain.Establishments;
+﻿using ASP.Domain.Establishments;
+using ASP.Domain.Establishments.Search;
 using Xunit;
 
-namespace ASP.Core.UnitTests;
+namespace ASP.Domain.UnitTests;
 
 public class StringExtensionsTests
 {
