@@ -49,7 +49,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 _api,
                 stepRouteConfig: new()
                 {
-                    [DownloadDataStepType.SelectYear] = new() { Path = "select-year" },
+                    [DownloadDataSubActionType.SelectYear] = new() { Path = "select-year" },
                 });
 
             _schoolSearchController = new SchoolSearchController(
@@ -101,14 +101,14 @@ namespace ASP.Web.Areas.LocalAuthority
         [HttpGet($"download-data/pupil-level-aggregated-la-data/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/pupil-level-aggregated-la-data/{DownloadDataController.SubRouteTemplate}")]
         [Authorize(Policy = Policy.NamedData)]
-        public Task<IActionResult> DownloadLocalAuthorityData(DownloadDataStepParameters parameters)
+        public Task<IActionResult> DownloadLocalAuthorityData(DownloadDataParameters parameters)
         {
             var result =
                 from laCode in User.GetLocalAuthorityCode()
                 from laName in GetLocalAuthorityName(laCode)
                 from actionResult in _localAuthorityDataDownloadController.Handle(
-                    parameters,
                     laCode,
+                    parameters,
                     GetChildPageBaseBreadcrumbTrail()
                         .Append(new("Download data", Action(nameof(DownloadData)))),
                     stepModel => View(new DownloadDataPageViewModel(
@@ -123,7 +123,7 @@ namespace ASP.Web.Areas.LocalAuthority
                         ),
                         stepModel.DownloadData
                     )),
-                    new() { [DownloadDataStepType.SelectFormat] = new() { Title = "Download pupil level and aggregated LA data" } }
+                    new() { [DownloadDataSubActionType.SelectFormat] = new() { Title = "Download pupil level and aggregated LA data" } }
                 )
                 select actionResult;
 
@@ -155,12 +155,10 @@ namespace ASP.Web.Areas.LocalAuthority
                             "Individual school data"
                         ),
                         model.Search,
-                        model.Establishments
+                        model.SearchResults
                     )),
-                    new()
-                    {
-                        [SchoolSearchSubActionType.AllSchools] = new()
-                        {
+                    new() {
+                        [SearchSubActionType.AllListings] = new() {
                             Title = "Search for a school",
                         }
                     })
@@ -173,7 +171,7 @@ namespace ASP.Web.Areas.LocalAuthority
         [HttpGet($"download-data/individual-school-data/{{urn:int:length(6)}}/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/individual-school-data/{{urn:int:length(6)}}/{DownloadDataController.SubRouteTemplate}")]
         [Authorize(Policy = Policy.NamedData)]
-        public Task<IActionResult> DownloadSchoolData(string urn, DownloadDataStepParameters parameters, string? search)
+        public Task<IActionResult> DownloadSchoolData(string urn, DownloadDataParameters parameters, string? search)
         {
             var result =
                 from laCode in User.GetLocalAuthorityCode()
@@ -187,8 +185,8 @@ namespace ASP.Web.Areas.LocalAuthority
                     : baseBreadcrumbTrail
                         .Append(new($"Search results for \"{search}\"", Action(nameof(DownloadSchoolDataSearch), new { search })))
                 from actionResult in _individualSchoolDataDownloadController.Handle(
-                    parameters,
                     urn,
+                    parameters,
                     breadcrumbTrail,
                     stepModel => View(new DownloadDataPageViewModel(
                         new PageViewModel(
@@ -202,9 +200,8 @@ namespace ASP.Web.Areas.LocalAuthority
                         ),
                         stepModel.DownloadData
                     )),
-                    new()
-                    {
-                        [DownloadDataStepType.SelectFormat] = new() { Title = "Download individual school data" }
+                    new() {
+                        [DownloadDataSubActionType.SelectFormat] = new() { Title = "Download individual school data" }
                     }
                 )
                 select actionResult;

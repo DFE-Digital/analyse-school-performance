@@ -18,7 +18,7 @@ namespace ASP.Web.Areas.School
     [Authorize(Policy = Policy.AccessToMySchools)]
     public class MySchoolsController : SchoolsController
     {
-        private readonly SchoolSearchController _schoolSearchController;
+        private readonly SchoolSearchController _searchController;
 
         public MySchoolsController(
             IAspApiClient api,
@@ -26,7 +26,7 @@ namespace ASP.Web.Areas.School
             IOptions<SearchOptions> searchOptions
         ) : base(api, hostEnvironment)
         {
-            _schoolSearchController = new SchoolSearchController(
+            _searchController = new SchoolSearchController(
                 nameof(Schools),
                 "MySchools",
                 [],
@@ -39,7 +39,7 @@ namespace ASP.Web.Areas.School
         {
             base.OnActionExecuting(context);
 
-            _schoolSearchController.BindContext(context);
+            _searchController.BindContext(context);
         }
 
         [HttpGet($"{SchoolSearchController.SubRouteTemplate}")]
@@ -47,7 +47,7 @@ namespace ASP.Web.Areas.School
         {
             var result =
                 from scopeInfo in User.GetScopeInfoForRole()
-                from action in _schoolSearchController.Handle(
+                from action in _searchController.Handle(
                     scopeInfo,
                     parameters,
                     [],
@@ -58,10 +58,10 @@ namespace ASP.Web.Areas.School
                             model.PageSubtitle
                         ),
                         model.Search,
-                        model.Establishments
+                        model.SearchResults
                     )),
                     new() {
-                        [SchoolSearchSubActionType.AllSchools] = new() { Title = "My schools" }
+                        [SearchSubActionType.AllListings] = new() { Title = "My schools" }
                     })
                 select action;
 

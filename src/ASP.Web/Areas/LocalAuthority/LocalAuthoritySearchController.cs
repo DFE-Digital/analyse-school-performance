@@ -1,5 +1,5 @@
 ﻿using ASP.Api.Client;
-using ASP.Api.Client.Establishments;
+using ASP.Api.Client.LocalAuthorities;
 using ASP.Core.Pagination;
 using ASP.Core.Results;
 using ASP.Web.Features.Search;
@@ -7,13 +7,13 @@ using ASP.Web.Features.SubController;
 using ASP.Web.Shared.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ASP.Web.Areas.School
+namespace ASP.Web.Areas.LocalAuthority
 {
     /// <summary>
     /// <para>
-    ///     <c>SchoolSearchController</c> is a sub-controller that can be hosted within a controller action, 
+    ///     <c>LocalAuthoritySearchController</c> is a sub-controller that can be hosted within a controller action, 
     ///     allowing its routing and authorization to be determined by the hosting controller. 
-    ///     The controller action specifies its route using attribute routing, but then delegates to the `SchoolSearchController` 
+    ///     The controller action specifies its route using attribute routing, but then delegates to the `LocalAuthoritySearchController` 
     ///     to resolve and handle the search sub-action based on the sub-route and query string parameters. 
     /// </para>
     /// </summary>
@@ -22,8 +22,8 @@ namespace ASP.Web.Areas.School
     /// <para>The action needs to handle GET methods:</para>
     /// <code>
     /// <![CDATA[
-    /// // Adds search sub-action as a catch-all route parameter to the route template e.g. "schools/{**subAction}"
-    /// [HttpGet($"schools/{SchoolSearchController.SubRouteTemplate}")]
+    /// // Adds search sub-action as a catch-all route parameter to the route template e.g. "local-authorities/{**subAction}"
+    /// [HttpGet($"local-authorities/{LocalAuthoritySearchController.SubRouteTemplate}")]
     /// public Task<IActionResult> Search(SearchParameters parameters)
     /// {
     ///     ...
@@ -31,34 +31,31 @@ namespace ASP.Web.Areas.School
     /// ]]>
     /// </code>
     /// <para>
-    ///     <c>SchoolSearchController</c> has a <c>Handle()</c> method that returns a <c>Result&lt;IActionResult&gt;</c> - 
+    ///     <c>LocalAuthoritySearchController</c> has a <c>Handle()</c> method that returns a <c>Result&lt;IActionResult&gt;</c> - 
     ///     this can then be incorporated in a <c>Result&lt;&gt;</c> chain along with other <c>Result&lt;&gt;</c> actions 
     ///     that may be needed to build up the page.
     /// </para>
     /// <para>
     ///     This needs to be passed a base breadcrumb trail that can be added to as the search actions are navigated, and a 
-    ///     <c>showPageView</c> function to be called to render the page. This is so that the <c>SchoolSearchController</c> 
+    ///     <c>showPageView</c> function to be called to render the page. This is so that the <c>LocalAuthoritySearchController</c> 
     ///     can take control of handling the search logic, including validation errors, not found errors (if the subAction 
     ///     part of the route is invalid), and search suggestions, rendering the page by calling the <c>showPageView</c> 
     ///     function as needed.
     /// </para>
     /// <code>
     /// <![CDATA[
-    /// public class SchoolsController : Controller
+    /// public class LocalAuthoritiesController : Controller
     /// {
     ///     private readonly IAspApiClient api;
-    ///     private readonly SchoolSearchController _schoolSearchController;
+    ///     private readonly LocalAuthoritySearchController _localAuthoritySearchController;
     ///     
-    ///     public class SchoolController(IAspApiClient api) 
+    ///     public class LocalAuthorityController(IAspApiClient api) 
     ///     {
-    ///         _schoolSearchController = new SchoolSearchController(
+    ///         _localAuthoritySearchController = new LocalAuthoritySearchController(
     ///             "Search",  // Action that will "host" the search sub-actions
-    ///             "Schools", // Host controller (i.e. this controller)
+    ///             "LocalAuthorities", // Host controller (i.e. this controller)
     ///             [],        // Keys of any route values the host action requires
-    ///             _api,      // API client instance
-    ///             // function to create a school page URL from a URN, 
-    ///             // to link to from the search results
-    ///             urn => Url.Action("LandingPage", "GenericSchool", new { urn }));
+    ///             _api);     // API client instance
     ///     }
     ///     
     ///     public override void OnActionExecuting(ActionExecutingContext context)
@@ -67,22 +64,21 @@ namespace ASP.Web.Areas.School
     ///
     ///         // Give the controller access to the currently executing ActionContext 
     ///         // in order to access route values and be able to redirect to sub-actions
-    ///         _schoolSearchController.BindContext(context);
+    ///         _localAuthoritySearchController.BindContext(context);
     ///     }
     ///
-    ///     [HttpGet($"schools/{SchoolSearchController.SubRouteTemplate}")]
-    ///     [HttpPost($"schools/{SchoolSearchController.SubRouteTemplate}")]
+    ///     [HttpGet($"local-authorities/{LocalAuthoritySearchController.SubRouteTemplate}")]
+    ///     [HttpPost($"local-authorities/{LocalAuthoritySearchController.SubRouteTemplate}")]
     ///     public Task<IActionResult> Search(SearchParameters parameters)
     ///     {
     ///         var result =
-    ///             from scope in ...     // get scope info from somewhere
-    ///             from otherData in ... // get other data needed to build the page
+    ///             from pageData in ... // get data needed to build the page
     ///         
-    ///             // delegate to the DownloadDataController to handle validation, error cases etc 
+    ///             // delegate to the LocalAuthoritySearchController to handle validation, error cases etc 
     ///             // and call the showPageView function to render the page
-    ///             from actionResult in _schoolSearchController.Handle(
+    ///             from actionResult in _localAuthoritySearchController.Handle(
     ///                 parameters,    // search parameters model-bound from route values/query string parameters
-    ///                 scope,         // scope under which to do search
+    ///                 Scope.Empty,   // scope parameter (not needed for LA search)
     ///                 
     ///                 // base breadcrumb trail for the Search page to be added to 
     ///                 // depending on the search sub-action
@@ -121,100 +117,87 @@ namespace ASP.Web.Areas.School
     /// <h1>@Model.PageTitle</h1>
     /// /* ... other stuff */
     /// <asp-search model="Model.Search" search-form-width="one-half">
-    ///    <partial name="_EstablishmentListingPartial" model="Model.EstablishmentListings" />
+    ///    <partial name="_LocalAuthorityListingPartial" model="Model.LocalAuthorityListings" />
     /// </asp-search>
     /// ]]>
     /// </code>
     /// </remarks>
     [NonController]
-    public class SchoolSearchController
-        : SearchController<SchoolSearchController, EstablishmentScopeInfo, EstablishmentListingViewModel>
+    public class LocalAuthoritySearchController
+        : SearchController<LocalAuthoritySearchController, LocalAuthoritySearchController.Scope, LocalAuthorityListingViewModel>
     {
         private readonly IAspApiClient _api;
-        private readonly Func<string, string?> _makeSchoolUrl;
         private readonly SearchOptions _searchOptions;
 
         /// <summary>
-        /// Creates a <c>SchoolSearchController</c> instance to handle school searches.
+        /// Creates a <c>LocalAuthoritySearchController</c> instance to handle localAuthority searches.
         /// </summary>
         /// <param name="hostAction">Action that will "host" the search sub-actions</param>
         /// <param name="hostController">Controller the "host" action belongs to</param>
         /// <param name="hostActionRouteValueKeys">Keys of any route values the host action requires</param>
         /// <param name="api">API client instance</param>
         /// <param name="searchOptions">searchOptions</param>
-        /// <param name="makeSchoolUrl">Function to create a school page URL from a URN, to link to from the search results</param>
         /// <param name="subActionRouteConfig">Optional config to override the default paths for each sub-action</param>
-        public SchoolSearchController(
+        public LocalAuthoritySearchController(
             string hostAction,
             string hostController,
             List<string> hostActionRouteValueKeys,
             IAspApiClient api,
             SearchOptions searchOptions,
-            Func<string, string?> makeSchoolUrl,
             Dictionary<SearchSubActionType, SubActionRouteConfig>? subActionRouteConfig = null)
             : base(
                 hostAction,
                 hostController,
                 hostActionRouteValueKeys,
-                "school",
-                "schools",
-                Constants.SchoolSearchTermInputValidationMessage,
+                "local authority",
+                "local authorities",
+                Constants.LaSearchTermInputValidationMessage,
                 subActionRouteConfig
             )
         {
             _api = api;
-            _makeSchoolUrl = makeSchoolUrl;
             _searchOptions = searchOptions;
         }
 
-        protected override Task<Result<ResultsPage<EstablishmentListingViewModel>>> GetAllListings(
-            EstablishmentScopeInfo scopeInfo,
+        protected override Task<Result<ResultsPage<LocalAuthorityListingViewModel>>> GetAllListings(
+            Scope scope,
             int pageNumber)
         {
-            var request = new GetAllEstablishmentsRequest(
-                scopeInfo.ScopeType,
-                scopeInfo.ScopeId,
+            var request = new GetAllLocalAuthoritiesRequest(
                 pageNumber,
                 _searchOptions.PageSize
             );
 
-            return _api.GetAllEstablishments(request)
-                .Map(results => (ResultsPage<EstablishmentListingViewModel>)results
-                    .Map(MakeListingViewModel));
+            return _api.GetAllLocalAuthorities(request)
+                .Map(results => results.Map(MakeListingViewModel));
         }
 
-        protected override Task<Result<SearchResultsPage<EstablishmentListingViewModel>>> PerformSearch(
-            EstablishmentScopeInfo scopeInfo,
+        protected override Task<Result<SearchResultsPage<LocalAuthorityListingViewModel>>> PerformSearch(
+            Scope scope,
             SearchParameters searchParams,
             int pageNumber)
         {
-            var request = new EstablishmentSearchRequest(
+            var request = new LocalAuthoritySearchRequest(
                 SearchTerm: searchParams.Search ?? string.Empty,
-                ScopeType: scopeInfo.ScopeType,
-                ScopeIdentifier: scopeInfo.ScopeId,
                 Page: pageNumber,
                 ResultsPerPage: _searchOptions.PageSize
             );
 
-            return _api.EstablishmentSearch(request)
-                .Map(results => (SearchResultsPage<EstablishmentListingViewModel>)results
-                    .Map(MakeListingViewModel));
+            return _api.LocalAuthoritySearch(request)
+                .Map(results => results.Map(MakeListingViewModel));
         }
 
-        protected override Task<Result<SearchSuggestionsList<EstablishmentListingViewModel>>> PerformSearchSuggestions(
-            EstablishmentScopeInfo scopeInfo,
+        protected override Task<Result<SearchSuggestionsList<LocalAuthorityListingViewModel>>> PerformSearchSuggestions(
+            Scope scope,
             SearchParameters searchParams)
         {
-            var request = new EstablishmentSearchSuggestionsRequest(
+            var request = new LocalAuthoritySearchSuggestionsRequest(
                 searchParams.Search ?? "",
-                scopeInfo.ScopeType,
-                scopeInfo.ScopeId,
                 _searchOptions.MaxSearchSuggestions
             );
 
-            return _api.EstablishmentSearchSuggestions(request)
-                .Map(results => (SearchSuggestionsList<EstablishmentListingViewModel>)results
-                    .Map(MakeListingViewModel));
+            return _api.LocalAuthoritySearchSuggestions(request)
+                .Map(results => results.Map(MakeListingViewModel));
         }
 
         protected override SearchFormViewModel CreateSearchFormViewModel(
@@ -222,39 +205,35 @@ namespace ASP.Web.Areas.School
             string searchSuggestionUrl,
             PaginationViewModel pagination)
         {
-            return SearchFormViewModel.ForSchools(
+            return SearchFormViewModel.ForLocalAuthorities(
                 searchTerm,
                 searchSuggestionUrl,
                 pagination);
         }
 
-        protected override string? GetListingUrl(EstablishmentListingViewModel listing)
-            => _makeSchoolUrl(listing.Urn);
+        protected override string? GetListingUrl(LocalAuthorityListingViewModel listing)
+            => MakeLocalAuthorityUrl(listing.Code);
 
-        private EstablishmentListingViewModel MakeListingViewModel(
-            EstablishmentListing listing
-        )
+        private string? MakeLocalAuthorityUrl(string laCode)
+            => _urlHelper?.Action(nameof(GenericLocalAuthorityController.LandingPage), "GenericLocalAuthority", new { laCode });
+
+        private LocalAuthorityListingViewModel MakeListingViewModel(
+            LookupValueWithCode lookupValue)
         {
-            return new EstablishmentListingViewModel {
-                Name = listing.Name,
-                Address = !string.IsNullOrEmpty(listing.Address) ? listing.Address : "No address available",
-                Urn = listing.Urn,
-                Laestab = !string.IsNullOrEmpty(listing.Laestab) ? listing.Laestab : "No data available",
-                Url = _makeSchoolUrl(listing.Urn) ?? ""
+            return new LocalAuthorityListingViewModel {
+                Code = lookupValue.Code,
+                Name = lookupValue.Name,
+                Url = MakeLocalAuthorityUrl(lookupValue.Code) ?? ""
             };
         }
 
-        private EstablishmentListingViewModel MakeListingViewModel(
-            EstablishmentSuggestion suggestion
-        )
+        public class Scope
         {
-            return new EstablishmentListingViewModel {
-                Name = suggestion.Name,
-                Address = !string.IsNullOrEmpty(suggestion.Address) ? suggestion.Address : "No address available",
-                Urn = suggestion.Urn,
-                Laestab = !string.IsNullOrEmpty(suggestion.Laestab) ? suggestion.Laestab : "No data available",
-                Url = _makeSchoolUrl(suggestion.Urn) ?? ""
-            };
+            private Scope()
+            {
+            }
+
+            public static Scope Empty => new Scope();
         }
     }
 }

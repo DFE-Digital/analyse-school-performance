@@ -1,6 +1,6 @@
 ﻿namespace ASP.Web.Features.DataDownloads
 {
-    public enum DownloadDataStepType
+    public enum DownloadDataSubActionType
     {
         SelectYear,
         SelectFiles,

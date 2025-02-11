@@ -3,8 +3,8 @@ using ASP.Api.Client.DataDownloads;
 using ASP.Core.Results;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
+using ASP.Web.Features.SubController;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace ASP.Web.Features.DataDownloads
 {
@@ -122,19 +122,11 @@ namespace ASP.Web.Features.DataDownloads
     /// </code>
     /// </remarks>
     [NonController]
-    public class DownloadDataController
+    public class DownloadDataController 
+        : SubController<DownloadDataController, DownloadDataParameters, string, DownloadDataSubActionType, DownloadDataSubActionViewModel>
     {
-        public const string SubRouteTemplate = "{**step}";
-
-        private readonly string _hostAction;
-        private readonly string _hostController;
-        private readonly List<string> _hostActionRouteValueKeys;
         private readonly DataDownloadsScopeType _scopeType;
         private readonly IAspApiClient _api;
-        private readonly Dictionary<DownloadDataStepType, DownloadDataStep> _steps = new();
-        private RouteValueDictionary? _hostActionRouteValues;
-        private ActionContext? _context;
-        private IUrlHelper? _urlHelper;
 
         /// <summary>
         /// Creates a <c>DownloadDataController</c> instance to handle data downloads.
@@ -151,175 +143,55 @@ namespace ASP.Web.Features.DataDownloads
             List<string> hostActionRouteValueKeys,
             DataDownloadsScopeType scopeType,
             IAspApiClient api,
-            Dictionary<DownloadDataStepType, DownloadDataStepRouteConfig>? stepRouteConfig = null)
+            Dictionary<DownloadDataSubActionType, SubActionRouteConfig>? stepRouteConfig = null)
+            : base(
+                hostAction,
+                hostController,
+                hostActionRouteValueKeys,
+                stepRouteConfig)
         {
-            _hostAction = hostAction;
-            _hostController = hostController;
-            _hostActionRouteValueKeys = hostActionRouteValueKeys;
             _scopeType = scopeType;
             _api = api;
 
-            _steps = new()
-            {
-                [DownloadDataStepType.SelectYear] =
-                    new SelectYearStep(this, "", "Dates available for download"),
+            AddSubAction(DownloadDataSubActionType.SelectYear,
+                new SelectYearStep(this, "", "Dates available for download"));
 
-                [DownloadDataStepType.SelectFiles] =
-                    new SelectFilesStep(this, "select-files", "Data files available for download"),
+            AddSubAction(DownloadDataSubActionType.SelectFiles,
+                new SelectFilesStep(this, "select-files", "Data files available for download"));
 
-                [DownloadDataStepType.SelectFormat] =
-                    new SelectFormatStep(this, "select-format", "Download data"),
+            AddSubAction(DownloadDataSubActionType.SelectFormat,
+                new SelectFormatStep(this, "select-format", "Download data"));
 
-                [DownloadDataStepType.DownloadAsZip] =
-                    new DownloadAsZipStep(this, "download-as-zip", "Download as Zip file")
-            };
-
-            // Step paths can be overridden if needed
-            if (stepRouteConfig != null)
-            {
-                foreach ((var key, var value) in stepRouteConfig)
-                {
-                    if (value.Path != null)
-                    {
-                        _steps[key].Path = value.Path.TrimEnd('/', ' ');
-                    }
-                }
-            }
+            AddSubAction(DownloadDataSubActionType.DownloadAsZip,
+                new DownloadAsZipStep(this, "download-as-zip", "Download as Zip file"));
         }
 
-        /// <summary>
-        /// This method should be called from OnActionExecuting() as the controller needs access to the currently executing
-        /// ActionContext in order to access route values and be able to redirect to sub-actions.
-        /// </summary>
-        /// <param name="context"></param>
-        public void BindContext(ActionContext context)
-        {
-            _context = context;
-            var factory = context.HttpContext?.RequestServices?.GetRequiredService<IUrlHelperFactory>();
-            _urlHelper = factory?.GetUrlHelper(context);
-            _hostActionRouteValues = new RouteValueDictionary(
-                _context.RouteData.Values.Where(kvp => _hostActionRouteValueKeys.Contains(kvp.Key)));
-        }
-
-        /// <summary>
-        /// Gets the Url for the initial action of this controller, using the optional routeValues provided
-        /// </summary>
-        /// <param name="routeValues">Optional routeValues for the initial action</param>
-        /// <returns></returns>
-        public string GetInitialActionUrl(object? routeValues = null)
-        {
-            var stepRouteValues = GetRouteValuesForStep(DownloadDataStepType.SelectYear, new DownloadDataStepParameters(), routeValues ?? new { });
-            var action = _urlHelper?.Action(_hostAction, _hostController, stepRouteValues);
-            return action ?? "";
-        }
-
-        /// <summary>
-        /// <para>
-        ///     Handles the download step logic, including validation errors, not found errors (if the step part of the route is invalid), 
-        ///     and returning a file download response, rendering the page by calling the <c>showPageView</c> function as needed.
-        /// </para>
-        /// </summary>
-        /// <param name="parameters">Download data step parameters model-bound from route values/query string parameters</param>
-        /// <param name="scopeIdentifier">URN or LA code to look up available downloads</param>
-        /// <param name="baseBreadcrumbTrail">Base breadcrumb trail for the page that can be added to as the download steps are navigated</param>
-        /// <param name="showPageView">Function to render a page view (displaying a download step, including any validation errors) based on a <c>DownloadDataStepModel</c></param>
-        /// <param name="stepConfig">Dictionary of overrides for any steps that need to be given different titles or paths</param>
-        /// <returns>a <c>Result&lt;IActionResult&gt;</c> that can then be incorporated in a <c>Result&lt;&gt;</c> chain along with other <c>Result&lt;&gt;</c> actions that may be needed to build up the page</returns>
-        public Task<Result<IActionResult>> Handle(
-            DownloadDataStepParameters parameters,
-            string scopeIdentifier,
-            IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
-            Func<DownloadDataStepViewModel, IActionResult> showPageView,
-            Dictionary<DownloadDataStepType, DownloadDataStepConfig>? stepConfig = null
-        )
-        {
-            // Step titles can be overridden if needed
-            if (stepConfig != null)
-            {
-                foreach ((var key, var value) in stepConfig)
-                {
-                    if (value.Title != null)
-                    {
-                        _steps[key].Title = value.Title;
-                    }
-                }
-            }
-
-            // Route value step in route template /path/to/download-data/{**step} is resolved as null if step portion is empty
-            // so Step parameter will be null for first step, but we prefer to deal with it as an empty string
-            var stepPath = (parameters.Step ?? "").TrimEnd('/', ' ');
-            var step = _steps.Values.FirstOrDefault(step => step.Path == stepPath);
-
-            if (step == null)
-            {
-                return Task.FromResult(Result.NotFound<IActionResult>($"Download data step \"{stepPath}\" was not recognised."));
-            }
-
-            return step.Handle(parameters, scopeIdentifier, baseBreadcrumbTrail, showPageView);
-        }
-
-        private string? RequestMethod
-            => _context?.HttpContext.Request.Method;
-
-        private string ScopeTypeLabel
-            => _scopeType == DataDownloadsScopeType.LA ? "LA" : "school";
-
-        private void AddModelError(string key, string errorMessage)
-            => _context?.ModelState.AddModelError(key, errorMessage);
-
-        private Result<IActionResult> RedirectToStep(DownloadDataStepType stepType, DownloadDataStepParameters parameters)
-            => new RedirectToActionResult(_hostAction, _hostController, GetRouteValuesForStep(stepType, parameters));
-
-        private BreadcrumbItem GetBreadcrumbForStep(DownloadDataStepType stepType, DownloadDataStepParameters parameters)
-        {
-            var step = _steps[stepType];
-            return new BreadcrumbItem(step.Title, GetUrlForStep(stepType, parameters));
-        }
-
-        private string GetUrlForStep(DownloadDataStepType stepType, DownloadDataStepParameters parameters)
-            => _urlHelper?.Action(_hostAction, _hostController, GetRouteValuesForStep(stepType, parameters)) ?? "";
-
-        private RouteValueDictionary GetRouteValuesForStep(DownloadDataStepType stepType, DownloadDataStepParameters parameters)
-            => (_hostActionRouteValues ?? [])
-                .Merge(_steps[stepType].GetRouteValues(parameters));
-
-        private RouteValueDictionary GetRouteValuesForStep(DownloadDataStepType stepType, DownloadDataStepParameters parameters, object initialRouteValues)
-            => (_hostActionRouteValues ?? [])
-                .Merge(initialRouteValues)
-                .Merge(_steps[stepType].GetRouteValues(parameters));
-
-        private Task<Result<AvailableDownloadsViewModel>> GetAvailableDownloads(string scopeIdentifier, int? year)
-        {
-            return
-                from downloads in _api.GetAvailableDownloads(new GetAvailableDownloadsRequest(_scopeType, scopeIdentifier, year))
-                select AvailableDownloadsViewModel.FromAvailableDownloads(downloads);
-        }
-
-        private class SelectYearStep : DownloadDataStep
+        private class SelectYearStep : SubAction
         {
             public SelectYearStep(
                 DownloadDataController controller,
                 string path,
-                string title)
-                : base(controller, path, title)
+                string title,
+                string subtitle = "")
+                : base(controller, path, title, subtitle)
             {
             }
 
-            public override object GetRouteValues(DownloadDataStepParameters parameters)
-                => new { step = Path, selectedYear = "", selectedFiles = "" };
+            public override RouteValueDictionary GetRouteValues(DownloadDataParameters parameters)
+                => base.GetRouteValues(parameters).Merge(new { selectedYear = "", selectedFiles = "" });
 
             public override async Task<Result<IActionResult>> Handle(
-                DownloadDataStepParameters parameters,
+                DownloadDataParameters parameters,
                 string scopeIdentifier,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
-                Func<DownloadDataStepViewModel, IActionResult> showPageView)
+                Func<DownloadDataSubActionViewModel, IActionResult> showPageView)
             {
                 if (Controller.RequestMethod == HttpMethods.Post)
                 {
                     // Redirect to files selection if year is valid
                     if (parameters.SelectedYear.HasValue)
                     {
-                        return Controller.RedirectToStep(DownloadDataStepType.SelectFiles, parameters);
+                        return Controller.RedirectToSubAction(DownloadDataSubActionType.SelectFiles, parameters);
                     }
 
                     Controller.AddModelError(Constants.ModelErrorKeySelectedYear,
@@ -339,7 +211,7 @@ namespace ASP.Web.Features.DataDownloads
                         : new DownloadDataNoDownloadsAvailableViewModel(
                             Controller.ScopeTypeLabel
                           )
-                    let model = new DownloadDataStepViewModel(
+                    let model = new DownloadDataSubActionViewModel(
                         title,
                         new BreadcrumbTrailViewModel(
                             baseBreadcrumbTrail
@@ -350,24 +222,25 @@ namespace ASP.Web.Features.DataDownloads
             }
         }
 
-        private class SelectFilesStep : DownloadDataStep
+        private class SelectFilesStep : SubAction
         {
             public SelectFilesStep(
                 DownloadDataController controller,
                 string path,
-                string title)
-                : base(controller, path, title)
+                string title,
+                string subtitle = "")
+                : base(controller, path, title, subtitle)
             {
             }
 
-            public override object GetRouteValues(DownloadDataStepParameters parameters)
-                => new { step = Path, selectedYear = parameters.SelectedYear, selectedFiles = "" };
+            public override RouteValueDictionary GetRouteValues(DownloadDataParameters parameters)
+                => base.GetRouteValues(parameters).Merge(new { selectedYear = parameters.SelectedYear, selectedFiles = "" });
 
             public override async Task<Result<IActionResult>> Handle(
-                DownloadDataStepParameters parameters,
+                DownloadDataParameters parameters,
                 string scopeIdentifier,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
-                Func<DownloadDataStepViewModel, IActionResult> showPageView)
+                Func<DownloadDataSubActionViewModel, IActionResult> showPageView)
             {
                 if (Controller.RequestMethod == HttpMethods.Post)
                 {
@@ -376,7 +249,7 @@ namespace ASP.Web.Features.DataDownloads
                     // Redirect to data select format page if year is valid
                     if (selectedFiles.Any())
                     {
-                        return Controller.RedirectToStep(DownloadDataStepType.SelectFormat, parameters);
+                        return Controller.RedirectToSubAction(DownloadDataSubActionType.SelectFormat, parameters);
                     }
 
                     Controller.AddModelError(Constants.ModelErrorKeySelectedFiles,
@@ -395,12 +268,12 @@ namespace ASP.Web.Features.DataDownloads
                         : new DownloadDataNoDownloadsAvailableViewModel(
                             Controller.ScopeTypeLabel,
                             parameters.SelectedYear,
-                            Controller.GetUrlForStep(DownloadDataStepType.SelectYear, parameters))
-                    let model = new DownloadDataStepViewModel(
+                            Controller.GetUrlForSubAction(DownloadDataSubActionType.SelectYear, parameters))
+                    let model = new DownloadDataSubActionViewModel(
                         title,
                         new BreadcrumbTrailViewModel(
                             baseBreadcrumbTrail.Concat([
-                                Controller.GetBreadcrumbForStep(DownloadDataStepType.SelectYear, parameters)
+                                Controller.GetBreadcrumbForSubAction(DownloadDataSubActionType.SelectYear, parameters)
                             ])
                         ),
                         downloadDataModel
@@ -409,45 +282,46 @@ namespace ASP.Web.Features.DataDownloads
             }
         }
 
-        private class SelectFormatStep : DownloadDataStep
+        private class SelectFormatStep : SubAction
         {
             public SelectFormatStep(
                 DownloadDataController controller,
                 string path,
-                string title)
-                : base(controller, path, title)
+                string title,
+                string subtitle = "")
+                : base(controller, path, title, subtitle)
             {
             }
 
-            public override object GetRouteValues(DownloadDataStepParameters parameters)
-                => new { step = Path, selectedYear = parameters.SelectedYear, selectedFiles = parameters.SelectedFiles };
+            public override RouteValueDictionary GetRouteValues(DownloadDataParameters parameters)
+                => base.GetRouteValues(parameters).Merge(new { selectedYear = parameters.SelectedYear, selectedFiles = parameters.SelectedFiles });
 
             public override Task<Result<IActionResult>> Handle(
-                DownloadDataStepParameters parameters,
+                DownloadDataParameters parameters,
                 string scopeIdentifier,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
-                Func<DownloadDataStepViewModel, IActionResult> showPageView)
+                Func<DownloadDataSubActionViewModel, IActionResult> showPageView)
             {
 
                 List<(string, string?)> fileFormatList = [];
 
-                foreach (Api.Client.DataDownloads.FileType fileType in Enum.GetValues<Api.Client.DataDownloads.FileType>())
+                foreach (FileType fileType in Enum.GetValues<FileType>())
                 {
-                    fileFormatList.Add(($"Data in {fileType} format", Controller.GetUrlForStep(DownloadDataStepType.DownloadAsZip, parameters with { FileType = fileType })));
+                    fileFormatList.Add(($"Data in {fileType} format", Controller.GetUrlForSubAction(DownloadDataSubActionType.DownloadAsZip, parameters with { FileType = fileType })));
                 }
 
-                var model = new DownloadDataStepViewModel(
+                var model = new DownloadDataSubActionViewModel(
                     Title,
                     new BreadcrumbTrailViewModel(
                         baseBreadcrumbTrail.Concat([
-                            Controller.GetBreadcrumbForStep(DownloadDataStepType.SelectYear, parameters),
-                            Controller.GetBreadcrumbForStep(DownloadDataStepType.SelectFiles, parameters)
+                            Controller.GetBreadcrumbForSubAction(DownloadDataSubActionType.SelectYear, parameters),
+                            Controller.GetBreadcrumbForSubAction(DownloadDataSubActionType.SelectFiles, parameters)
                         ])
                     ),
                     new DownloadDataSelectFormatViewModel(
                         Controller.ScopeTypeLabel,
                         fileFormatList,
-                        Controller.GetUrlForStep(DownloadDataStepType.SelectYear, parameters)
+                        Controller.GetUrlForSubAction(DownloadDataSubActionType.SelectYear, parameters)
                     )
                 );
 
@@ -455,26 +329,27 @@ namespace ASP.Web.Features.DataDownloads
             }
         }
 
-        private class DownloadAsZipStep : DownloadDataStep
+        private class DownloadAsZipStep : SubAction
         {
             public DownloadAsZipStep(
                 DownloadDataController controller,
                 string path,
-                string title)
-                : base(controller, path, title)
+                string title,
+                string subtitle = "")
+                : base(controller, path, title, subtitle)
             {
             }
 
-            public override object GetRouteValues(DownloadDataStepParameters parameters)
-                => new { step = Path, fileType = parameters.FileType, selectedFiles = parameters.SelectedFiles };
+            public override RouteValueDictionary GetRouteValues(DownloadDataParameters parameters)
+                => base.GetRouteValues(parameters).Merge(new { fileType = parameters.FileType, selectedFiles = parameters.SelectedFiles });
 
             public override async Task<Result<IActionResult>> Handle(
-                DownloadDataStepParameters parameters,
+                DownloadDataParameters parameters,
                 string scopeIdentifier,
                 IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
-                Func<DownloadDataStepViewModel, IActionResult> showPageView)
+                Func<DownloadDataSubActionViewModel, IActionResult> showPageView)
             {
-                var fileType = parameters.FileType ?? Api.Client.DataDownloads.FileType.CSV;
+                var fileType = parameters.FileType ?? FileType.CSV;
                 var selectedFiles = parameters.SelectedFiles ?? new();
 
                 return
@@ -486,30 +361,14 @@ namespace ASP.Web.Features.DataDownloads
             }
         }
 
-        private abstract class DownloadDataStep
+        private string ScopeTypeLabel
+            => _scopeType == DataDownloadsScopeType.LA ? "LA" : "school";
+
+        private Task<Result<AvailableDownloadsViewModel>> GetAvailableDownloads(string scopeIdentifier, int? year)
         {
-            public DownloadDataController Controller { get; }
-            public string Path { get; set; }
-            public string Title { get; set; }
-
-            public DownloadDataStep(
-                DownloadDataController controller,
-                string path,
-                string title)
-            {
-                Controller = controller;
-                Path = path;
-                Title = title;
-            }
-
-            public abstract object GetRouteValues(DownloadDataStepParameters parameters);
-
-            public abstract Task<Result<IActionResult>> Handle(
-                DownloadDataStepParameters parameters,
-                string scopeIdentifier,
-                IEnumerable<BreadcrumbItem> baseBreadcrumbTrail,
-                Func<DownloadDataStepViewModel, IActionResult> showPageView
-            );
-        };
+            return
+                from downloads in _api.GetAvailableDownloads(new GetAvailableDownloadsRequest(_scopeType, scopeIdentifier, year))
+                select AvailableDownloadsViewModel.FromAvailableDownloads(downloads);
+        }
     }
 }

@@ -44,12 +44,12 @@ namespace ASP.Web.Areas.LocalAuthority
             _individualSchoolDataDownloadController = new DownloadDataController(
                 nameof(DownloadSchoolData), 
                 "GenericLocalAuthority", 
-                ["laCode", .. SearchParameters.RouteValueKeys], 
+                ["laCode", ..SearchParameters.RouteValueKeys], 
                 DataDownloadsScopeType.School, 
                 _api,
                 stepRouteConfig: new()
                 {
-                    [DownloadDataStepType.SelectYear] = new() { Path = "select-year" },
+                    [DownloadDataSubActionType.SelectYear] = new() { Path = "select-year" },
                 });
 
             _schoolSearchController = new SchoolSearchController(
@@ -100,13 +100,13 @@ namespace ASP.Web.Areas.LocalAuthority
         [HttpGet($"download-data/pupil-level-aggregated-la-data/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/pupil-level-aggregated-la-data/{DownloadDataController.SubRouteTemplate}")]
         [Authorize(Policy = Policy.NamedData)]
-        public Task<IActionResult> DownloadLocalAuthorityData(string laCode, DownloadDataStepParameters parameters)
+        public Task<IActionResult> DownloadLocalAuthorityData(string laCode, DownloadDataParameters parameters)
         {
             var result =
                 from laName in GetLocalAuthorityName(laCode)
                 from actionResult in _localAuthorityDataDownloadController.Handle(
-                    parameters,
                     laCode,
+                    parameters,
                     GetChildPageBaseBreadcrumbTrail(laCode, laName)
                         .Append(new("Download data", Action(nameof(DownloadData), new { laCode }))),
                     stepModel => View(new DownloadDataPageViewModel(
@@ -121,9 +121,8 @@ namespace ASP.Web.Areas.LocalAuthority
                         ),
                         stepModel.DownloadData
                     )),
-                    new()
-                    {
-                        [DownloadDataStepType.SelectFormat] = new() { Title = "Download pupil level and aggregated LA data" }
+                    new() {
+                        [DownloadDataSubActionType.SelectFormat] = new() { Title = "Download pupil level and aggregated LA data" }
                     }
                 )
                 select actionResult;
@@ -155,12 +154,10 @@ namespace ASP.Web.Areas.LocalAuthority
                             "Individual school data"
                         ),
                         model.Search,
-                        model.Establishments
+                        model.SearchResults
                     )),
-                    new()
-                    {
-                        [SchoolSearchSubActionType.AllSchools] = new()
-                        {
+                    new() {
+                        [SearchSubActionType.AllListings] = new() {
                             Title = "Search for a school",
                         }
                     })
@@ -172,7 +169,7 @@ namespace ASP.Web.Areas.LocalAuthority
 
         [HttpGet($"download-data/individual-school-data/{{urn:int:length(6)}}/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/individual-school-data/{{urn:int:length(6)}}/{DownloadDataController.SubRouteTemplate}")]
-        public Task<IActionResult> DownloadSchoolData(string laCode, string urn, DownloadDataStepParameters parameters, string? search)
+        public Task<IActionResult> DownloadSchoolData(string laCode, string urn, DownloadDataParameters parameters, string? search)
         {
             var result =
                 from laName in GetLocalAuthorityName(laCode)
@@ -185,8 +182,8 @@ namespace ASP.Web.Areas.LocalAuthority
                     : baseBreadcrumbTrail
                         .Append(new($"Search results for \"{search}\"", Action(nameof(DownloadSchoolDataSearch), new { laCode, search })))
                 from actionResult in _individualSchoolDataDownloadController.Handle(
-                    parameters,
                     urn,
+                    parameters,
                     breadcrumbTrail,
                     stepModel => View(new DownloadDataPageViewModel(
                         new PageViewModel(
@@ -200,9 +197,8 @@ namespace ASP.Web.Areas.LocalAuthority
                         ),
                         stepModel.DownloadData
                     )),
-                    new()
-                    {
-                        [DownloadDataStepType.SelectFormat] = new() { Title = "Download individual school data" }
+                    new() {
+                        [DownloadDataSubActionType.SelectFormat] = new() { Title = "Download individual school data" }
                     }
                 )
                 select actionResult;

@@ -62,10 +62,10 @@ namespace ASP.Web.Areas.School
                             model.PageSubtitle
                         ),
                         model.Search,
-                        model.Establishments
+                        model.SearchResults
                     )),
                     new() {
-                        [SchoolSearchSubActionType.AllSchools] = new() { Subtitle = laName }
+                        [SearchSubActionType.AllListings] = new() { Subtitle = laName }
                     }
                 )
                 select action;

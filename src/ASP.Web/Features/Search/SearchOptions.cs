@@ -6,5 +6,4 @@ public class SearchOptions
 
     public int PageSize { get; set; } = ASP.Core.Constants.SearchResultPageSize;
     public int MaxSearchSuggestions { get; set; } = ASP.Core.Constants.SearchResultMaxSuggestions;
-
 }

@@ -7,12 +7,12 @@ public class LocalAuthoritySearchPageViewModel
 {
     public PageViewModel Page { get; }
     public SearchViewModel Search { get; }
-    public List<LocalAuthoritiesListingModel> LocalAuthorityListings { get; }
+    public List<LocalAuthorityListingViewModel> LocalAuthorityListings { get; }
 
     public LocalAuthoritySearchPageViewModel(
         PageViewModel page,
         SearchViewModel search,
-        List<LocalAuthoritiesListingModel> localAuthorityListings)
+        List<LocalAuthorityListingViewModel> localAuthorityListings)
     {
         Page = page;
         Search = search;

@@ -126,15 +126,15 @@ namespace ASP.Web.Areas.School
         [HttpGet($"download-data/{DownloadDataController.SubRouteTemplate}")]
         [HttpPost($"download-data/{DownloadDataController.SubRouteTemplate}")]
         [Authorize(Policy = Policy.NamedData)]
-        public Task<IActionResult> DownloadData(string urn, DownloadDataStepParameters parameters)
+        public Task<IActionResult> DownloadData(string urn, DownloadDataParameters parameters)
         {
             var result =
                 from establishmentDetails in GetEstablishmentDetails(urn)
                 let laCode = establishmentDetails.LocalAuthority?.Code ?? ""
                 let laName = establishmentDetails.LocalAuthority?.Name ?? ""
                 from actionResult in _downloadDataController.Handle(
-                    parameters,
                     urn,
+                    parameters,
                     GetChildPageBaseBreadcrumbTrail(laCode, laName, urn, establishmentDetails.Name)
                         .Append(new("Download data", _downloadDataController.GetInitialActionUrl(new { urn }))),
                     stepModel => View(new SchoolDownloadDataPageViewModel(
@@ -151,7 +151,7 @@ namespace ASP.Web.Areas.School
                         )),
                         stepModel.DownloadData
                     )),
-                    new() { [DownloadDataStepType.SelectFormat] = new() { Title = $"Download {establishmentDetails.Name} data" } }
+                    new() { [DownloadDataSubActionType.SelectFormat] = new() { Title = $"Download {establishmentDetails.Name} data" } }
                 )
                 select actionResult;
 

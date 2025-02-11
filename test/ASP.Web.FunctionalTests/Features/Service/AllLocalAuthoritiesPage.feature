@@ -24,6 +24,12 @@ Scenario: Diocese Named user is denied access to local-authorities page
 	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
+Scenario: No results when no schools exist
+	Given no Establishments exist
+	When I navigate to /local-authorities/
+	Then the page title should be "We found no local authorities"
+
+@Javascript:disabled
 Scenario: Page should show a breadcrumb trail
 	Given I am a DfE Named user
 	And Local Authority "301" exists:
@@ -246,6 +252,12 @@ Scenario: Page should show a breadcrumb trail when search returns no results (JS
 
 @Javascript:disabled
 Scenario: Search Term Validation
+	Given Local Authority "301" exists:
+		"""
+		{
+			"name": "Some Test Name"
+		}
+		"""
 	When I navigate to /local-authorities/
 	Then I should get a 200 response
 	And the page title should be "All local authorities"
@@ -253,6 +265,12 @@ Scenario: Search Term Validation
 
 @Javascript:enabled
 Scenario: Search Term Validation (JS)
+	Given Local Authority "301" exists:
+		"""
+		{
+			"name": "Some Test Name"
+		}
+		"""
 	When I navigate to /local-authorities/
 	Then I should get a 200 response
 	And the page title should be "All local authorities"
@@ -260,6 +278,12 @@ Scenario: Search Term Validation (JS)
 
 @Javascript:disabled
 Scenario: Errors in Search Term Validation
+	Given Local Authority "301" exists:
+		"""
+		{
+			"name": "Some Test Name"
+		}
+		"""
 	When I navigate to /local-authorities/
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authorities/?search=
@@ -269,30 +293,18 @@ Scenario: Errors in Search Term Validation
 
 @Javascript:enabled
 Scenario: Errors in Search Term Validation (JS)
+	Given Local Authority "301" exists:
+		"""
+		{
+			"name": "Some Test Name"
+		}
+		"""
 	When I navigate to /local-authorities/
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authorities/?search=
 	And the element "#app-field-Search-input-error" should have the text content "Please enter a local authority name or code"
 	And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
 	And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a local authority name or code"
-
-@Javascript:disabled
-Scenario: Generic Local Authorities search page should show correct message when there is no data
-	Given no Local Authorities exist
-	When I navigate to /local-authorities/
-	And I update the textbox "#app-field-Search" to have the value "primary"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authorities/?search=primary
-	And the element "h1" should have the text content "We found no matches for "primary""
-
-@Javascript:enabled
-Scenario: Generic Local Authorities search page should show correct message when there is no data (JS)
-	Given no Local Authorities exist
-	When I navigate to /local-authorities/
-	And I update the textbox "#app-field-Search" to have the value "primary"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authorities/?search=primary
-	And the page title should be "We found no matches for "primary""
 
 @Javascript:disabled
 Scenario: Generic Local Authorities search page should show correct message for search term with no matches

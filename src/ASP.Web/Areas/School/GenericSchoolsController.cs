@@ -18,7 +18,7 @@ namespace ASP.Web.Areas.School
     [Authorize(Policy = Policy.AccessToAllSchools)]
     public class GenericSchoolsController : SchoolsController
     {
-        private readonly SchoolSearchController _schoolSearchController;
+        private readonly SchoolSearchController _searchController;
 
         public GenericSchoolsController(
             IAspApiClient api,
@@ -26,11 +26,11 @@ namespace ASP.Web.Areas.School
             IOptions<SearchOptions> searchOptions
         ) : base(api, hostEnvironment)
         {
-            _schoolSearchController = new SchoolSearchController(
+            _searchController = new SchoolSearchController(
                 nameof(Schools),
                 "GenericSchools",
                 [],
-                _api,
+                api,
                 searchOptions.Value,
                 makeSchoolUrl: urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }));
         }
@@ -39,13 +39,13 @@ namespace ASP.Web.Areas.School
         {
             base.OnActionExecuting(context);
 
-            _schoolSearchController.BindContext(context);
+            _searchController.BindContext(context);
         }
 
         [HttpGet($"{SchoolSearchController.SubRouteTemplate}")]
         public async Task<IActionResult> Schools(SearchParameters parameters)
         {
-            var result = await _schoolSearchController.Handle(
+            var result = await _searchController.Handle(
                 new EstablishmentScopeInfo(EstablishmentScopeType.All, null),
                 parameters,
                 [],
@@ -56,7 +56,7 @@ namespace ASP.Web.Areas.School
                         model.PageSubtitle
                     ),
                     model.Search,
-                    model.Establishments
+                    model.SearchResults
                 ))
             );
 

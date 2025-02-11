@@ -1,13 +1,15 @@
-﻿namespace ASP.Web.Features.Search;
+﻿using ASP.Web.Extensions;
+using ASP.Web.Features.SubController;
 
-public class SearchParameters
+namespace ASP.Web.Features.Search;
+
+public record SearchParameters : SubActionParameters
 {
-    public static readonly List<string> RouteValueKeys = ["searchSubAction", "search", "page"];
+    public static new readonly List<string> RouteValueKeys = [..SubActionParameters.RouteValueKeys, "search", "page"];
 
-    public string? SearchSubAction { get; set; }
     public string? Search { get; set; }
     public string? Page { get; set; }
 
-    public RouteValueDictionary AsRouteValues()
-        => new(new { searchSubAction = SearchSubAction, search = Search, page = Page });
+    public override RouteValueDictionary AsRouteValues()
+        => new(base.AsRouteValues().Merge(new { search = Search, page = Page }));
 }
