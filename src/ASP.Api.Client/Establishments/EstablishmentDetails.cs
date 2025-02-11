@@ -16,4 +16,6 @@ public class EstablishmentDetails
     public LookupValueWithCode? ResourcedProvisionType { get; set; }
     public int? NoOfPupils { get; set; }
     public string? Laestab { get; set; }
+    public LookupValueWithId? MultiAcademyTrust { get; set; }
+    public LookupValueWithCode? Diocese { get; set; }
 }

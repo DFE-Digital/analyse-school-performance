@@ -18,10 +18,14 @@ namespace ASP.Web.Areas.School
         public LookupValueWithCode? AdmissionsPolicy { get; set; }
         public LookupValueWithCode? ResourcedProvisionType { get; set; }
         public int? NoOfPupils { get; set; }
+        public string? Laestab { get; set; }
+        public LookupValueWithId? MultiAcademyTrust { get; set; }
+        public LookupValueWithCode? Diocese { get; set; }
 
         public static EstablishmentDetailsViewModel FromEstablishmentDetails(EstablishmentDetails establishmentDetailsDto)
         {
-            return new EstablishmentDetailsViewModel {
+            return new EstablishmentDetailsViewModel
+            {
                 Urn = establishmentDetailsDto.Urn,
                 Name = establishmentDetailsDto.Name,
                 PhaseOfEducation = establishmentDetailsDto.EducationPhase,
@@ -34,7 +38,10 @@ namespace ASP.Web.Areas.School
                 ReligiousDenomination = establishmentDetailsDto.ReligiousDenomination,
                 AdmissionsPolicy = establishmentDetailsDto.AdmissionsPolicy,
                 ResourcedProvisionType = establishmentDetailsDto.ResourcedProvisionType,
-                NoOfPupils = establishmentDetailsDto.NoOfPupils
+                NoOfPupils = establishmentDetailsDto.NoOfPupils,
+                Laestab = establishmentDetailsDto.Laestab,
+                MultiAcademyTrust = establishmentDetailsDto.MultiAcademyTrust,
+                Diocese = establishmentDetailsDto.Diocese
             };
         }
     }

@@ -25,7 +25,9 @@ public static class EstablishmentDetailsMapper
             details.NoOfPupils,
             details.Laestab,
             details.OpenDate,
-            details.CloseDate
+            details.CloseDate,
+            details.MultiAcademyTrust.MapToDomainEntityMultiAcademyTrust(),
+            details.Diocese.MapToDomainEntityDiocese()
         );
     }
 }

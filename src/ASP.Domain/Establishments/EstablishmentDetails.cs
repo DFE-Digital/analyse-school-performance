@@ -21,12 +21,15 @@ namespace ASP.Domain.Establishments
         public string? Laestab { get; }
         public DateTime? OpenDate { get; }
         public DateTime? CloseDate { get; }
+        public MultiAcademyTrust? MultiAcademyTrust { get; }
+        public Diocese? Diocese { get; }
 
         public EstablishmentDetails(string urn, string name, EducationPhase educationPhase, Address? address, EstablishmentType? establishmentType,
             Gender? gender, LocalAuthority? localAuthority, HeadTeacher? headTeacher, AgeRange? ageRange,
             ReligiousDenomination? religiousDenomination, AdmissionsPolicy? admissionsPolicy,
             ResourcedProvisionType? resourcedProvisionType, List<Link>? links,
-            int? noOfPupils, string? laestab, DateTime? openDate, DateTime? closeDate)
+            int? noOfPupils, string? laestab, DateTime? openDate, DateTime? closeDate, 
+            MultiAcademyTrust? multiAcademyTrust, Diocese? diocese)
         {
             Urn = urn;
             Name = name;
@@ -45,6 +48,8 @@ namespace ASP.Domain.Establishments
             Laestab = laestab;
             OpenDate = openDate;
             CloseDate = closeDate;
+            MultiAcademyTrust = multiAcademyTrust;
+            Diocese = diocese;
         }
     }
 }

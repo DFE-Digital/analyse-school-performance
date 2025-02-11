@@ -1,4 +1,5 @@
 ﻿using ASP.Core.Pagination;
+using ASP.Domain.Establishments;
 using ASP.Domain.Establishments.LinkedEstablishments;
 
 namespace ASP.Api.Functions.Establishments;
@@ -32,7 +33,8 @@ public static class DomainMappingExtensions
 
     public static Client.Establishments.EstablishmentDetails ForApiClient(this Domain.Establishments.EstablishmentDetails details)
     {
-        return new Client.Establishments.EstablishmentDetails() {
+        return new Client.Establishments.EstablishmentDetails()
+        {
             Urn = details.Urn,
             Name = details.Name,
             Address = details.Address.ForApiClient(),
@@ -46,14 +48,17 @@ public static class DomainMappingExtensions
             Gender = details.Gender.ForApiClient(),
             ResourcedProvisionType = details.ResourcedProvisionType.ForApiClient(),
             NoOfPupils = details.NoOfPupils,
-            Laestab = details.Laestab
+            Laestab = details.Laestab,
+            MultiAcademyTrust = details.MultiAcademyTrust.ForApiClient(),
+            Diocese = details.Diocese.ForApiClient(),
         };
     }
 
     public static Client.Establishments.EstablishmentListing ForApiClient(
         this Domain.Establishments.EstablishmentListing details)
     {
-        return new Client.Establishments.EstablishmentListing() {
+        return new Client.Establishments.EstablishmentListing()
+        {
             Urn = details.Urn,
             Name = details.Name,
             Address = details.Address.ForApiClient(),
@@ -65,7 +70,8 @@ public static class DomainMappingExtensions
     public static Client.Establishments.EstablishmentSuggestion ForApiClient(
         this Domain.Establishments.SearchSuggestions.EstablishmentSuggestion details)
     {
-        return new Client.Establishments.EstablishmentSuggestion() {
+        return new Client.Establishments.EstablishmentSuggestion()
+        {
             Urn = details.Urn,
             Name = details.Name,
             Address = details.Address.ForApiClient(),
@@ -101,7 +107,8 @@ public static class DomainMappingExtensions
     {
         if (headTeacher == null) return null;  // Return null directly instead of an empty object
 
-        return new Client.Establishments.HeadTeacher() {
+        return new Client.Establishments.HeadTeacher()
+        {
             FirstName = headTeacher.FirstName,
             LastName = headTeacher.LastName,
             PreferredJobTitle = headTeacher.PreferredJobTitle,
@@ -158,7 +165,8 @@ public static class DomainMappingExtensions
     {
         if (response == null) return null;  // Return null directly instead of an empty object
 
-        return new ScopedSearchSuggestionsList<Client.Establishments.EstablishmentSuggestion> {
+        return new ScopedSearchSuggestionsList<Client.Establishments.EstablishmentSuggestion>
+        {
             Suggestions = response.Suggestions.ForApiClient(),
             MaxSuggestions = response.MaxSuggestions,
             SearchTerm = response.SearchTerm,
@@ -179,7 +187,8 @@ public static class DomainMappingExtensions
     {
         if (linkedEstablishment == null) return new List<Client.Establishments.LinkedEstablishment>();
 
-        return linkedEstablishment.Select(x => new Client.Establishments.LinkedEstablishment() {
+        return linkedEstablishment.Select(x => new Client.Establishments.LinkedEstablishment()
+        {
             Name = x.Name,
             Urn = x.Urn
         }).ToList();
@@ -188,7 +197,8 @@ public static class DomainMappingExtensions
     public static Client.Establishments.GetLinkedEstablishmentsResponse ForApiClient(
         this Domain.Establishments.UseCases.GetLinkedEstablishments.GetLinkedEstablishmentsResponse linkedEstablishmentsResponse)
     {
-        return new Client.Establishments.GetLinkedEstablishmentsResponse() {
+        return new Client.Establishments.GetLinkedEstablishmentsResponse()
+        {
             Urn = linkedEstablishmentsResponse.Urn,
             Name = linkedEstablishmentsResponse.Name,
             LinkedUrns = linkedEstablishmentsResponse.LinkedUrns,
@@ -199,7 +209,8 @@ public static class DomainMappingExtensions
     public static List<Client.Establishments.EstablishmentLink> ForApiClient(
         this List<EstablishmentLink> establishmentLink)
     {
-        return establishmentLink.Select(x => new Client.Establishments.EstablishmentLink() {
+        return establishmentLink.Select(x => new Client.Establishments.EstablishmentLink()
+        {
             Date = x.Date?.ToString("yyyy-MM-dd"),
             LinkType = x.LinkType.ForApiClient(),
             Establishments = x.Establishments.ForApiClient(),
@@ -216,5 +227,19 @@ public static class DomainMappingExtensions
             linkType.Code,
             linkType.Name
         );
+    }
+
+    public static Client.LookupValueWithId? ForApiClient(this MultiAcademyTrust? multiAcademyTrust)
+    {
+        if (multiAcademyTrust is null) return null;
+
+        return new Client.LookupValueWithId(multiAcademyTrust.Id, multiAcademyTrust.Name);
+    }
+
+    public static Client.LookupValueWithCode? ForApiClient(this Diocese? diocese)
+    {
+        if (diocese is null) return null;
+
+        return new Client.LookupValueWithCode(diocese.Id, diocese.Name);
     }
 }

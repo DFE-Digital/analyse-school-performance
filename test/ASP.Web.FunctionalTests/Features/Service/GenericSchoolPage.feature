@@ -226,7 +226,15 @@ Scenario: School page should contain a school details disclosure element
 			},
 			"resourcedProvisionType": {
 				"name": "Not recorded",
-			}
+			},
+			"laestab": "001/1234",
+			"multiAcademyTrust": {
+				"uid": "0001",
+				"name": "THE DEAN TRUST"
+			},
+			"diocese": {
+				"name": "Diocese of Chelmsford"
+			},
 		}
 		"""
 	When I navigate to /school/123456/
@@ -257,6 +265,12 @@ Scenario: School page should contain a school details disclosure element
 	And the element "*[data-testid='school-details-provision-value']" should have the text content "Not recorded"
 	And the element "*[data-testid='school-details-pupils-key']" should have the text content "Number of pupils"
 	And the element "*[data-testid='school-details-pupils-value']" should have the text content "404"
+	And the element "*[data-testid='school-details-laestab-key']" should have the text content "LAESTAB"
+	And the element "*[data-testid='school-details-laestab-value']" should have the text content "001/1234"
+	And the element "*[data-testid='school-details-mat-key']" should have the text content "Multi academy trust"
+	And the element "*[data-testid='school-details-mat-value']" should have the text content "THE DEAN TRUST"
+	And the element "*[data-testid='school-details-diocese-key']" should have the text content "Diocese"
+	And the element "*[data-testid='school-details-diocese-value']" should have the text content "Diocese of Chelmsford"
 
 @Javascript:disabled
 Scenario: School page should show if values are null
@@ -279,7 +293,10 @@ Scenario: School page should show if values are null
 			"name": "Hollinswood Primary School",
 			"noOfPupils": null,
 			"religiousDenomination": null,
-			"resourcedProvisionType": null
+			"resourcedProvisionType": null,
+			"laestab": null,
+			"multiAcademyTrust": null,
+			"diocese": null
 		}
 		"""
 	When I navigate to /school/123456/
@@ -310,6 +327,12 @@ Scenario: School page should show if values are null
 	And the element "*[data-testid='school-details-provision-value']" should have the text content ""
 	And the element "*[data-testid='school-details-pupils-key']" should have the text content "Number of pupils"
 	And the element "*[data-testid='school-details-pupils-value']" should have the text content ""
+	And the element "*[data-testid='school-details-laestab-key']" should have the text content "LAESTAB"
+	And the element "*[data-testid='school-details-laestab-value']" should have the text content ""
+	And the element "*[data-testid='school-details-mat-key']" should have the text content "Multi academy trust"
+	And the element "*[data-testid='school-details-mat-value']" should have the text content ""
+	And the element "*[data-testid='school-details-diocese-key']" should have the text content "Diocese"
+	And the element "*[data-testid='school-details-diocese-value']" should have the text content ""
 
 @Javascript:disabled
 Scenario: School page should show if values are null case 2
@@ -353,7 +376,15 @@ Scenario: School page should show if values are null case 2
 			},
 			"resourcedProvisionType": {
 				"name": null,
-			}
+			},
+			"laestab": null,
+			"multiAcademyTrust": {
+				"uid": "0001",
+				"name": null
+			},
+			"diocese": {
+				"name": null
+			},
 		}
 		"""
 	When I navigate to /school/123456/
@@ -384,6 +415,12 @@ Scenario: School page should show if values are null case 2
 	And the element "*[data-testid='school-details-provision-value']" should have the text content ""
 	And the element "*[data-testid='school-details-pupils-key']" should have the text content "Number of pupils"
 	And the element "*[data-testid='school-details-pupils-value']" should have the text content ""
+	And the element "*[data-testid='school-details-laestab-key']" should have the text content "LAESTAB"
+	And the element "*[data-testid='school-details-laestab-value']" should have the text content ""
+	And the element "*[data-testid='school-details-mat-key']" should have the text content "Multi academy trust"
+	And the element "*[data-testid='school-details-mat-value']" should have the text content ""
+	And the element "*[data-testid='school-details-diocese-key']" should have the text content "Diocese"
+	And the element "*[data-testid='school-details-diocese-value']" should have the text content ""
 
 
 @Javascript:disabled
