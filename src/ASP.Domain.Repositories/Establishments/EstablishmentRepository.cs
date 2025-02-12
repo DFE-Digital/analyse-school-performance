@@ -55,6 +55,22 @@ namespace ASP.Domain.Repositories.Establishments
                 });
         }
         
+        public Task<Result<List<EstablishmentDetails>>> GetLinkedEstablishments(
+            string urn, CancellationToken cancellationToken = default)
+        {
+            return _documentDB.QueryAsync(
+                    ContainerKey,
+                    GetLinkedEstablishmentsQuery(urn),
+                    cancellationToken)
+                .MapError(e => e is NotFoundError
+                    ? Error.NotFound($@"School with URN ""{urn}"" does not exist.")
+                    : e)
+                .Map(linkedEstablishments =>
+                {
+                    return linkedEstablishments.Select(e => e.MapToEstablishmentDetails()).ToList();
+                });
+        }
+        
         public Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails)
         {
             return _documentDB.UpsertAsync(ContainerKey, contentId, establishmentDetails.Urn, establishmentDetails);
@@ -390,6 +406,23 @@ namespace ASP.Domain.Repositories.Establishments
                 return nameAddressMatches
                     .OrderBy(x => x.Name)
                     .Take(maxSuggestions);
+            };
+        }
+        
+        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>> GetLinkedEstablishmentsQuery(string urn)
+        {
+            return queryable =>
+            {
+                // First, get the main establishment's links
+                var mainEstablishmentLinks = queryable
+                    .Where(e => e.Urn == urn && !e.IsDeleted && e.IsVisible)
+                    .SelectMany(e => e.Links ?? Enumerable.Empty<LinkDAO>())
+                    .Select(l => l.LinkedUrn);
+
+                // Then get all the linked establishments
+                return queryable
+                    .Where(e => mainEstablishmentLinks.Contains(e.Urn) && !e.IsDeleted && e.IsVisible)
+                    .OrderBy(e => e.Name);
             };
         }
     }

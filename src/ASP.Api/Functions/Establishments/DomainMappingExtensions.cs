@@ -151,7 +151,8 @@ public static class DomainMappingExtensions
             response.Urn,
             response.Scope,
             response.ScopeIdentifier,
-            response.IsAccessible);
+            response.IsAccessibleInScope,
+            response.IsAccessibleViaLinkedSchools);
     }
 
     public static ScopedSearchResultsPage<Client.Establishments.EstablishmentListing>? ForApiClient(this ScopedSearchResultsPage<Domain.Establishments.EstablishmentListing>? response)

@@ -14,6 +14,9 @@ namespace ASP.Domain.Establishments
 
         Task<Result<bool>> IsEstablishmentVisibleWithinScope(string urn, EstablishmentScope scope,
             CancellationToken cancellationToken = default);
+
+        Task<Result<List<EstablishmentDetails>>> GetLinkedEstablishments(string urn,
+            CancellationToken cancellationToken = default);
         
         Task<Result<Done>> Create(string contentId, EstablishmentDetails establishmentDetails);
 

@@ -1728,6 +1728,12 @@ Scenario Outline: Descriptions for link to multiple establishments with descript
 	  }
 	}
 	"""
+	And Local Authority "301" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
 	When I navigate to /my-schools/100001/
 	Then I should get a 200 response
 	And the element "[data-testid="linked-establishment-description-1"]" should have the text content "<Description>"
@@ -1801,6 +1807,12 @@ Scenario: Should provide default description if linkType is missing
 	  }
 	}
 	"""
+	And Local Authority "301" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
 	When I navigate to /my-schools/100001/
 	Then I should get a 200 response 
 	And the element "[data-testid="linked-establishment-description-1"]" should have the text content "Test School 1 was linked to Test School 2."
@@ -1842,6 +1854,12 @@ Scenario: Should provide default description if linkType is missing
 		   "localAuthority": {
 		   "code": "301"
 		  }
+		}
+		"""
+		And Local Authority "301" exists:
+		"""
+		{
+			"name": "Test LA"
 		}
 		"""
 		When I navigate to /my-schools/100001/

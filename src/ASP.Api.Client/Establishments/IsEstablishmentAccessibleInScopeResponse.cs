@@ -4,4 +4,5 @@ public record IsEstablishmentAccessibleInScopeResponse(
     string Urn,
     string Scope,
     string ScopeIdentifier,
-    bool IsAccessible);
+    bool IsAccessibleInScope,
+    bool IsAccessibleViaLinkedSchools);

@@ -5,9 +5,6 @@
         public string Urn { get; }
         public string Name { get; }
         public EducationPhase EducationPhase { get; }
-        public bool? IsPrimary { get; }
-        public bool? IsSecondary { get; }
-        public bool? IsPost16 { get; }
         public Address? Address { get; }
         public string? Laestab { get; }
 
