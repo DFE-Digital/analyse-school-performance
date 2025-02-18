@@ -198,6 +198,17 @@ public sealed class Role
         SuperAdmin,
     ];
 
+    public static readonly RoleCollection AccessToGenericSchool =
+    [
+        DfeUnnamed,
+        DfeNamed,
+        OfstedUnnamed,
+        SuperAdmin,
+        SchoolNamed,
+        SchoolUnnamed,
+        SchoolGovernor
+    ];
+
     public static readonly RoleCollection AccessToEditPages =
     [
         SuperAdmin

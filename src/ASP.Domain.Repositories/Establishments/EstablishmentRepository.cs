@@ -54,20 +54,31 @@ namespace ASP.Domain.Repositories.Establishments
                     return Result.Success(isInScope);
                 });
         }
-        
+
         public Task<Result<List<EstablishmentDetails>>> GetLinkedEstablishments(
             string urn, CancellationToken cancellationToken = default)
         {
-            return _documentDB.QueryAsync(
-                    ContainerKey,
-                    GetLinkedEstablishmentsQuery(urn),
-                    cancellationToken)
+            return _documentDB.GetAsync<EstablishmentDAO>(ContainerKey, urn, urn, cancellationToken)
                 .MapError(e => e is NotFoundError
                     ? Error.NotFound($@"School with URN ""{urn}"" does not exist.")
                     : e)
-                .Map(linkedEstablishments =>
+                .Map(result => result.Links ?? Enumerable.Empty<LinkDAO>())
+                .Map(l => l.Select(x => x.LinkedUrn))
+                .Then<IEnumerable<string>, List<EstablishmentDetails>>(async linkedUrns =>
                 {
-                    return linkedEstablishments.Select(e => e.MapToEstablishmentDetails()).ToList();
+                    var linkedUrnsList = linkedUrns.ToList();
+
+                    if (!linkedUrnsList.Any())
+                    {
+                        return Result.Success(new List<EstablishmentDetails>());
+                    }
+
+                    return await _documentDB.QueryAsync(
+                            ContainerKey,
+                            GetLinkedEstablishmentsQueryByUrns(linkedUrnsList),
+                            cancellationToken)
+                        .Map(linkedEstablishments =>
+                            linkedEstablishments.Select(e => e.MapToEstablishmentDetails()).ToList());
                 });
         }
         
@@ -409,21 +420,12 @@ namespace ASP.Domain.Repositories.Establishments
             };
         }
         
-        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>> GetLinkedEstablishmentsQuery(string urn)
+        private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>> GetLinkedEstablishmentsQueryByUrns(
+            IEnumerable<string> linkedUrns)
         {
-            return queryable =>
-            {
-                // First, get the main establishment's links
-                var mainEstablishmentLinks = queryable
-                    .Where(e => e.Urn == urn && !e.IsDeleted && e.IsVisible)
-                    .SelectMany(e => e.Links ?? Enumerable.Empty<LinkDAO>())
-                    .Select(l => l.LinkedUrn);
-
-                // Then get all the linked establishments
-                return queryable
-                    .Where(e => mainEstablishmentLinks.Contains(e.Urn) && !e.IsDeleted && e.IsVisible)
-                    .OrderBy(e => e.Name);
-            };
+            return queryable => queryable
+                .Where(e => linkedUrns.Contains(e.Urn) && !e.IsDeleted && e.IsVisible)
+                .OrderBy(e => e.Name);
         }
     }
 }

@@ -194,7 +194,8 @@ namespace ASP.Web.Areas.School
             return
                 from scopeInfo in User.GetScopeInfoForRole()
                 from _ in _api.IsEstablishmentAccessibleInScope(new(urn, scopeInfo.ScopeType, scopeInfo.ScopeId))
-                    .ErrorIf(response => !response.IsAccessibleInScope, Error.NotAllowed($"User is not allowed to view School {urn}"))
+                    .ErrorIf(response => !(response.IsAccessibleInScope || response.IsAccessibleViaLinkedSchools), 
+                        Error.NotAllowed($"User is not allowed to view School {urn}"))
                 from establishmentDetails in base.GetEstablishmentDetails(urn)
                 select establishmentDetails;
         }

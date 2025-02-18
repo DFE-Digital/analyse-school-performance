@@ -2,14 +2,6 @@ Feature: Generic School page
 
 Background:
 	Given I am a DfE Named user
- 
-@Javascript:disabled
-Scenario: A School user should not be able to access the generic 'School' page, even if it's for their own School. Instead, they should see a 403 Access not allowed page.
-	Given I am a School Named user for Establishment "123456"
-	When I navigate to /school/123456/
-	Then I should get a 403 response
-	And the page title should be "Access not allowed"
-	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
 Scenario: School page should throw page not found if Establishment is not currently visible
@@ -50,7 +42,7 @@ Scenario: School page should display page not found page if School URN is invali
 	And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
 	And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
 	And the element "*[data-testid='error-display-message']" should exist
-	And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/GetEstablishmentDetails Could not find Establishment with URN "222222"."
+	And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/IsEstablishmentAccessibleInScope School with URN "222222" does not exist."
 
 @Javascript:disabled
 Scenario: School page should contain seven app card container element
@@ -1456,7 +1448,6 @@ Examples:
 	| MAT Governor user for Multi-Academy Trust "1234" |
 	| Diocese Named user for Diocese "Test Diocese"    |
 	| Diocese Unnamed user for Diocese "Test Diocese"  |
-	| School Named user for Establishment "123456"     |
 	| School Unnamed user for Establishment "123456"   |
 	| School Governor user for Establishment "123456"  |
 	| DfE Unnamed user                                 |
@@ -1619,4 +1610,97 @@ Scenario Outline: Display linked establishment descriptions with links and estab
 	  | Text                                                       | Href            |
 	  | Test School 1 was linked to Test School 2.                 | /school/100002/ |
 	  | Test School 1 was linked to Test School 3 on 1 March 2020. | /school/100003/ |
+
+@Javascript:disabled
+Scenario: School user should be able to access the generic school page amd should show the correct breadcrumb trail
+	Given Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "multiAcademyTrust": {
+	        "uid": 1234
+	    },
+	    "links": [
+		    {
+		      "linkedUrn": "100002",
+		      "establishedDate": "2020-03-01"
+		    }
+		]
+	}
+	"""
+	And I am a <userRole>
+	When I navigate to /school/123456/
+	Then I should get a 200 response
+	Then the page title should be "Test School"
+	And the page subtitle should be "(URN: 123456)"
+	And the breadcrumb trail should be:
+	  | text | href |
+	  | Home | /    |
+Examples:
+  | userRole                                        |
+  | School Named user for Establishment "123456"    |
+  | School Unnamed user for Establishment "123456"  |
+  | School Governor user for Establishment "123456" |	
+  
+@Javascript:disabled
+Scenario: School user or DfE/Ofsted/Super Admin users should be able to access the generic school page
+	Given Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "links": [
+		    {
+		      "linkedUrn": "100002",
+		      "establishedDate": "2020-03-01"
+		    }
+		]
+	}
+	"""
+	And I am a <userRole>
+	When I navigate to /school/123456/
+	Then I should get a 200 response
+	Then the page title should be "Test School"
+	And the page subtitle should be "(URN: 123456)"
+
+Examples:
+  | userRole                                        |
+  | School Named user for Establishment "123456"    |
+  | School Unnamed user for Establishment "123456"  |
+  | School Governor user for Establishment "123456" |
+  | DfE Named user                                  |
+  | Ofsted Unnamed user                             |
+  | Super Admin user                                |
 	  
+@Javascript:disabled
+Scenario: School user or DfE/Ofsted/Super Admin users should be able to access the generic school page or via linked schools
+	Given Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "links": [
+		    {
+		      "linkedUrn": "100002",
+		      "establishedDate": "2020-03-01"
+		    }
+		]
+	}
+	"""
+	And Establishment "100002" exists:
+	"""
+	{ 
+	  "name": "Test School 2"
+	}
+	"""
+	And I am a <userRole>
+	When I navigate to /school/123456/
+	Then I should get a 200 response
+	Then the page title should be "Test School"
+	And the page subtitle should be "(URN: 123456)"
+Examples:
+  | userRole                                        |
+  | School Named user for Establishment "123456"    |
+  | School Unnamed user for Establishment "123456"  |
+  | School Governor user for Establishment "123456" |
+  | DfE Named user                                  |
+  | Ofsted Unnamed user                             |
+  | Super Admin user                                |

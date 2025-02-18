@@ -1868,4 +1868,61 @@ Scenario: Should provide default description if linkType is missing
 		  | Text                                                       | Href                |
 		  | Test School 1 was linked to Test School 2.                 | /my-schools/100002/ |
 		  | Test School 1 was linked to Test School 3 on 1 March 2020. | /my-schools/100003/ |	
-	
+    
+
+@Javascript:disabled
+Scenario: LA/MAT/Diocese user should be able to access a school within My schools school page or via linked schools
+	Given Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	     "localAuthority": {
+		 	"code": "301"
+	  	 },
+	  	"multiAcademyTrust": {
+	     	"uid": 1234
+	  	},
+	    "diocese": {
+		   "name": "Test Diocese"
+		},
+	    "links": [
+		    {
+		      "linkedUrn": "100002",
+		      "establishedDate": "2020-03-01"
+		    }
+		]
+	}
+	"""
+	And Establishment "100002" exists:
+	"""
+	{ 
+	  "name": "Test School 2"
+	}
+	"""
+	And Local Authority "301" exists:
+	"""
+	{
+		"name": "Test LA"
+	}
+	"""
+	And Multi Academy Trust "1234" exists:
+	"""
+	{
+		"multiAcademyTrust": {
+		    "uid": 1234
+		}
+	}
+	"""
+	And I am a <userRole>
+	When I navigate to /my-schools/123456/
+	Then I should get a 200 response
+	And the page title should be "My schools"
+	And the page subtitle should be "Test School (URN: 123456)"
+
+Examples:
+  | userRole                                      |
+  | LA Named user for Local Authority "301"       |
+  | MAT Named user for Multi-Academy Trust "1234" |
+  | Diocese Named user for Diocese "Test Diocese" |
+  
+  			

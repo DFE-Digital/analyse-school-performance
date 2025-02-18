@@ -18,7 +18,7 @@ namespace ASP.Web.Areas.School
     [Area("School")]
     [Route("school/{urn:int:length(6)}")]
     [ServiceFilter<TermsOfUseActionFilter>]
-    [Authorize(Policy = Policy.AccessToAllSchools)]
+    [Authorize(Policy = Policy.AccessToGenericSchool)]
     public class GenericSchoolController : BaseSchoolController
     {
         private readonly DownloadDataController _downloadDataController;
@@ -148,7 +148,7 @@ namespace ASP.Web.Areas.School
                                 "Download data",
                                 $"{establishmentDetails.Name} (URN: {urn})",
                                 GetSubNavigation(urn),
-                                GetDownloadDataSideNavigation(urn, establishmentDetails.Name),
+                                GetDownloadDataSideNavigation(establishmentDetails.Name),
                                 stepModel.StepTitle,
                                 $"{establishmentDetails.Name} data"
                         )),
@@ -162,12 +162,20 @@ namespace ASP.Web.Areas.School
                 .ToActionResult(_hostEnvironment);
         }
 
-        private IEnumerable<BreadcrumbItem> GetBaseBreadcrumbTrail(string laCode, string laName) =>
+        private IEnumerable<BreadcrumbItem> GetBaseBreadcrumbTrail(string laCode, string laName)
+        {
+            if (User.HasRole(Role.AccessToMySchool))
+            {
+                return [];
+            }
+            
+            return
             [
                 new("All local authorities", $"/local-authorities/"),
                 new(laName, $"/local-authority/{laCode}/"),
                 new("All schools", $"/local-authority/{laCode}/schools/")
             ];
+        }
 
         private IEnumerable<BreadcrumbItem> GetChildPageBaseBreadcrumbTrail(string laCode, string laName, string urn, string name) =>
             GetBaseBreadcrumbTrail(laCode, laName).Concat([
@@ -192,9 +200,20 @@ namespace ASP.Web.Areas.School
             return new NavigationViewModel(navigationItems);
         }
 
-        private NavigationViewModel GetDownloadDataSideNavigation(string urn, string name) =>
+        private NavigationViewModel GetDownloadDataSideNavigation(string name) =>
             new([
                 new($"{name} data", _downloadDataController.GetInitialActionUrl(), Request.Path)
             ]);
+        
+        protected override Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
+        {
+            return
+                from scopeInfo in User.GetScopeInfoForRole()
+                from _ in _api.IsEstablishmentAccessibleInScope(new(urn, scopeInfo.ScopeType, scopeInfo.ScopeId))
+                    .ErrorIf(response => !(response.IsAccessibleInScope || response.IsAccessibleViaLinkedSchools), 
+                        Error.NotAllowed($"User is not allowed to view School {urn}"))
+                from establishmentDetails in base.GetEstablishmentDetails(urn)
+                select establishmentDetails;
+        }
     }
 }
