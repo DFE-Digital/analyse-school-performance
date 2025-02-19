@@ -96,6 +96,7 @@ stages:
           testExecutionJson: 'test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json'
 
       - task: SpecFlowPlus@0
+        enabled: false
         inputs:
           generatorSource: 'TestAssembly'
           testAssemblyFilePath:  'test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\ASP.Api.FunctionalTests.dll'
