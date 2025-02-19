@@ -1,5 +1,5 @@
 ﻿using ASP.Api.Client;
-using ASP.Api.Client.Establishments;
+using ASP.Api.Client.Schools;
 
 namespace ASP.Web.Areas.School
 {
@@ -22,7 +22,7 @@ namespace ASP.Web.Areas.School
         public LookupValueWithId? MultiAcademyTrust { get; set; }
         public LookupValueWithCode? Diocese { get; set; }
 
-        public static EstablishmentDetailsViewModel FromEstablishmentDetails(EstablishmentDetails establishmentDetailsDto)
+        public static EstablishmentDetailsViewModel FromEstablishmentDetails(SchoolDetails establishmentDetailsDto)
         {
             return new EstablishmentDetailsViewModel
             {

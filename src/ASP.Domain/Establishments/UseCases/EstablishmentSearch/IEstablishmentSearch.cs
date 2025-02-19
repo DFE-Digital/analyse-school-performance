@@ -4,7 +4,7 @@ using ASP.Core.Pagination;
 
 namespace ASP.Domain.Establishments.UseCases.EstablishmentSearch
 {
-    public interface IEstablishmentSearch : IUseCase<EstablishmentSearchRequest, Result<ScopedSearchResultsPage<EstablishmentListing>>>
+    public interface IEstablishmentSearch : IUseCase<EstablishmentSearchRequest, Result<ResultsPage<EstablishmentListing>>>
     {
     }
 }

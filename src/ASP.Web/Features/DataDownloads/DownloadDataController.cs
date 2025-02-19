@@ -1,5 +1,5 @@
 ﻿using ASP.Api.Client;
-using ASP.Api.Client.DataDownloads;
+using ASP.Api.Client.Downloads;
 using ASP.Core.Results;
 using ASP.Web.Core.BreadcrumbTrail;
 using ASP.Web.Extensions;
@@ -125,7 +125,7 @@ namespace ASP.Web.Features.DataDownloads
     public class DownloadDataController 
         : SubController<DownloadDataController, DownloadDataParameters, string, DownloadDataSubActionType, DownloadDataSubActionViewModel>
     {
-        private readonly DataDownloadsScopeType _scopeType;
+        private readonly DownloadsScopeType _scopeType;
         private readonly IAspApiClient _api;
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace ASP.Web.Features.DataDownloads
             string hostAction,
             string hostController,
             List<string> hostActionRouteValueKeys,
-            DataDownloadsScopeType scopeType,
+            DownloadsScopeType scopeType,
             IAspApiClient api,
             Dictionary<DownloadDataSubActionType, SubActionRouteConfig>? stepRouteConfig = null)
             : base(
@@ -199,7 +199,7 @@ namespace ASP.Web.Features.DataDownloads
                 }
 
                 return
-                    from availableDownloads in await Controller.GetAvailableDownloads(scopeIdentifier, null)
+                    from availableDownloads in await Controller.DownloadsGetAll(scopeIdentifier, null)
                         .DefaultIf(e => e is NotFoundError, new())
                     let title = availableDownloads.Downloads.Any()
                         ? Title
@@ -257,7 +257,7 @@ namespace ASP.Web.Features.DataDownloads
                 }
 
                 return
-                    from availableDownloads in await Controller.GetAvailableDownloads(scopeIdentifier, parameters.SelectedYear)
+                    from availableDownloads in await Controller.DownloadsGetAll(scopeIdentifier, parameters.SelectedYear)
                         .DefaultIf(e => e is NotFoundError, new())
                     let title = availableDownloads.Downloads.Any()
                         ? Title
@@ -353,7 +353,7 @@ namespace ASP.Web.Features.DataDownloads
                 var selectedFiles = parameters.SelectedFiles ?? new();
 
                 return
-                    from response in await Controller._api.GetDownloadPackage(new GetDownloadPackageRequest(fileType, selectedFiles, Controller._scopeType, scopeIdentifier))
+                    from response in await Controller._api.DownloadsGetPackage(new DownloadsGetPackageRequest(fileType, selectedFiles, Controller._scopeType, scopeIdentifier))
                     select (IActionResult)new FileStreamResult(response.Content, response.ContentType)
                     {
                         FileDownloadName = response.FileName
@@ -362,12 +362,12 @@ namespace ASP.Web.Features.DataDownloads
         }
 
         private string ScopeTypeLabel
-            => _scopeType == DataDownloadsScopeType.LA ? "LA" : "school";
+            => _scopeType == DownloadsScopeType.LA ? "LA" : "school";
 
-        private Task<Result<AvailableDownloadsViewModel>> GetAvailableDownloads(string scopeIdentifier, int? year)
+        private Task<Result<AvailableDownloadsViewModel>> DownloadsGetAll(string scopeIdentifier, int? year)
         {
             return
-                from downloads in _api.GetAvailableDownloads(new GetAvailableDownloadsRequest(_scopeType, scopeIdentifier, year))
+                from downloads in _api.DownloadsGetAll(new DownloadsGetAllRequest(_scopeType, scopeIdentifier, year))
                 select AvailableDownloadsViewModel.FromAvailableDownloads(downloads);
         }
     }

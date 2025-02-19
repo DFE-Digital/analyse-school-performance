@@ -1,5 +1,4 @@
-﻿using ASP.Core.Pagination;
-using ASP.Core.Results;
+﻿using ASP.Core.Results;
 
 namespace ASP.Domain.Establishments.SearchSuggestions
 {
@@ -14,7 +13,7 @@ namespace ASP.Domain.Establishments.SearchSuggestions
             _establishmentRepository = establishmentRepository;
         }
 
-        public Task<Result<ScopedSearchSuggestionsList<EstablishmentSuggestion>>> Search(string searchTerm, EstablishmentScope scope, int maxSuggestions)
+        public Task<Result<List<EstablishmentSuggestion>>> Search(string searchTerm, EstablishmentScope scope, int maxSuggestions)
         {
             var isNumeric = int.TryParse(searchTerm, out var _);
 
@@ -37,14 +36,7 @@ namespace ASP.Domain.Establishments.SearchSuggestions
                 select results
               : _establishmentRepository.GetEstablishmentSearchSuggestions(scope, searchTerm, maxSuggestions);
                 
-            return suggestions
-                .Map(results => new ScopedSearchSuggestionsList<EstablishmentSuggestion> {
-                    Scope = scope.ScopeType.ToString(),
-                    ScopeIdentifier = scope.ScopeIdentifier,
-                    Suggestions = results,
-                    SearchTerm = searchTerm,
-                    MaxSuggestions = maxSuggestions
-                });
+            return suggestions;
         }
     }
 }

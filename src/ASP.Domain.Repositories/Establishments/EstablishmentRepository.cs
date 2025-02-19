@@ -87,7 +87,7 @@ namespace ASP.Domain.Repositories.Establishments
             return _documentDB.UpsertAsync(ContainerKey, contentId, establishmentDetails.Urn, establishmentDetails);
         }
 
-        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentNameOrLocation(
+        public Task<Result<ResultsPage<EstablishmentListing>>> SearchEstablishmentNameOrLocation(
             EstablishmentScope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
@@ -99,14 +99,10 @@ namespace ASP.Domain.Repositories.Establishments
                     resultsPerPage,
                     cancellationToken)
                     .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no matches for ""{searchTerm}"" within the given scope."))
-                select new ScopedSearchResultsPage<EstablishmentListing>(
-                    searchTerm,
-                    scope.ScopeType.ToString(),
-                    scope.ScopeIdentifier,
-                    results.Map(r => r.MapToEstablishmentListing()));
+                select results.Map(r => r.MapToEstablishmentListing());
         }
 
-        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCode(
+        public Task<Result<ResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCode(
             EstablishmentScope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
@@ -115,7 +111,7 @@ namespace ASP.Domain.Repositories.Establishments
             return SearchByLaestabCommon(scope, inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByEstablishmentNumber(
+        public Task<Result<ResultsPage<EstablishmentListing>>> SearchEstablishmentByEstablishmentNumber(
             EstablishmentScope scope, string searchTerm, int page, int resultsPerPage,
             CancellationToken cancellationToken = default)
         {
@@ -124,7 +120,7 @@ namespace ASP.Domain.Repositories.Establishments
             return SearchByLaestabCommon(scope, inputSearchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
+        public Task<Result<ResultsPage<EstablishmentListing>>> SearchEstablishmentByLaCodeOrEstablishmentNumber(
             EstablishmentScope scope,
             string searchTerm,
             int page,
@@ -134,7 +130,7 @@ namespace ASP.Domain.Repositories.Establishments
             return SearchByLaestabCommon(scope, searchTerm, searchTerm, page, resultsPerPage, cancellationToken);
         }
 
-        public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchEstablishmentByLaestab7DigitCode(
+        public Task<Result<ResultsPage<EstablishmentListing>>> SearchEstablishmentByLaestab7DigitCode(
             EstablishmentScope scope,
             string searchTerm,
             int page,
@@ -206,7 +202,7 @@ namespace ASP.Domain.Repositories.Establishments
                 select results.MapToEstablishmentSuggestions();
         }
 
-        public Task<Result<ScopedResultsPage<EstablishmentListing>>> GetAllEstablishments(
+        public Task<Result<ResultsPage<EstablishmentListing>>> GetAllEstablishments(
             EstablishmentScope scope,
             int page,
             int resultsPerPage,
@@ -220,13 +216,10 @@ namespace ASP.Domain.Repositories.Establishments
                     resultsPerPage,
                     cancellationToken)
                     .ErrorIf(q => q.TotalResults == 0, Error.NotFound("there were no establishments within the given scope."))
-                select new ScopedResultsPage<EstablishmentListing>(
-                    scope.ScopeType.ToString(),
-                    scope.ScopeIdentifier,
-                    results.Map(r => r.MapToEstablishmentListing()));
+                select results.Map(r => r.MapToEstablishmentListing());
         }
 
-        private Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> SearchByLaestabCommon(
+        private Task<Result<ResultsPage<EstablishmentListing>>> SearchByLaestabCommon(
             EstablishmentScope scope,
             string searchTerm,
             string originalSearchTerm,
@@ -243,11 +236,7 @@ namespace ASP.Domain.Repositories.Establishments
                     resultsPerPage,
                     cancellationToken)
                     .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"there were no matches for ""{originalSearchTerm}""."))
-                select new ScopedSearchResultsPage<EstablishmentListing>(
-                    originalSearchTerm,
-                    scope.ScopeType.ToString(),
-                    scope.ScopeIdentifier,
-                    results.Map(r => r.MapToEstablishmentListing()));
+                select results.Map(r => r.MapToEstablishmentListing());
         }
 
         private Func<IQueryable<EstablishmentDAO>, IQueryable<EstablishmentDAO>> ScopeWhere(EstablishmentScope scope) =>

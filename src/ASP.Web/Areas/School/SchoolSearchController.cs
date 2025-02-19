@@ -1,5 +1,5 @@
 ﻿using ASP.Api.Client;
-using ASP.Api.Client.Establishments;
+using ASP.Api.Client.Schools;
 using ASP.Core.Pagination;
 using ASP.Core.Results;
 using ASP.Web.Features.Search;
@@ -128,7 +128,7 @@ namespace ASP.Web.Areas.School
     /// </remarks>
     [NonController]
     public class SchoolSearchController
-        : SearchController<SchoolSearchController, EstablishmentScopeInfo, EstablishmentListingViewModel>
+        : SearchController<SchoolSearchController, SchoolsScopeInfo?, EstablishmentListingViewModel>
     {
         private readonly IAspApiClient _api;
         private readonly Func<string, string?> _makeSchoolUrl;
@@ -168,53 +168,49 @@ namespace ASP.Web.Areas.School
         }
 
         protected override Task<Result<ResultsPage<EstablishmentListingViewModel>>> GetAllListings(
-            EstablishmentScopeInfo scopeInfo,
+            SchoolsScopeInfo? scopeInfo,
             int pageNumber)
         {
-            var request = new GetAllEstablishmentsRequest(
-                scopeInfo.ScopeType,
-                scopeInfo.ScopeId,
-                pageNumber,
-                _searchOptions.PageSize
-            );
-
-            return _api.GetAllEstablishments(request)
-                .Map(results => (ResultsPage<EstablishmentListingViewModel>)results
-                    .Map(MakeListingViewModel));
-        }
-
-        protected override Task<Result<SearchResultsPage<EstablishmentListingViewModel>>> PerformSearch(
-            EstablishmentScopeInfo scopeInfo,
-            SearchParameters searchParams,
-            int pageNumber)
-        {
-            var request = new EstablishmentSearchRequest(
-                SearchTerm: searchParams.Search ?? string.Empty,
-                ScopeType: scopeInfo.ScopeType,
-                ScopeIdentifier: scopeInfo.ScopeId,
+            var request = new SchoolsGetAllRequest(
+                SearchTerm: null,
+                Scope: scopeInfo,
                 Page: pageNumber,
                 ResultsPerPage: _searchOptions.PageSize
             );
 
-            return _api.EstablishmentSearch(request)
-                .Map(results => (SearchResultsPage<EstablishmentListingViewModel>)results
-                    .Map(MakeListingViewModel));
+            return _api.SchoolsGetAll(request)
+                .Map(results => results.Map(MakeListingViewModel));
         }
 
-        protected override Task<Result<SearchSuggestionsList<EstablishmentListingViewModel>>> PerformSearchSuggestions(
-            EstablishmentScopeInfo scopeInfo,
+        protected override Task<Result<ResultsPage<EstablishmentListingViewModel>>> PerformSearch(
+            SchoolsScopeInfo? scopeInfo,
+            SearchParameters searchParams,
+            int pageNumber)
+        {
+            var request = new SchoolsGetAllRequest(
+                SearchTerm: searchParams.Search,
+                Scope: scopeInfo,
+                Page: pageNumber,
+                ResultsPerPage: _searchOptions.PageSize
+            );
+
+            return _api.SchoolsGetAll(request)
+                .Map(results => results.Map(MakeListingViewModel));
+        }
+
+        protected override Task<Result<List<EstablishmentListingViewModel>>> PerformSearchSuggestions(
+            SchoolsScopeInfo? scopeInfo,
             SearchParameters searchParams)
         {
-            var request = new EstablishmentSearchSuggestionsRequest(
-                searchParams.Search ?? "",
-                scopeInfo.ScopeType,
-                scopeInfo.ScopeId,
+            var request = new SchoolsGetSearchSuggestionsRequest(
+                SearchTerm: searchParams.Search ?? "",
+                scopeInfo,
                 _searchOptions.MaxSearchSuggestions
             );
 
-            return _api.EstablishmentSearchSuggestions(request)
-                .Map(results => (SearchSuggestionsList<EstablishmentListingViewModel>)results
-                    .Map(MakeListingViewModel));
+            return _api.SchoolsGetSearchSuggestions(request)
+                .Map(results => results
+                    .Select(MakeListingViewModel).ToList());
         }
 
         protected override SearchFormViewModel CreateSearchFormViewModel(
@@ -232,7 +228,7 @@ namespace ASP.Web.Areas.School
             => _makeSchoolUrl(listing.Urn);
 
         private EstablishmentListingViewModel MakeListingViewModel(
-            EstablishmentListing listing
+            SchoolListing listing
         )
         {
             return new EstablishmentListingViewModel {
@@ -245,7 +241,7 @@ namespace ASP.Web.Areas.School
         }
 
         private EstablishmentListingViewModel MakeListingViewModel(
-            EstablishmentSuggestion suggestion
+            SchoolSuggestion suggestion
         )
         {
             return new EstablishmentListingViewModel {

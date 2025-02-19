@@ -1,8 +1,8 @@
-﻿using ASP.Api.Client.DataDownloads;
-using ASP.Api.Client.Establishments;
+﻿using ASP.Api.Client.ContentTemplates;
+using ASP.Api.Client.Downloads;
 using ASP.Api.Client.LocalAuthorities;
 using ASP.Api.Client.MultiAcademyTrusts;
-using ASP.Api.Client.Templating;
+using ASP.Api.Client.Schools;
 using ASP.Core.Network;
 using ASP.Core.Pagination;
 using ASP.Core.Results;
@@ -11,24 +11,22 @@ namespace ASP.Api.Client;
 
 public interface IAspApiClient
 {
-    Task<Result<List<ContentTemplate>>> GetAllContentTemplates(GetAllContentTemplatesRequest request);
-    Task<Result<ContentTemplate>> GetContentTemplate(ViewContentTemplateRequest request);
-    Task<Result<Done>> UpdateContentTemplate(UpdateContentTemplateRequest request);
+    Task<Result<List<ContentTemplate>>> ContentTemplatesGetAll(ContentTemplatesGetAllRequest request);
+    Task<Result<ContentTemplate>> ContentTemplatesGetSingle(ContentTemplatesGetSingleRequest request);
+    Task<Result<Done>> ContentTemplatesUpdateSingle(ContentTemplatesUpdateSingleRequest request);
 
-    Task<Result<GetAvailableDownloadsResponse>> GetAvailableDownloads(GetAvailableDownloadsRequest request);
-    Task<Result<FileStreamResponse>> GetDownloadPackage(GetDownloadPackageRequest request);
+    Task<Result<DownloadsGetAllResponse>> DownloadsGetAll(DownloadsGetAllRequest request);
+    Task<Result<FileStreamResponse>> DownloadsGetPackage(DownloadsGetPackageRequest request);
 
-    Task<Result<EstablishmentDetails>> GetEstablishmentDetails(GetEstablishmentDetailsRequest request);
-    Task<Result<ScopedResultsPage<EstablishmentListing>>> GetAllEstablishments(GetAllEstablishmentsRequest request);
-    Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> EstablishmentSearch(EstablishmentSearchRequest request);
-    Task<Result<ScopedSearchSuggestionsList<EstablishmentSuggestion>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request);
-    Task<Result<IsEstablishmentAccessibleInScopeResponse>> IsEstablishmentAccessibleInScope(IsEstablishmentAccessibleInScopeRequest request);
-    Task<Result<GetLinkedEstablishmentsResponse>> GetLinkedEstablishments(GetLinkedEstablishmentsRequest request);
+    Task<Result<SchoolDetails>> SchoolsGetSingle(SchoolsGetSingleRequest request);
+    Task<Result<ResultsPage<SchoolListing>>> SchoolsGetAll(SchoolsGetAllRequest request);
+    Task<Result<List<SchoolSuggestion>>> SchoolsGetSearchSuggestions(SchoolsGetSearchSuggestionsRequest request);
+    Task<Result<SchoolsGetAccessResponse>> SchoolsGetAccess(SchoolsGetAccessRequest request);
+    Task<Result<SchoolsGetLinkedSchoolsResponse>> SchoolsGetLinkedSchools(SchoolsGetLinkedSchoolsRequest request);
 
-    Task<Result<LookupValueWithCode>> GetLocalAuthority(GetLocalAuthorityRequest request);
-    Task<Result<ResultsPage<LookupValueWithCode>>> GetAllLocalAuthorities(GetAllLocalAuthoritiesRequest request);
-    Task<Result<SearchResultsPage<LookupValueWithCode>>> LocalAuthoritySearch(LocalAuthoritySearchRequest request);
-    Task<Result<SearchSuggestionsList<LookupValueWithCode>>> LocalAuthoritySearchSuggestions(LocalAuthoritySearchSuggestionsRequest request); 
+    Task<Result<LookupValueWithCode>> LocalAuthoritiesGetSingle(LocalAuthoritiesGetSingleRequest request);
+    Task<Result<ResultsPage<LookupValueWithCode>>> LocalAuthoritiesGetAll(LocalAuthoritiesGetAllRequest request);
+    Task<Result<List<LookupValueWithCode>>> LocalAuthoritiesGetSearchSuggestions(LocalAuthoritiesGetSearchSuggestionsRequest request); 
     
-    Task<Result<LookupValueWithId>> GetMultiAcademyTrust(GetMultiAcademyTrustRequest request);
+    Task<Result<LookupValueWithId>> MultiAcademyTrustsGetSingle(MultiAcademyTrustsGetSingleRequest request);
 }

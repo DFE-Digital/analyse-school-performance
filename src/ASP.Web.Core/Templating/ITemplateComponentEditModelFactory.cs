@@ -1,4 +1,4 @@
-﻿using ASP.Api.Client.Templating;
+﻿using ASP.Api.Client.ContentTemplates;
 
 namespace ASP.Web.Core.Templating
 {

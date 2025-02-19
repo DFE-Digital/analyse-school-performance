@@ -1,6 +1,6 @@
 ﻿using ASP.Api.Client;
-using ASP.Api.Client.DataDownloads;
-using ASP.Api.Client.Establishments;
+using ASP.Api.Client.Downloads;
+using ASP.Api.Client.Schools;
 using ASP.Core.Results;
 using ASP.Web.Areas.School;
 using ASP.Web.Core.BreadcrumbTrail;
@@ -38,14 +38,14 @@ namespace ASP.Web.Areas.LocalAuthority
                 nameof(DownloadLocalAuthorityData),
                 "MyLocalAuthority",
                 [],
-                DataDownloadsScopeType.LA,
+                DownloadsScopeType.LA,
                 _api);
 
             _individualSchoolDataDownloadController = new DownloadDataController(
                 nameof(DownloadSchoolData), 
                 "MyLocalAuthority", 
                 SearchParameters.RouteValueKeys, 
-                DataDownloadsScopeType.School, 
+                DownloadsScopeType.School, 
                 _api,
                 stepRouteConfig: new()
                 {
@@ -76,7 +76,7 @@ namespace ASP.Web.Areas.LocalAuthority
             var result =
                 from laCode in User.GetLocalAuthorityCode()
                 from laName in GetLocalAuthorityName(laCode)
-                from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
+                from contentTemplate in ContentTemplatesGetSingle(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
                 let page = new PageViewModel(
                     new BreadcrumbTrailViewModel(GetBaseBreadcrumbTrail()),
                     "My local authority",
@@ -140,7 +140,7 @@ namespace ASP.Web.Areas.LocalAuthority
                 from laCode in User.GetLocalAuthorityCode()
                 from laName in GetLocalAuthorityName(laCode)
                 from action in _schoolSearchController.Handle(
-                    new EstablishmentScopeInfo(EstablishmentScopeType.LA, laCode),
+                    new SchoolsScopeInfo(SchoolsScopeType.LA, laCode),
                     parameters,
                     GetChildPageBaseBreadcrumbTrail()
                         .Append(new("Download data", Action(nameof(DownloadData)))),

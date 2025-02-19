@@ -1,4 +1,4 @@
-﻿using ASP.Api.Client.DataDownloads;
+﻿using ASP.Api.Client.Downloads;
 
 namespace ASP.Web.Features.DataDownloads
 {
@@ -7,7 +7,7 @@ namespace ASP.Web.Features.DataDownloads
         public List<Download> Downloads { get; set; } = new();
         public List<AcademicYear> AvailableDates { get; set; } = new();
 
-        public static AvailableDownloadsViewModel FromAvailableDownloads(GetAvailableDownloadsResponse response)
+        public static AvailableDownloadsViewModel FromAvailableDownloads(DownloadsGetAllResponse response)
         {
             return new AvailableDownloadsViewModel
             {

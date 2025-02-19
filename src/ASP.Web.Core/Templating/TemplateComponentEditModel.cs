@@ -1,4 +1,4 @@
-﻿using ASP.Api.Client.Templating;
+﻿using ASP.Api.Client.ContentTemplates;
 using ASP.Core.Results;
 using ASP.Core.Text;
 using Newtonsoft.Json.Linq;

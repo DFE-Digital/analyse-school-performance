@@ -1,4 +1,4 @@
-﻿using ASP.Api.Client.Establishments;
+﻿using ASP.Api.Client.Schools;
 using ASP.Core.Authorization;
 using ASP.Core.Results;
 using System.Security.Claims;
@@ -75,32 +75,30 @@ namespace ASP.Web.Features.Authorization
             return claim.Value;
         }
 
-        public static Result<EstablishmentScopeInfo> GetScopeInfoForRole(this ClaimsPrincipal user)
+        public static Result<SchoolsScopeInfo?> GetScopeInfoForRole(this ClaimsPrincipal user)
         {
             if (user.Role()!.IsLaUser)
             {
                 return
                     from scopeId in GetScopeIdForLaUser(user)
-                    select new EstablishmentScopeInfo(EstablishmentScopeType.LA, scopeId);
+                    select new SchoolsScopeInfo(SchoolsScopeType.LA, scopeId);
             }
 
             if (user.Role()!.IsMatUser)
             {
                 return
                     from scopeId in GetScopeIdForMatUser(user)
-                    select new EstablishmentScopeInfo(EstablishmentScopeType.MAT, scopeId);
+                    select new SchoolsScopeInfo(SchoolsScopeType.MAT, scopeId);
             }
 
             if (user.Role()!.IsDioceseUser)
             {
                 return
                     from name in user.GetDioceseName()
-                    select new EstablishmentScopeInfo(EstablishmentScopeType.Diocese, name);
+                    select new SchoolsScopeInfo(SchoolsScopeType.Diocese, name);
             }
 
-            return Result.Success(
-                new EstablishmentScopeInfo(EstablishmentScopeType.All, null)
-            );
+            return Result.Success((SchoolsScopeInfo?) null);
         }
 
         private static Result<string?> GetScopeIdForLaUser(ClaimsPrincipal user)

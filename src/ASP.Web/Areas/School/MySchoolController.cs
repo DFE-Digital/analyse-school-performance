@@ -1,5 +1,5 @@
 using ASP.Api.Client;
-using ASP.Api.Client.DataDownloads;
+using ASP.Api.Client.Downloads;
 using ASP.Core.Authorization;
 using ASP.Core.Results;
 using ASP.Web.Core.BreadcrumbTrail;
@@ -32,7 +32,7 @@ namespace ASP.Web.Areas.School
                 nameof(DownloadData),
                 "MySchool",
                 [],
-                DataDownloadsScopeType.School,
+                DownloadsScopeType.School,
                 _api);
         }
 
@@ -57,7 +57,7 @@ namespace ASP.Web.Areas.School
                         "My school",
                         establishmentDetails.Name
                 ))
-                from linkedEstablishments in GetLinkedEstablishments(urn, 
+                from linkedEstablishments in GetLinkedSchools(urn, 
                     urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }))
                 select new SchoolLandingPageViewModel(
                     schoolPage,

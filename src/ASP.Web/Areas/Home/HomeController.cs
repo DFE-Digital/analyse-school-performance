@@ -1,5 +1,5 @@
 using ASP.Api.Client;
-using ASP.Api.Client.Templating;
+using ASP.Api.Client.ContentTemplates;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
@@ -43,7 +43,7 @@ namespace ASP.Web.Areas.Home
             };
 
             var result =
-                from template in _api.GetContentTemplate(new ViewContentTemplateRequest(CONTENT_TEMPLATE_ID, revision))
+                from template in _api.ContentTemplatesGetSingle(new ContentTemplatesGetSingleRequest(CONTENT_TEMPLATE_ID, revision))
                 select ContentTemplateViewModel.FromTemplate(CONTENT_TEMPLATE_ID, revision, template);
 
             return result

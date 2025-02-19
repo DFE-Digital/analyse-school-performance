@@ -1,5 +1,5 @@
 using ASP.Api.Client;
-using ASP.Api.Client.Establishments;
+using ASP.Api.Client.Schools;
 using ASP.Core.Results;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
@@ -49,7 +49,7 @@ namespace ASP.Web.Areas.School
             var result =
                 from laName in GetLocalAuthorityName(laCode)
                 from action in _schoolSearchController.Handle(
-                    new EstablishmentScopeInfo(EstablishmentScopeType.LA, laCode),
+                    new SchoolsScopeInfo(SchoolsScopeType.LA, laCode),
                     parameters,
                     [
                         new("All local authorities", "/local-authorities/"),
@@ -77,7 +77,7 @@ namespace ASP.Web.Areas.School
         private Task<Result<string>> GetLocalAuthorityName(string laCode)
         {
             return
-                from la in _api.GetLocalAuthority(new(laCode))
+                from la in _api.LocalAuthoritiesGetSingle(new(laCode))
                 select string.IsNullOrWhiteSpace(la.Name)
                     ? "Missing local authority name"
                     : la.Name;

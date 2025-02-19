@@ -76,7 +76,7 @@ public class LocalAuthorityRepository : ILocalAuthorityRepository
             select results.MapToDomainEntityLocalAuthority();
     }
 
-    public Task<Result<SearchResultsPage<LocalAuthority>>> LocalAuthoritySearchByLaName(
+    public Task<Result<ResultsPage<LocalAuthority>>> LocalAuthoritySearchByLaName(
         string searchTerm, int page, int resultsPerPage,
         CancellationToken cancellationToken = default)
     {
@@ -90,7 +90,6 @@ public class LocalAuthorityRepository : ILocalAuthorityRepository
                     resultsPerPage,
                     cancellationToken)
                 .ErrorIf(r => r.TotalResults == 0, Error.NotFound($@"there were no matches for ""{searchTerm}""."))
-            select new SearchResultsPage<LocalAuthority>(searchTerm,
-                results.Map(r => r.MapToDomainEntityLocalAuthority()));
+            select results.Map(r => r.MapToDomainEntityLocalAuthority());
     }
 }

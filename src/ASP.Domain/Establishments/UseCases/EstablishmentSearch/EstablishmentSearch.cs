@@ -19,7 +19,7 @@ public class EstablishmentSearch : IEstablishmentSearch
         _searchService = new EstablishmentSearchService(establishmentRepository);
     }
 
-    public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> HandleRequest(
+    public Task<Result<ResultsPage<EstablishmentListing>>> HandleRequest(
         EstablishmentSearchRequest request)
     {
         var page = request.Page.GetValueOrDefault(1);

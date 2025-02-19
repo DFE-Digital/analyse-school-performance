@@ -1,6 +1,6 @@
-﻿using ASP.Api.Client.DataDownloads;
-using ASP.Api.Client.Establishments;
-using ASP.Api.Client.Templating;
+﻿using ASP.Api.Client.ContentTemplates;
+using ASP.Api.Client.Downloads;
+using ASP.Api.Client.Schools;
 using ASP.Core.Network;
 using ASP.Core.Pagination;
 using ASP.Core.Results;
@@ -48,14 +48,14 @@ public class AspApiClient : IAspApiClient
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public Task<Result<List<ContentTemplate>>> GetAllContentTemplates(GetAllContentTemplatesRequest request)
+    public Task<Result<List<ContentTemplate>>> ContentTemplatesGetAll(ContentTemplatesGetAllRequest request)
     {
         var url = "/api/content-templates";
 
         return ApiGet<List<ContentTemplate>>(url, null);
     }
 
-    public Task<Result<ContentTemplate>> GetContentTemplate(ViewContentTemplateRequest request)
+    public Task<Result<ContentTemplate>> ContentTemplatesGetSingle(ContentTemplatesGetSingleRequest request)
     {
         var url = $"/api/content-templates/{Uri.EscapeDataString(request.ContentTemplateId)}";
         var queryString = QueryString.Empty;
@@ -68,7 +68,7 @@ public class AspApiClient : IAspApiClient
         return ApiGet<ContentTemplate>(url, queryString);
     }
 
-    public Task<Result<Done>> UpdateContentTemplate(UpdateContentTemplateRequest request)
+    public Task<Result<Done>> ContentTemplatesUpdateSingle(ContentTemplatesUpdateSingleRequest request)
     {
         var url = $"/api/content-templates/{Uri.EscapeDataString(request.ContentTemplateId)}";
         var queryString = QueryString.Empty;
@@ -81,7 +81,7 @@ public class AspApiClient : IAspApiClient
         return ApiPost<Done>(url, queryString, request.ContentTemplate);
     }
 
-    public Task<Result<GetAvailableDownloadsResponse>> GetAvailableDownloads(GetAvailableDownloadsRequest request)
+    public Task<Result<DownloadsGetAllResponse>> DownloadsGetAll(DownloadsGetAllRequest request)
     {
         var url = "/api/downloads";
         var queryString = QueryString
@@ -93,10 +93,10 @@ public class AspApiClient : IAspApiClient
             queryString = queryString.Add("year", request.Year.ToString());
         }
 
-        return ApiGet<GetAvailableDownloadsResponse>(url, queryString);
+        return ApiGet<DownloadsGetAllResponse>(url, queryString);
     }
 
-    public Task<Result<FileStreamResponse>> GetDownloadPackage(GetDownloadPackageRequest request)
+    public Task<Result<FileStreamResponse>> DownloadsGetPackage(DownloadsGetPackageRequest request)
     {
         var url = "/api/downloads/package";
         var queryString = QueryString
@@ -112,54 +112,27 @@ public class AspApiClient : IAspApiClient
         return ApiGetFileStream(url, queryString);
     }
 
-    public Task<Result<EstablishmentDetails>> GetEstablishmentDetails(GetEstablishmentDetailsRequest request)
+    public Task<Result<SchoolDetails>> SchoolsGetSingle(SchoolsGetSingleRequest request)
     {
         var url = $"/api/schools/{Uri.EscapeDataString(request.Urn)}";
 
-        return ApiGet<EstablishmentDetails>(url, null);
+        return ApiGet<SchoolDetails>(url, null);
     }
 
-    public Task<Result<ScopedResultsPage<EstablishmentListing>>> GetAllEstablishments(GetAllEstablishmentsRequest request)
+    public Task<Result<ResultsPage<SchoolListing>>> SchoolsGetAll(SchoolsGetAllRequest request)
     {
         var url = "/api/schools";
         var queryString = QueryString.Empty;
 
-        if(request.ScopeType != EstablishmentScopeType.All)
+        if (request.SearchTerm != null)
         {
-            queryString = queryString.Add("scope", request.ScopeType.ToString());
+            queryString = queryString.Add("searchTerm", request.SearchTerm);
         }
 
-        if (request.ScopeIdentifier != null)
+        if (request.Scope != null)
         {
-            queryString = queryString.Add("scopeId", request.ScopeIdentifier);
-        }
-
-        if (request.Page != null)
-        {
-            queryString = queryString.Add("page", request.Page.ToString());
-        }
-
-        if (request.ResultsPerPage != null)
-        {
-            queryString = queryString.Add("resultsPerPage", request.ResultsPerPage.ToString());
-        }
-
-        return ApiGet<ScopedResultsPage<EstablishmentListing>>(url, queryString);
-    }
-
-    public Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> EstablishmentSearch(EstablishmentSearchRequest request)
-    {
-        var url = $"/api/schools/search";
-        var queryString = QueryString.Create("searchTerm", request.SearchTerm);
-
-        if (request.ScopeType != EstablishmentScopeType.All)
-        {
-            queryString = queryString.Add("scope", request.ScopeType.ToString());
-        }
-
-        if (request.ScopeIdentifier != null)
-        {
-            queryString = queryString.Add("scopeId", request.ScopeIdentifier);
+            queryString = queryString.Add("scope", request.Scope.ScopeType.ToString());
+            queryString = queryString.Add("scopeId", request.Scope.ScopeId);
         }
 
         if (request.Page != null)
@@ -172,22 +145,18 @@ public class AspApiClient : IAspApiClient
             queryString = queryString.Add("resultsPerPage", request.ResultsPerPage.ToString());
         }
 
-        return ApiGet<ScopedSearchResultsPage<EstablishmentListing>>(url, queryString);
+        return ApiGet<ResultsPage<SchoolListing>>(url, queryString);
     }
 
-    public Task<Result<ScopedSearchSuggestionsList<EstablishmentSuggestion>>> EstablishmentSearchSuggestions(EstablishmentSearchSuggestionsRequest request)
+    public Task<Result<List<SchoolSuggestion>>> SchoolsGetSearchSuggestions(SchoolsGetSearchSuggestionsRequest request)
     {
         var url = $"/api/schools/search-suggestions";
         var queryString = QueryString.Create("searchTerm", request.SearchTerm);
 
-        if (request.ScopeType != EstablishmentScopeType.All)
+        if (request.Scope != null)
         {
-            queryString = queryString.Add("scope", request.ScopeType.ToString());
-        }
-
-        if (request.ScopeIdentifier != null)
-        {
-            queryString = queryString.Add("scopeId", request.ScopeIdentifier);
+            queryString = queryString.Add("scope", request.Scope.ScopeType.ToString());
+            queryString = queryString.Add("scopeId", request.Scope.ScopeId);
         }
 
         if (request.MaxSuggestions != null)
@@ -195,36 +164,32 @@ public class AspApiClient : IAspApiClient
             queryString = queryString.Add("maxSuggestions", request.MaxSuggestions.ToString());
         }
 
-        return ApiGet<ScopedSearchSuggestionsList<EstablishmentSuggestion>>(url, queryString);
+        return ApiGet<List<SchoolSuggestion>>(url, queryString);
     }
 
-    public Task<Result<IsEstablishmentAccessibleInScopeResponse>> IsEstablishmentAccessibleInScope(IsEstablishmentAccessibleInScopeRequest request)
+    public Task<Result<SchoolsGetAccessResponse>> SchoolsGetAccess(SchoolsGetAccessRequest request)
     {
         var url = $"/api/schools/{Uri.EscapeDataString(request.Urn)}/access";
         var queryString = QueryString.Empty;
 
-        if (request.ScopeType != EstablishmentScopeType.All)
+        if (request.Scope != null)
         {
-            queryString = queryString.Add("scope", request.ScopeType.ToString());
+            queryString = queryString.Add("scope", request.Scope.ScopeType.ToString());
+            queryString = queryString.Add("scopeId", request.Scope.ScopeId);
         }
 
-        if (request.ScopeIdentifier != null)
-        {
-            queryString = queryString.Add("scopeId", request.ScopeIdentifier);
-        }
-
-        return ApiGet<IsEstablishmentAccessibleInScopeResponse>(url, queryString);
+        return ApiGet<SchoolsGetAccessResponse>(url, queryString);
     }
 
-    public Task<Result<GetLinkedEstablishmentsResponse>> GetLinkedEstablishments(GetLinkedEstablishmentsRequest request)
+    public Task<Result<SchoolsGetLinkedSchoolsResponse>> SchoolsGetLinkedSchools(SchoolsGetLinkedSchoolsRequest request)
     {
         var url = $"/api/schools/{Uri.EscapeDataString(request.Urn)}/linked-schools";
         var queryString = QueryString.Create("urn", request.Urn);
 
-        return ApiGet<GetLinkedEstablishmentsResponse>(url, queryString);
+        return ApiGet<SchoolsGetLinkedSchoolsResponse>(url, queryString);
     }
 
-    public Task<Result<LookupValueWithCode>> GetLocalAuthority(LA.GetLocalAuthorityRequest request)
+    public Task<Result<LookupValueWithCode>> LocalAuthoritiesGetSingle(LA.LocalAuthoritiesGetSingleRequest request)
     {
         var url = $"/api/local-authorities/{Uri.EscapeDataString(request.Code)}";
         var queryString = QueryString.Empty;
@@ -232,10 +197,15 @@ public class AspApiClient : IAspApiClient
         return ApiGet<LookupValueWithCode>(url, queryString);
     }
 
-    public Task<Result<ResultsPage<LookupValueWithCode>>> GetAllLocalAuthorities(LA.GetAllLocalAuthoritiesRequest request)
+    public Task<Result<ResultsPage<LookupValueWithCode>>> LocalAuthoritiesGetAll(LA.LocalAuthoritiesGetAllRequest request)
     {
         var url = "/api/local-authorities";
-        var queryString = new QueryString();
+        var queryString = QueryString.Empty;
+
+        if (request.SearchTerm != null)
+        {
+            queryString = queryString.Add("searchTerm", request.SearchTerm);
+        }
 
         if (request.Page != null)
         {
@@ -250,26 +220,8 @@ public class AspApiClient : IAspApiClient
         return ApiGet<ResultsPage<LookupValueWithCode>>(url, queryString);
     }
 
-    public Task<Result<SearchResultsPage<LookupValueWithCode>>> LocalAuthoritySearch(LA.LocalAuthoritySearchRequest request)
-    {
-        var url = "/api/local-authorities/search";
-        var queryString = QueryString.Create("searchTerm", request.SearchTerm);
-
-        if (request.Page != null)
-        {
-            queryString = queryString.Add("page", request.Page.ToString());
-        }
-
-        if (request.ResultsPerPage != null)
-        {
-            queryString = queryString.Add("resultsPerPage", request.ResultsPerPage.ToString());
-        }
-
-        return ApiGet<SearchResultsPage<LookupValueWithCode>>(url, queryString);
-    }
-
-    public Task<Result<SearchSuggestionsList<LookupValueWithCode>>>
-        LocalAuthoritySearchSuggestions(LA.LocalAuthoritySearchSuggestionsRequest request)
+    public Task<Result<List<LookupValueWithCode>>>
+        LocalAuthoritiesGetSearchSuggestions(LA.LocalAuthoritiesGetSearchSuggestionsRequest request)
     {
         var url = "/api/local-authorities/search-suggestions";
         var queryString = QueryString.Create("searchTerm", request.SearchTerm);
@@ -279,10 +231,10 @@ public class AspApiClient : IAspApiClient
             queryString = queryString.Add("maxSuggestions", request.MaxSuggestions.ToString());
         }
 
-        return ApiGet<SearchSuggestionsList<LookupValueWithCode>>(url, queryString);
+        return ApiGet<List<LookupValueWithCode>>(url, queryString);
     }
 
-    public Task<Result<LookupValueWithId>> GetMultiAcademyTrust(MAT.GetMultiAcademyTrustRequest request)
+    public Task<Result<LookupValueWithId>> MultiAcademyTrustsGetSingle(MAT.MultiAcademyTrustsGetSingleRequest request)
     {
         var url = $"/api/multi-academy-trusts/{Uri.EscapeDataString(request.Uid)}";
         var queryString = QueryString.Empty;

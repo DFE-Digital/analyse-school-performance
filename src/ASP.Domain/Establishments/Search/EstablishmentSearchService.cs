@@ -17,7 +17,7 @@ namespace ASP.Domain.Establishments.Search
             _strategyFactory = new EstablishmentSearchStrategyFactory(_establishmentRepository);
         }
 
-        public async Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> Search(string searchTerm, EstablishmentScope scope, int page, int resultsPerPage)
+        public async Task<Result<ResultsPage<EstablishmentListing>>> Search(string searchTerm, EstablishmentScope scope, int page, int resultsPerPage)
         {
             var searchType = searchTerm.ClassifySearchType();
 

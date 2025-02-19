@@ -4,6 +4,6 @@ using DfE.Data.ComponentLibrary.CleanArchitecture.CleanArchitecture.Application.
 
 namespace ASP.Domain.Establishments.UseCases.GetAllEstablishments;
 
-public interface IGetAllEstablishments : IUseCase<GetAllEstablishmentsRequest, Result<ScopedResultsPage<EstablishmentListing>>>
+public interface IGetAllEstablishments : IUseCase<GetAllEstablishmentsRequest, Result<ResultsPage<EstablishmentListing>>>
 {
 }

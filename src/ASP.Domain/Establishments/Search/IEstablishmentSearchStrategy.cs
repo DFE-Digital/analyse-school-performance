@@ -5,5 +5,5 @@ namespace ASP.Domain.Establishments.Search;
 
 public interface IEstablishmentSearchStrategy
 {
-    Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> Execute();
+    Task<Result<ResultsPage<EstablishmentListing>>> Execute();
 }

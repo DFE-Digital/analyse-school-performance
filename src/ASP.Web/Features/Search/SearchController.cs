@@ -64,12 +64,12 @@ public abstract class SearchController<TSearchController, TScope, TListingViewMo
         TScope scope,
         int pageNumber);
 
-    protected abstract Task<Result<SearchResultsPage<TListingViewModel>>> PerformSearch(
+    protected abstract Task<Result<ResultsPage<TListingViewModel>>> PerformSearch(
         TScope scope,
         SearchParameters searchParams,
         int pageNumber);
 
-    protected abstract Task<Result<SearchSuggestionsList<TListingViewModel>>> PerformSearchSuggestions(
+    protected abstract Task<Result<List<TListingViewModel>>> PerformSearchSuggestions(
         TScope scope,
         SearchParameters searchParams);
 
@@ -180,7 +180,7 @@ public abstract class SearchController<TSearchController, TScope, TListingViewMo
         {
             if (!Controller.ModelStateIsValid)
             {
-                return new JsonResult(new SearchSuggestionsList<TListingViewModel>());
+                return new JsonResult(new List<TListingViewModel>());
             }
 
             return

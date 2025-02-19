@@ -16,7 +16,6 @@ export default class AutoComplete {
         suggestionTemplate,
         setHiddenField,
         queryParameter,
-        resultDataProperty,
         searchRegenerateDelay = 250,
         minLength = 2,
         authCheckEndpoint = '/account/auth/status/',
@@ -34,7 +33,6 @@ export default class AutoComplete {
             suggestionTemplate,
             setHiddenField,
             queryParameter,
-            resultDataProperty,
             searchRegenerateDelay,
             minLength,
             authCheckEndpoint,
@@ -49,8 +47,7 @@ export default class AutoComplete {
             'containerId',
             'targetInputElementId',
             'targetInputElementName',
-            'queryParameter',
-            'resultDataProperty'
+            'queryParameter'
         ];
 
         for (const param of requiredParams) {
@@ -168,9 +165,9 @@ export default class AutoComplete {
         // Ensure the results are only displayed if the search term matches the latest input
         const input = document.querySelector(`#${this.config.targetInputElementId}`);
         if (input && input.value === searchTerm) {
-            if (data?.[this.config.resultDataProperty]?.length > 0) {
+            if (data?.length > 0) {
                 // Update both the displayed results and stored previous results
-                this._previousResults = data[this.config.resultDataProperty];
+                this._previousResults = data;
                 this._lastConfirmedSearchTerm = searchTerm;
                 populateResults(this._previousResults);
             } else {

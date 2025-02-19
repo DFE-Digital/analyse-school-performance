@@ -18,7 +18,7 @@ public class EstablishmentNameOrLocationSearchStrategy : EstablishmentSearchStra
         _establishmentRepository = establishmentRepository;
     }
 
-    public override async Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> Execute()
+    public override async Task<Result<ResultsPage<EstablishmentListing>>> Execute()
     {
         var results = await _establishmentRepository.SearchEstablishmentNameOrLocation(Scope, SearchTerm, Page, ResultsPerPage);
 

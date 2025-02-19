@@ -1,5 +1,4 @@
 using ASP.Api.Client;
-using ASP.Api.Client.Establishments;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
 using ASP.Web.Features.Search;
@@ -46,7 +45,7 @@ namespace ASP.Web.Areas.School
         public async Task<IActionResult> Schools(SearchParameters parameters)
         {
             var result = await _searchController.Handle(
-                new EstablishmentScopeInfo(EstablishmentScopeType.All, null),
+                null,
                 parameters,
                 [],
                 model => View(new SchoolSearchPageViewModel(

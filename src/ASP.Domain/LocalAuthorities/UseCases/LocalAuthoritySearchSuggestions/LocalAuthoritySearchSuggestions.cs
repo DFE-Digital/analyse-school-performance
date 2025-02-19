@@ -1,5 +1,4 @@
-﻿using ASP.Core.Pagination;
-using ASP.Core.Results;
+﻿using ASP.Core.Results;
 
 namespace ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearchSuggestions;
 
@@ -13,7 +12,7 @@ public class LocalAuthoritySearchSuggestions : ILocalAuthoritySearchSuggestions
                       throw new ArgumentNullException(nameof(repository));
     }
 
-    public Task<Result<SearchSuggestionsList<LocalAuthority>>> HandleRequest(LocalAuthoritySearchSuggestionsRequest request)
+    public Task<Result<List<LocalAuthority>>> HandleRequest(LocalAuthoritySearchSuggestionsRequest request)
     {
         var maxSuggestions = request.MaxSuggestions.GetValueOrDefault(Core.Constants.SearchResultMaxSuggestions);
         
@@ -22,13 +21,7 @@ public class LocalAuthoritySearchSuggestions : ILocalAuthoritySearchSuggestions
         var suggestions = isNumeric
             ? _repository.LocalAuthoritySearchSuggestionsByLaCode(request.SearchTerm, maxSuggestions)
             : _repository.LocalAuthoritySearchSuggestionsByLaName(request.SearchTerm, maxSuggestions);
-        
-        return
-            from response in suggestions
-            select new SearchSuggestionsList<LocalAuthority> {
-                Suggestions = response,
-                MaxSuggestions = maxSuggestions,
-                SearchTerm = request.SearchTerm
-            };
+
+        return suggestions;
     }
 }

@@ -13,7 +13,7 @@ public class LocalAuthoritySearch : ILocalAuthoritySearch
                       throw new ArgumentNullException(nameof(repository));
     }
 
-    public Task<Result<SearchResultsPage<LocalAuthority>>> HandleRequest(
+    public Task<Result<ResultsPage<LocalAuthority>>> HandleRequest(
         LocalAuthoritySearchRequest request)
     {
         var page = request.Page.GetValueOrDefault(1);
@@ -24,7 +24,7 @@ public class LocalAuthoritySearch : ILocalAuthoritySearch
             ? from localAuthority in _repository.GetLocalAuthority(request.SearchTerm).MapError(e => e is NotFoundError
                 ? Error.NotFound($@"there were no matches for ""{request.SearchTerm}"".")
                 : e)
-            select new SearchResultsPage<LocalAuthority>(request.SearchTerm, page, resultsPerPage,
+            select new ResultsPage<LocalAuthority>(page, resultsPerPage,
                 totalResults: 1, [new LocalAuthority(localAuthority.Code, localAuthority.Name)])
             : _repository.LocalAuthoritySearchByLaName(request.SearchTerm, page, resultsPerPage);
         

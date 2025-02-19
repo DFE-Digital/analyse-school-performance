@@ -14,11 +14,11 @@ public class LaEstabSearchStrategy : EstablishmentSearchStrategy
         _repository = repository;
     }
 
-    public override async Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> Execute()
+    public override async Task<Result<ResultsPage<EstablishmentListing>>> Execute()
     {
         var searchType = SearchTerm.ClassifySearchType();
 
-        Result<ScopedSearchResultsPage<EstablishmentListing>> result = searchType switch
+        Result<ResultsPage<EstablishmentListing>> result = searchType switch
         {
             SearchType.LocalAuthEstablishment => await _repository.SearchEstablishmentByLaCodeOrEstablishmentNumber(Scope, SearchTerm, Page, ResultsPerPage),
             SearchType.LocalAuthEstablishment7Digit => await _repository.SearchEstablishmentByLaestab7DigitCode(Scope, SearchTerm, Page, ResultsPerPage),

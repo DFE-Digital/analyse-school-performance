@@ -13,16 +13,13 @@ public class UrnLookupStrategy : EstablishmentSearchStrategy
         _repository = repository;
     }
 
-    public override Task<Result<ScopedSearchResultsPage<EstablishmentListing>>> Execute()
+    public override Task<Result<ResultsPage<EstablishmentListing>>> Execute()
     {
         return
             from isAllowed in _repository.IsEstablishmentVisibleWithinScope(SearchTerm, Scope)
                 .ErrorIf(exists => !exists, Error.NotFound($@"there were no matches for ""{SearchTerm}""."))
             from establishment in _repository.GetEstablishmentDetails(SearchTerm)
-            select new ScopedSearchResultsPage<EstablishmentListing>(
-                SearchTerm,
-                Scope.ScopeType.ToString(),
-                Scope.ScopeIdentifier,
+            select new ResultsPage<EstablishmentListing>(
                 Page,
                 ResultsPerPage,
                 totalResults: 1,

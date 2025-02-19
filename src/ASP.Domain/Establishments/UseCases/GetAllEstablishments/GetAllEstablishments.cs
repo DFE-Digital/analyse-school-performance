@@ -16,7 +16,7 @@ public class GetAllEstablishments : IGetAllEstablishments
         _scopeValidator = scopeValidator ?? throw new ArgumentNullException(nameof(scopeValidator));
     }
 
-    public Task<Result<ScopedResultsPage<EstablishmentListing>>> HandleRequest(
+    public Task<Result<ResultsPage<EstablishmentListing>>> HandleRequest(
         GetAllEstablishmentsRequest request)
     {
         var page = request.Page.GetValueOrDefault(1);

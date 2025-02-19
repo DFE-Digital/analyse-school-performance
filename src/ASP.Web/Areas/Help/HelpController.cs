@@ -1,5 +1,5 @@
 ﻿using ASP.Api.Client;
-using ASP.Api.Client.Templating;
+using ASP.Api.Client.ContentTemplates;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
@@ -32,10 +32,10 @@ namespace ASP.Web.Areas.Help
         public Task<IActionResult> ViewPage(string contentId, string? revision)
         {
             string templateId = $"help-{contentId}".ToLower();
-            ViewContentTemplateRequest request = new(templateId, revision);
+            ContentTemplatesGetSingleRequest request = new(templateId, revision);
 
             var result =
-                from template in _api.GetContentTemplate(request)
+                from template in _api.ContentTemplatesGetSingle(request)
                 select ContentTemplateViewModel.FromTemplate(contentId, revision, template);
 
             return result.ToActionResult(View, _hostEnvironment);
@@ -47,10 +47,10 @@ namespace ASP.Web.Areas.Help
         public Task<IActionResult> EditPage(string contentId, string? revision)
         {
             string templateId = $"help-{contentId}".ToLower();
-            ViewContentTemplateRequest request = new(templateId, revision);
+            ContentTemplatesGetSingleRequest request = new(templateId, revision);
 
             var result =
-                from template in _api.GetContentTemplate(request)
+                from template in _api.ContentTemplatesGetSingle(request)
                 select ContentTemplateEditModel.FromTemplate(contentId, revision, template, _editModelFactory);
                 
             return result.ToActionResult(View, _hostEnvironment);
@@ -64,7 +64,7 @@ namespace ASP.Web.Areas.Help
 
             var result =
                 from template in model.ToTemplate()
-                from done in _api.UpdateContentTemplate(new(templateId, revision, template))
+                from done in _api.ContentTemplatesUpdateSingle(new(templateId, revision, template))
                 select done;
 
             return result.ToActionResult(_ => RedirectToAction(nameof(ViewPage), new { contentId, revision }), _hostEnvironment);

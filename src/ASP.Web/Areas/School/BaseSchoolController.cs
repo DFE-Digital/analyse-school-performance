@@ -1,6 +1,6 @@
 ﻿using ASP.Api.Client;
-using ASP.Api.Client.Establishments;
-using ASP.Api.Client.Templating;
+using ASP.Api.Client.Schools;
+using ASP.Api.Client.ContentTemplates;
 using ASP.Core.Results;
 using ASP.Web.Core.Templating;
 using Microsoft.AspNetCore.Mvc;
@@ -28,23 +28,23 @@ namespace ASP.Web.Areas.School
         protected virtual Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
         {
             return 
-                from establishmentDetails in _api.GetEstablishmentDetails(new GetEstablishmentDetailsRequest(urn))
+                from establishmentDetails in _api.SchoolsGetSingle(new SchoolsGetSingleRequest(urn))
                 select EstablishmentDetailsViewModel.FromEstablishmentDetails(establishmentDetails);
         }
 
         protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentId, string? revision)
         {
             return (
-                from template in _api.GetContentTemplate(new ViewContentTemplateRequest(contentId, revision))
+                from template in _api.ContentTemplatesGetSingle(new ContentTemplatesGetSingleRequest(contentId, revision))
                 select ContentTemplateViewModel.FromTemplate(contentId, revision, template)
             ).DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel());
         }
         
-        protected virtual Task<Result<LinkedEstablishmentsViewModel>> GetLinkedEstablishments(string urn, Func<string, string?> createSchoolUrl)
+        protected virtual Task<Result<LinkedEstablishmentsViewModel>> GetLinkedSchools(string urn, Func<string, string?> createSchoolUrl)
         {
             return (
-                from linkedEstablishment in _api.GetLinkedEstablishments(new GetLinkedEstablishmentsRequest(urn))
-                select new LinkedEstablishmentsViewModel(linkedEstablishment.Urn, linkedEstablishment.Links, createSchoolUrl)
+                from linkedEstablishment in _api.SchoolsGetLinkedSchools(new SchoolsGetLinkedSchoolsRequest(urn))
+                select new LinkedEstablishmentsViewModel(urn, linkedEstablishment.Links, createSchoolUrl)
             );
         }
 

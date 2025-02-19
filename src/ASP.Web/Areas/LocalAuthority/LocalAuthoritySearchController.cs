@@ -163,41 +163,42 @@ namespace ASP.Web.Areas.LocalAuthority
             Scope scope,
             int pageNumber)
         {
-            var request = new GetAllLocalAuthoritiesRequest(
-                pageNumber,
-                _searchOptions.PageSize
-            );
-
-            return _api.GetAllLocalAuthorities(request)
-                .Map(results => results.Map(MakeListingViewModel));
-        }
-
-        protected override Task<Result<SearchResultsPage<LocalAuthorityListingViewModel>>> PerformSearch(
-            Scope scope,
-            SearchParameters searchParams,
-            int pageNumber)
-        {
-            var request = new LocalAuthoritySearchRequest(
-                SearchTerm: searchParams.Search ?? string.Empty,
+            var request = new LocalAuthoritiesGetAllRequest(
+                SearchTerm: null,
                 Page: pageNumber,
                 ResultsPerPage: _searchOptions.PageSize
             );
 
-            return _api.LocalAuthoritySearch(request)
+            return _api.LocalAuthoritiesGetAll(request)
                 .Map(results => results.Map(MakeListingViewModel));
         }
 
-        protected override Task<Result<SearchSuggestionsList<LocalAuthorityListingViewModel>>> PerformSearchSuggestions(
+        protected override Task<Result<ResultsPage<LocalAuthorityListingViewModel>>> PerformSearch(
+            Scope scope,
+            SearchParameters searchParams,
+            int pageNumber)
+        {
+            var request = new LocalAuthoritiesGetAllRequest(
+                SearchTerm: searchParams.Search,
+                Page: pageNumber,
+                ResultsPerPage: _searchOptions.PageSize
+            );
+
+            return _api.LocalAuthoritiesGetAll(request)
+                .Map(results => results.Map(MakeListingViewModel));
+        }
+
+        protected override Task<Result<List<LocalAuthorityListingViewModel>>> PerformSearchSuggestions(
             Scope scope,
             SearchParameters searchParams)
         {
-            var request = new LocalAuthoritySearchSuggestionsRequest(
+            var request = new LocalAuthoritiesGetSearchSuggestionsRequest(
                 searchParams.Search ?? "",
                 _searchOptions.MaxSearchSuggestions
             );
 
-            return _api.LocalAuthoritySearchSuggestions(request)
-                .Map(results => results.Map(MakeListingViewModel));
+            return _api.LocalAuthoritiesGetSearchSuggestions(request)
+                .Map(results => results.Select(MakeListingViewModel).ToList());
         }
 
         protected override SearchFormViewModel CreateSearchFormViewModel(

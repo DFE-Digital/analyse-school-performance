@@ -5,6 +5,6 @@ using DfE.Data.ComponentLibrary.CleanArchitecture.CleanArchitecture.Application.
 namespace ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearch;
 
 public interface ILocalAuthoritySearch : IUseCase<LocalAuthoritySearchRequest,
-    Result<SearchResultsPage<LocalAuthority>>>
+    Result<ResultsPage<LocalAuthority>>>
 {
 }

@@ -1,5 +1,4 @@
-﻿using ASP.Core.Pagination;
-using ASP.Core.Results;
+﻿using ASP.Core.Results;
 using ASP.Domain.Establishments.SearchSuggestions;
 
 namespace ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
@@ -18,7 +17,7 @@ public class EstablishmentSearchSuggestions : IEstablishmentSearchSuggestions
         _searchService = new EstablishmentSearchSuggestionsService(establishmentRepository);
     }
 
-    public Task<Result<ScopedSearchSuggestionsList<EstablishmentSuggestion>>> HandleRequest(
+    public Task<Result<List<EstablishmentSuggestion>>> HandleRequest(
         EstablishmentSearchSuggestionsRequest request
     )
     {

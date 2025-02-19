@@ -1,4 +1,4 @@
-﻿using ASP.Api.Client.DataDownloads;
+﻿using ASP.Api.Client.Downloads;
 using ASP.Web.Extensions;
 using ASP.Web.Features.SubController;
 

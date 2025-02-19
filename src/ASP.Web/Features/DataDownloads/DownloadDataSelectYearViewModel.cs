@@ -1,4 +1,4 @@
-﻿using ASP.Api.Client.DataDownloads;
+﻿using ASP.Api.Client.Downloads;
 
 namespace ASP.Web.Features.DataDownloads;
 

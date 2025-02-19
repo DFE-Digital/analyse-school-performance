@@ -26,8 +26,7 @@ export const searchSuggestions = (inputTemplate, suggestionTemplate) => ({
                 inputTemplate: inputTemplate,
                 suggestionTemplate: suggestionTemplate,
                 setHiddenField: this.setHiddenField.bind(this),
-                queryParameter: 'search',
-                resultDataProperty: 'suggestions'
+                queryParameter: 'search'
             });
 
             // Wait until this execution queue is finished to ensure the new input has been created.

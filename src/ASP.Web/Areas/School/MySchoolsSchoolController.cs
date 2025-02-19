@@ -1,5 +1,5 @@
 using ASP.Api.Client;
-using ASP.Api.Client.DataDownloads;
+using ASP.Api.Client.Downloads;
 using ASP.Core.Authorization;
 using ASP.Core.Results;
 using ASP.Web.Core.BreadcrumbTrail;
@@ -32,7 +32,7 @@ namespace ASP.Web.Areas.School
                 nameof(DownloadData),
                 "MySchoolsSchool",
                 ["urn"],
-                DataDownloadsScopeType.School,
+                DownloadsScopeType.School,
                 _api);
         }
 
@@ -58,7 +58,7 @@ namespace ASP.Web.Areas.School
                         "My schools",
                         establishmentDetails.Name
                 ))
-                from linkedEstablishments in GetLinkedEstablishments(urn, 
+                from linkedEstablishments in GetLinkedSchools(urn, 
                     urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { urn }))
                 select new SchoolLandingPageViewModel(
                     schoolPage,
@@ -193,7 +193,7 @@ namespace ASP.Web.Areas.School
         {
             return
                 from scopeInfo in User.GetScopeInfoForRole()
-                from _ in _api.IsEstablishmentAccessibleInScope(new(urn, scopeInfo.ScopeType, scopeInfo.ScopeId))
+                from _ in _api.SchoolsGetAccess(new(urn, scopeInfo))
                     .ErrorIf(response => !(response.IsAccessibleInScope || response.IsAccessibleViaLinkedSchools), 
                         Error.NotAllowed($"User is not allowed to view School {urn}"))
                 from establishmentDetails in base.GetEstablishmentDetails(urn)
