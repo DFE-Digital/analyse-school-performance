@@ -53,4 +53,4 @@ jobs:
             appType: functionApp
             appName: '$(functionAppName)'
             package: '$(System.ArtifactsDirectory)\files-api\**\api.zip'
-            appSettings: '-DocumentDatabase:ManagedIdentityClientId $(DocumentDatabase:ManagedIdentityClientId) -DocumentDatabase:EndpointUri $(DocumentDatabase:EndpointUri) -DocumentDatabase:DatabaseId $(DocumentDatabase:DatabaseId) -AzureKeyVault:KeyVaultName $(AzureKeyVault:KeyVaultName) -AzureWebJobsStorage__accountName $(StorageAccountName)'
+            appSettings: '-DocumentDatabase:ManagedIdentityClientId $(DocumentDatabase:ManagedIdentityClientId) -DocumentDatabase:EndpointUri $(DocumentDatabase:EndpointUri) -DocumentDatabase:DatabaseId $(DocumentDatabase:DatabaseId) -AzureKeyVault:KeyVaultName $(AzureKeyVault:KeyVaultName) -AzureWebJobsStorage $(AzureWebJobsStorage) -AzureWebJobsStorage__accountName $(StorageAccountName)'
