@@ -1,5 +1,5 @@
 using ASP.Core.Results;
-using ASP.Domain.Templating.UseCases.ViewContentTemplate;
+using ASP.Domain.Templating.UseCases.GetContentTemplate;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -10,15 +10,15 @@ using System.Net;
 
 namespace ASP.Api.Functions.Templating;
 
-public class ViewContentTemplate : ApiFunction
+public class GetContentTemplate : ApiFunction
 {
-    private readonly ILogger<ViewContentTemplate> _logger;
-    private readonly IViewContentTemplate _useCase;
+    private readonly ILogger<GetContentTemplate> _logger;
+    private readonly IGetContentTemplate _useCase;
     private readonly ApiResultConverter _resultConverter;
 
-    public ViewContentTemplate(
-        ILogger<ViewContentTemplate> logger,
-        IViewContentTemplate useCase,
+    public GetContentTemplate(
+        ILogger<GetContentTemplate> logger,
+        IGetContentTemplate useCase,
         ApiResultConverter resultConverter
     )
     {
@@ -32,16 +32,16 @@ public class ViewContentTemplate : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
-    [Function("ViewContentTemplate")]
-    [OpenApiOperation(operationId: "ViewContentTemplate", tags: ["Content Templates"], Description = "Retrieves details for a specific content template based on the provided ID.")]
-    [OpenApiParameter(name: "id", In = ParameterLocation.Query, Required = true, Description = "The unique identifier of the content template.")]
+    [Function("GetContentTemplate")]
+    [OpenApiOperation(operationId: "GetContentTemplate", tags: ["Content Templates"], Description = "Retrieves details for a specific content template based on the provided ID.")]
+    [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Description = "The unique identifier of the content template.")]
     [OpenApiParameter(name: "revision", In = ParameterLocation.Query, Required = false, Description = "The revision identifier of the content template.")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.Templating.ContentTemplate), Description = "Details of the specified content template.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Content template not found for the given ID and revision.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "content-templates/{id}")]
         HttpRequest request,
         CancellationToken cancellationToken
     )
@@ -50,9 +50,9 @@ public class ViewContentTemplate : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from id in request.ValidateParameter("id", p => p.IsRequired())
-            from revision in request.ValidateParameter("revision", p => p.IsOptional())
-            from response in _useCase.HandleRequest(new ViewContentTemplateRequest(id, revision))
+            from id in request.ValidateRouteParameter("id", p => p.IsRequired())
+            from revision in request.ValidateQueryStringParameter("revision", p => p.IsOptional())
+            from response in _useCase.HandleRequest(new GetContentTemplateRequest(id, revision))
             select response.ForApiClient();
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);

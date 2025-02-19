@@ -2,7 +2,7 @@ Feature: GetDownloadPackage
 
 
 Scenario: Should not accept POST method
-	When I send a POST request to /api/GetDownloadPackage
+	When I send a POST request to /api/downloads/package
 	Then I should get a 405 response
 	And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
 	And the response should include the header "Allow: GET"
@@ -10,17 +10,17 @@ Scenario: Should not accept POST method
 Scenario: Should return BadRequest (400) response if parameters are missing
 	When I send a GET request to <url>
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "<missingParameter>" is missing."
+	And the response should be the message "Bad request: The query parameter "<missingParameter>" is missing."
 Examples:
-	| url                                                                           | missingParameter |
-	| /api/GetDownloadPackage?scope=LA&scopeIdentifier=123456&fileType=csv          | downloadIds      |
-	| /api/GetDownloadPackage?scope=LA&scopeIdentifier=123456&downloadIds=test      | fileType         |
-	| /api/GetDownloadPackage?&scopeIdentifier=123456&fileType=csv&downloadIds=test | scope            |
+	| url                                                                  | missingParameter |
+	| /api/downloads/package?scope=LA&scopeId=123456&fileType=csv          | downloadIds      |
+	| /api/downloads/package?scope=LA&scopeId=123456&downloadIds=test      | fileType         |
+	| /api/downloads/package?&scopeId=123456&fileType=csv&downloadIds=test | scope            |
 
-Scenario: Should return BadRequest (400) response if scopeIdentifier parameter is missing
-	When I send a GET request to /api/GetDownloadPackage?scope=<scope>&fileType=CSV&downloadIds=test-999-2024
+Scenario: Should return BadRequest (400) response if scopeId parameter is missing
+	When I send a GET request to /api/downloads/package?scope=<scope>&fileType=CSV&downloadIds=test-999-2024
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scopeIdentifier" is missing."
+	And the response should be the message "Bad request: The query parameter "scopeId" is missing."
 Examples:
 	| scope  |
 	| School |
@@ -28,10 +28,10 @@ Examples:
 	| LA     |
 	| la     |
 
-Scenario: Should return BadRequest (400) response if scopeIdentifier parameter is empty
-	When I send a GET request to /api/GetDownloadPackage?scope=<scope>&scopeIdentifier=&fileType=CSV&downloadIds=test-999-2024
+Scenario: Should return BadRequest (400) response if scopeId parameter is empty
+	When I send a GET request to /api/downloads/package?scope=<scope>&scopeId=&fileType=CSV&downloadIds=test-999-2024
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scopeIdentifier" should not be empty."
+	And the response should be the message "Bad request: The query parameter "scopeId" should not be empty."
 Examples:
 	| scope  |
 	| School |
@@ -42,15 +42,15 @@ Examples:
 Scenario: Should return BadRequest (400) response if parameters are empty
     When I send a GET request to <url>
     Then I should get a 400 response
-    And the response should be the message "Bad request: The parameter "<emptyParameter>" should not be empty."
+    And the response should be the message "Bad request: The query parameter "<emptyParameter>" should not be empty."
 Examples:
-	| url                                                                                 | emptyParameter  |
-	| /api/GetDownloadPackage?scope=LA&scopeIdentifier=123456&fileType=csv&downloadIds=   | downloadIds     |
-	| /api/GetDownloadPackage?scope=LA&scopeIdentifier=123456&fileType=&downloadIds=test  | fileType        |
-	| /api/GetDownloadPackage?scope=&scopeIdentifier=123456&fileType=csv&downloadIds=test | scope           |
+	| url                                                                        | emptyParameter |
+	| /api/downloads/package?scope=LA&scopeId=123456&fileType=csv&downloadIds=   | downloadIds    |
+	| /api/downloads/package?scope=LA&scopeId=123456&fileType=&downloadIds=test  | fileType       |
+	| /api/downloads/package?scope=&scopeId=123456&fileType=csv&downloadIds=test | scope          |
 
 Scenario: Should return BadRequest (400) response if fileType parameter is not supported
-	When I send a GET request to /api/GetDownloadPackage?scope=LA&scopeIdentifier=123456&fileType=<fileType>
+	When I send a GET request to /api/downloads/package?scope=LA&scopeId=123456&fileType=<fileType>
 	Then I should get a 400 response
 	And the response should be the message "Bad request: "<fileType>" is not a valid fileType."
 Examples:
@@ -58,12 +58,17 @@ Examples:
 	| png      |
 	| docx     |
 
-Scenario: Should return BadRequest (400) response if scopeIdentifier parameter is invalid
-	When I send a GET request to /api/GetDownloadPackage?scope=LA&scopeIdentifier=xyz&fileType=csv&downloadIds=test-999-2024
+Scenario: Should return BadRequest (400) response if scopeId parameter is invalid URN
+	When I send a GET request to /api/downloads/package?scope=School&scopeId=xyz&fileType=csv&downloadIds=test-999-2024
 	Then I should get a 400 response
-	And the response should be the message "Bad request: "xyz" is not a valid scopeIdentifier."
+	And the response should be the message "Bad request: "xyz" is not a valid school URN."
 
-Scenario: Should return BadRequest (400) response if scopeIdentifier parameter is non-existent school URN
+Scenario: Should return BadRequest (400) response if scopeId parameter is invalid LA code
+	When I send a GET request to /api/downloads/package?scope=LA&scopeId=xyz&fileType=csv&downloadIds=test-999-2024
+	Then I should get a 400 response
+	And the response should be the message "Bad request: "xyz" is not a valid LA code."
+
+Scenario: Should return BadRequest (400) response if scopeId parameter is non-existent school URN
     Given blob storage file downloads-config.json exists in config container:
     """
     [
@@ -80,18 +85,18 @@ Scenario: Should return BadRequest (400) response if scopeIdentifier parameter i
         "name": "Test School"
     }
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=222222&fileType=CSV&downloadIds=test-999-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=222222&fileType=CSV&downloadIds=test-999-2024
     Then I should get a 400 response 
     And the response should be the message "Bad request: Establishment with URN "222222" does not exist."
 
-Scenario: Should return BadRequest (400) response if scopeIdentifier parameter is non-existent LA code
+Scenario: Should return BadRequest (400) response if scopeId parameter is non-existent LA code
     Given Local Authority "111" exists:
     """
     {
         "name": "Test LA"
     }
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=LA&scopeIdentifier=222&fileType=CSV&downloadIds=test-999-2024
+    When I send a GET request to /api/downloads/package?scope=LA&scopeId=222&fileType=CSV&downloadIds=test-999-2024
     Then I should get a 400 response 
     And the response should be the message "Bad request: Local Authority with Code "222" does not exist."
 
@@ -116,7 +121,7 @@ Scenario Outline: CSV, XLSX and TSV fileTypes should be supported (case insensit
     """
     test
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=111111&fileType=<fileType>&downloadIds=test-111111-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=<fileType>&downloadIds=test-111111-2024
     Then I should get a <statusCode> response
 Examples:
     | fileType | statusCode |
@@ -143,7 +148,7 @@ Scenario Outline: Should return BadRequest (400) response if downloadId is not i
         "name": "Test School"
     }
     """ 
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=111111&fileType=CSV&downloadIds=<invalidDownloadId>
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=CSV&downloadIds=<invalidDownloadId>
     Then I should get a 400 response
     And the response should be the message "Bad request: Download ID: <invalidDownloadId> is not in the format "{download-config.id}-{identifier}-{year}[-{version}]".""
 Examples:
@@ -173,7 +178,7 @@ Scenario Outline: Should return BadRequest (400) response if downloadId is not i
         "name": "Test LA"
     }
     """ 
-    When I send a GET request to /api/GetDownloadPackage?scope=LA&scopeIdentifier=111&fileType=CSV&downloadIds=<invalidDownloadId>
+    When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=<invalidDownloadId>
     Then I should get a 400 response
     And the response should be the message "Bad request: Download ID: <invalidDownloadId> is not in the format "{download-config.id}-{identifier}-{year}[-{version}]".""
 Examples:
@@ -195,7 +200,7 @@ Scenario: Should return ServerError (500) response if downloads-config.json file
         "name": "Test School 1"
     }
     """ 
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test
     Then I should get a 500 response
     And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"Blob storage file \"downloads-config.json\" does not exist in container \"config\".","MessagePrefix":"Unexpected: "}"
 
@@ -212,11 +217,11 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         "name": "Test School"
     }
     """    
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=111111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222222" is not accessible within the given scope."
 
-Scenario: Should return NotAllowed (403) response if downloadId identifier part is different school URN to scopeIdentifier (School scope)
+Scenario: Should return NotAllowed (403) response if downloadId identifier part is different school URN to scopeId (School scope)
     Given blob storage file downloads-config.json exists in config container:
     """
     [
@@ -235,7 +240,7 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         "name": "Test School 2"
     }
     """    
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=111111&fileType=CSV&downloadIds=test-222222-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=CSV&downloadIds=test-222222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222222" is not accessible within the given scope."
 
@@ -252,11 +257,11 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         "name": "Test LA"
     }
     """    
-    When I send a GET request to /api/GetDownloadPackage?scope=LA&scopeIdentifier=111&fileType=CSV&downloadIds=test-111-2024&downloadIds=test-222-2024
+    When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=test-111-2024&downloadIds=test-222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222" is not accessible within the given scope."
 
-Scenario: Should return NotAllowed (403) response if downloadId identifier part is different LA code to scopeIdentifier (LA scope)
+Scenario: Should return NotAllowed (403) response if downloadId identifier part is different LA code to scopeId (LA scope)
     Given blob storage file downloads-config.json exists in config container:
     """
     [
@@ -275,7 +280,7 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         "name": "Test LA 2"
     }
     """    
-    When I send a GET request to /api/GetDownloadPackage?scope=LA&scopeIdentifier=111&fileType=CSV&downloadIds=test-111-2024&downloadIds=test-222-2024
+    When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=test-111-2024&downloadIds=test-222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222" is not accessible within the given scope."
 
@@ -301,7 +306,7 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         }
     }
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=LA&scopeIdentifier=111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024
+    When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222222" is not accessible within the given scope."
 
@@ -342,7 +347,7 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         }
     }
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=LA&scopeIdentifier=111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024
+    When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222222" is not accessible within the given scope."
 
@@ -360,7 +365,7 @@ Scenario: Should return NotFound (404) response if single download id supplied c
         "name": "Test School 1"
     }
     """ 
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=xyz-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=xyz-123456-2024
     Then I should get a 404 response
     And the response should be the message "Not found: There is no download config with id "xyz"."
 
@@ -378,7 +383,7 @@ Scenario: Should return NotFound (404) response if multiple download ids supplie
         "name": "Test School 1"
     }
     """ 
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=abc-123456-2024&downloadIds=xyz-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=abc-123456-2024&downloadIds=xyz-123456-2024
     Then I should get a 404 response
     And the response should be the message "Not found: There is no download config with id "xyz"."
 
@@ -400,7 +405,7 @@ Scenario: Should return NotFound (404) response if downloads-config exists but b
     }
     """ 
     And no blob storage files exist in downloads-kts container 
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-123456-2024
     Then I should get a 404 response
     And the response should be the message "Not found: Blob storage file "test.csv" does not exist in container "downloads-kts"."
 
@@ -425,7 +430,7 @@ Scenario: Should zip up file from blob storage matching filePathPattern of downl
     """
     test
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-123456-2024
     Then the response should be a ZIP file download
     And the ZIP file download should contain 1 file
     And the ZIP file download should contain the file test.csv with contents:
@@ -456,7 +461,7 @@ Scenario Outline: Should create download filename based on current time
     test
     """
     And the current time is <currentTime>
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=111111&fileType=CSV&downloadIds=test-111111-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=CSV&downloadIds=test-111111-2024
     Then the response should be a ZIP file download with filename <filename>
 Examples:
     | currentTime         | filename                         |
@@ -495,7 +500,7 @@ Scenario: Should zip up multiple files from blob storage based on from different
     test2
     """
     And the current time is 2024/01/01 01:23:45
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test1-123456-2024&downloadIds=test2-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test1-123456-2024&downloadIds=test2-123456-2024
     Then the response should be a ZIP file download
     And the ZIP file download should contain 2 files
     And the ZIP file download should contain the file test1_file.csv with contents:
@@ -534,7 +539,7 @@ Scenario: Should zip up multiple files from blob storage based on from different
     test1
     """
     And the current time is 2024/01/01 01:23:45
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test1-123456-2024&downloadIds=test2-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test1-123456-2024&downloadIds=test2-123456-2024
     Then I should get a 404 response
     And the response should be the message "Not found: Blob storage file "test2_file.csv" does not exist in container "downloads-kts"."
 
@@ -567,7 +572,7 @@ Scenario: Should be able to download multiple years by replacing {year} in fileP
     """
     test-2024
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test-123456-2022&downloadIds=test-123456-2023&downloadIds=test-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-123456-2022&downloadIds=test-123456-2023&downloadIds=test-123456-2024
     Then the response should be a ZIP file download
     And the ZIP file download should contain 3 files
     And the ZIP file download should contain the file School/2022/test.csv with contents:
@@ -604,7 +609,7 @@ Scenario: Should be able to download multiple years by replacing {year} in fileP
     """
     test-2024
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test-123456-2023&downloadIds=test-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-123456-2023&downloadIds=test-123456-2024
     Then I should get a 404 response
     And the response should be the message "Not found: Blob storage file "School/2023/test.csv" does not exist in container "downloads-kts"."
 
@@ -664,7 +669,7 @@ Scenario: Should be able to download multiple school URNs by replacing {urn} in 
     """
     test-333333
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=LA&scopeIdentifier=111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024&downloadIds=test-333333-2024
+    When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024&downloadIds=test-333333-2024
     Then the response should be a ZIP file download
     And the ZIP file download should contain 3 files
     And the ZIP file download should contain the file School/111111/test.csv with contents:
@@ -702,7 +707,7 @@ Scenario Outline: Should be able to download multiple versions by replacing {ver
     test
     """
     And the current time is 2024/01/01 01:23:45
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=111111&fileType=CSV&downloadIds=test-111111-2024-<versionDashed>
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=CSV&downloadIds=test-111111-2024-<versionDashed>
     Then I should get a 200 response
     And the response should be a ZIP file download
     And the ZIP file download should contain 1 file
@@ -744,7 +749,7 @@ Scenario Outline: Should be able to download multiple versions by replacing {ver
     test
     """
     And the current time is 2024/01/01 01:23:45
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test-123456-2024-revised&downloadIds=test-123456-2024-final-with-cla
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-123456-2024-revised&downloadIds=test-123456-2024-final-with-cla
     Then I should get a 404 response
     And the response should be the message "Not found: Blob storage file "test_final_with_cla.csv" does not exist in container "downloads-kts"."
 
@@ -769,7 +774,7 @@ Scenario: Should be able to download fileType by replacing {fileType} in filePat
     """
     test
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=111111&fileType=<requestedFileType>&downloadIds=test-111111-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=<requestedFileType>&downloadIds=test-111111-2024
     Then the response should be a ZIP file download
     And the ZIP file download should contain 1 file
     And the ZIP file download should contain the file School/<fileTypeInBlobStorage>/test.<fileTypeInBlobStorage> with contents:
@@ -806,7 +811,7 @@ Scenario: Should be able to download fileType by replacing {fileType} in filePat
     """
     test
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=111111&fileType=csv&downloadIds=test-111111-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=csv&downloadIds=test-111111-2024
     Then I should get a 404 response
     And the response should be the message "Not found: Blob storage file "School/csv/test.csv" does not exist in container "downloads-kts"."
 
@@ -840,7 +845,7 @@ Scenario: Should zip up files from both ASP and KTS containers from blob storage
     """
     test_asp
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test-kts-123456-2024&downloadIds=test-asp-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-kts-123456-2024&downloadIds=test-asp-123456-2024
     Then the response should be a ZIP file download
     And the ZIP file download should contain 2 files
     And the ZIP file download should contain the file test_kts_file.csv with contents:
@@ -878,7 +883,7 @@ Scenario: Should zip up files from both ASP and KTS containers from blob storage
     """
     test_kts
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test-kts-123456-2024&downloadIds=test-asp-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-kts-123456-2024&downloadIds=test-asp-123456-2024
     Then I should get a 404 response
     And the response should be the message "Not found: Blob storage file "test_asp_file.csv" does not exist in container "downloads-asp"."
 
@@ -920,7 +925,7 @@ Scenario: Should be able to handle multiple years from both ASP and KTS containe
     """
     test-asp-2024
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test-kts-123456-2023&downloadIds=test-kts-123456-2024&downloadIds=test-asp-123456-2023&downloadIds=test-asp-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-kts-123456-2023&downloadIds=test-kts-123456-2024&downloadIds=test-asp-123456-2023&downloadIds=test-asp-123456-2024
     Then the response should be a ZIP file download
     And the ZIP file download should contain 4 files
     And the ZIP file download should contain the file School/2023/test-kts.csv with contents:
@@ -975,6 +980,6 @@ Scenario: Should be able to handle multiple years from both ASP and KTS containe
     """
     test-asp-2023
     """
-    When I send a GET request to /api/GetDownloadPackage?scope=School&scopeIdentifier=123456&fileType=CSV&downloadIds=test-kts-123456-2023&downloadIds=test-kts-123456-2024&downloadIds=test-asp-123456-2023&downloadIds=test-asp-123456-2024
+    When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-kts-123456-2023&downloadIds=test-kts-123456-2024&downloadIds=test-asp-123456-2023&downloadIds=test-asp-123456-2024
     Then I should get a 404 response
     And the response should be the message "Not found: Blob storage file "School/2024/test-asp.csv" does not exist in container "downloads-asp"."

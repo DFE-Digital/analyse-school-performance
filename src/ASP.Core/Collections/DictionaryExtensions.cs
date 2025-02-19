@@ -2,7 +2,7 @@
 
 namespace ASP.Core.Collections;
 
-public static class DictionaryExtensions
+public static class CollectionExtensions
 {
     public static bool TryGetValue<TValue>(this IDictionary<string, TValue> dictionary, string key, [MaybeNullWhen(false)] out TValue value, StringComparison comparisonType)
     {

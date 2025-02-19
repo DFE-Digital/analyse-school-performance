@@ -2,4 +2,4 @@
 
 namespace ASP.Domain.Establishments.UseCases.IsEstablishmentAccessibleInScope;
 
-public record IsEstablishmentAccessibleInScopeRequest(string Urn, EstablishmentScopeType ScopeType, Optional<string> ScopeIdentifier);
+public record IsEstablishmentAccessibleInScopeRequest(string Urn, Optional<EstablishmentScopeInfo> Scope);

@@ -36,15 +36,15 @@ public class GetDownloadPackage : ApiFunction
 
     [Function("GetDownloadPackage")]
     [OpenApiOperation(operationId: "GetDownloadPackage", tags: ["Downloads"], Description = "Creates a ZIP archive of multiple downloads.")]
-    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the request, e.g. 'LA' or 'School'.")]
-    [OpenApiParameter(name: "scopeIdentifier", In = ParameterLocation.Query, Required = true, Description = "An identifier for the selected scope, either a school URN or LA code")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the downloads requested, e.g. 'LA' or 'School'.")]
+    [OpenApiParameter(name: "scopeId", In = ParameterLocation.Query, Required = true, Description = "An identifier for the selected scope, either a school URN or LA code")]
     [OpenApiParameter(name: "fileType", In = ParameterLocation.Query, Required = true, Description = "Type of the file to be downloaded, examples: `csv`, `txt`, `xlsx`")]
     [OpenApiParameter(name: "downloadIds", In = ParameterLocation.Query, Required = true, Type = typeof(List<string>), Description = "List of file IDs to be downloaded as ZIP.", Explode = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/zip", bodyType: typeof(byte[]), Description = "The ZIP file containing the requested files.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "downloads/package")]
         HttpRequest request,
         CancellationToken cancellationToken
     )
@@ -53,10 +53,10 @@ public class GetDownloadPackage : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadsScopeType>())
-            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequired())
-            from fileType in request.ValidateParameter("fileType", p => p.IsRequired().IsEnum<FileType>())
-            from downloadIds in request.ValidateParameter("downloadIds", p => p.IsRequiredMultiParameter())
+            from scope in request.ValidateQueryStringParameter("scope", p => p.IsRequired().IsEnum<DataDownloadsScopeType>())
+            from scopeIdentifier in request.ValidateQueryStringParameter("scopeId", p => p.IsRequired())
+            from fileType in request.ValidateQueryStringParameter("fileType", p => p.IsRequired().IsEnum<FileType>())
+            from downloadIds in request.ValidateQueryStringParameter("downloadIds", p => p.IsRequiredMultiParameter())
             from response in _useCase.HandleRequest(new GetDownloadPackageRequest(fileType, downloadIds, scope, scopeIdentifier))
             select response;
 

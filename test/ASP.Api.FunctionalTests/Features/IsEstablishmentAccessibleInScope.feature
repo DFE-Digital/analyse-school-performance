@@ -1,32 +1,21 @@
 ﻿Feature: IsEstablishmentAccessibleInScope
 
     Scenario: Should not accept POST method
-        When I send a POST request to /api/IsEstablishmentAccessibleInScope
+        When I send a POST request to /api/schools/100001/access
         Then I should get a 405 response
         And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
         And the response should include the header "Allow: GET"
 
-    Scenario: Should return BadRequest (400) response if urn parameter is missing
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope
-        Then I should get a 400 response
-        And the response should be the message "Bad request: The parameter "urn" is missing."
-
     Scenario: Should return BadRequest (400) response if urn parameter is empty
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=
-        Then I should get a 400 response
-        And the response should be the message "Bad request: The parameter "urn" should not be empty."
-
-    Scenario: Should return BadRequest (400) response if urn parameter is not digits
-        Given no Establishments exist
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=xyzxyz
-        Then I should get a 400 response
-        And the response should be the message "Bad request: The parameter "urn" must contain only digits."
+        When I send a GET request to /api/schools//access
+        Then I should get a 404 response
+        And the response should be the message "Not found: Function not found for path: /api/schools//access"
 
     Scenario Outline: Should return BadRequest (400) response if urn parameter is not 6 characters long
         Given no Establishments exist
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=<urn>
+        When I send a GET request to /api/schools/<urn>/access
         Then I should get a 400 response
-        And the response should be the message "Bad request: The parameter "urn" must be exactly 6 characters long."
+        And the response should be the message "Bad request: The route parameter "urn" must be exactly 6 characters long."
 
         Examples:
           | urn     |
@@ -40,20 +29,9 @@
           "name": "Test School 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100002&scope=All
+        When I send a GET request to /api/schools/100002/access
         Then I should get a 404 response
         And the response should be the message "Not found: School with URN "100002" does not exist."
-
-    Scenario: Return 400 response when "scope" parameter is missing in the request
-        Given Establishment "100001" exists:
-        """
-        { 
-          "name": "Test School 1"
-        }
-        """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001
-        Then I should get a 400 response
-        And the response should be the message "Bad request: The parameter "scope" is missing."
 
     Scenario: Return 400 response when "scope" parameter is missing and empty in the request
         Given Establishment "100001" exists:
@@ -62,9 +40,9 @@
           "name": "Test School 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=
+        When I send a GET request to /api/schools/100001/access?scope=
         Then I should get a 400 response
-        And the response should be the message "Bad request: The parameter "scope" should not be empty."
+        And the response should be the message "Bad request: The query parameter "scope" should not be empty."
 
     Scenario: Return 400 for invalid scope in IsEstablishmentAccessibleInScope API
         Given Establishment "100001" exists:
@@ -73,20 +51,20 @@
           "name": "Test School 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=xyz
+        When I send a GET request to /api/schools/100001/access?scope=xyz
         Then I should get a 400 response
         And the response should be the message "Bad request: "xyz" is not a valid scope."
 
-    Scenario: Return 400 response when "scopeIdentifier" parameter is missing in the request
+    Scenario: Return 400 response when "scopeId" parameter is missing in the request
         Given Establishment "100001" exists:
         """
         { 
           "name": "Test School 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=<Scope>
+        When I send a GET request to /api/schools/100001/access?scope=<Scope>
         Then I should get a 400 response
-        And the response should be the message "Bad request: The parameter "scopeIdentifier" is missing."
+        And the response should be the message "Bad request: The query parameter "scopeId" is missing."
 
     Examples:
       | Scope   |
@@ -104,7 +82,7 @@
           "name": "Test School 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=LA&scopeIdentifier=101
+        When I send a GET request to /api/schools/100001/access?scope=LA&scopeId=101
         Then I should get a 400 response
         And the response should be the message "Bad request: Local Authority with code "101" does not exist."
 
@@ -121,7 +99,7 @@
           "name": "Test LA 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=LA&scopeIdentifier=101
+        When I send a GET request to /api/schools/100001/access?scope=LA&scopeId=101
         Then I should get a 400 response
         And the response should be the message "Bad request: Local Authority with code "101" does not exist."
 
@@ -139,7 +117,7 @@
           "name": "Test LA 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=LA&scopeIdentifier=101
+        When I send a GET request to /api/schools/100001/access?scope=LA&scopeId=101
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """
@@ -166,7 +144,7 @@
           "name": "Test LA 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=LA&scopeIdentifier=101
+        When I send a GET request to /api/schools/100001/access?scope=LA&scopeId=101
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """
@@ -220,7 +198,7 @@
           "name": "Test LA 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=LA&scopeIdentifier=101
+        When I send a GET request to /api/schools/100001/access?scope=LA&scopeId=101
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """
@@ -240,7 +218,7 @@
           "name": "Test School 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=MAT&scopeIdentifier=1001
+        When I send a GET request to /api/schools/100001/access?scope=MAT&scopeId=1001
         Then I should get a 400 response
         And the response should be the message "Bad request: Multi-Academy Trust with UID "1001" does not exist."
 
@@ -257,7 +235,7 @@
           "name": "Test MAT 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=MAT&scopeIdentifier=1001
+        When I send a GET request to /api/schools/100001/access?scope=MAT&scopeId=1001
         Then I should get a 400 response
         And the response should be the message "Bad request: Multi-Academy Trust with UID "1001" does not exist."
 
@@ -275,7 +253,7 @@
           "name": "Test MAT 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=MAT&scopeIdentifier=1001
+        When I send a GET request to /api/schools/100001/access?scope=MAT&scopeId=1001
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """
@@ -303,7 +281,7 @@
           "name": "Test MAT 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=MAT&scopeIdentifier=1001
+        When I send a GET request to /api/schools/100001/access?scope=MAT&scopeId=1001
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """
@@ -357,7 +335,7 @@
           "name": "Test MAT 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=MAT&scopeIdentifier=1001
+        When I send a GET request to /api/schools/100001/access?scope=MAT&scopeId=1001
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """
@@ -378,7 +356,7 @@
           "diocese": { "name": "XYZ" }
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=Diocese&scopeIdentifier=Test%20Diocese%201
+        When I send a GET request to /api/schools/100001/access?scope=Diocese&scopeId=Test%20Diocese%201
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """
@@ -399,7 +377,7 @@
           "diocese": { "name": "Test Diocese 1" }
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=Diocese&scopeIdentifier=Test%20Diocese%201
+        When I send a GET request to /api/schools/100001/access?scope=Diocese&scopeId=Test%20Diocese%201
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """
@@ -451,7 +429,7 @@
           ]
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=Diocese&scopeIdentifier=Test%20Diocese%201
+        When I send a GET request to /api/schools/100001/access?scope=Diocese&scopeId=Test%20Diocese%201
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """
@@ -471,7 +449,7 @@
           "name": "Test School 1"
         }
         """
-        When I send a GET request to /api/IsEstablishmentAccessibleInScope?urn=100001&scope=All
+        When I send a GET request to /api/schools/100001/access
         Then I should get a 200 response
         And the response should be an object containing these properties:
         """

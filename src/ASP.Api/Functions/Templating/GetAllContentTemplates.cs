@@ -38,7 +38,7 @@ public class GetAllContentTemplates : ApiFunction
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "content-templates")]
         HttpRequest request,
         CancellationToken cancellationToken
     )

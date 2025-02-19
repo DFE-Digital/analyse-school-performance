@@ -12,8 +12,6 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
     public sealed partial class AspApiStepDefinitions
     {
         private const string HTTP_METHOD = @"(GET|POST|DELETE)";
-        private const string API_ENDPOINT = @"(/api/[^\?]+)";
-        private const string QUERY_STRING = @"\?(.+)"; // to match the entire query string including spaces.
         private const string STATUS_CODE = @"(\d+)";
         private const string RESPONSE_MESSAGE = @"""(.+)""";
         private const string HTTP_HEADER = @"""([^:""]+): ([^:""]+)""";
@@ -27,46 +25,23 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
             _output = output;
         }
 
-        [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}")]
-        public async Task WhenISendARequest(string method, string function)
+        [When($@"I send a {HTTP_METHOD} request to (/api/[^\s]+)")]
+        public async Task WhenISendARequest(string method, string path)
         {
             var request = new HttpRequestMessage { 
                 Method = HttpMethod.Parse(method), 
-                RequestUri = new Uri($"https://localhost{function}") 
+                RequestUri = new Uri($"https://localhost{path}") 
             };
 
             await _api.Run(request);
         }
 
-        [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING}")]
-        public async Task WhenISendARequest(string method, string function, string queryString)
+        [When($@"I send a {HTTP_METHOD} request to (/api/[^\s]+) with content:")]
+        public async Task WhenISendARequestWithContent(string method, string path, string content)
         {
             var request = new HttpRequestMessage { 
                 Method = HttpMethod.Parse(method), 
-                RequestUri = new Uri($"https://localhost{function}?{queryString}") 
-            };
-
-            await _api.Run(request);
-        }
-
-        [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT} with content:")]
-        public async Task WhenISendARequestWithContent(string method, string function, string content)
-        {
-            var request = new HttpRequestMessage { 
-                Method = HttpMethod.Parse(method), 
-                RequestUri = new Uri($"https://localhost{function}"),
-                Content = new StringContent(content)
-            };
-
-            await _api.Run(request);
-        }
-
-        [When($@"I send a {HTTP_METHOD} request to {API_ENDPOINT}{QUERY_STRING} with content:")]
-        public async Task WhenISendARequestWithContent(string method, string function, string queryString, string content)
-        {
-            var request = new HttpRequestMessage {
-                Method = HttpMethod.Parse(method),
-                RequestUri = new Uri($"https://localhost{function}?{queryString}"),
+                RequestUri = new Uri($"https://localhost{path}"),
                 Content = new StringContent(content)
             };
 

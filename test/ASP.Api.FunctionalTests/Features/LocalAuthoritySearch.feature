@@ -1,25 +1,25 @@
 ﻿Feature: Local Authority Search
 
 	Scenario: Should not accept POST method
-		When I send a POST request to /api/LocalAuthoritySearch
+		When I send a POST request to /api/local-authorities/search
 		Then I should get a 405 response
 		And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
 		And the response should include the header "Allow: GET"
 
 	Scenario: Should return BadRequest (400) response if searchTerm parameter is missing
-		When I send a GET request to /api/LocalAuthoritySearch
+		When I send a GET request to /api/local-authorities/search
 		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "searchTerm" is missing."
+		And the response should be the message "Bad request: The query parameter "searchTerm" is missing."
 
 	Scenario: Should return BadRequest (400) response if searchTerm parameter is empty string
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=
+		When I send a GET request to /api/local-authorities/search?searchTerm=
 		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "searchTerm" should not be empty."
+		And the response should be the message "Bad request: The query parameter "searchTerm" should not be empty."
 
 	Scenario Outline: Should return BadRequest (400) response if page parameter is not a whole number greater than 1
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=x&page=<page>
+		When I send a GET request to /api/local-authorities/search?searchTerm=x&page=<page>
 		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "page" should be a whole number greater than or equal to 1."
+		And the response should be the message "Bad request: The query parameter "page" should be a whole number greater than or equal to 1."
 
 		Examples:
 			| page |
@@ -29,9 +29,9 @@
 			| -1   |
 
 	Scenario Outline: Should return BadRequest (400) response if resultsPerPage parameter is not a whole number greater than or equal to 1
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=x&resultsPerPage=<resultsPerPage>
+		When I send a GET request to /api/local-authorities/search?searchTerm=x&resultsPerPage=<resultsPerPage>
 		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "resultsPerPage" should be a whole number greater than or equal to 1."
+		And the response should be the message "Bad request: The query parameter "resultsPerPage" should be a whole number greater than or equal to 1."
 
 		Examples:
 			| resultsPerPage |
@@ -42,7 +42,7 @@
 
 	Scenario: Should return NotFound (404) response if no Local Authorities exist
 		Given no Local Authorities exist
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=x
+		When I send a GET request to /api/local-authorities/search?searchTerm=x
 		Then I should get a 404 response
 		And the response should be the message "Not found: there were no matches for "x"."
 
@@ -53,7 +53,7 @@
 			"name": "Some Local Authority"
 		}
 		"""
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=test
+		When I send a GET request to /api/local-authorities/search?searchTerm=test
 		Then I should get a 404 response
 		And the response should be the message "Not found: there were no matches for "test"."
 
@@ -64,7 +64,7 @@
 			"name": "Some Local Authority"
 		}
 		"""
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=<searchTerm>
+		When I send a GET request to /api/local-authorities/search?searchTerm=<searchTerm>
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -107,7 +107,7 @@
 			"name": "Local Authority C"
 		}
 		"""
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=local
+		When I send a GET request to /api/local-authorities/search?searchTerm=local
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -140,7 +140,7 @@
 			"name": "Some Local Authority"
 		}
 		"""
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=111
+		When I send a GET request to /api/local-authorities/search?searchTerm=111
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -165,7 +165,7 @@
 			"name": "Some Local Authority"
 		}
 		"""
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=11
+		When I send a GET request to /api/local-authorities/search?searchTerm=11
 		Then I should get a 404 response
 		And the response should be the message "Not found: there were no matches for "11"."
 
@@ -191,7 +191,7 @@
 			"name": "Local Authority 333"
 		}
 		"""
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=local
+		When I send a GET request to /api/local-authorities/search?searchTerm=local
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -236,7 +236,7 @@
 			"name": "Local Authority 333"
 		}
 		"""
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=local&resultsPerPage=2
+		When I send a GET request to /api/local-authorities/search?searchTerm=local&resultsPerPage=2
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -277,7 +277,7 @@
 			"name": "Local Authority 333"
 		}
 		"""
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=local&resultsPerPage=2&page=2
+		When I send a GET request to /api/local-authorities/search?searchTerm=local&resultsPerPage=2&page=2
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -314,7 +314,7 @@
 			"name": "Local Authority 333"
 		}
 		"""
-		When I send a GET request to /api/LocalAuthoritySearch?searchTerm=local&resultsPerPage=2&page=3
+		When I send a GET request to /api/local-authorities/search?searchTerm=local&resultsPerPage=2&page=3
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""

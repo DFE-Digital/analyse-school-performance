@@ -1,6 +1,7 @@
 ﻿using ASP.Domain.LocalAuthorities;
 using ASP.Domain.MultiAcademyTrusts;
 using ASP.Core.Results;
+using ASP.Core.Optionality;
 
 namespace ASP.Domain.Establishments;
 
@@ -74,6 +75,13 @@ public class EstablishmentScope
             }
 
             return new EstablishmentScope(scopeType, "");
+        }
+
+        public Task<Result<EstablishmentScope>> ValidateScope(Optional<EstablishmentScopeInfo> scope)
+        {
+            return scope.Match(
+                s => ValidateScope(s.ScopeType, s.ScopeId),
+                () => ValidateScope(EstablishmentScopeType.All, ""));
         }
     }
 }

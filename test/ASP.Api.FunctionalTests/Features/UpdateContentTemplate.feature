@@ -1,58 +1,37 @@
 ﻿Feature: UpdateContentTemplate
 
-Scenario: Should not accept GET method 
+
+Scenario: Should return NotFound (404) response if id parameter is missing
 	Given no Content Templates exist
-	When I send a GET request to /api/UpdateContentTemplate?id=test-content
-	Then I should get a 405 response
-	And the response should be the message "Method not allowed: The HTTP method GET is not allowed."
-	And the response should include the header "Allow: POST"
-
-
-Scenario: Should return BadRequest (400) response if id parameter is missing 
-	Given no Content Templates exist
-	When I send a POST request to /api/UpdateContentTemplate
-	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "id" is missing."
-
-
-Scenario: Should return BadRequest (400) response if id parameter is duplicated
-	Given no Content Templates exist
-	When I send a POST request to /api/UpdateContentTemplate?id=x&id=y
-	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "id" is duplicated."
-
-
-Scenario: Should return BadRequest (400) response if id parameter is empty string 
-	Given no Content Templates exist
-	When I send a POST request to /api/UpdateContentTemplate?id=
-	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "id" should not be empty."
+	When I send a POST request to /api/content-templates//
+	Then I should get a 404 response
+	And the response should be the message "Not found: Function not found for path: /api/content-templates//"
 
 
 Scenario: Should return BadRequest (400) response if revision parameter is empty string 
 	Given no Content Templates exist
-	When I send a POST request to /api/UpdateContentTemplate?id=xyz&revision=
+	When I send a POST request to /api/content-templates/xyz?revision=
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "revision" should not be empty."
+	And the response should be the message "Bad request: The query parameter "revision" should not be empty."
 
 
 Scenario: Should return BadRequest (400) response if revision parameter is duplicated
 	Given no Content Templates exist
-	When I send a POST request to /api/UpdateContentTemplate?id=xyz&revision=1&revision=2
+	When I send a POST request to /api/content-templates/xyz?revision=1&revision=2
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "revision" is duplicated."
+	And the response should be the message "Bad request: The query parameter "revision" is duplicated."
 
 
 Scenario: Should return BadRequest (400) response if request body is missing 
 	Given no Content Templates exist
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content
+	When I send a POST request to /api/content-templates/test-content
 	Then I should get a 400 response
 	And the response should be the message "Bad request: The request body is missing."
 
 
 Scenario: Should return BadRequest (400) response if request body is not an object 
 	Given no Content Templates exist
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content with content:
+	When I send a POST request to /api/content-templates/test-content with content:
 	"""
 	Hello
 	"""
@@ -67,7 +46,7 @@ Scenario: Should return NotFound (404) when updating a revision of a Content Tem
 		"PageTitle": "Test title"
 	}
 	"""
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content&revision=revision1 with content:
+	When I send a POST request to /api/content-templates/test-content?revision=revision1 with content:
 	"""
 	{
 		"PageTitle": "Updated test title"
@@ -84,7 +63,7 @@ Scenario: Should return Forbidden (403) when updating a published Content Templa
 		"PageTitle": "Test title"
 	}
 	"""
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content with content:
+	When I send a POST request to /api/content-templates/test-content with content:
 	"""
 	{
 		"PageTitle": "Updated title",
@@ -107,7 +86,7 @@ Scenario: Should return Forbidden (403) when updating a published revision
 		"PageTitle": "Test title (revised)"
 	}
 	"""
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content&revision=revision1 with content:
+	When I send a POST request to /api/content-templates/test-content?revision=revision1 with content:
 	"""
 	{
 		"PageTitle": "Updated title",
@@ -119,7 +98,7 @@ Scenario: Should return Forbidden (403) when updating a published revision
 
 Scenario: Should create unpublished Content Template if it doesn't exist 
 	Given no Content Templates exist
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content with content:
+	When I send a POST request to /api/content-templates/test-content with content:
 	"""
 	{
 		"PageTitle": "Test title",
@@ -142,7 +121,7 @@ Scenario: Should create revision if it doesn't exist
 		"PageTitle": "Test title"
 	}
 	"""
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content&revision=revision1 with content:
+	When I send a POST request to /api/content-templates/test-content?revision=revision1 with content:
 	"""
 	{
 		"PageTitle": "Updated test title"
@@ -172,7 +151,7 @@ Scenario: Should update unpublished Content Template
 		"PageTitle": "Test title"
 	}
 	"""
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content with content:
+	When I send a POST request to /api/content-templates/test-content with content:
 	"""
 	{
 		"PageTitle": "Updated title",
@@ -195,7 +174,7 @@ Scenario: Should update unpublished Content Template using revision parameter
 		"PageTitle": "Test title"
 	}
 	"""
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content&revision=test-content with content:
+	When I send a POST request to /api/content-templates/test-content?revision=test-content with content:
 	"""
 	{
 		"PageTitle": "Updated test title"
@@ -224,7 +203,7 @@ Scenario: Should update unpublished revision
 		"PageTitle": "Test title (revised)"
 	}
 	"""
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content&revision=revision1 with content:
+	When I send a POST request to /api/content-templates/test-content?revision=revision1 with content:
 	"""
 	{
 		"PageTitle": "Updated test title (revised)"
@@ -259,7 +238,7 @@ Scenario: Should ignore isPublished property when updating
 		"PageTitle": "Test title (revised)"
 	}
 	"""
-	When I send a POST request to /api/UpdateContentTemplate?id=test-content&revision=revision1 with content:
+	When I send a POST request to /api/content-templates/test-content?revision=revision1 with content:
 	"""
 	{
 		"isPublished": true,

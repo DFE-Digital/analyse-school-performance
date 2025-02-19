@@ -7,26 +7,28 @@ public class IsEstablishmentAccessibleInScope : IIsEstablishmentAccessibleInScop
     private readonly IEstablishmentRepository _repository;
     private readonly IEstablishmentScopeValidator _scopeValidator;
 
-    public IsEstablishmentAccessibleInScope(IEstablishmentRepository pageContentRepository,
+    public IsEstablishmentAccessibleInScope(
+        IEstablishmentRepository pageContentRepository,
         IEstablishmentScopeValidator scopeValidator)
     {
-        _repository = pageContentRepository ??
-                      throw new ArgumentNullException(nameof(pageContentRepository));
-        _scopeValidator = scopeValidator ?? throw new ArgumentNullException(nameof(scopeValidator));
+        _repository = pageContentRepository 
+            ?? throw new ArgumentNullException(nameof(pageContentRepository));
+        _scopeValidator = scopeValidator 
+            ?? throw new ArgumentNullException(nameof(scopeValidator));
     }
 
     public Task<Result<IsEstablishmentAccessibleInScopeResponse>> HandleRequest(
         IsEstablishmentAccessibleInScopeRequest request)
     {
-        var scopeIdentifier = request.ScopeIdentifier.GetValueOrDefault("");
-
         return
-            from scope in _scopeValidator.ValidateScope(request.ScopeType, scopeIdentifier)
-            from isAccessible in _repository.IsEstablishmentVisibleWithinScope(request.Urn,
-                new EstablishmentScope(request.ScopeType, scopeIdentifier))
+            from scope in _scopeValidator.ValidateScope(request.Scope)
+            from isAccessible in _repository.IsEstablishmentVisibleWithinScope(request.Urn, scope)
             from linkedEstablishments in _repository.GetLinkedEstablishments(request.Urn)
-            select new IsEstablishmentAccessibleInScopeResponse(request.Urn, request.ScopeType.ToString(),
-                scopeIdentifier, isAccessible,
+            select new IsEstablishmentAccessibleInScopeResponse(
+                request.Urn, 
+                request.Scope.Map(s => s.ScopeType).GetValueOrDefault(EstablishmentScopeType.All).ToString(),
+                request.Scope.Map(s => s.ScopeId).GetValueOrDefault(""), 
+                isAccessible,
                 new EstablishmentAccess(linkedEstablishments).IsAccessibleViaLinkedSchools(scope));
     }
 }

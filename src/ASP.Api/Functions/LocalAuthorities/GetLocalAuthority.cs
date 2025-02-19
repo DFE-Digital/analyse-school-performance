@@ -34,13 +34,13 @@ public class GetLocalAuthority : ApiFunction
 
     [Function("GetLocalAuthority")]
     [OpenApiOperation(operationId: "GetLocalAuthority", tags: ["Local Authorities"], Description = "Retrieves details for a specific local authority based on the provided code.")]
-    [OpenApiParameter(name: "code", In = ParameterLocation.Query, Required = true, Description = "The local authority code (3 digits).")]
+    [OpenApiParameter(name: "code", In = ParameterLocation.Path, Required = true, Description = "The local authority code (3 digits).")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.LookupValueWithCode), Description = "Details of the local authority for the specified code.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid local authority code parameter.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No local authority found for the specified code.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "local-authorities/{code:int}")]
         HttpRequest request,
         CancellationToken cancellationToken)
     {
@@ -48,7 +48,7 @@ public class GetLocalAuthority : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from laCode in request.ValidateParameter("code", p => p.IsRequired().IsDigits().HasLength(3))
+            from laCode in request.ValidateRouteParameter("code", p => p.IsRequired().IsDigits().HasLength(3))
             from response in _useCase.HandleRequest(new GetLocalAuthorityRequest(laCode))
             select response.ForApiClient();
 

@@ -34,14 +34,14 @@ public class GetEstablishmentDetails : ApiFunction
 
     [Function("GetEstablishmentDetails")]
     [OpenApiOperation(operationId: "GetEstablishmentDetails", tags: ["Establishments"], Description = "Retrieves details for a specific establishment based on URN.")]
-    [OpenApiParameter(name: "urn", In = ParameterLocation.Query, Required = true, Description = "The URN of the establishment.")]
+    [OpenApiParameter(name: "urn", In = ParameterLocation.Path, Required = true, Description = "The URN of the establishment.")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.Establishments.EstablishmentDetails), Description = "Details of the establishment for the specified URN.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid URN parameter.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No establishment found for the specified URN.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
-          HttpRequest request,
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "schools/{urn:int}")]
+        HttpRequest request,
         CancellationToken cancellationToken
     )
     {
@@ -49,7 +49,7 @@ public class GetEstablishmentDetails : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from urn in request.ValidateParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
+            from urn in request.ValidateRouteParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
             from response in _useCase.HandleRequest(new GetEstablishmentDetailsRequest(urn))
             select response.ForApiClient();
 

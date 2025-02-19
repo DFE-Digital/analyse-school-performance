@@ -215,7 +215,7 @@ Scenario: My local authority page should display server error page if user's LA 
 	Then I should get a 500 response
 	And the page title should be "Sorry, there is a problem with the service"
 	And the element "h1.govuk-heading-l" should have the text content "Sorry, there is a problem with the service"
-	And the element "*[data-testid='error-display-message']" should have the text content "Error message: API error: /api/GetLocalAuthority Could not find Local Authority with code "302"."
+	And the element "*[data-testid='error-display-message']" should have the text content "Error message: API error: /api/local-authorities/302 Could not find Local Authority with code "302"."
 		
 @Javascript:disabled
 Scenario: My local authority page should be accessible if user's LA exists

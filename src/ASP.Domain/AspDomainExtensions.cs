@@ -17,7 +17,7 @@ using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearchSuggestions;
 using ASP.Domain.MultiAcademyTrusts.UseCases.GetMultiAcademyTrust;
 using ASP.Domain.Templating.UseCases.GetAllContentTemplates;
 using ASP.Domain.Templating.UseCases.UpdateContentTemplate;
-using ASP.Domain.Templating.UseCases.ViewContentTemplate;
+using ASP.Domain.Templating.UseCases.GetContentTemplate;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -29,7 +29,7 @@ public static class AspDomainExtensions
     public static IServiceCollection ConfigureContentTemplates(this IServiceCollection services)
     {
         services.AddScoped<IUpdateContentTemplate, UpdateContentTemplate>();
-        services.AddScoped<IViewContentTemplate, ViewContentTemplate>();
+        services.AddScoped<IGetContentTemplate, GetContentTemplate>();
         services.AddScoped<IGetAllContentTemplates, GetAllContentTemplates>();
 
         return services;

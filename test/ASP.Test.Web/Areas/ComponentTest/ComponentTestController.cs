@@ -42,7 +42,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         public new Task<IActionResult> View()
         {
             var model =
-                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
+                from template in _api.GetContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
                 select ContentTemplateViewModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, template);
 
             return model
@@ -53,7 +53,7 @@ namespace ASP.Test.Web.Areas.ComponentTest
         public Task<IActionResult> Edit()
         {
             var model =
-                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
+                from template in _api.GetContentTemplate(new ViewContentTemplateRequest(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID))
                 select ContentTemplateEditModel.FromTemplate(TEST_COMPONENT_TEMPLATE_ID, TEST_COMPONENT_TEMPLATE_ID, template, _editModelFactory);
 
             return model

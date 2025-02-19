@@ -23,10 +23,9 @@ public class EstablishmentSearchSuggestions : IEstablishmentSearchSuggestions
     )
     {
         var maxSuggestions = request.MaxSuggestions.GetValueOrDefault(Core.Constants.SearchResultMaxSuggestions);
-        var scopeIdentifier = request.ScopeIdentifier.GetValueOrDefault("");
 
         return
-            from scope in _scopeValidator.ValidateScope(request.ScopeType, scopeIdentifier)
+            from scope in _scopeValidator.ValidateScope(request.Scope)
             from response in _searchService.Search(request.SearchTerm, scope, maxSuggestions)
             select response;
     }

@@ -1,33 +1,23 @@
 ﻿Feature: GetLinkedEstablishments
 
   Scenario: Should not accept POST method
-    When I send a POST request to /api/GetLinkedEstablishments
+    When I send a POST request to /api/schools/100001/linked-schools
     Then I should get a 405 response
     And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
     And the response should include the header "Allow: GET"
 
-  Scenario: Should return BadRequest (400) response if urn parameter is missing
-    When I send a GET request to /api/GetLinkedEstablishments
-    Then I should get a 400 response 
-    And the response should be the message "Bad request: The parameter "urn" is missing."
-
   Scenario: Should return BadRequest (400) response if urn parameter is empty
-    When I send a GET request to /api/GetLinkedEstablishments?urn=
-    Then I should get a 400 response 
-    And the response should be the message "Bad request: The parameter "urn" should not be empty."
-
-  Scenario: Should return BadRequest (400) response if urn parameter is not digits
-    Given no Establishments exist
-    When I send a GET request to /api/GetLinkedEstablishments?urn=xyzxyz
-    Then I should get a 400 response
-    And the response should be the message "Bad request: The parameter "urn" must contain only digits."
+    When I send a GET request to /api/schools//linked-schools
+    Then I should get a 404 response 
+    And the response should be the message "Not found: Function not found for path: /api/schools//linked-schools"
 
   Scenario Outline: Should return BadRequest (400) response if urn parameter is not 6 characters long
     Given no Establishments exist
-    When I send a GET request to /api/GetLinkedEstablishments?urn=<urn>
+    When I send a GET request to /api/schools/<urn>/linked-schools
     Then I should get a 400 response
-    And the response should be the message "Bad request: The parameter "urn" must be exactly 6 characters long."
-    Examples:
+    And the response should be the message "Bad request: The route parameter "urn" must be exactly 6 characters long."
+
+  Examples:
       | urn     |
       | 12345   |
       | 1234567 |
@@ -39,7 +29,7 @@
       "name": "Test School 1"
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100002
+    When I send a GET request to /api/schools/100002/linked-schools
     Then I should get a 404 response 
     And the response should be the message "Not found: Could not find Establishment with URN "100002"."
 
@@ -50,7 +40,7 @@
       "name": "Test School 1"
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100001
+    When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
@@ -74,7 +64,7 @@
       ]
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100001
+    When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
@@ -104,7 +94,7 @@
       "name": "Test School 2"
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100001
+    When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
@@ -134,7 +124,7 @@
       "name": "Test School 2"
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100001
+    When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
@@ -174,7 +164,7 @@
       "name": "Test School 3"
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100001
+    When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
@@ -232,7 +222,7 @@
       "name": "Test School 2"
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100001
+    When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
@@ -341,7 +331,7 @@
       "name": "Test School 4"
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100001
+    When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
@@ -445,7 +435,7 @@
       "name": "Test School 3"
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100001
+    When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
@@ -521,7 +511,7 @@
       "name": "Test School 3"
     }
     """
-    When I send a GET request to /api/GetLinkedEstablishments?urn=100001
+    When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """

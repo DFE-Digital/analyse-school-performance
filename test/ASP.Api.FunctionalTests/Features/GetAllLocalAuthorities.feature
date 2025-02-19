@@ -1,15 +1,15 @@
 ﻿Feature: GetAllLocalAuthorities
 
 	Scenario: Should not accept POST method
-		When I send a POST request to /api/GetAllLocalAuthorities
+		When I send a POST request to /api/local-authorities
 		Then I should get a 405 response
 		And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
 		And the response should include the header "Allow: GET"
 
 	Scenario Outline: Should return BadRequest (400) response if page parameter is not a whole number greater than or equal to 1
-		When I send a GET request to /api/GetAllLocalAuthorities?&page=<page>
+		When I send a GET request to /api/local-authorities?&page=<page>
 		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "page" should be a whole number greater than or equal to 1."
+		And the response should be the message "Bad request: The query parameter "page" should be a whole number greater than or equal to 1."
 
 		Examples:
 			| page |
@@ -25,7 +25,7 @@
 			"name": "Some Local Authority"
 		}
 		"""
-		When I send a GET request to /api/GetAllLocalAuthorities?page=1
+		When I send a GET request to /api/local-authorities?page=1
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -43,9 +43,9 @@
 		"""
 
 	Scenario Outline: Should return BadRequest (400) response if resultsPerPage parameter is not a whole number greater than or equal to 1
-		When I send a GET request to /api/GetAllLocalAuthorities?resultsPerPage=<resultsPerPage>
+		When I send a GET request to /api/local-authorities?resultsPerPage=<resultsPerPage>
 		Then I should get a 400 response
-		And the response should be the message "Bad request: The parameter "resultsPerPage" should be a whole number greater than or equal to 1."
+		And the response should be the message "Bad request: The query parameter "resultsPerPage" should be a whole number greater than or equal to 1."
 
 		Examples:
 			| resultsPerPage |
@@ -61,7 +61,7 @@
 			"name": "Some Local Authority"
 		}
 		"""
-		When I send a GET request to /api/GetAllLocalAuthorities?resultsPerPage=1
+		When I send a GET request to /api/local-authorities?resultsPerPage=1
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -79,7 +79,7 @@
 		"""
 	Scenario Outline: Should return NotFound (404) response if there were no Local Authorities
 		Given no Local Authorities exist
-		When I send a GET request to /api/GetAllLocalAuthorities
+		When I send a GET request to /api/local-authorities
 		Then I should get a 404 response
 		And the response should be the message "Not found: there were no Local Authorities." 
 		
@@ -90,7 +90,7 @@
 			"name": "Some Local Authority"
 		}
 		"""
-		When I send a GET request to /api/GetAllLocalAuthorities
+		When I send a GET request to /api/local-authorities
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -126,7 +126,7 @@
 			"name": "Test LA B"
 			}
 		"""
-		When I send a GET request to /api/GetAllLocalAuthorities
+		When I send a GET request to /api/local-authorities
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -170,7 +170,7 @@
 			"name": "Local Authority 333"
 			}
 		"""
-		When I send a GET request to /api/GetAllLocalAuthorities?resultsPerPage=2
+		When I send a GET request to /api/local-authorities?resultsPerPage=2
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -209,7 +209,7 @@
 			"name": "Local Authority 333"
 			}
 		"""
-		When I send a GET request to /api/GetAllLocalAuthorities?resultsPerPage=2&page=2
+		When I send a GET request to /api/local-authorities?resultsPerPage=2&page=2
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""
@@ -245,7 +245,7 @@
 			"name": "Local Authority 333"
 			}
 		"""
-		When I send a GET request to /api/GetAllLocalAuthorities?resultsPerPage=2&page=3
+		When I send a GET request to /api/local-authorities?resultsPerPage=2&page=3
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
 		"""

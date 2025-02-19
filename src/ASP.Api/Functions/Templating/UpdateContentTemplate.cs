@@ -35,7 +35,7 @@ public class UpdateContentTemplate : ApiFunction
 
     [Function("UpdateContentTemplate")]
     [OpenApiOperation(operationId: "UpdateContentTemplate", tags: ["Content Templates"], Description = "Updates a specific content template based on the provided ID.")]
-    [OpenApiParameter(name: "id", In = ParameterLocation.Query, Required = true, Description = "The unique identifier of the content template.")]
+    [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Description = "The unique identifier of the content template.")]
     [OpenApiParameter(name: "revision", In = ParameterLocation.Query, Required = false, Description = "The revision identifier of the content template.")]
     [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(ContentTemplate), Required = true, Description = "The content template details to update.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK, Description = "Updated content template details.")]
@@ -43,7 +43,7 @@ public class UpdateContentTemplate : ApiFunction
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Content template not found for the given ID and revision.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method GET is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", "get")]
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "content-templates/{id}")]
         HttpRequest request,
         CancellationToken cancellationToken
     )
@@ -52,8 +52,8 @@ public class UpdateContentTemplate : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Post])
-            from id in request.ValidateParameter("id", p => p.IsRequired())
-            from revision in request.ValidateParameter("revision", p => p.IsOptional())
+            from id in request.ValidateRouteParameter("id", p => p.IsRequired())
+            from revision in request.ValidateQueryStringParameter("revision", p => p.IsOptional())
             from contentTemplate in request.ValidateBodyAsync<ContentTemplate>()
             from response in _useCase.HandleRequest(new UpdateContentTemplateRequest(id, revision, contentTemplate))
             select response;

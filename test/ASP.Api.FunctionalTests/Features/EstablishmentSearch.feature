@@ -1,25 +1,25 @@
 Feature: Establishment Search
 
 Scenario: Should not accept POST method
-	When I send a POST request to /api/EstablishmentSearch
+	When I send a POST request to /api/schools/search
 	Then I should get a 405 response
 	And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
 	And the response should include the header "Allow: GET"
 
 Scenario: Should return BadRequest (400) response if searchTerm parameter is missing
-	When I send a GET request to /api/EstablishmentSearch?scope=All
+	When I send a GET request to /api/schools/search
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "searchTerm" is missing."
+	And the response should be the message "Bad request: The query parameter "searchTerm" is missing."
 
 Scenario: Should return BadRequest (400) response if searchTerm parameter is empty string
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=
+	When I send a GET request to /api/schools/search?searchTerm=
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "searchTerm" should not be empty."
+	And the response should be the message "Bad request: The query parameter "searchTerm" should not be empty."
 
 Scenario Outline: Should return BadRequest (400) response if page parameter is not a whole number greater than or equal to 1
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x&page=<page>
+	When I send a GET request to /api/schools/search?searchTerm=x&page=<page>
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "page" should be a whole number greater than or equal to 1."
+	And the response should be the message "Bad request: The query parameter "page" should be a whole number greater than or equal to 1."
 
 Examples:
 	| page |
@@ -29,9 +29,9 @@ Examples:
 	| -1   |
 
 Scenario Outline: Should return BadRequest (400) response if resultsPerPage parameter is not a whole number greater than 1
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x&resultsPerPage=<resultsPerPage>
+	When I send a GET request to /api/schools/search?searchTerm=x&resultsPerPage=<resultsPerPage>
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "resultsPerPage" should be a whole number greater than or equal to 1."
+	And the response should be the message "Bad request: The query parameter "resultsPerPage" should be a whole number greater than or equal to 1."
 
 Examples:
 	| resultsPerPage |
@@ -40,25 +40,20 @@ Examples:
 	| 0              |
 	| -1             |
 
-Scenario: Should return BadRequest (400) response if scope parameter is missing
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz
-	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scope" is missing."
-
 Scenario: Should return BadRequest (400) response if scope parameter is empty string
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=
+	When I send a GET request to /api/schools/search?searchTerm=xyz&scope=
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scope" should not be empty."
+	And the response should be the message "Bad request: The query parameter "scope" should not be empty."
 
 Scenario: Should return BadRequest (400) response if scope parameter is invalid
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=xyz
+	When I send a GET request to /api/schools/search?searchTerm=xyz&scope=xyz
 	Then I should get a 400 response
 	And the response should be the message "Bad request: "xyz" is not a valid scope."
 
-Scenario Outline: Should return BadRequest (400) response if scopeIdentifier parameter is missing
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=xyz&scope=<Scope>
+Scenario Outline: Should return BadRequest (400) response if scopeId parameter is missing
+	When I send a GET request to /api/schools/search?searchTerm=xyz&scope=<Scope>
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scopeIdentifier" is missing."
+	And the response should be the message "Bad request: The query parameter "scopeId" is missing."
 
 Examples:
 	| Scope   |
@@ -71,7 +66,7 @@ Examples:
 
 Scenario: Should return NotFound (404) response if no matches found for the searchTerm
 	Given no Establishments exist
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=x
+	When I send a GET request to /api/schools/search?searchTerm=x
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no matches for "x" within the given scope."
 
@@ -82,7 +77,7 @@ Scenario: Should return NotFound (404) response if there were no relevant matche
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=secondary
+	When I send a GET request to /api/schools/search?searchTerm=secondary
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no matches for "secondary" within the given scope."
 
@@ -93,7 +88,7 @@ Scenario: Should return a NotFound (404) response if the requested establishment
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=222222
+	When I send a GET request to /api/schools/search?searchTerm=222222
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no matches for "222222" within the given scope."
 
@@ -104,7 +99,7 @@ Scenario: Should return a NotFound (404) response if the requested establishment
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	When I send a GET request to /api/schools/search?searchTerm=111111
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no matches for "111111" within the given scope."
 
@@ -115,7 +110,7 @@ Scenario: Should not return 400 response if page = 1
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111&page=1
+	When I send a GET request to /api/schools/search?searchTerm=111111&page=1
 	Then I should get a 200 response
 
 Scenario: Should not return 400 response if resultsPerPage = 1
@@ -125,7 +120,7 @@ Scenario: Should not return 400 response if resultsPerPage = 1
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111&resultsPerPage=1
+	When I send a GET request to /api/schools/search?searchTerm=111111&resultsPerPage=1
 	Then I should get a 200 response
 
 Scenario Outline: Should return 200 response with search results when matches are found for the given searchTerm
@@ -135,7 +130,7 @@ Scenario Outline: Should return 200 response with search results when matches ar
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
+	When I send a GET request to /api/schools/search?searchTerm=<searchTerm>
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -170,7 +165,7 @@ Scenario Outline: Should return 200 response with search results when searchTerm
 			} 
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
+	When I send a GET request to /api/schools/search?searchTerm=<searchTerm>
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -235,7 +230,7 @@ Scenario: Should return 200 response with search results when searchTerm matchin
 			"name": "The Training Center"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=tr
+	When I send a GET request to /api/schools/search?searchTerm=tr
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -276,7 +271,7 @@ Scenario: Should return 200 response with search results when searchTerm matchin
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	When I send a GET request to /api/schools/search?searchTerm=111111
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -301,7 +296,7 @@ Scenario: Should return a NotFound (404) response if no relevant matches are fou
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=11
+	When I send a GET request to /api/schools/search?searchTerm=11
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no matches for "11" within the given scope."
 
@@ -323,7 +318,7 @@ Scenario: Should return 200 response with search results when searchTerm matches
 			} 
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=11
+	When I send a GET request to /api/schools/search?searchTerm=11
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -360,7 +355,7 @@ Scenario: Should return 200 response with search results when searchTerm is 6 di
 			} 
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	When I send a GET request to /api/schools/search?searchTerm=111111
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -386,12 +381,12 @@ Scenario Outline: Should return 200 response with search results when searchTerm
 			"laestab": "894/2200",
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
+	When I send a GET request to /api/schools/search?searchTerm=<searchTerm>
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
 		{
-			"SearchTerm": "<searchTerm>",
+			"SearchTerm": "<responseSearchTerm>",
 			"TotalResults": 1,
 			"ResultsPerPage": 50,
 			"Page": 1,
@@ -406,9 +401,9 @@ Scenario Outline: Should return 200 response with search results when searchTerm
 		"""
 
 Examples:
-	| searchTerm |
-	| 894/2200   |
-	| 8942200    |
+	| searchTerm | responseSearchTerm |
+	| 894%2F2200 | 894/2200           |
+	| 8942200    | 8942200            |
 
 Scenario: Should return 200 response with search results when searchTerm matches with LAESTAB 3 digit code partially
 	Given Establishment "111111" exists:
@@ -425,7 +420,7 @@ Scenario: Should return 200 response with search results when searchTerm matches
 			"name": "Some Other Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=894
+	When I send a GET request to /api/schools/search?searchTerm=894
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -465,7 +460,7 @@ Scenario: Should return 200 response with search results when searchTerm matches
 			"name": "Some Other Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=2200
+	When I send a GET request to /api/schools/search?searchTerm=2200
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -497,7 +492,7 @@ Scenario Outline: Should return NotFound (404) response if there were no relevan
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=<searchTerm>
+	When I send a GET request to /api/schools/search?searchTerm=<searchTerm>
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no matches for "<searchTerm>" within the given scope."
 
@@ -525,7 +520,7 @@ Scenario: Should return 200 response with search results when searchTerm matchin
 			}
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=8942200
+	When I send a GET request to /api/schools/search?searchTerm=8942200
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -563,7 +558,7 @@ Scenario: Should return 200 response with search results when searchTerm matchin
 			}  
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=894/2200
+	When I send a GET request to /api/schools/search?searchTerm=894%2F2200
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -601,7 +596,7 @@ Scenario: Should return 200 response with search results when searchTerm matchin
 			}  
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=894
+	When I send a GET request to /api/schools/search?searchTerm=894
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -639,7 +634,7 @@ Scenario: Should return 200 response with search results when searchTerm matchin
 			}  
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=2200
+	When I send a GET request to /api/schools/search?searchTerm=2200
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -677,7 +672,7 @@ Scenario: Should return a 200 response with search results and expected paginati
 			"name": "Primary School 333333"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary
+	When I send a GET request to /api/schools/search?searchTerm=primary
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -722,7 +717,7 @@ Scenario: Should return a 200 response with search results and expected paginati
 			"name": "Primary School 333333"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary&resultsPerPage=2
+	When I send a GET request to /api/schools/search?searchTerm=primary&resultsPerPage=2
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -763,7 +758,7 @@ Scenario: Should return a 200 response with search results and expected paginati
 			"name": "Primary School 333333"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary&resultsPerPage=2&page=2
+	When I send a GET request to /api/schools/search?searchTerm=primary&resultsPerPage=2&page=2
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -800,7 +795,7 @@ Scenario: Should return a 200 response with expected pagination and no results f
 			"name": "Primary School 333333"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=primary&resultsPerPage=2&page=3
+	When I send a GET request to /api/schools/search?searchTerm=primary&resultsPerPage=2&page=3
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -826,7 +821,7 @@ Scenario: Should return a 200 response with search results and a computed addres
 			} 
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	When I send a GET request to /api/schools/search?searchTerm=111111
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -856,7 +851,7 @@ Scenario: Should return a 200 response with search results and a computed addres
 			} 
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	When I send a GET request to /api/schools/search?searchTerm=111111
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -886,7 +881,7 @@ Scenario: Should return a 200 response with search results and a computed addres
 			} 
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	When I send a GET request to /api/schools/search?searchTerm=111111
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -915,7 +910,7 @@ Scenario: Should return a 200 response with search results and a computed educat
 			"isSecondary": false
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	When I send a GET request to /api/schools/search?searchTerm=111111
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -944,7 +939,7 @@ Scenario: Should return a 200 response with search results and a computed educat
 			"isSecondary": true
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	When I send a GET request to /api/schools/search?searchTerm=111111
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -973,7 +968,7 @@ Scenario: Should return a 200 response with search results and a computed educat
 			"isSecondary": false
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?scope=All&searchTerm=111111
+	When I send a GET request to /api/schools/search?searchTerm=111111
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -993,7 +988,7 @@ Scenario: Should return a 200 response with search results and a computed educat
 		"""
 
 Scenario: Should return BadRequest (400) response if Local Authority with code does not exist
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/schools/search?searchTerm=Test&scope=LA&scopeId=100
 	Then I should get a 400 response
 	And the response should be the message "Bad request: Local Authority with code "100" does not exist."
 
@@ -1013,7 +1008,7 @@ Scenario: Should return NotFound (404) response if Local Authority with code doe
 				}
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/schools/search?searchTerm=Test&scope=LA&scopeId=100
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no matches for "Test" within the given scope."
 
@@ -1051,7 +1046,7 @@ Scenario: Should return 200 response if Local Authority with code exist within t
 			 }
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/schools/search?searchTerm=Test&scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -1076,7 +1071,7 @@ Scenario: Should return 200 response if Local Authority with code exist within t
 		"""
 	 
 Scenario: Should return BadRequest (400) response if Multi Academy Trust with id does not exist
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=MAT&scopeIdentifier=1234
+	When I send a GET request to /api/schools/search?searchTerm=Test&scope=MAT&scopeId=1234
 	Then I should get a 400 response
 	And the response should be the message "Bad request: Multi-Academy Trust with UID "1234" does not exist."
 			 
@@ -1093,7 +1088,7 @@ Scenario: Should return NotFound (404) response if Multi Academy Trust with id d
 			"name": "Test School 1"
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=MAT&scopeIdentifier=1234
+	When I send a GET request to /api/schools/search?searchTerm=Test&scope=MAT&scopeId=1234
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no matches for "Test" within the given scope."
 		
@@ -1129,7 +1124,7 @@ Scenario: Should return 200 response if Multi Academy Trust with id exist within
 			 }
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=MAT&scopeIdentifier=1234
+	When I send a GET request to /api/schools/search?searchTerm=Test&scope=MAT&scopeId=1234
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -1178,7 +1173,7 @@ Scenario: Should return NotFound (404) response if there are no matches for Dioc
 		}
 		"""
 		
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=Diocese&scopeIdentifier=Test Diocese
+	When I send a GET request to /api/schools/search?searchTerm=Test&scope=Diocese&scopeId=Test%20Diocese
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no matches for "Test" within the given scope."
 		
@@ -1213,7 +1208,7 @@ Scenario: Should return 200 response if there are matches for the search within 
 			 }
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=Diocese&scopeIdentifier=Test Diocese
+	When I send a GET request to /api/schools/search?searchTerm=Test&scope=Diocese&scopeId=Test%20Diocese
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -1275,7 +1270,7 @@ Scenario: Should return 200 response if there are matches for the search within 
 			 }
 		}
 		"""
-	When I send a GET request to /api/EstablishmentSearch?searchTerm=Test&scope=All
+	When I send a GET request to /api/schools/search?searchTerm=Test
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""

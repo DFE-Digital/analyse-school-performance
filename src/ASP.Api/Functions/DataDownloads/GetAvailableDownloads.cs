@@ -35,14 +35,15 @@ public class GetAvailableDownloads : ApiFunction
 
     [Function("GetAvailableDownloads")]
     [OpenApiOperation(operationId: "GetAvailableDownloads", tags: ["Downloads"], Description = "Retrieves available downloads for specific local authority based on the code.")]
-    [OpenApiParameter(name: "code", In = ParameterLocation.Query, Required = true, Description = "The local authority code (3 digits).")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the available downloads, e.g., `School` or `LA`.")]
+    [OpenApiParameter(name: "scopeId", In = ParameterLocation.Query, Required = true, Description = "An identifier for the selected scope, either a school URN or LA code")]
     [OpenApiParameter(name: "year", In = ParameterLocation.Query, Required = false, Description = "The requested year for downloads.")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(GetAvailableDownloadsResponse), Description = "Available local authority downloads for the specified code and year.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid parameters provided.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No available downloads for the specified code.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "downloads")]
         HttpRequest request,
         CancellationToken cancellationToken
     )
@@ -51,9 +52,9 @@ public class GetAvailableDownloads : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<DataDownloadsScopeType>())
-            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequired())
-            from year in request.ValidateParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
+            from scope in request.ValidateQueryStringParameter("scope", p => p.IsRequired().IsEnum<DataDownloadsScopeType>())
+            from scopeIdentifier in request.ValidateQueryStringParameter("scopeId", p => p.IsRequired())
+            from year in request.ValidateQueryStringParameter("year", p => p.IsOptional().HasLength(4).IsNumeric())
             from response in _useCase.HandleRequest(new GetAvailableDownloadsRequest(scope, scopeIdentifier, year))
             select response.ForApiClient();
 

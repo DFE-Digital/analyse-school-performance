@@ -35,7 +35,7 @@ namespace ASP.Web.Areas.School
         protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentId, string? revision)
         {
             return (
-                from template in _api.ViewContentTemplate(new ViewContentTemplateRequest(contentId, revision))
+                from template in _api.GetContentTemplate(new ViewContentTemplateRequest(contentId, revision))
                 select ContentTemplateViewModel.FromTemplate(contentId, revision, template)
             ).DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel());
         }

@@ -31,9 +31,16 @@ public static class HttpRequestValidationExtensions
         }
     }
 
-    public static Result<T> ValidateParameter<T>(this HttpRequest req, string parameterName, Func<RequestParameterValidationBuilder<Done>, RequestParameterValidationBuilder<T>> validate)
+    public static Result<T> ValidateQueryStringParameter<T>(this HttpRequest req, string parameterName, Func<RequestQueryStringParameterValidationBuilder<Done>, RequestQueryStringParameterValidationBuilder<T>> validate)
     {
-        var builder = new RequestParameterValidationBuilder<Done>(req, parameterName, Result.Done);
+        var builder = new RequestQueryStringParameterValidationBuilder<Done>(req, parameterName, Result.Done);
+
+        return validate(builder).Result;
+    }
+
+    public static Result<T> ValidateRouteParameter<T>(this HttpRequest req, string parameterName, Func<RequestRouteParameterValidationBuilder<Done>, RequestRouteParameterValidationBuilder<T>> validate)
+    {
+        var builder = new RequestRouteParameterValidationBuilder<Done>(req, parameterName, Result.Done);
 
         return validate(builder).Result;
     }

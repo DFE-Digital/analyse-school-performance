@@ -43,7 +43,7 @@ public class LocalAuthoritySearch : ApiFunction
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No matching Local Authorities for the search term.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "local-authorities/search")]
         HttpRequest request,
         CancellationToken cancellationToken
     )
@@ -52,9 +52,9 @@ public class LocalAuthoritySearch : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from searchTerm in request.ValidateParameter("searchTerm", p => p.IsRequired())
-            from page in request.ValidateParameter("page", p => p.IsOptional().IsNumeric())
-            from resultsPerPage in request.ValidateParameter("resultsPerPage", p => p.IsOptional().IsNumeric())
+            from searchTerm in request.ValidateQueryStringParameter("searchTerm", p => p.IsRequired())
+            from page in request.ValidateQueryStringParameter("page", p => p.IsOptional().IsNumeric())
+            from resultsPerPage in request.ValidateQueryStringParameter("resultsPerPage", p => p.IsOptional().IsNumeric())
             from response in _useCase.HandleRequest(new LocalAuthoritySearchRequest(
                 searchTerm,
                 page,

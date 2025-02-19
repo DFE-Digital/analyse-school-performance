@@ -25,6 +25,16 @@ namespace ASP.Core.Text
         {
             T? item;
 
+            if (json == "\"\"")
+            {
+                if (typeof(T) == typeof(string) || typeof(T) == typeof(object))
+                {
+                    return Result.Success((T?)Convert.ChangeType("", typeof(T?)));
+                }
+
+                return Error.Unexpected($"Error occurred deserializing object of type {typeof(T)}: Could not deserialize empty string to {typeof(T)}. Object: {Environment.NewLine}{json}", null);
+            }
+
             string? error = null;
             item = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
                 NullValueHandling = ignoreNullValues ? NullValueHandling.Ignore : NullValueHandling.Include,
@@ -47,6 +57,16 @@ namespace ASP.Core.Text
         public static Result<T> DeserializeNotNull<T>(string json, bool ignoreNullValues = false, bool ignoreMissingMembers = false) where T : notnull
         {
             T? item;
+
+            if (json == "\"\"")
+            {
+                if (typeof(T) == typeof(string) || typeof(T) == typeof(object))
+                {
+                    return Result.Success((T)Convert.ChangeType("", typeof(T)));
+                }
+
+                return Error.Unexpected($"Error occurred deserializing object of type {typeof(T)}: Could not deserialize empty string to {typeof(T)}. Object: {Environment.NewLine}{json}", null);
+            }
 
             string? error = null;
             item = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {

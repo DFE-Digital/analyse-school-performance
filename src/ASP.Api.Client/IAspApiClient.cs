@@ -12,7 +12,7 @@ namespace ASP.Api.Client;
 public interface IAspApiClient
 {
     Task<Result<List<ContentTemplate>>> GetAllContentTemplates(GetAllContentTemplatesRequest request);
-    Task<Result<ContentTemplate>> ViewContentTemplate(ViewContentTemplateRequest request);
+    Task<Result<ContentTemplate>> GetContentTemplate(ViewContentTemplateRequest request);
     Task<Result<Done>> UpdateContentTemplate(UpdateContentTemplateRequest request);
 
     Task<Result<GetAvailableDownloadsResponse>> GetAvailableDownloads(GetAvailableDownloadsRequest request);

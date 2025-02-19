@@ -35,7 +35,7 @@ namespace ASP.Web.Areas.Help
             ViewContentTemplateRequest request = new(templateId, revision);
 
             var result =
-                from template in _api.ViewContentTemplate(request)
+                from template in _api.GetContentTemplate(request)
                 select ContentTemplateViewModel.FromTemplate(contentId, revision, template);
 
             return result.ToActionResult(View, _hostEnvironment);
@@ -50,7 +50,7 @@ namespace ASP.Web.Areas.Help
             ViewContentTemplateRequest request = new(templateId, revision);
 
             var result =
-                from template in _api.ViewContentTemplate(request)
+                from template in _api.GetContentTemplate(request)
                 select ContentTemplateEditModel.FromTemplate(contentId, revision, template, _editModelFactory);
                 
             return result.ToActionResult(View, _hostEnvironment);

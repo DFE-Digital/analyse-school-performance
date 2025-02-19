@@ -1,6 +1,6 @@
 ﻿using ASP.Core.Results;
 
-namespace ASP.Domain.Templating.UseCases.ViewContentTemplate
+namespace ASP.Domain.Templating.UseCases.GetContentTemplate
 {
     /// <summary>
     /// Views a Content Template or a Content Template revision, taking a ViewContentTemplateRequest object:
@@ -27,17 +27,17 @@ namespace ASP.Domain.Templating.UseCases.ViewContentTemplate
     ///   If the Revision exists and is unpublished, returns the Revision Content Template object
     ///   If the Revision exists and is published, returns the Revision Content Template object
     /// </summary>
-    public class ViewContentTemplate : IViewContentTemplate
+    public class GetContentTemplate : IGetContentTemplate
     {
         private readonly IContentTemplateRepository _repository;
 
-        public ViewContentTemplate(IContentTemplateRepository pageContentRepository)
+        public GetContentTemplate(IContentTemplateRepository pageContentRepository)
         {
             _repository = pageContentRepository ??
                 throw new ArgumentNullException(nameof(pageContentRepository));
         }
 
-        public Task<Result<ContentTemplate>> HandleRequest(ViewContentTemplateRequest request)
+        public Task<Result<ContentTemplate>> HandleRequest(GetContentTemplateRequest request)
         {
             return request.Revision.Match(
                 revision =>

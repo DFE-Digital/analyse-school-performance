@@ -35,13 +35,13 @@ public class GetLinkedEstablishments : ApiFunction
 
     [Function("GetLinkedEstablishments")]
     [OpenApiOperation(operationId: "GetLinkedEstablishments", tags: ["Establishments"], Description = "Retrieves linked establishments for a specific establishment based on URN.")]
-    [OpenApiParameter(name: "urn", In = ParameterLocation.Query, Required = true, Description = "The URN of the establishment.")]
+    [OpenApiParameter(name: "urn", In = ParameterLocation.Path, Required = true, Description = "The URN of the establishment.")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.Establishments.GetLinkedEstablishmentsResponse), Description = "Details of the linked establishments for the specified URN.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid URN parameter.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find Establishment with URN {urn}.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "schools/{urn:int}/linked-schools")]
         HttpRequest request,
         CancellationToken cancellationToken
     )
@@ -50,7 +50,7 @@ public class GetLinkedEstablishments : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from urn in request.ValidateParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
+            from urn in request.ValidateRouteParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
             from response in _useCase.HandleRequest(new GetLinkedEstablishmentsRequest(urn))
             select response.ForApiClient();
 

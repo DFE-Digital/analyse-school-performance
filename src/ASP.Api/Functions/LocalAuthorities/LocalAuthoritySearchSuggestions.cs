@@ -41,15 +41,15 @@ public class LocalAuthoritySearchSuggestions : ApiFunction
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No suggestions found for the given search term.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest request,
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "local-authorities/search-suggestions")] HttpRequest request,
         CancellationToken cancellationToken)
     {
         _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from searchTerm in request.ValidateParameter("searchTerm", p => p.IsRequired())
-            from maxSuggestions in request.ValidateParameter("maxSuggestions", p => p.IsOptional().IsNumeric())
+            from searchTerm in request.ValidateQueryStringParameter("searchTerm", p => p.IsRequired())
+            from maxSuggestions in request.ValidateQueryStringParameter("maxSuggestions", p => p.IsOptional().IsNumeric())
             from response in _useCase.HandleRequest(new LocalAuthoritySearchSuggestionsRequest(
                 searchTerm,
                 maxSuggestions

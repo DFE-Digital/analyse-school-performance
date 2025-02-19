@@ -33,12 +33,16 @@ namespace ASP.Domain.DataDownloads
                 _establishmentRepository = establishmentRepository;
             }
 
-            public Result<string> ValidateScopeIdentifier(string scopeIdentifier)
+            public Result<string> ValidateScopeIdentifier(DataDownloadsScopeType scopeType, string scopeIdentifier)
             {
+                var identifierDescription = scopeType == DataDownloadsScopeType.LA
+                    ? "LA code"
+                    : "school URN";
+
                 return Result.Success(scopeIdentifier)
                     .ErrorIf(
                         id => !Constants.ScopeIdentifierRegex.Match(id).Success,
-                        Error.Invalid($@"""{scopeIdentifier}"" is not a valid scopeIdentifier.")
+                        Error.Invalid($@"""{scopeIdentifier}"" is not a valid {identifierDescription}.")
                     );
             }
 

@@ -18,7 +18,7 @@ namespace ASP.Api.Client.InProcess
     {
         public static List<Type> FunctionTypes { get; }
 
-        private readonly Dictionary<string, Func<HttpRequest, Task<ActionResult>>> _functions;
+        private readonly List<FunctionRoute> _functions;
 
         static InProcessTransportLayer()
         {
@@ -34,19 +34,23 @@ namespace ASP.Api.Client.InProcess
         public InProcessTransportLayer(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _functions = FunctionTypes.ToDictionary(
-                t =>
-                {
-                    var runMethod = t.GetMethod("Run")
-                        ?? throw new InvalidOperationException($@"Function ""{t.Name}"" does not have a Run method");
+            _functions = FunctionTypes.Select(t => {
+                var runMethod = t.GetMethod("Run")
+                    ?? throw new InvalidOperationException($@"Function ""{t.Name}"" does not have a Run method");
 
-                    var functionAttribute = runMethod.GetCustomAttribute<FunctionAttribute>()
-                        ?? throw new InvalidOperationException($@"Function ""{t.Name}"" does not have a FunctionAttribute on its Run method");
+                var functionAttribute = runMethod.GetCustomAttribute<FunctionAttribute>()
+                    ?? throw new InvalidOperationException($@"Function ""{t.Name}"" does not have a FunctionAttribute on its Run method");
 
-                    return "/api/" + functionAttribute.Name;
-                },
-                t => (Func<HttpRequest, Task<ActionResult>>)(async (req) => await Run(t, req))
-            );
+                var parameter = runMethod.GetParameters().FirstOrDefault(p => p.ParameterType == typeof(HttpRequest))
+                    ?? throw new InvalidOperationException($@"Run method for function ""{t.Name}"" does not have a HttpRequest parameter");
+
+                var httpTriggerAttribute = parameter.GetCustomAttribute<HttpTriggerAttribute>()
+                    ?? throw new InvalidOperationException($@"Run method for function ""{t.Name}"" does not have a HttpTrigger attribute on its HttpRequest parameter");
+
+                return new FunctionRoute(functionAttribute.Name, httpTriggerAttribute.Route, httpTriggerAttribute.Methods,
+                    async (req) => await Run(t, req));
+
+            }).ToList();
         }
 
         private async Task<ActionResult> Run(Type type, HttpRequest req)
@@ -59,16 +63,16 @@ namespace ASP.Api.Client.InProcess
                 }
             }
 
-            return new ApiResult(500, $"Could not find function for path: \"{req.Path}\"");
+            return new ApiResult(500, $"Could not instantiate type \"{type.Name}\"");
         }
 
         public async Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
         {
-            var function = request.RequestUri?.AbsolutePath ?? "/";
+            var path = request.RequestUri?.AbsolutePath;
 
             var httpRequest = new DefaultHttpContext().Request;
             httpRequest.Method = request.Method.ToString();
-            httpRequest.Path = request.RequestUri?.AbsolutePath;
+            httpRequest.Path = path;
             httpRequest.QueryString = QueryString.FromUriComponent(request.RequestUri?.Query ?? "");
             if (request.Content != null)
             {
@@ -76,9 +80,8 @@ namespace ASP.Api.Client.InProcess
             }
 
             Func<HttpRequest, Task<ActionResult>> func =
-                _functions.TryGetValue(function, out var runMethod)
-                    ? runMethod
-                    : _ => Task.FromResult((ActionResult)new ApiResult(500, $"Function {function} not found."));
+                req => _functions.FirstOrDefault(f => f.IsMatch(httpRequest))?.Run(req) ?? 
+                    Task.FromResult((ActionResult)new ApiResult(404, $"Not found: Function not found for path: {path}"));
 
             var result = await func(httpRequest);
             httpRequest.HttpContext.RequestServices = new RequestServiceProvider();

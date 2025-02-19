@@ -4,8 +4,7 @@ namespace ASP.Domain.Establishments.UseCases.EstablishmentSearch;
 
 public record EstablishmentSearchRequest(
     string SearchTerm,
-    EstablishmentScopeType ScopeType,
-    Optional<string> ScopeIdentifier,
+    Optional<EstablishmentScopeInfo> Scope,
     Optional<int> Page,
     Optional<int> ResultsPerPage
 );

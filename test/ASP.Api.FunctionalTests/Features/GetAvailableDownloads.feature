@@ -1,46 +1,46 @@
 Feature: GetAvailableDownloads
 
 Scenario: Should not accept POST method
-	When I send a POST request to /api/GetAvailableDownloads
+	When I send a POST request to /api/downloads
 	Then I should get a 405 response
 	And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
 	And the response should include the header "Allow: GET"
 
 Scenario: Should return BadRequest (400) response if scope parameter is missing
-	When I send a GET request to /api/GetAvailableDownloads
+	When I send a GET request to /api/downloads
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scope" is missing."
+	And the response should be the message "Bad request: The query parameter "scope" is missing."
 
 Scenario: Should return BadRequest (400) response if scope parameter is empty string
-	When I send a GET request to /api/GetAvailableDownloads?scope=
+	When I send a GET request to /api/downloads?scope=
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scope" should not be empty."
+	And the response should be the message "Bad request: The query parameter "scope" should not be empty."
 
 Scenario: Should return BadRequest (400) response if scope parameter is invalid
 	Given no Local Authorities exist
-	When I send a GET request to /api/GetAvailableDownloads?scope=xyz
+	When I send a GET request to /api/downloads?scope=xyz
 	Then I should get a 400 response
 	And the response should be the message "Bad request: "xyz" is not a valid scope."
 
-Scenario: Should return BadRequest (400) response if scopeIdentifier parameter is missing
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA
+Scenario: Should return BadRequest (400) response if scopeId parameter is missing
+	When I send a GET request to /api/downloads?scope=LA
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scopeIdentifier" is missing."
+	And the response should be the message "Bad request: The query parameter "scopeId" is missing."
 
-Scenario: Should return BadRequest (400) response if scopeIdentifier parameter is empty string
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier
+Scenario: Should return BadRequest (400) response if scopeId parameter is empty string
+	When I send a GET request to /api/downloads?scope=LA&scopeId
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scopeIdentifier" should not be empty."
+	And the response should be the message "Bad request: The query parameter "scopeId" should not be empty."
 
 Scenario: Should return BadRequest (400) response if year parameter is not digits
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=301&year=xxxx
+	When I send a GET request to /api/downloads?scope=LA&scopeId=301&year=xxxx
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "year" should be a whole number greater than or equal to 1."
+	And the response should be the message "Bad request: The query parameter "year" should be a whole number greater than or equal to 1."
 
 Scenario: Should return BadRequest (400) response if year parameter is not 4 digits long
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=301&year=<year>
+	When I send a GET request to /api/downloads?scope=LA&scopeId=301&year=<year>
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "year" must be exactly 4 characters long."
+	And the response should be the message "Bad request: The query parameter "year" must be exactly 4 characters long."
 Examples:
 	| year  |
 	| 123   |
@@ -57,7 +57,7 @@ Scenario: Should return ServerError (500) response if Downloads config is not va
 	"""
 	Hello
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 500 response
 	And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"The configuration file 'downloads-config.json' contained invalid JSON.","MessagePrefix":"Unexpected: "}"
 
@@ -73,7 +73,7 @@ Scenario: Should return ServerError (500) response if Downloads config is empty
 	[
 	]
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 500 response
 	And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"The configuration file 'downloads-config.json' was empty.","MessagePrefix":"Unexpected: "}"
 
@@ -97,7 +97,7 @@ Scenario: Should return ServerError (500) response if config source is invalid
 		}
 	]
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 500 response
 	And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"The downloads source 'XYZ' was not recognised.","MessagePrefix":"Unexpected: "}"
 
@@ -109,7 +109,7 @@ Scenario: LA scope: Should return NotFound (404) response if LA does not exist
 		{}
 	]
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=101
+	When I send a GET request to /api/downloads?scope=LA&scopeId=101
 	Then I should get a 404 response
 	And the response should be the message "Not found: Could not find Local Authority with code "101"."
 
@@ -133,7 +133,7 @@ Scenario: LA scope: Should return NotFound (404) response if no downloads exist
 		}
 	]
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 404 response
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
 
@@ -172,7 +172,7 @@ Scenario: LA scope: Should return NotFound (404) response if no downloads exist 
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100&year=2000
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100&year=2000
 	Then I should get a 404 response
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100" for the year 2000."
 
@@ -209,7 +209,7 @@ Scenario: LA scope: Should return NotFound (404) response if files exist at Scho
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 404 response
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
 
@@ -242,7 +242,7 @@ Scenario: LA scope: Should return NotFound (404) response if files exist at Loca
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 404 response
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
 
@@ -276,7 +276,7 @@ Scenario: LA scope: Should return NotFound (404) response if files exist for LA 
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 404 response
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
 
@@ -310,7 +310,7 @@ Scenario: LA scope: Should return KTS downloads for LA for all matching years
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -367,7 +367,7 @@ Scenario: LA scope: Should ignore any non-matching files
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -426,7 +426,7 @@ Scenario: LA scope: Should ignore different filetypes within LA for the same yea
 	Column A\tColumn B\tColumn C
 	1\t2\t3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -491,7 +491,7 @@ Scenario: LA scope: Should return user-friendly text for different dataset types
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -567,7 +567,7 @@ Scenario: LA scope: Should return user-friendly text for different versions
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -630,7 +630,7 @@ Scenario: LA scope: Should ignore different file type casing
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -689,7 +689,7 @@ Scenario: LA scope: Should return KTS downloads filtered by year
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100&year=2023
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100&year=2023
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -743,7 +743,7 @@ Scenario: LA scope: Should return ASP downloads filtered by year
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100&year=2023
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100&year=2023
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -805,7 +805,7 @@ Scenario: LA scope: Should return latest KTS and ASP versions
 	Column A,Column B,Column C
 	1,2,3
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -870,7 +870,7 @@ Scenario: LA scope: Download configs for different sources that use the same fil
 	Column A,Column B,Column C,Source
 	1,2,3,KTS
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -930,7 +930,7 @@ Scenario: LA scope: Should still return results if downloads missing in once sou
 	Column A,Column B,Column C,Source
 	1,2,3,ASP
 	"""
-	When I send a GET request to /api/GetAvailableDownloads?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/downloads?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 	"""
@@ -962,7 +962,7 @@ Scenario: School scope: Should return NotFound (404) response if School does not
     {}
   ]
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=360158
+  When I send a GET request to /api/downloads?scope=School&scopeId=360158
   Then I should get a 404 response 
   And the response should be the message "Not found: Could not find Establishment with URN "360158"."
 
@@ -986,7 +986,7 @@ Scenario: School scope: Should return NotFound (404) response if no downloads ex
     }
   ]
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=123456
+  When I send a GET request to /api/downloads?scope=School&scopeId=123456
   Then I should get a 404 response 
   And the response should be the message "Not found: There are no downloads available for School "123456"."
 
@@ -1023,7 +1023,7 @@ Given Establishment "123456" exists:
   Column A,Column B,Column C
   1,2,3
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=123456
+  When I send a GET request to /api/downloads?scope=School&scopeId=123456
   Then I should get a 404 response
   And the response should be the message "Not found: There are no downloads available for School "123456"."
 
@@ -1052,7 +1052,7 @@ Scenario: School scope: Should return NotFound (404) response if files exist at 
   Column A, Column B, Column C
   1,2,3
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=123456
+  When I send a GET request to /api/downloads?scope=School&scopeId=123456
   Then I should get a 404 response 
   And the response should be the message "Not found: There are no downloads available for School "123456"."
 
@@ -1086,7 +1086,7 @@ Scenario: School scope: Should return NotFound (404) response if files exist for
   Column A, Column B, Column C
   1,2,3
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=123456
+  When I send a GET request to /api/downloads?scope=School&scopeId=123456
   Then I should get a 404 response 
   And the response should be the message "Not found: There are no downloads available for School "123456"."
 
@@ -1120,7 +1120,7 @@ Scenario: School scope: Should return KTS downloads for School for all matching 
   Column A, Column B, Column C
   1,2,3
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=123456
+  When I send a GET request to /api/downloads?scope=School&scopeId=123456
   Then I should get a 200 response 
   And the response should be an object containing these properties:
   """
@@ -1176,7 +1176,7 @@ Scenario: School scope: Should ignore different filetypes within School for the 
   Column A\tColumn B\tColumn C
   1\t2\t3
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=123456
+  When I send a GET request to /api/downloads?scope=School&scopeId=123456
   Then I should get a 200 response 
   And the response should be an object containing these properties:
   """
@@ -1219,7 +1219,7 @@ And blob storage file downloads-config.json exists in config container:
   Column A, Column B, Column C
   1,2,3
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=123456
+  When I send a GET request to /api/downloads?scope=School&scopeId=123456
   Then I should get a 200 response 
   And the response should be an object containing these properties:
   """
@@ -1271,7 +1271,7 @@ Scenario: School scope: Should return user-friendly text for different versions
   Column A, Column B, Column C
   1,2,3
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=123456
+  When I send a GET request to /api/downloads?scope=School&scopeId=123456
   Then I should get a 200 response 
   And the response should be an object containing these properties:
   """
@@ -1335,7 +1335,7 @@ Scenario: School scope: Should filter downloads by year
   Column A, Column B, Column C
   1,2,3
   """
-  When I send a GET request to /api/GetAvailableDownloads?scope=School&scopeIdentifier=123456&year=2023
+  When I send a GET request to /api/downloads?scope=School&scopeId=123456&year=2023
   Then I should get a 200 response 
   And the response should be an object containing these properties:
   """

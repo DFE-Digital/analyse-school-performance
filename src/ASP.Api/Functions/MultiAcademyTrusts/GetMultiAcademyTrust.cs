@@ -34,13 +34,13 @@ public class GetMultiAcademyTrust : ApiFunction
 
     [Function("GetMultiAcademyTrust")]
     [OpenApiOperation(operationId: "GetMultiAcademyTrust", tags: ["Multi Academy Trust"], Description = "Retrieves details for a specific Multi Academy Trust based on the provided ID.")]
-    [OpenApiParameter(name: "id", In = ParameterLocation.Query, Required = true, Description = "The ID of the Multi Academy Trust (numeric).")]
+    [OpenApiParameter(name: "uid", In = ParameterLocation.Path, Required = true, Description = "The UID of the Multi Academy Trust (numeric).")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.LookupValueWithId), Description = "Details of the Multi Academy Trust for the specified ID.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid ID parameter.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No Multi Academy Trust found for the specified ID.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid UID parameter.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No Multi Academy Trust found for the specified UID.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "multi-academy-trusts/{uid:int}")]
         HttpRequest request,
         CancellationToken cancellationToken)
     {
@@ -48,7 +48,7 @@ public class GetMultiAcademyTrust : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from uid in request.ValidateParameter("id", p => p.IsRequired().IsDigits())
+            from uid in request.ValidateRouteParameter("uid", p => p.IsRequired().IsDigits())
             from response in _useCase.HandleRequest(new GetMultiAcademyTrustRequest(uid))
             select response;
 

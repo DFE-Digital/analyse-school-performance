@@ -33,7 +33,7 @@ namespace ASP.Domain.DataDownloads.UseCases.GetDownloadPackage
         public Task<Result<FileStreamResponse>> HandleRequest(GetDownloadPackageRequest request)
         {
             var result =
-                from scopeIdentifier in _scopeValidator.ValidateScopeIdentifier(request.ScopeIdentifier)
+                from scopeIdentifier in _scopeValidator.ValidateScopeIdentifier(request.ScopeType, request.ScopeIdentifier)
                 from scope in _scopeValidator.ValidateScope(request.ScopeType, scopeIdentifier, Optional<int>.None)
                     .MapError(error => error is NotFoundError ? Error.Invalid(GetErrorMessage(request.ScopeType, scopeIdentifier)) : error)
                 from configs in _fileProvider.GetDownloadConfigs()

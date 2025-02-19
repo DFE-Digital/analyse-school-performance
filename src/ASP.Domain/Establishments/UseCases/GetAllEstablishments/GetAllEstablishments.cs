@@ -21,10 +21,9 @@ public class GetAllEstablishments : IGetAllEstablishments
     {
         var page = request.Page.GetValueOrDefault(1);
         var resultsPerPage = request.ResultsPerPage.GetValueOrDefault(Core.Constants.SearchResultPageSize);
-        var scopeIdentifier = request.ScopeIdentifier.GetValueOrDefault("");
 
         return
-            from scope in _scopeValidator.ValidateScope(request.ScopeType, scopeIdentifier)
+            from scope in _scopeValidator.ValidateScope(request.Scope)
             from results in _repository.GetAllEstablishments(scope, page, resultsPerPage)
             select results;
     }

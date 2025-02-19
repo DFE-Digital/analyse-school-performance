@@ -3,7 +3,6 @@
 namespace ASP.Domain.Establishments.UseCases.GetAllEstablishments;
 
 public record GetAllEstablishmentsRequest(
-    EstablishmentScopeType ScopeType,
-    Optional<string> ScopeIdentifier,
+    Optional<EstablishmentScopeInfo> Scope,
     Optional<int> Page,
     Optional<int> ResultsPerPage);

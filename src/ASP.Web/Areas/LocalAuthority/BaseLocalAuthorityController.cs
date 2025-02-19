@@ -42,7 +42,7 @@ namespace ASP.Web.Areas.LocalAuthority
         protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentTemplateId, string? revision)
         {
             var model =
-                from template in _api.ViewContentTemplate(new(contentTemplateId, revision))
+                from template in _api.GetContentTemplate(new(contentTemplateId, revision))
                 select ContentTemplateViewModel.FromTemplate(contentTemplateId, revision, template);
 
             return model

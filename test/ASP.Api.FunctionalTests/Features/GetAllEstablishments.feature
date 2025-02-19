@@ -1,30 +1,25 @@
 ﻿Feature: GetAllEstablishments
 
 Scenario: Should not accept POST method
-	When I send a POST request to /api/GetAllEstablishments
+	When I send a POST request to /api/schools
 	Then I should get a 405 response
 	And the response should be the message "Method not allowed: The HTTP method POST is not allowed."
 	And the response should include the header "Allow: GET"
 
-Scenario: Should return BadRequest (400) response if scope parameter is missing
-	When I send a GET request to /api/GetAllEstablishments
-	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scope" is missing."
-
 Scenario: Should return BadRequest (400) response if scope parameter is empty string
-	When I send a GET request to /api/GetAllEstablishments?scope=
+	When I send a GET request to /api/schools?scope=
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scope" should not be empty."
+	And the response should be the message "Bad request: The query parameter "scope" should not be empty."
 
 Scenario: Should return BadRequest (400) response if scope parameter is invalid
-	When I send a GET request to /api/GetAllEstablishments?scope=xyz
+	When I send a GET request to /api/schools?scope=xyz
 	Then I should get a 400 response
 	And the response should be the message "Bad request: "xyz" is not a valid scope."
 
-Scenario Outline: Should return BadRequest (400) response if scopeIdentifier parameter is missing
-	When I send a GET request to /api/GetAllEstablishments?scope=<Scope>
+Scenario Outline: Should return BadRequest (400) response if scopeId parameter is missing
+	When I send a GET request to /api/schools?scope=<Scope>
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "scopeIdentifier" is missing."
+	And the response should be the message "Bad request: The query parameter "scopeId" is missing."
 
 Examples:
 	| Scope   |
@@ -36,9 +31,9 @@ Examples:
 	| diocese |
 
 Scenario Outline: Should return BadRequest (400) response if page parameter is not a whole number greater than or equal to 1
-	When I send a GET request to /api/GetAllEstablishments?scope=All&page=<page>
+	When I send a GET request to /api/schools?page=<page>
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "page" should be a whole number greater than or equal to 1."
+	And the response should be the message "Bad request: The query parameter "page" should be a whole number greater than or equal to 1."
 
 Examples:
 	| page |
@@ -54,7 +49,7 @@ Scenario: Should allow page = 1
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All&page=1
+	When I send a GET request to /api/schools?page=1
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 		"""
@@ -72,9 +67,9 @@ Scenario: Should allow page = 1
 		"""
 
 Scenario Outline: Should return BadRequest (400) response if resultsPerPage parameter is not a whole number greater than 1
-	When I send a GET request to /api/GetAllEstablishments?scope=All&resultsPerPage=<resultsPerPage>
+	When I send a GET request to /api/schools?resultsPerPage=<resultsPerPage>
 	Then I should get a 400 response
-	And the response should be the message "Bad request: The parameter "resultsPerPage" should be a whole number greater than or equal to 1."
+	And the response should be the message "Bad request: The query parameter "resultsPerPage" should be a whole number greater than or equal to 1."
 
 Examples:
 	| resultsPerPage |
@@ -90,7 +85,7 @@ Scenario: Should allow resultsPerPage = 1
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All&resultsPerPage=1
+	When I send a GET request to /api/schools?resultsPerPage=1
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 		"""
@@ -109,7 +104,7 @@ Scenario: Should allow resultsPerPage = 1
 
 Scenario: Should return NotFound (404) response if there were no establishments exist within the given scope
 	Given no Establishments exist
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no establishments within the given scope."
 
@@ -120,7 +115,7 @@ Scenario: Should not return deleted establishments
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no establishments within the given scope."
 
@@ -131,7 +126,7 @@ Scenario: Should not return non-visible establishments
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no establishments within the given scope."
 
@@ -142,7 +137,7 @@ Scenario: Should return 200 response when establishments exist
 			"name": "Some Primary School"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
 		"""
@@ -160,7 +155,7 @@ Scenario: Should return 200 response when establishments exist
 		"""
 
 Scenario: Should return BadRequest (400) response if Local Authority with code does not exist
-	When I send a GET request to /api/GetAllEstablishments?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/schools?scope=LA&scopeId=100
 	Then I should get a 400 response
 	And the response should be the message "Bad request: Local Authority with code "100" does not exist."
 
@@ -180,7 +175,7 @@ Scenario: Should return NotFound (404) response if Local Authority with code doe
 				 }
 			 }
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/schools?scope=LA&scopeId=100
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no establishments within the given scope."
 
@@ -218,7 +213,7 @@ Scenario: Should return 200 response if Local Authority with code exist within t
 			 }
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=LA&scopeIdentifier=100
+	When I send a GET request to /api/schools?scope=LA&scopeId=100
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -242,7 +237,7 @@ Scenario: Should return 200 response if Local Authority with code exist within t
 		"""
 
 Scenario: Should return BadRequest (400) response if Multi Academy Trust with id does not exist
-	When I send a GET request to /api/GetAllEstablishments?scope=MAT&scopeIdentifier=1234
+	When I send a GET request to /api/schools?scope=MAT&scopeId=1234
 	Then I should get a 400 response
 	And the response should be the message "Bad request: Multi-Academy Trust with UID "1234" does not exist."
 
@@ -259,7 +254,7 @@ Scenario: Should return NotFound (404) response if Multi Academy Trust with id d
 			"name": "Test School 1"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=MAT&scopeIdentifier=1234
+	When I send a GET request to /api/schools?scope=MAT&scopeId=1234
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no establishments within the given scope."
 
@@ -294,7 +289,7 @@ Scenario: Should return 200 response if Multi Academy Trust with id exist within
 			 }
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=MAT&scopeIdentifier=1234
+	When I send a GET request to /api/schools?scope=MAT&scopeId=1234
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -342,7 +337,7 @@ Scenario: Should return NotFound (404) response if there are no matches for Dioc
 		}
 		"""
 
-	When I send a GET request to /api/GetAllEstablishments?scope=Diocese&scopeIdentifier=Test Diocese
+	When I send a GET request to /api/schools?scope=Diocese&scopeId=Test%20Diocese
 	Then I should get a 404 response
 	And the response should be the message "Not found: there were no establishments within the given scope."
 
@@ -377,7 +372,7 @@ Scenario: Should return 200 response if there are matches for the given scope "D
 			 }
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=Diocese&scopeIdentifier=Test Diocese
+	When I send a GET request to /api/schools?scope=Diocese&scopeId=Test%20Diocese
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -438,7 +433,7 @@ Scenario: Should return 200 response if there are matches for the given scope "A
 			 }
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -483,7 +478,7 @@ Scenario: Should return a 200 response with results and expected pagination for 
 			"name": "Primary School 333333"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -527,7 +522,7 @@ Scenario: Should return a 200 response with results and expected pagination for 
 			"name": "Primary School 333333"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All&resultsPerPage=2
+	When I send a GET request to /api/schools?resultsPerPage=2
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -567,7 +562,7 @@ Scenario: Should return a 200 response with results and expected pagination for 
 			"name": "Primary School 333333"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All&resultsPerPage=2&page=2
+	When I send a GET request to /api/schools?resultsPerPage=2&page=2
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -603,7 +598,7 @@ Scenario: Should return a 200 response with expected pagination and no results f
 			"name": "Primary School 333333"
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All&resultsPerPage=2&page=3
+	When I send a GET request to /api/schools?resultsPerPage=2&page=3
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -628,7 +623,7 @@ Scenario: Should return a 200 response with results and a computed address field
 			} 
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -657,7 +652,7 @@ Scenario: Should return a 200 response with results and a computed address field
 			} 
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -686,7 +681,7 @@ Scenario: Should return a 200 response with results and a computed address field
 			} 
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -714,7 +709,7 @@ Scenario: Should return a 200 response with results and a computed educationPhas
 			"isSecondary": false
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -742,7 +737,7 @@ Scenario: Should return a 200 response with results and a computed educationPhas
 			"isSecondary": true
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""
@@ -770,7 +765,7 @@ Scenario: Should return a 200 response with results and a computed educationPhas
 			"isSecondary": false
 		}
 		"""
-	When I send a GET request to /api/GetAllEstablishments?scope=All
+	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties excluding null:
 		"""

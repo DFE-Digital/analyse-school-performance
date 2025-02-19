@@ -35,15 +35,15 @@ public class IsEstablishmentAccessibleInScope : ApiFunction
 
     [Function("IsEstablishmentAccessibleInScope")]
     [OpenApiOperation(operationId: "IsEstablishmentAccessibleInScope", tags: ["Establishments"], Description = "Determines whether an establishment is accessible within a specified scope.")]
-    [OpenApiParameter(name: "urn", In = ParameterLocation.Query, Required = true, Description = "The URN of the establishment.")]
-    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the search, e.g., `All`, `LA`, `MAT`, `Diocese`.")]
-    [OpenApiParameter(name: "scopeIdentifier", In = ParameterLocation.Query, Required = false, Description = "An identifier for the selected scope, e.g, `LA Code`, `MAT UID`, `Diocese name`")]
+    [OpenApiParameter(name: "urn", In = ParameterLocation.Path, Required = true, Description = "The URN of the establishment.")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = false, Description = "Scope to check to determine the establishment's accessibilty, e.g., `LA`, `MAT` or `Diocese`.")]
+    [OpenApiParameter(name: "scopeId", In = ParameterLocation.Query, Required = false, Description = "An identifier for the selected scope, e.g, LA code, MAT UID or Diocese name")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.Establishments.IsEstablishmentAccessibleInScopeResponse), Description = "A response object indicating whether the establishment is accessible within the given scope.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find any establishments within the given scope.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "schools/{urn:int}/access")]
         HttpRequest request,
         CancellationToken cancellationToken
     )
@@ -52,13 +52,12 @@ public class IsEstablishmentAccessibleInScope : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from urn in request.ValidateParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
-            from scope in request.ValidateParameter("scope", p => p.IsRequired().IsEnum<EstablishmentScopeType>())
-            from scopeIdentifier in request.ValidateParameter("scopeIdentifier", p => p.IsRequiredIf(scope != EstablishmentScopeType.All))
+            from urn in request.ValidateRouteParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
+            from scope in request.ValidateQueryStringParameter("scope", p => p.IsOptional().IsEnum<EstablishmentScopeType>())
+            from scopeId in request.ValidateQueryStringParameter("scopeId", p => p.IsRequiredIf(scope.HasValue))
             from response in _useCase.HandleRequest(new IsEstablishmentAccessibleInScopeRequest(
                 urn,
-                scope,
-                scopeIdentifier
+                EstablishmentScopeInfo.Create(scope, scopeId)
             ))
             select response.ForApiClient();
 

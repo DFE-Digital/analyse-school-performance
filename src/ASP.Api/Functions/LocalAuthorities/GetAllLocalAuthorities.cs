@@ -41,7 +41,7 @@ public class GetAllLocalAuthorities : ApiFunction
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find any local authorities.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "local-authorities")]
         HttpRequest request,
         CancellationToken cancellationToken)
     {
@@ -49,8 +49,8 @@ public class GetAllLocalAuthorities : ApiFunction
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
-            from page in request.ValidateParameter("page", p => p.IsOptional().IsNumeric())
-            from resultsPerPage in request.ValidateParameter("resultsPerPage", p => p.IsOptional().IsNumeric())
+            from page in request.ValidateQueryStringParameter("page", p => p.IsOptional().IsNumeric())
+            from resultsPerPage in request.ValidateQueryStringParameter("resultsPerPage", p => p.IsOptional().IsNumeric())
             from response in _useCase.HandleRequest(new GetAllLocalAuthoritiesRequest(page, resultsPerPage))
             select response.ForApiClient();
 
