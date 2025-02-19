@@ -1,0 +1,9 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "CosmosDb:DatabaseId": "test",
+    "DocumentDatabase:InMemory": "true",
+    "BlobStorage:InMemory": "true",
+    "Api:InProcess": "true"
+  }
+}

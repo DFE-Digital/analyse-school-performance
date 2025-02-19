@@ -1,0 +1,28 @@
+﻿{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=false",
+    "AllowedHosts": "*",
+    "DocumentDatabase:InMemory": "false",
+    "DocumentDatabase:EndpointUri": "https://s192d01-cdb-dev.documents.azure.com:443/",
+    "DocumentDatabase:DatabaseId": "asp",
+    "DocumentDatabase:PrimaryKey": "<Replace with your Cosmos DB Primary Key>",
+    "DocumentDatabase:Containers:0:content:ContainerName": "content",
+    "DocumentDatabase:Containers:0:content:PartitionKey": "/contentId",
+    "DocumentDatabase:Containers:0:establishments:ContainerName": "establishments",
+    "DocumentDatabase:Containers:0:establishments:PartitionKey": "/urn",
+    "DocumentDatabase:Containers:0:local-authorities:ContainerName": "local-authorities",
+    "DocumentDatabase:Containers:0:local-authorities:PartitionKey": "/code",
+    "DocumentDatabase:Containers:0:multi-academy-trusts:ContainerName": "multi-academy-trusts",
+    "DocumentDatabase:Containers:0:multi-academy-trusts:PartitionKey": "/id",
+    "DocumentDatabase:ManagedIdentityClientId": "83a9dfa9-1d3a-42fd-86aa-9264ddf79ed0",
+    "ErrorHandling:ShowStackTrace": "true",
+    "BlobStorage:InMemory": "false",
+    "BlobStorage:PrimaryKey": "<Replace with your Blob Storage Primary Key>",
+    "BlobStorage:ManagedIdentityClientId": "83a9dfa9-1d3a-42fd-86aa-9264ddf79ed0",
+    "DataDownloads:DownloadsConfigContainerName": "config",
+    "DataDownloads:DownloadsConfigFileName": "downloads-config.json",
+    "DataDownloads:SourceContainerNames:ASP": "downloads-asp",
+    "DataDownloads:SourceContainerNames:KTS": "downloads-kts"
+  }
+}

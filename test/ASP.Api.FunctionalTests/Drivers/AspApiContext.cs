@@ -103,11 +103,11 @@ namespace ASP.Api.FunctionalTests.Drivers
 
             builder.ConfigureAppConfiguration(configure =>
             {
-                var config = configure
+                configure
                     .SetBasePath(path)
-                    .AddJsonFile("apisettings.Test.json", false)
+                    .AddJsonFile("local.settings.template.test.json", false)
                     // Add local config for connection strings to the test database
-                    .AddJsonFile("apisettings.Test.local.json", true);
+                    .AddJsonFile("local.settings.test.json", true);
             });
 
             builder.ConfigureServices((context, services) => services.ConfigureApiClient(context.Configuration));

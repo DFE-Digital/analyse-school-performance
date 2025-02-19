@@ -17,10 +17,10 @@ namespace ASP.Api
 
             builder
                 .AddJsonFile(Path.Combine(
-                    environment.ContentRootPath, "apisettings.json"),
+                    environment.ContentRootPath, "local.settings.template.json"),
                     optional: false)
                 .AddJsonFile(Path.Combine(
-                    environment.ContentRootPath, "apisettings.local.json"),
+                        environment.ContentRootPath, "local.settings.json"),
                     optional: true)
                 .AddEnvironmentVariables()
                 .ConfigureAzureKeyVault(config);
