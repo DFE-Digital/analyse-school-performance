@@ -1,7 +1,7 @@
 using ASP.Api.Client.Schools;
 using ASP.Core.Results;
-using ASP.Domain.Establishments;
-using ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
+using ASP.Domain.Schools.Access;
+using ASP.Domain.Schools.UseCases.SchoolSearchSuggestions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -15,14 +15,13 @@ namespace ASP.Api.Functions.Schools;
 public class SchoolsGetSearchSuggestions : ApiFunction
 {
     private readonly ILogger<SchoolsGetSearchSuggestions> _logger;
-    private readonly IEstablishmentSearchSuggestions _useCase;
+    private readonly ISchoolSearchSuggestionsUseCase _useCase;
     private readonly ApiResultConverter _resultConverter;
 
     public SchoolsGetSearchSuggestions(
         ILogger<SchoolsGetSearchSuggestions> logger,
-        IEstablishmentSearchSuggestions useCase,
-        ApiResultConverter resultConverter
-    )
+        ISchoolSearchSuggestionsUseCase useCase,
+        ApiResultConverter resultConverter)
     {
         _logger = logger
             ?? throw new ArgumentNullException(nameof(logger));
@@ -55,15 +54,15 @@ public class SchoolsGetSearchSuggestions : ApiFunction
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from searchTerm in request.ValidateQueryStringParameter("searchTerm", p => p.IsRequired().IsNotEmpty())
-            from scope in request.ValidateQueryStringParameter("scope", p => p.IsOptional().IsNotEmpty().IsEnum<EstablishmentScopeType>())
+            from scope in request.ValidateQueryStringParameter("scope", p => p.IsOptional().IsNotEmpty().IsEnum<SchoolAccessScopeType>())
             from scopeId in request.ValidateQueryStringParameter("scopeId", p => p.IsRequiredIf(scope.HasValue).IsNotEmpty())
             from maxSuggestions in request.ValidateQueryStringParameter("maxSuggestions", p => p.IsOptional().IsNumeric())
-            from response in _useCase.HandleRequest(new EstablishmentSearchSuggestionsRequest(
+            from response in _useCase.HandleRequest(new SchoolSearchSuggestionsRequest(
                 searchTerm,
-                EstablishmentScopeInfo.Create(scope, scopeId),
+                SchoolAccessScopeInfo.Create(scope, scopeId),
                 maxSuggestions
             ))
-            select response.ForApiClient();
+            select response.MapList(l => l.ForApiClientAsSuggestion());
         ;
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);

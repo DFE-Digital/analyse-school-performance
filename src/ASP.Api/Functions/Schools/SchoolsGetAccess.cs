@@ -1,7 +1,7 @@
 ﻿using ASP.Api.Client.Schools;
 using ASP.Core.Results;
-using ASP.Domain.Establishments;
-using ASP.Domain.Establishments.UseCases.IsEstablishmentAccessibleInScope;
+using ASP.Domain.Schools.Access;
+using ASP.Domain.Schools.UseCases.IsSchoolAccessibleInScope;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -15,14 +15,13 @@ namespace ASP.Api.Functions.Schools;
 public class SchoolsGetAccess : ApiFunction
 {
     private readonly ILogger<SchoolsGetAll> _logger;
-    private readonly IIsEstablishmentAccessibleInScope _useCase;
+    private readonly IIsSchoolAccessibleInScopeUseCase _useCase;
     private readonly ApiResultConverter _resultConverter;
 
     public SchoolsGetAccess(
         ILogger<SchoolsGetAll> logger,
-        IIsEstablishmentAccessibleInScope useCase,
-        ApiResultConverter resultConverter
-    )
+        IIsSchoolAccessibleInScopeUseCase useCase,
+        ApiResultConverter resultConverter)
     {
         _logger = logger
             ?? throw new ArgumentNullException(nameof(logger));
@@ -54,11 +53,11 @@ public class SchoolsGetAccess : ApiFunction
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from urn in request.ValidatePathParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
-            from scope in request.ValidateQueryStringParameter("scope", p => p.IsOptional().IsNotEmpty().IsEnum<EstablishmentScopeType>())
+            from scope in request.ValidateQueryStringParameter("scope", p => p.IsOptional().IsNotEmpty().IsEnum<SchoolAccessScopeType>())
             from scopeId in request.ValidateQueryStringParameter("scopeId", p => p.IsRequiredIf(scope.HasValue))
-            from response in _useCase.HandleRequest(new IsEstablishmentAccessibleInScopeRequest(
+            from response in _useCase.HandleRequest(new IsSchoolAccessibleInScopeRequest(
                 urn,
-                EstablishmentScopeInfo.Create(scope, scopeId)
+                SchoolAccessScopeInfo.Create(scope, scopeId)
             ))
             select response.ForApiClient();
 

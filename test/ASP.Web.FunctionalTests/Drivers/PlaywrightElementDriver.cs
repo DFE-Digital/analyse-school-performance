@@ -47,6 +47,19 @@ namespace ASP.Web.FunctionalTests.Drivers
             catch (PlaywrightException)
             {
                 var actual = await _element.CountAsync();
+                
+                if (count != actual)
+                {
+                    _outputHelper.WriteLine($"Element HTML:{Environment.NewLine}");
+
+                    var all = await _element.AllAsync();
+                    foreach(var el in all)
+                    {
+                        var html = await el.InnerHTMLAsync();
+                        _outputHelper.WriteLine($"{Environment.NewLine}{html}");
+                    }
+
+                }
 
                 Assert.Fail(errorIfIncorrectCount(count, actual));
             }

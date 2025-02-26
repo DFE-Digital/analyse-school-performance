@@ -1,7 +1,7 @@
-﻿using ASP.Domain.Establishments;
-using ASP.Domain.LocalAuthorities;
+﻿using ASP.Domain.LocalAuthorities;
 using ASP.Core.Optionality;
 using ASP.Core.Results;
+using ASP.Domain.Schools;
 
 namespace ASP.Domain.DataDownloads
 {
@@ -25,12 +25,12 @@ namespace ASP.Domain.DataDownloads
         public class Validator: IDataDownloadsScopeValidator
         {
             private ILocalAuthorityRepository _localAuthorityRepository;
-            private readonly IEstablishmentRepository _establishmentRepository;
+            private readonly ISchoolRepository _schoolRepository;
 
-            public Validator(ILocalAuthorityRepository localAuthorityRepository, IEstablishmentRepository establishmentRepository)
+            public Validator(ILocalAuthorityRepository localAuthorityRepository, ISchoolRepository schoolRepository)
             {
                 _localAuthorityRepository = localAuthorityRepository;
-                _establishmentRepository = establishmentRepository;
+                _schoolRepository = schoolRepository;
             }
 
             public Result<string> ValidateScopeIdentifier(DataDownloadsScopeType scopeType, string scopeIdentifier)
@@ -51,8 +51,13 @@ namespace ASP.Domain.DataDownloads
                 return scopeType switch {
                     DataDownloadsScopeType.LA => _localAuthorityRepository.GetLocalAuthority(scopeIdentifier)
                         .Map(la => (DataDownloadsScope)new DataDownloadsLocalAuthorityScope(scopeType, scopeIdentifier, year)),
-                    _ => _establishmentRepository.GetEstablishmentDetails(scopeIdentifier)
-                        .Map(school => (DataDownloadsScope)new DataDownloadsSchoolScope(scopeType, scopeIdentifier, year))
+
+                    DataDownloadsScopeType.School => 
+                        from schoolUrn in SchoolUrn.Parse(scopeIdentifier)
+                        from school in _schoolRepository.Get(schoolUrn)
+                        select (DataDownloadsScope)new DataDownloadsSchoolScope(scopeType, scopeIdentifier, year),
+
+                    _ => throw new ArgumentOutOfRangeException($@"Data Downloads Scope type ""{scopeType}"" is not supported.")
                 };
             }
         }

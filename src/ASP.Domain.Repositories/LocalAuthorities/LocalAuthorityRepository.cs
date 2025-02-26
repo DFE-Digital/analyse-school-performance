@@ -22,9 +22,7 @@ public class LocalAuthorityRepository : ILocalAuthorityRepository
     {
         return
             from dao in _documentDB.GetAsync<LocalAuthorityDAO>(ContainerKey, code, code)
-                .MapError(e => e is NotFoundError
-                    ? Error.NotFound($@"Could not find Local Authority with code ""{code}"".")
-                    : e)
+                .MapErrorIf(e => e is NotFoundError, Error.NotFound($@"Could not find Local Authority with code ""{code}""."))
             select dao.MapToDomainEntityLocalAuthority();
     }
 

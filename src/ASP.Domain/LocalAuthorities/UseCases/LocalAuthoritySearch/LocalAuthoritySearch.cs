@@ -21,9 +21,8 @@ public class LocalAuthoritySearch : ILocalAuthoritySearch
         var isNumeric = int.TryParse(request.SearchTerm, out var _);
 
         var localAuthoritySearchResults = isNumeric
-            ? from localAuthority in _repository.GetLocalAuthority(request.SearchTerm).MapError(e => e is NotFoundError
-                ? Error.NotFound($@"there were no matches for ""{request.SearchTerm}"".")
-                : e)
+            ? from localAuthority in _repository.GetLocalAuthority(request.SearchTerm)
+                .MapErrorIf(e => e is NotFoundError, Error.NotFound($@"there were no matches for ""{request.SearchTerm}""."))
             select new ResultsPage<LocalAuthority>(page, resultsPerPage,
                 totalResults: 1, [new LocalAuthority(localAuthority.Code, localAuthority.Name)])
             : _repository.LocalAuthoritySearchByLaName(request.SearchTerm, page, resultsPerPage);

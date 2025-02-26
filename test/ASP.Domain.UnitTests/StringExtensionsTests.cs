@@ -1,5 +1,5 @@
-﻿using ASP.Domain.Establishments;
-using ASP.Domain.Establishments.Search;
+﻿using ASP.Domain.Schools;
+using ASP.Domain.Schools.Search;
 using Xunit;
 
 namespace ASP.Domain.UnitTests;
@@ -10,10 +10,10 @@ public class StringExtensionsTests
     [InlineData("", SearchType.Invalid)]
     [InlineData(null, SearchType.Invalid)]
     [InlineData("123456", SearchType.Urn)]
-    [InlineData("894/2200", SearchType.LocalAuthEstablishment)]
-    [InlineData("894", SearchType.LocalAuthEstablishment3Digit)]
-    [InlineData("2200", SearchType.LocalAuthEstablishment4Digit)]
-    [InlineData("SomeOtherInput", SearchType.EstablishmentNameOrLocation)]
+    [InlineData("894/2200", SearchType.LAEstabCodeWithSeparator)]
+    [InlineData("894", SearchType.LACode)]
+    [InlineData("2200", SearchType.EstabCode)]
+    [InlineData("SomeOtherInput", SearchType.NameOrLocation)]
     public void ClassifySearchType_Test(string input, SearchType expected)
     {
         SearchType result = input.ClassifySearchType();

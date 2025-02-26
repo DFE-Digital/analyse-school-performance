@@ -953,7 +953,7 @@ Scenario: School scope: Should return NotFound (404) response if School does not
   """
   When I send a GET request to /api/downloads?scope=School&scopeId=360158
   Then I should get a 404 response 
-  And the response should be the message "Not found: Could not find Establishment with URN "360158"."
+  And the response should be the message "Not found: Could not find school with URN "360158"."
 
 Scenario: School scope: Should return NotFound (404) response if no downloads exist
   Given Establishment "123456" exists:

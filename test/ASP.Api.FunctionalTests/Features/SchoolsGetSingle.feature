@@ -29,7 +29,7 @@
 		Given no Establishments exist
 		When I send a GET request to /api/schools/123456
 		Then I should get a 404 response
-		And the response should be the message "Not found: Could not find Establishment with URN "123456"."
+		And the response should be the message "Not found: Could not find school with URN "123456"."
 
 	Scenario: Should return Establishment object if urn exists
 		Given Establishment "123456" exists:

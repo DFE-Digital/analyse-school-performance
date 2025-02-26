@@ -2,14 +2,6 @@
 using ASP.Domain.DataDownloads;
 using ASP.Domain.DataDownloads.UseCases.GetAvailableDownloads;
 using ASP.Domain.DataDownloads.UseCases.GetDownloadPackage;
-using ASP.Domain.Establishments;
-using ASP.Domain.Establishments.LinkedEstablishments;
-using ASP.Domain.Establishments.UseCases.EstablishmentSearch;
-using ASP.Domain.Establishments.UseCases.EstablishmentSearchSuggestions;
-using ASP.Domain.Establishments.UseCases.GetAllEstablishments;
-using ASP.Domain.Establishments.UseCases.GetEstablishmentDetails;
-using ASP.Domain.Establishments.UseCases.GetLinkedEstablishments;
-using ASP.Domain.Establishments.UseCases.IsEstablishmentAccessibleInScope;
 using ASP.Domain.LocalAuthorities.UseCases.GetAllLocalAuthorities;
 using ASP.Domain.LocalAuthorities.UseCases.GetLocalAuthority;
 using ASP.Domain.LocalAuthorities.UseCases.LocalAuthoritySearch;
@@ -21,6 +13,13 @@ using ASP.Domain.Templating.UseCases.GetContentTemplate;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using ASP.Domain.Schools.Access;
+using ASP.Domain.Schools.UseCases.GetAllSchools;
+using ASP.Domain.Schools.UseCases.GetSchoolDetails;
+using ASP.Domain.Schools.UseCases.GetLinkedSchools;
+using ASP.Domain.Schools.UseCases.IsSchoolAccessibleInScope;
+using ASP.Domain.Schools.UseCases.SchoolSearch;
+using ASP.Domain.Schools.UseCases.SchoolSearchSuggestions;
 
 namespace ASP.Domain;
 
@@ -35,17 +34,15 @@ public static class AspDomainExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigureEstablishments(this IServiceCollection services)
+    public static IServiceCollection ConfigureSchools(this IServiceCollection services)
     {
-        services.AddScoped<IGetAllEstablishments, GetAllEstablishments>();
-        services.AddScoped<IGetEstablishmentDetails, GetEstablishmentDetails>();
-        services.AddScoped<IEstablishmentSearch, EstablishmentSearch>();
-        services.AddScoped<IEstablishmentSearchSuggestions, EstablishmentSearchSuggestions>();
-        services.AddScoped<IIsEstablishmentAccessibleInScope, IsEstablishmentAccessibleInScope>();
-        services.AddScoped<IGetLinkedEstablishments, GetLinkedEstablishments>();
-        services.AddScoped<ILinkDescriptionGenerator, LinkDescriptionGenerator>();
-        services.AddScoped<ILinkedEstablishmentsService, LinkedEstablishmentsService>();
-        services.TryAddScoped<IEstablishmentScopeValidator, EstablishmentScope.Validator>();
+        services.AddScoped<IGetAllSchoolsUseCase, GetAllSchoolsUseCase>();
+        services.AddScoped<IGetSchoolDetailsUseCase, GetSchoolDetailsUseCase>();
+        services.AddScoped<ISchoolSearchUseCase, SchoolSearchUseCase>();
+        services.AddScoped<ISchoolSearchSuggestionsUseCase, SchoolSearchSuggestionsUseCase>();
+        services.AddScoped<IIsSchoolAccessibleInScopeUseCase, IsSchoolAccessibleInScopeUseCase>();
+        services.AddScoped<IGetLinkedSchoolsUseCase, GetLinkedSchoolsUseCase>();
+        services.TryAddScoped<ISchoolAccessScopeValidator, SchoolAccessScope.Validator>();
 
         return services;
     }

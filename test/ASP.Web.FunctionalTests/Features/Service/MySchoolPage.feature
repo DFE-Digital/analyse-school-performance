@@ -29,7 +29,7 @@ Scenario: School page should display server error page if user's Establishment i
 	Then I should get a 500 response
 	And the page title should be "Sorry, there is a problem with the service"
 	And the element "h1.govuk-heading-l" should have the text content "Sorry, there is a problem with the service"
-	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: API error: /api/schools/111111 Establishment with URN "111111" is not currently visible."
+	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: API error: /api/schools/111111 Could not find school with URN "111111"."
 
 @Javascript:disabled
 Scenario: School page should display server error page if user's Establishment is deleted
@@ -44,7 +44,7 @@ Scenario: School page should display server error page if user's Establishment i
 	Then I should get a 500 response
 	And the page title should be "Sorry, there is a problem with the service"
 	And the element "h1.govuk-heading-l" should have the text content "Sorry, there is a problem with the service"
-	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: API error: /api/schools/111111 Establishment with URN "111111" has been deleted."
+	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: API error: /api/schools/111111 Could not find school with URN "111111"."
 
 @Javascript:disabled
 Scenario: School page should display server error page if user's Establishment does not exist
@@ -59,7 +59,7 @@ Scenario: School page should display server error page if user's Establishment d
 	Then I should get a 500 response
 	And the page title should be "Sorry, there is a problem with the service"
 	And the element "h1.govuk-heading-l" should have the text content "Sorry, there is a problem with the service"
-	And the element "*[data-testid='error-display-message']" should have the text content "Error message: API error: /api/schools/222222 Could not find Establishment with URN "222222"."
+	And the element "*[data-testid='error-display-message']" should have the text content "Error message: API error: /api/schools/222222 Could not find school with URN "222222"."
 
 @Javascript:disabled
 Scenario: School page should be accessible if user's Establishment exists

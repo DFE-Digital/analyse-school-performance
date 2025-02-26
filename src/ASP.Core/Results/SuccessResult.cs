@@ -35,6 +35,18 @@
         public override Task<Result<TValue>> MapError(Func<Error, Task<Error>> onError)
             => Task.FromResult((Result<TValue>)this);
 
+        public override Result<TValue> MapErrorIf(Func<Error, bool> predicate, Error error)
+            => this;
+
+        public override Task<Result<TValue>> MapErrorIf(Func<Error, Task<bool>> predicate, Error error)
+            => Task.FromResult((Result<TValue>)this);
+
+        public override Result<TValue> MapErrorIf(Func<Error, bool> predicate, Func<string, Error> errorFunction)
+            => this;
+
+        public override Task<Result<TValue>> MapErrorIf(Func<Error, Task<bool>> predicate, Func<string, Task<Error>> errorFunction)
+            => Task.FromResult((Result<TValue>)this);
+
         public override Result<TValue> MapErrorMessage(Func<string, string> mapFunction)
             => this;
 

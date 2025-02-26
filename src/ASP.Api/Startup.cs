@@ -25,7 +25,7 @@ namespace ASP.Api
                         .ConfigureDocumentDatabase(context.Configuration)
                         .ConfigureBlobStorage(context.Configuration)
                         .ConfigureContentTemplates()
-                        .ConfigureEstablishments()
+                        .ConfigureSchools()
                         .ConfigureLocalAuthorities()
                         .ConfigureMultiAcademyTrusts()
                         .ConfigureDataDownloads(context.Configuration)

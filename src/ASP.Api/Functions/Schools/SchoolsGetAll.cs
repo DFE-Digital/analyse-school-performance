@@ -1,9 +1,9 @@
 ﻿using ASP.Api.Client.Schools;
 using ASP.Core.Pagination;
 using ASP.Core.Results;
-using ASP.Domain.Establishments;
-using ASP.Domain.Establishments.UseCases.EstablishmentSearch;
-using ASP.Domain.Establishments.UseCases.GetAllEstablishments;
+using ASP.Domain.Schools.Access;
+using ASP.Domain.Schools.UseCases.GetAllSchools;
+using ASP.Domain.Schools.UseCases.SchoolSearch;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -17,14 +17,14 @@ namespace ASP.Api.Functions.Schools;
 public class SchoolsGetAll : ApiFunction
 {
     private readonly ILogger<SchoolsGetAll> _logger;
-    private readonly IGetAllEstablishments _getAll;
-    private readonly IEstablishmentSearch _search;
+    private readonly IGetAllSchoolsUseCase _getAll;
+    private readonly ISchoolSearchUseCase _search;
     private readonly ApiResultConverter _resultConverter;
 
     public SchoolsGetAll(
         ILogger<SchoolsGetAll> logger,
-        IGetAllEstablishments getAll,
-        IEstablishmentSearch search,
+        IGetAllSchoolsUseCase getAll,
+        ISchoolSearchUseCase search,
         ApiResultConverter resultConverter
     )
     {
@@ -55,29 +55,28 @@ public class SchoolsGetAll : ApiFunction
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "schools")]
         HttpRequest request,
-        CancellationToken cancellationToken
-    )
+        CancellationToken cancellationToken)
     {
         _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from searchTerm in request.ValidateQueryStringParameter("searchTerm", p => p.IsOptional().IsNotEmpty())
-            from scope in request.ValidateQueryStringParameter("scope", p => p.IsOptional().IsNotEmpty().IsEnum<EstablishmentScopeType>())
+            from scope in request.ValidateQueryStringParameter("scope", p => p.IsOptional().IsNotEmpty().IsEnum<SchoolAccessScopeType>())
             from scopeId in request.ValidateQueryStringParameter("scopeId", p => p.IsRequiredIf(scope.HasValue).IsNotEmpty())
             from page in request.ValidateQueryStringParameter("page", p => p.IsOptional().IsNumeric())
             from resultsPerPage in request.ValidateQueryStringParameter("resultsPerPage", p => p.IsOptional().IsNumeric())
             from response in searchTerm.Match(
-                value => _search.HandleRequest(new EstablishmentSearchRequest(
+                value => _search.HandleRequest(new SchoolSearchRequest(
                     value,
-                    EstablishmentScopeInfo.Create(scope, scopeId),
+                    SchoolAccessScopeInfo.Create(scope, scopeId),
                     page,
                     resultsPerPage)),
-                () => _getAll.HandleRequest(new GetAllEstablishmentsRequest(
-                    EstablishmentScopeInfo.Create(scope, scopeId),
+                () => _getAll.HandleRequest(new GetAllSchoolsRequest(
+                    SchoolAccessScopeInfo.Create(scope, scopeId),
                     page,
                     resultsPerPage)))
-            select response.ForApiClient();
+            select response.MapResultsPage(p => p.ForApiClientAsListing());
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);
     }

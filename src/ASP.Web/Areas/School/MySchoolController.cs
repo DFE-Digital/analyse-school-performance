@@ -156,9 +156,7 @@ namespace ASP.Web.Areas.School
         protected override Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
         {
             return base.GetEstablishmentDetails(urn)
-                .MapError(error => error is NotFoundError
-                    ? Error.Unexpected(error.Message, null)
-                    : error);
+                .MapErrorIf(e => e is NotFoundError, m => Error.Unexpected(m, null));
         }
 
         private IEnumerable<BreadcrumbItem> GetBaseBreadcrumbTrail() => [];

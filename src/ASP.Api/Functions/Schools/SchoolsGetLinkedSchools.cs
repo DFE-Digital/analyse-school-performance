@@ -1,6 +1,6 @@
 ﻿using ASP.Api.Client.Schools;
 using ASP.Core.Results;
-using ASP.Domain.Establishments.UseCases.GetLinkedEstablishments;
+using ASP.Domain.Schools.UseCases.GetLinkedSchools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -15,14 +15,13 @@ public class SchoolsGetLinkedSchools : ApiFunction
 {
 
     private readonly ILogger<SchoolsGetLinkedSchools> _logger;
-    private readonly IGetLinkedEstablishments _useCase;
+    private readonly IGetLinkedSchoolsUseCase _useCase;
     private readonly ApiResultConverter _resultConverter;
 
     public SchoolsGetLinkedSchools(
         ILogger<SchoolsGetLinkedSchools> logger,
-        IGetLinkedEstablishments useCase,
-        ApiResultConverter resultConverter
-    )
+        IGetLinkedSchoolsUseCase useCase,
+        ApiResultConverter resultConverter)
     {
         _logger = logger
                   ?? throw new ArgumentNullException(nameof(logger));
@@ -52,7 +51,7 @@ public class SchoolsGetLinkedSchools : ApiFunction
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from urn in request.ValidatePathParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
-            from response in _useCase.HandleRequest(new GetLinkedEstablishmentsRequest(urn))
+            from response in _useCase.HandleRequest(new GetLinkedSchoolsRequest(urn))
             select response.ForApiClient();
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);

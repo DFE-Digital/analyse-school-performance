@@ -58,11 +58,15 @@ namespace ASP.Web.FunctionalTests.Drivers
             return new AngleSharpElementsDriver(El, selector);
         }
 
-        public Task ShouldHaveCountAsync(int count, Func<int, int, string> errorIfIncorrectCount)
+        public async Task ShouldHaveCountAsync(int count, Func<int, int, string> errorIfIncorrectCount)
         {
-            Assert.Equal(count, _elementCount, errorIfIncorrectCount(count, _elementCount));
+            if (count != _elementCount)
+            {
+                var pageContent = await _page.PageContentAsync();
+                _outputHelper.WriteLine($"Full page content:{Environment.NewLine}{Environment.NewLine}{pageContent}");
+            }
 
-            return Task.CompletedTask;
+            Assert.Equal(count, _elementCount, errorIfIncorrectCount(count, _elementCount));
         }
 
         public async Task ShouldNotExistAsync(string errorIfExists)

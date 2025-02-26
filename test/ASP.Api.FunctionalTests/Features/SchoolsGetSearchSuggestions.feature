@@ -32,7 +32,7 @@ Feature: SchoolsGetSearchSuggestions
 		Given no Establishments exist
 		When I send a GET request to /api/schools/search-suggestions?searchTerm=x
 		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "x" within the given scope."
+		And the response should be the message "Not found: There were no matches for "x" within the given scope."
 
 	Scenario: Should return NotFound (404) response if there were no relevant matches for the given searchTerm
 		Given Establishment "111111" exists:
@@ -43,7 +43,7 @@ Feature: SchoolsGetSearchSuggestions
 		"""
 		When I send a GET request to /api/schools/search-suggestions?searchTerm=secondary
 		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "secondary" within the given scope."
+		And the response should be the message "Not found: There were no matches for "secondary" within the given scope."
 
 	Scenario: Should return a NotFound (404) response if the requested establishment has been deleted for the given searchTerm
 		Given deleted Establishment "222222" exists:
@@ -54,7 +54,7 @@ Feature: SchoolsGetSearchSuggestions
 		"""
 		When I send a GET request to /api/schools/search-suggestions?searchTerm=222222
 		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "222222" within the given scope."
+		And the response should be the message "Not found: There were no matches for "222222" within the given scope."
 
 	Scenario: Should return a NotFound (404) response if the requested establishment is not currently visible for the given searchTerm
 		Given non-visible Establishment "111111" exists:
@@ -65,7 +65,7 @@ Feature: SchoolsGetSearchSuggestions
 		"""
 		When I send a GET request to /api/schools/search-suggestions?searchTerm=111111
 		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "111111" within the given scope."
+		And the response should be the message "Not found: There were no matches for "111111" within the given scope."
 
 	Scenario: Should not return 400 response if maxSuggestions = 1
 		Given Establishment "111111" exists:
@@ -261,7 +261,7 @@ Feature: SchoolsGetSearchSuggestions
 		"""
 		When I send a GET request to /api/schools/search-suggestions?searchTerm=Test&scope=LA&scopeId=100
 		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "Test" within the given scope."
+		And the response should be the message "Not found: There were no matches for "Test" within the given scope."
 
 	Scenario: Should return 200 response if Local Authority with code exist within the given scope "LA"
 		Given Local Authority "100" exists:
@@ -333,7 +333,7 @@ Feature: SchoolsGetSearchSuggestions
 		"""
 		When I send a GET request to /api/schools/search-suggestions?searchTerm=Test&scope=MAT&scopeId=1234
 		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "Test" within the given scope."
+		And the response should be the message "Not found: There were no matches for "Test" within the given scope."
 
 	Scenario: Should return 200 response if Multi Academy Trust with id exist within the given scope "MAT"
 		Given Multi Academy Trust "1234" exists:
@@ -409,7 +409,7 @@ Feature: SchoolsGetSearchSuggestions
 
 		When I send a GET request to /api/schools/search-suggestions?searchTerm=Test&scope=Diocese&scopeId=Test%20Diocese
 		Then I should get a 404 response
-		And the response should be the message "Not found: there were no matches for "Test" within the given scope."
+		And the response should be the message "Not found: There were no matches for "Test" within the given scope."
 
 	Scenario: Should return 200 response if there are matches for the search within the given scope "Diocese"
 		Given Establishment "111111" exists:

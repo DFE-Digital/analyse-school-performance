@@ -15,7 +15,7 @@ namespace ASP.Infrastructure.Blob
         public async Task<Result<Done>> DownloadToAsync(Stream stream, string container, string path, CancellationToken cancellationToken = default)
         {
             var result = await _memoryStore.Get(container, path)
-                .MapError(error => error is NotFoundError ? Error.NotFound($"Blob storage file \"{path}\" does not exist in container \"{container}\".") : error)
+                .MapErrorIf(e => e is NotFoundError, Error.NotFound($"Blob storage file \"{path}\" does not exist in container \"{container}\"."))
                 .Map(async r =>
                 {
                     using (var writer = new StreamWriter(stream, leaveOpen: true))
@@ -32,8 +32,8 @@ namespace ASP.Infrastructure.Blob
         public Task<Result<BinaryData>> DownloadAsync(string container, string path, CancellationToken cancellationToken = default)
         {
             var result = _memoryStore.Get(container, path)
-                                     .MapError(error => error is NotFoundError ? Error.NotFound($"Blob storage file \"{path}\" does not exist in container \"{container}\".") : error)
-                                     .Map(r => BinaryData.FromString(r.Contents));
+                .MapErrorIf(e => e is NotFoundError, Error.NotFound($"Blob storage file \"{path}\" does not exist in container \"{container}\"."))
+                .Map(r => BinaryData.FromString(r.Contents));
 
             return Task.FromResult(result);
         }

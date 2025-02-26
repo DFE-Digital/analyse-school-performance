@@ -135,6 +135,11 @@ public abstract class Result<TValue>
     /// <returns>The task object representing the asynchronous operation returning a <c>Result&lt;<typeparamref name="TValue"/>&gt;</c></returns>
     public abstract Task<Result<TValue>> MapError(Func<Error, Task<Error>> mapFunction);
 
+    public abstract Result<TValue> MapErrorIf(Func<Error, bool> predicate, Error error);
+    public abstract Task<Result<TValue>> MapErrorIf(Func<Error, Task<bool>> predicate, Error error);
+    public abstract Result<TValue> MapErrorIf(Func<Error, bool> predicate, Func<string, Error> errorFunction);
+    public abstract Task<Result<TValue>> MapErrorIf(Func<Error, Task<bool>> predicate, Func<string, Task<Error>> errorFunction);
+
     /// <summary>
     /// If the current result is an <c>ErrorResult</c>, uses the map function provided to change the error message,
     /// keeping the error type the same. Otherwise returns the current result unchanged. For example:

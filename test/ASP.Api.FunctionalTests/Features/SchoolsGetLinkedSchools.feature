@@ -31,7 +31,7 @@
     """
     When I send a GET request to /api/schools/100002/linked-schools
     Then I should get a 404 response 
-    And the response should be the message "Not found: Could not find Establishment with URN "100002"."
+    And the response should be the message "Not found: Could not find school with URN "100002"."
 
   Scenario: Should return empty links response if School exists but has no links
     Given Establishment "100001" exists:

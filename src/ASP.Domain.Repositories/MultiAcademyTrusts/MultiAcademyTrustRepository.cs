@@ -21,9 +21,7 @@ public class MultiAcademyTrustRepository : IMultiAcademyTrustRepository
     {
         return
             from dao in _documentDB.GetAsync<MultiAcademyTrustDAO>(ContainerKey, id, id)
-                .MapError(e => e is NotFoundError
-                    ? Error.NotFound($@"Could not find Multi-Academy Trust with id ""{id}"".")
-                    : e)
+                .MapErrorIf(e => e is NotFoundError, Error.NotFound($@"Could not find Multi-Academy Trust with id ""{id}""."))
             select dao.MapToDomainEntityLocalAuthority();
     }
 }

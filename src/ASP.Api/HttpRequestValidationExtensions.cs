@@ -24,10 +24,12 @@ public static class HttpRequestValidationExtensions
         {
             var content = await sr.ReadToEndAsync();
             if (content.Length == 0)
+            {
                 return Error.Invalid("The request body is missing.");
+            }
 
             return JsonHelper.DeserializeNotNull<TBody>(content, ignoreMissingMembers: true)
-                .MapError(e => Error.Invalid("The request body is not a JSON object."));
+                .MapError(_ => Error.Invalid("The request body is not a JSON object."));
         }
     }
 

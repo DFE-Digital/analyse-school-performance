@@ -87,7 +87,7 @@ Scenario: Should return BadRequest (400) response if scopeId parameter is non-ex
     """
     When I send a GET request to /api/downloads/package?scope=School&scopeId=222222&fileType=CSV&downloadIds=test-999-2024
     Then I should get a 400 response 
-    And the response should be the message "Bad request: Establishment with URN "222222" does not exist."
+    And the response should be the message "Bad request: School with URN "222222" does not exist."
 
 Scenario: Should return BadRequest (400) response if scopeId parameter is non-existent LA code
     Given Local Authority "111" exists:

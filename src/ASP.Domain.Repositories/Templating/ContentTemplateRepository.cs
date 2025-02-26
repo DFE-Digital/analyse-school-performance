@@ -38,9 +38,7 @@ namespace ASP.Domain.Repositories.Templating
         {
             return
                 from dao in _documentDB.GetAsync<ContentTemplateDAO>(ContainerKey, contentTemplateId, contentTemplateId)
-                    .MapError(e => e is NotFoundError
-                        ? Error.NotFound($@"Could not find Content Template ""{contentTemplateId}"".")
-                        : e)
+                    .MapErrorIf(e => e is NotFoundError, Error.NotFound($@"Could not find Content Template ""{contentTemplateId}""."))
                 select dao.ToContentTemplate();
         }
 

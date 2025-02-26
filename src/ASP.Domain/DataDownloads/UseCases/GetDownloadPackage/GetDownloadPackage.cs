@@ -1,10 +1,11 @@
-﻿using ASP.Domain.Establishments;
-using ASP.Core.Optionality;
+﻿using ASP.Core.Optionality;
 using ASP.Core.Results;
 using ASP.Core.Time;
 using Microsoft.Extensions.Options;
 using System.IO.Compression;
 using ASP.Core.Network;
+using ASP.Domain.LocalAuthorities;
+using ASP.Domain.Schools;
 
 namespace ASP.Domain.DataDownloads.UseCases.GetDownloadPackage
 {
@@ -13,20 +14,23 @@ namespace ASP.Domain.DataDownloads.UseCases.GetDownloadPackage
         private readonly DataDownloadsOptions _downloadStorageOptions;
         private readonly CurrentTimeProvider _currentTimeProvider;
         private readonly IDataDownloadsScopeValidator _scopeValidator;
-        private readonly IEstablishmentRepository _establishmentRepository;
+        private readonly ISchoolRepository _schoolRepository;
+        private readonly ILocalAuthorityRepository _localAuthorityRepository;
         private readonly IDataDownloadsFileProvider _fileProvider;
 
         public GetDownloadPackage(
 			IOptions<DataDownloadsOptions> downloadStorageOptions, 
 			CurrentTimeProvider currentTimeProvider,
-			IDataDownloadsScopeValidator scopeValidator, 
-			IEstablishmentRepository establishmentRepository,
+			IDataDownloadsScopeValidator scopeValidator,
+            ISchoolRepository schoolRepository,
+            ILocalAuthorityRepository localAuthorityRepository,
 			IDataDownloadsFileProvider fileProvider)
         {
             _downloadStorageOptions = downloadStorageOptions.Value;
             _currentTimeProvider = currentTimeProvider;
             _scopeValidator = scopeValidator;
-            _establishmentRepository = establishmentRepository;
+            _schoolRepository = schoolRepository;
+            _localAuthorityRepository = localAuthorityRepository;
             _fileProvider = fileProvider;
         }
 
@@ -35,7 +39,7 @@ namespace ASP.Domain.DataDownloads.UseCases.GetDownloadPackage
             var result =
                 from scopeIdentifier in _scopeValidator.ValidateScopeIdentifier(request.ScopeType, request.ScopeIdentifier)
                 from scope in _scopeValidator.ValidateScope(request.ScopeType, scopeIdentifier, Optional<int>.None)
-                    .MapError(error => error is NotFoundError ? Error.Invalid(GetErrorMessage(request.ScopeType, scopeIdentifier)) : error)
+                    .MapErrorIf(e => e is NotFoundError, Error.Invalid(GetErrorMessage(request.ScopeType, scopeIdentifier)))
                 from configs in _fileProvider.GetDownloadConfigs()
                 from downloadIds in request.DownloadIds
                     .Select(DownloadId.Parse)
@@ -57,35 +61,50 @@ namespace ASP.Domain.DataDownloads.UseCases.GetDownloadPackage
             return scopeType switch
             {
                 DataDownloadsScopeType.LA => $"Local Authority with Code \"{scopeIdentifier}\" does not exist.",
-                _ => $"Establishment with URN \"{scopeIdentifier}\" does not exist."
+                _ => $"School with URN \"{scopeIdentifier}\" does not exist."
             };
         }
 
         private async Task<Result<DownloadId>> CheckAccess(DataDownloadsScope scope, DownloadId downloadId)
         {
-            return await Result.Success(downloadId)
-                .Then(async id =>
+            if(scope.ScopeType == DataDownloadsScopeType.School)
+            {
+                return await (
+                    from urn in SchoolUrn.Parse(downloadId.Identifier)
+                    from school in _schoolRepository.Get(urn)
+                        .MapErrorIf(e => e is NotFoundError, 
+                            Error.NotAllowed($"Identifier \"{downloadId.Identifier}\" is not accessible within the given scope."))
+                        .ErrorIf(_ => scope.Identifier != downloadId.Identifier,
+                            Error.NotAllowed($"Identifier \"{downloadId.Identifier}\" is not accessible within the given scope."))
+                    select downloadId);
+            } 
+            
+            if(scope.ScopeType == DataDownloadsScopeType.LA)
+            {
+                if (SchoolUrn.TryParse(downloadId.Identifier, out var urn))
                 {
-                    if (scope.ScopeType == DataDownloadsScopeType.LA && id.Identifier.Length == 6)
-                    {
-                        return await _establishmentRepository.GetEstablishmentDetails(id.Identifier)
-                            .MapError(error => error is NotFoundError
-                                ? Error.NotAllowed($"Identifier \"{id.Identifier}\" is not accessible within the given scope.")
-                                : error)
-                            .ErrorIf(
-                                establishment => establishment.LocalAuthority?.Code != scope.Identifier,
-                                Error.NotAllowed($"Identifier \"{id.Identifier}\" is not accessible within the given scope.")
-                            )
-                            .Map(_ => id);
-                    }
+                    return await (
+                        from school in _schoolRepository.Get(urn)
+                            .MapErrorIf(e => e is NotFoundError,
+                                Error.NotAllowed($"Identifier \"{downloadId.Identifier}\" is not accessible within the given scope."))
+                            .ErrorIf(school => scope.Identifier != school.LocalAuthority?.Code,
+                                Error.NotAllowed($"Identifier \"{downloadId.Identifier}\" is not accessible within the given scope."))
+                        select downloadId);
+                }
+                
+                if(LACode.TryParse(downloadId.Identifier, out var laCode))
+                {
+                    return await (
+                        from la in _localAuthorityRepository.GetLocalAuthority(laCode.Value)
+                            .MapErrorIf(e => e is NotFoundError,
+                                Error.NotAllowed($"Identifier \"{downloadId.Identifier}\" is not accessible within the given scope."))
+                            .ErrorIf(_ => scope.Identifier != downloadId.Identifier,
+                                Error.NotAllowed($"Identifier \"{downloadId.Identifier}\" is not accessible within the given scope."))
+                        select downloadId);
+                }
+            }
 
-                    return Result.Success(id);
-                })
-                .ErrorIf(
-                    _ => scope.Identifier != downloadId.Identifier &&
-                         !(scope.ScopeType == DataDownloadsScopeType.LA && downloadId.Identifier.Length == 6),
-                    Error.NotAllowed($"Identifier \"{downloadId.Identifier}\" is not accessible within the given scope.")
-                );
+            return Error.NotAllowed($"Identifier \"{downloadId.Identifier}\" is not accessible within the given scope.");
         }
 
         private static Result<FileLocation> CreateFileLocation(

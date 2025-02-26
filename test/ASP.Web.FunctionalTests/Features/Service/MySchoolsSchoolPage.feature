@@ -38,7 +38,7 @@ Scenario: School page should throw page not found if Establishment is not curren
 		"""
 	When I navigate to /my-schools/111111/
 	Then I should get a 404 response
-	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/schools/111111 Establishment with URN "111111" is not currently visible."
+	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/schools/111111/access Could not find school with URN "111111"."
 
 @Javascript:disabled
 Scenario: School page should throw page not found if Establishment is deleted
@@ -59,7 +59,7 @@ Scenario: School page should throw page not found if Establishment is deleted
 		"""
 	When I navigate to /my-schools/111111/
 	Then I should get a 404 response
-	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/schools/111111 Establishment with URN "111111" has been deleted."
+	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/schools/111111/access Could not find school with URN "111111"."
 
 @Javascript:disabled
 Scenario: School page should display page not found page if School URN is invalid
@@ -85,7 +85,7 @@ Scenario: School page should display page not found page if School URN is invali
 	And the element "*[data-testid='address-typing-instruction']" should have the text content "If you typed the web address, check it is correct."
 	And the element "*[data-testid='address-pasting-instruction']" should have the text content "If you pasted the web address, check you copied the entire address."
 	And the element "*[data-testid='error-display-message']" should exist
-	And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/schools/222222/access School with URN "222222" does not exist."
+	And the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/schools/222222/access Could not find school with URN "222222"."
 
 @Javascript:disabled
 Scenario: School page should contain seven app card container element

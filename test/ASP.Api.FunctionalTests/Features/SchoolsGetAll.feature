@@ -106,7 +106,7 @@ Scenario: Should return NotFound (404) response if there were no establishments 
 	Given no Establishments exist
 	When I send a GET request to /api/schools
 	Then I should get a 404 response
-	And the response should be the message "Not found: there were no establishments within the given scope."
+	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should not return deleted establishments
 	Given deleted Establishment "222222" exists:
@@ -117,7 +117,7 @@ Scenario: Should not return deleted establishments
 		"""
 	When I send a GET request to /api/schools
 	Then I should get a 404 response
-	And the response should be the message "Not found: there were no establishments within the given scope."
+	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should not return non-visible establishments
 	Given non-visible Establishment "111111" exists:
@@ -128,7 +128,7 @@ Scenario: Should not return non-visible establishments
 		"""
 	When I send a GET request to /api/schools
 	Then I should get a 404 response
-	And the response should be the message "Not found: there were no establishments within the given scope."
+	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should return 200 response when establishments exist
 	Given Establishment "111111" exists:
@@ -177,7 +177,7 @@ Scenario: Should return NotFound (404) response if Local Authority with code doe
 		"""
 	When I send a GET request to /api/schools?scope=LA&scopeId=100
 	Then I should get a 404 response
-	And the response should be the message "Not found: there were no establishments within the given scope."
+	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should return 200 response if Local Authority with code exist within the given scope "LA"
 	Given Local Authority "100" exists:
@@ -254,7 +254,7 @@ Scenario: Should return NotFound (404) response if Multi Academy Trust with id d
 		"""
 	When I send a GET request to /api/schools?scope=MAT&scopeId=1234
 	Then I should get a 404 response
-	And the response should be the message "Not found: there were no establishments within the given scope."
+	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should return 200 response if Multi Academy Trust with id exist within the given scope "MAT"
 	Given Multi Academy Trust "1234" exists:
@@ -335,7 +335,7 @@ Scenario: Should return NotFound (404) response if there are no matches for Dioc
 
 	When I send a GET request to /api/schools?scope=Diocese&scopeId=Test%20Diocese
 	Then I should get a 404 response
-	And the response should be the message "Not found: there were no establishments within the given scope."
+	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should return 200 response if there are matches for the given scope "Diocese"
 	Given Establishment "111111" exists:

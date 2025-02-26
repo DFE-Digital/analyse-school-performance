@@ -213,9 +213,7 @@ namespace ASP.Web.Areas.LocalAuthority
         protected override Task<Result<string>> GetLocalAuthorityName(string laCode)
         {
             return base.GetLocalAuthorityName(laCode)
-                .MapError(error => error is NotFoundError
-                    ? Error.Unexpected(error.Message, null)
-                    : error);
+                .MapErrorIf(e => e is NotFoundError, m => Error.Unexpected(m, null));
         }
 
         private IEnumerable<BreadcrumbItem> GetBaseBreadcrumbTrail() => [];

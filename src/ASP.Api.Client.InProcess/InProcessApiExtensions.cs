@@ -36,7 +36,7 @@ namespace ASP.Api.Client.InProcess
                 .ConfigureDocumentDatabase(configuration)
                 .ConfigureBlobStorage(configuration)
                 .ConfigureContentTemplates()
-                .ConfigureEstablishments()
+                .ConfigureSchools()
                 .ConfigureLocalAuthorities()
                 .ConfigureMultiAcademyTrusts()
                 .ConfigureDataDownloads(configuration)

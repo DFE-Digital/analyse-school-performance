@@ -4,101 +4,114 @@ namespace ASP.Api.Functions.Schools;
 
 public static class DomainMappingExtensions
 {
-    public static string? ForApiClient(this Domain.Establishments.Address? address)
+    public static Client.Schools.SchoolDetails ForApiClientAsDetails(this Domain.Schools.Details.SchoolWithEstablishmentDetails school)
     {
-        if (address == null) return null;  // Return null directly instead of an empty object
+        return new Client.Schools.SchoolDetails() {
+            Urn = school.Urn.Value,
+            Name = school.Name,
+            Address = school.Address.MapNullable(ForApiClient),
+            EducationPhase = school.EducationPhase.ToString(),
+            ReligiousDenomination = school.EstablishmentDetails.ReligiousDenomination.MapNullable(ForApiClient),
+            AdmissionsPolicy = school.EstablishmentDetails.AdmissionsPolicy.MapNullable(ForApiClient),
+            LocalAuthority = school.LocalAuthority.MapNullable(ForApiClient),
+            HeadTeacher = school.EstablishmentDetails.HeadTeacher.MapNullable(ForApiClient),
+            AgeRange = school.EstablishmentDetails.AgeRange.MapNullable(ForApiClient),
+            EstablishmentType = school.EstablishmentDetails.EstablishmentType.MapNullable(ForApiClient),
+            Gender = school.EstablishmentDetails.Gender.MapNullable(ForApiClient),
+            ResourcedProvisionType = school.EstablishmentDetails.ResourcedProvisionType.MapNullable(ForApiClient),
+            NoOfPupils = school.EstablishmentDetails.NoOfPupils,
+            Laestab = school.LAEstab.Value,
+            MultiAcademyTrust = school.MultiAcademyTrust.MapNullable(ForApiClient),
+            Diocese = school.Diocese.MapNullable(ForApiClient),
+        };
+    }
 
+    public static Client.Schools.SchoolListing ForApiClientAsListing(this Domain.Schools.School school)
+    {
+        return new Client.Schools.SchoolListing() {
+            Urn = school.Urn.Value,
+            Name = school.Name,
+            Address = school.Address.MapNullable(ForApiClient),
+            EducationPhase = school.EducationPhase.ToString(),
+            Laestab = school.LAEstab.Value
+        };
+    }
+
+    public static Client.Schools.SchoolSuggestion ForApiClientAsSuggestion(this Domain.Schools.School school)
+    {
+        return new Client.Schools.SchoolSuggestion() {
+            Urn = school.Urn.Value,
+            Name = school.Name,
+            Address = school.Address.MapNullable(ForApiClient),
+            Laestab = school.LAEstab.Value
+        };
+    }
+
+    public static Client.Schools.SchoolsGetAccessResponse ForApiClient(this Domain.Schools.UseCases.IsSchoolAccessibleInScope.IsSchoolAccessibleInScopeResponse response)
+    {
+        return new Client.Schools.SchoolsGetAccessResponse(
+            response.IsAccessibleInScope,
+            response.IsAccessibleViaLinkedSchools);
+    }
+
+    public static Client.Schools.SchoolsGetLinkedSchoolsResponse ForApiClient(this Domain.Schools.UseCases.GetLinkedSchools.GetLinkedSchoolsResponse response)
+    {
+        return new Client.Schools.SchoolsGetLinkedSchoolsResponse() {
+            LinkedUrns = response.LinkedUrns.Select(urn => urn.Value).ToList(),
+            Links = response.Links.MapList(ForApiClient)
+        };
+    }
+
+    public static Client.Schools.LinkedSchool ForApiClientAsLinkedSchool(this Domain.Schools.School school)
+    {
+        return new Client.Schools.LinkedSchool() {
+            Name = school.Name,
+            Urn = school.Urn.Value
+        };
+    }
+
+    public static Client.Schools.SchoolLink ForApiClient(this Domain.Schools.LinkedSchools.LinkedSchoolsLink link)
+    {
+        return new Client.Schools.SchoolLink() {
+            Date = link.Date?.ToString("yyyy-MM-dd"),
+            LinkType = link.LinkType.MapNullable(ForApiClient),
+            Establishments = link.LinkedSchools.MapList(ForApiClientAsLinkedSchool),
+            Description = link.Description
+        };
+    }
+
+    public static Client.LookupValueWithCode ForApiClient(this Domain.Schools.LinkedSchools.LinkType linkType)
+    {
+        return new Client.LookupValueWithCode(
+            linkType.Code,
+            linkType.Name
+        );
+    }
+
+    public static Client.LookupValueWithCode ForApiClient(this Domain.Schools.LocalAuthority localAuthority)
+    {
+        return new Client.LookupValueWithCode(
+            localAuthority.Code,
+            localAuthority.Name);
+    }
+
+    public static Client.LookupValueWithId ForApiClient(this Domain.Schools.MultiAcademyTrust multiAcademyTrust)
+    {
+        return new Client.LookupValueWithId(multiAcademyTrust.Uid, multiAcademyTrust.Name);
+    }
+
+    public static Client.LookupValueWithCode ForApiClient(this Domain.Schools.Diocese diocese)
+    {
+        return new Client.LookupValueWithCode(diocese.Id, diocese.Name);
+    }
+
+    public static string ForApiClient(this Domain.Schools.Address address)
+    {
         return address.ToString();
     }
 
-    public static Client.LookupValueWithCode? ForApiClient(this Domain.Establishments.AdmissionsPolicy? admissionsPolicy)
+    public static Client.Schools.HeadTeacher ForApiClient(this Domain.Schools.Details.HeadTeacher headTeacher)
     {
-        if (admissionsPolicy == null) return null;  // Return null directly instead of an empty object
-
-        return new Client.LookupValueWithCode(
-            admissionsPolicy.Code,
-            admissionsPolicy.Name);
-    }
-
-    public static Client.Schools.AgeRange? ForApiClient(this Domain.Establishments.AgeRange? ageRange)
-    {
-        if (ageRange == null) return null;  // Return null directly instead of an empty object
-
-        return new Client.Schools.AgeRange(
-            ageRange.Low,
-            ageRange.High);
-    }
-
-    public static Client.Schools.SchoolDetails ForApiClient(this Domain.Establishments.EstablishmentDetails details)
-    {
-        return new Client.Schools.SchoolDetails() {
-            Urn = details.Urn,
-            Name = details.Name,
-            Address = details.Address.ForApiClient(),
-            EducationPhase = details.EducationPhase.ToString(),
-            ReligiousDenomination = details.ReligiousDenomination.ForApiClient(),
-            AdmissionsPolicy = details.AdmissionsPolicy.ForApiClient(),
-            LocalAuthority = details.LocalAuthority.ForApiClient(),
-            HeadTeacher = details.HeadTeacher.ForApiClient(),
-            AgeRange = details.AgeRange.ForApiClient(),
-            EstablishmentType = details.EstablishmentType.ForApiClient(),
-            Gender = details.Gender.ForApiClient(),
-            ResourcedProvisionType = details.ResourcedProvisionType.ForApiClient(),
-            NoOfPupils = details.NoOfPupils,
-            Laestab = details.Laestab,
-            MultiAcademyTrust = details.MultiAcademyTrust.ForApiClient(),
-            Diocese = details.Diocese.ForApiClient(),
-        };
-    }
-
-    public static Client.Schools.SchoolListing ForApiClient(this Domain.Establishments.EstablishmentListing details)
-    {
-        return new Client.Schools.SchoolListing() {
-            Urn = details.Urn,
-            Name = details.Name,
-            Address = details.Address.ForApiClient(),
-            EducationPhase = details.EducationPhase.ToString(),
-            Laestab = details.Laestab
-        };
-    }
-
-    public static Client.Schools.SchoolSuggestion ForApiClient(this Domain.Establishments.SearchSuggestions.EstablishmentSuggestion details)
-    {
-        return new Client.Schools.SchoolSuggestion() {
-            Urn = details.Urn,
-            Name = details.Name,
-            Address = details.Address.ForApiClient(),
-            Laestab = details.Laestab
-        };
-    }
-
-    public static List<Client.Schools.SchoolSuggestion> ForApiClient(this IEnumerable<Domain.Establishments.SearchSuggestions.EstablishmentSuggestion> detailsList)
-    {
-        return detailsList.Select(ForApiClient).ToList();
-    }
-
-    public static Client.LookupValueWithCode? ForApiClient(this Domain.Establishments.EstablishmentType? establishmentType)
-    {
-        if (establishmentType == null) return null;  // Return null directly instead of an empty object
-
-        return new Client.LookupValueWithCode(
-            establishmentType.Code,
-            establishmentType.Name);
-    }
-
-    public static Client.LookupValueWithCode? ForApiClient(this Domain.Establishments.Gender? gender)
-    {
-        if (gender == null) return null;  // Return null directly instead of an empty object
-
-        return new Client.LookupValueWithCode(
-            gender.Code,
-            gender.Name);
-    }
-
-    public static Client.Schools.HeadTeacher? ForApiClient(this Domain.Establishments.HeadTeacher? headTeacher)
-    {
-        if (headTeacher == null) return null;  // Return null directly instead of an empty object
-
         return new Client.Schools.HeadTeacher() {
             FirstName = headTeacher.FirstName,
             LastName = headTeacher.LastName,
@@ -107,98 +120,47 @@ public static class DomainMappingExtensions
         };
     }
 
-    public static Client.LookupValueWithCode? ForApiClient(this Domain.Establishments.LocalAuthority? localAuthority)
+    public static Client.Schools.AgeRange ForApiClient(this Domain.Schools.Details.AgeRange ageRange)
     {
-        if (localAuthority == null) return null;  // Return null directly instead of an empty object
+        return new Client.Schools.AgeRange(
+            ageRange.Low,
+            ageRange.High);
+    }
 
+    public static Client.LookupValueWithCode ForApiClient(this Domain.LookupValue lookupValue)
+    {
         return new Client.LookupValueWithCode(
-            localAuthority.Code,
-            localAuthority.Name);
+            lookupValue.Code,
+            lookupValue.Name);
     }
 
-    public static Client.LookupValueWithCode? ForApiClient(this Domain.Establishments.ReligiousDenomination? religiousDenomination)
+    public static List<U> MapList<T, U>(this IEnumerable<T>? source, Func<T, U> mapFunction)
     {
-        if (religiousDenomination == null) return null;  // Return null directly instead of an empty object
+        if (source == null) return [];
 
-        return new Client.LookupValueWithCode(
-            religiousDenomination.Code,
-            religiousDenomination.Name);
+        return source.Select(mapFunction).ToList();
     }
 
-    public static Client.LookupValueWithCode? ForApiClient(this Domain.Establishments.ResourcedProvisionType? resourcedProvisionType)
+    public static ResultsPage<U> MapResultsPage<T, U>(this ResultsPage<T> source, Func<T, U> mapFunction)
     {
-        if (resourcedProvisionType == null) return null;  // Return null directly instead of an empty object
-
-        return new Client.LookupValueWithCode(
-            resourcedProvisionType.Code,
-            resourcedProvisionType.Name);
+        return source.Map(mapFunction);
     }
 
-    public static Client.Schools.SchoolsGetAccessResponse? ForApiClient(this Domain.Establishments.UseCases.IsEstablishmentAccessibleInScope.IsEstablishmentAccessibleInScopeResponse? response)
+    public static U? MapNullable<T, U>(this T? t, Func<T, U> mapFunction)
+        where T : notnull
+        where U : notnull
     {
-        if (response == null) return null;  // Return null directly instead of an empty object
+        if (t is null) return default;
 
-        return new Client.Schools.SchoolsGetAccessResponse(
-            response.IsAccessibleInScope,
-            response.IsAccessibleViaLinkedSchools);
+        return mapFunction(t);
     }
 
-    public static ResultsPage<Client.Schools.SchoolListing>? ForApiClient(this ResultsPage<Domain.Establishments.EstablishmentListing>? response)
+    public static U? MapNullable<T, U>(this T? t, Func<T, U> mapFunction)
+        where T : struct
+        where U : struct
     {
-        if (response == null) return null;  // Return null directly instead of an empty object
+        if (t is null) return default;
 
-        return response.Map(r => r.ForApiClient());
-    }
-
-    public static List<Client.Schools.LinkedSchool> ForApiClient(this List<Domain.Establishments.LinkedEstablishments.LinkedEstablishment>? linkedEstablishment)
-    {
-        if (linkedEstablishment == null) return new List<Client.Schools.LinkedSchool>();
-
-        return linkedEstablishment.Select(x => new Client.Schools.LinkedSchool() {
-            Name = x.Name,
-            Urn = x.Urn
-        }).ToList();
-    }
-
-    public static Client.Schools.SchoolsGetLinkedSchoolsResponse ForApiClient(this Domain.Establishments.UseCases.GetLinkedEstablishments.GetLinkedEstablishmentsResponse linkedEstablishmentsResponse)
-    {
-        return new Client.Schools.SchoolsGetLinkedSchoolsResponse() {
-            LinkedUrns = linkedEstablishmentsResponse.LinkedUrns,
-            Links = linkedEstablishmentsResponse.Links.ForApiClient()
-        };
-    }
-
-    public static List<Client.Schools.SchoolLink> ForApiClient(this List<Domain.Establishments.LinkedEstablishments.EstablishmentLink> establishmentLink)
-    {
-        return establishmentLink.Select(x => new Client.Schools.SchoolLink() {
-            Date = x.Date?.ToString("yyyy-MM-dd"),
-            LinkType = x.LinkType.ForApiClient(),
-            Establishments = x.Establishments.ForApiClient(),
-            Description = x.Description
-        }).ToList();
-    }
-
-    public static Client.LookupValueWithCode? ForApiClient(this Domain.Establishments.LinkedEstablishments.LinkType? linkType)
-    {
-        if (linkType == null) return null;
-
-        return new Client.LookupValueWithCode(
-            linkType.Code,
-            linkType.Name
-        );
-    }
-
-    public static Client.LookupValueWithId? ForApiClient(this Domain.Establishments.MultiAcademyTrust? multiAcademyTrust)
-    {
-        if (multiAcademyTrust is null) return null;
-
-        return new Client.LookupValueWithId(multiAcademyTrust.Id, multiAcademyTrust.Name);
-    }
-
-    public static Client.LookupValueWithCode? ForApiClient(this Domain.Establishments.Diocese? diocese)
-    {
-        if (diocese is null) return null;
-
-        return new Client.LookupValueWithCode(diocese.Id, diocese.Name);
+        return mapFunction(t.Value);
     }
 }

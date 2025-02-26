@@ -23,9 +23,7 @@ namespace ASP.Infrastructure.DocumentDatabase
         {
             var result =
                 from item in _memoryStore.Get(container, new(id, partitionKeyValue))
-                    .MapError(e => e is NotFoundError
-                        ? Error.NotFound($@"Could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{container}"".")
-                        : e)
+                    .MapErrorIf(e => e is NotFoundError, Error.NotFound($@"Could not find the object with id ""{id}"" and partition key ""{partitionKeyValue}"" in container ""{container}""."))
                 from deserialized in JsonHelper.DeserializeNotNull<TItem>(item.Contents, ignoreMissingMembers: true)
                 select deserialized;
 

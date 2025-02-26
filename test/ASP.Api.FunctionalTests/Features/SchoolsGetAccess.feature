@@ -31,7 +31,7 @@
         """
         When I send a GET request to /api/schools/100002/access
         Then I should get a 404 response
-        And the response should be the message "Not found: School with URN "100002" does not exist."
+        And the response should be the message "Not found: Could not find school with URN "100002"."
 
     Scenario: Return 400 response when "scope" parameter is missing and empty in the request
         Given Establishment "100001" exists:

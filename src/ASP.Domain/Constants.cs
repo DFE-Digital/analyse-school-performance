@@ -6,9 +6,6 @@ public static class Constants
 {
     // Matches a 3-digit LA code or a 6-digit URN
     public static readonly Regex ScopeIdentifierRegex = new(@"^\d{3}$|^\d{6}$", RegexOptions.Compiled);
-
-    // Matches exactly six digits
-    public static readonly Regex UrnRegex = new Regex(@"^\d{6}$", RegexOptions.Compiled); 
     
     // Pattern to match a 3-digit code, a slash, then a 4-digit code
     public static readonly Regex LaEstabRegex = new Regex(@"^\d{3}/\d{4}$", RegexOptions.Compiled);

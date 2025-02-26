@@ -1,6 +1,6 @@
 using ASP.Api.Client.Schools;
 using ASP.Core.Results;
-using ASP.Domain.Establishments.UseCases.GetEstablishmentDetails;
+using ASP.Domain.Schools.UseCases.GetSchoolDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -14,14 +14,13 @@ namespace ASP.Api.Functions.Schools;
 public class SchoolsGetSingle : ApiFunction
 {
     private readonly ILogger<SchoolsGetSingle> _logger;
-    private readonly IGetEstablishmentDetails _useCase;
+    private readonly IGetSchoolDetailsUseCase _useCase;
     private readonly ApiResultConverter _resultConverter;
 
     public SchoolsGetSingle(
         ILogger<SchoolsGetSingle> logger,
-        IGetEstablishmentDetails useCase,
-        ApiResultConverter resultConverter
-    )
+        IGetSchoolDetailsUseCase useCase,
+        ApiResultConverter resultConverter)
     {
         _logger = logger
             ?? throw new ArgumentNullException(nameof(logger));
@@ -43,16 +42,15 @@ public class SchoolsGetSingle : ApiFunction
     public override async Task<ActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "schools/{urn:int}")]
         HttpRequest request,
-        CancellationToken cancellationToken
-    )
+        CancellationToken cancellationToken)
     {
         _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);
 
         var result =
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from urn in request.ValidatePathParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
-            from response in _useCase.HandleRequest(new GetEstablishmentDetailsRequest(urn))
-            select response.ForApiClient();
+            from response in _useCase.HandleRequest(new GetSchoolDetailsRequest(urn))
+            select response.ForApiClientAsDetails();
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);
     }

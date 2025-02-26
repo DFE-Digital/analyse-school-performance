@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Establishments\**" />
+    <EmbeddedResource Remove="Establishments\**" />
+    <None Remove="Establishments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
     <ProjectReference Include="..\ASP.Domain\ASP.Domain.csproj" />
     <ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />

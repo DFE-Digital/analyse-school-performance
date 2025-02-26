@@ -22,9 +22,9 @@ namespace ASP.Domain.Repositories.DataDownloads
         {
             return
                 from binaryData in await _blobStorage.DownloadAsync(_options.DownloadsConfigContainerName, _options.DownloadsConfigFileName)
-                  .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
+                  .MapErrorIf(e => e is NotFoundError, m => Error.Unexpected(m, null))
                 from config in CheckConfigs(binaryData, _options.DownloadsConfigFileName)
-                  .MapError(error => error is NotFoundError ? Error.Unexpected(error.Message, null) : error)
+                  .MapErrorIf(e => e is NotFoundError, m => Error.Unexpected(m, null))
                 select config;
         }
 
