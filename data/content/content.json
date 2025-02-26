@@ -1,0 +1,2926 @@
+[
+  {
+    "id": "help-cookies",
+    "contentId": "help-cookies",
+    "isPublished": true,
+    "PageTitle": "How cookies are used on this service",
+    "PageContent": {},
+    "Views": [
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Analyse school performance (ASP) puts small files (known as 'cookies') onto your computer to collect information about how you browse the site."
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Cookies are used to:"
+        }
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": {},
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "measure how you use the website so it can be updated and improved based on your needs"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "remember the notifications you've seen so that we don't show them to you again"
+            }
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The cookies aren't used to identify you personally."
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You'll normally see a message on the site before we store a cookie on your computer."
+        }
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/help/cookies",
+          "Text": "Find out how cookies are used by the main GOV.UK website"
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Measuring website usage"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We use Google Analytics software to collect information about how you use ASP. We do this to help make sure the site is meeting the needs of its users and to help us make improvements, for example [improving site search](https://insidegovuk.blog.gov.uk/2015/03/26/new-tool-to-see-trending-searches/). We also send cross-domain tracking information to GOV.UK to help us understand and monitor performance data across multiple public services."
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Google Analytics stores information about:"
+        }
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": {},
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "the pages you visit on ASP"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "how long you spend on each ASP page"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "how you got to the site"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "what you click on while you're visiting the site"
+            }
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We don't collect or store your personal information (for example your name or address) so this information can't be used to identify who you are."
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We don't allow Google to use or share our analytics data."
+        }
+      },
+      {
+        "ViewId": "Table",
+        "ViewContent": {
+          "Caption": "Google Analytics cookies",
+          "Headings": [
+            "Name",
+            "Purpose",
+            "Expires"
+          ],
+          "Rows": [
+            [
+              "_ga",
+              "This helps us count how many people visit GOV.UK by tracking if you've visited before",
+              "2 years"
+            ],
+            [
+              "_gat",
+              "Used to manage the rate at which page view requests are made",
+              "10 minutes"
+            ]
+          ]
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You can [opt out of Google Analytics cookies](https://tools.google.com/dlpage/gaoptout)."
+        }
+      },
+      {
+        "ViewId": "CookiePreferences",
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Some of our pages may contain content from other sites, like YouTube, which may set their own cookies. We have no control over cookies set on other websites - you will be able to indicate your cookie preferences for other sites in your browser."
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We use YouTube to provide videos on some pages of the site. YouTube sets cookies when you visit one of these pages."
+        }
+      },
+      {
+        "ViewId": "Table",
+        "ViewContent": {
+          "Caption": "YouTube cookies",
+          "Headings": [
+            "Name",
+            "Purpose",
+            "Expires"
+          ],
+          "Rows": [
+            [
+              "\\_use\\_hitbox",
+              "This is a randomly generated number that identifies your browser",
+              "When you close your browser"
+            ],
+            [
+              "VISITOR\\_INFO1\\_LIVE",
+              "Lets Youtube count the views of embedded Youtube videos",
+              "9 months"
+            ]
+          ]
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Essential cookies"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You may see a pop-up welcome message when you first visit GOV.UK. We'll store a cookie so that your computer knows you've seen it and knows not to show it again."
+        }
+      },
+      {
+        "ViewId": "Table",
+        "ViewContent": {
+          "Caption": "GOV.UK cookies",
+          "Headings": [
+            "Name",
+            "Purpose",
+            "Expires"
+          ],
+          "Rows": [
+            [
+              "\\_analytics\\_preferences",
+              "Lets us know whether you agree to the use of analytics cookies to help us understand how you use the service so we can make improvements",
+              "28 days"
+            ]
+          ]
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You may see pop-up messages about remembering your preferences. This means we may store a cookie that changes the way the website behaves or looks. These start with 'UX_*'"
+        }
+      },
+      {
+        "ViewId": "Table",
+        "ViewContent": {
+          "Caption": "Preference cookies",
+          "Headings": [
+            "Name",
+            "Purpose",
+            "Expires"
+          ],
+          "Rows": [
+            [
+              "UX\\_seen\\_pop\\_up",
+              "Saves a message to let us know that you don't want to see our new navigation message",
+              "1 hour / 90 days - depending on whether you selected the 'Never show me this again' checkbox"
+            ],
+            [
+              "UX\\_feedback\\_pop\\_up",
+              "Saves a message to let us know that you don't want to see our feedback message",
+              "1 hour / 90 days - depending on whether you selected the 'Never show me this again' checkbox"
+            ]
+          ]
+        }
+      },
+      {
+        "ViewId": "Table",
+        "ViewContent": {
+          "Caption": "Analyse school performance cookies",
+          "Headings": [
+            "Name",
+            "Purpose",
+            "Expires"
+          ],
+          "Rows": [
+            [
+              "AspNet.ApplicationCookie",
+              "One of the ways that we manage the user access to the service",
+              "When you close your browser"
+            ],
+            [
+              "AspNet.ExternalCookie",
+              "One of the ways that we manage the user access to the service",
+              "When you close your browser"
+            ],
+            [
+              "__RequestVerificationToken",
+              "One of the ways that we manage the user access to the service",
+              "When you close your browser"
+            ],
+            [
+              "AcceptedTermsOfUse",
+              "Records your acceptance of the ASP Terms and conditions so you do not have to accept them on every visit",
+              "12 months"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "help-terms-of-use",
+    "contentId": "help-terms-of-use",
+    "isPublished": true,
+    "PageTitle": "Using the Analyse school performance website",
+    "PageContent": null,
+    "Views": [
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "IsLarge": true,
+          "Text": "**Please read these terms of use carefully before using this website. We recommend that you keep a copy for your records.**"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "**ASP contains highly sensitive personal information about pupils in schools and colleges. It is your responsibility to ensure that any personal data or sensitive personal data you access in ASP cannot be viewed or used by any unauthorised persons. Your username and password are specific to you and must not be shared with any other person.**",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Analyse school performance (ASP) website terms of use",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The ASP website is operated by the **Department for Education** ('**DfE**', '**we**' or '**us**'). These terms of use apply to all and authorised users of the ASP website ('**you**').",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "In these terms of use, the following definitions apply:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "**'approver'** means an authorised user within an organisation, with additional responsibilities for ASP, including checking and verifying proposed authorised users' suitability for access; and set-up, administration and deletion of authorised users' ASP accounts"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "**'authorised user'** means a person authorised to use ASP, with a unique active username that is linked to him/her within ASP, working for the organisation to which the username is issued"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "**'data controller'** has the meaning given to it in the Data Protection Act 1998. DfE is the data controller in relation to the personal data and the sensitive personal data held in the ASP website"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "**'data subject'** means the living individual who is the subject of the personal data or the sensitive personal data"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "**'personal data'** means data about a living individual who can be identified from that data or from that data and other information which is in, or likely to come into, the data controller's possession"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "**'processing'** has the meaning set out in the Data Protection Act 1998 and in relation to personal data, means obtaining, recording or holding the information or data or carrying out any operation or set of operations on the information or data, including:"
+            },
+            "ViewModel": null,
+            "ChildViews": [
+              {
+                "ViewId": "List",
+                "ViewContent": {},
+                "ViewModel": null,
+                "ChildViews": [
+                  {
+                    "ViewId": "ListItem",
+                    "ViewContent": {
+                      "Text": "organisation, adaptation or alteration of the information or data"
+                    },
+                    "ViewModel": null,
+                    "ChildViews": []
+                  },
+                  {
+                    "ViewId": "ListItem",
+                    "ViewContent": {
+                      "Text": "retrieval, consultation or use of the information or data"
+                    },
+                    "ViewModel": null,
+                    "ChildViews": []
+                  },
+                  {
+                    "ViewId": "ListItem",
+                    "ViewContent": {
+                      "Text": "disclosure of the information or data by transmission, dissemination or otherwise making available"
+                    },
+                    "ViewModel": null,
+                    "ChildViews": []
+                  },
+                  {
+                    "ViewId": "ListItem",
+                    "ViewContent": {
+                      "Text": "alignment, combination, blocking, erasure or destruction of the information or data"
+                    },
+                    "ViewModel": null,
+                    "ChildViews": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "**'protected data'** means any personal data and/or any sensitive personal data and any data derived from it in any form such as text, drawings, diagrams, images or sounds (together with any database made up of any of these) which are embodied in any electronic, magnetic, optical or tangible media."
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Acceptance of terms",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "These terms and conditions of use, (together with the documents they refer to), set out the terms of use for [ASP](https://analyse-school-performance.service.gov.uk/) and its subdirectories and subdomains ('**our / the website**'). They apply to all authorised users and visitors.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Please read these terms of use carefully before you start. By using the website, you indicate that you accept these terms of use and that you agree to abide by them. If you do not agree to these terms of use, you must not access or use this website.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "In order to access the secure part of this website you must select the box at the bottom of this page to confirm you accept these terms of use.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "These terms of use may be amended at any time. Revised terms of use take effect immediately from the time they are published and continued use of the website will be deemed acceptance of updated or amended terms.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Other terms that apply",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "These terms of use refer to the following additional terms, which also apply to your use of our website:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Our [privacy policy](/help/privacy), which sets out the terms on which we process any personal data we collect from you, or that you provide to us. By using our website, you consent to such processing and you warrant that all data provided by you is accurate"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Our [acceptable use policy](/help/acceptable-use). When using ASP, you must comply with this acceptable use policy."
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Accessing the ASP website - authorised users and approvers",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You must treat your username, password or other information issued to you as part of our security procedures as confidential and not disclose it to a third party.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You **must:**",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "comply with the password guidance at registration"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "change your password on a regular basis and whenever there is any indication of possible system or password compromise"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "only connect to the ASP website using a secured internet connection"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "ensure screens on devices accessing ASP outside the workplace cannot be read by other people"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "ensure you log-off ASP after completing your session."
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You must not allow anyone else to use your username and password to access ASP or:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "keep a record (e.g. paper, software file or PDA) of your username and password, unless this can be stored securely in accordance with government standards"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "include passwords in any automated log-on processor"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "access personal data or sensitive personal data in ASP from outside the European Economic Area"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We have the right to disable any username or password, whether chosen by you or allocated by us/an approver, at any time, if in our reasonable opinion you have failed to comply with any of these terms of use. If you know or suspect that anyone other than you knows your username or password, you must promptly notify us using the [Secure Access service request form](https://form.education.gov.uk/fillform.php?self=1&form_id=AH8ogiDeAfD&noLoginPrompt=1).",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "**If you are an approver, you accept responsibility for the secure management of ASP usernames within your organisation and for ensuring your organisation has appropriate security measures in place to protect personal data and sensitive personal data accessed in ASP.**",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You **must** comply with [**the Secure access approver guide**](https://www.gov.uk/government/publications/secure-access-approver-role-guide):",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "ensure that identity and other appropriate checks have been made on an individual before issuing a username and password, including checking a person's suitability to access children's personal data and sensitive personal data"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "only issue a non-transferable username and password that is linked to an individual authorised user and transmit these to the authorised user in a secure manner"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "check the identity of authorised users before resetting passwords"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "ensure authorised users receive appropriate data protection and information security awareness training and regular updates"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "ensure that on termination of employment an authorised user's username is removed from the ASP system and verify that the authorised user no longer retains any personal data or sensitive personal data obtained from ASP"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "review the list of usernames under your control every three months to ensure that the list does not contain names that should have been removed"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "inform the ASP helpdesk of any suspected security incident that may compromise ASP as soon as is practically possible."
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You **must never**:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "ask authorised users to disclose passwords; or send unsolicited emails to authorised users asking them to logon to ASP"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "recycle a username or password"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "transfer your approver privileges to another authorised user."
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Using and sharing personal data and sensitive personal data from ASP",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "ASP contains personal data and sensitive personal data about pupils in schools and colleges. You must ensure that any personal data and any sensitive personal data you access in ASP cannot be viewed or used by any unauthorised persons.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You agree to comply with data protection and privacy laws including, but not limited to, the Data Protection Act 1998, where they apply in relation to personal data and sensitive personal data processed in connection with ASP.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You agree only to use the personal data and sensitive personal data you access in ASP for lawful educational purposes, in the interests of individual pupils and not for any other purpose. You are only permitted to share personal data and sensitive personal data from ASP with those who you are satisfied need the data to discharge a statutory education function.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You must not retain personal data from ASP on local authorities' systems, or on electronic or paper-based records, for pupils who are not on the roll of schools within your local authority.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You must process protected data securely and your use of protected data must be consistent with the purpose for which the ASP database was set up and not for any other purpose.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You must not print, save, or record in any way, any html pages from the ASP website that contain pupil-specific information. This restriction does not apply to PDF/XLS/CSV/CTF files that are downloaded from ASP.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "If you are not an authorised user, you must not access or try to access personal data or sensitive personal data held in ASP **by any method**. This does not limit your rights, if applicable, as a data subject under the Data Protection Act 1998.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Data protections laws should never be used as an excuse for failure to protect a child from a real risk of harm. For further information see:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "l",
+          "Url": "https://www.gov.uk/government/publications/safeguarding-practitioners-information-sharing-advice",
+          "Text": "https://www.gov.uk/government/publications/safeguarding-practitioners-information-sharing-advice"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Using predecessor school data from ASP",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We provide information and personal data and sensitive personal data about individual pupils in relation to their predecessor schools in accordance with The Education (Individual Pupil Information) (Prescribed Persons) (England) Regulations 2009 as amended by The Education (Individual Pupil Information) (Prescribed Persons) (England) (Amendment) Regulations 2013 (\"the Regulations\").",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Information, personal data and sensitive personal data about individual pupils may only be used for:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "conducting research or analysis"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "producing statistics"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "providing information, advice or guidance"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "and for the sole purpose of promoting the education or well-being of children in England.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You must not publish or share information or personal data or sensitive personal data relating to pupils in a form which enables individual pupils to be identified.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We provide the individual pupil information to you in line with the regulations and in good faith. We are not responsible for any unauthorised use by you of any information or personal data or sensitive personal data made available in ASP.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Website availability",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We do not guarantee that our website, or any content on it, will always be available or be uninterrupted. We may suspend or withdraw or restrict the availability of all or any part of our website for technical, operational or legal reasons without notice. We will not be liable if for any reason the website is unavailable at any time or for any period.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Limitation of liability",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The ASP service and content on our website are provided 'as is' and 'as available'. We make no representations, warranties or guarantees, whether express or implied by law, including the implied warranties of satisfactory quality, fitness for a particular purpose, non-infringement, or compatibility in relation to the ASP website or its content, or that it is accurate, secure, complete or up-to-date.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We do not warrant or represent that the functions contained in this website will be uninterrupted or error-free, that defects will be corrected or that this site, or the service that makes it available, are free of viruses and represent the full functionality, accuracy or reliability of the website content.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Our responsibility for damage suffered by you",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We do not exclude or limit in any way our liability to you where it would be unlawful to do so. This includes liability for death or personal injury caused by our proven negligence or fraud or fraudulent misrepresentation.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Virus protection",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We make every effort to check and test ASP for viruses at every stage of production. You must make sure that the way you use ASP doesn't expose you to the risk of viruses, malicious computer code or other forms of interference which can damage your computer system.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We're not responsible for any loss, disruption or damage to your data or computer system that might happen when you use ASP.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Viruses, hacking and other offences",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "When using ASP, you must not introduce viruses, trojans, worms, logic bombs or any other material that's malicious or technologically harmful.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You must not try to gain unauthorised access to ASP, the server on which it's stored or any server, computer or database connected to it.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You must not attack ASP in any way. This includes denial-of-service attacks.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We'll report any attacks or attempts to gain unauthorised access to ASP to the relevant law enforcement authorities and share information about you with them.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Hoax messages and phishing",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "DfE, Ofsted, local authorities and school approvers will never send an unsolicited email to you asking you to log-on to ASP or ask for your password. You must not respond to such a request. If you receive such a request please report it to your approver who should then report it to us.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Links to external websites",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Links on ASP will lead to other websites which are not under our control. We are not responsible for the content of any linked site. Listing and linking should not be taken as an endorsement of any kind and we accept no liability for the content. We cannot guarantee that these links will work all of the time and have no control over the availability of the linked pages.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Rules about linking to ASP",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": " You may link other websites to our home page at [https://www.analyse-school-performance.service.gov.uk](https://www.analyse-school-performance.service.gov.uk), provided you do so in a way that is lawful but you are not permitted to link to any other pages on this site or to set up an automated login.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Governing law",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "These terms of use, their subject matter and their formation (and any non-contractual disputes or claims) are governed by English law. We both agree to the exclusive jurisdiction of the courts of England and Wales.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "General",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Our failure or delay to exercise or enforce any right in these terms of use does not mean that we waive our right to enforce these rights on another occasion.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "If any of these terms of use is held to be illegal, invalid or otherwise unenforceable for any reason, it shall be severed and deleted from these terms of use and the remaining terms of use shall survive and remain in full force and effect and continue to be binding and enforceable.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      }
+    ]
+  },
+  {
+    "id": "help-acceptable-use",
+    "contentId": "help-acceptable-use",
+    "isPublished": true,
+    "PageTitle": "Acceptable use policy",
+    "PageContent": {},
+    "Views": [
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Analyse school performance [(ASP)](https://analyse-school-performance.service.gov.uk/) is operated by the Department for Education ('**we**' or '**us**') and replaces RAISEonline This policy applies to all authorised users of the ASP website ('**you**')."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "This acceptable use policy sets out the terms between you and us under which you may access the ASP website. This policy applies to all authorised users of the website."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Your use of our website means that you accept and agree to comply with this acceptable use policy, which supplements our terms of use for ASP."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Prohibited uses",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You may use ASP only for lawful purposes. You may not use the website in a manner which infringes the rights or restricts or inhibits the use and enjoyment of the website by any other person."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "In particular you may not use the website for:"
+        }
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": {},
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "conduct which is unlawful or which may harass or cause distress or inconvenience to any person"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "the purpose of harming or attempting to harm minors in any way"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "the transmission of any content which is obscene, offensive, unlawful, or defamatory"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "the transmission/sending/uploading of any material that constitutes or encourages conduct that would be considered a criminal offence, or likely to give rise to civil liability"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "the transmission/sending/uploading of any data that you know contains viruses or any other harmful programs or similar computer code designed to adversely affect the operation of any computer software or hardware"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "the disruption of the normal flow of dialogue within this website."
+            }
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We will fully co-operate with any law enforcement authorities or court order lawfully requesting or directing us to disclose the identity of anyone posting any such information or materials on this website. We will monitor the database for inappropriate use."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Changes to the acceptable use policy",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Size": "m",
+          "Text": "We may revise this acceptable use policy at any time by amending this page. You are expected to check this page from time to time to take notice of any change we make, as they are legally binding on you. Some of the provisions contained in this acceptable use policy may also be superseded by provisions or notices published elsewhere on ASP."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      }
+    ],
+    "EditableJson": null
+  },
+  {
+    "id": "help-accessibility",
+    "contentId": "help-accessibility",
+    "isPublished": true,
+    "PageTitle": "Accessibility statement for Analyse school performance",
+    "PageContent": {},
+    "Views": [
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "This service is part of the wider GOV.UK website. There's a separate accessibility statement for the main GOV.UK website."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "This page only contains information about the Analyse school performance service, available at [https://www.analyse-school-performance.service.gov.uk](https://www.analyse-school-performance.service.gov.uk)"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Using this service",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Size": "m",
+          "Text": "This service is run by the Department for Education. We want as many people as possible to be able to use this service. For example, that means you should be able to:"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": {},
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "navigate the service using just a keyboard"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "navigate the service using speech recognition software"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "listen to the service using a screen reader (including the most recent versions of JAWS, Voiceover, Dragon Naturally Speaking and Fusion)"
+            }
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We've also made the text in the service as simple as possible to understand."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "AbilityNet has advice on making your device easier to use if you have a disability."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "How accessible this service is",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Some people may find parts of this service difficult to use:"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": {},
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Users of high contrast mode may find their preferences do not work well with some of the icons and the charts may be difficult to interpret."
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Users who need to use an increased zoom level may find that they need to scroll horizontally to access all content."
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Users of screen readers will not be able to use the scatter plots."
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Users who rely on the keyboard for navigation may not be able to access all the available view options for the scatter plots."
+            }
+          }
+        ]
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "What to do if you have difficulty using this service",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "If you have difficulty using this service, contact us by clicking on the contact link in the page footer."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "As part of providing this service, we may need to send you messages or documents. We'll ask you how you want us to send messages or documents to you, but contact us if you need them in a different format."
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Reporting accessibility problems with this service",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We're always looking to improve the accessibility of this service. If you find any problems that aren't listed on this page or think we're not meeting accessibility requirements please contact us using the contact link in the page footer."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Enforcement procedure",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you're not happy with how we respond to your complaint, contact the Equality Advisory and Support Service (EASS)."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Contacting us",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You can contact us about this service using the contact link in the page footer."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "If your query is about anything else or you need to contact us by phone, you can find out how to contact us at [www.gov.uk/contact-dfe](www.gov.uk/contact-dfe)"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Technical information about this service's accessibility",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The Department for Education is committed to making this service accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "This service is partially compliant with the Web Content Accessibility Guidelines version 2.1 AA standard, due to the non-compliances listed below."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": {},
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Screen reader users may find the content ordering of the bar chart component is confusing. This is a contravention of WCAG 2.1 success criterion 1.3.2"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Most of our pages are not responsive and do not work well when zoomed, which is a contravention of WCAG 2.1 guideline 1.3 and success criterion 1.4.4"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Scatter plot pages will have issues for some users."
+            },
+            "ChildViews": [
+              {
+                "ViewId": "List",
+                "ViewContent": {},
+                "ViewModel": {},
+                "ChildViews": [
+                  {
+                    "ViewId": "ListItem",
+                    "ViewContent": {
+                      "Text": "Screen reader users will struggle to use them as they have no non-visual equivalent. This is in contravention to WCAG 2.1 success criterion 1.1.1."
+                    }
+                  },
+                  {
+                    "ViewId": "ListItem",
+                    "ViewContent": {
+                      "Text": "Users who rely on the keyboard for navigation will be unable to explore the pupil details within the scatter plots and will be limited as to the available viewing options. This is in contravention to WCAG2.1 success criterion 2.1.1"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "On some pages screen reader users may have difficulty accessing our tertiary level navigation. This is in contravention to WCAG2.1 success criterion 3.2.4."
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Screen reader users may struggle to filter the pupil lists with the data management section. This is in contravention to WCAG2.1 success criterion 3.2.4."
+            }
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We will fully co-operate with any law enforcement authorities or court order lawfully requesting or directing us to disclose the identity of anyone posting any such information or materials on this website. We will monitor the database for inappropriate use."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Non accessible content",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The content listed below is non-accessible for the following reasons."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": {},
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Screen reader users will find the scatter plot pages unusable as there is no text equivalent of the charts on the page."
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Users who cannot use a mouse may find the scatter plots difficult to navigate."
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Users who do not use a mouse may not be able to reveal the scores on the question level analysis charts."
+            }
+          }
+        ]
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Non compliance with the accessibility regulations",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Screen reader users may find the content ordering of the bar chart component is confusing."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Most of our pages are not responsive and do not work well when zoomed."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Scatter plot pages will have issues for some users. Screen reader users will struggle to use them as they have no non-visual equivalent. Users who rely on the keyboard for navigation will be unable to explore the pupil details on the scatter plots and will be limited as to the available viewing options."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "On some pages screen reader users may have difficulty accessing out tertiary level navigation as it appears at the end of the content."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Screen reader users may struggle to filter the pupil lists with the data management section."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "How we tested this service",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The service was last tested on 21st May 2020 and was checked for compliance with WCAG 2.1 AA. The test was carried out by the Department for Education, Technology Services team."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "You can [access the full audit report here](accessibility/report)"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "What we're doing to improve accessibility",
+          "LinkUrl": null
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We continually review and test our service with users including users of assistive technology. When accessibility issues are found we will always prioritise this within our work plans."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "This page was prepared on 10th September 2020. It was last updated on 10th September 2020"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      }
+    ],
+    "EditableJson": null
+  },
+  {
+    "id": "help-privacy",
+    "contentId": "help-privacy",
+    "isPublished": true,
+    "PageTitle": "Analyse school performance Privacy policy",
+    "PageContent": null,
+    "Views": [
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Who we are",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Analyse school performance (ASP) is a digital service operated by the Department for Education. This service enables authorised users to access detailed pupil level performance data to support school improvement. For the purpose of data protection legislation, the DfE is the data controller for the personal data processed as part of ASP.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "This privacy policy sets out how we collect and process your personal data for the ASP digital service.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "How we will use your information",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "As part of ASP we receive your personal information from your school/s. We use your personal information to help teachers, governors and other professionals understand and assess school and pupil performance to help support school improvement. More information about this work is available from:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education",
+          "Text": "www.gov.uk/government/organisations/department-for-education"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "The nature of your personal information we will be using",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We may use the following personal information for ASP:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Name"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Unique identifiers"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Exam results"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Performance and attainment results"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We may also use the following special category personal information:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Ethnicity"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "Special Educational Needs"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "This helps us to improve the site by monitoring how you use it and respond to any feedback you send us, if you request it.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Why our use of your personal data is lawful",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "In order for our use of your personal data to be lawful, we need to meet one (or more) conditions in the data protection legislation. For the purpose of this project, the relevant condition(s) that we are meeting are as set out in Article 6(1)(e) of the GPDR in that processing of your information is necessary for the exercise of the function of the department.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "For the processing of your special category data, the relevant condition is under Article 9 (2)(g) substantial public interest.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Where your data is stored",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The DfE holds and processes personal information within the UK and under contracted services, within the European Economic Area. Where we process your information outside of the UK, we ensure that our service providers take appropriate security measures to protect your personal information in line with our policies and legal requirements.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "How long we will keep your personal data",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h3",
+          "Caption": "",
+          "Text": "ASP service and ASP downloadable data",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We will only keep your personal information for as long as necessary for the purposes for which we are using it and as the law allows.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The dataset will be reviewed at least every 3 years whilst it is still in use. Once the data is no longer in use it can be archived and retained for a further 3 years. At the end of this period the data will be reviewed on an annual basis to determine whether there is still a business need to justify its retention.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Once there is no longer a business need, the dataset will be destroyed.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h3",
+          "Caption": "",
+          "Text": "Key to success pre-prepared downloadable data",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We will keep the individual pupil level personal data within the analyse school performance system for the statutory educational life of the pupil plus seven years (to cover statutory financial data retention requirements). At the end of this period the data will be reviewed on an annual basis to determine whether there is still a business need to justify its retention.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Once there is no longer a business need, the dataset will be destroyed.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Sharing your personal information with others",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We may share information we hold about you with certain organisations where the law allows it, or if we have a legal obligation to do so. We may share information with other organisations, including the following:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": null,
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "national and local agencies who look after children"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "local authorities"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "professionals who work in schools and further and higher education institutions, children's services and health services"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "other government departments and related public-sector bodies"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "research institutions"
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "organisations contracted with us and/or by the above organisations to undertake work for them, requiring them to manage your information."
+            },
+            "ViewModel": null,
+            "ChildViews": []
+          }
+        ]
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "There may be some circumstances where we will need to share information about you with others without your consent. For example, this might be to prevent or detect a crime, or to comply with our obligations under safeguarding laws. In all cases, we will comply with all information handling legislation including the Data Protection Act 2018.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Your data protection rights when DfE uses your personal information",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Under data protection law, you have rights depending on our reason for processing your personal information. More information about how the DfE handles personal information is published here:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Under the Data Protection Act 2018, you are entitled to ask if we hold information relating to you and ask for a copy, by making a ‘subject access request’.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "To find out what personal information we hold about you for ASP, or to exercise any of your rights you can contact us using the question option on our [Contact Form](https://form.education.gov.uk/fillform.php?self=1&form_id=cCCNJ1xSfBE&noLoginPrompt=1) and select ‘something else’ enter ASP in the subject.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "If you need to contact us regarding any of the above, please do so via the our [Contact Form](https://form.education.gov.uk/fillform.php?self=1&form_id=cCCNJ1xSfBE&noLoginPrompt=1)",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The Information Commissioner's Office (ICO) website provides information about your data protection rights. [Read more here](https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/).",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Caption": "",
+          "Text": "Changes to this Privacy Notice",
+          "LinkUrl": ""
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "We regularly review and update our Privacy Notice to ensure it is up- to-date and accurate. This version was last updated April 2020.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      }
+    ]
+  },
+  {
+    "id": "help-guidance",
+    "contentId": "help-guidance",
+    "isPublished": true,
+    "PageTitle": "Guidance",
+    "PageContent": {},
+    "Views": [
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Primary video tutorial",
+          "LinkUrl": "https://youtu.be/65Zo64jLZ0E"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "A step-by-step guide to understanding and using ASP features such as school performance reports, data management and question level analysis. As we are constantly updating the service, you may notice minor differences between the video and the live service."
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Secondary video tutorial",
+          "LinkUrl": "https://youtu.be/2ryXmLTPCIg"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "A step-by-step guide to understanding and using ASP features such as school performance reports, data management and question level analysis for incoming year 7 pupils. As we are constantly updating the service, you may notice minor differences between the video and the live service."
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "School performance guidance",
+          "LinkUrl": "https://www.gov.uk/government/collections/school-performance-tables-about-the-data"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Department for Education guidance documents explaining the methodology used in our performance measures."
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Contact",
+          "LinkUrl": "https://form.education.gov.uk/en/AchieveForms/?form_uri=sandbox-publish://AF-Process-2b61dfcd-9296-4f6a-8a26-4671265cae67/AF-Stage-f3f5200e-e605-4a1b-ae6b-3536bc77305c/definition.json"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "How to get in touch with us if you have a question, a comment, a complaint or a Freedom of Information request."
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Terms of use",
+          "LinkUrl": "/help/terms-of-use"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "An outline of your responsibilities in keeping sensitive data private."
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Privacy",
+          "LinkUrl": "/help/privacy"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Details of the information we collect from you when you use ASP, how we keep your data secure and your data protection rights."
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Acceptable use",
+          "LinkUrl": "/help/acceptable-use"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "The acceptable and prohibited uses of ASP."
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Cookies",
+          "LinkUrl": "/help/cookies"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "How we use cookies to help us improve ASP and to avoid unnecessary notifications."
+        }
+      },
+      {
+        "ViewId": "Heading",
+        "ViewContent": {
+          "HeadingType": "h2",
+          "Text": "Accessibility",
+          "LinkUrl": "/help/accessibility"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "Statement of accessibility for ASP."
+        }
+      }
+    ]
+  },
+  {
+    "id": "help-accept-terms-of-use",
+    "contentId": "help-accept-terms-of-use",
+    "isPublished": true,
+    "PageTitle": "Agree to our terms of use",
+    "PageContent": null,
+    "Views": [
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Size": "m",
+          "Text": "By continuing, you confirm that you agree to Analyse school performance:"
+        }
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": {},
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "[privacy policy (opens in a new tab)](/help/privacy){target=\"_blank\"}, which explains how we use your personal information"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Text": "[terms of use (opens in new tab)](/help/terms-of-use){target=\"_blank\"}"
+            }
+          }
+        ]
+      },
+      {
+        "ViewId": "AcceptTerms",
+        "ViewModel": {},
+        "ChildViews": []
+      }
+    ]
+  },
+  {
+    "id": "school-useful-links",
+    "contentId": "school-useful-links",
+    "isPublished": true,
+    "PageTitle": null,
+    "PageContent": null,
+    "Views": [
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Id": "department-for-education",
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education",
+          "Text": "department-for-education"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Id": "personal-information-charter",
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Link",
+        "ViewContent": {
+          "Size": "m",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
+          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      }
+    ]
+  },
+  {
+    "id": "school-other-reports-ofsted",
+    "contentId": "school-other-reports-ofsted",
+    "isPublished": true,
+    "PageTitle": "Ofsted inspection data summary reports",
+    "PageContent": null,
+    "Views": [
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Id": "ofsted-visit-service",
+          "Size": "m",
+          "Text": "For the latest IDSR, [visit the Ofsted IDSR service](https://idsr.ofsted.gov.uk/idsr/{URN}/){target=\"_blank\"}"
+        }
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Size": "m",
+          "Text": "Problem with an IDSR? If you have an issue downloading an IDSR or any questions about the data in an IDSR, please email the relevant Ofsted team stating your URN or LAESTAB and give as much detail as possible:"
+        }
+      },
+      {
+        "ViewId": "List",
+        "ViewContent": {},
+        "ViewModel": {},
+        "ChildViews": [
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Id": "ofsted-school-performance-mail",
+              "Text": "Schools - [School.Performance.Data@ofsted.gov.uk](mailto:School.Performance.Data@ofsted.gov.uk)"
+            }
+          },
+          {
+            "ViewId": "ListItem",
+            "ViewContent": {
+              "Id": "ofsted-skills-data-mail",
+              "Text": "16 to 19 - [FEandSkillsData@ofsted.gov.uk](mailto:FEandSkillsData@ofsted.gov.uk)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "help-release-timetable",
+    "contentId": "help-release-timetable",
+    "isPublished": true,
+    "PageTitle": "Release timetable",
+    "PageContent": null,
+    "Views": [
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "For the academic year which ends in July 2022, we plan to release performance data as follows:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Table",
+        "ViewContent": {
+          "Headings": [
+            "Planned 2021/22 data release",
+            "Version",
+            "Month"
+          ],
+          "Rows": [
+            [
+              "Exclusions 2021-22",
+              "Final",
+              "February 2023"
+            ]
+          ],
+          "FirstCellAsHeader": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "For the academic year which ends in July 2023, we plan to release performance data as follows:",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Table",
+        "ViewContent": {
+          "Headings": [
+            "Planned 2022/23 data release",
+            "Version",
+            "Month"
+          ],
+          "Rows": [
+            [
+              "School Characteristics",
+              "Final",
+              "August 2023"
+            ]
+          ]
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Paragraph",
+        "ViewContent": {
+          "Text": "This schedule is subject to change and is dependent on data being made available to the ASP team.",
+          "IsLarge": false
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Table",
+        "ViewContent": {
+          "Headings": [
+            "2021/22 Data currently available on ASP"
+          ],
+          "Rows": [
+            [
+              "Absence (3-term)"
+            ],
+            [
+              "Multiplication tables check"
+            ],
+            [
+              "KS4 Destinations revised"
+            ]
+          ],
+          "FirstCellAsHeader": true
+        },
+        "ViewModel": null,
+        "ChildViews": []
+      }
+    ]
+  },
+  {
+    "id": "school-landing-page-downloads",
+    "contentId": "school-landing-page",
+    "isPublished": false,
+    "PageTitle": "My school",
+    "PageContent": null,
+    "Views": [
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "Id": "app-card-downloads",
+          "Title": "Downloads",
+          "LinkUrl": "download",
+          "Text": "Some text about downloads."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "Id": "app-card-other-reports",
+          "Title": "Other reports",
+          "LinkUrl": "other-reports",
+          "Text": "View reports on school performance, Ofsted inspections, asbence and exclusions and school characteristics."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "Id": "app-card-useful-links",
+          "Title": "Useful links",
+          "LinkUrl": "useful-links",
+          "Text": "View links to other services and published documents that may be useful."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      }
+    ]
+  },
+  {
+    "id": "school-landing-page",
+    "contentId": "school-landing-page",
+    "isPublished": true,
+    "PageTitle": "My school",
+    "PageContent": null,
+    "Views": [
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "Id": "app-card-download-data",
+          "Title": "Download data",
+          "LinkUrl": "download-data/",
+          "Text": "Download data for Analyse school performance and Key to success"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "Id": "app-card-other-reports",
+          "Title": "Other reports",
+          "LinkUrl": "other-reports/",
+          "Text": "View reports on school performance, Ofsted inspections, asbence and exclusions and school characteristics."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "Id": "app-card-useful-links",
+          "Title": "Useful links",
+          "LinkUrl": "useful-links/",
+          "Text": "View links to other services and published documents that may be useful."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      }
+    ]
+  },
+  {
+    "id": "home-page",
+    "contentId": "home-page",
+    "isPublished": true,
+    "PageTitle": "Analyse school performance",
+    "PageContent": {
+      "HeroDescription": "CONTENT NEEDED HERE"
+    },
+    "Views": [
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "AuthorizationPolicy": "AccessToMySchool",
+          "Id": "app-card-my-school",
+          "Title": "My school",
+          "LinkUrl": "/my-school/",
+          "Text": "View your school by key stage. Look at graphs and charts to see how well your school is performing."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "AuthorizationPolicy": "AccessToMyLocalAuthority",
+          "Id": "app-card-my-la",
+          "Title": "My local authority",
+          "LinkUrl": "/my-local-authority/",
+          "Text": "CONTENT NEEDED HERE"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "AuthorizationPolicy": "AccessToMyLaSchools",
+          "Id": "app-card-my-schools",
+          "Title": "My schools",
+          "LinkUrl": "/my-schools/",
+          "Text": "View schools within your local authority"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "AuthorizationPolicy": "AccessToMyMatSchools",
+          "Id": "app-card-my-schools",
+          "Title": "My schools",
+          "LinkUrl": "/my-schools/",
+          "Text": "View schools within your multi-academy trust"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "AuthorizationPolicy": "AccessToMyDioceseSchools",
+          "Id": "app-card-my-schools",
+          "Title": "My schools",
+          "LinkUrl": "/my-schools/",
+          "Text": "View schools within your diocese"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "AuthorizationPolicy": "AccessToAllSchools",
+          "Id": "app-card-local-authorities",
+          "Title": "All local authorities",
+          "LinkUrl": "/local-authorities/",
+          "Text": "Search all local authorities"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "AuthorizationPolicy": "AccessToAllSchools",
+          "Id": "app-card-schools",
+          "Title": "All schools",
+          "LinkUrl": "/schools/",
+          "Text": "Search all schools."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "Id": "app-card-release-timetable",
+          "Title": "Release timetable",
+          "LinkUrl": "/help/release-timetable/",
+          "Text": "Find out when your data will be released in our timetable"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      }
+    ]
+  },
+  {
+    "id": "la-landing-page",
+    "contentId": "la-landing-page",
+    "isPublished": true,
+    "PageTitle": "My local authority",
+    "PageContent": null,
+    "Views": [
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "AuthorizationPolicy": "AccessToAllSchools",
+          "Id": "app-card-la-all-schools",
+          "Title": "All schools",
+          "LinkUrl": "schools/",
+          "Text": "All schools found in this LA."
+        }
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "AuthorizationPolicy": "AccessToMyLaSchools",
+          "Id": "app-card-my-schools",
+          "Title": "My schools",
+          "LinkUrl": "/my-schools/",
+          "Text": "View schools within your local authority"
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      },
+      {
+        "ViewId": "Card",
+        "ViewContent": {
+          "Id": "app-card-la-download",
+          "Title": "Download data",
+          "LinkUrl": "download-data/",
+          "Text": "Download data for Analyse school performance and Key to success."
+        },
+        "ViewModel": {},
+        "ChildViews": []
+      }
+    ]
+  }
+]

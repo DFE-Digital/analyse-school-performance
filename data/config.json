@@ -1,0 +1,31 @@
+﻿{
+  "Containers": [
+    {
+      "Name": "content",
+      "PartitionKeyPath": "/contentId",
+      "Throughput": 400,
+      "DataPath": "data/content"
+    },
+    {
+      "Name": "establishments",
+      "PartitionKeyPath": "/urn",
+      "Throughput": 400,
+      "DataPath": "data/establishments",
+      "WhereClause": "c.id >= '000001' and c.id <= '000747'"
+    },
+    {
+      "Name": "local-authorities",
+      "PartitionKeyPath": "/code",
+      "Throughput": 400,
+      "DataPath": "data/local-authorities",
+      "WhereClause": "c.id >= '001' and c.id <= '026'"
+    },
+    {
+      "Name": "multi-academy-trusts",
+      "PartitionKeyPath": "/id",
+      "Throughput": 400,
+      "DataPath": "data/multi-academy-trusts",
+      "WhereClause": "c.id = '0001'"
+    }
+  ]
+}
