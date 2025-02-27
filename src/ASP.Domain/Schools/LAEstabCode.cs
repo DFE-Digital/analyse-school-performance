@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using ASP.Core.Results;
+using System.Text.RegularExpressions;
 
 namespace ASP.Domain.Schools
 {
@@ -18,9 +19,16 @@ namespace ASP.Domain.Schools
 
         public string Value { get; }
 
-        public LAEstabCode(string value)
+        private LAEstabCode(string value)
         {
             Value = value;
+        }
+
+        public static Result<LAEstabCode> Parse(string? stringValue)
+        {
+            return stringValue != null && LaEstabRegex.IsMatch(stringValue)
+                ? Result.Success(new LAEstabCode(stringValue))
+                : Result.Invalid<LAEstabCode>($@"""{stringValue}"" is not a valid LAESTAB code.");
         }
     }
 }

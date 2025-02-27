@@ -7,15 +7,15 @@ public class SchoolSearchPageViewModel
 {
     public PageViewModel Page { get; }
     public SearchViewModel Search { get; }
-    public List<EstablishmentListingViewModel> EstablishmentListings { get; }
+    public List<SchoolListingViewModel> SchoolListings { get; }
 
     public SchoolSearchPageViewModel(
         PageViewModel page,
         SearchViewModel search,
-        List<EstablishmentListingViewModel> establishmentListings)
+        List<SchoolListingViewModel> schoolListings)
     {
         Page = page;
         Search = search;
-        EstablishmentListings = establishmentListings;
+        SchoolListings = schoolListings;
     }
 }

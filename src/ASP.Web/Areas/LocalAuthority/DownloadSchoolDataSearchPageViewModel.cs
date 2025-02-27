@@ -8,15 +8,15 @@ public class DownloadSchoolDataSearchPageViewModel
 {
     public PageViewModel Page { get; }
     public SearchViewModel Search { get; }
-    public List<EstablishmentListingViewModel> EstablishmentListings { get; }
+    public List<SchoolListingViewModel> SchoolListings { get; }
 
     public DownloadSchoolDataSearchPageViewModel(
         PageViewModel page,
         SearchViewModel search,
-        List<EstablishmentListingViewModel> establishmentListings)
+        List<SchoolListingViewModel> schoolListings)
     {
         Page = page;
         Search = search;
-        EstablishmentListings = establishmentListings;
+        SchoolListings = schoolListings;
     }
 }

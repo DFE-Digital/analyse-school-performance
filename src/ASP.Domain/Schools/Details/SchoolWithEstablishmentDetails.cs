@@ -4,7 +4,7 @@
     {
         public SchoolWithEstablishmentDetails(
             SchoolUrn urn,
-            LAEstabCode laEstab,
+            LAEstabCode? laEstab,
             string name,
             EducationPhase educationPhase,
             Address? address,

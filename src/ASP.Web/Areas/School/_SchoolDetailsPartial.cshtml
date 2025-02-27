@@ -1,0 +1,138 @@
+﻿@model ASP.Web.Areas.School.SchoolDetailsViewModel
+
+<details id="app-school-page-details" class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            <span data-testid="school-page-details-state-closed" class="app-school-details-closed">Show</span>
+            <span data-testid="school-page-details-state-open" class="app-school-details-open">Hide</span>
+            school details
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key app-school-details-summary-heading">
+                    Detail type
+                </dt>
+                <dd class="govuk-summary-list__value app-school-details-summary-heading">
+                    School details
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-laestab-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    LAESTAB
+                </dt>
+                <dd data-testid="school-details-laestab-value" class="govuk-summary-list__value">
+                    @Model.Laestab
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-address-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Address
+                </dt>
+                <dd data-testid="school-details-address-value" class="govuk-summary-list__value">
+                    @Model.Address
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-school-type-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    School type
+                </dt>
+                <dd data-testid="school-details-school-type-value" class="govuk-summary-list__value">
+                    @Model.EstablishmentType
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-education-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Education phase
+                </dt>
+                <dd data-testid="school-details-education-value" class="govuk-summary-list__value">
+                    @Model.EducationPhase
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-gender-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Gender of entry
+                </dt>
+                <dd data-testid="school-details-gender-value" class="govuk-summary-list__value">
+                    @Model.Gender
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-la-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Local authority
+                </dt>
+                <dd data-testid="school-details-la-value" class="govuk-summary-list__value">
+                    @(Model.LocalAuthority?.Name ?? "Data not available")
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-principal-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Headteacher / Principal
+                </dt>
+                <dd data-testid="school-details-principal-value" class="govuk-summary-list__value">
+                    @Model.HeadTeacher
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-age-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Age range
+                </dt>
+                <dd data-testid="school-details-age-value" class="govuk-summary-list__value">
+                    @Model.AgeRange
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-religious-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Religious character
+                </dt>
+                <dd data-testid="school-details-religious-value" class="govuk-summary-list__value">
+                    @Model.ReligiousDenomination
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-admission-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Admissions policy
+                </dt>
+                <dd data-testid="school-details-admission-value" class="govuk-summary-list__value">
+                    @Model.AdmissionsPolicy
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-provision-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    SEN unit or resourced provision
+                </dt>
+                <dd data-testid="school-details-provision-value" class="govuk-summary-list__value">
+                    @Model.ResourcedProvisionType
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-pupils-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Number of pupils
+                </dt>
+                <dd data-testid="school-details-pupils-value" class="govuk-summary-list__value">
+                    @Model.NoOfPupils
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt data-testid="school-details-diocese-key" class="govuk-summary-list__key app-school-details-summary-key">
+                    Diocese
+                </dt>
+                <dd data-testid="school-details-diocese-value" class="govuk-summary-list__value">
+                    @Model.Diocese
+                </dd>
+            </div>
+            @if (Model.MultiAcademyTrust != null)
+            {
+                <div class="govuk-summary-list__row">
+                    <dt data-testid="school-details-mat-key" class="govuk-summary-list__key app-school-details-summary-key">
+                        Multi-academy trust
+                    </dt>
+                    <dd data-testid="school-details-mat-value" class="govuk-summary-list__value">
+                        @Model.MultiAcademyTrust
+                    </dd>
+                </div>
+            }
+        </dl>
+    </div>
+</details>

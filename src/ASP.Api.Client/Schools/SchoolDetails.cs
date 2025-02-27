@@ -2,20 +2,20 @@
 
 public class SchoolDetails
 {
-    public string Urn { get; set; } = "";
-    public string Name { get; set; } = "";
-    public string? Address { get; set; }
-    public string? EducationPhase { get; set; }
-    public LookupValueWithCode? EstablishmentType { get; set; }
-    public LookupValueWithCode? Gender { get; set; }
+    public required string Urn { get; set; }
+    public required string Laestab { get; set; }
+    public required string Name { get; set; }
+    public required string Address { get; set; }
+    public required string EducationPhase { get; set; }
+    public required string EstablishmentType { get; set; }
+    public required string Gender { get; set; }
+    public required string HeadTeacher { get; set; }
+    public required string AgeRange { get; set; }
+    public required string ReligiousDenomination { get; set; }
+    public required string AdmissionsPolicy { get; set; }
+    public required string ResourcedProvisionType { get; set; }
+    public required string Diocese { get; set; }
+    public required string NoOfPupils { get; set; }
     public LookupValueWithCode? LocalAuthority { get; set; }
-    public HeadTeacher? HeadTeacher { get; set; }
-    public AgeRange? AgeRange { get; set; }
-    public LookupValueWithCode? ReligiousDenomination { get; set; }
-    public LookupValueWithCode? AdmissionsPolicy { get; set; }
-    public LookupValueWithCode? ResourcedProvisionType { get; set; }
-    public int? NoOfPupils { get; set; }
-    public string? Laestab { get; set; }
-    public LookupValueWithId? MultiAcademyTrust { get; set; }
-    public LookupValueWithCode? Diocese { get; set; }
+    public string? MultiAcademyTrust { get; set; }
 }

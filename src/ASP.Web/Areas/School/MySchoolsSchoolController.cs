@@ -47,7 +47,7 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> LandingPage(string urn, string? revision)
         {
             var result =
-                from establishmentDetails in GetEstablishmentDetails(urn)
+                from schoolDetails in GetSchoolDetails(urn)
                 from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
@@ -56,15 +56,15 @@ namespace ASP.Web.Areas.School
                             GetBaseBreadcrumbTrail()
                         ),
                         "My schools",
-                        establishmentDetails.Name
+                        schoolDetails.Name
                 ))
-                from linkedEstablishments in GetLinkedSchools(urn, 
+                from linkedSchools in GetLinkedSchools(urn, 
                     urn => Url.Action(nameof(MySchoolsSchoolController.LandingPage), "MySchoolsSchool", new { urn }))
                 select new SchoolLandingPageViewModel(
                     schoolPage,
-                    establishmentDetails,
+                    schoolDetails,
                     contentTemplate,
-                    linkedEstablishments
+                    linkedSchools
                 );
 
             return result
@@ -75,16 +75,16 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> OtherReports(string urn, string? revision)
         {
             var result = 
-                from establishmentDetails in GetEstablishmentDetails(urn)
+                from schoolDetails in GetSchoolDetails(urn)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(
-                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name)
+                            GetChildPageBaseBreadcrumbTrail(urn, schoolDetails.Name)
                         ),
                         "Other reports",
-                        establishmentDetails.Name,
+                        schoolDetails.Name,
                         GetSubNavigation(urn)
                 ))
                 select new SchoolContentPageViewModel(
@@ -100,16 +100,16 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> UsefulLinks(string urn, string? revision)
         {
             var result =
-                from establishmentDetails in GetEstablishmentDetails(urn)
+                from schoolDetails in GetSchoolDetails(urn)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(
-                            GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name)
+                            GetChildPageBaseBreadcrumbTrail(urn, schoolDetails.Name)
                         ),
                         "Useful links",
-                        establishmentDetails.Name,
+                        schoolDetails.Name,
                         GetSubNavigation(urn)
                     ))
                 select new SchoolContentPageViewModel(
@@ -127,11 +127,11 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> DownloadData(string urn, DownloadDataParameters parameters)
         {
             var result =
-                from establishmentDetails in GetEstablishmentDetails(urn)
+                from schoolDetails in GetSchoolDetails(urn)
                 from actionResult in _downloadDataController.Handle(
                     urn,
                     parameters,
-                    GetChildPageBaseBreadcrumbTrail(urn, establishmentDetails.Name)
+                    GetChildPageBaseBreadcrumbTrail(urn, schoolDetails.Name)
                         .Append(new("Download data", _downloadDataController.GetInitialActionUrl())),
                     stepModel => View(new SchoolDownloadDataPageViewModel(
                         new SchoolPageViewModel(
@@ -139,15 +139,15 @@ namespace ASP.Web.Areas.School
                             new PageViewModel(
                                 stepModel.BreadcrumbTrail,
                                 "Download data",
-                                $"{establishmentDetails.Name} (URN: {urn})",
+                                $"{schoolDetails.Name} (URN: {urn})",
                                 GetSubNavigation(urn),
-                                GetDownloadDataSideNavigation(urn, establishmentDetails.Name),
+                                GetDownloadDataSideNavigation(urn, schoolDetails.Name),
                                 stepModel.StepTitle,
-                                $"{establishmentDetails.Name} data"
+                                $"{schoolDetails.Name} data"
                         )),
                         stepModel.DownloadData
                     )),
-                    new() { [DownloadDataSubActionType.SelectFormat] = new() { Title = $"Download {establishmentDetails.Name} data" } }
+                    new() { [DownloadDataSubActionType.SelectFormat] = new() { Title = $"Download {schoolDetails.Name} data" } }
                 )
                 select actionResult;
 
@@ -189,15 +189,15 @@ namespace ASP.Web.Areas.School
                 new($"{name} data", _downloadDataController.GetInitialActionUrl(), Request.Path)
             ]);
 
-        protected override Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
+        protected override Task<Result<SchoolDetailsViewModel>> GetSchoolDetails(string urn)
         {
             return
                 from scopeInfo in User.GetScopeInfoForRole()
                 from _ in _api.SchoolsGetAccess(new(urn, scopeInfo))
                     .ErrorIf(response => !(response.IsAccessibleInScope || response.IsAccessibleViaLinkedSchools), 
                         Error.NotAllowed($"User is not allowed to view School {urn}"))
-                from establishmentDetails in base.GetEstablishmentDetails(urn)
-                select establishmentDetails;
+                from schoolDetails in base.GetSchoolDetails(urn)
+                select schoolDetails;
         }
     }
 }

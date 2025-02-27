@@ -2,28 +2,24 @@
 {
     public class EstablishmentDetails
     {
-        public LookupValue? EstablishmentType { get; }
-        public LookupValue? Gender { get; set; }
-        public HeadTeacher? HeadTeacher { get; }
-        public AgeRange? AgeRange { get; }
-        public LookupValue? ReligiousDenomination { get; }
-        public LookupValue? AdmissionsPolicy { get; }
-        public LookupValue? ResourcedProvisionType { get; }
-        public int? NoOfPupils { get; }
-        public DateTime? OpenDate { get; }
-        public DateTime? CloseDate { get; }
+        public string EstablishmentType { get; }
+        public string Gender { get; set; }
+        public string HeadTeacher { get; }
+        public string AgeRange { get; }
+        public string ReligiousDenomination { get; }
+        public string AdmissionsPolicy { get; }
+        public string ResourcedProvisionType { get; }
+        public string NoOfPupils { get; }
 
         public EstablishmentDetails(
-            LookupValue? establishmentType,
-            LookupValue? gender,
-            HeadTeacher? headTeacher,
-            AgeRange? ageRange,
-            LookupValue? religiousDenomination,
-            LookupValue? admissionsPolicy,
-            LookupValue? resourcedProvisionType,
-            int? noOfPupils,
-            DateTime? openDate,
-            DateTime? closeDate)
+            string establishmentType,
+            string gender,
+            string headTeacher,
+            string ageRange,
+            string religiousDenomination,
+            string admissionsPolicy,
+            string resourcedProvisionType,
+            string noOfPupils)
         {
             EstablishmentType = establishmentType;
             Gender = gender;
@@ -33,8 +29,6 @@
             AdmissionsPolicy = admissionsPolicy;
             ResourcedProvisionType = resourcedProvisionType;
             NoOfPupils = noOfPupils;
-            OpenDate = openDate;
-            CloseDate = closeDate;
         }
     }
 }

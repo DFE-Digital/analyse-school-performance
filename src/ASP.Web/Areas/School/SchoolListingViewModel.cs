@@ -1,6 +1,6 @@
 ﻿namespace ASP.Web.Areas.School;
 
-public class EstablishmentListingViewModel
+public class SchoolListingViewModel
 {
     public string Name { get; set; } = "";
     public string Address { get; set; } = "";

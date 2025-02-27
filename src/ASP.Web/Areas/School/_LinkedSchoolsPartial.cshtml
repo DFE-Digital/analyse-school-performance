@@ -1,0 +1,22 @@
+﻿@using ASP.Web.Areas.School
+@model ASP.Web.Areas.School.LinkedSchoolsViewModel?
+
+@{
+    var counter = 1;
+}
+
+@if (Model != null && Model.Links.Any())
+{
+    <div class="govuk-inset-text" data-testid="linked-school">
+        <p class="govuk-body">This establishment record is linked to other records, please follow the links to view data for these establishments:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            @foreach (var item in Model.Links)
+            {
+                <li data-testid="linked-school-description-@counter">
+                    @Html.Raw(LinkConverter.ConvertToLinks(item.Description, Model.CreateSchoolUrl))
+                </li>
+                counter++;
+            }
+        </ul>
+    </div>
+}

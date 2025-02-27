@@ -47,23 +47,23 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> LandingPage(string? revision)
         {
             var result =
-                from urn in User.GetEstablishmentUrn()
-                from establishmentDetails in GetEstablishmentDetails(urn)
+                from urn in User.GetSchoolUrn()
+                from schoolDetails in GetSchoolDetails(urn)
                 from contentTemplate in GetContentTemplate(LANDING_PAGE_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(GetBaseBreadcrumbTrail()),
                         "My school",
-                        establishmentDetails.Name
+                        schoolDetails.Name
                 ))
-                from linkedEstablishments in GetLinkedSchools(urn, 
+                from linkedSchools in GetLinkedSchools(urn, 
                     urn => Url.Action(nameof(GenericSchoolController.LandingPage), "GenericSchool", new { urn }))
                 select new SchoolLandingPageViewModel(
                     schoolPage,
-                    establishmentDetails,
+                    schoolDetails,
                     contentTemplate,
-                    linkedEstablishments
+                    linkedSchools
                 );
 
             return result
@@ -74,15 +74,15 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> OtherReports(string? revision)
         {
             var result =
-                from urn in User.GetEstablishmentUrn()
-                from establishmentDetails in GetEstablishmentDetails(urn)
+                from urn in User.GetSchoolUrn()
+                from schoolDetails in GetSchoolDetails(urn)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(GetChildPageBaseBreadcrumbTrail()),
                         "Other reports",
-                        establishmentDetails.Name,
+                        schoolDetails.Name,
                         GetSubNavigation()
                 ))
                 select new SchoolContentPageViewModel(
@@ -98,15 +98,15 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> UsefulLinks(string? revision)
         {
             var result =
-                from urn in User.GetEstablishmentUrn()
-                from establishmentDetails in GetEstablishmentDetails(urn)
+                from urn in User.GetSchoolUrn()
+                from schoolDetails in GetSchoolDetails(urn)
                 from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
                 let schoolPage = new SchoolPageViewModel(
                     urn,
                     new PageViewModel(
                         new BreadcrumbTrailViewModel(GetChildPageBaseBreadcrumbTrail()),
                         "Useful links",
-                        establishmentDetails.Name,
+                        schoolDetails.Name,
                         GetSubNavigation()
                 ))
                 select new SchoolContentPageViewModel(
@@ -124,8 +124,8 @@ namespace ASP.Web.Areas.School
         public Task<IActionResult> DownloadData(DownloadDataParameters parameters)
         {
             var result =
-                from urn in User.GetEstablishmentUrn()
-                from establishmentDetails in GetEstablishmentDetails(urn)
+                from urn in User.GetSchoolUrn()
+                from schoolDetails in GetSchoolDetails(urn)
                 from actionResult in _downloadDataController.Handle(
                     urn,
                     parameters,
@@ -137,15 +137,15 @@ namespace ASP.Web.Areas.School
                             new PageViewModel(
                                 stepModel.BreadcrumbTrail,
                                 "Download data",
-                                $"{establishmentDetails.Name} (URN: {urn})",
+                                $"{schoolDetails.Name} (URN: {urn})",
                                 GetSubNavigation(),
-                                GetDownloadDataSideNavigation(establishmentDetails.Name),
+                                GetDownloadDataSideNavigation(schoolDetails.Name),
                                 stepModel.StepTitle,
-                                $"{establishmentDetails.Name} data"
+                                $"{schoolDetails.Name} data"
                         )),
                         stepModel.DownloadData
                     )),
-                    new() { [DownloadDataSubActionType.SelectFormat] = new() { Title = $"Download {establishmentDetails.Name} data" } }
+                    new() { [DownloadDataSubActionType.SelectFormat] = new() { Title = $"Download {schoolDetails.Name} data" } }
                 )
                 select actionResult;
 
@@ -153,9 +153,9 @@ namespace ASP.Web.Areas.School
                 .ToActionResult(_hostEnvironment);
         }
 
-        protected override Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
+        protected override Task<Result<SchoolDetailsViewModel>> GetSchoolDetails(string urn)
         {
-            return base.GetEstablishmentDetails(urn)
+            return base.GetSchoolDetails(urn)
                 .MapErrorIf(e => e is NotFoundError, m => Error.Unexpected(m, null));
         }
 

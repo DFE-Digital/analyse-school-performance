@@ -737,8 +737,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Should
 		"""
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
 
 Examples:
 	| Counter | URN    | Name          |
@@ -764,16 +764,16 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/local-authority/301/download-data/individual-school-data/?page=6"
 	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authority/301/download-data/individual-school-data/?page=2"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100002"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100003"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100004"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100005"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100001"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100002"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100003"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100004"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100005"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100002"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100003"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100004"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100005"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100001"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100002"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100003"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100004"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100005"
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - Pagination 2
@@ -796,16 +796,16 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/local-authority/301/download-data/individual-school-data/?page=4"
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/local-authority/301/download-data/individual-school-data/?page=4"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100101"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100102"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100103"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100104"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100105"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100101"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100102"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100103"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100104"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100105"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100101"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100102"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100103"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100104"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100105"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100101"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100102"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100103"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100104"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100105"
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Page title should show correct text when search returns results
@@ -1224,16 +1224,16 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=6"
 	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100002"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100003"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100004"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100005"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100001"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100002"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100003"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100004"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100005"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100002"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100003"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100004"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100005"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100001"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100002"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100003"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100004"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100005"
 
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 3 (JS)
@@ -1254,16 +1254,16 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=6"
 	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100002"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100003"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100004"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100005"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100001"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100002"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100003"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100004"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100005"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100002"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100003"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100004"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100005"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100001"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100002"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100003"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100004"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100005"
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 4
@@ -1286,16 +1286,16 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=4"
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=4"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100101"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100102"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100103"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100104"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100105"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100101"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100102"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100103"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100104"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100105"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100101"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100102"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100103"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100104"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100105"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100101"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100102"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100103"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100104"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100105"
 
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 4 (JS)
@@ -1318,16 +1318,16 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=4"
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=4"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100101"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100102"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100103"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100104"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100105"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100101"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100102"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100103"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100104"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100105"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100101"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100102"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100103"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100104"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100105"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100101"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100102"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100103"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100104"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100105"
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 5
@@ -1345,8 +1345,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 51 - 51 of 51 schools"
 	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
 	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100051"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100051"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100051"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100051"
 
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 5 (JS)
@@ -1364,8 +1364,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 51 - 51 of 51 schools"
 	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
 	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100051"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100051"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100051"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100051"
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Matching URN search should redirect to Dates available for download
@@ -1897,17 +1897,17 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=tr
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
 	| Counter | URN    | Name                       | Address                        | Href                                                                          |
 	| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /local-authority/301/download-data/individual-school-data/333333/select-year/ |
 	| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
 	| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
-	| 4       | 444444 | The Training Centre        | No address available           | /local-authority/301/download-data/individual-school-data/444444/select-year/ |
+	| 4       | 444444 | The Training Centre        | Data not available           | /local-authority/301/download-data/individual-school-data/444444/select-year/ |
 
 @Javascript:enabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - Results page should show partial name and address matches (JS)
@@ -1977,16 +1977,16 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=tr
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
 
 Examples:
 	| Counter | URN    | Name                       | Address                        | Href                                                                          |
 	| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /local-authority/301/download-data/individual-school-data/333333/select-year/ |
 	| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
 	| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
-	| 4       | 444444 | The Training Centre        | No address available           | /local-authority/301/download-data/individual-school-data/444444/select-year/ |
+	| 4       | 444444 | The Training Centre        | Data not available           | /local-authority/301/download-data/individual-school-data/444444/select-year/ |
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - School search successful for 6-digit URN
@@ -2623,10 +2623,10 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "894"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=894
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
 	| Counter | URN    | LAESTAB  | Name                      | Href                                                                          |
@@ -2668,9 +2668,9 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "894"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=894
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
 Examples:
 	| Counter | URN    | LAESTAB  | Name                      | Href                                                                          |
@@ -2712,9 +2712,9 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "2200"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=2200
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
 Examples:
 	| Counter | URN    | LAESTAB  | Name                      |
@@ -2756,9 +2756,9 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "2200"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=2200
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
 Examples:
 	| Counter | URN    | LAESTAB  | Name                      |
@@ -3438,10 +3438,10 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "School"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=School
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
 	| Counter | URN    | Name     | Address                                   | Href                                                                          |
@@ -3505,9 +3505,9 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "School"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=School
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
 
 Examples:
 	| Counter | URN    | Name     | Address                                   | Href                                                                          |
@@ -3586,8 +3586,8 @@ Scenario: Data downloads > Individual school data > Search for a school - The Pa
 	And the sub-page title should be "Search results for "Primary"" with caption "Individual school data"
 	And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 26 of 26 schools"
 	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=Primary&page=1"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='establishment-listing-name-26']" should have the text content "Primary School 100026"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-listing-name-26']" should have the text content "Primary School 100026"
 		
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Autocomplete Should Populate Items When Two Or More Characters Entered

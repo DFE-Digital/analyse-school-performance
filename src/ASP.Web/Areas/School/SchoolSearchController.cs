@@ -121,14 +121,14 @@ namespace ASP.Web.Areas.School
     /// <h1>@Model.PageTitle</h1>
     /// /* ... other stuff */
     /// <asp-search model="Model.Search" search-form-width="one-half">
-    ///    <partial name="_EstablishmentListingPartial" model="Model.EstablishmentListings" />
+    ///    <partial name="_SchoolListingPartial" model="Model.SchoolListings" />
     /// </asp-search>
     /// ]]>
     /// </code>
     /// </remarks>
     [NonController]
     public class SchoolSearchController
-        : SearchController<SchoolSearchController, SchoolsScopeInfo?, EstablishmentListingViewModel>
+        : SearchController<SchoolSearchController, SchoolsScopeInfo?, SchoolListingViewModel>
     {
         private readonly IAspApiClient _api;
         private readonly Func<string, string?> _makeSchoolUrl;
@@ -167,7 +167,7 @@ namespace ASP.Web.Areas.School
             _searchOptions = searchOptions;
         }
 
-        protected override Task<Result<ResultsPage<EstablishmentListingViewModel>>> GetAllListings(
+        protected override Task<Result<ResultsPage<SchoolListingViewModel>>> GetAllListings(
             SchoolsScopeInfo? scopeInfo,
             int pageNumber)
         {
@@ -182,7 +182,7 @@ namespace ASP.Web.Areas.School
                 .Map(results => results.Map(MakeListingViewModel));
         }
 
-        protected override Task<Result<ResultsPage<EstablishmentListingViewModel>>> PerformSearch(
+        protected override Task<Result<ResultsPage<SchoolListingViewModel>>> PerformSearch(
             SchoolsScopeInfo? scopeInfo,
             SearchParameters searchParams,
             int pageNumber)
@@ -198,7 +198,7 @@ namespace ASP.Web.Areas.School
                 .Map(results => results.Map(MakeListingViewModel));
         }
 
-        protected override Task<Result<List<EstablishmentListingViewModel>>> PerformSearchSuggestions(
+        protected override Task<Result<List<SchoolListingViewModel>>> PerformSearchSuggestions(
             SchoolsScopeInfo? scopeInfo,
             SearchParameters searchParams)
         {
@@ -224,29 +224,29 @@ namespace ASP.Web.Areas.School
                 pagination);
         }
 
-        protected override string? GetListingUrl(EstablishmentListingViewModel listing)
+        protected override string? GetListingUrl(SchoolListingViewModel listing)
             => _makeSchoolUrl(listing.Urn);
 
-        private EstablishmentListingViewModel MakeListingViewModel(
+        private SchoolListingViewModel MakeListingViewModel(
             SchoolListing listing
         )
         {
-            return new EstablishmentListingViewModel {
+            return new SchoolListingViewModel {
                 Name = listing.Name,
-                Address = !string.IsNullOrEmpty(listing.Address) ? listing.Address : "No address available",
+                Address = !string.IsNullOrEmpty(listing.Address) ? listing.Address : "Data not available",
                 Urn = listing.Urn,
                 Laestab = !string.IsNullOrEmpty(listing.Laestab) ? listing.Laestab : "No data available",
                 Url = _makeSchoolUrl(listing.Urn) ?? ""
             };
         }
 
-        private EstablishmentListingViewModel MakeListingViewModel(
+        private SchoolListingViewModel MakeListingViewModel(
             SchoolSuggestion suggestion
         )
         {
-            return new EstablishmentListingViewModel {
+            return new SchoolListingViewModel {
                 Name = suggestion.Name,
-                Address = !string.IsNullOrEmpty(suggestion.Address) ? suggestion.Address : "No address available",
+                Address = !string.IsNullOrEmpty(suggestion.Address) ? suggestion.Address : "Data not available",
                 Urn = suggestion.Urn,
                 Laestab = !string.IsNullOrEmpty(suggestion.Laestab) ? suggestion.Laestab : "No data available",
                 Url = _makeSchoolUrl(suggestion.Urn) ?? ""

@@ -7,7 +7,7 @@ namespace ASP.Domain.Schools.LinkedSchools
     {
         public SchoolWithLinks(
             SchoolUrn urn,
-            LAEstabCode laEstab,
+            LAEstabCode? laEstab,
             string name,
             EducationPhase educationPhase,
             Address? address,

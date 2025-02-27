@@ -112,8 +112,8 @@ Examples:
         """
         When I navigate to /local-authority/100/schools/
         Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
-        And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-        And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
+        And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+        And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
 
     Examples:
       | Counter | URN    | Name          |
@@ -186,16 +186,16 @@ Examples:
 		"""
 	When I navigate to /local-authority/999/schools/
 	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 4 of 4 schools"
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
 	| Counter | URN    | Name                       | Address                        | Href            |
 	| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /school/333333/ |
 	| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /school/222222/ |
 	| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /school/111111/ |
-	| 4       | 444444 | The Training Centre        | No address available           | /school/444444/ |
+	| 4       | 444444 | The Training Centre        | Data not available           | /school/444444/ |
 
 @Javascript:disabled
 Scenario Outline: Pagination in Generic Local authority > All schools page for 'AccessToAllSchools' users
@@ -217,16 +217,16 @@ Scenario Outline: Pagination in Generic Local authority > All schools page for '
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/local-authority/999/schools/?page=6"
 	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authority/999/schools/?page=2"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100002"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100003"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100004"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100005"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100001"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100002"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100003"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100004"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100005"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100002"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100003"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100004"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100005"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100001"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100002"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100003"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100004"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100005"
 
 Examples:
 	| AccessToAllSchools |
@@ -257,16 +257,16 @@ Scenario Outline: Pagination in Generic Local authority > All schools page for '
 	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/local-authority/999/schools/?page=4"
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/local-authority/999/schools/?page=4"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100101"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100102"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100103"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100104"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100105"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100101"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100102"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100103"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100104"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100105"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100101"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100102"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100103"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100104"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100105"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100101"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100102"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100103"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100104"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100105"
 
 Examples:
 	| AccessToAllSchools |
@@ -676,16 +676,16 @@ Scenario: Pagination in Search Validation
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/local-authority/999/schools/?search=primary&page=6"
 	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authority/999/schools/?search=primary&page=2"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100002"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100003"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100004"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100005"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100001"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100002"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100003"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100004"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100005"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100002"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100003"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100004"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100005"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100001"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100002"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100003"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100004"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100005"
 
 @Javascript:enabled
 Scenario: Pagination in Search Validation (JS)
@@ -706,16 +706,16 @@ Scenario: Pagination in Search Validation (JS)
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/local-authority/999/schools/?search=primary&page=6"
 	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authority/999/schools/?search=primary&page=2"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100002"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100003"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100004"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100005"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100001"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100002"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100003"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100004"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100005"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100002"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100003"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100004"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100005"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100001"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100002"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100003"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100004"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100005"
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation 2
@@ -738,16 +738,16 @@ Scenario: Pagination in Search Validation 2
 	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/local-authority/999/schools/?search=primary&page=4"
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/local-authority/999/schools/?search=primary&page=4"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100101"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100102"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100103"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100104"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100105"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100101"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100102"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100103"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100104"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100105"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100101"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100102"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100103"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100104"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100105"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100101"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100102"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100103"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100104"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100105"
 
 @Javascript:enabled
 Scenario: Pagination in Search Validation 2 (JS)
@@ -770,16 +770,16 @@ Scenario: Pagination in Search Validation 2 (JS)
 	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/local-authority/999/schools/?search=primary&page=4"
 	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
 	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/local-authority/999/schools/?search=primary&page=4"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100101"
-	And the element "*[data-testid='establishment-listing-name-2']" should have the text content "Primary School 100102"
-	And the element "*[data-testid='establishment-listing-name-3']" should have the text content "Primary School 100103"
-	And the element "*[data-testid='establishment-listing-name-4']" should have the text content "Primary School 100104"
-	And the element "*[data-testid='establishment-listing-name-5']" should have the text content "Primary School 100105"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100101"
-	And the element "*[data-testid='establishment-listing-urn-2']" should have the text content "100102"
-	And the element "*[data-testid='establishment-listing-urn-3']" should have the text content "100103"
-	And the element "*[data-testid='establishment-listing-urn-4']" should have the text content "100104"
-	And the element "*[data-testid='establishment-listing-urn-5']" should have the text content "100105"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100101"
+	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100102"
+	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100103"
+	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100104"
+	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100105"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100101"
+	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100102"
+	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100103"
+	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100104"
+	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100105"
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation 3
@@ -797,8 +797,8 @@ Scenario: Pagination in Search Validation 3
 	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 51 - 51 of 51 schools"
 	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/local-authority/999/schools/?search=primary&page=1"
 	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/999/schools/?search=primary&page=1"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100051"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100051"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100051"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100051"
 
 @Javascript:enabled
 Scenario: Pagination in Search Validation 3 (JS)
@@ -816,8 +816,8 @@ Scenario: Pagination in Search Validation 3 (JS)
 	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 51 - 51 of 51 schools"
 	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/local-authority/999/schools/?search=primary&page=1"
 	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/999/schools/?search=primary&page=1"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100051"
-	And the element "*[data-testid='establishment-listing-urn-1']" should have the text content "100051"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100051"
+	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100051"
 
 @Javascript:disabled
 Scenario: Matching URN search should redirect to school landing page
@@ -1167,17 +1167,17 @@ Scenario Outline: Results page should show partial name and address matches
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=tr
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
 	| Counter | URN    | Name                       | Address                        | Href            |
 	| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /school/333333/ |
 	| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /school/222222/ |
 	| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /school/111111/ |
-	| 4       | 444444 | The Training Centre        | No address available           | /school/444444/ |
+	| 4       | 444444 | The Training Centre        | Data not available           | /school/444444/ |
 
 @Javascript:enabled
 Scenario Outline: Results page should show partial name and address matches (JS)
@@ -1247,16 +1247,16 @@ Scenario Outline: Results page should show partial name and address matches (JS)
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=tr
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
 
 Examples:
 	| Counter | URN    | Name                       | Address                        | Href            |
 	| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /school/333333/ |
 	| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /school/222222/ |
 	| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /school/111111/ |
-	| 4       | 444444 | The Training Centre        | No address available           | /school/444444/ |
+	| 4       | 444444 | The Training Centre        | Data not available             | /school/444444/ |
 
 @Javascript:disabled
 Scenario: School search successful for 6-digit URN
@@ -1689,10 +1689,10 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (LA
 	And I update the textbox "#app-field-Search" to have the value "894"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=894
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
 	| Counter | URN    | LAESTAB  | Name                      | Href            |
@@ -1734,9 +1734,9 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (LA
 	And I update the textbox "#app-field-Search" to have the value "894"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=894
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
 Examples:
 	| Counter | URN    | LAESTAB  | Name                      | Href            |
@@ -1778,9 +1778,9 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (ES
 	And I update the textbox "#app-field-Search" to have the value "2200"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=2200
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
 Examples:
 	| Counter | URN    | LAESTAB  | Name                      |
@@ -1822,9 +1822,9 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (ES
 	And I update the textbox "#app-field-Search" to have the value "2200"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=2200
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
 
 Examples:
 	| Counter | URN    | LAESTAB  | Name                      |
@@ -2340,10 +2340,10 @@ Scenario Outline: Multiple successful school name matches show correct search re
 	And I update the textbox "#app-field-Search" to have the value "School"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=School
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the href "<Href>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
 
 Examples:
 	| Counter | URN    | Name     | Address                                   | Href            |
@@ -2407,9 +2407,9 @@ Scenario Outline: Multiple successful school name matches show correct search re
 	And I update the textbox "#app-field-Search" to have the value "School"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=School
-	And the element "[data-testid="establishment-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="establishment-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="establishment-listing-address-<Counter>"]" should have the text content "<Address>"
+	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
+	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
+	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
 
 Examples:
 	| Counter | URN    | Name     | Address                                   | Href            |
@@ -2486,8 +2486,8 @@ Scenario: The PageNo parameter number greater than the total number of pages, th
 	And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 26 of 26 schools"
 	And the page subtitle should be "Test LA - 26 schools"
 	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/999/schools/?search=Primary&page=1"
-	And the element "*[data-testid='establishment-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='establishment-listing-name-26']" should have the text content "Primary School 100026"
+	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
+	And the element "*[data-testid='school-listing-name-26']" should have the text content "Primary School 100026"
 		
 @Javascript:enabled
 Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered

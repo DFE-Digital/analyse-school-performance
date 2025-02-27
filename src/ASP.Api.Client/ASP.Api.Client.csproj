@@ -23,7 +23,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="LookupValueWithId.cs" />
+        <None Include="LookupValueWithUid.cs" />
     </ItemGroup>
 
     <ItemGroup>

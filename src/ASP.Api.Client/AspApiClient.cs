@@ -234,12 +234,12 @@ public class AspApiClient : IAspApiClient
         return ApiGet<List<LookupValueWithCode>>(url, queryString);
     }
 
-    public Task<Result<LookupValueWithId>> MultiAcademyTrustsGetSingle(MAT.MultiAcademyTrustsGetSingleRequest request)
+    public Task<Result<LookupValueWithUid>> MultiAcademyTrustsGetSingle(MAT.MultiAcademyTrustsGetSingleRequest request)
     {
         var url = $"/api/multi-academy-trusts/{Uri.EscapeDataString(request.Uid)}";
         var queryString = QueryString.Empty;
 
-        return ApiGet<LookupValueWithId>(url, queryString);
+        return ApiGet<LookupValueWithUid>(url, queryString);
     }
 
     private async Task<Result<T>> ApiGet<T>(string url, QueryString? queryString)

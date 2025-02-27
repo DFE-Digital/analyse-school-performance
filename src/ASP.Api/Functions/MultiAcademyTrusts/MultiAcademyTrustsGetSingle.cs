@@ -35,7 +35,7 @@ public class MultiAcademyTrustsGetSingle : ApiFunction
     [Function("MultiAcademyTrustsGetSingle")]
     [OpenApiOperation(operationId: "MultiAcademyTrustsGetSingle", tags: ["Multi Academy Trust"], Description = "Retrieves details for a specific Multi Academy Trust based on the provided ID.")]
     [OpenApiParameter(name: "uid", In = ParameterLocation.Path, Required = true, Description = "The UID of the Multi Academy Trust (numeric).")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.LookupValueWithId), Description = "Details of the Multi Academy Trust for the specified ID.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.LookupValueWithUid), Description = "Details of the Multi Academy Trust for the specified ID.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid UID parameter.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No Multi Academy Trust found for the specified UID.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]

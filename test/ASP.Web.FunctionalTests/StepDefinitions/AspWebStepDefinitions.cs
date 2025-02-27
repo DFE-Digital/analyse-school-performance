@@ -366,7 +366,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         [Then("the linked establishment description should be:")]
         public async Task ThenTheLinkedEstablishmentDescriptionShouldBe(Table navigationItems)
         {
-            await AssertLinkedEstablishmentDescriptionNavigation("[data-testid='linked-establishment'] li", "Linked establishment description", navigationItems);
+            await AssertLinkedEstablishmentDescriptionNavigation("[data-testid='linked-school'] li", "Linked establishment description", navigationItems);
         }
 
         private async Task AssertNavigation(string selector, string itemName, Table navigationItems)

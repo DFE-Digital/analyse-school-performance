@@ -6,23 +6,23 @@ public static class DomainMappingExtensions
 {
     public static Client.Schools.SchoolDetails ForApiClientAsDetails(this Domain.Schools.Details.SchoolWithEstablishmentDetails school)
     {
-        return new Client.Schools.SchoolDetails() {
+        return new Client.Schools.SchoolDetails {
             Urn = school.Urn.Value,
+            Laestab = school.LAEstab?.Value ?? "Data not available",
             Name = school.Name,
-            Address = school.Address.MapNullable(ForApiClient),
-            EducationPhase = school.EducationPhase.ToString(),
-            ReligiousDenomination = school.EstablishmentDetails.ReligiousDenomination.MapNullable(ForApiClient),
-            AdmissionsPolicy = school.EstablishmentDetails.AdmissionsPolicy.MapNullable(ForApiClient),
-            LocalAuthority = school.LocalAuthority.MapNullable(ForApiClient),
-            HeadTeacher = school.EstablishmentDetails.HeadTeacher.MapNullable(ForApiClient),
-            AgeRange = school.EstablishmentDetails.AgeRange.MapNullable(ForApiClient),
-            EstablishmentType = school.EstablishmentDetails.EstablishmentType.MapNullable(ForApiClient),
-            Gender = school.EstablishmentDetails.Gender.MapNullable(ForApiClient),
-            ResourcedProvisionType = school.EstablishmentDetails.ResourcedProvisionType.MapNullable(ForApiClient),
+            Address = school.Address.MapNullable(ForApiClient) ?? "Data not available",
+            EducationPhase = school.EducationPhase?.ToString() ?? "Data not available",
+            LocalAuthority = school.LocalAuthority.MapNullable(l => l.ForApiClient()),
+            MultiAcademyTrust = school.MultiAcademyTrust.MapNullable(mat => mat.Name),
+            Diocese = school.Diocese.MapNullable(d => d.Name) ?? "Not applicable",
+            ReligiousDenomination = school.EstablishmentDetails.ReligiousDenomination,
+            AdmissionsPolicy = school.EstablishmentDetails.AdmissionsPolicy,
+            HeadTeacher = school.EstablishmentDetails.HeadTeacher,
+            AgeRange = school.EstablishmentDetails.AgeRange,
+            EstablishmentType = school.EstablishmentDetails.EstablishmentType,
+            Gender = school.EstablishmentDetails.Gender,
+            ResourcedProvisionType = school.EstablishmentDetails.ResourcedProvisionType,
             NoOfPupils = school.EstablishmentDetails.NoOfPupils,
-            Laestab = school.LAEstab.Value,
-            MultiAcademyTrust = school.MultiAcademyTrust.MapNullable(ForApiClient),
-            Diocese = school.Diocese.MapNullable(ForApiClient),
         };
     }
 
@@ -31,9 +31,9 @@ public static class DomainMappingExtensions
         return new Client.Schools.SchoolListing() {
             Urn = school.Urn.Value,
             Name = school.Name,
-            Address = school.Address.MapNullable(ForApiClient),
-            EducationPhase = school.EducationPhase.ToString(),
-            Laestab = school.LAEstab.Value
+            Address = school.Address.MapNullable(ForApiClient) ?? "Data not available",
+            EducationPhase = school.EducationPhase?.ToString() ?? "Data not available",
+            Laestab = school.LAEstab?.Value ?? "Data not available",
         };
     }
 
@@ -42,8 +42,8 @@ public static class DomainMappingExtensions
         return new Client.Schools.SchoolSuggestion() {
             Urn = school.Urn.Value,
             Name = school.Name,
-            Address = school.Address.MapNullable(ForApiClient),
-            Laestab = school.LAEstab.Value
+            Address = school.Address.MapNullable(ForApiClient) ?? "Data not available",
+            Laestab = school.LAEstab?.Value ?? "Data not available",
         };
     }
 
@@ -95,43 +95,11 @@ public static class DomainMappingExtensions
             localAuthority.Name);
     }
 
-    public static Client.LookupValueWithId ForApiClient(this Domain.Schools.MultiAcademyTrust multiAcademyTrust)
-    {
-        return new Client.LookupValueWithId(multiAcademyTrust.Uid, multiAcademyTrust.Name);
-    }
-
-    public static Client.LookupValueWithCode ForApiClient(this Domain.Schools.Diocese diocese)
-    {
-        return new Client.LookupValueWithCode(diocese.Id, diocese.Name);
-    }
-
     public static string ForApiClient(this Domain.Schools.Address address)
     {
-        return address.ToString();
-    }
+        var stringValue = address.ToString();
 
-    public static Client.Schools.HeadTeacher ForApiClient(this Domain.Schools.Details.HeadTeacher headTeacher)
-    {
-        return new Client.Schools.HeadTeacher() {
-            FirstName = headTeacher.FirstName,
-            LastName = headTeacher.LastName,
-            PreferredJobTitle = headTeacher.PreferredJobTitle,
-            Title = headTeacher.Title
-        };
-    }
-
-    public static Client.Schools.AgeRange ForApiClient(this Domain.Schools.Details.AgeRange ageRange)
-    {
-        return new Client.Schools.AgeRange(
-            ageRange.Low,
-            ageRange.High);
-    }
-
-    public static Client.LookupValueWithCode ForApiClient(this Domain.LookupValue lookupValue)
-    {
-        return new Client.LookupValueWithCode(
-            lookupValue.Code,
-            lookupValue.Name);
+        return string.IsNullOrWhiteSpace(stringValue) ? "Data not available" : stringValue;
     }
 
     public static List<U> MapList<T, U>(this IEnumerable<T>? source, Func<T, U> mapFunction)

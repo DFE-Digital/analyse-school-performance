@@ -5,20 +5,20 @@ namespace ASP.Web.Areas.School;
 public class SchoolLandingPageViewModel
 {
     public SchoolPageViewModel SchoolPage { get; }
-    public EstablishmentDetailsViewModel EstablishmentDetails { get; }
+    public SchoolDetailsViewModel SchoolDetails { get; }
     public ContentTemplateViewModel ContentTemplate { get; }
-    public LinkedEstablishmentsViewModel? LinkedEstablishments { get;  }
+    public LinkedSchoolsViewModel? LinkedSchools { get;  }
 
     public SchoolLandingPageViewModel(
         SchoolPageViewModel schoolPage,
-        EstablishmentDetailsViewModel establishmentDetails,
+        SchoolDetailsViewModel schoolDetails,
         ContentTemplateViewModel contentTemplate,
-        LinkedEstablishmentsViewModel? linkedEstablishments = null
+        LinkedSchoolsViewModel? linkedSchools = null
     )
     {
         SchoolPage = schoolPage;
-        EstablishmentDetails = establishmentDetails;
+        SchoolDetails = schoolDetails;
         ContentTemplate = contentTemplate;
-        LinkedEstablishments = linkedEstablishments;
+        LinkedSchools = linkedSchools;
     }
 }

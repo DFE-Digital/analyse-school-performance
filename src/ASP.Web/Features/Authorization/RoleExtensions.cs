@@ -24,7 +24,7 @@ namespace ASP.Web.Features.Authorization
             return claim.Value;
         }
 
-        public static Result<string> GetEstablishmentUrn(this ClaimsPrincipal user)
+        public static Result<string> GetSchoolUrn(this ClaimsPrincipal user)
         {
             if (!(user.Role() is Role r && r.IsSchoolUser))
             {

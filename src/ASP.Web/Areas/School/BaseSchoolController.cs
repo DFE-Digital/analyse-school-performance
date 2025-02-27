@@ -25,11 +25,11 @@ namespace ASP.Web.Areas.School
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
-        protected virtual Task<Result<EstablishmentDetailsViewModel>> GetEstablishmentDetails(string urn)
+        protected virtual Task<Result<SchoolDetailsViewModel>> GetSchoolDetails(string urn)
         {
             return 
                 from establishmentDetails in _api.SchoolsGetSingle(new SchoolsGetSingleRequest(urn))
-                select EstablishmentDetailsViewModel.FromEstablishmentDetails(establishmentDetails);
+                select SchoolDetailsViewModel.FromSchoolDetails(establishmentDetails);
         }
 
         protected virtual Task<Result<ContentTemplateViewModel>> GetContentTemplate(string contentId, string? revision)
@@ -40,11 +40,11 @@ namespace ASP.Web.Areas.School
             ).DefaultIf(error => error is NotFoundError, new ContentTemplateViewModel());
         }
         
-        protected virtual Task<Result<LinkedEstablishmentsViewModel>> GetLinkedSchools(string urn, Func<string, string?> createSchoolUrl)
+        protected virtual Task<Result<LinkedSchoolsViewModel>> GetLinkedSchools(string urn, Func<string, string?> createSchoolUrl)
         {
             return (
                 from linkedEstablishment in _api.SchoolsGetLinkedSchools(new SchoolsGetLinkedSchoolsRequest(urn))
-                select new LinkedEstablishmentsViewModel(urn, linkedEstablishment.Links, createSchoolUrl)
+                select new LinkedSchoolsViewModel(urn, linkedEstablishment.Links, createSchoolUrl)
             );
         }
 

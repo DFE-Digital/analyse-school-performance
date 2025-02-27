@@ -28,5 +28,5 @@ public interface IAspApiClient
     Task<Result<ResultsPage<LookupValueWithCode>>> LocalAuthoritiesGetAll(LocalAuthoritiesGetAllRequest request);
     Task<Result<List<LookupValueWithCode>>> LocalAuthoritiesGetSearchSuggestions(LocalAuthoritiesGetSearchSuggestionsRequest request); 
     
-    Task<Result<LookupValueWithId>> MultiAcademyTrustsGetSingle(MultiAcademyTrustsGetSingleRequest request);
+    Task<Result<LookupValueWithUid>> MultiAcademyTrustsGetSingle(MultiAcademyTrustsGetSingleRequest request);
 }

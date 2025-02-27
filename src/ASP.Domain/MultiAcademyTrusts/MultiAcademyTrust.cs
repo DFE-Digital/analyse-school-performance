@@ -4,10 +4,10 @@ public class MultiAcademyTrust
 {
     public MultiAcademyTrust(string id, string name)
     {
-        Id = id;
+        Uid = id;
         Name = name;
     }
     
-    public string Id { get; }
+    public string Uid { get; }
     public string Name { get; }
 }

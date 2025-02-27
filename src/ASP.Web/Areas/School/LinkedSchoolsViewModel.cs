@@ -2,13 +2,13 @@
 
 namespace ASP.Web.Areas.School;
 
-public class LinkedEstablishmentsViewModel
+public class LinkedSchoolsViewModel
 {
     public string Urn { get; }
     public List<SchoolLink> Links { get; }
     public Func<string, string?> CreateSchoolUrl { get; }
 
-    public LinkedEstablishmentsViewModel(string urn, List<SchoolLink> links, Func<string, string?> createSchoolUrl)
+    public LinkedSchoolsViewModel(string urn, List<SchoolLink> links, Func<string, string?> createSchoolUrl)
     {
         Urn = urn;
         Links = links;

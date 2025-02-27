@@ -205,9 +205,11 @@ namespace ASP.Domain.Repositories.Schools
         {
             return
                 from urn in SchoolUrn.Parse(dao.Urn)
+                from laestab in LAEstabCode.Parse(dao.Laestab)
+                    .Map(l => (LAEstabCode?)l).DefaultIfError(null)
                 select new School(
                     urn,
-                    new LAEstabCode(dao.Laestab ?? ""),
+                    laestab,
                     dao.Name,
                     new EducationPhase(
                         dao.IsPrimary,
@@ -226,9 +228,11 @@ namespace ASP.Domain.Repositories.Schools
         {
             return
                 from urn in SchoolUrn.Parse(dao.Urn)
+                from laestab in LAEstabCode.Parse(dao.Laestab)
+                    .Map(l => (LAEstabCode?)l).DefaultIfError(null)
                 select new SchoolWithEstablishmentDetails(
                     urn,
-                    new LAEstabCode(dao.Laestab ?? ""),
+                    laestab,
                     dao.Name,
                     new EducationPhase(
                         dao.IsPrimary,
@@ -241,25 +245,29 @@ namespace ASP.Domain.Repositories.Schools
                     MapNullable(dao.MultiAcademyTrust, FromDao),
                     MapNullable(dao.Diocese, FromDaoAsDiocese),
                     new EstablishmentDetails(
-                        MapNullable(dao.EstablishmentType, FromDaoAsLookupValue),
-                        MapNullable(dao.Gender, FromDaoAsLookupValue),
-                        MapNullable(dao.HeadTeacher, FromDao),
-                        MapNullable(dao.AgeRange, FromDao),
-                        MapNullable(dao.ReligiousDenomination, FromDaoAsLookupValue),
-                        MapNullable(dao.AdmissionsPolicy, FromDaoAsLookupValue),
-                        MapNullable(dao.ResourcedProvisionType, FromDaoAsLookupValue),
-                        dao.NoOfPupils,
-                        dao.OpenDate,
-                        dao.CloseDate));
+                        dao.EstablishmentType?.Name ?? "Data not available",
+                        dao.Gender?.Name ?? "Data not available",
+                        dao.HeadTeacher != null && (!string.IsNullOrWhiteSpace(dao.HeadTeacher.Title) || !string.IsNullOrWhiteSpace(dao.HeadTeacher.FirstName) || !string.IsNullOrWhiteSpace(dao.HeadTeacher.LastName))
+                            ? $"{dao.HeadTeacher.Title} {dao.HeadTeacher.FirstName} {dao.HeadTeacher.LastName}" 
+                            : "Data not available",
+                        dao.AgeRange != null && (!string.IsNullOrWhiteSpace(dao.AgeRange.Low) || !string.IsNullOrWhiteSpace(dao.AgeRange.Low))
+                            ? $"{dao.AgeRange.Low} to {dao.AgeRange.High}" 
+                            : "Data not available",
+                        dao.ReligiousDenomination?.Name ?? "Data not available",
+                        dao.AdmissionsPolicy?.Name ?? "Data not available",
+                        dao.ResourcedProvisionType?.Name ?? "Data not available",
+                        dao.NoOfPupils?.ToString() ?? "Data not available"));
         }
 
         private Result<SchoolWithLinks> FromDaoWithLinkedSchools(EstablishmentDao dao, List<LinkedSchoolsLink> links)
         {
             return
                 from urn in SchoolUrn.Parse(dao.Urn)
+                from laestab in LAEstabCode.Parse(dao.Laestab)
+                    .Map(l => (LAEstabCode?)l).DefaultIfError(null)
                 select new SchoolWithLinks(
                     urn,
-                    new LAEstabCode(dao.Laestab ?? ""),
+                    laestab,
                     dao.Name,
                     new EducationPhase(
                         dao.IsPrimary,

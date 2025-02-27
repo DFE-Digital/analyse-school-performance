@@ -4,7 +4,7 @@
     {
         public School(
             SchoolUrn urn,
-            LAEstabCode laEstab,
+            LAEstabCode? laEstab,
             string name,
             EducationPhase educationPhase,
             Address? address,
@@ -27,7 +27,7 @@
         }
 
         public SchoolUrn Urn { get; }
-        public LAEstabCode LAEstab { get; }
+        public LAEstabCode? LAEstab { get; }
         public string Name { get; }
         public EducationPhase EducationPhase { get; }
         public Address? Address { get; }

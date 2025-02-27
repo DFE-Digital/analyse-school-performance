@@ -11,6 +11,6 @@ public static class MultiAcademyTrustMapper
 
     public static MultiAcademyTrustDAO? MapToLocalAuthorityDAO(this MultiAcademyTrust multiAcademyTrust)
     {
-        return new MultiAcademyTrustDAO(multiAcademyTrust.Id, multiAcademyTrust.Name);
+        return new MultiAcademyTrustDAO(multiAcademyTrust.Uid, multiAcademyTrust.Name);
     }
 }

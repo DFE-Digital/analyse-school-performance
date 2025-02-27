@@ -2,8 +2,8 @@
 
 public static class DomainMappingExtensions
 {
-    public static Client.LookupValueWithId ForApiClient(this Domain.MultiAcademyTrusts.MultiAcademyTrust multiAcademyTrust)
+    public static Client.LookupValueWithUid ForApiClient(this Domain.MultiAcademyTrusts.MultiAcademyTrust multiAcademyTrust)
     {
-        return new Client.LookupValueWithId(multiAcademyTrust.Id, multiAcademyTrust.Name);
+        return new Client.LookupValueWithUid(multiAcademyTrust.Uid, multiAcademyTrust.Name);
     }
 }
