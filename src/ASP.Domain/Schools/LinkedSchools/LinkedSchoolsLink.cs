@@ -34,7 +34,7 @@ public class LinkedSchoolsLink
                 "1L" => FormatDateMessage($"{ParentName} was merged with {schoolsList}", "on", Date),
                 "2" or "2A" => FormatDateMessage($"{ParentName} became {schoolsList}", "on", Date),
                 "2F" => GenerateSuccessorSplitDescription(schoolsList),
-                "2K" => FormatDateMessage($"{ParentName} was amalgamated into {schoolsList}", "on", Date),
+                "2K" => FormatDateMessage($"{ParentName} was the result of an amalgamation of {schoolsList}", "on", Date),
                 "2O" or "2P" or "2Q" or "6" => FormatDateMessage($"{ParentName} was merged with {schoolsList}", "on", Date),
                 "6.1" => GeneratePredecessorAmalgamatedDescription(schoolsList),
                 "6.2" => FormatDateMessage($"{ParentName} was amalgamated into {schoolsList}", "on", Date),
@@ -77,7 +77,7 @@ public class LinkedSchoolsLink
     {
         if (LinkedSchools.Count == 1)
         {
-            return FormatDateMessage($"{ParentName} was amalgamated with {schoolsList}", "on", Date);
+            return FormatDateMessage($"{ParentName} was the result of an amalgamation of {schoolsList}", "on", Date);
         }
 
         bool isCreatedOnAmalgamationDate = Date.HasValue &&
@@ -86,10 +86,10 @@ public class LinkedSchoolsLink
 
         if (isCreatedOnAmalgamationDate)
         {
-            return FormatDateMessage($"{ParentName} was created as an amalgamation of {schoolsList}", "on", Date);
+            return FormatDateMessage($"{ParentName} was the result of an amalgamation of {schoolsList}", "on", Date);
         }
 
-        return FormatDateMessage($"{ParentName} was amalgamated with {schoolsList}", "on", Date);
+        return FormatDateMessage($"{ParentName} was the result of an amalgamation of {schoolsList}", "on", Date);
     }
 
     private string FormatSchoolsList()

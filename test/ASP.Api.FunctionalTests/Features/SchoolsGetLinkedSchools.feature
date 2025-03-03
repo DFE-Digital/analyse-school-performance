@@ -238,35 +238,35 @@
     """
 
   Examples:
-    | Code | Name                                                           | EstablishedDate | Description                                                                                            |
-    | 1    | Predecessor                                                    | null            | Test School 1 was previously [Test School 2](100002).                                                  |
-    | 1    | Predecessor                                                    | "2020-10-01"    | Test School 1 was previously [Test School 2](100002) up until 1 October 2020.                          |
-    | 1F   | Predecessor - Split School                                     | null            | Test School 1 was created as the result of a split from [Test School 2](100002).                       |
-    | 1F   | Predecessor - Split School                                     | "2020-10-01"    | Test School 1 was created as the result of a split from [Test School 2](100002) on 1 October 2020.     |
-    | 1I   | Closure                                                        | null            | Test School 1 was previously [Test School 2](100002).                                                  |
-    | 1I   | Closure                                                        | "2020-10-01"    | Test School 1 was previously [Test School 2](100002), which closed on 1 October 2020.                  |
-    | 1L   | Predecessor - merged                                           | null            | Test School 1 was merged with [Test School 2](100002).                                                 |
-    | 1L   | Predecessor - merged                                           | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                               |
-    | 2    | Successor                                                      | null            | Test School 1 became [Test School 2](100002).                                                          |
-    | 2    | Successor                                                      | "2020-10-01"    | Test School 1 became [Test School 2](100002) on 1 October 2020.                                        |
-    | 2A   | Expansion                                                      | null            | Test School 1 became [Test School 2](100002).                                                          |
-    | 2A   | Expansion                                                      | "2020-10-01"    | Test School 1 became [Test School 2](100002) on 1 October 2020.                                        |
-    | 2F   | Successor - Split School                                       | null            | [Test School 2](100002) was split off from Test School 1.                                              |
-    | 2F   | Successor - Split School                                       | "2020-10-01"    | [Test School 2](100002) was split off from Test School 1 on 1 October 2020.                            |
-    | 2K   | Result of Amalgamation                                         | null            | Test School 1 was amalgamated into [Test School 2](100002).                                            |
-    | 2K   | Result of Amalgamation                                         | "2020-10-01"    | Test School 1 was amalgamated into [Test School 2](100002) on 1 October 2020.                          |
-    | 2O   | Merged - change in age range                                   | null            | Test School 1 was merged with [Test School 2](100002).                                                 |
-    | 2O   | Merged - change in age range                                   | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                               |
-    | 2P   | Merged - expansion of school capacity                          | null            | Test School 1 was merged with [Test School 2](100002).                                                 |
-    | 2P   | Merged - expansion of school capacity                          | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                               |
-    | 2Q   | Merged - expansion in school capacity and changer in age range | null            | Test School 1 was merged with [Test School 2](100002).                                                 |
-    | 2Q   | Merged - expansion in school capacity and changer in age range | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                               |
-    | 6    | Successor - merged                                             | null            | Test School 1 was merged with [Test School 2](100002).                                                 |
-    | 6    | Successor - merged                                             | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                               |
-    | 6.1  | Predecessor - amalgamated                                      | null            | Test School 1 was amalgamated with [Test School 2](100002).                   |
-    | 6.1  | Predecessor - amalgamated                                      | "2020-10-01"    | Test School 1 was amalgamated with [Test School 2](100002) on 1 October 2020. |
-    | 6.2  | Successor - amalgamated                                        | null            | Test School 1 was amalgamated into [Test School 2](100002).                                            |
-    | 6.2  | Successor - amalgamated                                        | "2020-10-01"    | Test School 1 was amalgamated into [Test School 2](100002) on 1 October 2020.                          |
+    | Code | Name                                                           | EstablishedDate | Description                                                                                        |
+    | 1    | Predecessor                                                    | null            | Test School 1 was previously [Test School 2](100002).                                              |
+    | 1    | Predecessor                                                    | "2020-10-01"    | Test School 1 was previously [Test School 2](100002) up until 1 October 2020.                      |
+    | 1F   | Predecessor - Split School                                     | null            | Test School 1 was created as the result of a split from [Test School 2](100002).                   |
+    | 1F   | Predecessor - Split School                                     | "2020-10-01"    | Test School 1 was created as the result of a split from [Test School 2](100002) on 1 October 2020. |
+    | 1I   | Closure                                                        | null            | Test School 1 was previously [Test School 2](100002).                                              |
+    | 1I   | Closure                                                        | "2020-10-01"    | Test School 1 was previously [Test School 2](100002), which closed on 1 October 2020.              |
+    | 1L   | Predecessor - merged                                           | null            | Test School 1 was merged with [Test School 2](100002).                                             |
+    | 1L   | Predecessor - merged                                           | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                           |
+    | 2    | Successor                                                      | null            | Test School 1 became [Test School 2](100002).                                                      |
+    | 2    | Successor                                                      | "2020-10-01"    | Test School 1 became [Test School 2](100002) on 1 October 2020.                                    |
+    | 2A   | Expansion                                                      | null            | Test School 1 became [Test School 2](100002).                                                      |
+    | 2A   | Expansion                                                      | "2020-10-01"    | Test School 1 became [Test School 2](100002) on 1 October 2020.                                    |
+    | 2F   | Successor - Split School                                       | null            | [Test School 2](100002) was split off from Test School 1.                                          |
+    | 2F   | Successor - Split School                                       | "2020-10-01"    | [Test School 2](100002) was split off from Test School 1 on 1 October 2020.                        |
+    | 2K   | Result of Amalgamation                                         | null            | Test School 1 was the result of an amalgamation of [Test School 2](100002).                        |
+    | 2K   | Result of Amalgamation                                         | "2020-10-01"    | Test School 1 was the result of an amalgamation of [Test School 2](100002) on 1 October 2020.      |
+    | 2O   | Merged - change in age range                                   | null            | Test School 1 was merged with [Test School 2](100002).                                             |
+    | 2O   | Merged - change in age range                                   | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                           |
+    | 2P   | Merged - expansion of school capacity                          | null            | Test School 1 was merged with [Test School 2](100002).                                             |
+    | 2P   | Merged - expansion of school capacity                          | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                           |
+    | 2Q   | Merged - expansion in school capacity and changer in age range | null            | Test School 1 was merged with [Test School 2](100002).                                             |
+    | 2Q   | Merged - expansion in school capacity and changer in age range | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                           |
+    | 6    | Successor - merged                                             | null            | Test School 1 was merged with [Test School 2](100002).                                             |
+    | 6    | Successor - merged                                             | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002) on 1 October 2020.                           |
+    | 6.1  | Predecessor - amalgamated                                      | null            | Test School 1 was the result of an amalgamation of [Test School 2](100002).                        |
+    | 6.1  | Predecessor - amalgamated                                      | "2020-10-01"    | Test School 1 was the result of an amalgamation of [Test School 2](100002) on 1 October 2020.      |
+    | 6.2  | Successor - amalgamated                                        | null            | Test School 1 was amalgamated into [Test School 2](100002).                                        |
+    | 6.2  | Successor - amalgamated                                        | "2020-10-01"    | Test School 1 was amalgamated into [Test School 2](100002) on 1 October 2020.                      |
 
   Scenario: Descriptions for link to multiple establishments
     Given Establishment "100001" exists:
@@ -368,8 +368,8 @@
     | 2A   | Expansion                                                      | "2020-10-01"    | Test School 1 became [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                                    |
     | 2F   | Successor - Split School                                       | null            | [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) were split off from Test School 1.                                         |
     | 2F   | Successor - Split School                                       | "2020-10-01"    | [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) were split off from Test School 1 on 1 October 2020.                       |
-    | 2K   | Result of Amalgamation                                         | null            | Test School 1 was amalgamated into [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004).                                        |
-    | 2K   | Result of Amalgamation                                         | "2020-10-01"    | Test School 1 was amalgamated into [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                      |
+    | 2K   | Result of Amalgamation                                         | null            | Test School 1 was the result of an amalgamation of [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004).                                        |
+    | 2K   | Result of Amalgamation                                         | "2020-10-01"    | Test School 1 was the result of an amalgamation of [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                      |
     | 2O   | Merged - change in age range                                   | null            | Test School 1 was merged with [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004).                                             |
     | 2O   | Merged - change in age range                                   | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                           |
     | 2P   | Merged - expansion of school capacity                          | null            | Test School 1 was merged with [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004).                                             |
@@ -378,8 +378,8 @@
     | 2Q   | Merged - expansion in school capacity and changer in age range | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                           |
     | 6    | Successor - merged                                             | null            | Test School 1 was merged with [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004).                                             |
     | 6    | Successor - merged                                             | "2020-10-01"    | Test School 1 was merged with [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                           |
-    | 6.1  | Predecessor - amalgamated                                      | null            | Test School 1 was amalgamated with [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004).                                        |
-    | 6.1  | Predecessor - amalgamated                                      | "2020-10-01"    | Test School 1 was amalgamated with [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                      |
+    | 6.1  | Predecessor - amalgamated                                      | null            | Test School 1 was the result of an amalgamation of [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004).                                        |
+    | 6.1  | Predecessor - amalgamated                                      | "2020-10-01"    | Test School 1 was the result of an amalgamation of [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                      |
     | 6.2  | Successor - amalgamated                                        | null            | Test School 1 was amalgamated into [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004).                                        |
     | 6.2  | Successor - amalgamated                                        | "2020-10-01"    | Test School 1 was amalgamated into [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                      |
 
@@ -524,10 +524,10 @@
     }
     """
     Examples:
-      | NewSchoolOpenDate | AmalgamateDate | Description                                                                                                            |
-      | null              | null           | Test School 1 was amalgamated with [Test School 2](100002) and [Test School 3](100003).                                |
-      | null              | "2020-10-01"   | Test School 1 was amalgamated with [Test School 2](100002) and [Test School 3](100003) on 1 October 2020.              |
-      | "2019-02-01"      | null           | Test School 1 was amalgamated with [Test School 2](100002) and [Test School 3](100003).                                |
-      | "2019-02-01"      | "2020-10-01"   | Test School 1 was amalgamated with [Test School 2](100002) and [Test School 3](100003) on 1 October 2020.              |
-      | "2020-10-01"      | "2020-10-01"   | Test School 1 was created as an amalgamation of [Test School 2](100002) and [Test School 3](100003) on 1 October 2020. |
-      | "2021-01-01"      | "2020-10-01"   | Test School 1 was created as an amalgamation of [Test School 2](100002) and [Test School 3](100003) on 1 October 2020. |
+      | NewSchoolOpenDate | AmalgamateDate | Description                                                                                                               |
+      | null              | null           | Test School 1 was the result of an amalgamation of [Test School 2](100002) and [Test School 3](100003).                   |
+      | null              | "2020-10-01"   | Test School 1 was the result of an amalgamation of [Test School 2](100002) and [Test School 3](100003) on 1 October 2020. |
+      | "2019-02-01"      | null           | Test School 1 was the result of an amalgamation of [Test School 2](100002) and [Test School 3](100003).                   |
+      | "2019-02-01"      | "2020-10-01"   | Test School 1 was the result of an amalgamation of [Test School 2](100002) and [Test School 3](100003) on 1 October 2020. |
+      | "2020-10-01"      | "2020-10-01"   | Test School 1 was the result of an amalgamation of [Test School 2](100002) and [Test School 3](100003) on 1 October 2020. |
+      | "2021-01-01"      | "2020-10-01"   | Test School 1 was the result of an amalgamation of [Test School 2](100002) and [Test School 3](100003) on 1 October 2020. |
