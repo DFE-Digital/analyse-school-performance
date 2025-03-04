@@ -93,6 +93,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "establishments", "establishments", "{CBD9F061-9CE8-4A34-93EE-8181155CB2ED}"
 	ProjectSection(SolutionItems) = preProject
 		data\establishments\establishments.json = data\establishments\establishments.json
+		data\establishments\synthetic-establishments.json = data\establishments\synthetic-establishments.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "local-authorities", "local-authorities", "{4C65D929-6D01-4451-951A-E12431589DF5}"

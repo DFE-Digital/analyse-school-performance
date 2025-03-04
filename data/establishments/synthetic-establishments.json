@@ -1,0 +1,1007 @@
+[
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE24",
+            "name": "ASP Test Diocese CE24 Named",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010000",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "004",
+            "name": "Manchester",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010000",
+        "multiAcademyTrust": {
+            "uid": "0001",
+            "name": "THE DEAN TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School A",
+        "openDate": "2010-01-01",
+        "closeDate": "2018-08-31",
+        "links": [
+            {
+                "establishedDate": "2018-08-31",
+                "linkType": {
+                    "code": "2F",
+                    "name": "Successor - Split School",
+                    "isNullish": false
+                },
+                "linkedUrn": "010002"
+            },
+            {
+                "establishedDate": "2018-08-31",
+                "linkType": {
+                    "code": "2F",
+                    "name": "Successor - Split School",
+                    "isNullish": false
+                },
+                "linkedUrn": "010003"
+            }
+        ]
+    },
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE24",
+            "name": "ASP Test Diocese CE24 Named",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010001",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "004",
+            "name": "Manchester",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010001",
+        "multiAcademyTrust": {
+            "uid": "0001",
+            "name": "THE DEAN TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School B",
+        "openDate": "2011-01-01",
+        "closeDate": "2019-08-31",
+        "links": [
+            {
+                "establishedDate": "2019-08-31",
+                "linkType": {
+                    "code": "6.2",
+                    "name": "Successor - amalgamated",
+                    "isNullish": false
+                },
+                "linkedUrn": "000005"
+            }
+        ]
+    },
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE24",
+            "name": "ASP Test Diocese CE24 Named",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010002",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "004",
+            "name": "Manchester",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010002",
+        "multiAcademyTrust": {
+            "uid": "0001",
+            "name": "THE DEAN TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School C",
+        "openDate": "2018-09-01",
+        "closeDate": "2019-08-31",
+        "links": [
+            {
+                "establishedDate": "2019-08-31",
+                "linkType": {
+                    "code": "6.2",
+                    "name": "Successor - amalgamated",
+                    "isNullish": false
+                },
+                "linkedUrn": "000005"
+            },
+            {
+                "establishedDate": "2018-08-31",
+                "linkType": {
+                    "code": "1F",
+                    "name": "Predecessor - Split School",
+                    "isNullish": false
+                },
+                "linkedUrn": "010000"
+            }
+        ]
+    },
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE24",
+            "name": "ASP Test Diocese CE24 Named",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010003",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "004",
+            "name": "Manchester",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010003",
+        "multiAcademyTrust": {
+            "uid": "0001",
+            "name": "THE DEAN TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School D",
+        "openDate": "2018-08-31",
+        "closeDate": null,
+        "links": [
+            {
+                "establishedDate": "2018-08-31",
+                "linkType": {
+                    "code": "1F",
+                    "name": "Predecessor - Split School",
+                    "isNullish": false
+                },
+                "linkedUrn": "010000"
+            }
+        ]
+    },
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE24",
+            "name": "ASP Test Diocese CE24 Named",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010004",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "005",
+            "name": "Oldham",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010004",
+        "multiAcademyTrust": {
+            "uid": "0001",
+            "name": "THE DEAN TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School E From A Different LA",
+        "openDate": "2011-01-01",
+        "closeDate": "2018-08-31",
+        "links": [
+            {
+                "establishedDate": "2018-08-31",
+                "linkType": {
+                    "code": "2",
+                    "name": "Successor",
+                    "isNullish": false
+                },
+                "linkedUrn": "010007"
+            }
+        ]
+    },
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE99",
+            "name": "Test Diocese CE99",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010005",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "004",
+            "name": "Manchester",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010005",
+        "multiAcademyTrust": {
+            "uid": "0001",
+            "name": "THE DEAN TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School F From A Different Diocese",
+        "openDate": "2011-01-01",
+        "closeDate": "2018-08-31",
+        "links": [
+            {
+                "establishedDate": "2018-08-31",
+                "linkType": {
+                    "code": "2",
+                    "name": "Successor",
+                    "isNullish": false
+                },
+                "linkedUrn": "010008"
+            }
+        ]
+    },
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE24",
+            "name": "ASP Test Diocese CE24 Named",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010006",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "004",
+            "name": "Manchester",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010006",
+        "multiAcademyTrust": {
+            "uid": "0011",
+            "name": "KINGSWAY COMMUNITY TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School G From A Different MAT",
+        "openDate": "2011-01-01",
+        "closeDate": "2018-08-31",
+        "links": [
+            {
+                "establishedDate": "2018-08-31",
+                "linkType": {
+                    "code": "2",
+                    "name": "Successor",
+                    "isNullish": false
+                },
+                "linkedUrn": "010009"
+            }
+        ]
+    },
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE24",
+            "name": "ASP Test Diocese CE24 Named",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010007",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "005",
+            "name": "Oldham",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010007",
+        "multiAcademyTrust": {
+            "uid": "0001",
+            "name": "THE DEAN TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School H From A Different LA",
+        "openDate": "2018-09-01",
+        "closeDate": "2019-08-31",
+        "links": [
+            {
+                "establishedDate": "2018-09-01",
+                "linkType": {
+                    "code": "1",
+                    "name": "Predecessor",
+                    "isNullish": false
+                },
+                "linkedUrn": "010004"
+            },
+            {
+                "establishedDate": "2019-08-31",
+                "linkType": {
+                    "code": "6.2",
+                    "name": "Successor - amalgamated",
+                    "isNullish": false
+                },
+                "linkedUrn": "000005"
+            }
+        ]
+    },
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE99",
+            "name": "Test Diocese CE99",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010008",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "004",
+            "name": "Manchester",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010008",
+        "multiAcademyTrust": {
+            "uid": "0001",
+            "name": "THE DEAN TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School I From A Different Diocese",
+        "openDate": "2018-09-01",
+        "closeDate": "2019-08-31",
+        "links": [
+            {
+                "establishedDate": "2018-09-01",
+                "linkType": {
+                    "code": "1",
+                    "name": "Predecessor",
+                    "isNullish": false
+                },
+                "linkedUrn": "010005"
+            },
+            {
+                "establishedDate": "2019-08-31",
+                "linkType": {
+                    "code": "6.2",
+                    "name": "Successor - amalgamated",
+                    "isNullish": false
+                },
+                "linkedUrn": "000005"
+            }
+        ]
+    },
+    {
+        "is16to18Establishment": false,
+        "isDeleted": false,
+        "isIndependentSchool": false,
+        "isJuniorSchool": false,
+        "isMiddleSchool": true,
+        "isPost16": false,
+        "isPrimary": true,
+        "isSecondary": true,
+        "lastUpdatedUtc": "2023-09-11",
+        "isVisible": true,
+        "address": {
+            "street": "Crescent Road",
+            "town": "Manchester",
+            "postCode": "M8 5UF"
+        },
+        "admissionsPolicy": {
+            "code": "4",
+            "name": "Non-selective",
+            "isNullish": "False"
+        },
+        "ageRange": {
+            "low": "3",
+            "high": "16"
+        },
+        "diocese": {
+            "code": "CE24",
+            "name": "ASP Test Diocese CE24 Named",
+            "isNullish": "False"
+        },
+        "establishmentNumber": 4271,
+        "establishmentStatus": {
+            "code": "2",
+            "name": "Closed",
+            "isNullish": "False"
+        },
+        "establishmentType": {
+            "code": "1",
+            "name": "Community school",
+            "isNullish": "False"
+        },
+        "establishmentTypeGroup": {
+            "code": "4",
+            "name": "Local authority maintained schools",
+            "isNullish": "False"
+        },
+        "gender": {
+            "code": "3",
+            "name": "Mixed",
+            "isNullish": "False"
+        },
+        "headTeacher": {
+            "title": "Mr",
+            "firstName": "Andrew",
+            "lastName": "Shakos",
+            "preferredJobTitle": "Headteacher"
+        },
+        "id": "010009",
+        "laestab": "004/4271",
+        "localAuthority": {
+            "code": "004",
+            "name": "Manchester",
+            "isNullish": "False"
+        },
+        "noOfPupils": 1822,
+        "religiousDenomination": {
+            "code": "0",
+            "name": "Does not apply",
+            "isNullish": "True"
+        },
+        "resourcedProvisionType": {
+            "code": "1",
+            "name": "Resourced provision",
+            "isNullish": "False"
+        },
+        "urn": "010009",
+        "multiAcademyTrust": {
+            "uid": "0011",
+            "name": "KINGSWAY COMMUNITY TRUST",
+            "isNullish": "False"
+        },
+        "name": "Test Linked School J From A Different MAT",
+        "openDate": "2018-09-01",
+        "closeDate": "2019-08-31",
+        "links": [
+            {
+                "establishedDate": "2018-09-01",
+                "linkType": {
+                    "code": "1",
+                    "name": "Predecessor",
+                    "isNullish": false
+                },
+                "linkedUrn": "010006"
+            },
+            {
+                "establishedDate": "2019-08-31",
+                "linkType": {
+                    "code": "6.2",
+                    "name": "Successor - amalgamated",
+                    "isNullish": false
+                },
+                "linkedUrn": "000005"
+            }
+        ]
+    }
+]
