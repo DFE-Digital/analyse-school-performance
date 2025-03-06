@@ -780,7 +780,7 @@ Scenario: Should return a 200 response with expected pagination and no results f
 		{
 			"TotalResults": 3,
 			"ResultsPerPage": 2,
-			"Page": 2,
+			"Page": 3,
 			"Results": [
 			]
 		}

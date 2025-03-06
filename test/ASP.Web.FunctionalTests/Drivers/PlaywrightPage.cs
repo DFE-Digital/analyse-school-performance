@@ -55,7 +55,7 @@ namespace ASP.Web.FunctionalTests.Drivers
             await _web.ExpectStatusCode();
 
             var elements = Page.Locator(selector);
-            return new PlaywrightElementsDriver(elements, this);
+            return new PlaywrightElementsDriver(elements, this, _web, _outputHelper);
         }
 
         public async Task WaitForSelectorAsync(string selector, string errorIfNotExists)

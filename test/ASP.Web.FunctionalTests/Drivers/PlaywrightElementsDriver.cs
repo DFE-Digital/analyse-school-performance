@@ -1,5 +1,6 @@
 ﻿using ASP.Test.Core;
 using Microsoft.Playwright;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.Drivers
 {
@@ -8,11 +9,15 @@ namespace ASP.Web.FunctionalTests.Drivers
     {
         private readonly ILocator _elements;
         private readonly PlaywrightPage _page;
+        private readonly PlaywrightWebDriver _web;
+        private readonly ISpecFlowOutputHelper _outputHelper;
 
-        public PlaywrightElementsDriver(ILocator elements, PlaywrightPage page)
+        public PlaywrightElementsDriver(ILocator elements, PlaywrightPage page, PlaywrightWebDriver web, ISpecFlowOutputHelper outputHelper)
         {
             _elements = elements;
             _page = page;
+            _web = web;
+            _outputHelper = outputHelper;
         }
 
         public async Task ShouldHaveCountAsync(int count, Func<int, string> errorIfIncorrectCount)
@@ -58,6 +63,13 @@ namespace ASP.Web.FunctionalTests.Drivers
         public async Task<int> CountAsync()
         {
             return await _elements.CountAsync();
+        }
+
+        public IElementDriver ElementAt(int index)
+        {
+            var locator = _elements.Nth(index);
+
+            return new PlaywrightElementDriver(locator, _page, _web, _outputHelper);
         }
 
         public async Task<IList<string>> TextContentsAsync()

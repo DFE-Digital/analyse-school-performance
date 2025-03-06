@@ -95,7 +95,7 @@ namespace ASP.Domain.DataDownloads.UseCases.GetDownloadPackage
                 if(LACode.TryParse(downloadId.Identifier, out var laCode))
                 {
                     return await (
-                        from la in _localAuthorityRepository.GetLocalAuthority(laCode.Value)
+                        from la in _localAuthorityRepository.Get(laCode)
                             .MapErrorIf(e => e is NotFoundError,
                                 Error.NotAllowed($"Identifier \"{downloadId.Identifier}\" is not accessible within the given scope."))
                             .ErrorIf(_ => scope.Identifier != downloadId.Identifier,

@@ -1,31 +1,27 @@
 ﻿@using ASP.Web.Areas.School
 @model List<SchoolListingViewModel>
-@{
-    var counter = 1;
-}
 
-<ul class="govuk-list">
+<ul class="govuk-list app-listing">
     @foreach (var item in Model)
     {
         <li>
             <div class="app-listing-result-tile">
                 <h3 class="govuk-heading-s">
-                    <a class="govuk-link" data-testid="school-listing-name-@counter" href="@item.Url">
+                    <a class="govuk-link app-listing-name" href="@item.Url">
                         @item.Name
                     </a>
                 </h3>
                 <dl class="govuk-list asp-summary-list">
                     <dt class="app-summary-list__key">Address:</dt>
-                    <dd class="app-summary-list__value" data-testid="school-listing-address-@counter">@item.Address</dd>
+                    <dd class="app-summary-list__value app-listing-address">@item.Address</dd>
                     <dt class="app-summary-list__key">URN:</dt>
-                    <dd class="app-summary-list__value" data-testid="school-listing-urn-@counter">@item.Urn</dd>
+                    <dd class="app-summary-list__value app-listing-urn">@item.Urn</dd>
                     <dt class="app-summary-list__key">LAESTAB:</dt>
-                    <dd class="app-summary-list__value" data-testid="school-listing-laestab-@counter">@item.Laestab</dd>
+                    <dd class="app-summary-list__value app-listing-laestab">@item.Laestab</dd>
                 </dl>
             </div>
 
         </li>
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-        counter++;
     }
 </ul>

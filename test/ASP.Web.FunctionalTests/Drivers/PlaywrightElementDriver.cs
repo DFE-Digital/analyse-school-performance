@@ -7,10 +7,10 @@ namespace ASP.Web.FunctionalTests.Drivers
     // Driver for tests to interact with an element on the page using Playwright (see PlaywrightWebDriver)
     internal class PlaywrightElementDriver : IElementDriver
     {
-        private ILocator _element;
-        private PlaywrightPage _page;
-        PlaywrightWebDriver _web;
-        private ISpecFlowOutputHelper _outputHelper;
+        private readonly ILocator _element;
+        private readonly PlaywrightPage _page;
+        private readonly PlaywrightWebDriver _web;
+        private readonly ISpecFlowOutputHelper _outputHelper;
 
         public PlaywrightElementDriver(ILocator element, PlaywrightPage page, PlaywrightWebDriver web, ISpecFlowOutputHelper outputHelper)
         {
@@ -35,7 +35,7 @@ namespace ASP.Web.FunctionalTests.Drivers
         public IElementsDriver Elements(string selector)
         {
             var elements = _element.Locator(selector);
-            return new PlaywrightElementsDriver(elements, _page);
+            return new PlaywrightElementsDriver(elements, _page, _web, _outputHelper);
         }
 
         public async Task ShouldHaveCountAsync(int count, Func<int, int, string> errorIfIncorrectCount)
@@ -87,6 +87,13 @@ namespace ASP.Web.FunctionalTests.Drivers
             }
 
             return this;
+        }
+
+        public async Task<bool> ExistsAsync()
+        {
+            var count = await _element.CountAsync();
+
+            return count > 0;
         }
 
         public async Task<string> OuterHtmlAsync()

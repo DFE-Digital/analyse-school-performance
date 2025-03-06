@@ -68,10 +68,10 @@ namespace ASP.Domain.Repositories.Schools
                     cancellationToken)
                     .ErrorIf(q => q.TotalResults == 0, Error.NotFound("There were no schools within the given scope."))
                 from schools in results.Results.Select(FromDao).Combine()
-                select new ResultsPage<School>(results.Page, results.ResultsPerPage, results.TotalResults, schools);
+                select new ResultsPage<School>(page, resultsPerPage, results.TotalResults, schools);
         }
 
-        public Task<Result<ResultsPage<School>>> SearchByCriteria(
+        public Task<Result<ResultsPage<School>>> Search(
             ISearchCriteria criteria,
             Optional<SchoolAccessScope> scope,
             int page,
@@ -89,10 +89,10 @@ namespace ASP.Domain.Repositories.Schools
                     cancellationToken)
                     .ErrorIf(q => q.TotalResults == 0, Error.NotFound($@"There were no matches for ""{criteria.RawValue}"" within the given scope."))
                 from schools in results.Results.Select(FromDao).Combine()
-                select new ResultsPage<School>(results.Page, results.ResultsPerPage, results.TotalResults, schools);
+                select new ResultsPage<School>(page, resultsPerPage, results.TotalResults, schools);
         }
 
-        public Task<Result<List<School>>> SearchSuggestionsByCriteria(
+        public Task<Result<List<School>>> SearchSuggestions(
             ISearchCriteria criteria,
             Optional<SchoolAccessScope> scope,
             int maxSuggestions,

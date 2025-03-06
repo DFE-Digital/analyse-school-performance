@@ -15,7 +15,8 @@ public class GetLocalAuthority : IGetLocalAuthority
     public Task<Result<LocalAuthority>> HandleRequest(GetLocalAuthorityRequest request)
     {
         return
-            from la in _repository.GetLocalAuthority(request.Code)
+            from laCode in LACode.Parse(request.Code)
+            from la in _repository.Get(laCode)
             select la;
     }
 }

@@ -3,7 +3,7 @@ using ASP.Core.Results;
 
 namespace ASP.Domain.Schools.Search;
 
-public interface ISearchStrategy
+public interface ISchoolSearchStrategy
 {
     Task<Result<ResultsPage<School>>> Execute();
 }

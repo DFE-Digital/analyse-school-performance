@@ -141,5 +141,5 @@ Scenario: Page should show a breadcrumb trail
 	When I navigate to /help/test
 	Then I should get a 200 response
 	And the breadcrumb trail should be:
-		| text | href |
-		| Home | /    |
+		| Link Text | Url |
+		| Home      | /   |

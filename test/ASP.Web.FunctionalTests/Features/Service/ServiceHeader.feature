@@ -30,11 +30,11 @@ Scenario Outline: School user top navigation
 	Given I am a <Role> user
 	When I navigate to /
 	Then the top navigation should be:
-		| text                  | href                     |
-		| Home                  | /                        |
-		| My school             | /my-school/              |
-		| Release timetable     | /help/release-timetable/ |
-		| Guidance              | /help/guidance/          |
+		| Link Text         | Url                      |
+		| Home              | /                        |
+		| My school         | /my-school/              |
+		| Release timetable | /help/release-timetable/ |
+		| Guidance          | /help/guidance/          |
 Examples: 
 	| Role            |
 	| School Named    |
@@ -46,12 +46,12 @@ Scenario Outline: LA user top navigation
 	Given I am a <Role> user
 	When I navigate to /
 	Then the top navigation should be:
-		| text                  | href                     |
-		| Home                  | /                        |
-		| My local authority    | /my-local-authority/     |
-		| My schools            | /my-schools/             |
-		| Release timetable     | /help/release-timetable/ |
-		| Guidance              | /help/guidance/          |
+		| Link Text          | Url                      |
+		| Home               | /                        |
+		| My local authority | /my-local-authority/     |
+		| My schools         | /my-schools/             |
+		| Release timetable  | /help/release-timetable/ |
+		| Guidance           | /help/guidance/          |
 Examples: 
 	| Role            |
 	| LA Named        |
@@ -62,11 +62,11 @@ Scenario Outline: MAT/Diocese user top navigation
 	Given I am a <Role> user
 	When I navigate to /
 	Then the top navigation should be:
-		| text                  | href                     |
-		| Home                  | /                        |
-		| My schools            | /my-schools/             |
-		| Release timetable     | /help/release-timetable/ |
-		| Guidance              | /help/guidance/          |
+		| Link Text         | Url                      |
+		| Home              | /                        |
+		| My schools        | /my-schools/             |
+		| Release timetable | /help/release-timetable/ |
+		| Guidance          | /help/guidance/          |
 Examples: 
 	| Role            |
 	| MAT Named       |
@@ -80,7 +80,7 @@ Scenario Outline: All schools user top navigation
 	Given I am a <Role> user
 	When I navigate to /
 	Then the top navigation should be:
-		| text                  | href                     |
+		| Link Text             | Url                      |
 		| Home                  | /                        |
 		| All local authorities | /local-authorities/      |
 		| All schools           | /schools/                |

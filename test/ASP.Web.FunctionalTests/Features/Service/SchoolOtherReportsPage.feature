@@ -13,10 +13,10 @@ Scenario Outline: Other reports page should be accessible when valid urn is prov
 	Then I should get a 200 response
 	And the page title should be "Other reports"
 	And the sub-navigation should be:
-		| text          | href                      | current |
-		| Download data | /my-school/download-data/ |         |
-		| Other reports | /my-school/other-reports/ | true    |
-		| Useful links  | /my-school/useful-links/  |         |
+		| Link Text     | Url                       | Current Page |
+		| Download data | /my-school/download-data/ |              |
+		| Other reports | /my-school/other-reports/ | true         |
+		| Useful links  | /my-school/useful-links/  |              |
 
 @Javascript:disabled
 Scenario Outline: Other reports page should be accessible when valid urn is provided (Generic school page)
@@ -31,10 +31,10 @@ Scenario Outline: Other reports page should be accessible when valid urn is prov
 	Then I should get a 200 response
 	And the page title should be "Other reports"
 	And the sub-navigation should be:
-		| text          | href                          | current |
-		| Download data | /school/136028/download-data/ |         |
-		| Other reports | /school/136028/other-reports/ | true    |
-		| Useful links  | /school/136028/useful-links/  |         |
+		| Link Text     | Url                           | Current Page |
+		| Download data | /school/136028/download-data/ |              |
+		| Other reports | /school/136028/other-reports/ | true         |
+		| Useful links  | /school/136028/useful-links/  |              |
 
 @Javascript:disabled
 Scenario Outline: Other reports page should be accessible when valid urn is provided (My schools > School page)
@@ -58,10 +58,10 @@ Scenario Outline: Other reports page should be accessible when valid urn is prov
 	Then I should get a 200 response
 	And the page title should be "Other reports"
 	And the sub-navigation should be:
-		| text          | href                              | current |
-		| Download data | /my-schools/136028/download-data/ |         |
-		| Other reports | /my-schools/136028/other-reports/ | true    |
-		| Useful links  | /my-schools/136028/useful-links/  |         |
+		| Link Text     | Url                               | Current Page |
+		| Download data | /my-schools/136028/download-data/ |              |
+		| Other reports | /my-schools/136028/other-reports/ | true         |
+		| Useful links  | /my-schools/136028/useful-links/  |              |
   
 @Javascript:disabled
 Scenario Outline: LA user should not be able to access the Other Reports page of a school with a valid URN outside their Local Authority (My schools > School page)

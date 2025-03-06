@@ -28,14 +28,14 @@ namespace ASP.Domain.Schools
             int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<ResultsPage<School>>> SearchByCriteria(
+        Task<Result<ResultsPage<School>>> Search(
             ISearchCriteria criteria,
             Optional<SchoolAccessScope> scope,
             int page,
             int resultsPerPage,
             CancellationToken cancellationToken = default);
 
-        Task<Result<List<School>>> SearchSuggestionsByCriteria(
+        Task<Result<List<School>>> SearchSuggestions(
             ISearchCriteria criteria,
             Optional<SchoolAccessScope> scope,
             int maxSuggestions,

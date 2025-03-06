@@ -17,6 +17,6 @@ public class GetAllLocalAuthorities : IGetAllLocalAuthorities
     {
         var page = request.Page.GetValueOrDefault(1);
         var resultsPerPage = request.ResultsPerPage.GetValueOrDefault(Core.Constants.SearchResultPageSize);
-        return await _localAuthorityRepository.GetAllLocalAuthorities(page, resultsPerPage);
+        return await _localAuthorityRepository.GetAll(page, resultsPerPage);
     }
 }

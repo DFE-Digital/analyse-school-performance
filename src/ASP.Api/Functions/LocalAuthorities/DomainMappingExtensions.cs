@@ -7,7 +7,7 @@ public static class DomainMappingExtensions
     public static Client.LookupValueWithCode ForApiClient(this Domain.LocalAuthorities.LocalAuthority localAuthority)
     {
         return new Client.LookupValueWithCode(
-            localAuthority.Code,
+            localAuthority.Code.Value,
             localAuthority.Name);
     }
 

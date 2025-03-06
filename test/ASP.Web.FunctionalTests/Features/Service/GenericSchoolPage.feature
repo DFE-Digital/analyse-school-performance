@@ -444,7 +444,7 @@ Scenario Outline: Landing page - common page elements
 	Then the page title should be "Hollinswood Primary School"
 	And the page subtitle should be "(URN: 123456)"
 	And the breadcrumb trail should be:
-		| text                  | href                          |
+		| Link Text             | Url                           |
 		| Home                  | /                             |
 		| All local authorities | /local-authorities/           |
 		| Oxfordshire           | /local-authority/931/         |
@@ -483,7 +483,7 @@ Scenario: Data downloads 'Dates available for download' - common page elements
 	When I navigate to /school/136028/download-data
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                      | href                          |
+		| Link Text                 | Url                           |
 		| Home                      | /                             |
 		| All local authorities     | /local-authorities/           |
 		| Oxfordshire               | /local-authority/931/         |
@@ -491,13 +491,13 @@ Scenario: Data downloads 'Dates available for download' - common page elements
 		| Dagenham Park CofE School | /school/136028/               |
 		| Download data             | /school/136028/download-data/ |
 	And the sub-navigation should be:
-		| text          | href                          | current |
-		| Download data | /school/136028/download-data/ | true    |
-		| Other reports | /school/136028/other-reports/ |         |
-		| Useful links  | /school/136028/useful-links/  |         |
+		| Link Text     | Url                           | Current Page |
+		| Download data | /school/136028/download-data/ | true         |
+		| Other reports | /school/136028/other-reports/ |              |
+		| Useful links  | /school/136028/useful-links/  |              |
 	And the side navigation should be:
-		| text                           | href                          | current |
-		| Dagenham Park CofE School data | /school/136028/download-data/ | true    |
+		| Link Text                      | Url                           | Current Page |
+		| Dagenham Park CofE School data | /school/136028/download-data/ | true         |
 	And the sub-page title should be "Dates available for download" with caption "Dagenham Park CofE School data"
 	
 @Javascript:disabled
@@ -688,7 +688,7 @@ Scenario: Data downloads 'Data files available for download' - common page eleme
 	When I navigate to /school/136028/download-data/select-files/?selectedYear=2022
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                         | href                          |
+		| Link Text                    | Url                           |
 		| Home                         | /                             |
 		| All local authorities        | /local-authorities/           |
 		| Oxfordshire                  | /local-authority/931/         |
@@ -697,13 +697,13 @@ Scenario: Data downloads 'Data files available for download' - common page eleme
 		| Download data                | /school/136028/download-data/ |
 		| Dates available for download | /school/136028/download-data/ |
 	And the sub-navigation should be:
-		| text          | href                          | current |
-		| Download data | /school/136028/download-data/ | true    |
-		| Other reports | /school/136028/other-reports/ |         |
-		| Useful links  | /school/136028/useful-links/  |         |
+		| Link Text     | Url                           | Current Page |
+		| Download data | /school/136028/download-data/ | true         |
+		| Other reports | /school/136028/other-reports/ |              |
+		| Useful links  | /school/136028/useful-links/  |              |
 	And the side navigation should be:
-		| text                           | href                          | current |
-		| Dagenham Park CofE School data | /school/136028/download-data/ | true    |
+		| Link Text                      | Url                           | Current Page |
+		| Dagenham Park CofE School data | /school/136028/download-data/ | true         |
 	And the sub-page title should be "Data files available for download" with caption "Dagenham Park CofE School data"
 
 @Javascript:disabled
@@ -1108,7 +1108,7 @@ Scenario: Data downloads 'Download school data' page - common page elements
 	When I navigate to /school/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-136028-ks2-2022-final-school
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                              | href                                                         |
+		| Link Text                         | Url                                                          |
 		| Home                              | /                                                            |
 		| All local authorities             | /local-authorities/                                          |
 		| Oxfordshire                       | /local-authority/931/                                        |
@@ -1118,13 +1118,13 @@ Scenario: Data downloads 'Download school data' page - common page elements
 		| Dates available for download      | /school/136028/download-data/                                |
 		| Data files available for download | /school/136028/download-data/select-files/?selectedYear=2022 |
 	And the sub-navigation should be:
-		| text          | href                          | current |
-		| Download data | /school/136028/download-data/ | true    |
-		| Other reports | /school/136028/other-reports/ |         |
-		| Useful links  | /school/136028/useful-links/  |         |
+		| Link Text     | Url                           | Current Page |
+		| Download data | /school/136028/download-data/ | true         |
+		| Other reports | /school/136028/other-reports/ |              |
+		| Useful links  | /school/136028/useful-links/  |              |
 	And the side navigation should be:
-		| text                           | href                          | current |
-		| Dagenham Park CofE School data | /school/136028/download-data/ | true    |
+		| Link Text                      | Url                           | Current Page |
+		| Dagenham Park CofE School data | /school/136028/download-data/ | true         |
 	And the sub-page title should be "Download Dagenham Park CofE School data" with caption "Dagenham Park CofE School data"
 
 @Javascript:disabled
@@ -1156,7 +1156,7 @@ Scenario Outline: Data downloads 'Download school data' page should contain thre
 	When I navigate to /school/136028/download-data/select-format/?selectedYear=2022&selectedFiles=kts-school-ks2-pupil-136028-2022-final
 	Then the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your school."
 	And the available download formats should be:
-		| text                | href                                                                                                             |
+		| Link Text           | Url                                                                                                              |
 		| Data in CSV format  | /school/136028/download-data/download-as-zip/?fileType=CSV&selectedFiles=kts-school-ks2-pupil-136028-2022-final  |
 		| Data in XLSX format | /school/136028/download-data/download-as-zip/?fileType=XLSX&selectedFiles=kts-school-ks2-pupil-136028-2022-final |
 		| Data in TSV format  | /school/136028/download-data/download-as-zip/?fileType=TSV&selectedFiles=kts-school-ks2-pupil-136028-2022-final  |
@@ -1326,10 +1326,10 @@ Scenario: Data downloads sub navigation item should be visible to Named policy u
 	When I navigate to /school/136028/other-reports/
 	Then I should get a 200 response
 	And the sub-navigation should be:
-		| text          | href                          | current |
-		| Download data | /school/136028/download-data/ |         |
-		| Other reports | /school/136028/other-reports/ | true    |
-		| Useful links  | /school/136028/useful-links/  |         |
+		| Link Text     | Url                           | Current Page |
+		| Download data | /school/136028/download-data/ |              |
+		| Other reports | /school/136028/other-reports/ | true         |
+		| Useful links  | /school/136028/useful-links/  |              |
 Examples:
 	| Roles       |
 	| DfE Named   |
@@ -1366,9 +1366,9 @@ Scenario: Data downloads sub navigation item should not be visible to Unnamed po
 	When I navigate to /school/123456/other-reports/
 	Then I should get a 200 response
 	And the sub-navigation should be:
-		| text          | href                          | current |
-		| Other reports | /school/123456/other-reports/ | true    |
-		| Useful links  | /school/123456/useful-links/  |         |
+		| Link Text     | Url                           | Current Page |
+		| Other reports | /school/123456/other-reports/ | true         |
+		| Useful links  | /school/123456/useful-links/  |              |
 Examples:
 	| Roles          |
 	| DfE Unnamed    |
@@ -1604,8 +1604,8 @@ Scenario Outline: Display linked establishment descriptions with links and estab
 	"""
 	When I navigate to /school/100001/
 	Then I should get a 200 response
-	And the linked establishment description should be:
-	  | Text                                                       | Href            |
+	And the linked schools links should be:
+	  | Text Content                                               | Url             |
 	  | Test School 1 was linked to Test School 2.                 | /school/100002/ |
 	  | Test School 1 was linked to Test School 3 on 1 March 2020. | /school/100003/ |
 
@@ -1632,7 +1632,7 @@ Scenario: School user should be able to access the generic school page amd shoul
 	Then the page title should be "Test School"
 	And the page subtitle should be "(URN: 123456)"
 	And the breadcrumb trail should be:
-	  | text | href |
+	  | Link Text | Url |
 	  | Home | /    |
 Examples:
   | userRole                                        |

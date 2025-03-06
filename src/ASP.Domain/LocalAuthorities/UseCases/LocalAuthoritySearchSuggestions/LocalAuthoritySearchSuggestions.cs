@@ -19,8 +19,8 @@ public class LocalAuthoritySearchSuggestions : ILocalAuthoritySearchSuggestions
         var isNumeric = int.TryParse(request.SearchTerm, out var _);
 
         var suggestions = isNumeric
-            ? _repository.LocalAuthoritySearchSuggestionsByLaCode(request.SearchTerm, maxSuggestions)
-            : _repository.LocalAuthoritySearchSuggestionsByLaName(request.SearchTerm, maxSuggestions);
+            ? _repository.SearchSuggestions(new PartialCodeSearchCriteria(request.SearchTerm), maxSuggestions)
+            : _repository.SearchSuggestions(new NameSearchCriteria(request.SearchTerm), maxSuggestions);
 
         return suggestions;
     }

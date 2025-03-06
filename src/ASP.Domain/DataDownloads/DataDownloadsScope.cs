@@ -49,8 +49,10 @@ namespace ASP.Domain.DataDownloads
             public Task<Result<DataDownloadsScope>> ValidateScope(DataDownloadsScopeType scopeType, string scopeIdentifier, Optional<int> year)
             {
                 return scopeType switch {
-                    DataDownloadsScopeType.LA => _localAuthorityRepository.GetLocalAuthority(scopeIdentifier)
-                        .Map(la => (DataDownloadsScope)new DataDownloadsLocalAuthorityScope(scopeType, scopeIdentifier, year)),
+                    DataDownloadsScopeType.LA => 
+                        from laCode in LACode.Parse(scopeIdentifier)
+                        from la in _localAuthorityRepository.Get(laCode)
+                        select (DataDownloadsScope)new DataDownloadsLocalAuthorityScope(scopeType, scopeIdentifier, year),
 
                     DataDownloadsScopeType.School => 
                         from schoolUrn in SchoolUrn.Parse(scopeIdentifier)

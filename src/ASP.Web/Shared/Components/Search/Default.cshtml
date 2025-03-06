@@ -10,7 +10,7 @@
     {
         searchForm.Width = Model.SearchFormWidth;
     }
-    <partial name="Features/Search/_SearchFormPartial" model="searchForm" />
+    <partial name="Features/Search/_SearchFormPartial" model=searchForm />
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -20,9 +20,9 @@
     </div>
 
     <partial name="Pagination/_PaginationPartial"
-             model="@((searchForm.Pagination, "Footer"))" />
+             model=searchForm.Pagination />
 }
 else if (Model.Search is SearchResultsNotFoundViewModel notFound)
 {
-    <partial name="Features/Search/_SearchResultNotFoundPartial" model="notFound" />
+    <partial name="Features/Search/_SearchResultNotFoundPartial" model=notFound />
 }

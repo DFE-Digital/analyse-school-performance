@@ -9,8 +9,7 @@ namespace ASP.Web.FunctionalTests.Drivers
     // Driver for tests to interact with an element on the page using AngleSharp (see AngleSharpWebDriver)
     public class AngleSharpElementDriver : IElementDriver
     {
-        private IElement _outerElement;
-        private string _selector;
+        private string? _selector;
         private IElement? _element;
         private int _elementCount;
         private AngleSharpPage _page;
@@ -19,12 +18,20 @@ namespace ASP.Web.FunctionalTests.Drivers
 
         public AngleSharpElementDriver(IElement outerElement, string selector, AngleSharpPage page, AngleSharpWebDriver web, ISpecFlowOutputHelper outputHelper)
         {
-            _outerElement = outerElement;
-            _selector = selector;
             _page = page;
             _web = web;
-            _elementCount = _outerElement.QuerySelectorAll(_selector).Count();
-            _element = _outerElement.QuerySelector(_selector);
+            _elementCount = outerElement.QuerySelectorAll(selector).Count();
+            _element = outerElement.QuerySelector(selector);
+
+            _outputHelper = outputHelper;
+        }
+
+        public AngleSharpElementDriver(IElement element, AngleSharpPage page, AngleSharpWebDriver web, ISpecFlowOutputHelper outputHelper)
+        {
+            _page = page;
+            _web = web;
+            _elementCount = 1;
+            _element = element;
             _outputHelper = outputHelper;
         }
 
@@ -32,7 +39,8 @@ namespace ASP.Web.FunctionalTests.Drivers
         {
             get
             {
-                Assert.NotNull(_element, $"Element \"{_selector}\" does not exist on the page");
+                var selector = _selector != null ? $"\"{_selector}\" " : "";
+                Assert.NotNull(_element, $"Element {selector}does not exist on the page");
 
                 return _element;
             }
@@ -55,7 +63,7 @@ namespace ASP.Web.FunctionalTests.Drivers
 
         public IElementsDriver Elements(string selector)
         {
-            return new AngleSharpElementsDriver(El, selector);
+            return new AngleSharpElementsDriver(El, selector, _page, _web, _outputHelper);
         }
 
         public async Task ShouldHaveCountAsync(int count, Func<int, int, string> errorIfIncorrectCount)
@@ -95,6 +103,11 @@ namespace ASP.Web.FunctionalTests.Drivers
             return this;
         }
 
+        public Task<bool> ExistsAsync()
+        {
+            return Task.FromResult(_element != null);
+        }
+        
         public Task<string> TextContentAsync()
         {
             return Task.FromResult(El.TextContent);

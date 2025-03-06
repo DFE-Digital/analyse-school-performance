@@ -462,8 +462,8 @@ Scenario Outline: My school page - common page elements
 	Then the page title should be "My school"
 	And the page subtitle should be "Hollinswood Primary School (URN: 123456)"
 	And the breadcrumb trail should be:
-		| text | href |
-		| Home | /    |
+		| Link Text | Url |
+		| Home      | /   |
 Examples:
 	| School          |
 	| School Named    |
@@ -500,18 +500,18 @@ Scenario: Data downloads 'Dates available for download' page - common page eleme
 	When I navigate to /my-school/download-data
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text          | href                      |
+		| Link Text     | Url                       |
 		| Home          | /                         |
 		| My school     | /my-school/               |
 		| Download data | /my-school/download-data/ |
 	And the sub-navigation should be:
-		| text          | href                      | current |
-		| Download data | /my-school/download-data/ | true    |
-		| Other reports | /my-school/other-reports/ |         |
-		| Useful links  | /my-school/useful-links/  |         |
+		| Link Text     | Url                       | Current Page |
+		| Download data | /my-school/download-data/ | true         |
+		| Other reports | /my-school/other-reports/ |              |
+		| Useful links  | /my-school/useful-links/  |              |
 	And the side navigation should be:
-		| text                           | href                      | current |
-		| Dagenham Park CofE School data | /my-school/download-data/ | true    |
+		| Link Text                      | Url                       | Current Page |
+		| Dagenham Park CofE School data | /my-school/download-data/ | true         |
 	And the sub-page title should be "Dates available for download" with caption "Dagenham Park CofE School data"
 
 @Javascript:disabled
@@ -703,19 +703,19 @@ Scenario: Data downloads "Data files available for download' - common page eleme
 	When I navigate to /my-school/download-data/select-files/?selectedYear=2022
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                         | href                      |
+		| Link Text                    | Url                       |
 		| Home                         | /                         |
 		| My school                    | /my-school/               |
 		| Download data                | /my-school/download-data/ |
 		| Dates available for download | /my-school/download-data/ |
 	And the sub-navigation should be:
-		| text          | href                      | current |
-		| Download data | /my-school/download-data/ | true    |
-		| Other reports | /my-school/other-reports/ |         |
-		| Useful links  | /my-school/useful-links/  |         |
+		| Link Text     | Url                       | Current Page |
+		| Download data | /my-school/download-data/ | true         |
+		| Other reports | /my-school/other-reports/ |              |
+		| Useful links  | /my-school/useful-links/  |              |
 	And the side navigation should be:
-		| text                           | href                      | current |
-		| Dagenham Park CofE School data | /my-school/download-data/ | true    |
+		| Link Text                      | Url                       | Current Page |
+		| Dagenham Park CofE School data | /my-school/download-data/ | true         |
 	And the sub-page title should be "Data files available for download" with caption "Dagenham Park CofE School data"
 
 @Javascript:disabled
@@ -1121,20 +1121,20 @@ Scenario: Data downloads 'Download school data' - common page elements
 	When I navigate to /my-school/download-data/select-format/?selectedYear=2022&selectedFiles=kts-800200-ks2-2022-final-school&selectedFiles=asp-800200-ks2-2022-provisional-school
 	Then the page title should be "Download data"
 	And the breadcrumb trail should be:
-		| text                              | href                                                     |
+		| Link Text                         | Url                                                      |
 		| Home                              | /                                                        |
 		| My school                         | /my-school/                                              |
 		| Download data                     | /my-school/download-data/                                |
 		| Dates available for download      | /my-school/download-data/                                |
 		| Data files available for download | /my-school/download-data/select-files/?selectedYear=2022 |
 	And the sub-navigation should be:
-		| text          | href                      | current |
-		| Download data | /my-school/download-data/ | true    |
-		| Other reports | /my-school/other-reports/ |         |
-		| Useful links  | /my-school/useful-links/  |         |
+		| Link Text     | Url                       | Current Page |
+		| Download data | /my-school/download-data/ | true         |
+		| Other reports | /my-school/other-reports/ |              |
+		| Useful links  | /my-school/useful-links/  |              |
 	And the side navigation should be:
-		| text                           | href                      | current |
-		| Dagenham Park CofE School data | /my-school/download-data/ | true    |
+		| Link Text                      | Url                       | Current Page |
+		| Dagenham Park CofE School data | /my-school/download-data/ | true         |
 	And the sub-page title should be "Download Dagenham Park CofE School data" with caption "Dagenham Park CofE School data"
 
 @Javascript:disabled
@@ -1514,8 +1514,8 @@ Scenario Outline: Display linked establishment descriptions with links and estab
 	"""
 	When I navigate to /my-school/
 	Then I should get a 200 response
-	And the linked establishment description should be:
-	  | Text                                                       | Href            |
+	And the linked schools links should be:
+	  | Text Content                                               | Url             |
 	  | Test School 1 was linked to Test School 2.                 | /school/100002/ |
 	  | Test School 1 was linked to Test School 3 on 1 March 2020. | /school/100003/ |
 		

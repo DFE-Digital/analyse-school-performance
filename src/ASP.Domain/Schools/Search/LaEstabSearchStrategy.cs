@@ -23,7 +23,7 @@ public class LaEstabSearchStrategy : SearchStrategy
     public override Task<Result<ResultsPage<School>>> Execute()
     {
         return from criteria in FullLACodeOrEstabCodeSearchCriteria.Parse(SearchTerm)
-               from results in _repository.SearchByCriteria(criteria, Scope, Page, ResultsPerPage)
+               from results in _repository.Search(criteria, Scope, Page, ResultsPerPage)
                select results;
     }
 }

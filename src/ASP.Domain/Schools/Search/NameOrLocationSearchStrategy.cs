@@ -22,7 +22,7 @@ public class NameOrLocationSearchStrategy : SearchStrategy
 
     public override async Task<Result<ResultsPage<School>>> Execute()
     {
-        var results = await _repository.SearchByCriteria(new NameOrAddressSearchCriteria(SearchTerm), Scope, Page, ResultsPerPage);
+        var results = await _repository.Search(new NameOrAddressSearchCriteria(SearchTerm), Scope, Page, ResultsPerPage);
 
         return results;
     }

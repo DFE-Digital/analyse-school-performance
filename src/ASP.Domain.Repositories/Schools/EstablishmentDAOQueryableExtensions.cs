@@ -4,7 +4,7 @@ using ASP.Domain.Schools.Search;
 
 namespace ASP.Domain.Repositories.Schools
 {
-    public static class EstablishmentDAOQueryableExtensions
+    public static class EstablishmentDaoQueryableExtensions
     {
         public static IQueryable<EstablishmentDao> VisibleAndNotDeleted(this IQueryable<EstablishmentDao> query)
         {

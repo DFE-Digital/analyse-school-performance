@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASP.Domain.Schools
+namespace ASP.Domain
 {
     public record LACode
     {

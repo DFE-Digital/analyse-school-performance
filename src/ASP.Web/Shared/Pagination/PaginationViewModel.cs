@@ -18,15 +18,16 @@ public class PaginationViewModel
     public int ResultsPerPage { get; }
     public string ResultNameSingular { get; }
     public string ResultNamePlural { get; }
-    public int TotalPages => (int)Math.Ceiling((double)TotalResults / ResultsPerPage);
-    public bool ShowPagination => TotalPages > 1;
-    public bool ShowPreviousLink => CurrentPage > 1;
-    public bool ShowNextLink => CurrentPage < TotalPages;
-    public string PreviousLink => PageLink(CurrentPage - 1);
-    public string NextLink => PageLink(CurrentPage + 1);
-    public int Skip => Math.Max(0, CurrentPage - 1) * ResultsPerPage;
-    public int ResultsStartOffset => Skip + 1;
-    public int ResultsEndOffset => Math.Min(Skip + ResultsPerPage, TotalResults);
+
+    public int TotalPages { get; }
+    public bool ShowPagination { get; }
+    public bool ShowPreviousLink { get; }
+    public bool ShowNextLink { get; }
+    public string PreviousLink { get; }
+    public string NextLink { get; }
+
+    public int ResultsStartOffset { get; }
+    public int ResultsEndOffset { get; }
 
     #endregion
 
@@ -41,11 +42,23 @@ public class PaginationViewModel
         string resultNamePlural)
     {
         PageLinkBaseUrl = BuildBaseUrl(pageLinkBaseUrl);
-        CurrentPage = currentPage;
         TotalResults = totalResults;
         ResultsPerPage = resultsPerPage;
         ResultNameSingular = resultNameSingular;
         ResultNamePlural = resultNamePlural;
+
+        TotalPages = (int)Math.Ceiling((double)TotalResults / ResultsPerPage);
+        CurrentPage = Math.Min(currentPage, TotalPages);
+
+        ShowPagination = TotalPages > 1;
+        ShowPreviousLink = CurrentPage > 1;
+        ShowNextLink = CurrentPage < TotalPages;
+        PreviousLink = PageLink(CurrentPage - 1);
+        NextLink = PageLink(CurrentPage + 1);
+
+        var skip = Math.Max(0, CurrentPage - 1) * ResultsPerPage;
+        ResultsStartOffset = skip + 1;
+        ResultsEndOffset = Math.Min(skip + ResultsPerPage, TotalResults);
     }
 
     #endregion

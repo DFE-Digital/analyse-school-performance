@@ -46,7 +46,7 @@ Scenario: Local authority landing page - common page elements
 	And the page title should be "Test LA"
 	And the page subtitle should be "All schools within Test LA"
 	And the breadcrumb trail should be:
-		| text                  | href                |
+		| Link Text             | Url                 |
 		| Home                  | /                   |
 		| All local authorities | /local-authorities/ |
 
@@ -229,18 +229,18 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Dates available 
 	And the page title should be "Download data"
 	And the page subtitle should be "Pupil level and aggregated LA data"
 	And the breadcrumb trail should be:
-		| text                  | href                                |
+		| Link Text             | Url                                 |
 		| Home                  | /                                   |
 		| All local authorities | /local-authorities/                 |
 		| Test LA               | /local-authority/301/               |
 		| Download data         | /local-authority/301/download-data/ |
 	And the sub-navigation should be:
-		| text          | href                                | current |
-		| Download data | /local-authority/301/download-data/ | true    |
+		| Link Text     | Url                                 | Current Page |
+		| Download data | /local-authority/301/download-data/ | true         |
 	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true    |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |         |
+		| Link Text                          | Url                                                                | Current Page |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true         |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |              |
 	And the sub-page title should be "Dates available for download" with caption "Pupil level and aggregated LA data"
 
 @Javascript:disabled
@@ -385,17 +385,17 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Data files avail
 	And the page title should be "Download data"
 	And the page subtitle should be "Pupil level and aggregated LA data"
 	And the breadcrumb trail should be:
-		| text                         | href                                                               |
+		| Link Text                    | Url                                                                |
 		| Home                         | /                                                                  |
 		| All local authorities        | /local-authorities/                                                |
 		| Test LA                      | /local-authority/301/                                              |
 		| Download data                | /local-authority/301/download-data/                                |
 		| Dates available for download | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |
 	And the sub-navigation should be:
-		| text          | href                                |
+		| Link Text     | Url                                 |
 		| Download data | /local-authority/301/download-data/ |
 	And the side navigation should be:
-		| text                               | href                                                               |
+		| Link Text                          | Url                                                                |
 		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |
 		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |
 	And the sub-page title should be "Data files available for download" with caption "Pupil level and aggregated LA data"
@@ -588,7 +588,7 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Download data - 
 	And the page title should be "Download data"
 	And the page subtitle should be "Pupil level and aggregated LA data"
 	And the breadcrumb trail should be:
-		| text                              | href                                                                                              |
+		| Link Text                         | Url                                                                                               |
 		| Home                              | /                                                                                                 |
 		| All local authorities             | /local-authorities/                                                                               |
 		| Test LA                           | /local-authority/301/                                                                             |
@@ -596,12 +596,12 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Download data - 
 		| Dates available for download      | /local-authority/301/download-data/pupil-level-aggregated-la-data/                                |
 		| Data files available for download | /local-authority/301/download-data/pupil-level-aggregated-la-data/select-files/?selectedYear=2022 |
 	And the sub-navigation should be:
-		| text          | href                                | current |
+		| Link Text     | Url                                 | Current Page |
 		| Download data | /local-authority/301/download-data/ | true    |
 	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true    |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |         |
+		| Link Text                          | Url                                                                | Current Page |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ | true         |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         |              |
 	And the sub-page title should be "Download pupil level and aggregated LA data" with caption "Pupil level and aggregated LA data"
 
 @Javascript:disabled
@@ -616,7 +616,7 @@ Scenario Outline: Data downloads > Pupil level and aggregated LA data > Download
 	Then I should get a 200 response
 	And the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your LA."
 	And the available download formats should be:
-		| text                | href                                                                                                                                                                                   |
+		| Link Text           | Url                                                                                                                                                                                    |
 		| Data in CSV format  | /local-authority/301/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=CSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional  |
 		| Data in XLSX format | /local-authority/301/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=XLSX&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional |
 		| Data in TSV format  | /local-authority/301/download-data/pupil-level-aggregated-la-data/download-as-zip/?fileType=TSV&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional  |
@@ -645,19 +645,19 @@ Scenario: Data downloads > Individual school data > Search for a school - No res
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                  | href                                                       |
+		| Link Text             | Url                                                        |
 		| Home                  | /                                                          |
 		| All local authorities | /local-authorities/                                        |
 		| Test LA               | /local-authority/301/                                      |
 		| Download data         | /local-authority/301/download-data/                        |
 		| Search for a school   | /local-authority/301/download-data/individual-school-data/ |
 	And the sub-navigation should be:
-		| text          | href                                | current |
-		| Download data | /local-authority/301/download-data/ | true    |
+		| Link Text     | Url                                 | Current Page |
+		| Download data | /local-authority/301/download-data/ | true         |
 	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |         |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true    |
+		| Link Text                          | Url                                                                | Current Page |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |              |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true         |
 	And the sub-page title should be "We found no schools" with caption "Individual school data"
 
 @Javascript:disabled
@@ -683,18 +683,18 @@ Scenario: Data downloads > Individual school data > Search for a school - Common
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                  | href                                |
+		| Link Text             | Url                                 |
 		| Home                  | /                                   |
 		| All local authorities | /local-authorities/                 |
 		| Test LA               | /local-authority/301/               |
 		| Download data         | /local-authority/301/download-data/ |
 	And the sub-navigation should be:
-		| text          | href                                | current |
-		| Download data | /local-authority/301/download-data/ | true    |
+		| Link Text     | Url                                 | Current Page |
+		| Download data | /local-authority/301/download-data/ | true         |
 	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |         |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true    |
+		| Link Text                          | Url                                                                | Current Page |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |              |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true         |
 	And the sub-page title should be "Search for a school" with caption "Individual school data"
 
 @Javascript:disabled
@@ -736,14 +736,11 @@ Scenario: Data downloads > Individual school data > Search for a school - Should
 		}
 		"""
 	When I navigate to /local-authority/301/download-data/individual-school-data/
-	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
-	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
-
-Examples:
-	| Counter | URN    | Name          |
-	| 1       | 111111 | Test School 1 |
-	| 2       | 222222 | Test School 2 |
+	Then the pagination summary should be "Showing 1 - 2 of 2 schools"
+	And the listings should be:
+		| Index | URN    | Name          |
+		| 1     | 111111 | Test School 1 |
+		| 2     | 222222 | Test School 2 |
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - Pagination
@@ -758,22 +755,21 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 		}
 		"""
 	When I navigate to /local-authority/301/download-data/individual-school-data/
-	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 50 of 251 schools"
-	And the element "*[data-testid='PageLinks-Footer-1']" should have the href "/local-authority/301/download-data/individual-school-data/?page=1"
-	And the element "*[data-testid='PageLinks-Footer-2']" should have the href "/local-authority/301/download-data/individual-school-data/?page=2"
-	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
-	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/local-authority/301/download-data/individual-school-data/?page=6"
-	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authority/301/download-data/individual-school-data/?page=2"
-	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100002"
-	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100003"
-	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100004"
-	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100005"
-	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100001"
-	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100002"
-	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100003"
-	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100004"
-	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100005"
+	Then the pagination summary should be "Showing 1 - 50 of 251 schools"
+	And the pagination links should be:
+		| Link Text | Url                                                               |
+		| 1         | /local-authority/301/download-data/individual-school-data/?page=1 |
+		| 2         | /local-authority/301/download-data/individual-school-data/?page=2 |
+		| ...       |                                                                   |
+		| 6         | /local-authority/301/download-data/individual-school-data/?page=6 |
+		| Next page | /local-authority/301/download-data/individual-school-data/?page=2 |
+	And the listings should be:
+		| Index | URN    | Name                  |
+		| 1     | 100001 | Primary School 100001 |
+		| 2     | 100002 | Primary School 100002 |
+		| 3     | 100003 | Primary School 100003 |
+		| 4     | 100004 | Primary School 100004 |
+		| 5     | 100005 | Primary School 100005 |
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - Pagination 2
@@ -788,24 +784,25 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 		}
 		"""
 	When I navigate to /local-authority/301/download-data/individual-school-data/?page=3
-	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 101 - 150 of 501 schools"
-	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/local-authority/301/download-data/individual-school-data/?page=2"
-	And the element "*[data-testid='PageLinks-Footer-1']" should have the href "/local-authority/301/download-data/individual-school-data/?page=1"
-	And the element "*[data-testid='PageLinks-Footer-2']" should have the href "/local-authority/301/download-data/individual-school-data/?page=2"
-	And the elements "*[data-testid='PageLinks-Footer-3']" should all have the href "/local-authority/301/download-data/individual-school-data/?page=3"
-	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/local-authority/301/download-data/individual-school-data/?page=4"
-	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
-	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/local-authority/301/download-data/individual-school-data/?page=4"
-	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100101"
-	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100102"
-	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100103"
-	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100104"
-	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100105"
-	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100101"
-	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100102"
-	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100103"
-	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100104"
-	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100105"
+	Then the pagination summary should be "Showing 101 - 150 of 501 schools"
+	And the pagination links should be:
+		| Link Text | Url                                                                |
+		| Prev page | /local-authority/301/download-data/individual-school-data/?page=2  |
+		| 1         | /local-authority/301/download-data/individual-school-data/?page=1  |
+		| 2         | /local-authority/301/download-data/individual-school-data/?page=2  |
+		| 3         | /local-authority/301/download-data/individual-school-data/?page=3  |
+		| 4         | /local-authority/301/download-data/individual-school-data/?page=4  |
+		| ...       |                                                                    |
+		| 11        | /local-authority/301/download-data/individual-school-data/?page=11 |
+		| Next page | /local-authority/301/download-data/individual-school-data/?page=4  |
+	And the listings should be:
+		| Index | URN    | Name                  |
+		| 1     | 100101 | Primary School 100101 |
+		| 2     | 100102 | Primary School 100102 |
+		| 3     | 100103 | Primary School 100103 |
+		| 4     | 100104 | Primary School 100104 |
+		| 5     | 100105 | Primary School 100105 |
+
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Page title should show correct text when search returns results
@@ -826,43 +823,6 @@ Scenario: Data downloads > Individual school data > Search for a school - Page t
 			"localAuthority": {
 				"code": "301",
 				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "Primary"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=Primary
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Search results for "Primary"" with caption "Individual school data"
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Page title should show correct text when search returns results (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"localAuthority": {
-				"code": "301",
-					"name": "Oxfordshire"
 			}
 		}
 		"""
@@ -915,48 +875,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Page s
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=Primary
 	And the breadcrumb trail should be:
-		| text                  | href                                                       |
-		| Home                  | /                                                          |
-		| All local authorities | /local-authorities/                                        |
-		| Oxfordshire           | /local-authority/301/                                      |
-		| Download data         | /local-authority/301/download-data/                        |
-		| Search for a school   | /local-authority/301/download-data/individual-school-data/ |
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Page should show a breadcrumb trail when search returns results (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "Primary"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=Primary
-	And the breadcrumb trail should be:
-		| text                  | href                                                       |
+		| Link Text             | Url                                                        |
 		| Home                  | /                                                          |
 		| All local authorities | /local-authorities/                                        |
 		| Oxfordshire           | /local-authority/301/                                      |
@@ -997,48 +916,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Page s
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=Secondary
 	And the breadcrumb trail should be:
-		| text                  | href                                                       |
-		| Home                  | /                                                          |
-		| All local authorities | /local-authorities/                                        |
-		| Oxfordshire           | /local-authority/301/                                      |
-		| Download data         | /local-authority/301/download-data/                        |
-		| Search for a school   | /local-authority/301/download-data/individual-school-data/ |
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Page should show a breadcrumb trail when search returns no results (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "Secondary"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=Secondary
-	And the breadcrumb trail should be:
-		| text                  | href                                                       |
+		| Link Text             | Url                                                        |
 		| Home                  | /                                                          |
 		| All local authorities | /local-authorities/                                        |
 		| Oxfordshire           | /local-authority/301/                                      |
@@ -1046,7 +924,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Page s
 		| Search for a school   | /local-authority/301/download-data/individual-school-data/ |
 
 @Javascript:disabled
-Scenario: Data downloads > Individual school data > Search for a school - Search Term Validation
+Scenario: Data downloads > Individual school data > Search for a school - Search Term validation
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -1072,7 +950,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 	And the element "#searchForm" should have the text content "Enter school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number) Search"
 
 @Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Search Term Validation (JS)
+Scenario: Data downloads > Individual school data > Search for a school - Search Term validation should still work with JS enabled
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -1098,7 +976,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 	And the element "#searchForm" should have the text content "Enter school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number) When autocomplete results are available use up and down arrows to review and enter to select. Touch device users, explore by touch or with swipe gestures. Search"
 
 @Javascript:disabled
-Scenario: Data downloads > Individual school data > Search for a school - Errors in Search Term Validation
+Scenario: Data downloads > Individual school data > Search for a school - Search Term validation errors
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -1124,7 +1002,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Errors
 	And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 
 @Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Errors in Search Term Validation (JS)
+Scenario: Data downloads > Individual school data > Search for a school - Search Term validation errors should still work with JS enabled
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -1148,37 +1026,9 @@ Scenario: Data downloads > Individual school data > Search for a school - Errors
 	And the element "#app-field-Search-input-error" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
 	And the element "h2.govuk-error-summary__title" should have the text content "There is a problem"
 	And the element "*[data-testid='app-error-summary-Search']" should have the text content "Please enter a school name, address, URN (Unique Reference Number) or LAESTAB (Local Authority Establishment Number)"
-	
+
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Should show correct message for search term with no matches
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "secondary"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=secondary
-	And the element "[data-testid="result-not-found-search-url"]" should have the href "/local-authority/301/download-data/individual-school-data/"
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "We found no matches for "secondary"" with caption "Individual school data"
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Should show correct message for search term with no matches (JS)
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -1218,52 +1068,22 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 		}
 		"""
 	When I navigate to /local-authority/301/download-data/individual-school-data/?search=primary
-	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 50 of 251 schools"
-	And the element "*[data-testid='PageLinks-Footer-1']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the element "*[data-testid='PageLinks-Footer-2']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
-	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=6"
-	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100002"
-	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100003"
-	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100004"
-	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100005"
-	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100001"
-	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100002"
-	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100003"
-	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100004"
-	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100005"
+	Then the pagination summary should be "Showing 1 - 50 of 251 schools"
+	And the pagination links should be:
+		| Link Text | Url                                                                              |
+		| 1         | /local-authority/301/download-data/individual-school-data/?search=primary&page=1 |
+		| 2         | /local-authority/301/download-data/individual-school-data/?search=primary&page=2 |
+		| ...       |                                                                                  |
+		| 6         | /local-authority/301/download-data/individual-school-data/?search=primary&page=6 |
+		| Next page | /local-authority/301/download-data/individual-school-data/?search=primary&page=2 |
+	And the listings should be:
+		| Index | URN    | Name                  |
+		| 1     | 100001 | Primary School 100001 |
+		| 2     | 100002 | Primary School 100002 |
+		| 3     | 100003 | Primary School 100003 |
+		| 4     | 100004 | Primary School 100004 |
+		| 5     | 100005 | Primary School 100005 |
 
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Pagination 3 (JS)
-	Given 251 Establishments exist with properties:
-		| urn          | name                        | localAuthority                       |
-		| (100000 + n) | Primary School (100000 + n) | { "code": "301", "name": "Test LA" } |
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/?search=primary
-	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 50 of 251 schools"
-	And the element "*[data-testid='PageLinks-Footer-1']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the element "*[data-testid='PageLinks-Footer-2']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
-	And the element "*[data-testid='PageLinks-Footer-6']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=6"
-	And the element "*[data-testid='PageLinks-Footer-Next']" should have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100002"
-	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100003"
-	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100004"
-	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100005"
-	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100001"
-	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100002"
-	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100003"
-	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100004"
-	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100005"
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 4
@@ -1278,56 +1098,25 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 		}
 		"""
 	When I navigate to /local-authority/301/download-data/individual-school-data/?page=3&search=primary
-	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 101 - 150 of 501 schools"
-	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the elements "*[data-testid='PageLinks-Footer-2']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the elements "*[data-testid='PageLinks-Footer-3']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=3"
-	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=4"
-	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
-	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=4"
-	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100101"
-	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100102"
-	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100103"
-	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100104"
-	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100105"
-	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100101"
-	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100102"
-	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100103"
-	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100104"
-	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100105"
+	Then the pagination summary should be "Showing 101 - 150 of 501 schools"
+	And the pagination links should be:
+		| Link Text | Url                                                                               |
+		| Prev page | /local-authority/301/download-data/individual-school-data/?search=primary&page=2  |
+		| 1         | /local-authority/301/download-data/individual-school-data/?search=primary&page=1  |
+		| 2         | /local-authority/301/download-data/individual-school-data/?search=primary&page=2  |
+		| 3         | /local-authority/301/download-data/individual-school-data/?search=primary&page=3  |
+		| 4         | /local-authority/301/download-data/individual-school-data/?search=primary&page=4  |
+		| ...       |                                                                                   |
+		| 11        | /local-authority/301/download-data/individual-school-data/?search=primary&page=11 |
+		| Next page | /local-authority/301/download-data/individual-school-data/?search=primary&page=4  |
+	And the listings should be:
+		| Index | URN    | Name                  |
+		| 1     | 100101 | Primary School 100101 |
+		| 2     | 100102 | Primary School 100102 |
+		| 3     | 100103 | Primary School 100103 |
+		| 4     | 100104 | Primary School 100104 |
+		| 5     | 100105 | Primary School 100105 |
 
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Pagination 4 (JS)
-	Given 501 Establishments exist with properties:
-		| urn          | name                        | localAuthority                       |
-		| (100000 + n) | Primary School (100000 + n) | { "code": "301", "name": "Test LA" } |
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/?page=3&search=primary
-	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 101 - 150 of 501 schools"
-	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the elements "*[data-testid='PageLinks-Footer-2']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=2"
-	And the elements "*[data-testid='PageLinks-Footer-3']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=3"
-	And the elements "*[data-testid='PageLinks-Footer-4']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=4"
-	And the element "*[data-testid='govuk-pagination__link--Footer']" should have the text content "..."
-	And the elements "*[data-testid='PageLinks-Footer-Next']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=4"
-	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100101"
-	And the element "*[data-testid='school-listing-name-2']" should have the text content "Primary School 100102"
-	And the element "*[data-testid='school-listing-name-3']" should have the text content "Primary School 100103"
-	And the element "*[data-testid='school-listing-name-4']" should have the text content "Primary School 100104"
-	And the element "*[data-testid='school-listing-name-5']" should have the text content "Primary School 100105"
-	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100101"
-	And the element "*[data-testid='school-listing-urn-2']" should have the text content "100102"
-	And the element "*[data-testid='school-listing-urn-3']" should have the text content "100103"
-	And the element "*[data-testid='school-listing-urn-4']" should have the text content "100104"
-	And the element "*[data-testid='school-listing-urn-5']" should have the text content "100105"
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 5
@@ -1342,78 +1131,19 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 		}
 		"""
 	When I navigate to /local-authority/301/download-data/individual-school-data/?page=2&search=primary
-	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 51 - 51 of 51 schools"
-	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100051"
-	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100051"
+	Then the pagination summary should be "Showing 51 - 51 of 51 schools"
+	And the pagination links should be:
+		| Link Text | Url                                                                              |
+		| Prev page | /local-authority/301/download-data/individual-school-data/?search=primary&page=1 |
+		| 1         | /local-authority/301/download-data/individual-school-data/?search=primary&page=1 |
+		| 2         | /local-authority/301/download-data/individual-school-data/?search=primary&page=2 |
+	And the listings should be:
+		| Index | URN    | Name                  |
+		| 1     | 100051 | Primary School 100051 |
 
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Pagination 5 (JS)
-	Given 51 Establishments exist with properties:
-		| urn          | name                        | localAuthority                       |
-		| (100000 + n) | Primary School (100000 + n) | { "code": "301", "name": "Test LA" } |
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/?page=2&search=primary
-	Then the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 51 - 51 of 51 schools"
-	And the elements "*[data-testid='PageLinks-Footer-Prev']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=primary&page=1"
-	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100051"
-	And the element "*[data-testid='school-listing-urn-1']" should have the text content "100051"
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Matching URN search should redirect to Dates available for download
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "111111"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Matching URN search should redirect to Dates available for download (JS)
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -1502,100 +1232,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 	And the page subtitle should be "Individual school data"
 	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
 
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Partial match for school name should redirect to Dates available for download (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "PRiMaRY"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Partial street match should redirect to Dates available for download
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"address": {
-				"street": "13 The Street",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "str"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Partial street match should redirect to Dates available for download (JS)
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -1688,102 +1326,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
 
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Partial town match should redirect to Dates available for download (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"address": {
-				"street": "13 The Street",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "some"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Partial postcode match should redirect to Dates available for download
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"address": {
-				"street": "13 The Street",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "tr1"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Partial postcode match should redirect to Dates available for download (JS)
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -1897,144 +1441,15 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=tr
-	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
-
-Examples:
-	| Counter | URN    | Name                       | Address                        | Href                                                                          |
-	| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /local-authority/301/download-data/individual-school-data/333333/select-year/ |
-	| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
-	| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
-	| 4       | 444444 | The Training Centre        | Data not available           | /local-authority/301/download-data/individual-school-data/444444/select-year/ |
-
-@Javascript:enabled
-Scenario Outline: Data downloads > Individual school data > Search for a school - Results page should show partial name and address matches (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"address": {
-				"street": "13 The Street",
-				"town": "SomeTown",
-				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"address": {
-				"street": "13 The Road",
-				"town": "Tring",
-				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "A Different Primary School",
-			"address": {
-				"street": "13 The Road",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "444444" exists:
-		"""
-		{
-			"name": "The Training Centre",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "tr"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=tr
-	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
-
-Examples:
-	| Counter | URN    | Name                       | Address                        | Href                                                                          |
-	| 1       | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /local-authority/301/download-data/individual-school-data/333333/select-year/ |
-	| 2       | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
-	| 3       | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
-	| 4       | 444444 | The Training Centre        | Data not available           | /local-authority/301/download-data/individual-school-data/444444/select-year/ |
+	And the listings should be:
+		| Index | URN    | Name                       | Address                        | Url                                                                          |
+		| 1     | 333333 | A Different Primary School | 13 The Road, SomeTown TR18 3JT | /local-authority/301/download-data/individual-school-data/333333/select-year/ |
+		| 2     | 222222 | Some Other Primary School  | 13 The Road, Tring B1 1AA      | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
+		| 3     | 111111 | Some Primary School        | 13 The Street, SomeTown B1 1AA | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
+		| 4     | 444444 | The Training Centre        | Data not available             | /local-authority/301/download-data/individual-school-data/444444/select-year/ |
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - School search successful for 6-digit URN
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "111111"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - School search successful for 6-digit URN (JS)
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -2113,40 +1528,6 @@ Examples:
 	| 1111       |
 	| 11111      |
 
-@Javascript:enabled
-Scenario Outline: Data downloads > Individual school data > Search for a school - School search with less than 6 digits does not match on URN (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=<SearchTerm>
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "We found no matches for "<SearchTerm>"" with caption "Individual school data"
-
-Examples:
-	| SearchTerm |
-	| 1          |
-	| 11         |
-	| 111        |
-	| 1111       |
-	| 11111      |
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - School search with less than 6 digits matches on school address
@@ -2216,136 +1597,9 @@ Examples:
 	| 1111       |
 	| 11111      |
 
-@Javascript:enabled
-Scenario Outline: Data downloads > Individual school data > Search for a school - School search with less than 6 digits matches on school address (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
-			"address": {
-				"street": "<SearchTerm> The Street",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/222222/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/222222/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Another Primary School (URN: 222222)"
-
-Examples:
-	| SearchTerm |
-	| 1          |
-	| 11         |
-	| 111        |
-	| 1111       |
-	| 11111      |
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 6-digit number, treat it as an exact URN search
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
-			"address": {
-				"street": "111111 The Street",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "111111"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 6-digit number, treat it as an exact URN search (JS)
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -2450,100 +1704,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 	And the page subtitle should be "Individual school data"
 	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
 
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Search term matching establishment LAESTAB code (with forward slash) (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "894/2200"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Search term matching establishment LAESTAB code (without forward slash)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "8942200"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Search term matching establishment LAESTAB code (without forward slash) (JS)
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -2623,59 +1785,10 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "894"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=894
-	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
-
-Examples:
-	| Counter | URN    | LAESTAB  | Name                      | Href                                                                          |
-	| 2       | 111111 | 894/2200 | Some Primary School       | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
-	| 1       | 222222 | 894/1234 | Some Other Primary School | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
-
-@Javascript:enabled
-Scenario Outline: Data downloads > Individual school data > Search for a school - School results page shows multiple partial LAESTAB matches (LA part) (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"laestab": "894/1234",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "894"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=894
-	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
-
-Examples:
-	| Counter | URN    | LAESTAB  | Name                      | Href                                                                          |
-	| 2       | 111111 | 894/2200 | Some Primary School       | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
-	| 1       | 222222 | 894/1234 | Some Other Primary School | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
+	And the listings should be:
+		| Index | URN    | LAESTAB  | Name                      | Url                                                                          |
+		| 2     | 111111 | 894/2200 | Some Primary School       | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
+		| 1     | 222222 | 894/1234 | Some Other Primary School | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - School results page shows multiple partial LAESTAB matches (ESTAB part)
@@ -2712,58 +1825,10 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "2200"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=2200
-	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
-
-Examples:
-	| Counter | URN    | LAESTAB  | Name                      |
-	| 2       | 111111 | 894/2200 | Some Primary School       |
-	| 1       | 222222 | 600/2200 | Some Other Primary School |
-
-@Javascript:enabled
-Scenario Outline: Data downloads > Individual school data > Search for a school - School results page shows multiple partial LAESTAB matches (ESTAB part) (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"laestab": "600/2200",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "2200"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=2200
-	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="school-listing-laestab-<Counter>"]" should have the text content "<LAESTAB>"
-
-Examples:
-	| Counter | URN    | LAESTAB  | Name                      |
-	| 2       | 111111 | 894/2200 | Some Primary School       |
-	| 1       | 222222 | 600/2200 | Some Other Primary School |
+	And the listings should be:
+		| Index | URN    | LAESTAB  | Name                      |
+		| 2     | 111111 | 894/2200 | Some Primary School       |
+		| 1     | 222222 | 600/2200 | Some Other Primary School |
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Partial LAESTAB (LA part) match should show no matching results
@@ -2783,34 +1848,6 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 		{
 			"name": "Test LA",
 			"code": "301"
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "89"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=89
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "We found no matches for "89"" with caption "Individual school data"
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Partial LAESTAB (LA part) match should show no matching results (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab" : "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
 		}
 		"""
 	And Local Authority "301" exists:
@@ -2856,98 +1893,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 	And the page subtitle should be "Individual school data"
 	And the sub-page title should be "We found no matches for "22"" with caption "Individual school data"
 
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - Partial LAESTAB (ESTAB only) match should show no matching results (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab" : "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "22"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=22
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "We found no matches for "22"" with caption "Individual school data"
-
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
-			"laestab": "123/4567",
-			"address": {
-				"street": "8942200 The Street",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "8942200"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields) (JS)
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -3071,133 +2018,8 @@ Scenario: Data downloads > Individual school data > Search for a school - If sea
 	And the page subtitle should be "Individual school data"
 	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
 
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields) (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		} 
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
-			"laestab": "123/4567",
-			"address": {
-				"street": "894/2200 The Street",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-			
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "894/2200"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}		 
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
-			"laestab": "123/4567",
-			"address": {
-				"street": "894 The Street",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}		 
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "894"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields) (JS)
 	Given Establishment "111111" exists:
 		"""
 		{
@@ -3320,68 +2142,6 @@ Scenario: Data downloads > Individual school data > Search for a school - if sea
 	And the page subtitle should be "Individual school data"
 	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
 
-@Javascript:enabled
-Scenario: Data downloads > Individual school data > Search for a school - if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields) (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
-			"laestab": "123/4567",
-			"address": {
-				"street": "2200 The Street",
-				"town": "SomeTown",
-				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And blob storage file downloads-config.json exists in config container:
-		"""
-		[
-			{
-				"id": "kts-school-ks2-pupil",
-				"source": "KTS",
-				"scope": "School",
-				"dataSetType": "KeyStage2",
-				"label": "Key stage 2 (KS2)",
-				"filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
-			}
-		]
-		"""
-	And blob storage file School/111111/2022/csv/ks2_pupil_final.csv exists in downloads-kts container:
-		"""
-		Column A,Column B,Column C
-		1,2,3
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "2200"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/111111/select-year/
-	And the page title should be "Download data"
-	And the page subtitle should be "Individual school data"
-	And the sub-page title should be "Dates available for download" with caption "Some Primary School (URN: 111111)"
-
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - Multiple successful school name matches show correct search results
 	Given Establishment "111111" exists:
@@ -3438,82 +2198,11 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	And I update the textbox "#app-field-Search" to have the value "School"
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=School
-	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the href "<Href>"
-
-Examples:
-	| Counter | URN    | Name     | Address                                   | Href                                                                          |
-	| 1       | 111111 | School A | 13 The Street AB12 3CD                    | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
-	| 2       | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
-	| 3       | 333333 | School C | 34 Long Road, Sheffield                   | /local-authority/301/download-data/individual-school-data/333333/select-year/ |
-
-@Javascript:enabled
-Scenario Outline: Data downloads > Individual school data > Search for a school - Multiple successful school name matches show correct search results (JS)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "School A",
-			"address": {
-				"street": "13 The Street",
-				"postCode": "AB12 3CD"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "School B",
-			"address": {
-				"street": "2a Mornington Crescent",
-				"town": "Liverpool",
-				"postCode": "LL1 1AB"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "School C",
-			"address": {
-				"street": "34 Long Road",
-				"town": "Sheffield"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	When I navigate to /local-authority/301/download-data/individual-school-data/
-	And I update the textbox "#app-field-Search" to have the value "School"
-	And I click the button "#searchSubmit"
-	Then the path should be /local-authority/301/download-data/individual-school-data/?search=School
-	And the element "[data-testid="school-listing-urn-<Counter>"]" should have the text content "<URN>"
-	And the element "[data-testid="school-listing-name-<Counter>"]" should have the text content "<Name>"
-	And the element "[data-testid="school-listing-address-<Counter>"]" should have the text content "<Address>"
-
-Examples:
-	| Counter | URN    | Name     | Address                                   | Href                                                                          |
-	| 1       | 111111 | School A | 13 The Street AB12 3CD                    | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
-	| 2       | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
-	| 3       | 333333 | School C | 34 Long Road, Sheffield                   | /local-authority/301/download-data/individual-school-data/333333/select-year/ |
+	And the listings should be:
+		| Index | URN    | Name     | Address                                   | Url                                                                          |
+		| 1     | 111111 | School A | 13 The Street AB12 3CD                    | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
+		| 2     | 222222 | School B | 2a Mornington Crescent, Liverpool LL1 1AB | /local-authority/301/download-data/individual-school-data/222222/select-year/ |
+		| 3     | 333333 | School C | 34 Long Road, Sheffield                   | /local-authority/301/download-data/individual-school-data/333333/select-year/ |
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - The PageNo parameter should handle invalid values with a default value of 1
@@ -3558,8 +2247,8 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 	Then the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the sub-page title should be "Search results for "Primary"" with caption "Individual school data"
-	And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 2 of 2 schools"
-	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=Primary&page=1"
+	And the pagination summary should be "Showing 1 - 2 of 2 schools"
+	And the pagination links should be empty
 
 Examples:
 	| page |
@@ -3584,10 +2273,12 @@ Scenario: Data downloads > Individual school data > Search for a school - The Pa
 	Then the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the sub-page title should be "Search results for "Primary"" with caption "Individual school data"
-	And the element "*[data-testid='NumberOfPages-Footer']" should have the text content "Showing 1 - 26 of 26 schools"
-	And the elements "*[data-testid='PageLinks-Footer-1']" should all have the href "/local-authority/301/download-data/individual-school-data/?search=Primary&page=1"
-	And the element "*[data-testid='school-listing-name-1']" should have the text content "Primary School 100001"
-	And the element "*[data-testid='school-listing-name-26']" should have the text content "Primary School 100026"
+	And the pagination summary should be "Showing 1 - 26 of 26 schools"
+	And the pagination links should be empty
+	And the listings should be:
+		| Index | URN    | Name                  |
+		| 1     | 100001 | Primary School 100001 |
+		| 26    | 100026 | Primary School 100026 |
 		
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Autocomplete Should Populate Items When Two Or More Characters Entered
@@ -3665,13 +2356,13 @@ Scenario: Data downloads > Individual school data > Search for a school - Autoco
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "primary"
 	Then the autocomplete results should appear
-	Then there should be 3 autocomplete items
-	Then the elements ".autocomplete__option strong" should have the text contents:
+	And there should be 3 autocomplete items
+	And the elements ".autocomplete__option strong" should have the text contents:
 		| Highlighted Values |
 		| Primary            |
 		| Primary            |
 		| Primary            |
-	Then the elements ".autocomplete__option" should have the text contents:
+	And the elements ".autocomplete__option" should have the text contents:
 		| Autocomplete Items                                                                             |
 		| A Different Primary School Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
 		| Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201       |
@@ -3753,15 +2444,15 @@ Scenario: Data downloads > Individual school data > Search for a school - Autoco
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	Then the autocomplete results should appear
-	Then there should be 4 autocomplete items
-	Then the elements ".autocomplete__option strong" should have the text contents:
+	And there should be 4 autocomplete items
+	And the elements ".autocomplete__option strong" should have the text contents:
 		| Highlighted Values |
 		| tr                 |
 		| TR                 |
 		| Tr                 |
 		| tr                 |
 		| TR                 |
-	Then the elements ".autocomplete__option" should have the text contents:
+	And the elements ".autocomplete__option" should have the text contents:
 		| Autocomplete Items                                                                                    |
 		| A Different Primary School Centre Address:13 The Road, SomeTown TR18 3JT URN:333333, LAESTAB:894/2202 |
 		| Some Other Primary School Address:13 The Road, Tring B1 1AA URN:222222, LAESTAB:894/2201              |
@@ -3844,15 +2535,15 @@ Scenario: Data downloads > Individual school data > Search for a school - Autoco
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "42"
 	Then the autocomplete results should appear
-	Then there should be 4 autocomplete items
-	Then the elements ".autocomplete__option strong" should have the text contents:
+	And there should be 4 autocomplete items
+	And the elements ".autocomplete__option strong" should have the text contents:
 		| Highlighted Values |
 		| 42                 |
 		| 4/2                |
 		| 4/2                |
 		| 4/2                |
 		| 4/2                |
-	Then the elements ".autocomplete__option" should have the text contents:
+	And the elements ".autocomplete__option" should have the text contents:
 		| Autocomplete Items                                                                                    |
 		| Some Secondary School Address:13 The Road, SomeTown TR18 3JT URN:444442, LAESTAB:894/2203             |
 		| Some Primary School Address:13 The Street, SomeTown B1 1AA URN:111111, LAESTAB:894/2200               |
@@ -3910,19 +2601,19 @@ Scenario: Data downloads > Individual school data > Dates available for download
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                  | href                                                       |
+		| Link Text             | Url                                                        |
 		| Home                  | /                                                          |
 		| All local authorities | /local-authorities/                                        |
 		| Test LA               | /local-authority/301/                                      |
 		| Download data         | /local-authority/301/download-data/                        |
 		| Search for a school   | /local-authority/301/download-data/individual-school-data/ |
 	And the sub-navigation should be:
-		| text          | href                                | current |
-		| Download data | /local-authority/301/download-data/ | true    |
+		| Link Text     | Url                                 | Current Page |
+		| Download data | /local-authority/301/download-data/ | true         |
 	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |         |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true    |
+		| Link Text                          | Url                                                                | Current Page |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |              |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true         |
 	And the sub-page title should be "Dates available for download" with caption "Test School 1 (URN: 111111)"
 
 @Javascript:disabled
@@ -4147,7 +2838,7 @@ Scenario: Data downloads > Individual school data > Data files available for dow
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                         | href                                                                          |
+		| Link Text                    | Url                                                                           |
 		| Home                         | /                                                                             |
 		| All local authorities        | /local-authorities/                                                           |
 		| Test LA                      | /local-authority/301/                                                         |
@@ -4155,12 +2846,12 @@ Scenario: Data downloads > Individual school data > Data files available for dow
 		| Search for a school          | /local-authority/301/download-data/individual-school-data/                    |
 		| Dates available for download | /local-authority/301/download-data/individual-school-data/111111/select-year/ |
 	And the sub-navigation should be:
-		| text          | href                                | current |
-		| Download data | /local-authority/301/download-data/ | true    |
+		| Link Text     | Url                                 | Current Page |
+		| Download data | /local-authority/301/download-data/ | true         |
 	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |         |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true    |
+		| Link Text                          | Url                                                                | Current Page |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |              |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true         |
 	And the sub-page title should be "Data files available for download" with caption "Test School 1 (URN: 111111)"
 
 @Javascript:disabled
@@ -4451,7 +3142,7 @@ Scenario: Data downloads > Individual school data > Download data - Common page 
 	And the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
 	And the breadcrumb trail should be:
-		| text                              | href                                                                                             |
+		| Link Text                         | Url                                                                                              |
 		| Home                              | /                                                                                                |
 		| All local authorities             | /local-authorities/                                                                              |
 		| Test LA                           | /local-authority/301/                                                                            |
@@ -4460,12 +3151,12 @@ Scenario: Data downloads > Individual school data > Download data - Common page 
 		| Dates available for download      | /local-authority/301/download-data/individual-school-data/111111/select-year/                    |
 		| Data files available for download | /local-authority/301/download-data/individual-school-data/111111/select-files/?selectedYear=2022 |
 	And the sub-navigation should be:
-		| text          | href                                | current |
-		| Download data | /local-authority/301/download-data/ | true    |
+		| Link Text     | Url                                 | Current Page |
+		| Download data | /local-authority/301/download-data/ | true         |
 	And the side navigation should be:
-		| text                               | href                                                               | current |
-		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |         |
-		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true    |
+		| Link Text                          | Url                                                                | Current Page |
+		| Pupil level and aggregated LA data | /local-authority/301/download-data/pupil-level-aggregated-la-data/ |              |
+		| Individual school data             | /local-authority/301/download-data/individual-school-data/         | true         |
 	And the sub-page title should be "Download individual school data" with caption "Test School 1 (URN: 111111)"
 
 @Javascript:disabled
@@ -4500,7 +3191,7 @@ Scenario Outline: Data downloads > Individual school data > Download data - Page
 	Then I should get a 200 response
 	And the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your school."
 	And the available download formats should be:
-		| text                | href                                                                                                                                                                                                            |
+		| Link Text                | Url                                                                                                                                                                                                            |
 		| Data in CSV format  | /local-authority/301/download-data/individual-school-data/111111/download-as-zip/?fileType=CSV&selectedFiles=kts-school-ks2-pupil-111111-2022-final&selectedFiles=kts-school-ks2-pupil-111111-2023-provisional  |
 		| Data in XLSX format | /local-authority/301/download-data/individual-school-data/111111/download-as-zip/?fileType=XLSX&selectedFiles=kts-school-ks2-pupil-111111-2022-final&selectedFiles=kts-school-ks2-pupil-111111-2023-provisional |
 		| Data in TSV format  | /local-authority/301/download-data/individual-school-data/111111/download-as-zip/?fileType=TSV&selectedFiles=kts-school-ks2-pupil-111111-2022-final&selectedFiles=kts-school-ks2-pupil-111111-2023-provisional  |

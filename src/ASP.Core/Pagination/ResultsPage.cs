@@ -35,3 +35,9 @@ public class ResultsPage<T>
         );
     }
 }
+
+public class ResultsPage
+{
+    public static ResultsPage<T> SingleItem<T>(int page, int resultsPerPage, T item)
+        => new ResultsPage<T>(page, resultsPerPage, 1, [item]);
+}

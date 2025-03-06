@@ -21,14 +21,13 @@ public class LocalAuthoritySearch : ILocalAuthoritySearch
         var isNumeric = int.TryParse(request.SearchTerm, out var _);
 
         var localAuthoritySearchResults = isNumeric
-            ? from localAuthority in _repository.GetLocalAuthority(request.SearchTerm)
+            ? from laCode in LACode.Parse(request.SearchTerm)
+                .MapErrorIf(e => e is ValidationError, Error.NotFound($@"there were no matches for ""{request.SearchTerm}""."))
+              from localAuthority in _repository.Get(laCode)
                 .MapErrorIf(e => e is NotFoundError, Error.NotFound($@"there were no matches for ""{request.SearchTerm}""."))
-            select new ResultsPage<LocalAuthority>(page, resultsPerPage,
-                totalResults: 1, [new LocalAuthority(localAuthority.Code, localAuthority.Name)])
-            : _repository.LocalAuthoritySearchByLaName(request.SearchTerm, page, resultsPerPage);
+              select ResultsPage.SingleItem(page, resultsPerPage, localAuthority)
+            : _repository.Search(new NameSearchCriteria(request.SearchTerm), page, resultsPerPage);
         
-        return 
-            from response in localAuthoritySearchResults
-            select response;
+        return localAuthoritySearchResults;
     }
 }

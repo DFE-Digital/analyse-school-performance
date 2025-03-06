@@ -16,6 +16,7 @@
         Task<string> TagNameAsync();
         Task<string> OuterHtmlAsync();
         Task<string> ValueAsync();
+        Task<bool> ExistsAsync();
         Task<bool> IsCheckedAsync();
         Task<bool> MatchesAsync(string selector);
         Task<string> AttributeAsync(string attributeName);

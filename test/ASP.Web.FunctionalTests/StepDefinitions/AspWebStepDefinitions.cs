@@ -1,6 +1,8 @@
 using ASP.Web.FunctionalTests.Drivers;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using TechTalk.SpecFlow.Infrastructure;
+using YamlDotNet.Core.Tokens;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
@@ -328,166 +330,208 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         }
 
         [Then("the top navigation should be:")]
-        public async Task ThenTheTopNavigationShouldBe(Table navigationItems)
+        public async Task ThenTheTopNavigationShouldBe(Table expectedListItems)
         {
-            await AssertNavigation("#navigation", "Top navigation item", navigationItems);
+            await AssertOnListOfNavigationItems("#navigation > li", "Top navigation item", expectedListItems);
         }
 
         [Then("the breadcrumb trail should be:")]
-        public async Task ThenTheBreadcrumbTrailShouldBe(Table breadcrumbs)
+        public async Task ThenTheBreadcrumbTrailShouldBe(Table expectedListItems)
         {
-            await AssertNavigation("[data-testid='breadcrumbs']", "Breadcrumb", breadcrumbs);
+            await AssertOnListOfNavigationItems("[data-testid='breadcrumbs'] > li", "Breadcrumb", expectedListItems);
         }
         
         [Then("the landing page cards should be:")]
         public async Task ThenTheLandingPageCardsShouldBe(Table cards)
         {
-            await AssertLandingPageCards("Landing page card", cards);
+            await AssertOnLandingPageCards(".app-card", "Landing page card", cards);
         }
 
         [Then("the sub-navigation should be:")]
-        public async Task ThenTheSubnavigationShouldBe(Table navigationItems)
+        public async Task ThenTheSubnavigationShouldBe(Table expectedListItems)
         {
-            await AssertNavigation("[data-testid='sub-navigation']", "Sub-navigation item", navigationItems);
+            await AssertOnListOfNavigationItems("[data-testid='sub-navigation'] > li", "Sub-navigation item", expectedListItems);
         }
 
         [Then("the side navigation should be:")]
-        public async Task ThenTheSideNavigationShouldBe(Table navigationItems)
+        public async Task ThenTheSideNavigationShouldBe(Table expectedListItems)
         {
-            await AssertNavigation("[data-testid='side-navigation']", "Side navigation item", navigationItems);
+            await AssertOnListOfNavigationItems("[data-testid='side-navigation'] > li", "Side navigation item", expectedListItems);
         }
 
         [Then("the available download formats should be:")]
-        public async Task ThenTheAvailableDownloadFormatsShouldBe(Table navigationItems)
+        public async Task ThenTheAvailableDownloadFormatsShouldBe(Table expectedListItems)
         {
-            await AssertNavigation("[data-testid='available-downloads-formats']", "Download format", navigationItems);
+            await AssertOnListOfNavigationItems("[data-testid='available-downloads-formats'] > li", "Download format", expectedListItems);
         }
         
-        [Then("the linked establishment description should be:")]
-        public async Task ThenTheLinkedEstablishmentDescriptionShouldBe(Table navigationItems)
+        [Then("the linked schools links should be:")]
+        public async Task ThenTheLinkedEstablishmentDescriptionShouldBe(Table expectedListItems)
         {
-            await AssertLinkedEstablishmentDescriptionNavigation("[data-testid='linked-school'] li", "Linked establishment description", navigationItems);
+            await AssertOnListOfLinks("[data-testid='linked-school'] li", "Linked school", expectedListItems);
         }
 
-        private async Task AssertNavigation(string selector, string itemName, Table navigationItems)
+        [Then(@"the pagination summary should be ""(.+)""")]
+        public async Task ThenThePaginationSummaryShouldBe(string summary)
         {
-            var elements = await _web.CurrentPage.ElementsAsync($"{selector} > li");
+            await ThenTheElementShouldHaveTheValue("element", ".pagination-container-p-text", "text content", summary);
+        }
+
+        [Then("the pagination links should be:")]
+        public async Task ThenThePaginationLinksShouldBe(Table expectedListItems)
+        {
+            await AssertOnListOfLinks(".govuk-pagination .govuk-pagination__prev, .govuk-pagination .govuk-pagination__item, .govuk-pagination .govuk-pagination__next", "Pagination link", expectedListItems);
+        }
+
+        [Then("the pagination links should be empty")]
+        public async Task ThenThePaginationLinksShouldBeEmpty()
+        {
+            var elements = await _web.CurrentPage.ElementsAsync(".govuk-pagination .govuk-pagination__prev, .govuk-pagination .govuk-pagination__item, .govuk-pagination .govuk-pagination__next");
             var actualItemCount = await elements.CountAsync();
-            Assert.Equal(navigationItems.RowCount, actualItemCount, $"Expected {itemName} count to be {navigationItems.RowCount}, but was {actualItemCount}");
-            for (var i = 0; i < navigationItems.RowCount; i++)
+            Assert.Equal(0, actualItemCount, $"Expected pagination links to be empty, but found {actualItemCount} items");
+        }
+
+        [Then("the listings should be:")]
+        public async Task ThenTheListingsShouldBe(Table expectedListItems)
+        {
+            await AssertOnListOfLinks(".app-listing li", "Listing", expectedListItems, async (element, textElement, row, item) =>
             {
-                var row = navigationItems.Rows[i];
-
-                var element = await _web.CurrentPage.ElementAsync($"{selector} > li:nth-child({i + 1})");
-                await element.ShouldExistAsync($"{itemName} {i + 1} does not exist");
-
-                if (TryGetRowKey("Href", row, out var expectedHref) && !string.IsNullOrWhiteSpace(expectedHref))
+                var remainingRowKeys = row.Keys.Except(["Text", "Url", "Index"], StringComparer.InvariantCultureIgnoreCase);
+                foreach (var key in remainingRowKeys)
                 {
-                    element = element.Element(":scope > a");
-                    var rowName = row.ContainsKey("text") ? $"(\"{row["text"]}\")" : "";
-                    await element.ShouldExistAsync($"Link element for {itemName} {i + 1} {rowName} does not exist");
-                    var actualHref = await element.AttributeAsync("href");
-                    Assert.Equal(expectedHref, actualHref.Trim());
+                    if (TryGetRowKey(key, row, out var expectedValue))
+                    {
+                        var value = element.Element($".app-listing-{key.ToLowerInvariant()}");
+                        var actualValue = (await value.TextContentAsync()).Trim();
+                        Assert.Equal(expectedValue, actualValue, $@"Expected {item} {key} to be ""{expectedValue}"" but was ""{actualValue}""");
+                    }
                 }
+            });
+        }
 
-                if (TryGetRowKey("Text", row, out var expectedText))
-                {
-                    var actualText = await element.TextContentAsync();
-                    Assert.Equal(expectedText, actualText.Trim());
-                }
-
-                if (TryGetRowKey("Current", row, out var currentString))
+        private async Task AssertOnListOfNavigationItems(string selector, string itemName, Table expectedListItems)
+        {
+            await AssertOnListOfLinks(selector, itemName, expectedListItems, async (element, textElement, row, item) => {
+                if (TryGetRowKey("Current Page", row, out var currentString))
                 {
                     var expectedIsCurrent = bool.TryParse(currentString, out var val) && val;
-                    var ariaCurrent = await element.AttributeAsync("aria-current");
+                    var ariaCurrent = (await textElement.AttributeAsync("aria-current")).Trim();
+
                     if (expectedIsCurrent)
                     {
-                        Assert.Equal("page", ariaCurrent);
+                        Assert.Equal("page", ariaCurrent, $"Expected {item} aria-current attribute to be \"page\" but was \"{ariaCurrent}\"");
                     }
                     else
                     {
-                        Assert.NotEqual("page", ariaCurrent);
+                        Assert.NotEqual("page", ariaCurrent, $"Expected {item} aria-current attribute not to be \"page\" but was \"{ariaCurrent}\"");
                     }
+                }
+            });
+        }
+
+        private async Task AssertOnListOfLinks(string selector, string itemName, Table expectedListItems, Func<IElementDriver, IElementDriver, TableRow, string, Task>? extraItemAssertions = null)
+        {
+            var elements = await _web.CurrentPage.ElementsAsync(selector);
+            var rowsAreIndexed = expectedListItems.ContainsColumn("Index");
+            if (!rowsAreIndexed)
+            {
+                var actualItemCount = await elements.CountAsync();
+                Assert.Equal(expectedListItems.RowCount, actualItemCount, $"Expected {itemName} count to be {expectedListItems.RowCount}, but was {actualItemCount}");
+            }
+
+            for (var i = 0; i < expectedListItems.RowCount; i++)
+            {
+                var row = expectedListItems.Rows[i];
+                var index = rowsAreIndexed && row.TryGetValue("Index", out string ix) ? int.Parse(ix) - 1 : i;
+                var element = elements.ElementAt(index);
+                var item = $"{itemName} {index + 1}";
+                await element.ShouldExistAsync($"{item} does not exist");
+
+                var link = element.Element("a");
+                var linkExists = await link.ExistsAsync();
+                var textElement = linkExists ? link : element;
+
+                if (TryGetRowKey("Link Text", row, out var expectedText))
+                {
+                    var actualText = (await textElement.TextContentAsync()).Trim();
+                    Assert.Equal(expectedText, actualText, $@"Expected {item} Text to be ""{expectedText}"" but was ""{actualText}""");
+                }
+
+                if (TryGetRowKey("Text Content", row, out var expectedTextContent))
+                {
+                    var actualTextContent = (await element.TextContentAsync()).Trim();
+                    Assert.Equal(expectedTextContent, actualTextContent, $@"Expected {item} Text Content to be ""{expectedTextContent}"" but was ""{actualTextContent}""");
+                }
+
+                if (TryGetRowKey("Url", row, out var expectedHref) && !string.IsNullOrWhiteSpace(expectedHref))
+                {
+                    await link.ShouldExistAsync($"Link element for {item} does not exist");
+                    var actualHref = (await link.AttributeAsync("href")).Trim();
+                    Assert.Equal(expectedHref, actualHref, $@"Expected {item} Url to be ""{expectedHref}"" but was ""{actualHref}""");
+                }
+
+                if(extraItemAssertions != null)
+                {
+                    await extraItemAssertions(element, textElement, row, item);
                 }
             }
         }
-        
-        private async Task AssertLandingPageCards(string itemName, Table cards)
+
+        private async Task AssertOnLandingPageCards(string selector, string itemName, Table expectedListItems)
         {
-            for (var i = 0; i < cards.RowCount; i++)
+            var elements = await _web.CurrentPage.ElementsAsync(selector);
+            var rowsAreIndexed = expectedListItems.ContainsColumn("Index");
+            if (!rowsAreIndexed)
             {
-                var row = cards.Rows[i];
-        
-                // Select each card using nth-child
-                var element = await _web.CurrentPage.ElementAsync($".app-card:nth-child({i + 1})");
-                await element.ShouldExistAsync($"Card {i + 1} does not exist");
-                
+                var actualItemCount = await elements.CountAsync();
+                Assert.Equal(expectedListItems.RowCount, actualItemCount, $"Expected {itemName} count to be {expectedListItems.RowCount}, but was {actualItemCount}");
+            }
+
+            for (var i = 0; i < expectedListItems.RowCount; i++)
+            {
+                var row = expectedListItems.Rows[i];
+                var index = rowsAreIndexed && row.TryGetValue("Index", out string ix) ? int.Parse(ix) - 1 : i;
+                var element = elements.ElementAt(index);
+                var item = $"{itemName} {index + 1}";
+                await element.ShouldExistAsync($"{item} does not exist");
+
                 var linkTitleElement = element.Element(":scope > .app-card-container > h2 > a");
                 var contentElement = element.Element(":scope > .app-card-container > p.govuk-body");
 
                 if (TryGetRowKey("Title", row, out var expectedTitle))
                 {
-                    await linkTitleElement.ShouldExistAsync($"Link element for {itemName} {i + 1} does not exist");
-                    var actualText = await linkTitleElement.TextContentAsync();
-                    Assert.Equal(expectedTitle, actualText.Trim());
+                    await linkTitleElement.ShouldExistAsync($"Link element for {item} does not exist");
+                    var actualTitle = (await linkTitleElement.TextContentAsync()).Trim();
+                    Assert.Equal(expectedTitle, actualTitle, $@"Expected {item} Title to be ""{expectedTitle}"" but was ""{actualTitle}""");
                 }
 
                 if (TryGetRowKey("Url", row, out var expectedUrl))
                 {
-                    var rowName = row.ContainsKey("Title") ? $"(\"{row["Title"]}\")" : "";
-                    await linkTitleElement.ShouldExistAsync($"Link element for {itemName} {i + 1} {rowName} does not exist");
-                    var actualHref = await linkTitleElement.AttributeAsync("href");
-                    Assert.Equal(expectedUrl, actualHref.Trim());
+                    await linkTitleElement.ShouldExistAsync($"Link element for {itemName} {i + 1} does not exist");
+                    var actualUrl = (await linkTitleElement.AttributeAsync("href")).Trim();
+                    Assert.Equal(expectedUrl, actualUrl, $@"Expected {item} Url to be ""{expectedUrl}"" but was ""{actualUrl}""");
                 }
 
                 if (TryGetRowKey("Content", row, out var expectedContent))
                 {
-                    await contentElement.ShouldExistAsync($"Content element for {itemName} {i + 1} does not exist");
-                    var actualContent = await contentElement.TextContentAsync();
-                    Assert.Equal(expectedContent, actualContent.Trim());
+                    await contentElement.ShouldExistAsync($"Content element for {item} does not exist");
+                    var actualContent = (await contentElement.TextContentAsync()).Trim();
+                    Assert.Equal(expectedContent, actualContent, $@"Expected {item} Content to be ""{expectedContent}"" but was ""{actualContent}""");
                 }
             }
         }
-        
-        private async Task AssertLinkedEstablishmentDescriptionNavigation(string selector, string itemName, Table navigationItems)
-        {
-            var elements = await _web.CurrentPage.ElementsAsync(selector);
-            var actualItemCount = await elements.CountAsync();
-            Assert.Equal(navigationItems.RowCount, actualItemCount, $"Expected {itemName} count to be {navigationItems.RowCount}, but was {actualItemCount}");
 
-            for (var i = 0; i < navigationItems.RowCount; i++)
-            {
-                var row = navigationItems.Rows[i];
-                var element = await _web.CurrentPage.ElementAsync($"{selector}:nth-child({i + 1})");
-                await element.ShouldExistAsync($"{itemName} {i + 1} does not exist");
-
-                if (TryGetRowKey("Text", row, out var expectedText))
-                {
-                    var actualText = await element.TextContentAsync();
-                    Assert.Equal(expectedText.Trim(), actualText.Trim());
-                }
-
-                if (TryGetRowKey("Href", row, out var expectedHref) && !string.IsNullOrWhiteSpace(expectedHref))
-                {
-                    element = element.Element("a");
-                    var rowName = row.TryGetValue("text", out var value) ? $"(\"{value}\")" : "";
-                    await element.ShouldExistAsync($"Link element for {itemName} {i + 1} {rowName} does not exist");
-                    var actualHref = await element.AttributeAsync("href");
-                    Assert.Equal(expectedHref, actualHref.Trim());
-                }
-            }
-        }
         private bool TryGetRowKey(string key, TableRow row, [NotNullWhen(true)] out string? value)
         {
             if(row.ContainsKey(key))
             {
-                value = row[key];
+                value = row[key].Trim();
                 return true;
             }
 
             if (row.ContainsKey(key.ToLowerInvariant()))
             {
-                value = row[key.ToLowerInvariant()];
+                value = row[key.ToLowerInvariant()].Trim();
                 return true;
             }
 

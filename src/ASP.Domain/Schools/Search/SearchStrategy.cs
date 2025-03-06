@@ -5,7 +5,7 @@ using ASP.Domain.Schools.Access;
 
 namespace ASP.Domain.Schools.Search;
 
-public abstract class SearchStrategy : ISearchStrategy
+public abstract class SearchStrategy : ISchoolSearchStrategy
 {
     protected Optional<SchoolAccessScope> Scope { get; }
     protected string SearchTerm { get; }

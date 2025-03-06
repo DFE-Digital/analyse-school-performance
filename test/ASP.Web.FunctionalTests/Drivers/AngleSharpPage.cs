@@ -53,7 +53,7 @@ namespace ASP.Web.FunctionalTests.Drivers
         {
             await _web.ExpectStatusCode();
 
-            return new AngleSharpElementsDriver(_page.DocumentElement, selector);
+            return new AngleSharpElementsDriver(_page.DocumentElement, selector, this, _web, _outputHelper);
         }
 
         public Task WaitForSelectorAsync(string selector, string errorIfNotExists)
