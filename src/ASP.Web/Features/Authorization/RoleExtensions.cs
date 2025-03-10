@@ -97,6 +97,13 @@ namespace ASP.Web.Features.Authorization
                     from name in user.GetDioceseName()
                     select new SchoolsScopeInfo(SchoolsScopeType.Diocese, name);
             }
+            
+            if (user.Role()!.IsSchoolUser)
+            {
+                return
+                    from urn in user.GetSchoolUrn()
+                    select new SchoolsScopeInfo(SchoolsScopeType.School, urn);
+            }
 
             return Result.Success((SchoolsScopeInfo?) null);
         }

@@ -19,63 +19,33 @@ namespace ASP.Domain.Schools.LinkedSchools
             List<LinkedSchoolsLink> links)
             : base(urn, laEstab, name, educationPhase, address, openDate, closeDate, localAuthority, multiAcademyTrust, diocese)
         {
-            Links = links;
+            Links = links.AsReadOnly();
+            LinkedUrns = Links
+                .SelectMany(l => l.LinkedSchools)
+                .Select(l => l.Urn)
+                .Distinct()
+                .ToList()
+                .AsReadOnly();
         }
 
-        public List<LinkedSchoolsLink> Links { get; }
-        public List<SchoolUrn> LinkedUrns => Links
-            .SelectMany(l => l.LinkedSchools)
-            .Select(l => l.Urn)
-            .Distinct()
-            .ToList();
+        public IReadOnlyCollection<LinkedSchoolsLink> Links { get; }
+        public IReadOnlyCollection<SchoolUrn> LinkedUrns { get; }
 
-        public SchoolAccess GetAccessForScope(Optional<SchoolAccessScope> scope)
-        {
-            return new SchoolAccess(
-                IsAccessibleInScope(scope),
-                IsAccessibleViaLinkedSchools(scope));
-        }
-
-        private bool IsAccessibleInScope(Optional<SchoolAccessScope> scope) =>
+        public bool IsAccessibleInScope(Optional<SchoolAccessScope> scope) =>
             scope.Match(
-                scope => scope.ScopeType switch {
+                matchedScope => matchedScope.ScopeType switch {
                     SchoolAccessScopeType.LA => LocalAuthority != null &&
-                        LocalAuthority.Code.ToString() == scope.ScopeIdentifier,
+                                                LocalAuthority.Code == matchedScope.ScopeIdentifier,
 
                     SchoolAccessScopeType.MAT => MultiAcademyTrust != null &&
-                        MultiAcademyTrust.Uid.ToString() == scope.ScopeIdentifier,
+                                                 MultiAcademyTrust.Uid == matchedScope.ScopeIdentifier,
 
                     SchoolAccessScopeType.Diocese => Diocese != null &&
-                        Diocese.Name == scope.ScopeIdentifier,
+                                                     Diocese.Name == matchedScope.ScopeIdentifier,
+                
+                    SchoolAccessScopeType.School => Urn.Value == matchedScope.ScopeIdentifier,
 
-                    _ => false // Default case returns false for any unhandled ScopeType
+                    _ => false
                 },
                 () => true);
-
-        private bool IsAccessibleViaLinkedSchools(Optional<SchoolAccessScope> scope) =>
-            scope.Match(
-                scope =>
-                {
-                    if (scope.ScopeType is SchoolAccessScopeType.LA)
-                    {
-                        return false;
-                    }
-
-                    if (!Links.Any())
-                    {
-                        return false;
-                    }
-
-                    return scope.ScopeType switch {
-                        SchoolAccessScopeType.MAT => Links.Any(
-                            link => link.LinkedSchools.Any(school => school.MultiAcademyTrust?.Uid.ToString() == scope.ScopeIdentifier)),
-
-                        SchoolAccessScopeType.Diocese => Links.Any(
-                            link => link.LinkedSchools.Any(school => school.Diocese?.Name == scope.ScopeIdentifier)),
-
-                        _ => false
-                    };
-                },
-                () => false);
-    }
-}
+    }}

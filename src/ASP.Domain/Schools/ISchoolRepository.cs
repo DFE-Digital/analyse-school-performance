@@ -13,12 +13,20 @@ namespace ASP.Domain.Schools
         Task<Result<School>> Get(
             SchoolUrn urn,
             CancellationToken cancellationToken = default);
+        
+        Task<Result<List<School>>> Get(
+            List<string> urns,
+            CancellationToken cancellationToken = default);
 
         Task<Result<SchoolWithEstablishmentDetails>> GetWithEstablishmentDetails(
             SchoolUrn urn,
             CancellationToken cancellationToken = default);
 
         Task<Result<SchoolWithLinks>> GetWithLinkedSchools(
+            SchoolUrn urn,
+            CancellationToken cancellationToken = default);
+
+        Task<Result<List<string>>> GetAllLinkedUrns(
             SchoolUrn urn,
             CancellationToken cancellationToken = default);
 

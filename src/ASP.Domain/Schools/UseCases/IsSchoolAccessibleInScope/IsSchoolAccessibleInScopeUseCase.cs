@@ -23,8 +23,11 @@ public class IsSchoolAccessibleInScopeUseCase : IIsSchoolAccessibleInScopeUseCas
         return
             from scope in request.Scope.Then(_scopeValidator.ValidateScope)
             from urn in SchoolUrn.Parse(request.Urn)
-            from school in _repository.GetWithLinkedSchools(urn)
-            let access = school.GetAccessForScope(scope)
+            from school in _repository.GetWithLinkedSchools(urn) 
+            from linkedUrns in _repository.GetAllLinkedUrns(urn)
+            from linkedSchools in _repository.Get(linkedUrns)
+            let accessChecker = new SchoolAccessChecker(school, linkedUrns, linkedSchools)
+            let access = accessChecker.GetAccessForScope(scope)
             select new IsSchoolAccessibleInScopeResponse(
                 request.Urn,
                 request.Scope.Map(s => s.ScopeType.ToString()).GetValueOrDefault(""),

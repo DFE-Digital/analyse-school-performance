@@ -27,7 +27,7 @@ public class UrnLookupStrategy : SearchStrategy
             from school in _repository.GetWithLinkedSchools(urn)
                 .MapErrorIf(e => e is NotFoundError, Error.NotFound($@"There were no matches for ""{SearchTerm}""."))
                 // TODO: fixed bug here, need tests
-                .ErrorIf(school => !school.GetAccessForScope(Scope).IsAccessible, Error.NotFound($@"There were no matches for ""{SearchTerm}""."))
+                .ErrorIf(school => !school.IsAccessibleInScope(Scope), Error.NotFound($@"There were no matches for ""{SearchTerm}""."))
             select new ResultsPage<School>(
                 Page,
                 ResultsPerPage,

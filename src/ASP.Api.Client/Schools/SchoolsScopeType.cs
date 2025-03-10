@@ -2,6 +2,7 @@
 
 public enum SchoolsScopeType
 {
+    School,
     LA,
     MAT,
     Diocese

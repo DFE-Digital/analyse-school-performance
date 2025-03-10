@@ -1702,3 +1702,65 @@ Examples:
   | DfE Named user                                  |
   | Ofsted Unnamed user                             |
   | Super Admin user                                |
+ 
+
+@Javascript:disabled
+Scenario Outline: School users attempt to access a generic school page
+	Given Establishment "123456" exists:
+	"""
+	{
+	    "name": "Test School",
+	    "links": [
+		    {
+		      "linkedUrn": "100002",
+		      "establishedDate": "2020-03-01"
+		    }
+		]
+	}
+	"""
+	And Establishment "100002" exists:
+	"""
+	{ 
+	  "name": "Test School 2",
+	  "links": [
+		    {
+		      "linkedUrn": "100004",
+		      "establishedDate": "2020-03-01"
+		    },
+			{
+		      "linkedUrn": "123456",
+		      "establishedDate": "2020-03-01"
+		    }
+		]
+	}
+	"""
+	And Establishment "100003" exists:
+	"""
+	{ 
+	  "name": "Test School 3"
+	}
+	"""
+	And Establishment "100004" exists:
+	"""
+	{ 
+	  "name": "Test School 4",
+	  "links": [
+		    {
+		      "linkedUrn": "100002",
+		      "establishedDate": "2020-03-01"
+		    }
+		]
+	}
+	"""
+	And I am a <userRole>
+	When I navigate to /school/<urn>/
+	Then I should get a <statusCode> response
+	Examples:
+	  | userRole                                        | urn    | statusCode |
+	  | School Named user for Establishment "123456"    | 123456 | 200        |
+	  | School Named user for Establishment "123456"    | 100002 | 200        |
+	  | School Named user for Establishment "123456"    | 100004 | 200        |
+	  | School Unnamed user for Establishment "100002"  | 123456 | 200        |
+	  | School Named user for Establishment "100004"    | 100002 | 200        |
+	  | School Governor user for Establishment "123456" | 100003 | 403        |
+	  | School Named user for Establishment "100003"    | 123456 | 403        |

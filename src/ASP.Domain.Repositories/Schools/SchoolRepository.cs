@@ -30,6 +30,17 @@ namespace ASP.Domain.Repositories.Schools
                 from result in FromDao(dao)
                 select result;
         }
+        
+        public Task<Result<List<School>>> Get(
+            List<string> urns,
+            CancellationToken cancellationToken = default)
+        {
+            return QueryEstablishments(
+                    q => q.VisibleAndNotDeleted().WithUrnIn(urns),
+                    cancellationToken)
+                .Then(daos => daos.Select(FromDao).Combine())
+                .Map(schools => schools.ToList());
+        }
 
         public Task<Result<SchoolWithEstablishmentDetails>> GetWithEstablishmentDetails(
             SchoolUrn urn,
@@ -50,6 +61,78 @@ namespace ASP.Domain.Repositories.Schools
                 from linkedSchools in GetLinkedSchools(dao, cancellationToken)
                 from result in FromDaoWithLinkedSchools(dao, linkedSchools)
                 select result;
+        }
+
+        /// <summary>
+        /// Iteratively retrieves all linked URNs for a given establishment, including linked URNs of linked establishments.
+        /// </summary>
+        /// <param name="urn">The school URN to find linked URNs for.</param>
+        /// <param name="cancellationToken">Optional cancellation token to cancel the operation.</param>
+        /// <returns>A Result containing all linked URN strings.</returns>
+        /// <remarks>
+        /// Process flow:
+        /// 1. Start with initial URN (e.g., "000005") in currentBatch
+        /// 2. For each batch:
+        ///    a. Query database for establishments with URNs in currentBatch
+        ///    b. Add currentBatch URNs to processedUrns to avoid reprocessing
+        ///    c. For each establishment:
+        ///       - Get its linked URNs
+        ///       - Add unprocessed linked URNs to nextBatch and allLinkedUrns
+        ///    d. Set currentBatch to nextBatch for next iteration
+        /// 3. Repeat step 2 until currentBatch is empty (no new URNs to process)
+        /// 
+        /// Example flow:
+        /// Initial:     currentBatch=["000005"]
+        /// First Query: finds ["000001", "010001", "010002"]
+        /// Second Query: finds ["020001", "020002"] from processing ["000001", "010001", "010002"]
+        /// Third Query: finds no new URNs, process completes
+        /// 
+        /// Database queries:
+        /// - Makes exactly one query per level of linked schools
+        /// - Each query processes a batch of URNs together
+        /// - Stops when no new unprocessed URNs are found
+        /// </remarks>
+        public Task<Result<List<string>>> GetAllLinkedUrns(
+            SchoolUrn urn,
+            CancellationToken cancellationToken = default)
+        {
+            return ProcessBatches(
+                [urn.Value],
+                [],
+                [],
+                cancellationToken);
+        }
+
+        private Task<Result<List<string>>> ProcessBatches(
+            HashSet<string> currentBatch,
+            HashSet<string> processedUrns,
+            HashSet<string> allLinkedUrns,
+            CancellationToken cancellationToken)
+        {
+            // Base case: no more URNs to process
+            if (!currentBatch.Any())
+            {
+                return Task.FromResult(Result.Success(allLinkedUrns.ToList()));
+            }
+
+            // Process current batch with a single database query
+            return QueryEstablishments(
+                    q => q.VisibleAndNotDeleted().WithUrnIn(currentBatch),
+                    cancellationToken)
+                .Then(establishments =>
+                {
+                    // Mark current batch as processed
+                    processedUrns.UnionWith(currentBatch);
+
+                    // Get linked URNs that haven't been processed yet and add to overall result
+                    var nextBatch = establishments.SelectMany(e => e.Links ?? [])
+                        .Select(l => l.LinkedUrn)
+                        .Except(processedUrns).ToList();
+                    allLinkedUrns.UnionWith(nextBatch);
+
+                    // Recursively process next batch
+                    return ProcessBatches(nextBatch.ToHashSet(), processedUrns, allLinkedUrns, cancellationToken);
+                });
         }
 
         public Task<Result<ResultsPage<School>>> GetAll(
@@ -110,7 +193,7 @@ namespace ASP.Domain.Repositories.Schools
                 from schools in results.Select(FromDao).ToList().Combine()
                 select schools;
         }
-
+        
         private async Task<Result<List<LinkedSchoolsLink>>> GetLinkedSchools(
             EstablishmentDao dao,
             CancellationToken cancellationToken = default)
@@ -127,8 +210,8 @@ namespace ASP.Domain.Repositories.Schools
             return
                 from daos in await QueryEstablishments(
                     q => q.VisibleAndNotDeleted()
-                          .WithUrnIn(distinctUrns)
-                          .OrderedByName(),
+                        .WithUrnIn(distinctUrns)
+                        .OrderedByName(),
                     cancellationToken)
                 let linkedEstablishments = daos.ToDictionary(dao => dao.Urn, dao => dao)
                 from responses in CreateLinks(dao, linkedEstablishments)
