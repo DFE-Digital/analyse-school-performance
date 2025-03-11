@@ -32,15 +32,22 @@ public class MultiAcademyTrustsGetSingle : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "MultiAcademyTrustsGetSingle", tags: ["Multi-Academy Trusts"], 
+        Description = "Retrieves details for a specific multi-academy trust based on a given UID.")]
+    [OpenApiParameter(name: "uid", In = ParameterLocation.Path, Required = true, 
+        Description = "The UID of the multi-academy trust (numeric).")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.LookupValueWithUid), 
+        Description = "Details of the multi-academy trust for the given UID.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Invalid UID parameter.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: No multi-academy trust found for the given UID.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST is not allowed.")]
+    
     [Function("MultiAcademyTrustsGetSingle")]
-    [OpenApiOperation(operationId: "MultiAcademyTrustsGetSingle", tags: ["Multi Academy Trust"], Description = "Retrieves details for a specific Multi Academy Trust based on the provided ID.")]
-    [OpenApiParameter(name: "uid", In = ParameterLocation.Path, Required = true, Description = "The UID of the Multi Academy Trust (numeric).")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.LookupValueWithUid), Description = "Details of the Multi Academy Trust for the specified ID.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid UID parameter.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No Multi Academy Trust found for the specified UID.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "multi-academy-trusts/{uid:int}")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "multi-academy-trusts/{uid:int}")]
         HttpRequest request,
         CancellationToken cancellationToken)
     {

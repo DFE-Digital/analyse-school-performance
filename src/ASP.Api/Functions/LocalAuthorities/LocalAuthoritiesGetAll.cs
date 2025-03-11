@@ -39,16 +39,25 @@ public class LocalAuthoritiesGetAll : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "LocalAuthoritiesGetAll", tags: ["Local Authorities"], 
+        Description = "Retrieves a paginated list of all local authorities.")]
+    [OpenApiParameter(name: "searchTerm", In = ParameterLocation.Query, Required = false, 
+        Summary = "Search term for local authority names", 
+        Description = "The term used to search local authorities.")]
+    [OpenApiParameter(name: "page", In = ParameterLocation.Query, Required = false, 
+        Description = "The page number for pagination.")]
+    [OpenApiParameter(name: "resultsPerPage", In = ParameterLocation.Query, Required = false, 
+        Description = "The number of results to return per page.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ResultsPage<Client.LookupValueWithCode>), 
+        Description = "A paginated list of local authorities.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: Could not find any local authorities.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST is not allowed.")]
+    
     [Function("LocalAuthoritiesGetAll")]
-    [OpenApiOperation(operationId: "LocalAuthoritiesGetAll", tags: ["Local Authorities"], Description = "Retrieves a paginated list of all local authorities.")]
-    [OpenApiParameter(name: "searchTerm", In = ParameterLocation.Query, Required = false, Summary = "Search term for local authority names", Description = "The term used to search local authorities.")]
-    [OpenApiParameter(name: "page", In = ParameterLocation.Query, Required = false, Description = "The page number for pagination.")]
-    [OpenApiParameter(name: "resultsPerPage", In = ParameterLocation.Query, Required = false, Description = "The number of results to return per page.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ResultsPage<Client.LookupValueWithCode>), Description = "A paginated list of local authorities.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find any local authorities.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "local-authorities")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "local-authorities")]
         HttpRequest request,
         CancellationToken cancellationToken)
     {

@@ -24,24 +24,31 @@ public class SchoolsGetLinkedSchools : ApiFunction
         ApiResultConverter resultConverter)
     {
         _logger = logger
-                  ?? throw new ArgumentNullException(nameof(logger));
+            ?? throw new ArgumentNullException(nameof(logger));
 
         _useCase = useCase
-                   ?? throw new ArgumentNullException(nameof(useCase));
+            ?? throw new ArgumentNullException(nameof(useCase));
 
         _resultConverter = resultConverter
-                           ?? throw new ArgumentNullException(nameof(resultConverter));
+            ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "SchoolsGetLinkedSchools", tags: ["Schools"], 
+        Description = "Retrieves linked schools for a specific school based on a given URN.")]
+    [OpenApiParameter(name: "urn", In = ParameterLocation.Path, Required = true, 
+        Description = "The URN of the school.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(SchoolsGetLinkedSchoolsResponse), 
+        Description = "Details of the linked schools for the specified URN.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Invalid URN parameter.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: Could not find a school with the specified URN.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST/PUT/DELETE is not allowed.")]
+    
     [Function("SchoolsGetLinkedSchools")]
-    [OpenApiOperation(operationId: "SchoolsGetLinkedSchools", tags: ["Schools"], Description = "Retrieves linked schools for a specific school based on URN.")]
-    [OpenApiParameter(name: "urn", In = ParameterLocation.Path, Required = true, Description = "The URN of the school.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(SchoolsGetLinkedSchoolsResponse), Description = "Details of the linked schools for the specified URN.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid URN parameter.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find a school with URN {urn}.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "schools/{urn:int}/linked-schools")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "schools/{urn:int}/linked-schools")]
         HttpRequest request,
         CancellationToken cancellationToken
     )

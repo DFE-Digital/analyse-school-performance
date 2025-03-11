@@ -34,17 +34,26 @@ public class DownloadsGetPackage : ApiFunction
     }
 
 
+    [OpenApiOperation(operationId: "DownloadsGetPackage", tags: ["Downloads"], 
+        Description = "Creates a ZIP archive of multiple downloads within a specified scope based on a list of download file IDs.")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, 
+        Description = "Scope of the downloads requested, e.g. 'LA' or 'School'.")]
+    [OpenApiParameter(name: "scopeId", In = ParameterLocation.Query, Required = true, 
+        Description = "An identifier for the selected scope: either a school URN or LA code.")]
+    [OpenApiParameter(name: "fileType", In = ParameterLocation.Query, Required = true, 
+        Description = "Type of the file to be downloaded, examples: `csv`, `txt`, `xlsx`")]
+    [OpenApiParameter(name: "downloadIds", In = ParameterLocation.Query, Required = true, Type = typeof(List<string>), 
+        Description = "List of file IDs to be downloaded as ZIP.", Explode = true)]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/zip", bodyType: typeof(byte[]), 
+        Description = "The ZIP file containing the requested files.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST is not allowed.")]
+
     [Function("DownloadsGetPackage")]
-    [OpenApiOperation(operationId: "DownloadsGetPackage", tags: ["Downloads"], Description = "Creates a ZIP archive of multiple downloads.")]
-    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the downloads requested, e.g. 'LA' or 'School'.")]
-    [OpenApiParameter(name: "scopeId", In = ParameterLocation.Query, Required = true, Description = "An identifier for the selected scope, either a school URN or LA code")]
-    [OpenApiParameter(name: "fileType", In = ParameterLocation.Query, Required = true, Description = "Type of the file to be downloaded, examples: `csv`, `txt`, `xlsx`")]
-    [OpenApiParameter(name: "downloadIds", In = ParameterLocation.Query, Required = true, Type = typeof(List<string>), Description = "List of file IDs to be downloaded as ZIP.", Explode = true)]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/zip", bodyType: typeof(byte[]), Description = "The ZIP file containing the requested files.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "downloads/package")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "downloads/package")]
         HttpRequest request,
         CancellationToken cancellationToken
     )

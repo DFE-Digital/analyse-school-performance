@@ -31,16 +31,24 @@ public class LocalAuthoritiesGetSearchSuggestions : ApiFunction
                            ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "LocalAuthoritiesGetSearchSuggestions", tags: ["Local Authorities"], 
+        Description = "Provides suggestions for local authorities based on a given search term.")]
+    [OpenApiParameter(name: "searchTerm", In = ParameterLocation.Query, Required = true, Type = typeof(string), 
+        Description = "The term to search for local authorities.")]
+    [OpenApiParameter(name: "maxSuggestions", In = ParameterLocation.Query, Required = false, Type = typeof(int), 
+        Description = "The maximum number of suggestions to return.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<Client.LookupValueWithCode>), 
+        Description = "A list of suggested local authorities.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: No suggestions found for the given search term.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST is not allowed.")]
+
     [Function("LocalAuthoritiesGetSearchSuggestions")]
-    [OpenApiOperation(operationId: "LocalAuthoritiesGetSearchSuggestions", tags: ["Local Authorities"], Description = "Provides suggestions for local authorities based on a search term.")]
-    [OpenApiParameter(name: "searchTerm", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The term to search for local authorities.")]
-    [OpenApiParameter(name: "maxSuggestions", In = ParameterLocation.Query, Required = false, Type = typeof(int), Description = "The maximum number of suggestions to return.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<Client.LookupValueWithCode>), Description = "A list of suggested local authorities.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No suggestions found for the given search term.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "local-authorities/search-suggestions")] HttpRequest request,
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "local-authorities/search-suggestions")] HttpRequest request,
         CancellationToken cancellationToken)
     {
         _logger.LogInformation(request.Method + " " + request.Path + request.QueryString);

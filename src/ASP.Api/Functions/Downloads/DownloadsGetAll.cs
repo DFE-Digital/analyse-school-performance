@@ -33,17 +33,26 @@ public class DownloadsGetAll : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "DownloadsGetAll", tags: ["Downloads"], 
+        Description = "Retrieves available downloads for a given year within a specified scope.")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, 
+        Description = "Scope of the available downloads, e.g., `School` or `LA`.")]
+    [OpenApiParameter(name: "scopeId", In = ParameterLocation.Query, Required = true, 
+        Description = "An identifier for the selected scope: either a school URN or LA code.")]
+    [OpenApiParameter(name: "year", In = ParameterLocation.Query, Required = false, 
+        Description = "Optional year for downloads.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(GetAvailableDownloadsResponse), 
+        Description = "Available downloads for the given year within the specified scope.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Invalid parameters provided.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: No available downloads for the given year within the specified scope.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST is not allowed.")]
+
     [Function("DownloadsGetAll")]
-    [OpenApiOperation(operationId: "DownloadsGetAll", tags: ["Downloads"], Description = "Retrieves available downloads for specific local authority based on the code.")]
-    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = true, Description = "Scope of the available downloads, e.g., `School` or `LA`.")]
-    [OpenApiParameter(name: "scopeId", In = ParameterLocation.Query, Required = true, Description = "An identifier for the selected scope, either a school URN or LA code")]
-    [OpenApiParameter(name: "year", In = ParameterLocation.Query, Required = false, Description = "The requested year for downloads.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(GetAvailableDownloadsResponse), Description = "Available local authority downloads for the specified code and year.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid parameters provided.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No available downloads for the specified code.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "downloads")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "downloads")]
         HttpRequest request,
         CancellationToken cancellationToken
     )

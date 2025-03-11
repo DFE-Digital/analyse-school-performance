@@ -33,16 +33,24 @@ public class ContentTemplatesGetSingle : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "ContentTemplatesGetSingle", tags: ["Content Templates"], 
+        Description = "Retrieves details for a specific content template based on a given ID.")]
+    [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, 
+        Description = "The unique identifier of the content template.")]
+    [OpenApiParameter(name: "revision", In = ParameterLocation.Query, Required = false, 
+        Description = "The revision identifier of the content template.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ContentTemplate), 
+        Description = "Details of the specified content template.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: Content template not found for the given ID and revision.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method PUT/POST/DELETE is not allowed.")]
+
     [Function("ContentTemplatesGetSingle")]
-    [OpenApiOperation(operationId: "ContentTemplatesGetSingle", tags: ["Content Templates"], Description = "Retrieves details for a specific content template based on the provided ID.")]
-    [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Description = "The unique identifier of the content template.")]
-    [OpenApiParameter(name: "revision", In = ParameterLocation.Query, Required = false, Description = "The revision identifier of the content template.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ContentTemplate), Description = "Details of the specified content template.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Content template not found for the given ID and revision.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "content-templates/{id}")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "delete", Route = "content-templates/{id}")]
         HttpRequest request,
         CancellationToken cancellationToken
     )

@@ -32,14 +32,20 @@ public class ContentTemplatesGetAll : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "ContentTemplatesGetAll", tags: ["Content Templates"], 
+        Description = "Retrieves all published content templates.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<ContentTemplate>), 
+        Description = "A list of all published content templates.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: Could not find any published content templates.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST/PUT/DELETE is not allowed.")]
+
     [Function("ContentTemplatesGetAll")]
-    [OpenApiOperation(operationId: "ContentTemplatesGetAll", tags: ["Content Templates"], Description = "Retrieves all available content templates.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<ContentTemplate>), Description = "A list of all content templates.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find any published Content Templates.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "content-templates")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "content-templates")]
         HttpRequest request,
         CancellationToken cancellationToken
     )

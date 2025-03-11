@@ -1,9 +1,5 @@
 using ASP.Api.FunctionalTests.Drivers;
-using ASP.Test.SpecFlow;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.IO.Compression;
-using System.Text.RegularExpressions;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Api.FunctionalTests.StepDefinitions
@@ -11,7 +7,7 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
     [Binding]
     public sealed partial class AspApiStepDefinitions
     {
-        private const string HTTP_METHOD = @"(GET|POST|DELETE)";
+        private const string HTTP_METHOD = @"(GET|POST|PUT|DELETE)";
         private const string STATUS_CODE = @"(\d+)";
         private const string RESPONSE_MESSAGE = @"""(.+)""";
         private const string HTTP_HEADER = @"""([^:""]+): ([^:""]+)""";

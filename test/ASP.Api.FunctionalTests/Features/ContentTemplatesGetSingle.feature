@@ -1,5 +1,15 @@
 ﻿Feature: ContentTemplatesGetSingle
 
+Scenario Outline: Should only accept GET method 
+	Given no Content Templates exist
+	When I send a <method> request to /api/content-templates/xyz
+	Then I should get a 405 response
+
+Examples: 
+	| method |
+	| PUT    |
+	| DELETE |
+
 Scenario: Should return NotFound (404) response if id parameter is missing 
 	Given no Content Templates exist
 	When I send a GET request to /api/content-templates//

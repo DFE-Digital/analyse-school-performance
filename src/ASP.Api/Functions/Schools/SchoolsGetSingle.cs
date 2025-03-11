@@ -32,15 +32,22 @@ public class SchoolsGetSingle : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "SchoolsGetSingle", tags: ["Schools"], 
+        Description = "Retrieves details for a specific school based on a given URN.")]
+    [OpenApiParameter(name: "urn", In = ParameterLocation.Path, Required = true, 
+        Description = "The URN of the school.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(SchoolDetails), 
+        Description = "Details of the school with the given URN.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Invalid URN parameter.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: No school found for the given URN.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST/PUT/DELETE is not allowed.")]
+    
     [Function("SchoolsGetSingle")]
-    [OpenApiOperation(operationId: "SchoolsGetSingle", tags: ["Schools"], Description = "Retrieves details for a specific school based on URN.")]
-    [OpenApiParameter(name: "urn", In = ParameterLocation.Path, Required = true, Description = "The URN of the school.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(SchoolDetails), Description = "Details of the school with the specified URN.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid URN parameter.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No school found for the specified URN.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "schools/{urn:int}")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "schools/{urn:int}")]
         HttpRequest request,
         CancellationToken cancellationToken)
     {

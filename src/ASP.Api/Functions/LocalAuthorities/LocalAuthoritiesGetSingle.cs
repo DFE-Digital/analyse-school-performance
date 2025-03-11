@@ -32,15 +32,22 @@ public class LocalAuthoritiesGetSingle : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "LocalAuthoritiesGetSingle", tags: ["Local Authorities"], 
+        Description = "Retrieves details for a specific local authority based on a given code.")]
+    [OpenApiParameter(name: "code", In = ParameterLocation.Path, Required = true, 
+        Description = "The local authority code (3 digits).")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.LookupValueWithCode), 
+        Description = "Details of the local authority for the specified code.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Invalid local authority code parameter.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: No local authority found for the specified code.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST is not allowed.")]
+
     [Function("LocalAuthoritiesGetSingle")]
-    [OpenApiOperation(operationId: "LocalAuthoritiesGetSingle", tags: ["Local Authorities"], Description = "Retrieves details for a specific local authority based on the provided code.")]
-    [OpenApiParameter(name: "code", In = ParameterLocation.Path, Required = true, Description = "The local authority code (3 digits).")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Client.LookupValueWithCode), Description = "Details of the local authority for the specified code.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Invalid local authority code parameter.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: No local authority found for the specified code.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "local-authorities/{code:int}")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "local-authorities/{code:int}")]
         HttpRequest request,
         CancellationToken cancellationToken)
     {

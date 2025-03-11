@@ -41,19 +41,30 @@ public class SchoolsGetAll : ApiFunction
             ?? throw new ArgumentNullException(nameof(resultConverter));
     }
 
+    [OpenApiOperation(operationId: "SchoolsGetAll", tags: ["Schools"], 
+        Description = "Retrieves a list of schools within a specified scope.")]
+    [OpenApiParameter(name: "searchTerm", In = ParameterLocation.Query, Required = false, 
+        Description = "A search term to filter schools by.")]
+    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = false, 
+        Description = "Scope of the search, e.g.: `LA`, `MAT`, `Diocese`.")]
+    [OpenApiParameter(name: "scopeId", In = ParameterLocation.Query, Required = false, 
+        Description = "An identifier for the selected scope, e.g.: LA code, MAT UID or Diocese name (case insensitive).")]
+    [OpenApiParameter(name: "page", In = ParameterLocation.Query, Required = false, 
+        Description = "The page number for pagination.")]
+    [OpenApiParameter(name: "resultsPerPage", In = ParameterLocation.Query, Required = false, 
+        Description = "The number of results to return per page.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ResultsPage<SchoolListing>), 
+        Description = "A list of schools within the specified scope matching the given search term.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, 
+        Description = "Not found: Could not find any schools within the given scope matching the given search term.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
+        Description = "Bad request: Missing or invalid parameters.")]
+    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, 
+        Description = "Method not allowed: The HTTP method POST/PUT/DELETE is not allowed.")]
+    
     [Function("SchoolsGetAll")]
-    [OpenApiOperation(operationId: "SchoolsGetAll", tags: ["Schools"], Description = "Retrieves a list of schools within a specified scope.")]
-    [OpenApiParameter(name: "searchTerm", In = ParameterLocation.Query, Required = false, Description = "A search term to filter schools by.")]
-    [OpenApiParameter(name: "scope", In = ParameterLocation.Query, Required = false, Description = "Scope of the search, e.g., `LA`, `MAT`, `Diocese`.")]
-    [OpenApiParameter(name: "scopeId", In = ParameterLocation.Query, Required = false, Description = "An identifier for the selected scope, e.g, LA code, MAT UID or Diocese name")]
-    [OpenApiParameter(name: "page", In = ParameterLocation.Query, Required = false, Description = "The page number for pagination.")]
-    [OpenApiParameter(name: "resultsPerPage", In = ParameterLocation.Query, Required = false, Description = "The number of results to return per page.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ResultsPage<SchoolListing>), Description = "A list of schools within the specified scope matching the given search term.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.NotFound, Description = "Not found: Could not find any schools within the given scope.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, Description = "Bad request: Missing or invalid parameters.")]
-    [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Description = "Method not allowed: The HTTP method POST is not allowed.")]
     public override async Task<ActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", "post", "put", "delete", Route = "schools")]
+        [HttpTrigger(AuthorizationLevel.Function, "get", "put", "post", "delete", Route = "schools")]
         HttpRequest request,
         CancellationToken cancellationToken)
     {
