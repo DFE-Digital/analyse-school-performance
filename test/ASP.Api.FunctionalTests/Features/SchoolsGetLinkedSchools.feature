@@ -12,7 +12,7 @@
     And the response should be the message "Not found: Function not found for path: /api/schools//linked-schools"
 
   Scenario Outline: Should return BadRequest (400) response if urn parameter is not 6 characters long
-    Given no Establishments exist
+    Given no establishments exist
     When I send a GET request to /api/schools/<urn>/linked-schools
     Then I should get a 400 response
     And the response should be the message "Bad request: The path parameter "urn" must be exactly 6 characters long."
@@ -23,23 +23,13 @@
       | 1234567 |
 
   Scenario: Should return NotFound (404) response if School does not exist
-    Given Establishment "100001" exists:
-    """
-    { 
-      "name": "Test School 1"
-    }
-    """
+    Given establishment Test School 1 (100001) exists
     When I send a GET request to /api/schools/100002/linked-schools
     Then I should get a 404 response 
     And the response should be the message "Not found: Could not find school with URN "100002"."
 
   Scenario: Should return empty links response if School exists but has no links
-    Given Establishment "100001" exists:
-    """
-    { 
-      "name": "Test School 1"
-    }
-    """
+    Given establishment Test School 1 (100001) exists
     When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
@@ -51,10 +41,9 @@
     """
 
   Scenario: Should return no link if linked Establishment does not exist
-    Given Establishment "100001" exists:
+    Given establishment Test School 1 (100001) exists with properties:
     """
-    { 
-      "name": "Test School 1",
+    {
       "links": [
         {
           "linkedUrn": "100002"
@@ -73,10 +62,9 @@
     """
 
   Scenario: Should return no link if linked Establishment is deleted
-    Given Establishment "100001" exists:
+    Given establishment Test School 1 (100001) exists with properties:
     """
-    { 
-      "name": "Test School 1",
+    {
       "links": [
         {
           "linkedUrn": "100002"
@@ -84,12 +72,7 @@
       ]
     }
     """
-    And deleted Establishment "100002" exists:
-    """
-    { 
-      "name": "Test School 2"
-    }
-    """
+    And deleted establishment Test School 2 (100002) exists
     When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
@@ -101,10 +84,9 @@
     """
 
   Scenario: Should return no link if linked Establishment is not visible
-    Given Establishment "100001" exists:
+    Given establishment Test School 1 (100001) exists with properties:
     """
-    { 
-      "name": "Test School 1",
+    {
       "links": [
         {
           "linkedUrn": "100002"
@@ -112,12 +94,7 @@
       ]
     }
     """
-    And non-visible Establishment "100002" exists:
-    """
-    { 
-      "name": "Test School 2"
-    }
-    """
+    And non-visible establishment Test School 2 (100002) exists
     When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
@@ -129,10 +106,9 @@
     """
 
   Scenario: Should provide default description if linkType is missing
-    Given Establishment "100001" exists:
+    Given establishment Test School 1 (100001) exists with properties:
     """
-    { 
-      "name": "Test School 1",
+    {
       "links": [
         {
           "linkedUrn": "100002"
@@ -144,18 +120,8 @@
       ]
     }
     """
-    And Establishment "100002" exists:
-    """
-    { 
-      "name": "Test School 2"
-    }
-    """
-    And Establishment "100003" exists:
-    """
-    { 
-      "name": "Test School 3"
-    }
-    """
+    And establishment Test School 2 (100002) exists
+    And establishment Test School 3 (100003) exists
     When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
@@ -190,10 +156,9 @@
     """
 
   Scenario: Descriptions for link to single establishment
-    Given Establishment "100001" exists:
+    Given establishment Test School 1 (100001) exists with properties:
     """
-    { 
-      "name": "Test School 1",
+    {
       "links": [
         {
           "linkedUrn": "100002",
@@ -206,12 +171,7 @@
       ]
     }
     """
-    And Establishment "100002" exists:
-    """
-    { 
-      "name": "Test School 2"
-    }
-    """
+    And establishment Test School 2 (100002) exists
     When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
@@ -269,10 +229,9 @@
     | 6.2  | Successor - amalgamated                                        | "2020-10-01"    | Test School 1 was amalgamated into [Test School 2](100002) on 1 October 2020.                      |
 
   Scenario: Descriptions for link to multiple establishments
-    Given Establishment "100001" exists:
+    Given establishment Test School 1 (100001) exists with properties:
     """
-    { 
-      "name": "Test School 1",
+    {
       "links": [
         {
           "linkedUrn": "100002",
@@ -301,24 +260,9 @@
       ]
     }
     """
-    And Establishment "100002" exists:
-    """
-    { 
-      "name": "Test School 2"
-    }
-    """
-    And Establishment "100003" exists:
-    """
-    { 
-      "name": "Test School 3"
-    }
-    """
-    And Establishment "100004" exists:
-    """
-    { 
-      "name": "Test School 4"
-    }
-    """
+    And establishment Test School 2 (100002) exists
+    And establishment Test School 3 (100003) exists
+    And establishment Test School 4 (100004) exists
     When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
@@ -384,10 +328,9 @@
     | 6.2  | Successor - amalgamated                                        | "2020-10-01"    | Test School 1 was amalgamated into [Test School 2](100002), [Test School 3](100003) and [Test School 4](100004) on 1 October 2020.                      |
 
   Scenario Outline: 2F - Successor - Split School
-    Given Establishment "100001" exists:
+    Given establishment Test School 1 (100001) exists with properties:
     """
-    { 
-      "name": "Test School 1",
+    {
       "closeDate": <OldSchoolCloseDate>,
       "links": [
         {
@@ -409,18 +352,8 @@
       ]
     }
     """
-    And Establishment "100002" exists:
-    """
-    { 
-      "name": "Test School 2"
-    }
-    """
-    And Establishment "100003" exists:
-    """
-    { 
-      "name": "Test School 3"
-    }
-    """
+    And establishment Test School 2 (100002) exists
+    And establishment Test School 3 (100003) exists
     When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:
@@ -458,10 +391,9 @@
       | "2020-10-01"       | "2020-10-01" | Test School 1 was split into [Test School 2](100002) and [Test School 3](100003) on 1 October 2020.      |
 
   Scenario Outline: 6.1 - Predecessor - amalgamated
-    Given Establishment "100001" exists:
+    Given establishment Test School 1 (100001) exists with properties:
     """
-    { 
-      "name": "Test School 1",
+    {
       "openDate": <NewSchoolOpenDate>,
       "links": [
         {
@@ -483,18 +415,8 @@
       ]
     }
     """
-    And Establishment "100002" exists:
-    """
-    { 
-      "name": "Test School 2"
-    }
-    """
-    And Establishment "100003" exists:
-    """
-    { 
-      "name": "Test School 3"
-    }
-    """
+    And establishment Test School 2 (100002) exists
+    And establishment Test School 3 (100003) exists
     When I send a GET request to /api/schools/100001/linked-schools
     Then I should get a 200 response 
     And the response should be an object containing these properties:

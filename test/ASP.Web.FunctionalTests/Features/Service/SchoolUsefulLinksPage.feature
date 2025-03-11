@@ -2,12 +2,7 @@ Feature: School Useful links page
 
 @Javascript:disabled
 Scenario Outline: School Useful links page should be accessible when valid urn is provided (My school page)
-	Given Establishment "136028" exists:
-	"""
-	{
-		"name": "Dagenham Park CofE School"
-	}
-	"""
+	Given establishment Dagenham Park CofE School (136028) exists
 	And Content Template "school-useful-links" exists:
 	"""
 	{
@@ -24,7 +19,7 @@ Scenario Outline: School Useful links page should be accessible when valid urn i
 		 ]
 	}
 	"""
-	And I am a School Named user for Establishment "136028"
+	And I am a School Named user for Establishment 136028
 	When I navigate to /my-school/useful-links/
 	Then I should get a 200 response
 	And the page title should be "Useful links"
@@ -36,12 +31,7 @@ Scenario Outline: School Useful links page should be accessible when valid urn i
 
 @Javascript:disabled
 Scenario Outline: School Useful links page should be accessible when valid urn is provided (Generic school page)
-	Given Establishment "136028" exists:
-	"""
-	{
-		"name": "Dagenham Park CofE School"
-	}
-	"""
+	Given establishment Dagenham Park CofE School (136028) exists
 	And Content Template "school-useful-links" exists:
 	"""
 	{
@@ -70,21 +60,8 @@ Scenario Outline: School Useful links page should be accessible when valid urn i
 
 @Javascript:disabled
 Scenario Outline: School Useful links page should be accessible when valid urn is provided (My schools > School page)
-	Given Establishment "136028" exists:
-	"""
-	{
-		"name": "Dagenham Park CofE School",
-	    "localAuthority": {
-		        "code": "301"
-		},
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 301
+	And local authority Test LA (301) exists
 	And Content Template "school-useful-links" exists:
 	"""
 	{
@@ -101,7 +78,7 @@ Scenario Outline: School Useful links page should be accessible when valid urn i
 		 ]
 	}
 	"""
-	And I am a LA Named user for Local Authority "301"
+	And I am a LA Named user for Local Authority 301
 	When I navigate to /my-schools/136028/useful-links/
 	Then I should get a 200 response
 	And the page title should be "Useful links"
@@ -113,21 +90,8 @@ Scenario Outline: School Useful links page should be accessible when valid urn i
 
 @Javascript:disabled
 Scenario Outline: LA user should not be able to access the School Useful links page of a school with a valid URN outside their Local Authority (My schools > School page)
-	Given Establishment "136028" exists:
-	"""
-	{
-		"name": "Dagenham Park CofE School",
-	    "localAuthority": {
-		   "code": "302"
-		},
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 302
+	And local authority Test LA (301) exists
 	And Content Template "school-useful-links" exists:
 	"""
 	{
@@ -144,7 +108,7 @@ Scenario Outline: LA user should not be able to access the School Useful links p
 		 ]
 	}
 	"""
-	And I am a LA Named user for Local Authority "301"
+	And I am a LA Named user for Local Authority 301
 	When I navigate to /my-schools/136028/useful-links/
 	Then I should get a 403 response
 	And the page title should be "Access not allowed"

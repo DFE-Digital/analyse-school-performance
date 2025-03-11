@@ -1,11 +1,11 @@
 Feature: My schools > School page
 
 Background:
-	Given I am an LA Named user for Local Authority "301"
+	Given I am an LA Named user for Local Authority 301
  
 @Javascript:disabled
 Scenario: A School user should not be able to access the My schools > School page, even if it's for their own School. Instead, they should see a 403 Access not allowed page.
-	Given I am a School Named user for Establishment "123456"
+	Given I am a School Named user for Establishment 123456
 	When I navigate to /my-schools/123456/
 	Then I should get a 403 response
 	And the page title should be "Access not allowed"
@@ -21,63 +21,24 @@ Scenario: A user with access to all schools should not be able to access the My 
 
 @Javascript:disabled
 Scenario: School page should throw page not found if Establishment is not currently visible
-	Given non-visible Establishment "111111" exists:
-		"""
-		{
-			"name": "Thursby Primary School",
-	        "localAuthority": {
-		        "code": "301"
-		    }
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given non-visible establishment Thursby Primary School (111111) exists in local authority 301
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/111111/
 	Then I should get a 404 response
 	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/schools/111111/access Could not find school with URN "111111"."
 
 @Javascript:disabled
 Scenario: School page should throw page not found if Establishment is deleted
-	Given deleted Establishment "111111" exists:
-		"""
-		{
-			"name": "Thursby Primary School",
-	        "localAuthority": {
-		        "code": "301"
-		    }
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given deleted establishment Thursby Primary School (111111) exists in local authority 301
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/111111/
 	Then I should get a 404 response
 	Then the element "*[data-testid='error-display-message']" should have the text content "Error message: Not found: API error: /api/schools/111111/access Could not find school with URN "111111"."
 
 @Javascript:disabled
 Scenario: School page should display page not found page if School URN is invalid
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Thursby Primary School",
-	        "localAuthority": {
-		        "code": "301"
-		    }
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Thursby Primary School (111111) exists in local authority 301
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/222222/
 	Then I should get a 404 response
 	And the page title should be "Page not found"
@@ -159,22 +120,8 @@ Scenario: School page should contain seven app card container element
 			]
 		}
 		"""
-	And Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School",
-				"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-				}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	And establishment Hollinswood Primary School (123456) exists in local authority Test LA (301)
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/123456/
 	Then the element "#app-card-container" class should contain "app-grid-container-four-column"
 	And the elements "#app-card-container .app-card" should total 7
@@ -209,21 +156,8 @@ Scenario: School page should contain seven app card container element
 
 @Javascript:disabled
 Scenario Outline: Landing page - common page elements
-	Given Establishment "123456" exists:
-	"""
-		{
-			"name": "Hollinswood Primary School",
-	        "localAuthority": {
-		        "code": "301"
-		    }
-		}
-	"""
-	And Local Authority "301" exists:
-	"""
-		{
-			"name": "Test LA"
-		}
-	"""
+	Given establishment Hollinswood Primary School (123456) exists in local authority 301
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/123456/
 	Then the page title should be "My schools"
 	And the page subtitle should be "Hollinswood Primary School (URN: 123456)"
@@ -234,7 +168,7 @@ Scenario Outline: Landing page - common page elements
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
-	Given Establishment "123456" exists:
+	Given establishment Hollinswood Primary School (123456) exists with properties:
 		"""
 		{
 			"isPost16": false,
@@ -267,7 +201,6 @@ Scenario: School page should contain a school details disclosure element
 				"name": "Telford and Wrekin",
 				"code": "301"
 			},
-			"name": "Hollinswood Primary School",
 			"noOfPupils": 404,
 			"religiousDenomination": {
 				"name": "Does not apply",
@@ -285,12 +218,7 @@ Scenario: School page should contain a school details disclosure element
 			},
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/123456/
 	Then I should get a 200 response
 	And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
@@ -328,7 +256,7 @@ Scenario: School page should contain a school details disclosure element
 
 @Javascript:disabled
 Scenario: School page should show if values are null
-	Given Establishment "123456" exists:
+	Given establishment Hollinswood Primary School (123456) exists with properties:
 		"""
 		{
 			"isPost16": null,
@@ -344,7 +272,6 @@ Scenario: School page should show if values are null
 				"code": "301",
 				"name": "Test LA"
 			},
-			"name": "Hollinswood Primary School",
 			"noOfPupils": null,
 			"religiousDenomination": null,
 			"resourcedProvisionType": null,
@@ -353,12 +280,7 @@ Scenario: School page should show if values are null
 			"diocese": null
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/123456/
 	Then I should get a 200 response
 	And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
@@ -396,10 +318,9 @@ Scenario: School page should show if values are null
 
 @Javascript:disabled
 Scenario: School page should show if values are null case 2
-	Given Establishment "123456" exists:
+	Given establishment Hollinswood Primary School (123456) exists with properties:
 		"""
 		{
-			"name": "Hollinswood Primary School",
 			"isPost16": null,
 			"isPrimary": null,
 			"isSecondary": null,
@@ -447,12 +368,7 @@ Scenario: School page should show if values are null case 2
 			},
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/123456/
 	Then the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
 	And the element "*[data-testid='school-page-details-state-open']" should have the text content "Hide"
@@ -489,42 +405,15 @@ Scenario: School page should show if values are null case 2
 
 @Javascript:disabled
 Scenario: Details disclosure element text should read 'Show school details' when closed
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Hollinswood Primary School (123456) exists in local authority Test LA (301)
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/123456/
 	Then the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
 	
 @Javascript:disabled
 Scenario: Data downloads 'Dates available for download' - common page elements
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School",
-	        "localAuthority": {
-		        "code": "301"
-		    }
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -563,21 +452,8 @@ Scenario: Data downloads 'Dates available for download' - common page elements
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Dates available for download' - page should contain three radio buttons
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School",
-	         "localAuthority": {
-		        "code": "301"
-		     },
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -616,21 +492,8 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads 'Dates available for download' - when no date is selected and Continue button clicked, should show validation error
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School",
-			"localAuthority": {
-		        "code": "301"
-		    },
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Hollinswood Primary School (123456) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -669,21 +532,8 @@ Scenario: Data downloads 'Dates available for download' - when no date is select
 
 @Javascript:disabled
 Scenario: Data downloads 'Dates available for download' - when date is selected and Continue button clicked, should move to next step
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School",
-	         "localAuthority": {
-		        "code": "301"
-		     },
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Hollinswood Primary School (123456) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -719,21 +569,8 @@ Scenario: Data downloads 'Dates available for download' - when date is selected 
 
 @Javascript:disabled
 Scenario: Data downloads "Data files available for download' - common page elements
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School",
-	         "localAuthority": {
-		        "code": "301"
-		     }
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -799,21 +636,8 @@ Scenario: Data downloads "Data files available for download' - common page eleme
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Data files available for download' - page should contain three checkbox groups
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School",
-	         "localAuthority": {
-		        "code": "301"
-		     },
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -868,21 +692,8 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Data files available for download' - page should contain five checkboxes
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School",
-	         "localAuthority": {
-		        "code": "301"
-		     },
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -965,21 +776,8 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads 'Data files available for download' - when no files are selected and Continue button clicked, should show validation error
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School",
-	        "localAuthority": {
-		        "code": "301"
-		    }
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Hollinswood Primary School (123456) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1060,21 +858,8 @@ Scenario: Data downloads 'Data files available for download' - when no files are
 
 @Javascript:disabled
 Scenario: Data downloads 'Data files available for download' - when files are selected and Continue button clicked, should move to next step
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School",
-	        "localAuthority": {
-		        "code": "301"
-		    }
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Hollinswood Primary School (123456) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1152,21 +937,8 @@ Scenario: Data downloads 'Data files available for download' - when files are se
 
 @Javascript:disabled
 Scenario: Data downloads 'Download school data' - common page elements
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School",
-	         "localAuthority": {
-		        "code": "301"
-		     },
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1259,21 +1031,8 @@ Scenario: Data downloads 'Download school data' - common page elements
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Download school data' - page should contain three links
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School",
-	         "localAuthority": {
-		        "code": "301"
-		     },
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1303,21 +1062,8 @@ Scenario Outline: Data downloads 'Download school data' - page should contain th
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Download school data' - Download other dates link should link back to first step
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School",
-	         "localAuthority": {
-		        "code": "301"
-		     },
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists in local authority 301
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1341,13 +1087,9 @@ Scenario Outline: Data downloads 'Download school data' - Download other dates l
 
 @Javascript:disabled
 Scenario Outline: My Schools users should see Download data card on School landing page
-	Given Establishment "123456" exists:
+	Given establishment Test School (123456) exists in local authority 301 with properties:
 		"""
 		{
-		    "name": "Test School",
-		    "localAuthority": {
-		        "code": "301"
-		    },
 		    "multiAcademyTrust": {
 		        "uid": 1234
 		    },
@@ -1356,20 +1098,8 @@ Scenario Outline: My Schools users should see Download data card on School landi
 		    }
 		}
 		"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
-	And Multi Academy Trust "1234" exists:
-	"""
-	{
-		"multiAcademyTrust": {
-		    "uid": 1234
-		}
-	}
-	"""
+	And local authority Test LA (301) exists
+	And multi-academy trust Test MAT (1234) exists
 	And Content Template "school-landing-page" exists:
 		"""
 			{
@@ -1412,20 +1142,16 @@ Scenario Outline: My Schools users should see Download data card on School landi
 		| Useful links  | useful-links/  | View links to other services and published documents that may be useful.                                   |
 
 Examples:
-	| userRole                                      |
-	| LA Named user for Local Authority "301"       |
-	| MAT Named user for Multi-Academy Trust "1234" |
-	| Diocese Named user for Diocese "Test Diocese" |
+	| userRole                                    |
+	| LA Named user for Local Authority 301       |
+	| MAT Named user for Multi-Academy Trust 1234 |
+	| Diocese Named user for Diocese Test Diocese |
 
 @Javascript:disabled
 Scenario Outline: My Schools users should not see Download data card on School landing page
-	Given Establishment "123456" exists:
+	Given establishment Test School (123456) exists in local authority 301 with properties:
 		"""
 		{
-		    "name": "Test School",
-		    "localAuthority": {
-		        "code": "301"
-		    },
 		    "multiAcademyTrust": {
 		        "uid": 1234
 		    },
@@ -1434,20 +1160,8 @@ Scenario Outline: My Schools users should not see Download data card on School l
 		    }
 		}
 		"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
-	And Multi Academy Trust "1234" exists:
-	"""
-	{
-		"multiAcademyTrust": {
-		    "uid": 1234
-		}
-	}
-	"""
+	And local authority Test LA (301) exists
+	And multi-academy trust Test MAT (1234) exists
 	And Content Template "school-landing-page" exists:
 		"""
 			{
@@ -1489,22 +1203,17 @@ Scenario Outline: My Schools users should not see Download data card on School l
 		| Useful links  | useful-links/  | View links to other services and published documents that may be useful.                                   |
 
 Examples:
-	| userRole                                         |
-	| LA Unnamed user for Local Authority "301"        |
-	| MAT Unnamed user for Multi-Academy Trust "1234"  |
-	| MAT Governor user for Multi-Academy Trust "1234" |
-	| Diocese Unnamed user for Diocese "Test Diocese"  |
+	| userRole                                       |
+	| LA Unnamed user for Local Authority 301        |
+	| MAT Unnamed user for Multi-Academy Trust 1234  |
+	| MAT Governor user for Multi-Academy Trust 1234 |
+	| Diocese Unnamed user for Diocese Test Diocese  |
 	
 
 @Javascript:disabled
 Scenario: Data downloads sub navigation item should not be visible to Unnamed policy users
 	Given I am a <Roles> user
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1536,22 +1245,9 @@ Examples:
  
 @Javascript:disabled
 Scenario: LA user should not be able to access a school outside their Local Authority
-	Given I am an LA Named user for Local Authority "301"
-	And Establishment "123456" exists:
-	"""
-	{
-	    "name": "Test School",
-	    "localAuthority": {
-	        "code": "302"
-	    }
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given I am an LA Named user for Local Authority 301
+	And establishment Test School (123456) exists in local authority 302
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/123456/
 	Then I should get a 403 response
 	And the page title should be "Access not allowed"
@@ -1559,22 +1255,9 @@ Scenario: LA user should not be able to access a school outside their Local Auth
 	
 @Javascript:disabled
 Scenario: LA user should be able to access a school within their Local Authority
-	Given I am an LA Named user for Local Authority "301"
-	And Establishment "123456" exists:
-	"""
-	{
-	    "name": "Test School",
-	    "localAuthority": {
-	        "code": "301"
-	    }
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given I am an LA Named user for Local Authority 301
+	And establishment Test School (123456) exists in local authority 301
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/123456/
 	Then I should get a 200 response
 	And the page title should be "My schools"
@@ -1582,16 +1265,8 @@ Scenario: LA user should be able to access a school within their Local Authority
 	
 @Javascript:disabled
 Scenario: Diocese user should not be able to access a school outside their Diocese
-	Given I am a Diocese Named user for Diocese "Test Diocese"
-	And Establishment "123456" exists:
-	"""
-	{
-	    "name": "Test School",
-	    "diocese": {
-	        "name": "Test Diocese 2"
-	    }
-	}
-	"""
+	Given I am a Diocese Named user for Diocese Test Diocese
+	And establishment Test School (123456) exists in diocese Test Diocese 2
 	When I navigate to /my-schools/123456/
 	Then I should get a 403 response
 	And the page title should be "Access not allowed"
@@ -1599,16 +1274,8 @@ Scenario: Diocese user should not be able to access a school outside their Dioce
 	
 @Javascript:disabled
 Scenario: Diocese user should be able to access a school within their Diocese
-	Given I am a Diocese Named user for Diocese "Test Diocese"
-	And Establishment "123456" exists:
-	"""
-	{
-	    "name": "Test School",
-	    "diocese": {
-	        "name": "Test Diocese"
-	    }
-	}
-	"""
+	Given I am a Diocese Named user for Diocese Test Diocese
+	And establishment Test School (123456) exists in diocese Test Diocese
 	When I navigate to /my-schools/123456/
 	Then I should get a 200 response
 	And the page title should be "My schools"
@@ -1616,24 +1283,9 @@ Scenario: Diocese user should be able to access a school within their Diocese
 	
 @Javascript:disabled
 Scenario: MAT user should not be able to access a school outside their Multi-Academy Trust
-	Given I am a MAT Named user for Multi-Academy Trust "1234"
-	And Establishment "123456" exists:
-	"""
-	{
-	    "name": "Test School",
-	    "multiAcademyTrust": {
-	        "uid": 4321
-	    }
-	}
-	"""
-	And Multi Academy Trust "1234" exists:
-	"""
-	{
-		"multiAcademyTrust": {
-		    "uid": 1234
-		}
-	}
-	"""
+	Given I am a MAT Named user for Multi-Academy Trust 1234
+	And establishment Test School (123456) exists in multi-academy trust 4321
+	And multi-academy trust Test MAT (1234) exists
 	When I navigate to /my-schools/123456/
 	Then I should get a 403 response
 	And the page title should be "Access not allowed"
@@ -1641,24 +1293,9 @@ Scenario: MAT user should not be able to access a school outside their Multi-Aca
 	
 @Javascript:disabled
 Scenario: MAT user should be able to access a school within their Multi-Academy Trust
-	Given I am a MAT Named user for Multi-Academy Trust "1234"
-	And Establishment "123456" exists:
-	"""
-	{
-	    "name": "Test School",
-	    "multiAcademyTrust": {
-	        "uid": 1234
-	    }
-	}
-	"""
-	And Multi Academy Trust "1234" exists:
-	"""
-	{
-		"multiAcademyTrust": {
-		    "uid": 1234
-		}
-	}
-	"""
+	Given I am a MAT Named user for Multi-Academy Trust 1234
+	And establishment Test School (123456) exists in multi-academy trust 1234
+	And multi-academy trust Test MAT (1234) exists
 	When I navigate to /my-schools/123456/
 	Then I should get a 200 response
 	And the page title should be "My schools"
@@ -1666,13 +1303,9 @@ Scenario: MAT user should be able to access a school within their Multi-Academy 
 	
 @Javascript:disabled
 Scenario Outline: Descriptions for link to multiple establishments with description text
-	Given Establishment "100001" exists:
+	Given establishment Test School 1 (100001) exists in local authority 301 with properties:
 	"""
-	{ 
-	  "name": "Test School 1",
-	  "localAuthority": {
-		  "code": "301"
-	  },
+	{
 	  "links": [
 	    {
 	      "linkedUrn": "100002",
@@ -1701,39 +1334,10 @@ Scenario Outline: Descriptions for link to multiple establishments with descript
 	  ]
 	}
 	"""
-	And Establishment "100002" exists:
-	"""
-	{ 
-	  "name": "Test School 2",
-	  "localAuthority": {
-		 "code": "301"
-	  }
-	}
-	"""
-	And Establishment "100003" exists:
-	"""
-	{ 
-	  "name": "Test School 3",
-	  "localAuthority": {
-		 "code": "301"
-	  }
-	}
-	"""
-	And Establishment "100004" exists:
-	"""
-	{ 
-	  "name": "Test School 4",
-	  "localAuthority": {
-		 "code": "301"
-	  }
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	And establishment Test School 2 (100002) exists in local authority 301
+	And establishment Test School 3 (100003) exists in local authority 301
+	And establishment Test School 4 (100004) exists in local authority 301
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/100001/
 	Then I should get a 200 response
 	And the element "[data-testid="linked-school-description-1"]" should have the text content "<Description>"
@@ -1753,8 +1357,8 @@ Scenario Outline: Descriptions for link to multiple establishments with descript
 	  | 2A   | Expansion                                                      | "2020-10-01"    | Test School 1 became Test School 2, Test School 3 and Test School 4 on 1 October 2020.                                    |
 	  | 2F   | Successor - Split School                                       | null            | Test School 2, Test School 3 and Test School 4 were split off from Test School 1.                                         |
 	  | 2F   | Successor - Split School                                       | "2020-10-01"    | Test School 2, Test School 3 and Test School 4 were split off from Test School 1 on 1 October 2020.                       |
-	  | 2K   | Result of Amalgamation                                         | null            | Test School 1 was the result of an amalgamation of Test School 2, Test School 3 and Test School 4.                                        |
-	  | 2K   | Result of Amalgamation                                         | "2020-10-01"    | Test School 1 was the result of an amalgamation of Test School 2, Test School 3 and Test School 4 on 1 October 2020.                      |
+	  | 2K   | Result of Amalgamation                                         | null            | Test School 1 was the result of an amalgamation of Test School 2, Test School 3 and Test School 4.                        |
+	  | 2K   | Result of Amalgamation                                         | "2020-10-01"    | Test School 1 was the result of an amalgamation of Test School 2, Test School 3 and Test School 4 on 1 October 2020.      |
 	  | 2O   | Merged - change in age range                                   | null            | Test School 1 was merged with Test School 2, Test School 3 and Test School 4.                                             |
 	  | 2O   | Merged - change in age range                                   | "2020-10-01"    | Test School 1 was merged with Test School 2, Test School 3 and Test School 4 on 1 October 2020.                           |
 	  | 2P   | Merged - expansion of school capacity                          | null            | Test School 1 was merged with Test School 2, Test School 3 and Test School 4.                                             |
@@ -1763,21 +1367,17 @@ Scenario Outline: Descriptions for link to multiple establishments with descript
 	  | 2Q   | Merged - expansion in school capacity and changer in age range | "2020-10-01"    | Test School 1 was merged with Test School 2, Test School 3 and Test School 4 on 1 October 2020.                           |
 	  | 6    | Successor - merged                                             | null            | Test School 1 was merged with Test School 2, Test School 3 and Test School 4.                                             |
 	  | 6    | Successor - merged                                             | "2020-10-01"    | Test School 1 was merged with Test School 2, Test School 3 and Test School 4 on 1 October 2020.                           |
-	  | 6.1  | Predecessor - amalgamated                                      | null            | Test School 1 was the result of an amalgamation of Test School 2, Test School 3 and Test School 4.                                        |
-	  | 6.1  | Predecessor - amalgamated                                      | "2020-10-01"    | Test School 1 was the result of an amalgamation of Test School 2, Test School 3 and Test School 4 on 1 October 2020.                      |
+	  | 6.1  | Predecessor - amalgamated                                      | null            | Test School 1 was the result of an amalgamation of Test School 2, Test School 3 and Test School 4.                        |
+	  | 6.1  | Predecessor - amalgamated                                      | "2020-10-01"    | Test School 1 was the result of an amalgamation of Test School 2, Test School 3 and Test School 4 on 1 October 2020.      |
 	  | 6.2  | Successor - amalgamated                                        | null            | Test School 1 was amalgamated into Test School 2, Test School 3 and Test School 4.                                        |
 	  | 6.2  | Successor - amalgamated                                        | "2020-10-01"    | Test School 1 was amalgamated into Test School 2, Test School 3 and Test School 4 on 1 October 2020.                      |
 
    
 @Javascript:disabled
 Scenario: Should provide default description if linkType is missing
-	Given Establishment "100001" exists:
+	Given establishment Test School 1 (100001) exists in local authority 301 with properties:
 	"""
-	{ 
-	  "name": "Test School 1",
-	  "localAuthority": {
-		  "code": "301"
-	  },
+	{
 	  "links": [
 	    {
 	      "linkedUrn": "100002"
@@ -1789,30 +1389,9 @@ Scenario: Should provide default description if linkType is missing
 	  ]
 	}
 	"""
-	And Establishment "100002" exists:
-	"""
-	{ 
-	  "name": "Test School 2",
-	  "localAuthority": {
-		  "code": "301"
-	  }
-	}
-	"""
-	And Establishment "100003" exists:
-	"""
-	{ 
-	  "name": "Test School 3",
-	  "localAuthority": {
-		  "code": "301"
-	  }
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	And establishment Test School 2 (100002) exists in local authority 301
+	And establishment Test School 3 (100003) exists in local authority 301
+	And local authority Test LA (301) exists
 	When I navigate to /my-schools/100001/
 	Then I should get a 200 response 
 	And the element "[data-testid="linked-school-description-1"]" should have the text content "Test School 1 was linked to Test School 2."
@@ -1820,13 +1399,9 @@ Scenario: Should provide default description if linkType is missing
 	
 	@Javascript:disabled
 	Scenario Outline: Display linked establishment descriptions with links and established dates
-		Given Establishment "100001" exists:
+		Given establishment Test School 1 (100001) exists in local authority 301 with properties:
 		"""
-		{ 
-		  "name": "Test School 1",
-		   "localAuthority": {
-		   "code": "301"
-		   },
+		{
 		  "links": [
 		    {
 		      "linkedUrn": "100002",
@@ -1838,30 +1413,9 @@ Scenario: Should provide default description if linkType is missing
 		  ]
 		}
 		"""
-		And Establishment "100002" exists:
-		"""
-		{ 
-		  "name": "Test School 2",
-		   "localAuthority": {
-		   "code": "301"
-		  }
-		}
-		"""
-		And Establishment "100003" exists:
-		"""
-		{ 
-		   "name": "Test School 3",
-		   "localAuthority": {
-		   "code": "301"
-		  }
-		}
-		"""
-		And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+		And establishment Test School 2 (100002) exists in local authority 301
+		And establishment Test School 3 (100003) exists in local authority 301
+		And local authority Test LA (301) exists
 		When I navigate to /my-schools/100001/
 		Then I should get a 200 response
 		And the linked schools links should be:
@@ -1872,13 +1426,9 @@ Scenario: Should provide default description if linkType is missing
 
 @Javascript:disabled
 Scenario: LA/MAT/Diocese user should be able to access a school within My schools school page or via linked schools
-	Given Establishment "123456" exists:
+	Given establishment Test School (123456) exists in local authority 301 with properties:
 	"""
 	{
-	    "name": "Test School",
-	     "localAuthority": {
-		 	"code": "301"
-	  	 },
 	  	"multiAcademyTrust": {
 	     	"uid": 1234
 	  	},
@@ -1893,26 +1443,9 @@ Scenario: LA/MAT/Diocese user should be able to access a school within My school
 		]
 	}
 	"""
-	And Establishment "100002" exists:
-	"""
-	{ 
-	  "name": "Test School 2"
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
-	And Multi Academy Trust "1234" exists:
-	"""
-	{
-		"multiAcademyTrust": {
-		    "uid": 1234
-		}
-	}
-	"""
+	And establishment Test School 2 (100002) exists
+	And local authority Test LA (301) exists
+	And multi-academy trust Test MAT (1234) exists
 	And I am a <userRole>
 	When I navigate to /my-schools/123456/
 	Then I should get a 200 response
@@ -1920,9 +1453,9 @@ Scenario: LA/MAT/Diocese user should be able to access a school within My school
 	And the page subtitle should be "Test School (URN: 123456)"
 
 Examples:
-  | userRole                                      |
-  | LA Named user for Local Authority "301"       |
-  | MAT Named user for Multi-Academy Trust "1234" |
-  | Diocese Named user for Diocese "Test Diocese" |
+  | userRole                                    |
+  | LA Named user for Local Authority 301       |
+  | MAT Named user for Multi-Academy Trust 1234 |
+  | Diocese Named user for Diocese Test Diocese |
   
   			

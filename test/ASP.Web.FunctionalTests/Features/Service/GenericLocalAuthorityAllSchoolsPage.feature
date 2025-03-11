@@ -23,37 +23,17 @@ Examples:
 	
 @Javascript:disabled
 Scenario: No results when Local Authority contains no schools
-	Given Local Authority "100" exists:
-	"""
-		{ 
-			"name": "Test LA"
-		}
-	"""
-	And Establishment "111111" exists:
-	"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-				{
-				"code": "999"
-				}
-		}
-	"""
+	Given local authority Test LA (100) exists
+	And establishment Test School 1 (111111) exists in local authority 999
 	When I navigate to /local-authority/100/schools/
 	Then the page title should be "We found no schools"
 
 @Javascript:disabled
 Scenario Outline: Generic Local authority > All schools page - common page elements
-	Given 251 Establishments exist with properties:
+	Given 251 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "999", "name": "Test LA" } |
-	And Local Authority "999" exists:
-	"""
-	{
-		"Name": "Test LA",
-		"Code": "999"
-	}
-	"""
+	And local authority Test LA (999) exists
 And I am a <AccessToAllSchools> user
 When I navigate to /local-authority/999/schools/
 Then I should get a 200 response
@@ -74,42 +54,10 @@ Examples:
 
 @Javascript:disabled
 Scenario: Should display only schools within the Local Authority
-	Given Local Authority "100" exists:
-	"""
-		{ 
-		"name": "Test LA"
-		}
-	"""
-	And Establishment "111111" exists:
-	"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-			"code": "100"
-			}
-		}
-	"""
-	And Establishment "222222" exists:
-	"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-			"code": "100"
-			}
-		}
-	"""
-	And Establishment "333333" exists:
-	"""
-		{
-		"name": "Test School 3",
-		"localAuthority":
-			{
-			"code": "999"
-			}
-		}
-	"""
+	Given local authority Test LA (100) exists
+	And establishment Test School 1 (111111) exists in local authority 100
+	And establishment Test School 2 (222222) exists in local authority 100
+	And establishment Test School 3 (333333) exists in local authority 999
 	When I navigate to /local-authority/100/schools/
 	Then the pagination summary should be "Showing 1 - 2 of 2 schools"
 	And the listings should be:
@@ -119,68 +67,38 @@ Scenario: Should display only schools within the Local Authority
 
 @Javascript:disabled
 Scenario: DfE Named user should see All schools
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority Oxfordshire (999) with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Oxfordshire"
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority Oxfordshire (999) with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Oxfordshire"
 			}
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School (333333) exists in local authority Oxfordshire (999) with properties:
 		"""
 		{
-			"name": "A Different Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Oxfordshire"
 			}
 		}
 		"""
-	And Establishment "444444" exists:
-		"""
-		{
-			"name": "The Training Centre",
-			"localAuthority": {
-				"code": "999",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Oxfordshire",
-			"Code": "999"
-		}
-		"""
+	And establishment The Training Centre (444444) exists in local authority 999
+	And local authority Oxfordshire (999) exists
 	When I navigate to /local-authority/999/schools/
 	Then the pagination summary should be "Showing 1 - 4 of 4 schools"
 	And the listings should be:
@@ -193,16 +111,10 @@ Scenario: DfE Named user should see All schools
 @Javascript:disabled
 Scenario Outline: Pagination in Generic Local authority > All schools page for 'AccessToAllSchools' users
 	Given I am a <AccessToAllSchools> user
-	And 251 Establishments exist with properties:
+	And 251 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "999", "name": "Test LA" } |
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	Then the pagination summary should be "Showing 1 - 50 of 251 schools"
 	And the pagination links should be:
@@ -230,16 +142,10 @@ Examples:
 @Javascript:disabled
 Scenario Outline: Pagination in Generic Local authority > All schools page for 'AccessToAllSchools' users Validation 2
 	Given I am a <AccessToAllSchools> user
-	And 501 Establishments exist with properties:
+	And 501 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "999", "name": "Test LA" } |
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/?page=3
 	Then the pagination summary should be "Showing 101 - 150 of 501 schools"
 	And the pagination links should be:
@@ -269,33 +175,9 @@ Examples:
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns results
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Oxfordshire",
-			"Code": "999"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And establishment Some Other Primary School (222222) exists in local authority 999
+	And local authority Oxfordshire (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "Primary"
 	And I click the button "#searchSubmit"
@@ -304,33 +186,9 @@ Scenario: Page title should show correct text when search returns results
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns results
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Oxfordshire",
-			"Code": "999"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And establishment Some Other Primary School (222222) exists in local authority 999
+	And local authority Oxfordshire (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "Primary"
 	And I click the button "#searchSubmit"
@@ -344,33 +202,9 @@ Scenario: Page should show a breadcrumb trail when search returns results
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns no results
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Oxfordshire",
-			"Code": "999"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And establishment Some Other Primary School (222222) exists in local authority 999
+	And local authority Oxfordshire (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "Secondary"
 	And I click the button "#searchSubmit"
@@ -384,23 +218,8 @@ Scenario: Page should show a breadcrumb trail when search returns no results
 
 @Javascript:disabled
 Scenario: Search Term validation
-	Given Establishment "111111" exists:
-	"""
-	{
-		"name": "Some Primary School",
-		"localAuthority": {
-			"code": "999",
-			"name": "Oxfordshire"
-		}
-	}
-	"""
-	And Local Authority "999" exists:
-	"""
-	{
-		"Name": "Oxfordshire",
-		"Code": "999"
-	}
-	"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Oxfordshire (999) exists
 	When I navigate to /local-authority/999/schools/
 	Then I should get a 200 response
 	And the page title should be "All schools"
@@ -408,23 +227,8 @@ Scenario: Search Term validation
 
 @Javascript:enabled
 Scenario: Search Term validation should work with JS enabled
-	Given Establishment "111111" exists:
-	"""
-	{
-		"name": "Some Primary School",
-		"localAuthority": {
-			"code": "999",
-			"name": "Oxfordshire"
-		}
-	}
-	"""
-	And  Local Authority "999" exists:
-	"""
-	{
-		"Name": "Oxfordshire",
-		"Code": "999"
-	}
-	"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Oxfordshire (999) exists
 	When I navigate to /local-authority/999/schools/
 	Then I should get a 200 response
 	And the page title should be "All schools"
@@ -432,23 +236,8 @@ Scenario: Search Term validation should work with JS enabled
 
 @Javascript:disabled
 Scenario: Search Term validation errors
-	Given Establishment "111111" exists:
-	"""
-	{
-		"name": "Some Primary School",
-		"localAuthority": {
-			"code": "999",
-			"name": "Oxfordshire"
-		}
-	}
-	"""
-	And Local Authority "999" exists:
-	"""
-	{
-		"Name": "Oxfordshire",
-		"Code": "999"
-	}
-	"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Oxfordshire (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=
@@ -458,23 +247,8 @@ Scenario: Search Term validation errors
 
 @Javascript:enabled
 Scenario: Search Term validation errors should still work with JS enabled
-	Given Establishment "111111" exists:
-	"""
-	{
-		"name": "Some Primary School",
-		"localAuthority": {
-			"code": "999",
-			"name": "Oxfordshire"
-		}
-	}
-	"""
-	And Local Authority "999" exists:
-	"""
-	{
-		"Name": "Oxfordshire",
-		"Code": "999"
-	}
-	"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Oxfordshire (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/999/schools/?search=
@@ -484,23 +258,8 @@ Scenario: Search Term validation errors should still work with JS enabled
 	
 @Javascript:disabled
 Scenario: School search page should show correct message for search term with no matches
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-					"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Oxfordshire",
-			"Code": "999"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Oxfordshire (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "secondary"
 	And I click the button "#searchSubmit"
@@ -510,16 +269,10 @@ Scenario: School search page should show correct message for search term with no
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation
-	Given 251 Establishments exist with properties:
+	Given 251 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "999", "name": "Test LA" } |
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/?search=primary
 	Then the pagination summary should be "Showing 1 - 50 of 251 schools"
 	And the pagination links should be:
@@ -539,16 +292,10 @@ Scenario: Pagination in Search Validation
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation 2
-	Given 501 Establishments exist with properties:
+	Given 501 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "999", "name": "Test LA" } |
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/?page=3&search=primary
 	Then the pagination summary should be "Showing 101 - 150 of 501 schools"
 	And the pagination links should be:
@@ -571,16 +318,10 @@ Scenario: Pagination in Search Validation 2
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation 3
-	Given 51 Establishments exist with properties:
+	Given 51 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "999", "name": "Test LA" } |
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/?page=2&search=primary
 	Then the pagination summary should be "Showing 51 - 51 of 51 schools"
 	And the pagination links should be:
@@ -594,23 +335,8 @@ Scenario: Pagination in Search Validation 3
 
 @Javascript:disabled
 Scenario: Matching URN search should redirect to school landing page
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "111111"
 	And I click the button "#searchSubmit"
@@ -619,23 +345,8 @@ Scenario: Matching URN search should redirect to school landing page
 
 @Javascript:enabled
 Scenario: Matching URN search should redirect to school landing page with JS enabled
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-					 "code": "999",
-				 		 "name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "111111"
 	And I click the button "#searchSubmit"
@@ -644,23 +355,8 @@ Scenario: Matching URN search should redirect to school landing page with JS ena
 
 @Javascript:disabled
 Scenario: Partial match for school name should redirect to school landing page
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "PRiMaRY"
 	And I click the button "#searchSubmit"
@@ -669,28 +365,17 @@ Scenario: Partial match for school name should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial street match should redirect to school landing page
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "str"
 	And I click the button "#searchSubmit"
@@ -699,28 +384,17 @@ Scenario: Partial street match should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial town match should redirect to school landing page
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "some"
 	And I click the button "#searchSubmit"
@@ -729,28 +403,17 @@ Scenario: Partial town match should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial postcode match should redirect to school landing page
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "tr1"
 	And I click the button "#searchSubmit"
@@ -759,68 +422,38 @@ Scenario: Partial postcode match should redirect to school landing page
 
 @Javascript:disabled
 Scenario Outline: Results page should show partial name and address matches
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School (333333) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "A Different Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "444444" exists:
-		"""
-		{
-			"name": "The Training Centre",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And establishment The Training Centre (444444) exists in local authority 999
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	And I click the button "#searchSubmit"
@@ -834,23 +467,8 @@ Scenario Outline: Results page should show partial name and address matches
 
 @Javascript:disabled
 Scenario: School search successful for 6-digit URN
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "111111"
 	And I click the button "#searchSubmit"
@@ -859,23 +477,8 @@ Scenario: School search successful for 6-digit URN
 
 @Javascript:disabled
 Scenario Outline: School search with less than 6 digits does not match on URN
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"
@@ -893,38 +496,18 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: School search with less than 6 digits matches on school address
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And establishment Another Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
 			"address": {
 				"street": "<SearchTerm> The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"
@@ -942,38 +525,18 @@ Examples:
 
 @Javascript:disabled
 Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999
+	And establishment Another Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
 			"address": {
 				"street": "111111 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "111111"
 	And I click the button "#searchSubmit"
@@ -982,24 +545,13 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (with forward slash)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "894/2200"
 	And I click the button "#searchSubmit"
@@ -1008,24 +560,13 @@ Scenario: Search term matching establishment LAESTAB code (with forward slash)
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (without forward slash)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "8942200"
 	And I click the button "#searchSubmit"
@@ -1034,35 +575,19 @@ Scenario: Search term matching establishment LAESTAB code (without forward slash
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (LA part)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
-			"laestab": "894/1234",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
+			"laestab": "894/1234"
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "894"
 	And I click the button "#searchSubmit"
@@ -1074,35 +599,19 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (LA
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (ESTAB part)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
-			"laestab": "600/2200",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "600/2200"
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "2200"
 	And I click the button "#searchSubmit"
@@ -1114,35 +623,13 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (ES
 
 @Javascript:disabled
 Scenario: Partial LAESTAB (LA part) match should show no matching results
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab" : "894/2200",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
+			"laestab" : "894/2200"
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999",
-			 	"localAuthority": {
-			 		"code": "999",
-			 		"name": "Test LA"
-			 	}
-		}
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "89"
 	And I click the button "#searchSubmit"
@@ -1151,24 +638,13 @@ Scenario: Partial LAESTAB (LA part) match should show no matching results
 
 @Javascript:disabled
 Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab" : "894/2200",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
+			"laestab" : "894/2200"
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "22"
 	And I click the button "#searchSubmit"
@@ -1177,40 +653,24 @@ Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "8942200 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "8942200"
 	And I click the button "#searchSubmit"
@@ -1219,41 +679,24 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		} 
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "894/2200 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-		 	"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
-			
-		} 
-		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
 		}
 		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "894/2200"
 	And I click the button "#searchSubmit"
@@ -1262,40 +705,24 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 
 @Javascript:disabled
 Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}		 
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "894 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}		 
+			}
 		} 
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "894"
 	And I click the button "#searchSubmit"
@@ -1304,40 +731,24 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 
 @Javascript:disabled
 Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "2200 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				 	"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "2200"
 	And I click the button "#searchSubmit"
@@ -1346,56 +757,35 @@ Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code sea
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct search results
-	Given Establishment "111111" exists:
+	Given establishment School A (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "School A",
 			"address": {
 				"street": "13 The Street",
 				"postCode": "AB12 3CD"
-			},
-		 	"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment School B (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "School B",
 			"address": {
 				"street": "2a Mornington Crescent",
 				"town": "Liverpool",
 				"postCode": "LL1 1AB"
-			},
-		 	"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment School C (333333) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "School C",
 			"address": {
 				"street": "34 Long Road",
 				"town": "Sheffield"
-			},
-		 	"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "School"
 	And I click the button "#searchSubmit"
@@ -1408,43 +798,27 @@ Scenario Outline: Multiple successful school name matches show correct search re
 
 @Javascript:disabled
 Scenario Outline: The PageNo parameter should handle invalid values with a default value of 1
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
 			}
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/?search=Primary&page=<page>
 	Then the page title should be "Search results for "Primary""
 	And the page subtitle should be "Test LA - 2 schools"
@@ -1460,16 +834,10 @@ Examples:
 
 @Javascript:disabled
 Scenario: The PageNo parameter number greater than the total number of pages, the last page of results should be shown
-	Given 26 Establishments exist with properties:
+	Given 26 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "999", "name": "Test LA" } |
-	And Local Authority "999" exists:
-		"""
-		{
-			"Name": "Test LA",
-			"Code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/?page=50&search=Primary
 	Then the page title should be "Search results for "Primary""
 	And the pagination summary should be "Showing 1 - 26 of 26 schools"
@@ -1481,77 +849,51 @@ Scenario: The PageNo parameter number greater than the total number of pages, th
 		
 @Javascript:enabled
 Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2201",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2201"
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School (333333) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "A Different Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2202",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2202"
 		}
 		"""
-	And Establishment "444444" exists:
+	And establishment Some Secondary School (444444) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Secondary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2203",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2203"
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "primary"
 	Then the autocomplete results should appear
@@ -1569,77 +911,51 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 
 @Javascript:enabled
 Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting Name and Address
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2201",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2201"
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School Centre (333333) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "A Different Primary School Centre",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2202",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2202"
 		}
 		"""
-	And Establishment "444444" exists:
+	And establishment Some Secondary School (444444) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Secondary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2203",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2203"
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	Then the autocomplete results should appear
@@ -1660,77 +976,51 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 
 @Javascript:enabled
 Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting URN and LaEstab
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2201",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2201"
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School Centre (333333) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "A Different Primary School Centre",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2202",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2202"
 		}
 		"""
-	And Establishment "444442" exists:
+	And establishment Some Secondary School (444442) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Secondary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2203",
-			"localAuthority": {
-				"code": "999",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2203"
 		}
 		"""
-	And Local Authority "999" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "999"
-		}
-		"""
+	And local authority Test LA (999) exists
 	When I navigate to /local-authority/999/schools/
 	And I update the textbox "#app-field-Search" to have the value "42"
 	Then the autocomplete results should appear

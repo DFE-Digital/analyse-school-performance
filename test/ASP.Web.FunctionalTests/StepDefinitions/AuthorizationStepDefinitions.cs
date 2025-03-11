@@ -67,7 +67,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             _web.TestClaimsProvider.SetName(firstName, lastName);
         }
 
-        [Given($@"I am an? ({ScopedRoles}) user for (Local Authority|Multi-Academy Trust|Diocese|Establishment) ""(.+)""")]
+        [Given($@"I am an? ({ScopedRoles}) user for (Local Authority|Multi-Academy Trust|Diocese|Establishment) ([^""]+)")]
         public void GivenIAmAUserWithTheRoleFor(string roleName, string identifierType, string identifierValue)
         {
             var role = Role.FromName(roleName);

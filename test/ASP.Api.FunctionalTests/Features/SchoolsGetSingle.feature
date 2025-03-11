@@ -1,7 +1,7 @@
 ﻿Feature: SchoolsGetSingle
 
 	Scenario: Should only accept GET method
-		Given no Establishments exist
+		Given no establishments exist
 		When I send a <method> request to /api/schools/123456
 		Then I should get a 405 response
 	Examples:
@@ -10,13 +10,13 @@
 		| DELETE |
 
 	Scenario: Should return NotFound (404) response if urn parameter is empty string
-		Given no Establishments exist
+		Given no establishments exist
 		When I send a GET request to /api/schools//
 		Then I should get a 404 response
 		And the response should be the message "Not found: Function not found for path: /api/schools//"
 
 	Scenario: Should return BadRequest (400) response if urn parameter is not 6 digits
-		Given no Establishments exist
+		Given no establishments exist
 		When I send a GET request to /api/schools/<urn>
 		Then I should get a 400 response
 		And the response should be the message "Bad request: The path parameter "urn" must be exactly 6 characters long."
@@ -26,18 +26,13 @@
 		| 1234567 |
 
 	Scenario: Should return NotFound (404) response if Establishment doesn't exist
-		Given no Establishments exist
+		Given no establishments exist
 		When I send a GET request to /api/schools/123456
 		Then I should get a 404 response
 		And the response should be the message "Not found: Could not find school with URN "123456"."
 
 	Scenario: Should return Establishment object if urn exists
-		Given Establishment "123456" exists:
-		"""
-		{
-			"Name": "Test name"
-		}
-		"""
+		Given establishment Test name (123456) exists
 		When I send a GET request to /api/schools/123456
 		Then I should get a 200 response
 		And the response should be an object containing these properties:

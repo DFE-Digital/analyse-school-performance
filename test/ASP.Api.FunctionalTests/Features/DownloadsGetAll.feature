@@ -17,7 +17,7 @@ Scenario: Should return BadRequest (400) response if scope parameter is empty st
 	And the response should be the message "Bad request: The query parameter "scope" should not be empty."
 
 Scenario: Should return BadRequest (400) response if scope parameter is invalid
-	Given no Local Authorities exist
+	Given no local authorities exist
 	When I send a GET request to /api/downloads?scope=xyz
 	Then I should get a 400 response
 	And the response should be the message "Bad request: "xyz" is not a valid scope."
@@ -47,12 +47,7 @@ Examples:
 	| 12345 |
 
 Scenario: Should return ServerError (500) response if Downloads config is not valid JSON
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	Hello
@@ -62,12 +57,7 @@ Scenario: Should return ServerError (500) response if Downloads config is not va
 	And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"The configuration file 'downloads-config.json' contained invalid JSON.","MessagePrefix":"Unexpected: "}"
 
 Scenario: Should return ServerError (500) response if Downloads config is empty
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -78,12 +68,7 @@ Scenario: Should return ServerError (500) response if Downloads config is empty
 	And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"The configuration file 'downloads-config.json' was empty.","MessagePrefix":"Unexpected: "}"
 
 Scenario: Should return ServerError (500) response if config source is invalid
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -102,7 +87,7 @@ Scenario: Should return ServerError (500) response if config source is invalid
 	And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"The downloads source 'XYZ' was not recognised.","MessagePrefix":"Unexpected: "}"
 
 Scenario: LA scope: Should return NotFound (404) response if LA does not exist
-	Given no Local Authorities exist
+	Given no local authorities exist
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -114,12 +99,7 @@ Scenario: LA scope: Should return NotFound (404) response if LA does not exist
 	And the response should be the message "Not found: Could not find Local Authority with code "101"."
 
 Scenario: LA scope: Should return NotFound (404) response if no downloads exist
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -138,12 +118,7 @@ Scenario: LA scope: Should return NotFound (404) response if no downloads exist
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
 
 Scenario: LA scope: Should return NotFound (404) response if no downloads exist for the given year
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -177,12 +152,7 @@ Scenario: LA scope: Should return NotFound (404) response if no downloads exist 
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100" for the year 2000."
 
 Scenario: LA scope: Should return NotFound (404) response if files exist at School level but not LocalAuthority
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -214,12 +184,7 @@ Scenario: LA scope: Should return NotFound (404) response if files exist at Scho
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
 
 Scenario: LA scope: Should return NotFound (404) response if files exist at LocalAuthority level but not for LA
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -247,12 +212,7 @@ Scenario: LA scope: Should return NotFound (404) response if files exist at Loca
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
 
 Scenario: LA scope: Should return NotFound (404) response if files exist for LA but don't match config filepath pattern
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -281,12 +241,7 @@ Scenario: LA scope: Should return NotFound (404) response if files exist for LA 
 	And the response should be the message "Not found: There are no downloads available for Local Authority "100"."
 
 Scenario: LA scope: Should return KTS downloads for LA for all matching years
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -337,12 +292,7 @@ Scenario: LA scope: Should return KTS downloads for LA for all matching years
 	"""
 
 Scenario: LA scope: Should ignore any non-matching files
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -385,12 +335,7 @@ Scenario: LA scope: Should ignore any non-matching files
 	"""
 
 Scenario: LA scope: Should ignore different filetypes within LA for the same year
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -451,12 +396,7 @@ Scenario: LA scope: Should ignore different filetypes within LA for the same yea
 	"""
 
 Scenario: LA scope: Should return user-friendly text for different dataset types
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -526,12 +466,7 @@ Examples:
 	| Phonics               | Phonics                          |
 
 Scenario: LA scope: Should return user-friendly text for different versions
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -601,12 +536,7 @@ Examples:
 	| final_with_cla          | final-with-cla          | Final, with CLA          |
 
 Scenario: LA scope: Should ignore different file type casing
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -649,12 +579,7 @@ Examples:
 	| CsV      |
 
 Scenario: LA scope: Should return KTS downloads filtered by year
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -702,12 +627,7 @@ Scenario: LA scope: Should return KTS downloads filtered by year
 	"""
 
 Scenario: LA scope: Should return ASP downloads filtered by year
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -755,12 +675,7 @@ Scenario: LA scope: Should return ASP downloads filtered by year
 	"""
 
 Scenario: LA scope: Should return latest KTS and ASP versions
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -824,12 +739,7 @@ Scenario: LA scope: Should return latest KTS and ASP versions
 	"""
 
 Scenario: LA scope: Download configs for different sources that use the same file path pattern should match up correctly
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -888,12 +798,7 @@ Scenario: LA scope: Download configs for different sources that use the same fil
 	"""
 
 Scenario: LA scope: Should still return results if downloads missing in once source
-	Given Local Authority "100" exists:
-	"""
-	{
-		"name": "Test LA"
-	}
-	"""
+	Given local authority Test LA (100) exists
 	And blob storage file downloads-config.json exists in config container:
 	"""
 	[
@@ -939,12 +844,7 @@ Scenario: LA scope: Should still return results if downloads missing in once sou
 	"""
 
 Scenario: School scope: Should return NotFound (404) response if School does not exist
-  Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+  Given establishment Test School (123456) exists
   And blob storage file downloads-config.json exists in config container:
   """
   [
@@ -956,12 +856,7 @@ Scenario: School scope: Should return NotFound (404) response if School does not
   And the response should be the message "Not found: Could not find school with URN "360158"."
 
 Scenario: School scope: Should return NotFound (404) response if no downloads exist
-  Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+  Given establishment Test School (123456) exists
   And blob storage file downloads-config.json exists in config container:
   """
   [
@@ -980,12 +875,7 @@ Scenario: School scope: Should return NotFound (404) response if no downloads ex
   And the response should be the message "Not found: There are no downloads available for School "123456"."
 
 Scenario: School scope: Should return NotFound (404) response if files exist at LA level but not School
-Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+Given establishment Test School (123456) exists
   And blob storage file downloads-config.json exists in config container:
   """
   [
@@ -1017,12 +907,7 @@ Given Establishment "123456" exists:
   And the response should be the message "Not found: There are no downloads available for School "123456"."
 
 Scenario: School scope: Should return NotFound (404) response if files exist at School level but not for given School
-  Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+  Given establishment Test School (123456) exists
   And blob storage file downloads-config.json exists in config container:
   """
   [
@@ -1046,12 +931,7 @@ Scenario: School scope: Should return NotFound (404) response if files exist at 
   And the response should be the message "Not found: There are no downloads available for School "123456"."
 
 Scenario: School scope: Should return NotFound (404) response if files exist for School but don't match config filepath pattern
-  Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+  Given establishment Test School (123456) exists
   And blob storage file downloads-config.json exists in config container:
   """
   [
@@ -1080,12 +960,7 @@ Scenario: School scope: Should return NotFound (404) response if files exist for
   And the response should be the message "Not found: There are no downloads available for School "123456"."
 
 Scenario: School scope: Should return KTS downloads for School for all matching years
-  Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+  Given establishment Test School (123456) exists
   And blob storage file downloads-config.json exists in config container:
   """
   [
@@ -1136,12 +1011,7 @@ Scenario: School scope: Should return KTS downloads for School for all matching 
   """
 
 Scenario: School scope: Should ignore different filetypes within School for the same year
-  Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+  Given establishment Test School (123456) exists
   And blob storage file downloads-config.json exists in config container:
   """
   [
@@ -1184,12 +1054,7 @@ Scenario: School scope: Should ignore different filetypes within School for the 
   """
 
 Scenario: School scope: Should return user-friendly text for different dataset types
-  Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+  Given establishment Test School (123456) exists
 And blob storage file downloads-config.json exists in config container:
   """
   [
@@ -1236,12 +1101,7 @@ Examples:
   | Exclusions            | Exclusions              |
 
 Scenario: School scope: Should return user-friendly text for different versions
-  Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+  Given establishment Test School (123456) exists
   And blob storage file downloads-config.json exists in config container:
   """
   [
@@ -1290,12 +1150,7 @@ Examples:
   | final_with_cla          | final-with-cla          | Final, with CLA          |
 
 Scenario: School scope: Should filter downloads by year
-  Given Establishment "123456" exists:
-  """
-  { 
-    "name": "Test School"
-  }
-  """
+  Given establishment Test School (123456) exists
   And blob storage file downloads-config.json exists in config container:
   """
   [

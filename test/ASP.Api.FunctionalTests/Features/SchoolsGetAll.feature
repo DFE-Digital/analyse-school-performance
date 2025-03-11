@@ -43,12 +43,7 @@ Examples:
 	| -1   |
 
 Scenario: Should allow page = 1
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists
 	When I send a GET request to /api/schools?page=1
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
@@ -79,12 +74,7 @@ Examples:
 	| -1             |
 
 Scenario: Should allow resultsPerPage = 1
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists
 	When I send a GET request to /api/schools?resultsPerPage=1
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
@@ -103,40 +93,25 @@ Scenario: Should allow resultsPerPage = 1
 		"""
 
 Scenario: Should return NotFound (404) response if there were no establishments exist within the given scope
-	Given no Establishments exist
+	Given no establishments exist
 	When I send a GET request to /api/schools
 	Then I should get a 404 response
 	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should not return deleted establishments
-	Given deleted Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given deleted establishment Some Primary School (222222) exists
 	When I send a GET request to /api/schools
 	Then I should get a 404 response
 	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should not return non-visible establishments
-	Given non-visible Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given non-visible establishment Some Primary School (111111) exists
 	When I send a GET request to /api/schools
 	Then I should get a 404 response
 	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should return 200 response when establishments exist
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists
 	When I send a GET request to /api/schools
 	Then I should get a 200 response
 	And the response should be an object containing these properties:
@@ -160,62 +135,20 @@ Scenario: Should return BadRequest (400) response if Local Authority with code d
 	And the response should be the message "Bad request: Local Authority with code "100" does not exist."
 
 Scenario: Should return NotFound (404) response if Local Authority with code does not exist
-	Given Local Authority "100" exists:
-		"""
-		{
-			"Name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-		"localAuthority": {
-			"code": "999"
-			}
-		}
-		"""
+	Given local authority Test LA (100) exists
+	And establishment Test School 1 (111111) exists in local authority 999
 	When I send a GET request to /api/schools?scope=LA&scopeId=100
 	Then I should get a 404 response
 	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should return 200 response if Local Authority with code exist within the given scope "LA"
-	Given Local Authority "100" exists:
-		"""
-		{
-			"Name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority": {
-				"code": "100"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			 "name": "Test School 2",
-			 "localAuthority": {
-				"code": "100"
-			 }
-		}
-		"""
-	And Establishment "333333 " exists:
-		"""
-		{
-			 "name": "Test School 3",
-			 "localAuthority": {
-				"code": "999"
-			 }
-		}
-		"""
+	Given local authority Test LA (100) exists
+	And establishment Test School 1 (111111) exists in local authority 100
+	And establishment Test School 2 (222222) exists in local authority 100
+	And establishment Test School 3 (333333) exists in local authority 999
 	When I send a GET request to /api/schools?scope=LA&scopeId=100
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 2,
@@ -240,56 +173,20 @@ Scenario: Should return BadRequest (400) response if Multi Academy Trust with id
 	And the response should be the message "Bad request: Multi-Academy Trust with UID "1234" does not exist."
 
 Scenario: Should return NotFound (404) response if Multi Academy Trust with id does not exist
-	Given Multi Academy Trust "1234" exists:
-		"""
-		{
-			"Name": "Test MAT"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1"
-		}
-		"""
+	Given multi-academy trust Test MAT (1234) exists
+	And establishment Test School 1 (111111) exists
 	When I send a GET request to /api/schools?scope=MAT&scopeId=1234
 	Then I should get a 404 response
 	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should return 200 response if Multi Academy Trust with id exist within the given scope "MAT"
-	Given Multi Academy Trust "1234" exists:
-		"""
-		{
-			"Name": "Test MAT"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"multiAcademyTrust": {
-				"uid": 1234
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2"
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "Test School 3",
-			"multiAcademyTrust": {
-				"uid": 1234
-			}
-		}
-		"""
+	Given multi-academy trust Test MAT (1234) exists
+	And establishment Test School 1 (111111) exists in multi-academy trust 1234
+	And establishment Test School 2 (222222) exists
+	And establishment Test School 3 (333333) exists in multi-academy trust 1234
 	When I send a GET request to /api/schools?scope=MAT&scopeId=1234
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 2,
@@ -309,68 +206,25 @@ Scenario: Should return 200 response if Multi Academy Trust with id exist within
 		"""
 
 Scenario: Should return NotFound (404) response if there are no matches for Diocese scope
-	Given Establishment "111111" exists:
+	Given establishment Test School 1 (111111) exists in diocese Not applicable
+	And establishment Test School 2 (222222) exists with properties:
 		"""
 		{
-			"name": "Test School 1",
-			"diocese": {
-				"code": "0000",
-				"name": "Not applicable"
-			 }
-		}
-		"""
-	And Establishment "222222 " exists:
-		"""
-		{
-			"name": "Test School 2",
 			"diocese": null
 		}
 		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "Test School 3",
-		}
-		"""
-
+	And establishment Test School 3 (333333) exists
 	When I send a GET request to /api/schools?scope=Diocese&scopeId=Test%20Diocese
 	Then I should get a 404 response
 	And the response should be the message "Not found: There were no schools within the given scope."
 
 Scenario: Should return 200 response if there are matches for the given scope "Diocese"
-	Given Establishment "111111" exists:
-		"""
-		{
-			 "name": "Test School 1",
-			 "diocese": {
-				"code": "1000",
-				"name": "Test Diocese"
-			 }
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			 "name": "Test School 2",
-			 "diocese": {
-				"code": "1001",
-				"name": "Another Diocese"
-			 }
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			 "name": "Test School 3",
-			 "diocese": {
-				"code": "1000",
-				"name": "Test Diocese"
-			 }
-		}
-		"""
+	Given establishment Test School 1 (111111) exists in diocese Test Diocese
+	And establishment Test School 2 (222222) exists in diocese Another Diocese
+	And establishment Test School 3 (333333) exists in diocese Test Diocese
 	When I send a GET request to /api/schools?scope=Diocese&scopeId=Test%20Diocese
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 2,
@@ -390,46 +244,14 @@ Scenario: Should return 200 response if there are matches for the given scope "D
 		"""
 
 Scenario: Should return 200 response if there are matches for the given scope "All"
-	Given Local Authority "100" exists:
-		"""
-		{
-			"Name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority": {
-				"code": "100"
-			} 
-		}
-		"""
-	Given Multi Academy Trust "1234" exists:
-		"""
-		{
-			"Name": "Test MAT"
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			 "name": "Test School 2"
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "Test School 3",
-			"diocese": {
-				"code": "1000",
-				"name": "Test Diocese"
-			 }
-		}
-		"""
+	Given local authority Test LA (100) exists
+	And establishment Test School 1 (111111) exists in local authority 100
+	And multi-academy trust Test MAT (1234) exists
+	And establishment Test School 2 (222222) exists
+	And establishment Test School 3 (333333) exists in diocese Test Diocese
 	When I send a GET request to /api/schools
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"ResultsPerPage": 50,
@@ -452,27 +274,12 @@ Scenario: Should return 200 response if there are matches for the given scope "A
 		"""
 
 Scenario: Should return a 200 response with results and expected pagination for the given scope
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Primary School 111111"
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Primary School 222222"
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "Primary School 333333"
-		}
-		"""
+	Given establishment Primary School 111111 (111111) exists
+	And establishment Primary School 222222 (222222) exists
+	And establishment Primary School 333333 (333333) exists
 	When I send a GET request to /api/schools
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 3,
@@ -496,27 +303,12 @@ Scenario: Should return a 200 response with results and expected pagination for 
 		"""
 
 Scenario: Should return a 200 response with results and expected pagination for the given resultsPerPage
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Primary School 111111"
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Primary School 222222"
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "Primary School 333333"
-		}
-		"""
+	Given establishment Primary School 111111 (111111) exists
+	And establishment Primary School 222222 (222222) exists
+	And establishment Primary School 333333 (333333) exists
 	When I send a GET request to /api/schools?resultsPerPage=2
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 3,
@@ -536,27 +328,12 @@ Scenario: Should return a 200 response with results and expected pagination for 
 		"""
 
 Scenario: Should return a 200 response with results and expected pagination for the given resultsPerPage and page
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Primary School 111111"
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Primary School 222222"
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "Primary School 333333"
-		}
-		"""
+	Given establishment Primary School 111111 (111111) exists
+	And establishment Primary School 222222 (222222) exists
+	And establishment Primary School 333333 (333333) exists
 	When I send a GET request to /api/schools?resultsPerPage=2&page=2
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 3,
@@ -572,27 +349,12 @@ Scenario: Should return a 200 response with results and expected pagination for 
 		"""
 
 Scenario: Should return a 200 response with expected pagination and no results for the given resultsPerPage, and page
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Primary School 111111"
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Primary School 222222"
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "Primary School 333333"
-		}
-		"""
+	Given establishment Primary School 111111 (111111) exists
+	And establishment Primary School 222222 (222222) exists
+	And establishment Primary School 333333 (333333) exists
 	When I send a GET request to /api/schools?resultsPerPage=2&page=3
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 3,
@@ -604,10 +366,9 @@ Scenario: Should return a 200 response with expected pagination and no results f
 		"""
 
 Scenario: Should return a 200 response with results and a computed address field
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -617,7 +378,7 @@ Scenario: Should return a 200 response with results and a computed address field
 		"""
 	When I send a GET request to /api/schools
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 1,
@@ -634,10 +395,9 @@ Scenario: Should return a 200 response with results and a computed address field
 		"""
 
 Scenario: Should return a 200 response with results and a computed address field when the URN and given address has street and postcode
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"postCode": "AB12 3CD"
@@ -646,7 +406,7 @@ Scenario: Should return a 200 response with results and a computed address field
 		"""
 	When I send a GET request to /api/schools
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 1,
@@ -663,10 +423,9 @@ Scenario: Should return a 200 response with results and a computed address field
 		"""
 
 Scenario: Should return a 200 response with results and a computed address field when the URN and given address has street and town
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown"
@@ -675,7 +434,7 @@ Scenario: Should return a 200 response with results and a computed address field
 		"""
 	When I send a GET request to /api/schools
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 1,
@@ -692,10 +451,9 @@ Scenario: Should return a 200 response with results and a computed address field
 		"""
 
 Scenario: Should return a 200 response with results and a computed educationPhase field when the URN and given educationPhase isPrimary equal true
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"isPost16": false,
 			"isPrimary": true,
 			"isSecondary": false
@@ -703,7 +461,7 @@ Scenario: Should return a 200 response with results and a computed educationPhas
 		"""
 	When I send a GET request to /api/schools
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 1,
@@ -720,10 +478,9 @@ Scenario: Should return a 200 response with results and a computed educationPhas
 		"""
 
 Scenario: Should return a 200 response with results and a computed educationPhase field when the URN and given educationPhase isSecondary equal true
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"isPost16": false,
 			"isPrimary": false,
 			"isSecondary": true
@@ -731,7 +488,7 @@ Scenario: Should return a 200 response with results and a computed educationPhas
 		"""
 	When I send a GET request to /api/schools
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 1,
@@ -748,10 +505,9 @@ Scenario: Should return a 200 response with results and a computed educationPhas
 		"""
 
 Scenario: Should return a 200 response with results and a computed educationPhase field when the URN and given educationPhase isPost16 equal true
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"isPost16": true,
 			"isPrimary": false,
 			"isSecondary": false
@@ -759,7 +515,7 @@ Scenario: Should return a 200 response with results and a computed educationPhas
 		"""
 	When I send a GET request to /api/schools
 	Then I should get a 200 response
-	And the response should be an object containing these properties excluding null:
+	And the response should be an object containing these properties (ignoring null values):
 		"""
 		{
 			"TotalResults": 1,

@@ -2,7 +2,7 @@ Feature: My school page
 
 @Javascript:disabled
 Scenario: A non-School user should not be able to access the 'My school' page. Instead, they should see a 403 Access not allowed page.
-	Given I am a MAT Named user for Multi-Academy Trust "1234"
+	Given I am a MAT Named user for Multi-Academy Trust 1234
 	When I navigate to /my-school/
 	Then I should get a 403 response
 	And the page title should be "Access not allowed"
@@ -18,13 +18,8 @@ Scenario: A user with access to all schools should not be able to access the 'My
 
 @Javascript:disabled
 Scenario: School page should display server error page if user's Establishment is not visible
-	Given non-visible Establishment "111111" exists:
-		"""
-		{
-			"name": "Thursby Primary School"
-		}
-		"""
-	And I am a School Named user for Establishment "111111"
+	Given non-visible establishment Thursby Primary School (111111) exists
+	And I am a School Named user for Establishment 111111
 	When I navigate to /my-school/
 	Then I should get a 500 response
 	And the page title should be "Sorry, there is a problem with the service"
@@ -33,13 +28,8 @@ Scenario: School page should display server error page if user's Establishment i
 
 @Javascript:disabled
 Scenario: School page should display server error page if user's Establishment is deleted
-	Given deleted Establishment "111111" exists:
-		"""
-		{
-			"name": "Thursby Primary School"
-		}
-		"""
-	And I am a School Named user for Establishment "111111"
+	Given deleted establishment Thursby Primary School (111111) exists
+	And I am a School Named user for Establishment 111111
 	When I navigate to /my-school/
 	Then I should get a 500 response
 	And the page title should be "Sorry, there is a problem with the service"
@@ -48,13 +38,8 @@ Scenario: School page should display server error page if user's Establishment i
 
 @Javascript:disabled
 Scenario: School page should display server error page if user's Establishment does not exist
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Thursby Primary School"
-		}
-		"""
-	And I am a School Named user for Establishment "222222"
+	Given establishment Thursby Primary School (111111) exists
+	And I am a School Named user for Establishment 222222
 	When I navigate to /my-school/
 	Then I should get a 500 response
 	And the page title should be "Sorry, there is a problem with the service"
@@ -63,13 +48,8 @@ Scenario: School page should display server error page if user's Establishment d
 
 @Javascript:disabled
 Scenario: School page should be accessible if user's Establishment exists
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School"
-		}
-		"""
-	And I am a School Named user for Establishment "123456"
+	Given establishment Hollinswood Primary School (123456) exists
+	And I am a School Named user for Establishment 123456
 	When I navigate to /my-school/
 	Then I should get a 200 response
 	Then the page title should be "My school"
@@ -157,13 +137,8 @@ Scenario: School page should contain eight app card container elements
 			]
 		}
 		"""
-	And Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School"
-		}
-		"""
-	And I am a School Named user for Establishment "123456"
+	And establishment Hollinswood Primary School (123456) exists
+	And I am a School Named user for Establishment 123456
 	When I navigate to /my-school/
 	Then the element "#app-card-container" class should contain "app-grid-container-four-column"
 	And the elements "#app-card-container .app-card" should total 8
@@ -203,7 +178,7 @@ Scenario: School page should contain eight app card container elements
 
 @Javascript:disabled
 Scenario: School page should contain a school details disclosure element
-	Given Establishment "123456" exists:
+	Given establishment Hollinswood Primary School (123456) exists with properties:
 		"""
 		{
 			"isPost16": false,
@@ -235,7 +210,6 @@ Scenario: School page should contain a school details disclosure element
 			"localAuthority": {
 				"name": "Telford and Wrekin",
 			},
-			"name": "Hollinswood Primary School",
 			"noOfPupils": 404,
 			"religiousDenomination": {
 				"name": "Does not apply",
@@ -253,7 +227,7 @@ Scenario: School page should contain a school details disclosure element
 			},
 		}
 		"""
-	And I am a School Named user for Establishment "123456"
+	And I am a School Named user for Establishment 123456
 	When I navigate to /my-school/
 	Then I should get a 200 response
 	And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
@@ -291,7 +265,7 @@ Scenario: School page should contain a school details disclosure element
 
 @Javascript:disabled
 Scenario: School page should show if values are null
-	Given Establishment "123456" exists:
+	Given establishment Hollinswood Primary School (123456) exists with properties:
 		"""
 		{
 			"isPost16": null,
@@ -304,7 +278,6 @@ Scenario: School page should show if values are null
 			"gender": null,
 			"headteacher": null,
 			"localAuthority": null,
-			"name": "Hollinswood Primary School",
 			"noOfPupils": null,
 			"religiousDenomination": null,
 			"resourcedProvisionType": null,
@@ -313,7 +286,7 @@ Scenario: School page should show if values are null
 			"diocese": null
 		}
 		"""
-	And I am a School Named user for Establishment "123456"
+	And I am a School Named user for Establishment 123456
 	When I navigate to /my-school/
 	Then I should get a 200 response
 	And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
@@ -351,7 +324,7 @@ Scenario: School page should show if values are null
 
 @Javascript:disabled
 Scenario: School page should show if values are null case 2
-	Given Establishment "123456" exists:
+	Given establishment Hollinswood Primary School (123456) exists with properties:
 		"""
 		{
 			"isPost16": null,
@@ -383,7 +356,6 @@ Scenario: School page should show if values are null case 2
 			"localAuthority": {
 				"name": null,
 			},
-			"name": null,
 			"noOfPupils": null,
 			"religiousDenomination": {
 				"name": null,
@@ -401,7 +373,7 @@ Scenario: School page should show if values are null case 2
 			},
 		}
 		"""
-	And I am a School Named user for Establishment "123456"
+	And I am a School Named user for Establishment 123456
 	When I navigate to /my-school/
 	Then I should get a 200 response
 	And the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
@@ -439,25 +411,15 @@ Scenario: School page should show if values are null case 2
 
 @Javascript:disabled
 Scenario: Details disclosure element text should read 'Show school details' when closed
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School"
-		}
-		"""
-	And I am a School Named user for Establishment "123456"
+	Given establishment Hollinswood Primary School (123456) exists
+	And I am a School Named user for Establishment 123456
 	When I navigate to /my-school/
 	Then the element "*[data-testid='school-page-details-state-closed']" should have the text content "Show"
 	
 @Javascript:disabled
 Scenario Outline: My school page - common page elements
-	Given I am a <School> user for Establishment "123456"
-	And Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School"
-		}
-		"""
+	Given I am a <School> user for Establishment 123456
+	And establishment Hollinswood Primary School (123456) exists
 	When I navigate to /my-school/
 	Then the page title should be "My school"
 	And the page subtitle should be "Hollinswood Primary School (URN: 123456)"
@@ -472,13 +434,8 @@ Examples:
 	
 @Javascript:disabled
 Scenario: Data downloads 'Dates available for download' page - common page elements
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
-	And I am a School Named user for Establishment "136028"
+	Given establishment Dagenham Park CofE School (136028) exists
+	And I am a School Named user for Establishment 136028
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -516,12 +473,7 @@ Scenario: Data downloads 'Dates available for download' page - common page eleme
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Dates available for download' - page should contain three radio buttons
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -550,7 +502,7 @@ Scenario Outline: Data downloads 'Dates available for download' - page should co
 		Column A,Column B,Column C
 		1,2,3
 		"""
-	And I am a School Named user for Establishment "136028"
+	And I am a School Named user for Establishment 136028
 	When I navigate to /my-school/download-data
 	Then I should get a 200 response
 	And the element "[data-testid='available-downloads-dates-<year>-label']" should have the text content "<label>"
@@ -562,12 +514,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads 'Dates available for download' - when no date is selected and Continue button clicked, should show validation error
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School"
-		}
-		"""
+	Given establishment Hollinswood Primary School (123456) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -596,7 +543,7 @@ Scenario: Data downloads 'Dates available for download' - when no date is select
 		Column A,Column B,Column C
 		1,2,3
 		"""
-	And I am a School Named user for Establishment "123456"
+	And I am a School Named user for Establishment 123456
 	When I navigate to /my-school/download-data/
 	And I click the button "*[data-testid='selectedYearSubmit']"
 	Then the path should be /my-school/download-data/
@@ -607,12 +554,7 @@ Scenario: Data downloads 'Dates available for download' - when no date is select
 
 @Javascript:disabled
 Scenario: Data downloads 'Dates available for download' - when date is selected and Continue button clicked, should move to next step
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School"
-		}
-		"""
+	Given establishment Hollinswood Primary School (123456) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -641,7 +583,7 @@ Scenario: Data downloads 'Dates available for download' - when date is selected 
 		Column A,Column B,Column C
 		1,2,3
 		"""
-	And I am a School Named user for Establishment "123456"
+	And I am a School Named user for Establishment 123456
 	When I navigate to /my-school/download-data/
 	And I update the element "#app-available-downloads-dates-2022" to be checked
 	And I click the button "*[data-testid='selectedYearSubmit']"
@@ -649,13 +591,8 @@ Scenario: Data downloads 'Dates available for download' - when date is selected 
 
 @Javascript:disabled
 Scenario: Data downloads "Data files available for download' - common page elements
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
-	And I am a School Named user for Establishment "136028"
+	Given establishment Dagenham Park CofE School (136028) exists
+	And I am a School Named user for Establishment 136028
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -720,13 +657,8 @@ Scenario: Data downloads "Data files available for download' - common page eleme
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Data files available for download' - page should contain three checkbox groups
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
-	And I am a School Named user for Establishment "136028"
+	Given establishment Dagenham Park CofE School (136028) exists
+	And I am a School Named user for Establishment 136028
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -781,12 +713,7 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Data files available for download' - page should contain five checkboxes
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
+	Given establishment Dagenham Park CofE School (136028) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -857,7 +784,7 @@ Scenario Outline: Data downloads 'Data files available for download' - page shou
 		Column A,Column B,Column C
 		1,2,3
 		"""
-	And I am a School Named user for Establishment "136028"
+	And I am a School Named user for Establishment 136028
 	When I navigate to /my-school/download-data/select-files/?selectedYear=2022
 	Then the element "[data-testid='available-downloads-file-<fileid>-label']" should have the text content "<label>"
 Examples:
@@ -870,13 +797,8 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads 'Data files available for download' - when no files are selected and Continue button clicked, should show validation error
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School"
-		}
-		"""
-	And I am a School Named user for Establishment "123456"
+	Given establishment Hollinswood Primary School (123456) exists
+	And I am a School Named user for Establishment 123456
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -957,13 +879,8 @@ Scenario: Data downloads 'Data files available for download' - when no files are
 
 @Javascript:disabled
 Scenario: Data downloads 'Data files available for download' - when files are selected and Continue button clicked, should move to next step
-	Given Establishment "123456" exists:
-		"""
-		{
-			"name": "Hollinswood Primary School"
-		}
-		"""
-	And I am a School Named user for Establishment "123456"
+	Given establishment Hollinswood Primary School (123456) exists
+	And I am a School Named user for Establishment 123456
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1041,13 +958,8 @@ Scenario: Data downloads 'Data files available for download' - when files are se
 
 @Javascript:disabled
 Scenario: Data downloads 'Download school data' - common page elements
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
-	And I am a School Named user for Establishment "136028"
+	Given establishment Dagenham Park CofE School (136028) exists
+	And I am a School Named user for Establishment 136028
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1139,13 +1051,8 @@ Scenario: Data downloads 'Download school data' - common page elements
 
 @Javascript:disabled
 Scenario Outline: Data downloads 'Download school data' - Download other dates link should link back to first step
-	Given Establishment "136028" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
-	And I am a School Named user for Establishment "136028"
+	Given establishment Dagenham Park CofE School (136028) exists
+	And I am a School Named user for Establishment 136028
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1169,12 +1076,7 @@ Scenario Outline: Data downloads 'Download school data' - Download other dates l
 
 @Javascript:disabled
 Scenario: School Named user should see Download data card on School landing page
-	Given Establishment "123456" exists:
-		"""
-		{
-		    "name": "Test School"
-		}
-		"""
+	Given establishment Test School (123456) exists
 	And Content Template "school-landing-page" exists:
 		"""
 		{
@@ -1207,7 +1109,7 @@ Scenario: School Named user should see Download data card on School landing page
 		    ]
 		}
 		"""
-	And I am a School Named user for Establishment "123456"
+	And I am a School Named user for Establishment 123456
 	When I navigate to /my-school/
 	Then I should get a 200 response
 	And the landing page cards should be:
@@ -1218,12 +1120,7 @@ Scenario: School Named user should see Download data card on School landing page
    
 @Javascript:disabled
 Scenario: School Unnamed/School Governor users should not see Download data card on School landing page
-	Given Establishment "123456" exists:
-		"""
-		{
-		    "name": "Test School"
-		}
-		"""
+	Given establishment Test School (123456) exists
 	And Content Template "school-landing-page" exists:
 		"""
 		{
@@ -1256,7 +1153,7 @@ Scenario: School Unnamed/School Governor users should not see Download data card
 		    ]
 		}
 		"""
-	And I am a School Named user for Establishment "123456"
+	And I am a School Named user for Establishment 123456
 	And I am a <userRole>
 	When I navigate to /my-school/
 	Then I should get a 200 response
@@ -1265,19 +1162,14 @@ Scenario: School Unnamed/School Governor users should not see Download data card
 		| Other reports | other-reports/ | View reports on school performance, Ofsted inspections, absence and exclusions and school characteristics. |
 		| Useful links  | useful-links/  | View links to other services and published documents that may be useful.                                   |
 Examples:
-	| userRole                                        |
-	| School Unnamed user for Establishment "123456"  |
-	| School Governor user for Establishment "123456" |
+	| userRole                                      |
+	| School Unnamed user for Establishment 123456  |
+	| School Governor user for Establishment 123456 |
 	
 @Javascript:disabled
 Scenario Outline: Should return (200) response if the School Named user accesses /my-school/download-data
-	Given I am a School Named user for Establishment "123456"
-	And Establishment "123456" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
+	Given I am a School Named user for Establishment 123456
+	And establishment Dagenham Park CofE School (123456) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1310,12 +1202,7 @@ Scenario Outline: Should return (200) response if the School Named user accesses
 @Javascript:disabled
 Scenario Outline: Should return (403) response if the below mentioned user roles access /my-school/download-data
 	Given I am a <userRole>
-	And Establishment "123456" exists:
-		"""
-		{
-			"name": "Dagenham Park CofE School"
-		}
-		"""
+	And establishment Dagenham Park CofE School (123456) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1345,27 +1232,26 @@ Scenario Outline: Should return (403) response if the below mentioned user roles
 	When I navigate to /my-school/download-data
 	Then I should get a 403 response
 Examples:
-	| userRole                                         |
-	| School Unnamed user for Establishment "123456"   |
-	| School Governor user for Establishment "123456"  |
-	| LA Named user for Local Authority "301"          |
-	| LA Unnamed user for Local Authority "301"        |
-	| MAT Named user for Multi-Academy Trust "1234"    |
-	| MAT Unnamed user for Multi-Academy Trust "1234"  |
-	| MAT Governor user for Multi-Academy Trust "1234" |
-	| Diocese Named user for Diocese "Test Diocese"    |
-	| Diocese Unnamed user for Diocese "Test Diocese"  |
-	| DfE Named user                                   |
-	| DfE Unnamed user                                 |
-	| Ofsted Unnamed user                              |
-	| Super Admin user                                 |
+	| userRole                                       |
+	| School Unnamed user for Establishment 123456   |
+	| School Governor user for Establishment 123456  |
+	| LA Named user for Local Authority 301          |
+	| LA Unnamed user for Local Authority 301        |
+	| MAT Named user for Multi-Academy Trust 1234    |
+	| MAT Unnamed user for Multi-Academy Trust 1234  |
+	| MAT Governor user for Multi-Academy Trust 1234 |
+	| Diocese Named user for Diocese Test Diocese    |
+	| Diocese Unnamed user for Diocese Test Diocese  |
+	| DfE Named user                                 |
+	| DfE Unnamed user                               |
+	| Ofsted Unnamed user                            |
+	| Super Admin user                               |
 
 @Javascript:disabled
 Scenario Outline: Descriptions for link to multiple establishments with description text
-	Given Establishment "100001" exists:
+	Given establishment Test School 1 (100001) exists with properties:
 	"""
-	{ 
-	  "name": "Test School 1",
+	{
 	  "links": [
 	    {
 	      "linkedUrn": "100002",
@@ -1394,25 +1280,10 @@ Scenario Outline: Descriptions for link to multiple establishments with descript
 	  ]
 	}
 	"""
-	And I am a School Named user for Establishment "100001"
-	And Establishment "100002" exists:
-	"""
-	{ 
-	  "name": "Test School 2"
-	}
-	"""
-	And Establishment "100003" exists:
-	"""
-	{ 
-	  "name": "Test School 3"
-	}
-	"""
-	And Establishment "100004" exists:
-	"""
-	{ 
-	  "name": "Test School 4"
-	}
-	"""
+	And I am a School Named user for Establishment 100001
+	And establishment Test School 2 (100002) exists
+	And establishment Test School 3 (100003) exists
+	And establishment Test School 4 (100004) exists
 	When I navigate to /my-school/
 	Then I should get a 200 response
 	And the element "[data-testid="linked-school-description-1"]" should have the text content "<Description>"
@@ -1449,10 +1320,9 @@ Scenario Outline: Descriptions for link to multiple establishments with descript
    
 @Javascript:disabled
 Scenario: Should provide default description if linkType is missing
-	Given Establishment "100001" exists:
+	Given establishment Test School 1 (100001) exists with properties:
 	"""
-	{ 
-	  "name": "Test School 1",
+	{
 	  "links": [
 	    {
 	      "linkedUrn": "100002"
@@ -1464,19 +1334,9 @@ Scenario: Should provide default description if linkType is missing
 	  ]
 	}
 	"""
-	And I am a School Named user for Establishment "100001"
-	And Establishment "100002" exists:
-	"""
-	{ 
-	  "name": "Test School 2"
-	}
-	"""
-	And Establishment "100003" exists:
-	"""
-	{ 
-	  "name": "Test School 3"
-	}
-	"""
+	And I am a School Named user for Establishment 100001
+	And establishment Test School 2 (100002) exists
+	And establishment Test School 3 (100003) exists
 	When I navigate to /my-school/
 	Then I should get a 200 response 
 	And the element "[data-testid="linked-school-description-1"]" should have the text content "Test School 1 was linked to Test School 2."
@@ -1484,10 +1344,9 @@ Scenario: Should provide default description if linkType is missing
 	
 @Javascript:disabled
 Scenario Outline: Display linked establishment descriptions with links and established dates
-	Given Establishment "100001" exists:
+	Given establishment Test School 1 (100001) exists with properties:
 	"""
-	{ 
-	  "name": "Test School 1",
+	{
 	  "links": [
 	    {
 	      "linkedUrn": "100002"
@@ -1499,19 +1358,9 @@ Scenario Outline: Display linked establishment descriptions with links and estab
 	  ]
 	}
 	"""
-	And I am a School Named user for Establishment "100001"
-	And Establishment "100002" exists:
-	"""
-	{ 
-	  "name": "Test School 2"
-	}
-	"""
-	And Establishment "100003" exists:
-	"""
-	{ 
-	  "name": "Test School 3"
-	}
-	"""
+	And I am a School Named user for Establishment 100001
+	And establishment Test School 2 (100002) exists
+	And establishment Test School 3 (100003) exists
 	When I navigate to /my-school/
 	Then I should get a 200 response
 	And the linked schools links should be:

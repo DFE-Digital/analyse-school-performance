@@ -95,7 +95,7 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
             Assert.ObjectMatchesProperties(expectedContent, responseBody);
         }
 
-        [Then($@"the response should be an object containing these properties excluding null:")]
+        [Then(@"the response should be an object containing these properties \(ignoring null values\):")]
         public async Task ThenTheResponseShouldBeAnObjectContainingThesePropertiesExcludingNull(string expectedContent)
         {
             var responseBody = await _api.LastResponse.Content.ReadAsStringAsync();

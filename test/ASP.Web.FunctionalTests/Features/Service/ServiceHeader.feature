@@ -10,12 +10,8 @@ Scenario: Header should contain user account and sign in links
 
 @Javascript:disabled
 Scenario: Navigation item should be selected if current page is equal to or sub-path of item path
-	Given I am a School Named user for Establishment "123456"
-	And Establishment "123456" exists:
-	"""
-	{
-	}
-	"""
+	Given I am a School Named user for Establishment 123456
+	And establishment Test School (123456) exists
 	When I navigate to <Path>
 	Then the element "[data-testid='app-header-navigation-item-home']" class should contain "app-header__navigation-item--<HomeClass>"
 	And the element "[data-testid='app-header-navigation-item-my-school']" class should contain "app-header__navigation-item--<MySchoolClass>"

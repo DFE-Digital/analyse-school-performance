@@ -29,29 +29,19 @@
 			| -1             |
 
 	Scenario: Should return NotFound (404) response if no Local Authorities exist
-		Given no Local Authorities exist
+		Given no local authorities exist
 		When I send a GET request to /api/local-authorities/search-suggestions?searchTerm=x
 		Then I should get a 404 response
 		And the response should be the message "Not found: there were no matches for "x"."
 
 	Scenario: Should return NotFound (404) response if no Local Authorities match the search term
-		Given Local Authority "111" exists:
-		"""
-		{
-			"name": "Some Local Authority" 
-		}
-		"""
+		Given local authority Some Local Authority (111) exists
 		When I send a GET request to /api/local-authorities/search-suggestions?searchTerm=test
 		Then I should get a 404 response
 		And the response should be the message "Not found: there were no matches for "test"."
 
 	Scenario Outline: Should return Success (200) response with suggestions when matches are found for the given searchTerm
-		Given Local Authority "123" exists:
-		"""
-		{
-			"name": "Some Local Authority"
-		}
-		"""
+		Given local authority Some Local Authority (123) exists
 		When I send a GET request to /api/local-authorities/search-suggestions?searchTerm=<searchTerm>
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
@@ -76,30 +66,10 @@
 			| 123        |
 
 	Scenario: When searching for a partial name, suggestions should be sorted by name
-		Given Local Authority "111" exists:
-		"""
-		{
-			"name": "Local Authority C"
-		}
-		"""
-		And Local Authority "222" exists:
-		"""
-		{
-			"name": "Local Authority D"
-		}
-		"""
-		And Local Authority "333" exists:
-		"""
-		{
-			"name": "Local Authority B"
-		}
-		"""
-		And Local Authority "444" exists:
-		"""
-		{
-			"name": "Local Authority A"
-		}
-		"""
+		Given local authority Local Authority C (111) exists
+		And local authority Local Authority D (222) exists
+		And local authority Local Authority B (333) exists
+		And local authority Local Authority A (444) exists
 		When I send a GET request to /api/local-authorities/search-suggestions?searchTerm=local
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
@@ -125,30 +95,10 @@
 		"""
 
 	Scenario: When searching for a partial code, suggestions should be sorted by code
-		Given Local Authority "101" exists:
-		"""
-		{
-			"name": "Local Authority C"
-		}
-		"""
-		And Local Authority "102" exists:
-		"""
-		{
-			"name": "Local Authority D"
-		}
-		"""
-		And Local Authority "103" exists:
-		"""
-		{
-			"name": "Local Authority B"
-		}
-		"""
-		And Local Authority "104" exists:
-		"""
-		{
-			"name": "Local Authority A"
-		}
-		"""
+		Given local authority Local Authority C (101) exists
+		And local authority Local Authority D (102) exists
+		And local authority Local Authority B (103) exists
+		And local authority Local Authority A (104) exists
 		When I send a GET request to /api/local-authorities/search-suggestions?searchTerm=10
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
@@ -174,30 +124,10 @@
 		"""
 
 	Scenario: Suggestions should be limited by maxSuggestions parameter
-		Given Local Authority "111" exists:
-		"""
-		{
-			"name": "Local Authority C"
-		}
-		"""
-		And Local Authority "222" exists:
-		"""
-		{
-			"name": "Local Authority B"
-		}
-		"""
-		And Local Authority "333" exists:
-		"""
-		{
-			"name": "Local Authority A"
-		}
-		"""
-		And Local Authority "444" exists:
-		"""
-		{
-			"name": "Local Authority D"
-		}
-		"""
+		Given local authority Local Authority C (111) exists
+		And local authority Local Authority B (222) exists
+		And local authority Local Authority A (333) exists
+		And local authority Local Authority D (444) exists
 		When I send a GET request to /api/local-authorities/search-suggestions?searchTerm=local&maxSuggestions=2
 		Then I should get a 200 response
 		And the response should be an object containing these properties:

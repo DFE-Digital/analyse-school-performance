@@ -5,7 +5,7 @@ Background:
 
 @Javascript:disabled
 Scenario: A user with no access to all Local Authorities should not be able to access the generic 'Local authority' page. Instead, they should see a 403 Access not allowed page.
-	Given I am a MAT Named user for Multi-Academy Trust "1234"
+	Given I am a MAT Named user for Multi-Academy Trust 1234
 	When I navigate to /local-authority/301/
 	Then I should get a 403 response
 	And the page title should be "Access not allowed"
@@ -13,7 +13,7 @@ Scenario: A user with no access to all Local Authorities should not be able to a
 
 @Javascript:disabled
 Scenario: An LA user should not be able to access the generic 'Local authority' page, even if it's for their own LA. Instead, they should see a 403 Access not allowed page.
-	Given I am a LA Named user for Local Authority "301"
+	Given I am a LA Named user for Local Authority 301
 	When I navigate to /local-authority/301/
 	Then I should get a 403 response
 	And the page title should be "Access not allowed"
@@ -21,12 +21,7 @@ Scenario: An LA user should not be able to access the generic 'Local authority' 
 
 @Javascript:disabled
 Scenario: Local authority page should not be found when invalid code is provided
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	When I navigate to /local-authority/302/
 	Then I should get a 404 response
 	And the page title should be "Page not found"
@@ -35,12 +30,7 @@ Scenario: Local authority page should not be found when invalid code is provided
 @Javascript:disabled
 Scenario: Local authority landing page - common page elements
 	Given I am a DfE Named user
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/
 	Then I should get a 200 response
 	And the page title should be "Test LA"
@@ -77,12 +67,7 @@ Scenario: Local authority landing page cards should be populated from the "la-la
 			]
 		}
 		"""
-	And Local Authority "302" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	And local authority Test LA (302) exists
 	When I navigate to /local-authority/302/
 	Then the element "#app-card-la-all-schools h2 a" should have the href "schools/"
 	And the element "#app-card-la-all-schools h2 a" should have the text content "All schools"
@@ -94,12 +79,7 @@ Scenario: Local authority landing page cards should be populated from the "la-la
 @Javascript:disabled
 Scenario Outline: DfE Named/Super Admin users should see Download data card on LA landing page
 	Given I am a <userRole>
-	And Local Authority "301" exists:
-		"""
-		{
-		    "name": "Test LA"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And Content Template "la-landing-page" exists:
 		"""
 		{
@@ -148,12 +128,7 @@ Examples:
 @Javascript:disabled
 Scenario Outline: DfE Unnamed/Ofsted Unnamed users should not see Download data card on LA landing page
 	Given I am a <userRole>
-	And Local Authority "301" exists:
-		"""
-		{
-		    "name": "Test LA"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And Content Template "la-landing-page" exists:
 		"""
 		{
@@ -200,12 +175,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads > Pupil level and aggregated LA data > Dates available for download - Common page elements
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-		}
-		"""
+	Given local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -245,12 +215,7 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Dates available 
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Pupil level and aggregated LA data > Dates Available for Download - Page should contain multiple radio buttons
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -291,12 +256,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads > Pupil level and aggregated LA data > Dates available for download - When no date is selected and Continue button clicked, should show validation error
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -325,12 +285,7 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Dates available 
 
 @Javascript:disabled
 Scenario: Data downloads > Pupil level and aggregated LA data > Dates available for download - When date is selected and Continue button clicked, should move to next step
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -356,12 +311,7 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Dates available 
 
 @Javascript:disabled
 Scenario: Data downloads > Pupil level and aggregated LA data > Data files available for download - Common page elements
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-		}
-		"""
+	Given local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -402,12 +352,7 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Data files avail
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Pupil level and aggregated LA data > Data files available for download - Page should contain multiple checkbox groups
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -450,12 +395,7 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Pupil level and aggregated LA data > Data files available for download - Page should contain multiple checkboxes
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -512,12 +452,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads > Pupil level and aggregated LA data > Data files available for download - When no files are selected and Continue button clicked, should show validation error
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-		}
-		"""
+	Given local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -546,12 +481,7 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Data files avail
 
 @Javascript:disabled
 Scenario: Data downloads > Pupil level and aggregated LA data > Data files available for download - When files are selected and Continue button clicked, should move to next step
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -577,12 +507,7 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Data files avail
 
 @Javascript:disabled
 Scenario: Data downloads > Pupil level and aggregated LA data > Download data - Common page elements
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional
 	Then I should get a 200 response
 	And the page title should be "Download data"
@@ -606,12 +531,7 @@ Scenario: Data downloads > Pupil level and aggregated LA data > Download data - 
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Pupil level and aggregated LA data > Download data - Page should contain three links
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-301-ks2-la-2022-final&selectedFiles=asp-301-ks2-la-2022-provisional
 	Then I should get a 200 response
 	And the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your LA."
@@ -623,23 +543,13 @@ Scenario Outline: Data downloads > Pupil level and aggregated LA data > Download
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Pupil level and aggregated LA data > Download data - Download other dates link should link back to first step
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/pupil-level-aggregated-la-data/select-format/?selectedYear=2022&selectedFiles=kts-004-phonics-la-2022-final-pupil
 	Then the element "[data-testid="available-downloads-other-dates"]" should have the href "/local-authority/301/download-data/pupil-level-aggregated-la-data/"
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - No results when Local Authority contains no schools
-	Given Local Authority "301" exists:
-		"""
-		{ 
-			"name": "Test LA"
-		}
-		"""
+	Given local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	Then I should get a 200 response
 	And the page title should be "Download data"
@@ -662,22 +572,8 @@ Scenario: Data downloads > Individual school data > Search for a school - No res
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Common page elements
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	Then I should get a 200 response
 	And the page title should be "Download data"
@@ -699,42 +595,10 @@ Scenario: Data downloads > Individual school data > Search for a school - Common
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Should display only schools within the Local Authority
-	Given Local Authority "301" exists:
-		"""
-		{ 
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "333333" exists:
-		"""
-		{
-			"name": "Test School 3",
-			"localAuthority":
-			{
-				"code": "999"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
+	And establishment Test School 3 (333333) exists in local authority 999
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	Then the pagination summary should be "Showing 1 - 2 of 2 schools"
 	And the listings should be:
@@ -744,16 +608,10 @@ Scenario: Data downloads > Individual school data > Search for a school - Should
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - Pagination
-	And 251 Establishments exist with properties:
+	And 251 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "301", "name": "Test LA" } |
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	Then the pagination summary should be "Showing 1 - 50 of 251 schools"
 	And the pagination links should be:
@@ -773,16 +631,10 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - Pagination 2
-	And 501 Establishments exist with properties:
+	And 501 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "301", "name": "Test LA" } |
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/?page=3
 	Then the pagination summary should be "Showing 101 - 150 of 501 schools"
 	And the pagination links should be:
@@ -806,33 +658,9 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Page title should show correct text when search returns results
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Oxfordshire (301)
+	And establishment Some Other Primary School (222222) exists in local authority Oxfordshire (301)
+	And local authority Oxfordshire (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "Primary"
 	And I click the button "#searchSubmit"
@@ -843,33 +671,9 @@ Scenario: Data downloads > Individual school data > Search for a school - Page t
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Page should show a breadcrumb trail when search returns results
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Oxfordshire (301)
+	And establishment Some Other Primary School (222222) exists in local authority Oxfordshire (301)
+	And local authority Oxfordshire (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "Primary"
 	And I click the button "#searchSubmit"
@@ -884,33 +688,9 @@ Scenario: Data downloads > Individual school data > Search for a school - Page s
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Page should show a breadcrumb trail when search returns no results
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Oxfordshire (301)
+	And establishment Some Other Primary School (222222) exists in local authority Oxfordshire (301)
+	And local authority Oxfordshire (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "Secondary"
 	And I click the button "#searchSubmit"
@@ -925,23 +705,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Page s
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Search Term validation
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Oxfordshire (301)
+	And local authority Oxfordshire (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	Then I should get a 200 response
 	And the page title should be "Download data"
@@ -951,23 +716,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Search Term validation should still work with JS enabled
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Oxfordshire (301)
+	And local authority Oxfordshire (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	Then I should get a 200 response
 	And the page title should be "Download data"
@@ -977,23 +727,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Search Term validation errors
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Oxfordshire (301)
+	And local authority Oxfordshire (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=
@@ -1003,23 +738,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Search Term validation errors should still work with JS enabled
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Oxfordshire (301)
+	And local authority Oxfordshire (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I click the button "#searchSubmit"
 	Then the path should be /local-authority/301/download-data/individual-school-data/?search=
@@ -1029,23 +749,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Should show correct message for search term with no matches
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Oxfordshire"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Oxfordshire",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Oxfordshire (301)
+	And local authority Oxfordshire (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "secondary"
 	And I click the button "#searchSubmit"
@@ -1057,16 +762,10 @@ Scenario: Data downloads > Individual school data > Search for a school - Should
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 3
-	Given 251 Establishments exist with properties:
+	Given 251 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "301", "name": "Test LA" } |
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/?search=primary
 	Then the pagination summary should be "Showing 1 - 50 of 251 schools"
 	And the pagination links should be:
@@ -1087,16 +786,10 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 4
-	Given 501 Establishments exist with properties:
+	Given 501 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "301", "name": "Test LA" } |
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/?page=3&search=primary
 	Then the pagination summary should be "Showing 101 - 150 of 501 schools"
 	And the pagination links should be:
@@ -1120,16 +813,10 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Pagination 5
-	Given 51 Establishments exist with properties:
+	Given 51 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "301", "name": "Test LA" } |
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/?page=2&search=primary
 	Then the pagination summary should be "Showing 51 - 51 of 51 schools"
 	And the pagination links should be:
@@ -1144,23 +831,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Pagina
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Matching URN search should redirect to Dates available for download
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Test LA (301)
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1189,23 +861,8 @@ Scenario: Data downloads > Individual school data > Search for a school - Matchi
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Partial match for school name should redirect to Dates available for download
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Test LA (301)
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1234,10 +891,9 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Partial street match should redirect to Dates available for download
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -1249,13 +905,7 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 			}
 		} 
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1281,28 +931,17 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Partial town match should redirect to Dates available for download
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1328,28 +967,17 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Partial postcode match should redirect to Dates available for download
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1375,68 +1003,38 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - Results page should show partial name and address matches
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School (333333) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "A Different Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "444444" exists:
-		"""
-		{
-			"name": "The Training Centre",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And establishment The Training Centre (444444) exists in local authority Test LA (301)
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	And I click the button "#searchSubmit"
@@ -1450,23 +1048,8 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - School search successful for 6-digit URN
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Test LA (301)
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1495,23 +1078,8 @@ Scenario: Data downloads > Individual school data > Search for a school - School
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - School search with less than 6 digits does not match on URN
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Test LA (301)
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"
@@ -1531,38 +1099,18 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - School search with less than 6 digits matches on school address
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority Test LA (301)
+	And establishment Another Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
 			"address": {
 				"street": "<SearchTerm> The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1600,38 +1148,18 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 6-digit number, treat it as an exact URN search
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority Test LA (301)
+	And establishment Another Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
 			"address": {
 				"street": "111111 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1660,24 +1188,13 @@ Scenario: Data downloads > Individual school data > Search for a school - If sea
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Search term matching establishment LAESTAB code (with forward slash)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1706,24 +1223,13 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Search term matching establishment LAESTAB code (without forward slash)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1752,35 +1258,19 @@ Scenario: Data downloads > Individual school data > Search for a school - Search
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - School results page shows multiple partial LAESTAB matches (LA part)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
-			"laestab": "894/1234",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
+			"laestab": "894/1234"
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "894"
 	And I click the button "#searchSubmit"
@@ -1792,35 +1282,19 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - School results page shows multiple partial LAESTAB matches (ESTAB part)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
-			"laestab": "600/2200",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "600/2200"
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "2200"
 	And I click the button "#searchSubmit"
@@ -1832,31 +1306,14 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Partial LAESTAB (LA part) match should show no matching results
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab" : "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
+			"laestab" : "894/2200"
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "89"
 	And I click the button "#searchSubmit"
@@ -1867,24 +1324,13 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - Partial LAESTAB (ESTAB only) match should show no matching results
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab" : "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
+			"laestab" : "894/2200"
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "22"
 	And I click the button "#searchSubmit"
@@ -1895,40 +1341,24 @@ Scenario: Data downloads > Individual school data > Search for a school - Partia
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "8942200 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		} 
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -1957,41 +1387,24 @@ Scenario: Data downloads > Individual school data > Search for a school - If sea
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		} 
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "894/2200 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
-			
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
 		}
 		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -2020,40 +1433,24 @@ Scenario: Data downloads > Individual school data > Search for a school - If sea
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}		 
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "894 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}		 
+			}
 		} 
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -2082,40 +1479,24 @@ Scenario: Data downloads > Individual school data > Search for a school - If sea
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "2200 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
-		} 
-		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
 		}
 		"""
+	And local authority Test LA (301) exists
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -2144,56 +1525,35 @@ Scenario: Data downloads > Individual school data > Search for a school - if sea
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - Multiple successful school name matches show correct search results
-	Given Establishment "111111" exists:
+	Given establishment School A (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "School A",
 			"address": {
 				"street": "13 The Street",
 				"postCode": "AB12 3CD"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment School B (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "School B",
 			"address": {
 				"street": "2a Mornington Crescent",
 				"town": "Liverpool",
 				"postCode": "LL1 1AB"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment School C (333333) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "School C",
 			"address": {
 				"street": "34 Long Road",
 				"town": "Sheffield"
-			},
-			"localAuthority": {
-				"code": "301",
-				"name": "Test LA"
 			}
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "School"
 	And I click the button "#searchSubmit"
@@ -2206,25 +1566,19 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Search for a school - The PageNo parameter should handle invalid values with a default value of 1
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
-			},
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -2236,13 +1590,7 @@ Scenario Outline: Data downloads > Individual school data > Search for a school 
 			}
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/?search=Primary&page=<page>
 	Then the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
@@ -2259,16 +1607,10 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Search for a school - The PageNo parameter number greater than the total number of pages, the last page of results should be shown
-	Given 26 Establishments exist with properties:
+	Given 26 establishments exist with properties:
 		| urn          | name                        | localAuthority                       |
 		| (100000 + n) | Primary School (100000 + n) | { "code": "301", "name": "Test LA" } |
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/?page=50&search=Primary
 	Then the page title should be "Download data"
 	And the page subtitle should be "Individual school data"
@@ -2282,77 +1624,51 @@ Scenario: Data downloads > Individual school data > Search for a school - The Pa
 		
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Autocomplete Should Populate Items When Two Or More Characters Entered
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2201",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2201"
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School (333333) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "A Different Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2202",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2202"
 		}
 		"""
-	And Establishment "444444" exists:
+	And establishment Some Secondary School (444444) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Secondary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2203",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2203"
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "primary"
 	Then the autocomplete results should appear
@@ -2370,77 +1686,51 @@ Scenario: Data downloads > Individual school data > Search for a school - Autoco
 
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting Name and Address
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2201",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2201"
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School Centre (333333) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "A Different Primary School Centre",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2202",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2202"
 		}
 		"""
-	And Establishment "444444" exists:
+	And establishment Some Secondary School (444444) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Secondary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2203",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2203"
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	Then the autocomplete results should appear
@@ -2461,77 +1751,51 @@ Scenario: Data downloads > Individual school data > Search for a school - Autoco
 
 @Javascript:enabled
 Scenario: Data downloads > Individual school data > Search for a school - Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting URN and LaEstab
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
 				"postCode": "B1 1AA"
 			},
-			"laestab": "894/2201",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2201"
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School Centre (333333) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "A Different Primary School Centre",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2202",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2202"
 		}
 		"""
-	And Establishment "444442" exists:
+	And establishment Some Secondary School (444442) exists in local authority 301 with properties:
 		"""
 		{
-			"name": "Some Secondary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
 			},
-			"laestab": "894/2203",
-			"localAuthority": {
-				"code": "301",
-		 		"name": "Test LA"
-			}
+			"laestab": "894/2203"
 		}
 		"""
-	And Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-			"code": "301"
-		}
-		"""
+	And local authority Test LA (301) exists
 	When I navigate to /local-authority/301/download-data/individual-school-data/
 	And I update the textbox "#app-field-Search" to have the value "42"
 	Then the autocomplete results should appear
@@ -2552,32 +1816,9 @@ Scenario: Data downloads > Individual school data > Search for a school - Autoco
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Dates available for download - Common page elements
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -2618,32 +1859,9 @@ Scenario: Data downloads > Individual school data > Dates available for download
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Dates Available for Download - Page should contain multiple radio buttons
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -2684,32 +1902,9 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Dates available for download - When no date is selected and Continue button clicked, should show validation error
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -2738,32 +1933,9 @@ Scenario: Data downloads > Individual school data > Dates available for download
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Dates available for download - When date is selected and Continue button clicked, should move to next step
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -2789,32 +1961,9 @@ Scenario: Data downloads > Individual school data > Dates available for download
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Data files available for download - Common page elements
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -2856,32 +2005,9 @@ Scenario: Data downloads > Individual school data > Data files available for dow
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Data files available for download - Page should contain multiple checkbox groups
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -2924,32 +2050,9 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Data files available for download - Page should contain multiple checkboxes
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -3006,32 +2109,9 @@ Examples:
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Data files available for download - When no files are selected and Continue button clicked, should show validation error
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA",
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -3060,32 +2140,9 @@ Scenario: Data downloads > Individual school data > Data files available for dow
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Data files available for download - When files are selected and Continue button clicked, should move to next step
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	And blob storage file downloads-config.json exists in config container:
 		"""
 		[
@@ -3111,32 +2168,9 @@ Scenario: Data downloads > Individual school data > Data files available for dow
 
 @Javascript:disabled
 Scenario: Data downloads > Individual school data > Download data - Common page elements
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	When I navigate to /local-authority/301/download-data/individual-school-data/111111/select-format/?selectedYear=2022&selectedFiles=kts-school-ks2-pupil-111111-2022-final&selectedFiles=kts-school-ks2-pupil-111111-2023-provisional
 	Then I should get a 200 response
 	And the page title should be "Download data"
@@ -3161,32 +2195,9 @@ Scenario: Data downloads > Individual school data > Download data - Common page 
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Download data - Page should contain three links
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	When I navigate to /local-authority/301/download-data/individual-school-data/111111/select-format/?selectedYear=2022&selectedFiles=kts-school-ks2-pupil-111111-2022-final&selectedFiles=kts-school-ks2-pupil-111111-2023-provisional
 	Then I should get a 200 response
 	And the element "[data-testid="select-format-description"]" should have the text content "The data included in your download is the pupil level / aggregated data for your school."
@@ -3198,31 +2209,8 @@ Scenario Outline: Data downloads > Individual school data > Download data - Page
 
 @Javascript:disabled
 Scenario Outline: Data downloads > Individual school data > Download data - Download other dates link should link back to first step
-	Given Local Authority "301" exists:
-		"""
-		{
-			"name": "Test LA"
-		}
-		"""
-	And Establishment "111111" exists:
-		"""
-		{
-			"name": "Test School 1",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Test School 2",
-			"localAuthority":
-			{
-				"code": "301"
-			}
-		}
-		"""
+	Given local authority Test LA (301) exists
+	And establishment Test School 1 (111111) exists in local authority 301
+	And establishment Test School 2 (222222) exists in local authority 301
 	When I navigate to /local-authority/301/download-data/individual-school-data/111111/select-format/?selectedYear=2022&kts-school-ks2-pupil-111111-2022-final
 	Then the element "[data-testid="available-downloads-other-dates"]" should have the href "/local-authority/301/download-data/individual-school-data/111111/select-year/"

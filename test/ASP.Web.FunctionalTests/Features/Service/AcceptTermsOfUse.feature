@@ -27,22 +27,8 @@ Examples:
 
 @Javascript:disabled
 Scenario: Should not be redirected to accept terms when Accepted terms cookie is set to Accepted
-	Given Establishment "136028" exists:
-	"""
-	{
-		"name": "Some Primary School",
-		"localAuthority": {
-			"code": "999",
-			 	"name": "Test LA"
-		}
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Some Local Authority"
-	}
-	"""
+	Given establishment Some Primary School (136028) exists in local authority 999
+	And local authority Some Local Authority (301) exists
 	When I navigate to <Path>
 	Then I should get a 200 response
 	And the path should be <Path>
@@ -100,18 +86,8 @@ Scenario: Should set referral url when Accepted terms cookie is set to Rejected
 		]
 	}
 	"""
-	And Establishment "136028" exists:
-	"""
-	{
-		"name": "Some Primary School"
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Some Local Authority"
-	}
-	"""
+	And establishment Some Primary School (136028) exists
+	And local authority Some Local Authority (301) exists
 	And the cookie "AcceptedTermsOfUse" has been set to "Rejected"
 	When I navigate to <Path>
 	Then I should get a 200 response
@@ -155,22 +131,8 @@ Scenario: Should redirect to the correct referrer
 		]
 	}
 	"""
-	And Establishment "136028" exists:
-	"""
-	{
-		"name": "Some Primary School",
-		"localAuthority": {
-			"code": "999",
-			"name": "Test LA"
-		}
-	}
-	"""
-	And Local Authority "301" exists:
-	"""
-	{
-		"name": "Some Local Authority"
-	}
-	"""
+	And establishment Some Primary School (136028) exists in local authority 999
+	And local authority Some Local Authority (301) exists
 	And the cookie "AcceptedTermsOfUse" has been set to "Rejected"
 	When I navigate to <Path>
 	Then I should get a 200 response

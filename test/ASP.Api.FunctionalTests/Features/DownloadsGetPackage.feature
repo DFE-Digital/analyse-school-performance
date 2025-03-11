@@ -79,23 +79,13 @@ Scenario: Should return BadRequest (400) response if scopeId parameter is non-ex
         }
     ]
     """
-    And Establishment "111111" exists:
-    """
-    {
-        "name": "Test School"
-    }
-    """
+    And establishment Test School (111111) exists
     When I send a GET request to /api/downloads/package?scope=School&scopeId=222222&fileType=CSV&downloadIds=test-999-2024
     Then I should get a 400 response 
     And the response should be the message "Bad request: School with URN "222222" does not exist."
 
 Scenario: Should return BadRequest (400) response if scopeId parameter is non-existent LA code
-    Given Local Authority "111" exists:
-    """
-    {
-        "name": "Test LA"
-    }
-    """
+    Given local authority Test LA (111) exists
     When I send a GET request to /api/downloads/package?scope=LA&scopeId=222&fileType=CSV&downloadIds=test-999-2024
     Then I should get a 400 response 
     And the response should be the message "Bad request: Local Authority with Code "222" does not exist."
@@ -111,12 +101,7 @@ Scenario Outline: CSV, XLSX and TSV fileTypes should be supported (case insensit
         }
     ]
     """
-    And Establishment "111111" exists:
-    """
-    {
-        "name": "Test School"
-    }
-    """
+    And establishment Test School (111111) exists
     And blob storage file test.csv exists in downloads-kts container:
     """
     test
@@ -142,12 +127,7 @@ Scenario Outline: Should return BadRequest (400) response if downloadId is not i
         { "id": "def" }
     ]
     """
-    And Establishment "111111" exists:
-    """
-    {
-        "name": "Test School"
-    }
-    """ 
+    And establishment Test School (111111) exists 
     When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=CSV&downloadIds=<invalidDownloadId>
     Then I should get a 400 response
     And the response should be the message "Bad request: Download ID: <invalidDownloadId> is not in the format "{download-config.id}-{identifier}-{year}[-{version}]".""
@@ -172,12 +152,7 @@ Scenario Outline: Should return BadRequest (400) response if downloadId is not i
         { "id": "def" }
     ]
     """
-    And Local Authority "111" exists:
-    """
-    {
-        "name": "Test LA"
-    }
-    """ 
+    And local authority Test LA (111) exists 
     When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=<invalidDownloadId>
     Then I should get a 400 response
     And the response should be the message "Bad request: Download ID: <invalidDownloadId> is not in the format "{download-config.id}-{identifier}-{year}[-{version}]".""
@@ -194,12 +169,7 @@ Examples:
 
 Scenario: Should return ServerError (500) response if downloads-config.json file does not exist
     Given no files exist in blob storage
-    And Establishment "123456" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """ 
+    And establishment Test School 1 (123456) exists 
     When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test
     Then I should get a 500 response
     And the response should be the message "{"ErrorType":"Unexpected","StackTrace":null,"Message":"Blob storage file \"downloads-config.json\" does not exist in container \"config\".","MessagePrefix":"Unexpected: "}"
@@ -211,12 +181,7 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         { "id": "test" }
     ]
     """
-    Given Establishment "111111" exists:
-    """
-    {
-        "name": "Test School"
-    }
-    """    
+    Given establishment Test School (111111) exists    
     When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222222" is not accessible within the given scope."
@@ -228,18 +193,8 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         { "id": "test" }
     ]
     """
-    And Establishment "111111" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """    
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Test School 2"
-    }
-    """    
+    And establishment Test School 1 (111111) exists    
+    And establishment Test School 2 (222222) exists    
     When I send a GET request to /api/downloads/package?scope=School&scopeId=111111&fileType=CSV&downloadIds=test-222222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222222" is not accessible within the given scope."
@@ -251,12 +206,7 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         { "id": "test" }
     ]
     """
-    And Local Authority "111" exists:
-    """
-    {
-        "name": "Test LA"
-    }
-    """    
+    And local authority Test LA (111) exists    
     When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=test-111-2024&downloadIds=test-222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222" is not accessible within the given scope."
@@ -268,18 +218,8 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         { "id": "test" }
     ]
     """
-    And Local Authority "111" exists:
-    """
-    {
-        "name": "Test LA 1"
-    }
-    """    
-    And Local Authority "222" exists:
-    """
-    {
-        "name": "Test LA 2"
-    }
-    """    
+    And local authority Test LA 1 (111) exists    
+    And local authority Test LA 2 (222) exists    
     When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=test-111-2024&downloadIds=test-222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222" is not accessible within the given scope."
@@ -291,21 +231,8 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         { "id": "test" }
     ]
     """
-    And Local Authority "111" exists:
-    """
-    {
-        "name": "Test LA 1"
-    }
-    """    
-    And Establishment "111111" exists:
-    """
-    {
-        "name": "Test School 1",
-        "localAuthority": {
-            "code": "111"
-        }
-    }
-    """
+    And local authority Test LA 1 (111) exists    
+    And establishment Test School 1 (111111) exists in local authority 111
     When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222222" is not accessible within the given scope."
@@ -317,36 +244,10 @@ Scenario: Should return NotAllowed (403) response if downloadId identifier part 
         { "id": "test" }
     ]
     """
-    And Local Authority "111" exists:
-    """
-    {
-        "name": "Test LA 1"
-    }
-    """    
-    And Local Authority "222" exists:
-    """
-    {
-        "name": "Test LA 2"
-    }
-    """    
-    And Establishment "111111" exists:
-    """
-    {
-        "name": "Test School 1",
-        "localAuthority": {
-            "code": "111"
-        }
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Test School 2",
-        "localAuthority": {
-            "code": "222"
-        }
-    }
-    """
+    And local authority Test LA 1 (111) exists    
+    And local authority Test LA 2 (222) exists    
+    And establishment Test School 1 (111111) exists in local authority 111
+    And establishment Test School 2 (222222) exists in local authority 222
     When I send a GET request to /api/downloads/package?scope=LA&scopeId=111&fileType=CSV&downloadIds=test-111111-2024&downloadIds=test-222222-2024
     Then I should get a 403 response
     And the response should be the message "Not allowed: Identifier "222222" is not accessible within the given scope."
@@ -359,12 +260,7 @@ Scenario: Should return NotFound (404) response if single download id supplied c
         { "id": "def" }
     ]
     """
-    And Establishment "123456" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """ 
+    And establishment Test School 1 (123456) exists 
     When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=xyz-123456-2024
     Then I should get a 404 response
     And the response should be the message "Not found: There is no download config with id "xyz"."
@@ -377,12 +273,7 @@ Scenario: Should return NotFound (404) response if multiple download ids supplie
         { "id": "def", "filePathPattern":"", "source":"KTS" }
     ]
     """
-    And Establishment "123456" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """ 
+    And establishment Test School 1 (123456) exists 
     When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=abc-123456-2024&downloadIds=xyz-123456-2024
     Then I should get a 404 response
     And the response should be the message "Not found: There is no download config with id "xyz"."
@@ -398,12 +289,7 @@ Scenario: Should return NotFound (404) response if downloads-config exists but b
         }
     ]
     """
-    And Establishment "123456" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """ 
+    And establishment Test School 1 (123456) exists 
     And no blob storage files exist in downloads-kts container 
     When I send a GET request to /api/downloads/package?scope=School&scopeId=123456&fileType=CSV&downloadIds=test-123456-2024
     Then I should get a 404 response
@@ -420,12 +306,7 @@ Scenario: Should zip up file from blob storage matching filePathPattern of downl
         }
     ]
     """
-    And Establishment "123456" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """ 
+    And establishment Test School 1 (123456) exists 
     And blob storage file test.csv exists in downloads-kts container:
     """
     test
@@ -450,12 +331,7 @@ Scenario Outline: Should create download filename based on current time
         }
     ]
     """
-	And Establishment "111111" exists:
-	"""
-	{
-		"name": "Test School"
-	}
-	"""
+	And establishment Test School (111111) exists
     And blob storage file test.csv exists in downloads-kts container:
     """
     test
@@ -485,12 +361,7 @@ Scenario: Should zip up multiple files from blob storage based on from different
 
     ]
     """
-    And Establishment "123456" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """ 
+    And establishment Test School 1 (123456) exists 
     And blob storage file test1_file.csv exists in downloads-kts container:
     """
     test1
@@ -528,12 +399,7 @@ Scenario: Should zip up multiple files from blob storage based on from different
         }
     ]
     """
-    And Establishment "123456" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """ 
+    And establishment Test School 1 (123456) exists 
     And blob storage file test1_file.csv exists in downloads-kts container:
     """
     test1
@@ -554,12 +420,7 @@ Scenario: Should be able to download multiple years by replacing {year} in fileP
         }
     ]
     """
-	And Establishment "123456" exists:
-	"""
-	{
-		"name": "Test School"
-	}
-	"""
+	And establishment Test School (123456) exists
     And blob storage file School/2022/test.csv exists in downloads-kts container:
     """
     test-2022
@@ -599,12 +460,7 @@ Scenario: Should be able to download multiple years by replacing {year} in fileP
         }
     ]
     """
-	And Establishment "123456" exists: 
-	"""
-		{
-		   "name": "Test School"
-		}   
-	"""
+	And establishment Test School (123456) exists
     And blob storage file School/2024/test.csv exists in downloads-kts container:
     """
     test-2024
@@ -624,39 +480,10 @@ Scenario: Should be able to download multiple school URNs by replacing {urn} in 
         }
     ]
     """
-    And Local Authority "111" exists:
-    """
-    {
-        "name": "Test LA"
-    }
-    """ 
-    And Establishment "111111" exists:
-    """
-    {
-        "name": "Test School 1",
-        "localAuthority": {
-            "code": "111"
-        }
-    }
-    """
-    And Establishment "222222" exists:
-    """
-    {
-        "name": "Test School 2",
-        "localAuthority": {
-            "code": "111"
-        }
-    }
-    """
-    And Establishment "333333" exists:
-    """
-    {
-        "name": "Test School 3",
-        "localAuthority": {
-            "code": "111"
-        }
-    }
-    """
+    And local authority Test LA (111) exists 
+    And establishment Test School 1 (111111) exists in local authority 111
+    And establishment Test School 2 (222222) exists in local authority 111
+    And establishment Test School 3 (333333) exists in local authority 111
     And blob storage file School/111111/test.csv exists in downloads-kts container:
     """
     test-111111
@@ -696,12 +523,7 @@ Scenario Outline: Should be able to download multiple versions by replacing {ver
         }
     ]
     """
-	And Establishment "111111" exists:
-	"""
-	{
-		"name": "Test School"
-	}
-	"""
+	And establishment Test School (111111) exists
     And blob storage file test_<version>.csv exists in downloads-kts container:
     """
     test
@@ -738,12 +560,7 @@ Scenario Outline: Should be able to download multiple versions by replacing {ver
         }
     ]
     """
-    And Establishment "123456" exists:
-	"""
-	{
-		"name": "Test School"
-	}
-	"""
+    And establishment Test School (123456) exists
     And blob storage file test_revised.csv exists in downloads-kts container:
     """
     test
@@ -764,12 +581,7 @@ Scenario: Should be able to download fileType by replacing {fileType} in filePat
         }
     ]
     """
-    And Establishment "111111" exists:
-    """
-    {
-        "name": "Test LA 1"
-    }
-    """   
+    And establishment Test LA 1 (111111) exists   
     And blob storage file School/<fileTypeInBlobStorage>/test.<fileTypeInBlobStorage> exists in downloads-kts container:
     """
     test
@@ -801,12 +613,7 @@ Scenario: Should be able to download fileType by replacing {fileType} in filePat
         }
     ]
     """
-	And Establishment "111111" exists:
-	"""
-	{
-		"name": "Test LA 1"
-	}
-	"""
+	And establishment Test LA 1 (111111) exists
     And blob storage file School/abc/test.abc exists in downloads-kts container:
     """
     test
@@ -831,12 +638,7 @@ Scenario: Should zip up files from both ASP and KTS containers from blob storage
         }
     ]
     """
-    And Establishment "123456" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """ 
+    And establishment Test School 1 (123456) exists 
     And blob storage file test_kts_file.csv exists in downloads-kts container:
     """
     test_kts
@@ -873,12 +675,7 @@ Scenario: Should zip up files from both ASP and KTS containers from blob storage
         }
     ]
     """
-    And Establishment "123456" exists:
-    """
-    {
-        "name": "Test School 1"
-    }
-    """ 
+    And establishment Test School 1 (123456) exists 
     And blob storage file test_kts_file.csv exists in downloads-kts container:
     """
     test_kts
@@ -903,12 +700,7 @@ Scenario: Should be able to handle multiple years from both ASP and KTS containe
         }
     ]
     """
-	And Establishment "123456" exists:
-	"""
-	{
-		"name": "Test School"
-	}
-	"""
+	And establishment Test School (123456) exists
     And blob storage file School/2023/test-kts.csv exists in downloads-kts container:
     """
     test-kts-2023
@@ -962,12 +754,7 @@ Scenario: Should be able to handle multiple years from both ASP and KTS containe
 
     ]
     """
-	And Establishment "123456" exists:
-	"""
-	{
-		"name": "Test School"
-	}
-	"""
+	And establishment Test School (123456) exists
     And blob storage file School/2023/test-kts.csv exists in downloads-kts container:
     """
     test-kts-2023

@@ -5,14 +5,14 @@ Background:
 
 @Javascript:disabled
 Scenario: School Named user is denied access to all schools page
-	Given I am a School Named user for Establishment "123456"
+	Given I am a School Named user for Establishment 123456
 	When I navigate to /schools/
 	Then I should get a 403 response
 	And the element "h1.govuk-heading-l" should have the text content "Access not allowed"
 
 @Javascript:disabled
 Scenario: MAT Named user is denied access to all schools page
-	Given I am a MAT Named user for Multi-Academy Trust "1234"
+	Given I am a MAT Named user for Multi-Academy Trust 1234
 	When I navigate to /schools/
 	Then I should get a 403 response
 	And the page title should be "Access not allowed"
@@ -20,13 +20,13 @@ Scenario: MAT Named user is denied access to all schools page
 
 @Javascript:disabled
 Scenario: No results when no schools exist
-	Given no Establishments exist
+	Given no establishments exist
 	When I navigate to /schools/
 	Then the page title should be "We found no schools"
 
 @Javascript:disabled
 Scenario Outline: Generic Local authority > All schools page - common page elements
-	Given 251 Establishments exist with properties:
+	Given 251 establishments exist with properties:
 		| urn          | name                        |
 		| (100000 + n) | Primary School (100000 + n) |
 	And I am a <AccessToAllSchools> user
@@ -47,10 +47,9 @@ Examples:
 
 @Javascript:disabled
 Scenario: DfE Named user should see All schools
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -58,10 +57,9 @@ Scenario: DfE Named user should see All schools
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -69,10 +67,9 @@ Scenario: DfE Named user should see All schools
 			}
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School (333333) exists with properties:
 		"""
 		{
-			"name": "A Different Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
@@ -80,12 +77,7 @@ Scenario: DfE Named user should see All schools
 			}
 		}
 		"""
-	And Establishment "444444" exists:
-		"""
-		{
-			"name": "The Training Centre"
-		}
-		"""
+	And establishment The Training Centre (444444) exists
 	When I navigate to /schools/
 	Then the pagination summary should be "Showing 1 - 4 of 4 schools"
 	And the listings should be:
@@ -97,7 +89,7 @@ Scenario: DfE Named user should see All schools
 
 @Javascript:disabled
 Scenario: Pagination in all schools
-	Given 251 Establishments exist with properties:
+	Given 251 establishments exist with properties:
 		| urn          | name                        |
 		| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /schools/
@@ -119,7 +111,7 @@ Scenario: Pagination in all schools
 
 @Javascript:disabled
 Scenario: Pagination in all schools Validation 2
-	Given 501 Establishments exist with properties:
+	Given 501 establishments exist with properties:
 		| urn          | name                        |
 		| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /schools/?page=3
@@ -144,10 +136,9 @@ Scenario: Pagination in all schools Validation 2
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -164,10 +155,9 @@ Scenario: Page should show a breadcrumb trail
 
 @Javascript:disabled
 Scenario: Page title should show correct text when search returns results
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -175,10 +165,9 @@ Scenario: Page title should show correct text when search returns results
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -194,10 +183,9 @@ Scenario: Page title should show correct text when search returns results
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns results
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -205,10 +193,9 @@ Scenario: Page should show a breadcrumb trail when search returns results
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -227,10 +214,9 @@ Scenario: Page should show a breadcrumb trail when search returns results
 
 @Javascript:disabled
 Scenario: Page should show a breadcrumb trail when search returns no results
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -238,10 +224,9 @@ Scenario: Page should show a breadcrumb trail when search returns no results
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -260,12 +245,7 @@ Scenario: Page should show a breadcrumb trail when search returns no results
 
 @Javascript:disabled
 Scenario: Search Term validation
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists
 	When I navigate to /schools/
 	Then I should get a 200 response
 	And the page title should be "All schools"
@@ -273,12 +253,7 @@ Scenario: Search Term validation
 
 @Javascript:enabled
 Scenario: Search Term validation still works with JS enabled
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists
 	When I navigate to /schools/
 	Then I should get a 200 response
 	And the page title should be "All schools"
@@ -286,12 +261,7 @@ Scenario: Search Term validation still works with JS enabled
 
 @Javascript:disabled
 Scenario: Search Term validation errors
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists
 	When I navigate to /schools/
 	And I click the button "#searchSubmit"
 	Then the path should be /schools/?search=
@@ -301,12 +271,7 @@ Scenario: Search Term validation errors
 
 @Javascript:enabled
 Scenario: Search Term validation errors still work with JS enabled
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists
 	When I navigate to /schools/
 	And I click the button "#searchSubmit"
 	Then the path should be /schools/?search=
@@ -316,12 +281,7 @@ Scenario: Search Term validation errors still work with JS enabled
 
 @Javascript:disabled
 Scenario: School search page should show correct message for search term with no matches
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists
 	When I navigate to /schools/
 	And I update the textbox "#app-field-Search" to have the value "secondary"
 	And I click the button "#searchSubmit"
@@ -331,7 +291,7 @@ Scenario: School search page should show correct message for search term with no
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation
-	Given 251 Establishments exist with properties:
+	Given 251 establishments exist with properties:
 		| urn          | name                        |
 		| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /schools/?search=primary
@@ -353,7 +313,7 @@ Scenario: Pagination in Search Validation
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation 2
-	Given 501 Establishments exist with properties:
+	Given 501 establishments exist with properties:
 		| urn          | name                        |
 		| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /schools/?page=3&search=primary
@@ -378,7 +338,7 @@ Scenario: Pagination in Search Validation 2
 
 @Javascript:disabled
 Scenario: Pagination in Search Validation 3
-	Given 51 Establishments exist with properties:
+	Given 51 establishments exist with properties:
 		| urn          | name                        |
 		| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /schools/?page=2&search=primary
@@ -394,16 +354,7 @@ Scenario: Pagination in Search Validation 3
 
 @Javascript:disabled
 Scenario: Matching URN search should redirect to school landing page
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Test LA (999)
 	When I navigate to /schools/
 	And I update the textbox "#app-field-Search" to have the value "111111"
 	And I click the button "#searchSubmit"
@@ -412,16 +363,7 @@ Scenario: Matching URN search should redirect to school landing page
 
 @Javascript:enabled
 Scenario: Matching URN search should redirect to school landing page with JS enabled
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Test LA (999)
 	When I navigate to /schools/
 	And I update the textbox "#app-field-Search" to have the value "111111"
 	And I click the button "#searchSubmit"
@@ -430,16 +372,7 @@ Scenario: Matching URN search should redirect to school landing page with JS ena
 
 @Javascript:disabled
 Scenario: Partial match for school name should redirect to school landing page
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Test LA (999)
 	When I navigate to /schools/
 	And I update the textbox "#app-field-Search" to have the value "PRiMaRY"
 	And I click the button "#searchSubmit"
@@ -448,18 +381,13 @@ Scenario: Partial match for school name should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial street match should redirect to school landing page
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		} 
 		"""
@@ -471,18 +399,13 @@ Scenario: Partial street match should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial town match should redirect to school landing page
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		} 
 		"""
@@ -494,18 +417,13 @@ Scenario: Partial town match should redirect to school landing page
 
 @Javascript:disabled
 Scenario: Partial postcode match should redirect to school landing page
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		} 
 		"""
@@ -517,10 +435,9 @@ Scenario: Partial postcode match should redirect to school landing page
 
 @Javascript:disabled
 Scenario Outline: Results page should show partial name and address matches
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -528,10 +445,9 @@ Scenario Outline: Results page should show partial name and address matches
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -539,10 +455,9 @@ Scenario Outline: Results page should show partial name and address matches
 			}
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School (333333) exists with properties:
 		"""
 		{
-			"name": "A Different Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
@@ -550,12 +465,7 @@ Scenario Outline: Results page should show partial name and address matches
 			}
 		}
 		"""
-	And Establishment "444444" exists:
-		"""
-		{
-			"name": "The Training Centre"
-		}
-		"""
+	And establishment The Training Centre (444444) exists
 	When I navigate to /schools/
 	And I update the textbox "#app-field-Search" to have the value "tr"
 	And I click the button "#searchSubmit"
@@ -569,16 +479,7 @@ Scenario Outline: Results page should show partial name and address matches
 
 @Javascript:disabled
 Scenario: School search successful for 6-digit URN
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
-		}
-		"""
+	Given establishment Some Primary School (111111) exists in local authority Test LA (999)
 	When I navigate to /schools/
 	And I update the textbox "#app-field-Search" to have the value "111111"
 	And I click the button "#searchSubmit"
@@ -587,12 +488,7 @@ Scenario: School search successful for 6-digit URN
 
 @Javascript:disabled
 Scenario Outline: School search with less than 6 digits does not match on URN
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists
 	When I navigate to /schools/
 	And I update the textbox "#app-field-Search" to have the value "<SearchTerm>"
 	And I click the button "#searchSubmit"
@@ -610,24 +506,14 @@ Examples:
 
 @Javascript:disabled
 Scenario Outline: School search with less than 6 digits matches on school address
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists
+	And establishment Another Primary School (222222) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School"
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
 			"address": {
 				"street": "<SearchTerm> The Street",
 				"town": "SomeTown",
 				"postCode": "TR18 3JT"
-			},
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
 			}
 		} 
 		"""
@@ -648,20 +534,10 @@ Examples:
 
 @Javascript:disabled
 Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority Test LA (999)
+	And establishment Another Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Another Primary School",
 			"address": {
 				"street": "111111 The Street",
 				"town": "SomeTown",
@@ -677,15 +553,10 @@ Scenario: If searchTerm is a 6-digit number, treat it as an exact URN search
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (with forward slash)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
 	When I navigate to /schools/
@@ -696,15 +567,10 @@ Scenario: Search term matching establishment LAESTAB code (with forward slash)
 
 @Javascript:disabled
 Scenario: Search term matching establishment LAESTAB code (without forward slash)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
 	When I navigate to /schools/
@@ -715,20 +581,8 @@ Scenario: Search term matching establishment LAESTAB code (without forward slash
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (LA part)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200"
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"laestab": "894/1234"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists with LAESTAB code 894/2200
+	And establishment Some Other Primary School (222222) exists with LAESTAB code 894/1234
 	When I navigate to /schools/
 	And I update the textbox "#app-field-Search" to have the value "894"
 	And I click the button "#searchSubmit"
@@ -740,20 +594,8 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (LA
 
 @Javascript:disabled
 Scenario Outline: School results page shows multiple partial LAESTAB matches (ESTAB part)
-	Given Establishment "111111" exists:
-		"""
-		{
-			"name": "Some Primary School",
-			"laestab": "894/2200"
-		}
-		"""
-	And Establishment "222222" exists:
-		"""
-		{
-			"name": "Some Other Primary School",
-			"laestab": "600/2200"
-		}
-		"""
+	Given establishment Some Primary School (111111) exists with LAESTAB code 894/2200
+	And establishment Some Other Primary School (222222) exists with LAESTAB code 600/2200
 	When I navigate to /schools/
 	And I update the textbox "#app-field-Search" to have the value "2200"
 	And I click the button "#searchSubmit"
@@ -765,10 +607,9 @@ Scenario Outline: School results page shows multiple partial LAESTAB matches (ES
 
 @Javascript:disabled
 Scenario: Partial LAESTAB (LA part) match should show no matching results
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"laestab" : "894/2200"
 		}
 		"""
@@ -780,10 +621,9 @@ Scenario: Partial LAESTAB (LA part) match should show no matching results
 
 @Javascript:disabled
 Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"laestab" : "894/2200"
 		}
 		"""
@@ -795,21 +635,15 @@ Scenario: Partial LAESTAB (ESTAB only) match should show no matching results
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "8942200 The Street",
@@ -826,21 +660,15 @@ Scenario: If searchTerm is a 7-digit number, treat it as an exact LAESTAB code s
 
 @Javascript:disabled
 Scenario: If searchTerm is a 7-digit number with forward slash in the right place, treat it as an exact LAESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "894/2200 The Street",
@@ -857,21 +685,15 @@ Scenario: If searchTerm is a 7-digit number with forward slash in the right plac
 
 @Javascript:disabled
 Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}		 
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "894 The Street",
@@ -888,21 +710,15 @@ Scenario: If searchTerm is a 3-digit number, treat it as an exact LA code search
 
 @Javascript:disabled
 Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code search (ignoring other matching fields)
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists in local authority 999 with properties:
 		"""
 		{
-			"name": "Some Primary School",
-			"laestab": "894/2200",
-			"localAuthority": {
-				"code": "999",
-				"name": "Test LA"
-			}
+			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Another Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Another Primary School",
 			"laestab": "123/4567",
 			"address": {
 				"street": "2200 The Street",
@@ -919,20 +735,18 @@ Scenario: if searchTerm is a 4-digit number, treat it as an exact ESTAB code sea
 
 @Javascript:disabled
 Scenario Outline: Multiple successful school name matches show correct search results
-	Given Establishment "111111" exists:
+	Given establishment School A (111111) exists with properties:
 		"""
 		{
-			"name": "School A",
 			"address": {
 				"street": "13 The Street",
 				"postCode": "AB12 3CD"
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment School B (222222) exists with properties:
 		"""
 		{
-			"name": "School B",
 			"address": {
 				"street": "2a Mornington Crescent",
 				"town": "Liverpool",
@@ -940,10 +754,9 @@ Scenario Outline: Multiple successful school name matches show correct search re
 			} 
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment School C (333333) exists with properties:
 		"""
 		{
-			"name": "School C",
 			"address": {
 				"street": "34 Long Road",
 				"town": "Sheffield"
@@ -962,10 +775,9 @@ Scenario Outline: Multiple successful school name matches show correct search re
 
 @Javascript:disabled
 Scenario Outline: The PageNo parameter should handle invalid values with a default value of 1
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -973,10 +785,9 @@ Scenario Outline: The PageNo parameter should handle invalid values with a defau
 			}
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -999,7 +810,7 @@ Examples:
 
 @Javascript:disabled
 Scenario: The PageNo parameter number greater than the total number of pages, the last page of results should be shown
-	Given 26 Establishments exist with properties:
+	Given 26 establishments exist with properties:
 		| urn          | name                        |
 		| (100000 + n) | Primary School (100000 + n) |
 	When I navigate to /schools/?page=50&search=Primary
@@ -1014,10 +825,9 @@ Scenario: The PageNo parameter number greater than the total number of pages, th
 
 @Javascript:enabled
 Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -1026,10 +836,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -1038,10 +847,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 			"laestab": "894/2201"
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School (333333) exists with properties:
 		"""
 		{
-			"name": "A Different Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
@@ -1050,10 +858,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 			"laestab": "894/2202"
 		}
 		"""
-	And Establishment "444444" exists:
+	And establishment Some Secondary School (444444) exists with properties:
 		"""
 		{
-			"name": "Some Secondary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
@@ -1079,10 +886,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 
 @Javascript:enabled
 Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting Name and Address
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -1091,10 +897,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -1103,10 +908,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 			"laestab": "894/2201"
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School Centre (333333) exists with properties:
 		"""
 		{
-			"name": "A Different Primary School Centre",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
@@ -1115,10 +919,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 			"laestab": "894/2202"
 		}
 		"""
-	And Establishment "444444" exists:
+	And establishment Some Secondary School (444444) exists with properties:
 		"""
 		{
-			"name": "Some Secondary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
@@ -1147,10 +950,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 
 @Javascript:enabled
 Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered Highlighting URN and LaEstab
-	Given Establishment "111111" exists:
+	Given establishment Some Primary School (111111) exists with properties:
 		"""
 		{
-			"name": "Some Primary School",
 			"address": {
 				"street": "13 The Street",
 				"town": "SomeTown",
@@ -1159,10 +961,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 			"laestab": "894/2200"
 		}
 		"""
-	And Establishment "222222" exists:
+	And establishment Some Other Primary School (222222) exists with properties:
 		"""
 		{
-			"name": "Some Other Primary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "Tring",
@@ -1171,10 +972,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 			"laestab": "894/2201"
 		}
 		"""
-	And Establishment "333333" exists:
+	And establishment A Different Primary School Centre (333333) exists with properties:
 		"""
 		{
-			"name": "A Different Primary School Centre",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",
@@ -1183,10 +983,9 @@ Scenario: Autocomplete Should Populate Items When Two Or More Characters Entered
 			"laestab": "894/2202"
 		}
 		"""
-	And Establishment "444442" exists:
+	And establishment Some Secondary School (444442) exists with properties:
 		"""
 		{
-			"name": "Some Secondary School",
 			"address": {
 				"street": "13 The Road",
 				"town": "SomeTown",

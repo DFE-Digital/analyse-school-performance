@@ -23,18 +23,19 @@ public partial class MultiAcademyTrustStepDefinitions
         _outputHelper = outputHelper;
     }
     
-    [Given(@"no Multi Academy Trust exist")]
+    [Given(@"no multi-academy trusts exist")]
     public void GivenNoMultiAcademyTrustExists()
     {
     }
-    
-    [Given(@"Multi Academy Trust ""([^""]+)"" exists:")]
-    public async Task GivenMultiAcademyTrustExistsMultiline(string id, string data)
+
+    [Given(@"multi-academy trust ([^\(\)]+) \(([0-9]+)\) exists")]
+    public async Task GivenEstablishmentExists(string name, string uid)
     {
-        await SetUpMultiAcademyTrust(id, data).Switch(
+        await SetUpMultiAcademyTrust(uid, @$"{{""name"":""{name}""}}").Switch(
             _ => { },
             e => Assert.Fail(e.ToString()));
     }
+
     protected Task<Result<Done>> SetUpMultiAcademyTrust(string id, string data)
     {
         var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);

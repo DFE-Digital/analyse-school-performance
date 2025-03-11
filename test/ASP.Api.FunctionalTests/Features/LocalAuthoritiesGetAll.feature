@@ -19,12 +19,7 @@
 			| -1   |
 			
 	Scenario Outline: Should allow page = 1
-		Given Local Authority "123" exists:
-		"""
-		{
-			"name": "Some Local Authority"
-		}
-		"""
+		Given local authority Some Local Authority (123) exists
 		When I send a GET request to /api/local-authorities?page=1
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
@@ -55,12 +50,7 @@
 			| -1             |
 			
 	Scenario Outline: Should allow resultsPerPage = 1
-		Given Local Authority "123" exists:
-		"""
-		{
-			"name": "Some Local Authority"
-		}
-		"""
+		Given local authority Some Local Authority (123) exists
 		When I send a GET request to /api/local-authorities?resultsPerPage=1
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
@@ -78,18 +68,13 @@
 			}
 		"""
 	Scenario Outline: Should return NotFound (404) response if there were no Local Authorities
-		Given no Local Authorities exist
+		Given no local authorities exist
 		When I send a GET request to /api/local-authorities
 		Then I should get a 404 response
 		And the response should be the message "Not found: there were no Local Authorities." 
 		
 	Scenario Outline: Should return 200 response when Local Authorities exist
-		Given Local Authority "123" exists:
-		"""
-		{
-			"name": "Some Local Authority"
-		}
-		"""
+		Given local authority Some Local Authority (123) exists
 		When I send a GET request to /api/local-authorities
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
@@ -108,24 +93,9 @@
 		"""  
 		
 	Scenario Outline: Should order by name
-		Given Local Authority "100" exists:
-		"""
-			{
-			"name": "Test LA C"
-			}
-		"""
-		And Local Authority "101" exists:
-		"""
-			{
-			"name": "Test LA A"
-			}
-		"""
-		And Local Authority "102" exists:
-		"""
-			{
-			"name": "Test LA B"
-			}
-		"""
+		Given local authority Test LA C (100) exists
+		And local authority Test LA A (101) exists
+		And local authority Test LA B (102) exists
 		When I send a GET request to /api/local-authorities
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
@@ -152,24 +122,9 @@
 		"""  
 	
 	Scenario Outline: Should limit the results to results per page
-		Given Local Authority "111" exists:
-		"""
-			{
-			"name": "Local Authority 111"
-			}
-		"""
-		And Local Authority "222" exists:
-		"""
-			{
-			"name": "Local Authority 222"
-			}
-		"""
-		And Local Authority "333" exists:
-		"""
-			{
-			"name": "Local Authority 333"
-			}
-		"""
+		Given local authority Local Authority 111 (111) exists
+		And local authority Local Authority 222 (222) exists
+		And local authority Local Authority 333 (333) exists
 		When I send a GET request to /api/local-authorities?resultsPerPage=2
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
@@ -190,25 +145,11 @@
 				]
 			}
 		"""
+
 	Scenario: Pagination (TBC)
-		Given Local Authority "111" exists:
-		"""
-			{
-			"name": "Local Authority 111"
-			}
-		"""
-		And Local Authority "222" exists:
-		"""
-			{
-			"name": "Local Authority 222"
-			}
-		"""
-		And Local Authority "333" exists:
-		"""
-			{
-			"name": "Local Authority 333"
-			}
-		"""
+		Given local authority Local Authority 111 (111) exists
+		And local authority Local Authority 222 (222) exists
+		And local authority Local Authority 333 (333) exists
 		When I send a GET request to /api/local-authorities?resultsPerPage=2&page=2
 		Then I should get a 200 response
 		And the response should be an object containing these properties:
@@ -227,24 +168,9 @@
 		"""
 		
 	Scenario: If page number is too big returns an empty page of results
-		Given Local Authority "111" exists:
-		"""
-			{
-			"name": "Local Authority 111"
-			}
-		"""
-		And Local Authority "222" exists:
-		"""
-			{
-			"name": "Local Authority 222"
-			}
-		"""
-		And Local Authority "333" exists:
-		"""
-			{
-			"name": "Local Authority 333"
-			}
-		"""
+		Given local authority Local Authority 111 (111) exists
+		And local authority Local Authority 222 (222) exists
+		And local authority Local Authority 333 (333) exists
 		When I send a GET request to /api/local-authorities?resultsPerPage=2&page=3
 		Then I should get a 200 response
 		And the response should be an object containing these properties:

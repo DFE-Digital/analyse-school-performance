@@ -23,21 +23,21 @@ public partial class LocalAuthorityStepDefinitions
         _outputHelper = outputHelper;
     }
     
-    [Given(@"no Local Authorities exist")]
+    [Given(@"no local authorities exist")]
     public void GivenNoLocalAuthorityExists()
     {
 
     }
     
-    [Given(@"Local Authority ""([^""]+)"" exists:")]
-    public async Task GivenLocalAuthorityExistsMultiline(string id, string data)
+    [Given(@"local authority ([^\(\)]+) \(([0-9]+)\) exists")]
+    public async Task GivenLocalAuthorityExists(string name, string code)
     {
-        await SetUpLocalAuthority(id, data).Switch(
+        await SetUpLocalAuthority(code, @$"{{""name"":""{name}""}}").Switch(
             _ => { },
             e => Assert.Fail(e.ToString()));
     }
-    
-    [Given(@"([0-9]+) Local Authorities exist with properties:")]
+
+    [Given(@"([0-9]+) local authorities exist with properties:")]
     public async Task GivenLocalAuthorityExistsWithProperties(int noOfLocalAuthorities, Table properties)
     {
         for (var n = 1; n <= noOfLocalAuthorities; n++)
@@ -61,26 +61,26 @@ public partial class LocalAuthorityStepDefinitions
                 e => Assert.Fail(e.ToString()));
         }
     }
-    protected Task<Result<Done>> SetUpLocalAuthority(string id, string data)
+    protected Task<Result<Done>> SetUpLocalAuthority(string code, string data)
     {
         var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
 
-        return SetUpLocalAuthority(id, dataDict!);
+        return SetUpLocalAuthority(code, dataDict!);
     }
     
-    protected async Task<Result<Done>> SetUpLocalAuthority(string id, Dictionary<string, object> data)
+    protected async Task<Result<Done>> SetUpLocalAuthority(string code, Dictionary<string, object> data)
     {
-        var document = await _database.GetAsync<Dictionary<string, object>>("local-authorities", id, id)
+        var document = await _database.GetAsync<Dictionary<string, object>>("local-authorities", code, code)
             .GetValueOrDefault(new Dictionary<string, object>());
 
         foreach (var d in data)
         {
             document[d.Key] = d.Value;
         }
-        document["id"] = id;
-        document["code"] = id;
+        document["id"] = code;
+        document["code"] = code;
 
-        return await _database.UpsertAsync("local-authorities", id, id, document);
+        return await _database.UpsertAsync("local-authorities", code, code, document);
     }
     
 }
