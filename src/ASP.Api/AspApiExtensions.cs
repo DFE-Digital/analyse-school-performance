@@ -32,7 +32,7 @@ namespace ASP.Api
         {
             services.AddSingleton<IOpenApiConfigurationOptions>(_ =>
             {
-                return new OpenApiConfigurationOptions()
+                var options = new OpenApiConfigurationOptions()
                 {
                     Info = new OpenApiInfo()
                     {
@@ -50,6 +50,10 @@ namespace ASP.Api
                     ForceHttps = DefaultOpenApiConfigurationOptions.IsHttpsForced(),
                     ForceHttp = DefaultOpenApiConfigurationOptions.IsHttpForced(),
                 };
+                
+                options.DocumentFilters.Add(new SecurityDefinitionDocumentFilter());
+
+                return options;
             });
 
             return services;
