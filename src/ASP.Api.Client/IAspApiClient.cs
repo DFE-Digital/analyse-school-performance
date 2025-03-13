@@ -22,7 +22,7 @@ public interface IAspApiClient
     Task<Result<ResultsPage<SchoolListing>>> SchoolsGetAll(SchoolsGetAllRequest request);
     Task<Result<List<SchoolSuggestion>>> SchoolsGetSearchSuggestions(SchoolsGetSearchSuggestionsRequest request);
     Task<Result<SchoolsGetAccessResponse>> SchoolsGetAccess(SchoolsGetAccessRequest request);
-    Task<Result<SchoolsGetLinkedSchoolsResponse>> SchoolsGetLinkedSchools(SchoolsGetLinkedSchoolsRequest request);
+    Task<Result<List<SchoolLink>>> SchoolsGetLinkedSchools(SchoolsGetLinkedSchoolsRequest request);
 
     Task<Result<LookupValueWithCode>> LocalAuthoritiesGetSingle(LocalAuthoritiesGetSingleRequest request);
     Task<Result<ResultsPage<LookupValueWithCode>>> LocalAuthoritiesGetAll(LocalAuthoritiesGetAllRequest request);

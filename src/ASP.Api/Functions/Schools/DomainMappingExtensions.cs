@@ -54,14 +54,6 @@ public static class DomainMappingExtensions
             response.IsAccessibleViaLinkedSchools);
     }
 
-    public static Client.Schools.SchoolsGetLinkedSchoolsResponse ForApiClient(this Domain.Schools.UseCases.GetLinkedSchools.GetLinkedSchoolsResponse response)
-    {
-        return new Client.Schools.SchoolsGetLinkedSchoolsResponse() {
-            LinkedUrns = response.LinkedUrns.Select(urn => urn.Value).ToList(),
-            Links = response.Links.MapList(ForApiClient)
-        };
-    }
-
     public static Client.Schools.LinkedSchool ForApiClientAsLinkedSchool(this Domain.Schools.School school)
     {
         return new Client.Schools.LinkedSchool() {

@@ -86,7 +86,7 @@ public class AspApiClient : IAspApiClient
         var url = "/api/downloads";
         var queryString = QueryString
             .Create("scope", request.ScopeType.ToString())
-            .Add("scopeId", request.ScopeIdentifier);
+            .Add("scopeId", request.ScopeId);
 
         if (request.Year != null)
         {
@@ -101,7 +101,7 @@ public class AspApiClient : IAspApiClient
         var url = "/api/downloads/package";
         var queryString = QueryString
             .Create("scope", request.ScopeType.ToString())
-            .Add("scopeIdentifier", request.ScopeIdentifier.ToString())
+            .Add("scopeId", request.ScopeId.ToString())
             .Add("fileType", request.FileType.ToString());
 
         foreach (var id in request.DownloadIds)
@@ -181,12 +181,12 @@ public class AspApiClient : IAspApiClient
         return ApiGet<SchoolsGetAccessResponse>(url, queryString);
     }
 
-    public Task<Result<SchoolsGetLinkedSchoolsResponse>> SchoolsGetLinkedSchools(SchoolsGetLinkedSchoolsRequest request)
+    public Task<Result<List<SchoolLink>>> SchoolsGetLinkedSchools(SchoolsGetLinkedSchoolsRequest request)
     {
         var url = $"/api/schools/{Uri.EscapeDataString(request.Urn)}/linked-schools";
         var queryString = QueryString.Create("urn", request.Urn);
 
-        return ApiGet<SchoolsGetLinkedSchoolsResponse>(url, queryString);
+        return ApiGet<List<SchoolLink>>(url, queryString);
     }
 
     public Task<Result<LookupValueWithCode>> LocalAuthoritiesGetSingle(LA.LocalAuthoritiesGetSingleRequest request)

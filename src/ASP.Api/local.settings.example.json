@@ -1,0 +1,14 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "ASPNETCORE_ENVIRONMENT": "Local",
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "BlobStorage:InMemory": "false",
+        "BlobStorage:StorageAccountName": "s192d01strdev",
+        "BlobStorage:PrimaryKey": "<Replace with Blob Storage Primary Key for s192d01strdev>",
+        "DocumentDatabase:InMemory": "false",
+        "DocumentDatabase:EndpointUri": "https://s192d01-cdb-dev.documents.azure.com:443/",
+        "DocumentDatabase:PrimaryKey": "<Replace with Cosmos DB Primary Key for s192d01-cdb-dev>",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+    }
+}

@@ -44,7 +44,7 @@ namespace ASP.Api.Client.InProcess
                 .AddScoped<ApiResultConverter>();
         }
 
-        private static IServiceCollection ConfigureInProcessTransportLayer(this IServiceCollection services)
+        public static IServiceCollection ConfigureInProcessTransportLayer(this IServiceCollection services)
         {
             services.RemoveAll<ITransportLayer>();
             services.AddScoped<ITransportLayer, InProcessTransportLayer>();

@@ -20,20 +20,14 @@ namespace ASP.Domain.Schools.LinkedSchools
             : base(urn, laEstab, name, educationPhase, address, openDate, closeDate, localAuthority, multiAcademyTrust, diocese)
         {
             Links = links.AsReadOnly();
-            LinkedUrns = Links
-                .SelectMany(l => l.LinkedSchools)
-                .Select(l => l.Urn)
-                .Distinct()
-                .ToList()
-                .AsReadOnly();
         }
 
         public IReadOnlyCollection<LinkedSchoolsLink> Links { get; }
-        public IReadOnlyCollection<SchoolUrn> LinkedUrns { get; }
 
         public bool IsAccessibleInScope(Optional<SchoolAccessScope> scope) =>
             scope.Match(
-                matchedScope => matchedScope.ScopeType switch {
+                matchedScope => matchedScope.ScopeType switch
+                {
                     SchoolAccessScopeType.LA => LocalAuthority != null &&
                                                 LocalAuthority.Code == matchedScope.ScopeIdentifier,
 
@@ -42,10 +36,11 @@ namespace ASP.Domain.Schools.LinkedSchools
 
                     SchoolAccessScopeType.Diocese => Diocese != null &&
                                                      Diocese.Name == matchedScope.ScopeIdentifier,
-                
+
                     SchoolAccessScopeType.School => Urn.Value == matchedScope.ScopeIdentifier,
 
                     _ => false
                 },
                 () => true);
-    }}
+    }
+}

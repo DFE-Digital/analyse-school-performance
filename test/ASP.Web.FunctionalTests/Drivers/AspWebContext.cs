@@ -24,8 +24,8 @@ namespace ASP.Web.FunctionalTests.Drivers;
 // Context for tests to access the ASP web application running in a test host using ASP.NET Core WebApplicationFactory.
 // Overrides services wired up in Program.cs with test implementations such as in-memory data store and test cookie provider.
 // The in-memory data store is used to run the test suite locally, but can be configured to use an actual database by setting
-// the environment variable ASP_Test_Mode to Integration instead of Development (default). In this case database configuration
-// is set in appsettings.Test.local.json (or application settings on the build server)
+// DocumentDatabase:InMemory or BlobStorage:InMemory to false in appsettings.Test.json and configuring the appropriate connection strings
+// in appsettings.Test.local.json
 public class AspWebContext
 {
     // Building and launching the WebApplicationFactory and HttpClient are expensive so these are instantiated only once 
@@ -167,13 +167,6 @@ public class AspWebContext
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            // ASP_Test_Mode environment variable can be set to "Development" or "Integration"
-            // Development: uses in-memory database for speed
-            // Integration: uses a real database (can cause contention issues if multiple people
-            // are running this at once against the same database)
-            // TODO: look into containerisation as a possible solution, see Aasim's PR:
-            // https://agilefactory.visualstudio.com/SPT/_git/DfE.Data.PerformanceTables.Services/pullrequest/5046
-            var testMode = Environment.GetEnvironmentVariable("ASP_Test_Mode") ?? "Development";
             var path = Path.GetDirectoryName(GetType().Assembly.GetAssemblyLocation());
 
             builder.ConfigureServices((context, services) =>
@@ -215,13 +208,8 @@ public class AspWebContext
                 services.RemoveAll<ICookieProvider>();
                 services.Add(new ServiceDescriptor(typeof(ICookieProvider), _cookieProvider));
 
-                services.RemoveAll<IBlobStorage>();
-                services.TryAdd(new ServiceDescriptor(typeof(MemoryStore<string>), new MemoryStore<string>()));
-                services.AddSingleton<IBlobStorage, InMemoryBlobStorage>();
-
                 // Add service that provides Roles for use in authorization tests
                 services.Add(new ServiceDescriptor(typeof(TestClaimsProvider), _testClaimsProvider));
-
             });
         }
     }

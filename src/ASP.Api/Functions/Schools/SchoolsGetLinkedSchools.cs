@@ -37,7 +37,7 @@ public class SchoolsGetLinkedSchools : ApiFunction
         Description = "Retrieves linked schools for a specific school based on a given URN.")]
     [OpenApiParameter(name: "urn", In = ParameterLocation.Path, Required = true, 
         Description = "The URN of the school.")]
-    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(SchoolsGetLinkedSchoolsResponse), 
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<SchoolLink>), 
         Description = "Details of the linked schools for the specified URN.")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.BadRequest, 
         Description = "Bad request: Invalid URN parameter.")]
@@ -59,7 +59,7 @@ public class SchoolsGetLinkedSchools : ApiFunction
             from _ in request.ValidateHttpMethod([HttpMethods.Get])
             from urn in request.ValidatePathParameter("urn", p => p.IsRequired().IsDigits().HasLength(6))
             from response in _useCase.HandleRequest(new GetLinkedSchoolsRequest(urn))
-            select response.ForApiClient();
+            select response.MapList(link => link.ForApiClient());
 
         return await _resultConverter.ConvertToApiResultAsync(result, cancellationToken);
     }

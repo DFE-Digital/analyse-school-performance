@@ -1,8 +1,9 @@
 using ASP.Api.Client.InProcess;
 using ASP.Core.Time;
-using ASP.Infrastructure.DocumentDatabase;
+using ASP.Infrastructure.Azure.Blob;
+using ASP.Infrastructure.Azure.CosmosDb;
+using ASP.Infrastructure.Azure.TableStorage;
 using ASP.Infrastructure.Logging;
-using ASP.Infrastructure.TableStorage;
 using ASP.Web.Components;
 using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
@@ -38,8 +39,9 @@ public class Program
             .ConfigureAuthentication(builder.Configuration)
             .ConfigureAuthorization(builder.Configuration)
             .ConfigureErrorHandling(builder.Configuration, out var errorHandlingConfig)
-            .ConfigureTableStorage(builder.Configuration)
+            .ConfigureBlobStorage(builder.Configuration)
             .ConfigureDocumentDatabase(builder.Configuration)
+            .ConfigureTableStorage(builder.Configuration)
             .ConfigureApiClient(builder.Configuration)
             .ConfigureContentTemplates()
             .ConfigureContentSecurityPolicy()

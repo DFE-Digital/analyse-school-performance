@@ -63,6 +63,7 @@ livingdoc feature-folder test/ASP.Web.FunctionalTests
 ```
 Documentation for this is [here](https://docs.specflow.org/projects/specflow-livingdoc/en/latest/LivingDocGenerator/CLI/livingdoc-feature-folder.html)
 
+# TODO: correct this documentation
 ## Functional test modes
 Functional test projects can be switched between Development mode and Integration Test mode.
 

@@ -1,29 +1,33 @@
 ﻿{
   "IsEncrypted": false,
-  "Values": {
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "AzureWebJobsStorage": "UseDevelopmentStorage=false",
-    "AllowedHosts": "*",
-    "DocumentDatabase:InMemory": "false",
-    "DocumentDatabase:EndpointUri": "https://s192d01-cdb-dev.documents.azure.com:443/",
-    "DocumentDatabase:DatabaseId": "asp",
-    "DocumentDatabase:PrimaryKey": "<Replace with your Cosmos DB Primary Key>",
-    "DocumentDatabase:Containers:0:content:ContainerName": "content",
-    "DocumentDatabase:Containers:0:content:PartitionKey": "/contentId",
-    "DocumentDatabase:Containers:0:establishments:ContainerName": "establishments",
-    "DocumentDatabase:Containers:0:establishments:PartitionKey": "/urn",
-    "DocumentDatabase:Containers:0:local-authorities:ContainerName": "local-authorities",
-    "DocumentDatabase:Containers:0:local-authorities:PartitionKey": "/code",
-    "DocumentDatabase:Containers:0:multi-academy-trusts:ContainerName": "multi-academy-trusts",
-    "DocumentDatabase:Containers:0:multi-academy-trusts:PartitionKey": "/id",
-    "DocumentDatabase:ManagedIdentityClientId": "83a9dfa9-1d3a-42fd-86aa-9264ddf79ed0",
-    "ErrorHandling:ShowStackTrace": "true",
-    "BlobStorage:InMemory": "false",
-    "BlobStorage:PrimaryKey": "<Replace with your Blob Storage Primary Key>",
-    "BlobStorage:ManagedIdentityClientId": "83a9dfa9-1d3a-42fd-86aa-9264ddf79ed0",
-    "DataDownloads:DownloadsConfigContainerName": "config",
-    "DataDownloads:DownloadsConfigFileName": "downloads-config.json",
-    "DataDownloads:SourceContainerNames:ASP": "downloads-asp",
-    "DataDownloads:SourceContainerNames:KTS": "downloads-kts"
-  }
+    "Values": {
+        "AllowedHosts": "*",
+        "ASPNETCORE_ENVIRONMENT": null, // local.settings.json, s192d01-group, s192t01-group
+        "AzureKeyVault:KeyVaultName": null, // s192d01-group, s192t01-group
+        "AzureWebJobsStorage": null, // local.settings.json, s192d01-group, s192t01-group
+        "AzureWebJobsStorage__accountName": null, // s192d01-group, s192t01-group
+        "BlobStorage:InMemory": "false", // local.settings.json
+        "BlobStorage:StorageAccountName": null, // local.settings.json, s192d01-group, s192t01-group
+        "BlobStorage:PrimaryKey": null, // local.settings.json
+        "BlobStorage:ManagedIdentityClientId": null, // s192d01-group, s192t01-group
+        "DataDownloads:DownloadsConfigContainerName": "config",
+        "DataDownloads:DownloadsConfigFileName": "downloads-config.json",
+        "DataDownloads:SourceContainerNames:ASP": "downloads-asp",
+        "DataDownloads:SourceContainerNames:KTS": "downloads-kts",
+        "DocumentDatabase:InMemory": "false", // local.settings.json
+        "DocumentDatabase:EndpointUri": null, // local.settings.json, s192d01-group, s192t01-group
+        "DocumentDatabase:PrimaryKey": null, // local.settings.json
+        "DocumentDatabase:ManagedIdentityClientId": null, // s192d01-group, s192t01-group
+        "DocumentDatabase:DatabaseId": "asp",
+        "DocumentDatabase:Containers:0:content:ContainerName": "content",
+        "DocumentDatabase:Containers:0:content:PartitionKey": "/contentId",
+        "DocumentDatabase:Containers:0:establishments:ContainerName": "establishments",
+        "DocumentDatabase:Containers:0:establishments:PartitionKey": "/urn",
+        "DocumentDatabase:Containers:0:local-authorities:ContainerName": "local-authorities",
+        "DocumentDatabase:Containers:0:local-authorities:PartitionKey": "/code",
+        "DocumentDatabase:Containers:0:multi-academy-trusts:ContainerName": "multi-academy-trusts",
+        "DocumentDatabase:Containers:0:multi-academy-trusts:PartitionKey": "/id",
+        "ErrorHandling:ShowStackTrace": "true", // s192d01-group, s192t01-group
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+    }
 }

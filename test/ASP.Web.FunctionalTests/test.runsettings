@@ -1,9 +1,5 @@
 ﻿<!-- File name extension must be .runsettings -->
 <RunSettings>
   <RunConfiguration>
-      <EnvironmentVariables>
-          <!-- List of environment variables we want to set-->
-          <ASP_Test_Mode>Development</ASP_Test_Mode>
-      </EnvironmentVariables>
   </RunConfiguration>
 </RunSettings>

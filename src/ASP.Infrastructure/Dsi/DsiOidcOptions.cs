@@ -4,6 +4,7 @@
     {
         public const string SectionName = "DsiOidc";
 
+        public bool Enabled { get; set; } = true;
         public double SessionTimeout { get; set; } = 20.0;
         public string Audience { get; set; } = "";
         public string Issuer { get; set; } = "";

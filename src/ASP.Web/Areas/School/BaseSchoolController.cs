@@ -43,8 +43,8 @@ namespace ASP.Web.Areas.School
         protected virtual Task<Result<LinkedSchoolsViewModel>> GetLinkedSchools(string urn, Func<string, string?> createSchoolUrl)
         {
             return (
-                from linkedEstablishment in _api.SchoolsGetLinkedSchools(new SchoolsGetLinkedSchoolsRequest(urn))
-                select new LinkedSchoolsViewModel(urn, linkedEstablishment.Links, createSchoolUrl)
+                from linkedSchools in _api.SchoolsGetLinkedSchools(new SchoolsGetLinkedSchoolsRequest(urn))
+                select new LinkedSchoolsViewModel(urn, linkedSchools, createSchoolUrl)
             );
         }
 

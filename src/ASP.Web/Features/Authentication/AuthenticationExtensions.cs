@@ -18,162 +18,147 @@ public static class AuthenticationExtensions
         services
             .ConfigureOptions<DsiOidcOptions>(configuration, out var config);
 
-        var overallSessionTimeout = TimeSpan.FromMinutes(config.SessionTimeout);
-
         services
             .Configure<MvcOptions>(options =>
             {
                 options.Filters.Add(typeof(UserDetailsActionFilter));
-            })
-            .AddAuthentication(options =>
-            {
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options =>
-            {
-                //If a cookie name is not provided it will default to .ASPNetCore.Cookies
-                options.Cookie.Name = DsiConstants.DsiCookieName;
+            });
 
-                //If 'SlidingExpiration' is set to true then a new cookie is issue if a request is received (user activity on the service) more than halfway
-                //through the 'overallSessionTimeout' value.
-                //This is to improve the user experience by preventing users having to sign in everytime the 'overallSessionTimeout'
-                //is reached
-                options.SlidingExpiration = true;
+        if (config.Enabled)
+        {
+            var overallSessionTimeout = TimeSpan.FromMinutes(config.SessionTimeout);
 
-                //This is the high level Access not allowed check
-                //If you try to access a controller action that's protected with a Policy that you do not
-                //have access rights to then you will be redirected to the 'accessdenied' page
-                options.AccessDeniedPath = new PathString(DsiConstants.AccessDeniedRoute);
-            })
-            //Various settings used to authenticate using OAuth 2.0 and OpenId connect.
-            .AddOpenIdConnect(options =>
-            {
-                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.MetadataAddress = config.MetadataAddress;
-                options.ClientId = config.ClientId;
-                options.ClientSecret = config.ClientSecret;
-                options.ResponseType = OpenIdConnectResponseType.Code;
-                options.RequireHttpsMetadata = true;
-                options.GetClaimsFromUserInfoEndpoint = true;
-                // Make sure DSI cookies adhere to the Content-security policy (fixed browser errorrs)
-                options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Scope.Clear();
-                options.Scope.Add(DsiConstants.DsiScopeOpenId);
-                options.Scope.Add(DsiConstants.DsiScopeEmail);
-                options.Scope.Add(DsiConstants.DsiScopeProfile);
-                options.Scope.Add(DsiConstants.DsiScopeOrganisation);
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                })
+                .AddCookie(options =>
+                {
+                    //If a cookie name is not provided it will default to .ASPNetCore.Cookies
+                    options.Cookie.Name = DsiConstants.DsiCookieName;
 
-                //Save the authentication information in the cookie.
-                //This information is known as the authentication ticket
-                options.SaveTokens = true;
+                    //If 'SlidingExpiration' is set to true then a new cookie is issue if a request is received (user activity on the service) more than halfway
+                    //through the 'overallSessionTimeout' value.
+                    //This is to improve the user experience by preventing users having to sign in everytime the 'overallSessionTimeout'
+                    //is reached
+                    options.SlidingExpiration = true;
 
-                //Does not change the id tokens exp claim value
-                options.MaxAge = overallSessionTimeout;
+                    //This is the high level Access not allowed check
+                    //If you try to access a controller action that's protected with a Policy that you do not
+                    //have access rights to then you will be redirected to the 'accessdenied' page
+                    options.AccessDeniedPath = new PathString(DsiConstants.AccessDeniedRoute);
+                })
+                //Various settings used to authenticate using OAuth 2.0 and OpenId connect.
+                .AddOpenIdConnect(options =>
+                {
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.MetadataAddress = config.MetadataAddress;
+                    options.ClientId = config.ClientId;
+                    options.ClientSecret = config.ClientSecret;
+                    options.ResponseType = OpenIdConnectResponseType.Code;
+                    options.RequireHttpsMetadata = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    // Make sure DSI cookies adhere to the Content-security policy (fixed browser errorrs)
+                    options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Scope.Clear();
+                    options.Scope.Add(DsiConstants.DsiScopeOpenId);
+                    options.Scope.Add(DsiConstants.DsiScopeEmail);
+                    options.Scope.Add(DsiConstants.DsiScopeProfile);
+                    options.Scope.Add(DsiConstants.DsiScopeOrganisation);
 
-                //This 'CallbackPath' does not require a controller route. 
-                //Requests to this path are handled automatically by the OIDC middleware.
-                //The path value does need to match the one that's requested in the 'Redirect URL' section of the
-                //DSI Service Configuration for the ASP2
-                options.CallbackPath = config.CallbackPath;
+                    //Save the authentication information in the cookie.
+                    //This information is known as the authentication ticket
+                    options.SaveTokens = true;
 
-                //This 'SignedOutCallbackPath' does not require a controller route. 
-                //Requests to this path are handler automatically by the OIDC middleware.
-                //The path value does need to match the one that's requested in the 'Logout redirect URL' section of the
-                //DSI Service Configuration for the ASP2
-                options.SignedOutCallbackPath = config.SignedOutCallbackPath;
+                    //Does not change the id tokens exp claim value
+                    options.MaxAge = overallSessionTimeout;
 
-                //The URI users are redirected to once they sign out
-                options.SignedOutRedirectUri = config.SignedOutRedirectUri;
+                    //This 'CallbackPath' does not require a controller route. 
+                    //Requests to this path are handled automatically by the OIDC middleware.
+                    //The path value does need to match the one that's requested in the 'Redirect URL' section of the
+                    //DSI Service Configuration for the ASP2
+                    options.CallbackPath = config.CallbackPath;
 
-                //Taken from GIAP and left unchanged.
-                //Probably worth investigating what properties of the id_token we should/need to be validating.
-                //'ProtocolValidator' states that the id_token should match the specification
-                //defined at 'https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation'
-                options.ProtocolValidator = new OpenIdConnectProtocolValidator {
-                    RequireSub = true,
-                    RequireStateValidation = false,
-                    NonceLifetime = TimeSpan.FromMinutes(60)           
-                };
+                    //This 'SignedOutCallbackPath' does not require a controller route. 
+                    //Requests to this path are handler automatically by the OIDC middleware.
+                    //The path value does need to match the one that's requested in the 'Logout redirect URL' section of the
+                    //DSI Service Configuration for the ASP2
+                    options.SignedOutCallbackPath = config.SignedOutCallbackPath;
 
-                options.Events = new OpenIdConnectEvents {
+                    //The URI users are redirected to once they sign out
+                    options.SignedOutRedirectUri = config.SignedOutRedirectUri;
 
-                    //capture the user's path when the authentication process starts.
-                    //This path is used to return the user their location before the authentication process started
-                    OnRedirectToIdentityProvider = context =>
-                    {
-                        context.ProtocolMessage.State = context.HttpContext.Request.Path.Value?.ToString();
+                    //Taken from GIAP and left unchanged.
+                    //Probably worth investigating what properties of the id_token we should/need to be validating.
+                    //'ProtocolValidator' states that the id_token should match the specification
+                    //defined at 'https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation'
+                    options.ProtocolValidator = new OpenIdConnectProtocolValidator {
+                        RequireSub = true,
+                        RequireStateValidation = false,
+                        NonceLifetime = TimeSpan.FromMinutes(60)
+                    };
 
-                        return Task.CompletedTask;
-                    },
+                    options.Events = new OpenIdConnectEvents {
 
-                    OnMessageReceived = context =>
-                    {
-                        var isSpuriousAuthCbRequest =
-                            context.Request.Path == options.CallbackPath &&
-                            context.Request.Method == "GET" &&
-                            !context.Request.Query.ContainsKey("code");
+                        //capture the user's path when the authentication process starts.
+                        //This path is used to return the user their location before the authentication process started
+                        OnRedirectToIdentityProvider = context =>
+                        {
+                            context.ProtocolMessage.State = context.HttpContext.Request.Path.Value?.ToString();
 
-                        if (isSpuriousAuthCbRequest)
+                            return Task.CompletedTask;
+                        },
+
+                        OnMessageReceived = context =>
+                        {
+                            var isSpuriousAuthCbRequest =
+                                context.Request.Path == options.CallbackPath &&
+                                context.Request.Method == "GET" &&
+                                !context.Request.Query.ContainsKey("code");
+
+                            if (isSpuriousAuthCbRequest)
+                            {
+                                context.HandleResponse();
+                                context.Response.Redirect(DsiConstants.AccessDeniedRoute);
+                            }
+
+                            return Task.CompletedTask;
+                        },
+
+                        //Should ideally redirect to an exception page
+                        //Not implemented yet
+                        OnRemoteFailure = context =>
                         {
                             context.HandleResponse();
-                            context.Response.Redirect(DsiConstants.AccessDeniedRoute);
-                        }
+                            return Task.FromException(context.Failure!);
+                        },
 
-                        return Task.CompletedTask;
-                    },
-
-                    //Should ideally redirect to an exception page
-                    //Not implemented yet
-                    OnRemoteFailure = context =>
-                    {
-                        context.HandleResponse();
-                        return Task.FromException(context.Failure!);
-                    },
-
-                    //Once the id_token is validated in the above steps..
-                    //A claims Principle is created using the information about the user that's contained in the id_token
-                    //such as user organisation, userid.
-                    //The user organisation and userid is then used to make a call to the DSI public API
-                    //This API call will return Role information for the user.
-                    //This Role information is then used to create a set of Claims that the service can perform checks against.
-                    OnTokenValidated = async context =>
-                    {
-                        if (context.Principal?.Identity?.IsAuthenticated == true)
+                        //Once the id_token is validated in the above steps..
+                        //A claims Principle is created using the information about the user that's contained in the id_token
+                        //such as user organisation, userid.
+                        //The user organisation and userid is then used to make a call to the DSI public API
+                        //This API call will return Role information for the user.
+                        //This Role information is then used to create a set of Claims that the service can perform checks against.
+                        OnTokenValidated = async context =>
                         {
-                            //These two properties refer to cookie behaviour.
-                            //If 'IsPersistent = true' and an 'ExpiresUtc' is set then the cookie will be removed from the
-                            //browser once 'ExpiresUtc' is reached
-                            context.Properties = new() {
-                                IsPersistent = true,
-                                ExpiresUtc = DateTime.UtcNow.Add(overallSessionTimeout)
-                            };
-
-                            var principal = context.Principal;
-
-                            var organisation = principal.GetOrganisation();
-                            if (organisation == null)
+                            if (context.Principal?.Identity?.IsAuthenticated == true)
                             {
-                                // Just return here, we don't want to throw an exception if the user doesn't have an organisation
-                                // as they won't then be able to sign out and select a different user (at least on Dev as it will show
-                                // the Developer Exception page which doesn't have a sign out link)
-                                return;
-                            }
-                            else
-                            {
-                                var authenticatedUserInfo = new AuthenticatedUserInfo() {
-                                    UserId = principal.GetUserId()
+                                //These two properties refer to cookie behaviour.
+                                //If 'IsPersistent = true' and an 'ExpiresUtc' is set then the cookie will be removed from the
+                                //browser once 'ExpiresUtc' is reached
+                                context.Properties = new() {
+                                    IsPersistent = true,
+                                    ExpiresUtc = DateTime.UtcNow.Add(overallSessionTimeout)
                                 };
 
-                                var dsiPublicApiClient = context.HttpContext.RequestServices.GetService<IDsiApiClient>();
+                                var principal = context.Principal;
 
-                                //userAccess contains the Role information needed to construct a set of Claims for use in the service
-                                var userAccessResult = await dsiPublicApiClient!.GetUserAccess(config.ServiceId, organisation.Id, authenticatedUserInfo.UserId);
-
-                                var userAccess = userAccessResult.GetValueOrDefault(new UserAccess());
-                                if (!userAccess.Roles.Any())
+                                var organisation = principal.GetOrganisation();
+                                if (organisation == null)
                                 {
                                     // Just return here, we don't want to throw an exception if the user doesn't have an organisation
                                     // as they won't then be able to sign out and select a different user (at least on Dev as it will show
@@ -182,60 +167,80 @@ public static class AuthenticationExtensions
                                 }
                                 else
                                 {
-                                    //A Role is Claim with Type Role
-                                    //A user may have more than one Role
-                                    //Individual Claims would need to be added for each one.
-                                    var claims = new List<Claim> {
-                                        new Claim(ClaimTypes.Role, userAccess.Roles.First().Code)
+                                    var authenticatedUserInfo = new AuthenticatedUserInfo() {
+                                        UserId = principal.GetUserId()
                                     };
 
-                                    //Create a claim for the user's return url
-                                    if (!string.IsNullOrEmpty(context.ProtocolMessage.GetParameter("state")))
-                                    {
-                                        claims.Add(new Claim(CustomClaimTypes.ReturnUrl, context.ProtocolMessage.GetParameter("state")));
-                                    }                                    
+                                    var dsiPublicApiClient = context.HttpContext.RequestServices.GetService<IDsiApiClient>();
 
-                                    //Add user name claims
-                                    claims.AddRange(principal.FindAll(c => c.Type == ClaimTypes.GivenName || c.Type == ClaimTypes.Surname));
+                                    //userAccess contains the Role information needed to construct a set of Claims for use in the service
+                                    var userAccessResult = await dsiPublicApiClient!.GetUserAccess(config.ServiceId, organisation.Id, authenticatedUserInfo.UserId);
 
-                                    if (!string.IsNullOrEmpty(organisation.UniqueReferenceNumber))
+                                    var userAccess = userAccessResult.GetValueOrDefault(new UserAccess());
+                                    if (!userAccess.Roles.Any())
                                     {
-                                        claims.Add(new Claim(CustomClaimTypes.UniqueReferenceNumber, organisation.UniqueReferenceNumber));
+                                        // Just return here, we don't want to throw an exception if the user doesn't have an organisation
+                                        // as they won't then be able to sign out and select a different user (at least on Dev as it will show
+                                        // the Developer Exception page which doesn't have a sign out link)
+                                        return;
                                     }
-
-                                    if (!string.IsNullOrEmpty(organisation.EstablishmentNumber))
+                                    else
                                     {
-                                        claims.Add(new Claim(CustomClaimTypes.EstablishmentNumber, organisation.EstablishmentNumber));
-                                    }
-                                    
-                                    // Add Organisation Name
-                                    if (!string.IsNullOrEmpty(organisation.Name))
-                                    {
-                                        claims.Add(new Claim(CustomClaimTypes.OrganisationName, organisation.Name));
-                                    }
+                                        //A Role is Claim with Type Role
+                                        //A user may have more than one Role
+                                        //Individual Claims would need to be added for each one.
+                                        var claims = new List<Claim> {
+                                        new Claim(ClaimTypes.Role, userAccess.Roles.First().Code)
+                                        };
 
-                                    if (!string.IsNullOrEmpty(organisation.UniqueIdentifier))
-                                    {
-                                        claims.Add(new Claim(CustomClaimTypes.UniqueIdentifier, organisation.UniqueIdentifier));
-                                    }
+                                        //Create a claim for the user's return url
+                                        if (!string.IsNullOrEmpty(context.ProtocolMessage.GetParameter("state")))
+                                        {
+                                            claims.Add(new Claim(CustomClaimTypes.ReturnUrl, context.ProtocolMessage.GetParameter("state")));
+                                        }
 
-                                    //Create a new ClaimsPrincipal containing the Claims of the logged in user taken from the API
-                                    //This overrides the Principal that is created from the id_token that's sent as part of the authentication process.
-                                    //The original Claim information in that Principal may need to be retained.
-                                    context.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, DsiConstants.AuthenticationMethod));
+                                        //Add user name claims
+                                        claims.AddRange(principal.FindAll(c => c.Type == ClaimTypes.GivenName || c.Type == ClaimTypes.Surname));
+
+                                        if (!string.IsNullOrEmpty(organisation.UniqueReferenceNumber))
+                                        {
+                                            claims.Add(new Claim(CustomClaimTypes.UniqueReferenceNumber, organisation.UniqueReferenceNumber));
+                                        }
+
+                                        if (!string.IsNullOrEmpty(organisation.EstablishmentNumber))
+                                        {
+                                            claims.Add(new Claim(CustomClaimTypes.EstablishmentNumber, organisation.EstablishmentNumber));
+                                        }
+
+                                        // Add Organisation Name
+                                        if (!string.IsNullOrEmpty(organisation.Name))
+                                        {
+                                            claims.Add(new Claim(CustomClaimTypes.OrganisationName, organisation.Name));
+                                        }
+
+                                        if (!string.IsNullOrEmpty(organisation.UniqueIdentifier))
+                                        {
+                                            claims.Add(new Claim(CustomClaimTypes.UniqueIdentifier, organisation.UniqueIdentifier));
+                                        }
+
+                                        //Create a new ClaimsPrincipal containing the Claims of the logged in user taken from the API
+                                        //This overrides the Principal that is created from the id_token that's sent as part of the authentication process.
+                                        //The original Claim information in that Principal may need to be retained.
+                                        context.Principal = new ClaimsPrincipal(new ClaimsIdentity(claims, DsiConstants.AuthenticationMethod));
+                                    }
                                 }
                             }
-                        }
-                    },
-                    //Set the ReturnUri to the url of the user when the authentication process started
-                    OnTicketReceived = context =>
-                    {
-                        var returnUrl = context.Principal?.FindFirst(CustomClaimTypes.ReturnUrl)?.Value;
-                        context.ReturnUri = returnUrl;
-                        return Task.CompletedTask;
-                    },
-                };
-            });
+                        },
+                        //Set the ReturnUri to the url of the user when the authentication process started
+                        OnTicketReceived = context =>
+                        {
+                            var returnUrl = context.Principal?.FindFirst(CustomClaimTypes.ReturnUrl)?.Value;
+                            context.ReturnUri = returnUrl;
+                            return Task.CompletedTask;
+                        },
+                    };
+                });
+        }
 
         return services;
     }

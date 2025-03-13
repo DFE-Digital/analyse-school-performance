@@ -34,10 +34,7 @@
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
-    {
-      "LinkedUrns": [],
-      "Links": []
-    }
+    []
     """
 
   Scenario: Should return no link if linked Establishment does not exist
@@ -55,10 +52,7 @@
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
-    {
-      "LinkedUrns": [],
-      "Links": []
-    }
+    []
     """
 
   Scenario: Should return no link if linked Establishment is deleted
@@ -77,10 +71,7 @@
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
-    {
-      "LinkedUrns": [],
-      "Links": []
-    }
+    []
     """
 
   Scenario: Should return no link if linked Establishment is not visible
@@ -99,10 +90,7 @@
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
-    {
-      "LinkedUrns": [],
-      "Links": []
-    }
+    []
     """
 
   Scenario: Should provide default description if linkType is missing
@@ -126,33 +114,30 @@
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
-    {
-      "LinkedUrns": ["100002", "100003"],
-      "Links": [
-        {
-          "Date": null,
-          "LinkType": null,
-          "Establishments": [
-            {
-              "Urn": "100002",
-              "Name": "Test School 2"
-            }
-          ],
-          "Description": "Test School 1 was linked to [Test School 2](100002)."
-        },
-        {
-          "Date": "2020-03-01",
-          "LinkType": null,
-          "Establishments": [
-            {
-              "Urn": "100003",
-              "Name": "Test School 3"
-            }
-          ],
-          "Description": "Test School 1 was linked to [Test School 3](100003) on 1 March 2020."
-        }
-      ]
-    }
+    [
+      {
+        "Date": null,
+        "LinkType": null,
+        "Establishments": [
+          {
+            "Urn": "100002",
+            "Name": "Test School 2"
+          }
+        ],
+        "Description": "Test School 1 was linked to [Test School 2](100002)."
+      },
+      {
+        "Date": "2020-03-01",
+        "LinkType": null,
+        "Establishments": [
+          {
+            "Urn": "100003",
+            "Name": "Test School 3"
+          }
+        ],
+        "Description": "Test School 1 was linked to [Test School 3](100003) on 1 March 2020."
+      }
+    ]
     """
 
   Scenario: Descriptions for link to single establishment
@@ -176,25 +161,22 @@
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
-    {
-      "LinkedUrns": ["100002"],
-      "Links": [
-        {
-          "Date": <EstablishedDate>,
-          "LinkType": {
-            "Code": "<Code>",
-            "Name": "<Name>"
-          },
-          "Establishments": [
-            {
-              "Urn": "100002",
-              "Name": "Test School 2"
-            }
-          ],
-          "Description": "<Description>"
-        }
-      ]
-    }
+    [
+      {
+        "Date": <EstablishedDate>,
+        "LinkType": {
+          "Code": "<Code>",
+          "Name": "<Name>"
+        },
+        "Establishments": [
+          {
+            "Urn": "100002",
+            "Name": "Test School 2"
+          }
+        ],
+        "Description": "<Description>"
+      }
+    ]
     """
 
   Examples:
@@ -267,33 +249,30 @@
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
-    {
-      "LinkedUrns": ["100002", "100003", "100004"],
-      "Links": [
-        {
-          "Date": <EstablishedDate>,
-          "LinkType": {
-            "Code": "<Code>",
-            "Name": "<Name>"
+    [
+      {
+        "Date": <EstablishedDate>,
+        "LinkType": {
+          "Code": "<Code>",
+          "Name": "<Name>"
+        },
+        "Establishments": [
+          {
+            "Urn": "100002",
+            "Name": "Test School 2"
           },
-          "Establishments": [
-            {
-              "Urn": "100002",
-              "Name": "Test School 2"
-            },
-            {
-              "Urn": "100003",
-              "Name": "Test School 3"
-            },
-            {
-              "Urn": "100004",
-              "Name": "Test School 4"
-            }
-          ],
-          "Description": "<Description>"
-        }
-      ]
-    }
+          {
+            "Urn": "100003",
+            "Name": "Test School 3"
+          },
+          {
+            "Urn": "100004",
+            "Name": "Test School 4"
+          }
+        ],
+        "Description": "<Description>"
+      }
+    ]
     """
 
   Examples:
@@ -358,29 +337,26 @@
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
-    {
-      "LinkedUrns": ["100002", "100003"],
-      "Links": [
-        {
-          "Date": <SplitDate>,
-          "LinkType": {
-            "Code": "2F",
-            "Name": "Successor - Split School"
+    [
+      {
+        "Date": <SplitDate>,
+        "LinkType": {
+          "Code": "2F",
+          "Name": "Successor - Split School"
+        },
+        "Establishments": [
+          {
+            "Urn": "100002",
+            "Name": "Test School 2"
           },
-          "Establishments": [
-            {
-              "Urn": "100002",
-              "Name": "Test School 2"
-            },
-            {
-              "Urn": "100003",
-              "Name": "Test School 3"
-            }
-          ],
-          "Description": "<Description>"
-        }
-      ]
-    }
+          {
+            "Urn": "100003",
+            "Name": "Test School 3"
+          }
+        ],
+        "Description": "<Description>"
+      }
+    ]
     """
     Examples:
       | OldSchoolCloseDate | SplitDate    | Description                                                                                              |
@@ -421,29 +397,26 @@
     Then I should get a 200 response 
     And the response should be an object containing these properties:
     """
-    {
-      "LinkedUrns": ["100002", "100003"],
-      "Links": [
-        {
-          "Date": <AmalgamateDate>,
-          "LinkType": {
-            "Code": "6.1",
-            "Name": "Predecessor - amalgamated"
+    [
+      {
+        "Date": <AmalgamateDate>,
+        "LinkType": {
+          "Code": "6.1",
+          "Name": "Predecessor - amalgamated"
+        },
+        "Establishments": [
+          {
+            "Urn": "100002",
+            "Name": "Test School 2"
           },
-          "Establishments": [
-            {
-              "Urn": "100002",
-              "Name": "Test School 2"
-            },
-            {
-              "Urn": "100003",
-              "Name": "Test School 3"
-            }
-          ],
-          "Description": "<Description>"
-        }
-      ]
-    }
+          {
+            "Urn": "100003",
+            "Name": "Test School 3"
+          }
+        ],
+        "Description": "<Description>"
+      }
+    ]
     """
     Examples:
       | NewSchoolOpenDate | AmalgamateDate | Description                                                                                                               |

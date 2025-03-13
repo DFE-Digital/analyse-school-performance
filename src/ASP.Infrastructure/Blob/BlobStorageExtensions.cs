@@ -15,7 +15,7 @@ namespace ASP.Infrastructure.Blob
             services.ConfigureOptions<BlobStorageOptions>(configuration);
 
             services.TryAdd(new ServiceDescriptor(typeof(MemoryStore<string>), _store));
-            services.TryAddScoped<IBlobStorage, InMemoryBlobStorage>();
+            services.TryAddSingleton<IBlobStorage, InMemoryBlobStorage>();
 
             return services;
         }

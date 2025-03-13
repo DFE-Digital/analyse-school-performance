@@ -1,4 +1,5 @@
 ﻿using ASP.Core.Results;
+using ASP.Domain.Schools.LinkedSchools;
 
 namespace ASP.Domain.Schools.UseCases.GetLinkedSchools;
 
@@ -11,13 +12,11 @@ public class GetLinkedSchoolsUseCase : IGetLinkedSchoolsUseCase
         _repository = schoolRepository;
     }
 
-    public Task<Result<GetLinkedSchoolsResponse>> HandleRequest(GetLinkedSchoolsRequest request)
+    public Task<Result<List<LinkedSchoolsLink>>> HandleRequest(GetLinkedSchoolsRequest request)
     {
         return
             from urn in SchoolUrn.Parse(request.Urn)
             from school in _repository.GetWithLinkedSchools(urn)
-            select new GetLinkedSchoolsResponse(
-                school.LinkedUrns,
-                school.Links);
+            select school.Links.ToList();
     }
 }

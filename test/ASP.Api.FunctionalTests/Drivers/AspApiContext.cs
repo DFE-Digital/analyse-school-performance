@@ -13,7 +13,7 @@ namespace ASP.Api.FunctionalTests.Drivers
     public class AspApiContext
     {
         private static readonly IHost _host;
-        private static readonly ASP.Api.Client.ITransportLayer _transport;
+        private static readonly Client.ITransportLayer _transport;
 
         private readonly ISpecFlowOutputHelper _outputHelper;
         private HttpRequestMessage? _lastRequest = null;
@@ -98,7 +98,6 @@ namespace ASP.Api.FunctionalTests.Drivers
 
         private static void Configure(IHostBuilder builder)
         {
-            var testMode = Environment.GetEnvironmentVariable("ASP_Test_Mode") ?? "Development";
             var path = Path.GetDirectoryName(typeof(AspApiContext).Assembly.GetAssemblyLocation());
 
             builder.ConfigureAppConfiguration(configure =>
@@ -110,7 +109,7 @@ namespace ASP.Api.FunctionalTests.Drivers
                     .AddJsonFile("local.settings.test.json", true);
             });
 
-            builder.ConfigureServices((context, services) => services.ConfigureApiClient(context.Configuration));
+            builder.ConfigureServices((context, services) => services.ConfigureInProcessTransportLayer());
         }
     }
 }

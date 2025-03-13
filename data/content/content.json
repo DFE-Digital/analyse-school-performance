@@ -2692,48 +2692,6 @@
     ]
   },
   {
-    "id": "school-landing-page-downloads",
-    "contentId": "school-landing-page",
-    "isPublished": false,
-    "PageTitle": "My school",
-    "PageContent": null,
-    "Views": [
-      {
-        "ViewId": "Card",
-        "ViewContent": {
-          "Id": "app-card-downloads",
-          "Title": "Downloads",
-          "LinkUrl": "download",
-          "Text": "Some text about downloads."
-        },
-        "ViewModel": {},
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Card",
-        "ViewContent": {
-          "Id": "app-card-other-reports",
-          "Title": "Other reports",
-          "LinkUrl": "other-reports",
-          "Text": "View reports on school performance, Ofsted inspections, asbence and exclusions and school characteristics."
-        },
-        "ViewModel": {},
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Card",
-        "ViewContent": {
-          "Id": "app-card-useful-links",
-          "Title": "Useful links",
-          "LinkUrl": "useful-links",
-          "Text": "View links to other services and published documents that may be useful."
-        },
-        "ViewModel": {},
-        "ChildViews": []
-      }
-    ]
-  },
-  {
     "id": "school-landing-page",
     "contentId": "school-landing-page",
     "isPublished": true,
@@ -2746,7 +2704,7 @@
           "Id": "app-card-download-data",
           "Title": "Download data",
           "LinkUrl": "download-data/",
-          "Text": "Download data for Analyse school performance and Key to success"
+          "Text": "Download data for Analyse school performance and Key to success."
         },
         "ViewModel": {},
         "ChildViews": []
@@ -2781,7 +2739,7 @@
     "isPublished": true,
     "PageTitle": "Analyse school performance",
     "PageContent": {
-      "HeroDescription": "CONTENT NEEDED HERE"
+        "HeroDescription": "Analyse school performance supports school improvement initiatives by offering detailed reports on pupil attainment and progress."
     },
     "Views": [
       {
@@ -2799,11 +2757,11 @@
       {
         "ViewId": "Card",
         "ViewContent": {
-          "AuthorizationPolicy": "AccessToMyLocalAuthority",
-          "Id": "app-card-my-la",
-          "Title": "My local authority",
-          "LinkUrl": "/my-local-authority/",
-          "Text": "CONTENT NEEDED HERE"
+            "AuthorizationPolicy": "AccessToMyLocalAuthority",
+            "Id": "app-card-my-la",
+            "Title": "My local authority",
+            "LinkUrl": "/my-local-authority/",
+            "Text": "View aggregated data to see how well schools in your local authority are performing."
         },
         "ViewModel": {},
         "ChildViews": []
@@ -2815,7 +2773,7 @@
           "Id": "app-card-my-schools",
           "Title": "My schools",
           "LinkUrl": "/my-schools/",
-          "Text": "View schools within your local authority"
+          "Text": "View schools within your local authority."
         },
         "ViewModel": {},
         "ChildViews": []
@@ -2827,7 +2785,7 @@
           "Id": "app-card-my-schools",
           "Title": "My schools",
           "LinkUrl": "/my-schools/",
-          "Text": "View schools within your multi-academy trust"
+          "Text": "View schools within your multi-academy trust."
         },
         "ViewModel": {},
         "ChildViews": []
@@ -2839,7 +2797,7 @@
           "Id": "app-card-my-schools",
           "Title": "My schools",
           "LinkUrl": "/my-schools/",
-          "Text": "View schools within your diocese"
+          "Text": "View schools within your diocese."
         },
         "ViewModel": {},
         "ChildViews": []
@@ -2851,7 +2809,7 @@
           "Id": "app-card-local-authorities",
           "Title": "All local authorities",
           "LinkUrl": "/local-authorities/",
-          "Text": "Search all local authorities"
+          "Text": "Search all local authorities."
         },
         "ViewModel": {},
         "ChildViews": []
@@ -2874,7 +2832,7 @@
           "Id": "app-card-release-timetable",
           "Title": "Release timetable",
           "LinkUrl": "/help/release-timetable/",
-          "Text": "Find out when your data will be released in our timetable"
+          "Text": "Find out when your data will be released in our timetable."
         },
         "ViewModel": {},
         "ChildViews": []
@@ -2895,7 +2853,7 @@
           "Id": "app-card-la-all-schools",
           "Title": "All schools",
           "LinkUrl": "schools/",
-          "Text": "All schools found in this LA."
+          "Text": "All schools found in this local authority."
         }
       },
       {
@@ -2905,7 +2863,7 @@
           "Id": "app-card-my-schools",
           "Title": "My schools",
           "LinkUrl": "/my-schools/",
-          "Text": "View schools within your local authority"
+          "Text": "View schools within your local authority."
         },
         "ViewModel": {},
         "ChildViews": []

@@ -115,6 +115,7 @@ namespace ASP.Web.Features.ErrorHandling
                 _ => (body, null)
             };
 
+            context.TraceIdentifier = Guid.NewGuid().ToString();
             var scheme = context.Request.Scheme;
             var host = context.Request.Headers.ContainsKey("X-Forwarded-Host")
                 ? context.Request.Headers["X-Forwarded-Host"].ToString()
@@ -127,7 +128,9 @@ namespace ASP.Web.Features.ErrorHandling
                 StatusCode = context.Response.StatusCode,
                 Type = context.Response.StatusCode.ToString(),
                 Title = errorMessage,
-                Detail = url,
+                Detail = !string.IsNullOrEmpty(stackTrace) 
+                    ? $"{url} {Environment.NewLine}Stack trace: {Environment.NewLine}{stackTrace}" 
+                    : url,
             };
 
             var tableStorageProblemDetails = new TableStorageProblemDetails(context, context.Response.StatusCode.ToString());
