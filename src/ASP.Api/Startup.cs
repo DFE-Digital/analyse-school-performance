@@ -3,6 +3,7 @@ using ASP.Domain;
 using ASP.Domain.Repositories;
 using ASP.Infrastructure.Azure.Blob;
 using ASP.Infrastructure.Azure.CosmosDb;
+using ASP.Infrastructure.Logging;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,6 +32,7 @@ namespace ASP.Api
                         .ConfigureDataDownloads(context.Configuration)
                         .RegisterRepositories()
                         .AddScoped<ApiResultConverter>()
+                        .ConfigureLogging()
                         .ConfigureCurrentTime()
                         .AddOpenApiConfiguration();
                 })

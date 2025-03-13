@@ -1,6 +1,7 @@
 using ASP.Api.Client.InProcess;
 using ASP.Core.Time;
 using ASP.Infrastructure.DocumentDatabase;
+using ASP.Infrastructure.Logging;
 using ASP.Infrastructure.TableStorage;
 using ASP.Web.Components;
 using ASP.Web.Core.Templating;
@@ -14,7 +15,6 @@ using ASP.Web.Features.ContentSecurityPolicy;
 using ASP.Web.Features.ContentTemplates;
 using ASP.Web.Features.Cookies;
 using ASP.Web.Features.ErrorHandling;
-using ASP.Web.Features.Logging;
 using ASP.Web.Features.Search;
 using ASP.Web.Features.TermsOfUse;
 using ASP.Web.Features.UrlRewriting;
