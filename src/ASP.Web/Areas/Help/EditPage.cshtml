@@ -25,7 +25,7 @@
                     </div>
                 </fieldset>
 
-                <partial name="Features/ContentTemplates/ContentTemplateEdit" model="Model" />
+                <partial name="Features/ContentTemplates/_ContentTemplateEditPartial" model="Model" />
 
                 <button data-testid="content-edit-save" class="govuk-button" type="submit">Save</button>
                 <a data-testid="content-edit-cancel" asp-route="app-route-help-view" asp-route-contentId="@Model.ContentId" role="button" draggable="false" class="govuk-button govuk-button--secondary">

@@ -23,11 +23,11 @@ namespace ASP.Web.Core.Templating
                 }
                 else 
                 {
-                    foreach(var p in _options.ComponentLocations)
+                    foreach(var path in _options.ComponentLocations)
                     {
-                        if(viewContext.View.Path.StartsWith(p))
+                        if(viewContext.View.Path.StartsWith(path))
                         {
-                            context.Values["component_path"] = p;
+                            context.Values["component_path"] = path;
                             break;
                         }
                     }

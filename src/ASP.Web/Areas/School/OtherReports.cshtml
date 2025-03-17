@@ -9,20 +9,9 @@
 <div class="govuk-body">
     <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
         <asp-accordion Title="Ofsted inspection data summary reports" title-data-test-id="1" body-data-test-id="inspection-data-summary-panel">
-            @if (Model.ContentTemplate.Views != null)
+            @foreach (var view in Model.ContentTemplate.Views)
             {
-                foreach (var view in Model.ContentTemplate.Views)
-                {
-                    @if (view.ViewId == "Paragraph")
-                    {
-                        <partial name="~/Components/Paragraph/View.cshtml" model=@view />
-                    }
-                    else if (view.ViewId == "List")
-                    {
-                        <partial name="~/Components/List/View.cshtml" model=@view />
-                    }
-
-                }
+                <partial name="Features/ContentTemplates/_TemplateComponentViewPartial" model=view />
             }
         </asp-accordion>
         <asp-accordion Title="School performance summary" title-data-test-id="2" body-data-test-id="summary-report-panel">

@@ -2450,8 +2450,8 @@
         "ViewContent": {
           "Id": "department-for-education",
           "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education",
-          "Text": "department-for-education"
+          "Text": "Department for Education",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education"
         },
         "ViewModel": null,
         "ChildViews": []
@@ -2461,88 +2461,8 @@
         "ViewContent": {
           "Id": "personal-information-charter",
           "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
-          "Text": "personal-information-charter"
-        },
-        "ViewModel": null,
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Link",
-        "ViewContent": {
-          "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
-          "Text": "personal-information-charter"
-        },
-        "ViewModel": null,
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Link",
-        "ViewContent": {
-          "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
-          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
-        },
-        "ViewModel": null,
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Link",
-        "ViewContent": {
-          "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
-          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
-        },
-        "ViewModel": null,
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Link",
-        "ViewContent": {
-          "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
-          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
-        },
-        "ViewModel": null,
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Link",
-        "ViewContent": {
-          "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
-          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
-        },
-        "ViewModel": null,
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Link",
-        "ViewContent": {
-          "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
-          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
-        },
-        "ViewModel": null,
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Link",
-        "ViewContent": {
-          "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
-          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
-        },
-        "ViewModel": null,
-        "ChildViews": []
-      },
-      {
-        "ViewId": "Link",
-        "ViewContent": {
-          "Size": "m",
-          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter",
-          "Text": "www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
+          "Text": "Personal information charter",
+          "Url": "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter"
         },
         "ViewModel": null,
         "ChildViews": []

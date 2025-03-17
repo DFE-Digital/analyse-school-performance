@@ -104,7 +104,7 @@ namespace ASP.Web.Areas.School
         {
             var result =
                 from schoolDetails in GetSchoolDetails(urn)
-                from contentTemplate in GetContentTemplate(OTHER_REPORTS_OFSTED_CONTENT_TEMPLATE_ID, revision)
+                from contentTemplate in GetContentTemplate(USEFUL_LINKS_CONTENT_TEMPLATE_ID, revision)
                 let laCode = schoolDetails.LocalAuthority?.Code ?? ""
                 let laName = schoolDetails.LocalAuthority?.Name ?? ""
                 let schoolPage = new SchoolPageViewModel(

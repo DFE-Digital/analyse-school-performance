@@ -1,0 +1,11 @@
+﻿@model ContentTemplateEditModel
+
+@if (Model.Views != null)
+{
+    for (var i = 0; i < Model.Views.Count; i++)
+    {
+        //TODO: Specify Features explicity here? (but relative path instead of absolute, so we can get rid of hardcoded 
+        // /Features/TemplateComponents in Program.cs)
+        @Html.EditorFor(m => m.Views[i], Model.Views[i].ViewId)
+    }
+}

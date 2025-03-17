@@ -6,13 +6,10 @@
 }
 
 <ul class="app-links-list">
-    @if (Model.ContentTemplate.Views != null)
+    @foreach (var view in Model.ContentTemplate.Views)
     {
-        foreach (var view in Model.ContentTemplate.Views)
-        {
-            <li>
-                <partial name="~/Components/Link/View.cshtml" model=@view />
-            </li>
-        }
+        <li>
+            <partial name="Features/ContentTemplates/_TemplateComponentViewPartial" model=view />
+        </li>
     }
 </ul>
