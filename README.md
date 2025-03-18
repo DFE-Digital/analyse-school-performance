@@ -1,12 +1,13 @@
 # Introduction 
-ASP V2.0 
+ASP v2.0 
 
 # Prerequisites
 Before getting started, ensure you have the following installed on your machine: 
 
 - [Node.js](https://nodejs.org/)
 - [npm](https://www.npmjs.com/)
-
+- [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (or higher)
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (or higher)
 
 # Getting Started
 To install the required node packages, you must run the below command within `ASP.Web`
@@ -14,7 +15,8 @@ To install the required node packages, you must run the below command within `AS
 npm install
 ```
 
-# Running the application in development mode
+# Running the ASP web application locally
+## Building the front-end assets
 There are two npm scripts that you can use to run the application in development mode.
 
 ```
@@ -23,20 +25,104 @@ npm run watch
 ```
 
 `build-dev` will run webpack in development mode and output un-minified CSS and JS to `wwwroot\assets`.
-`watch` will run webpack in development and watch for changes to SCSS and JS files in Styles and Scripts folders. This allows you to see style and javascript changes in the browser as you make them in application codebase.
 
-**Note:**
+`watch` will run webpack in development and watch for changes to SCSS and JS files in `Styles` and `Scripts` folders. This allows you to see style and Javascript changes in the browser as you make them in application codebase.
+
+The npm scripts above must be run from within the `src/ASP.Web` folder. To make this less annoying there are two batch files in the repository root (`web-build.bat` and `web-watch.bat`) that run from the root folder and execute the corresponding npm script:
+
+  ```
+  C:\code\asp>web-build
+  C:\code\asp>web-watch
+  ```
+
+  Equivalent bash scripts are provided for running in git bash terminal:
+
+  ```
+  $ ./web-build
+  $ ./web-watch
+  ```
+
 If you want to also see any updates you make to HTML files reflected in the browser automatically, you will need to use Visual Studio's 'Hot Reload' feature. 
 
-To improve the 'Hot Reload' experience, you can activate the 'Hot Reload on save' feature from the 'Hot Reload' settings. If you also install the 'Auto file save' extension you can automate saving and hence automatically trigger 'Hot Reload'.
+  To improve the 'Hot Reload' experience, you can activate the 'Hot Reload on save' feature from the 'Hot Reload' settings. If you also install the 'Auto file save' extension you can automate saving and hence automatically trigger 'Hot Reload'.
 
-# Build the application CSS, JS and other assets for production
-The following npm script will run webpack and output minified CSS and JS to `wwwroot\assets`.
+## Building the front-end assets for production
+The following npm script will run webpack and output minified CSS and JS to `wwwroot\assets`:
 
-`npm run build-prod`
+```
+npm run build-prod
+```
+
+## App settings
+To run `ASP.Web` locally, you'll have to add the appropriate app settings by creating `.secrets.json` files - **do not check these in!** There should be a `.gitignore` entry for these files to ensure they are not accidentally added.
+
+In ASP.Web there should be an `appsettings.web.json` file, and an `appsettings.web.secrets.template.json` file. Simply copy the template file as `appsettings.web.secrets.json` and fill in the missing values, referring to the `appsettings.web.json` file as a guide for which values are needed for local development.
+
+For example here is an extract from `appsettings.web.json`:
+```
+{
+    // Null settings values will be populated as indicated by the comments as folllows
+    // local only:      populated from appsettings.web.secrets.json                                                     (required for local development)
+    // deployed only:   populated during deployment from pipeline variable groups s192d01-group and s192t01-group       (not needed for local development)
+    // local, deployed: populated from appsettings.web.secrets.json and during deployment from pipeline variable groups (required for local development)
+    
+    "DocumentDatabase": {
+        "InMemory": false,
+        "EndpointUri": null,             // local, deployed
+        "PrimaryKey": null,              // local only
+        "ManagedIdentityClientId": null, // deployed only
+        "DatabaseId": "asp",
+        "Containers": {
+            "content": {
+                "ContainerName": "content",
+                "PartitionKey": "/contentId"
+            },
+            "establishments": {
+                "ContainerName": "establishments",
+                "PartitionKey": "/urn"
+            },
+            ...
+        }
+    }
+}
+```
+
+Note the null values for `DocumentDatabase.EndpointUri`, `DocumentDatabase.PrimaryKey` and `DocumentDatabase.ManagedIdentityClientId`. These are simply placeholders that will need to be populated either from `appsettings.web.secrets.json` or by the deployment pipeline from the appropriate variable group when deploying the application to the Dev or Test environment.
+
+Note also the comments indicating that `DocumentDatabase.PrimaryKey` is only needed for local development, and `DocumentDatabase.ManagedIdentityClientId` is only needed when deploying the application.
+
+Here's the corresponding section of the `appsettings.web.secrets.json` file:
+```
+{
+    "DocumentDatabase": {
+        "InMemory": false,
+        "EndpointUri": "https://s192d01-cdb-dev.documents.azure.com:443/",
+        "PrimaryKey": "<Replace with Cosmos DB Primary Key for s192d01-cdb-dev>"
+    }
+}
+```
+
+# Running the API function app locally
+## App settings
+Similar to the web application, in order to run the API locally the appropriate app settings will need to be added. Inside `ASP.Api` there should be an `appsettings.api.json` file and an `appsettings.api.secrets.template.json` file that can be copied and modified to create the `appsettings.api.secrets.json` file needed for local development.
+
+## Functions key
+When sending requests to the API function app hosted on the Dev or Test environments, the `x-functions-key` header must be included in every request. The value for this header can be obtained from the function app in Azure Portal by navigating to Functions -> App keys -> Host keys (all functions).
+
+When sending requests to the function app running locally, there is no need to include the `x-functions-key` header, this is due to the Authorization level being 'Anonymous' when running locally.
+
+## Troubleshooting Local API Project Setup
+If you encounter a "There is no functions runtime available that matches the version specified" error while attempting to run the API project locally, follow these steps to resolve the issue:
+
+- Navigate to Tools -> Options -> Projects & Solutions -> Azure Functions in Visual Studio.
+- Click on the "Check for updates" button.
+- Allow Visual Studio some time to update. Note that the update process may take a while, and Visual Studio may crash during this time.
+- Once the update is complete, attempt to run the API project again.
 
 # Functional tests using SpecFlow
 The `ASP.Web.FunctionalTests` and `ASP.Api.FunctionalTests` projects need the `SpecFlow for Visual Studio 2022` extension to edit and run the SpecFlow tests from the Visual Studio test runner. The version in the Visual Studio Marketplace doesn't support .NET 8 yet, but there is an out-of-band release that supports it, [available here](https://github.com/SpecFlowOSS/SpecFlow.VS/releases/tag/v2022.1.93-net8) (download and run the `.vsix` file.)
+
+**Note:** As of December 2024, SpecFlow is no longer supported, so functional tests will need to be migrated to an equivalent framework, e.g. [Reqnroll](https://docs.reqnroll.net/latest/guides/migrating-from-specflow.html)
 
 ## Javascript enabled/disabled
 The `ASP.Web.FunctionalTests` spin up the `ASP.Web` web application in a test host using ASP.NET Core's `WebApplicationFactory`. This allows us to interact with the HTML on the page to fully test the behaviour of the application and components. The web application must be functional when Javascript is disabled and when it is enabled, so in order to test the functionality in each circumstance a different web driver must be used.
@@ -63,90 +149,49 @@ livingdoc feature-folder test/ASP.Web.FunctionalTests
 ```
 Documentation for this is [here](https://docs.specflow.org/projects/specflow-livingdoc/en/latest/LivingDocGenerator/CLI/livingdoc-feature-folder.html)
 
-# TODO: correct this documentation
-## Functional test modes
-Functional test projects can be switched between Development mode and Integration Test mode.
+## Using a real database
 
-Configuration is in `test.runsettings` in the functional test project root:
+The test web application is configured using `appsettings.web.test.json` and `appsettings.web.test.secrets.json` (or `appsettings.api.settings.test.json` and `appsettings.api.test.secrets.json` for the API) - the `appsettings.web.test.json` file overrides values from `appsettings.web.json` in the ASP.Web project.
 
-```
-<RunSettings>
-  <RunConfiguration>
-      <EnvironmentVariables>
-          <!-- List of environment variables we want to set-->
-          <ASP_Test_Mode>Development</ASP_Test_Mode>
-      </EnvironmentVariables>
-  </RunConfiguration>
-</RunSettings>
-```
-
-### ASP_Test_Mode
-| value |function|
-|-|-|
-|Development|tests are run using an in-memory database (fast running to enable development with quick feedback)|
-|Integration|tests are run using a real database (slow but exercises the real database connection code)|
-
-### Test database config
-Test database is configured using appsettings.Test.json and appsettings.Test.local.json.
-
-appsettings.Test.json is a replica of appsettings.json in the ASP.Web project, containing this section:
+By default, `appsettings.web.test.json` is configured to set the document database and blob storage to use in-memory implementations: 
 
 ```
-"CosmosDb": {
-    "EndpointUri": null,
-    "PrimaryKey": null,
-    "DatabaseId": "test",
-    "Containers": [ ... ]
+{
+    ...
+    "BlobStorage": {
+        "InMemory": true,           // Override in appsettings.web.test.secrets.json to use real blob storage
+        "StorageAccountName": null, // Override in appsettings.web.test.secrets.json to use real blob storage
+        "PrimaryKey": null          // Override in appsettings.web.test.secrets.json to use real blob storage
+    },
+    "DocumentDatabase": {
+        "InMemory": true,           // Override in appsettings.web.test.secrets.json to use real database
+        "EndpointUri": null,        // Override in appsettings.web.test.secrets.json to use real database
+        "PrimaryKey": null,         // Override in appsettings.web.test.secrets.json to use real database
+        "DatabaseId": "test"
+    }
     ...
 }
 ```
 
-`DatabaseId` defaults to `"test"` which should be a database completely dedicated to integration tests. Integration tests can (and should) be run as part of development to catch errors but care should be taken as if two test runs are happening at the same time it will cause the tests to fail.
+These can be configured to use a real database/blob storage instance by overriding these in `appsettings.web.test.secrets.json`, e.g.:
 
-`appsettings.Test.local.json` should be created locally to point to the test database on dev. One way to avoid conflicting test runs could be if each developer has their own test database on dev and wire up the local config to point to that.
+```
+{
+    ...
+    "BlobStorage": {
+        "InMemory": false,
+        "StorageAccountName": "<Replace with test Blob Storage account name>",
+        "PrimaryKey": "<Replace with test Blob Storage Primary Key>"
+    },
+    "DocumentDatabase": {
+        "InMemory": false,
+        "EndpointUri": "<Replace with test Cosmos DB Endpoint URI>",
+        "PrimaryKey": "<Replace with test Cosmos DB Primary Key>"
+    }
+    ...
+}
+```
+
+`DocumentDatabase:DatabaseId` defaults to `"test"` which should be a database completely dedicated to integration tests. Integration tests can (and should) be run as part of development to catch errors but care should be taken as if two test runs are happening at the same time it will cause the tests to fail. One way to avoid conflicting test runs could be if each developer configures `appsettings.web.test.secrets.json` to point to their own dedicated test database on dev, or an instance of Azure Cosmos Db Emulator.
 
 The intention is that these are run on a dedicated database on CI build - suggest a unique database is created/destroyed on each pipeline run so as to avoid issues when multiple builds are triggered simultaneously.
-
-## Running local API
-You will need to add a `local.settings.json` file with the below info:
-
-```
-{
-    "IsEncrypted": false,
-    "Values": {
-        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-        "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
-    }
-}
-```
-
-You'll also need your local cosmos instance running and update the details win your `appsettings.json`:
-```
-{
-  ...,
-  "CosmosDb": {
-    "EndpointUri": "https://localhost:8081",
-    "PrimaryKey": "your-key-here",
-    "DatabaseId": "your-database-id",
-    "Containers": [
-      {
-        "content": {
-          "ContainerName": "content",
-          "PartitionKey": "/contentId"
-        }
-      }
-    ]
-  }
-}
-```
-
-When runniing locally, there is no need to include the "x-functions-key" header, this is due to the Authorization level being 'Anonymous' when running locally.
-
-
-## Troubleshooting Local API Project Setup
-If you encounter a "There is no functions runtime available that matches the version specified" error while attempting to run the API project locally, follow these steps to resolve the issue:
-
-- Navigate to Tools -> Options -> Projects & Solutions -> Azure Functions in Visual Studio.
-- Click on the "Check for updates" button.
-- Allow Visual Studio some time to update. Note that the update process may take a while, and Visual Studio may crash during this time.
-- Once the update is complete, attempt to run the API project again.

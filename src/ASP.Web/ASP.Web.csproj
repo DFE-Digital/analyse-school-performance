@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>cf8f3269-b21b-4514-b0fa-6f1c961dd46a</UserSecretsId>
+    </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <WarningLevel>9999</WarningLevel>
@@ -22,72 +23,90 @@
         <NoWarn>1701;1702;1591</NoWarn>
     </PropertyGroup>
 
-	<ItemGroup>
-	  <Compile Remove="Areas\Shared\**" />
-	  <Compile Remove="Components\**" />
-	  <Compile Remove="Enums\**" />
-	  <Compile Remove="ExceptionHandlers\**" />
-	  <Compile Remove="Services\**" />
-	  <Content Remove="Areas\Shared\**" />
-	  <Content Remove="Components\**" />
-	  <Content Remove="Enums\**" />
-	  <Content Remove="ExceptionHandlers\**" />
-	  <Content Remove="Services\**" />
-	  <EmbeddedResource Remove="Areas\Shared\**" />
-	  <EmbeddedResource Remove="Components\**" />
-	  <EmbeddedResource Remove="Enums\**" />
-	  <EmbeddedResource Remove="ExceptionHandlers\**" />
-	  <EmbeddedResource Remove="Services\**" />
-	  <None Remove="Areas\Shared\**" />
-	  <None Remove="Components\**" />
-	  <None Remove="Enums\**" />
-	  <None Remove="ExceptionHandlers\**" />
-	  <None Remove="Services\**" />
-	</ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Areas\Shared\**" />
+        <Compile Remove="Components\**" />
+        <Compile Remove="Enums\**" />
+        <Compile Remove="ExceptionHandlers\**" />
+        <Compile Remove="Services\**" />
+        <Content Remove="Areas\Shared\**" />
+        <Content Remove="Components\**" />
+        <Content Remove="Enums\**" />
+        <Content Remove="ExceptionHandlers\**" />
+        <Content Remove="Services\**" />
+        <EmbeddedResource Remove="Areas\Shared\**" />
+        <EmbeddedResource Remove="Components\**" />
+        <EmbeddedResource Remove="Enums\**" />
+        <EmbeddedResource Remove="ExceptionHandlers\**" />
+        <EmbeddedResource Remove="Services\**" />
+        <None Remove="Areas\Shared\**" />
+        <None Remove="Components\**" />
+        <None Remove="Enums\**" />
+        <None Remove="ExceptionHandlers\**" />
+        <None Remove="Services\**" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\ASP.Api.Client.InProcess\ASP.Api.Client.InProcess.csproj" />
-		<ProjectReference Include="..\ASP.Api.Client\ASP.Api.Client.csproj" />
-		<ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
-		<ProjectReference Include="..\ASP.Infrastructure.Azure\ASP.Infrastructure.Azure.csproj" />
-		<ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
-		<ProjectReference Include="..\ASP.Web.Components\ASP.Web.Components.csproj" />
-		<ProjectReference Include="..\ASP.Web.Core\ASP.Web.Core.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <Content Remove="appsettings.web.secrets.template.json" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Azure.Identity" Version="1.11.4" />
-		<PackageReference Include="GracefulExpandoObject.Json" Version="1.6.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.6" />
-		<PackageReference Include="Microsoft.Azure.Cosmos" Version="3.37.1" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\ASP.Api.Client.InProcess\ASP.Api.Client.InProcess.csproj" />
+        <ProjectReference Include="..\ASP.Api.Client\ASP.Api.Client.csproj" />
+        <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
+        <ProjectReference Include="..\ASP.Infrastructure.Azure\ASP.Infrastructure.Azure.csproj" />
+        <ProjectReference Include="..\ASP.Infrastructure\ASP.Infrastructure.csproj" />
+        <ProjectReference Include="..\ASP.Web.Components\ASP.Web.Components.csproj" />
+        <ProjectReference Include="..\ASP.Web.Core\ASP.Web.Core.csproj" />
+    </ItemGroup>
 
-	<ItemGroup>
-	  <Reference Include="DfE.Data.ComponentLibrary.CleanArchitecture">
-	    <HintPath>..\..\lib\DfE.Data.ComponentLibrary.CleanArchitecture.dll</HintPath>
-	  </Reference>
-	  <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
-	    <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
-	  </Reference>
-	  <Reference Include="DfE.Data.DynamicPageTemplates.Web">
-	    <HintPath>..\..\lib\DfE.Data.DynamicPageTemplates.Web.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-	
-	<ItemGroup>
-		<None Remove="CurrentCommit.txt" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<Content Include="CurrentCommit.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-	
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-	  <Exec Command="git rev-parse HEAD &gt; &quot;$(ProjectDir)\CurrentCommit.txt&quot;" />
-	</Target>
+    <ItemGroup>
+        <PackageReference Include="Azure.Identity" Version="1.11.4" />
+        <PackageReference Include="GracefulExpandoObject.Json" Version="1.6.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.6" />
+        <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.37.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    </ItemGroup>
 
+    <ItemGroup>
+        <Reference Include="DfE.Data.ComponentLibrary.CleanArchitecture">
+            <HintPath>..\..\lib\DfE.Data.ComponentLibrary.CleanArchitecture.dll</HintPath>
+        </Reference>
+        <Reference Include="DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb">
+            <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
+        </Reference>
+        <Reference Include="DfE.Data.DynamicPageTemplates.Web">
+            <HintPath>..\..\lib\DfE.Data.DynamicPageTemplates.Web.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="CurrentCommit.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="CurrentCommit.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+        <Exec Command="git rev-parse HEAD &gt; &quot;$(ProjectDir)\CurrentCommit.txt&quot;" />
+    </Target>
+
+    <ItemGroup>
+        <None Update="appsettings.web.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </None>
+        <None Update="appsettings.web.secrets.json">
+            <CopyToOutputDirectory Condition="Exists('$(ProjectDir)\appsettings.web.secrets.json')">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+        <None Update="appsettings.web.secrets.template.json">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
 </Project>

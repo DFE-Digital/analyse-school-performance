@@ -1,6 +1,7 @@
 ﻿using ASP.Core.Configuration;
 using ASP.Infrastructure.Azure.KeyVault;
 using ASP.Web.Areas;
+using ASP.Web.Core.Environment;
 using ASP.Web.Features;
 using Microsoft.AspNetCore.Mvc.Razor;
 
@@ -42,16 +43,17 @@ namespace ASP.Web.Extensions
         /// <summary>
         /// This method configures various aspects of the application's environment, including key vaults and settings files.
         /// </summary>
-        /// <param name="builder">Configuration builder object that allows configuration sources to be added</param>
+        /// <param name="builder">Configuration builder object that allows configuration sources to be added.</param>
+        /// <param name="environment">IHostEnvironment instance that allows access to environment variables.</param>
         /// <param name="configuration">Configuration object representing state of configuration as it is being built.</param>
         /// <returns>The configuration builder</returns>
-        public static IConfigurationBuilder ConfigureSettings(this IConfigurationBuilder builder, IConfiguration configuration)
+        public static IConfigurationBuilder ConfigureSettings(this IConfigurationBuilder builder, IHostEnvironment environment, IConfiguration configuration)
         {
             configuration.BindConfig<AzureKeyVaultOptions>(out var config);
 
             builder
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.local.json", true)
+                .AddJsonFile("appsettings.web.json")
+                .AddJsonFile("appsettings.web.secrets.json", !environment.IsLocalDevelopment())
                 .AddEnvironmentVariables()
                 // Adds a point for overriding/adding configuration sources that are then used to drive the
                 // existing dependency injection. This allows test code to override configuration options without having

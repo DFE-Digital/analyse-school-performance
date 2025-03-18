@@ -157,9 +157,9 @@ public class AspWebContext
                 var path = Path.GetDirectoryName(typeof(AspWebContext).Assembly.GetAssemblyLocation());
                 var config = configure
                     .SetBasePath(path)
-                    .AddJsonFile("appsettings.Test.json", false)
-                    // Add local config for connection strings to the test database
-                    .AddJsonFile("appsettings.Test.local.json", true);
+                    .AddJsonFile("appsettings.web.test.json", false)
+                    // Add secrets config for connection strings to the test database
+                    .AddJsonFile("appsettings.web.test.secrets.json", true);
             });
 
             return base.CreateWebHostBuilder();

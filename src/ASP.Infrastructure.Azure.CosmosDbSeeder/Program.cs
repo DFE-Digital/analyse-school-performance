@@ -20,7 +20,7 @@ public class Program
         IConfiguration configuration = configBuilder
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false)
-            .AddJsonFile("appsettings.local.json", optional: true)
+            .AddJsonFile("appsettings.secrets.json", optional: false)
             .AddEnvironmentVariables()
             .Build();
 

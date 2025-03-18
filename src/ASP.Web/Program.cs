@@ -29,7 +29,7 @@ public class Program
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         builder.Configuration
-            .ConfigureSettings(builder.Configuration);
+            .ConfigureSettings(builder.Environment, builder.Configuration);
 
         builder.Services
             .ConfigureRouting()

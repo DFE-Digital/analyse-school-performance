@@ -1,5 +1,6 @@
 ﻿using ASP.Core.Configuration;
 using ASP.Infrastructure.Azure.KeyVault;
+using ASP.Web.Core.Environment;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Abstractions;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Configurations;
 using Microsoft.Extensions.Configuration;
@@ -17,11 +18,11 @@ namespace ASP.Api
 
             builder
                 .AddJsonFile(Path.Combine(
-                    environment.ContentRootPath, "local.settings.template.json"),
+                    environment.ContentRootPath, "appsettings.api.json"),
                     optional: false)
                 .AddJsonFile(Path.Combine(
-                        environment.ContentRootPath, "local.settings.json"),
-                    optional: true)
+                    environment.ContentRootPath, "appsettings.api.secrets.json"),
+                    optional: !environment.IsLocalDevelopment())
                 .AddEnvironmentVariables()
                 .ConfigureAzureKeyVault(config);
 

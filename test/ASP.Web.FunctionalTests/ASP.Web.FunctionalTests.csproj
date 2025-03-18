@@ -7,6 +7,11 @@
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\test.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
+    <ItemGroup>
+        <Content Remove="appsettings.test.secrets.json" />
+        <Content Remove="appsettings.test.secrets.template.json" />
+    </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.1.2" />
     <PackageReference Include="AngleSharp.Io" Version="1.0.0" />
@@ -52,7 +57,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.Test.json">
+    <None Update="appsettings.web.test.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.web.test.secrets.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="xunit.runner.json">

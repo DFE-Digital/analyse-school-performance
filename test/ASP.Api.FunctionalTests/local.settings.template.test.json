@@ -1,7 +1,0 @@
-{
-  "IsEncrypted": false,
-  "Values": {
-    "DocumentDatabase:InMemory": "true",
-    "BlobStorage:InMemory": "true"
-  }
-}

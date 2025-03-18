@@ -104,9 +104,9 @@ namespace ASP.Api.FunctionalTests.Drivers
             {
                 configure
                     .SetBasePath(path)
-                    .AddJsonFile("local.settings.template.test.json", false)
-                    // Add local config for connection strings to the test database
-                    .AddJsonFile("local.settings.test.json", true);
+                    .AddJsonFile("appsettings.api.test.json", false)
+                    // Add secrets config for connection strings to the test database
+                    .AddJsonFile("appsettings.api.test.secrets.json", true);
             });
 
             builder.ConfigureServices((context, services) => services.ConfigureInProcessTransportLayer());

@@ -50,30 +50,29 @@
             <HintPath>..\..\lib\DfE.Data.ComponentLibrary.Infrastructure.Persistence.CosmosDb.dll</HintPath>
         </Reference>
     </ItemGroup>
-    <ItemGroup>
-        <Content Remove="local.settings.json" />
-    </ItemGroup>
 
     <ItemGroup>
-        <None Remove="local.settings.template.json" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="local.settings.template.json">
+        <None Update="appsettings.api.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
+        </None>
+        <None Update="appsettings.api.secrets.json">
+            <CopyToOutputDirectory Condition="Exists('$(ProjectDir)\appsettings.api.secrets.json')">PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+        <None Update="appsettings.api.secrets.template.json">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </None>
         <None Update="host.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="local.settings.example.json">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-          <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        <None Update="local.settings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
         </None>
     </ItemGroup>
+    
     <ItemGroup>
         <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
     </ItemGroup>

@@ -38,8 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "non-project files", "non-pr
 		validate-pipeline.yml = validate-pipeline.yml
 		web-build = web-build
 		web-build.bat = web-build.bat
+		web-watch = web-watch
 		web-watch.bat = web-watch.bat
-		web-watch.sh = web-watch.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{57E44EE3-7A80-4F12-BDAA-D622C5D1B4A0}"
