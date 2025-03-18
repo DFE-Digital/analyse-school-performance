@@ -47,10 +47,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Remove="appsettings.web.secrets.template.json" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\ASP.Api.Client.InProcess\ASP.Api.Client.InProcess.csproj" />
         <ProjectReference Include="..\ASP.Api.Client\ASP.Api.Client.csproj" />
         <ProjectReference Include="..\ASP.Core\ASP.Core.csproj" />
