@@ -2,22 +2,22 @@
   "IsEncrypted": false,
     "Values": {
         "AllowedHosts": "*",
-        "ASPNETCORE_ENVIRONMENT": null, // local.settings.json, s192d01-group, s192t01-group
-        "AzureKeyVault:KeyVaultName": null, // s192d01-group, s192t01-group
-        "AzureWebJobsStorage": null, // local.settings.json, s192d01-group, s192t01-group
-        "AzureWebJobsStorage__accountName": null, // s192d01-group, s192t01-group
+        "ASPNETCORE_ENVIRONMENT": "", // local.settings.json, s192d01-group, s192t01-group
+        "AzureKeyVault:KeyVaultName": "", // s192d01-group, s192t01-group
+        "AzureWebJobsStorage": "", // local.settings.json, s192d01-group, s192t01-group
+        "AzureWebJobsStorage__accountName": "", // s192d01-group, s192t01-group
         "BlobStorage:InMemory": "false", // local.settings.json
-        "BlobStorage:StorageAccountName": null, // local.settings.json, s192d01-group, s192t01-group
-        "BlobStorage:PrimaryKey": null, // local.settings.json
-        "BlobStorage:ManagedIdentityClientId": null, // s192d01-group, s192t01-group
+        "BlobStorage:StorageAccountName": "", // local.settings.json, s192d01-group, s192t01-group
+        "BlobStorage:PrimaryKey": "", // local.settings.json
+        "BlobStorage:ManagedIdentityClientId": "", // s192d01-group, s192t01-group
         "DataDownloads:DownloadsConfigContainerName": "config",
         "DataDownloads:DownloadsConfigFileName": "downloads-config.json",
         "DataDownloads:SourceContainerNames:ASP": "downloads-asp",
         "DataDownloads:SourceContainerNames:KTS": "downloads-kts",
         "DocumentDatabase:InMemory": "false", // local.settings.json
-        "DocumentDatabase:EndpointUri": null, // local.settings.json, s192d01-group, s192t01-group
-        "DocumentDatabase:PrimaryKey": null, // local.settings.json
-        "DocumentDatabase:ManagedIdentityClientId": null, // s192d01-group, s192t01-group
+        "DocumentDatabase:EndpointUri": "", // local.settings.json, s192d01-group, s192t01-group
+        "DocumentDatabase:PrimaryKey": "", // local.settings.json
+        "DocumentDatabase:ManagedIdentityClientId": "", // s192d01-group, s192t01-group
         "DocumentDatabase:DatabaseId": "asp",
         "DocumentDatabase:Containers:content:ContainerName": "content",
         "DocumentDatabase:Containers:content:PartitionKey": "/contentId",
