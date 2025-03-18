@@ -78,12 +78,14 @@ public class Program
         // Register DatabaseConfig as a singleton
         services.AddSingleton(sp =>
         {
-            var configPath = DirectoryHelper.GetSolutionDataFolderPath("data/config.json");
+            var configPath = DirectoryHelper.GetSolutionFolderPath("data/config.json");
             var configJson = File.ReadAllText(configPath);
             var config = JsonSerializer.Deserialize<DatabaseConfig>(configJson)
                 ?? throw new InvalidOperationException("Failed to load database configuration");
             return config;
         });
+        
+        services.AddBlobStorageServices(configuration);
 
         return services.BuildServiceProvider();
     }

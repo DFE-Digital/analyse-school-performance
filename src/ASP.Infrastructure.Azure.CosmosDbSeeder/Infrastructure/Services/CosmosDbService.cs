@@ -146,7 +146,7 @@ public class CosmosDbService : ICosmosDbService
     {
         try
         {
-            var dataPath = DirectoryHelper.GetSolutionDataFolderPath(containerConfig.DataPath);
+            var dataPath = DirectoryHelper.GetSolutionFolderPath(containerConfig.DataPath);
 
             if (!Directory.Exists(dataPath) && !File.Exists(dataPath))
             {

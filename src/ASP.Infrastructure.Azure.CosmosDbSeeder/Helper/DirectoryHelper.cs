@@ -36,20 +36,20 @@ namespace ASP.Infrastructure.Azure.CosmosDbSeeder.Helper
         }
 
         /// <summary>
-        /// Combines the solution directory path with the specified data folder path
+        /// Combines the solution directory path with the specified folder path
         /// </summary>
-        /// <param name="dataFolderPath">Relative or absolute path to the data folder</param>
-        /// <returns>The full path to the data folder</returns>
-        public static string GetSolutionDataFolderPath(string dataFolderPath)
+        /// <param name="folderPath">Relative or absolute path to the folder</param>
+        /// <returns>The full path to the folder</returns>
+        public static string GetSolutionFolderPath(string folderPath)
         {
             // If the path is absolute, use it as-is
-            if (Path.IsPathRooted(dataFolderPath))
+            if (Path.IsPathRooted(folderPath))
             {
-                return dataFolderPath;
+                return folderPath;
             }
 
             // Otherwise, combine it with the solution path
-            return Path.Combine(GetSolutionDirectoryPath(), dataFolderPath);
+            return Path.Combine(GetSolutionDirectoryPath(), folderPath);
         }
     }
 }

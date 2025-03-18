@@ -1,7 +1,9 @@
-﻿using ASP.Infrastructure.Azure.CosmosDbSeeder.Core.Interfaces;
+﻿using ASP.Infrastructure.Azure.CosmosDbSeeder.Configuration;
+using ASP.Infrastructure.Azure.CosmosDbSeeder.Core.Interfaces;
 using ASP.Infrastructure.Azure.CosmosDbSeeder.Helper;
 using ASP.Infrastructure.Azure.CosmosDbSeeder.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace ASP.Infrastructure.Azure.CosmosDbSeeder;
@@ -12,18 +14,24 @@ public class DataSeeder : IDataSeeder
     private readonly ICosmosDbServiceFactory _cosmosDbServiceFactory;
     private readonly DatabaseConfig _databaseConfig;
     private readonly ExtractionConfig _extractionConfig;
+    private readonly BlobStorageOptions _blobStorageOptions;
+    private readonly IBlobStorageService _blobStorageService;
 
     public DataSeeder(
         ILogger<DataSeeder> logger,
         ICosmosDbServiceFactory cosmosDbServiceFactory,
         DatabaseConfig databaseConfig,
-        ExtractionConfig extractionConfig)
+        ExtractionConfig extractionConfig,
+        IOptions<BlobStorageOptions> blobStorageOptions,
+        IBlobStorageService blobStorageService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _cosmosDbServiceFactory =
             cosmosDbServiceFactory ?? throw new ArgumentNullException(nameof(cosmosDbServiceFactory));
         _databaseConfig = databaseConfig ?? throw new ArgumentNullException(nameof(databaseConfig));
         _extractionConfig = extractionConfig ?? throw new ArgumentNullException(nameof(extractionConfig));
+        _blobStorageOptions = blobStorageOptions.Value ?? throw new ArgumentNullException(nameof(blobStorageOptions));
+        _blobStorageService = blobStorageService ?? throw new ArgumentNullException(nameof(blobStorageService));
     }
 
     public async Task ExecuteAsync()
@@ -45,6 +53,16 @@ public class DataSeeder : IDataSeeder
 
             // Proceed with seeding
             await SeedAsync();
+            
+            // Blob storage upload
+            if (_blobStorageOptions.Enabled)
+            {
+                await UploadAllToBlobStorageAsync();
+            }
+            else
+            {
+                _logger.LogInformation("Blob storage upload is disabled in configuration");
+            }
 
             _logger.LogInformation("Data management process completed successfully.");
         }
@@ -128,7 +146,7 @@ public class DataSeeder : IDataSeeder
 
             foreach (var containerConfig in _databaseConfig.Containers)
             {
-                var dataPath = DirectoryHelper.GetSolutionDataFolderPath(containerConfig.DataPath);
+                var dataPath = DirectoryHelper.GetSolutionFolderPath(containerConfig.DataPath);
 
                 if (Directory.Exists(dataPath))
                 {
@@ -184,7 +202,7 @@ public class DataSeeder : IDataSeeder
         IEnumerable<Dictionary<string, object>> documents,
         ContainerConfig containerConfig)
     {
-        var dataPath = DirectoryHelper.GetSolutionDataFolderPath(containerConfig.DataPath);
+        var dataPath = DirectoryHelper.GetSolutionFolderPath(containerConfig.DataPath);
 
         Directory.CreateDirectory(dataPath);
 
@@ -219,6 +237,19 @@ public class DataSeeder : IDataSeeder
                 ex,
                 "Error saving documents to file: {FilePath}",
                 filePath);
+            throw;
+        }
+    }
+    
+    private async Task UploadAllToBlobStorageAsync()
+    {
+        try
+        {
+            await _blobStorageService.UploadAllToBlobStorageAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to upload config file to blob storage");
             throw;
         }
     }

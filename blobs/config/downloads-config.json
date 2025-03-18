@@ -1,0 +1,107 @@
+[
+    {
+        "id": "kts-school-mtc-pupil",
+        "source": "KTS",
+        "scope": "School",
+        "dataSetType": "MTC",
+        "label": "MTC pupil",
+        "filePathPattern": "School/{urn}/{year}/mtc/mtc_pupil.{filetype}"
+    },
+    {
+        "id": "kts-school-phonics-pupil",
+        "source": "KTS",
+        "scope": "School",
+        "dataSetType": "Phonics",
+        "label": "Phonics pupil",
+        "filePathPattern": "School/{urn}/{year}/phonics/phonics_pupil.{filetype}"
+    },
+    {
+        "id": "kts-school-qla-pupil",
+        "source": "KTS",
+        "scope": "School",
+        "dataSetType": "QLA",
+        "label": "QLA spelling pupil year 6",
+        "filePathPattern": "School/{urn}/{year}/qla/qla_spelling_pupil_year6.{filetype}"
+    },
+    {
+        "id": "asp-school-mtc-pupil",
+        "source": "ASP",
+        "scope": "School",
+        "dataSetType": "MTC",
+        "label": "MTC pupil",
+        "filePathPattern": "School/{urn}/{year}/mtc/mtc_pupil.{filetype}"
+    },
+    {
+        "id": "asp-school-phonics-pupil",
+        "source": "ASP",
+        "scope": "School",
+        "dataSetType": "Phonics",
+        "label": "Phonics pupil",
+        "filePathPattern": "School/{urn}/{year}/phonics/phonics_pupil.{filetype}"
+    },
+    {
+        "id": "asp-la-qla-pupil",
+        "source": "ASP",
+        "scope": "LocalAuthority",
+        "dataSetType": "QLA",
+        "label": "QLA spelling pupil year 6",
+        "filePathPattern": "LA/{code}/{year}/qla/qla_spelling_pupil_year6.{filetype}"
+    },
+    {
+        "id": "kts-school-ks2-pupil",
+        "source": "KTS",
+        "scope": "School",
+        "dataSetType": "KeyStage2",
+        "label": "KS2 pupil",
+        "filePathPattern": "School/{urn}/{year}/ks2/ks2_pupil_{version}.{filetype}"
+    },
+    {
+        "id": "kts-school-ks2-pupil-stu",
+        "source": "KTS",
+        "scope": "School",
+        "dataSetType": "KeyStage2",
+        "label": "KS2 pupil",
+        "filePathPattern": "School/{urn}/{year}/{filetype}/ks2_pupil_{version}.{filetype}"
+    },
+    {
+        "id": "kts-school-post16-retention-school",
+        "source": "KTS",
+        "scope": "School",
+        "dataSetType": "Post16",
+        "label": "16-18 school retention data",
+        "filePathPattern": "School/{urn}/{year}/{filetype}/post16_retention_school_{version}.{filetype}"
+    },
+    {
+        "id": "kts-la-ks4-la",
+        "source": "KTS",
+        "scope": "LocalAuthority",
+        "dataSetType": "KeyStage4",
+        "label": "KS4 LA",
+        "filePathPattern": "LA/{code}/{year}/{filetype}/ks4_la_aggregated_{version}.{filetype}"
+    },
+    {
+        "id": "kts-la-ks4-pupil",
+        "source": "KTS",
+        "scope": "LocalAuthority",
+        "dataSetType": "KeyStage4",
+        "label": "KS4 pupil",
+        "filePathPattern": "LA/{code}/{year}/ks4/ks4_pupil_{version}.{filetype}"
+    },
+    {
+        "id": "kts-la-post16-la",
+        "source": "KTS",
+        "scope": "LocalAuthority",
+        "dataSetType": "Post16",
+        "label": "16-18 LA",
+        "filePathPattern": "LA/{code}/{year}/post16/post16_la_aggregated_{version}.{filetype}"
+    },
+    {
+        "id": "kts-la-post16-pupil",
+        "source": "KTS",
+        "scope": "LocalAuthority",
+        "dataSetType": "Post16",
+        "label": "16-18 pupil",
+        "filePathPattern": "LA/{code}/{year}/post16/post16_pupil_{version}.{filetype}"
+    }
+]
+

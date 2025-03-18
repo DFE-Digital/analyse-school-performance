@@ -43,6 +43,9 @@ The application is configured using `appsettings.json`. Below is an example conf
       "_ts"
     ]
   },
+   "BlobStorage": {
+      "Enabled": false
+   },
   "Logging": {
     "LogLevel": {
       "Default": "Information",
@@ -67,7 +70,10 @@ For security and flexibility, do not hardcode sensitive information like connect
     "TargetDatabase": {
       "ConnectionString": "AccountEndpoint=https://<TARGET_ACCOUNT>.documents.azure.com:443/;AccountKey=<TARGET_KEY>;"
     }
-  }
+  },
+   "BlobStorage": {
+      "ConnectionString": "DefaultEndpointsProtocol=https;AccountName=<ACCOUNT_NAME>;AccountKey=<ACCOUNT_KEY>;EndpointSuffix=core.windows.net"
+   }
 }
 ```
 
@@ -94,7 +100,7 @@ The application stores data files in a configurable location. You can specify th
 ### Important Notes
  - If you provide a relative path, it will be resolved against the solution directory where the .sln file is located.
  - Ensure that the specified data folder exists.
- - The application will throw an exception if the configuration file or data folder cannot be found. 
+ - The application will throw an exception if the configuration file or data folder cannot be found.
 
 ## Running the Application
 
