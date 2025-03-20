@@ -1,14 +1,12 @@
 ﻿using ASP.Infrastructure.DocumentDatabase;
-using ASP.Test.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions;
 
 [Binding]
-public partial class EstablishmentStepDefinitions : Test.SpecFlow.EstablishmentStepDefinitions
+public partial class EstablishmentStepDefinitions : Test.Reqnroll.EstablishmentStepDefinitions
 {
     public EstablishmentStepDefinitions(ScenarioContext scenarioContext, IDocumentDatabase database,
-        ISpecFlowOutputHelper outputHelper)
+        IReqnrollOutputHelper outputHelper)
         : base(scenarioContext, database, outputHelper)
     {
     }

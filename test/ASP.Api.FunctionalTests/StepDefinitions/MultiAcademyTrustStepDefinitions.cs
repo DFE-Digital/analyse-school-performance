@@ -1,13 +1,12 @@
 ﻿using ASP.Infrastructure.DocumentDatabase;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Api.FunctionalTests.StepDefinitions;
 
 [Binding]
-public partial class MultiAcademyTrustStepDefinitions : Test.SpecFlow.MultiAcademyTrustStepDefinitions
+public partial class MultiAcademyTrustStepDefinitions : Test.Reqnroll.MultiAcademyTrustStepDefinitions
 {
     public MultiAcademyTrustStepDefinitions(ScenarioContext scenarioContext, IDocumentDatabase documentDatabase,
-        ISpecFlowOutputHelper outputHelper
+        IReqnrollOutputHelper outputHelper
     )
         : base(scenarioContext, documentDatabase, outputHelper)
     {

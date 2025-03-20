@@ -1,6 +1,5 @@
 using ASP.Api.FunctionalTests.Drivers;
 using Newtonsoft.Json;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Api.FunctionalTests.StepDefinitions
 {
@@ -13,9 +12,9 @@ namespace ASP.Api.FunctionalTests.StepDefinitions
         private const string HTTP_HEADER = @"""([^:""]+): ([^:""]+)""";
 
         private readonly AspApiContext _api;
-        private readonly ISpecFlowOutputHelper _output;
+        private readonly IReqnrollOutputHelper _output;
 
-        public AspApiStepDefinitions(AspApiContext api, ISpecFlowOutputHelper output)
+        public AspApiStepDefinitions(AspApiContext api, IReqnrollOutputHelper output)
         {
             _api = api;
             _output = output;

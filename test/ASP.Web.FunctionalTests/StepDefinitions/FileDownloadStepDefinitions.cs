@@ -1,15 +1,13 @@
 using ASP.Web.FunctionalTests.Drivers;
-using System.IO.Compression;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
     [Binding]
-    public class FileDownloadStepDefinitions : Test.SpecFlow.FileDownloadStepDefinitions
+    public class FileDownloadStepDefinitions : Test.Reqnroll.FileDownloadStepDefinitions
     {
         private readonly IWebDriver _web;
 
-        public FileDownloadStepDefinitions(IWebDriver web, ISpecFlowOutputHelper output)
+        public FileDownloadStepDefinitions(IWebDriver web, IReqnrollOutputHelper output)
             : base(output)
         {
             _web = web;

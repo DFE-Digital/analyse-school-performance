@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using AngleSharp;
 using AngleSharp.Dom;
-using ASP.Test.Core;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.Drivers
 {
@@ -11,9 +9,9 @@ namespace ASP.Web.FunctionalTests.Drivers
         private readonly IDocument _page;
         private readonly AngleSharp.Io.IResponse _response;
         private readonly AngleSharpWebDriver _web;
-        private ISpecFlowOutputHelper _outputHelper;
+        private IReqnrollOutputHelper _outputHelper;
 
-        public AngleSharpPage(IDocument page, AngleSharp.Io.IResponse response, AngleSharpWebDriver web, ISpecFlowOutputHelper outputHelper)
+        public AngleSharpPage(IDocument page, AngleSharp.Io.IResponse response, AngleSharpWebDriver web, IReqnrollOutputHelper outputHelper)
         {
             _page = page;
             _response = response;

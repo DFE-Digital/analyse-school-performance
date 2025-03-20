@@ -1,22 +1,20 @@
-﻿using ASP.Core;
-using ASP.Core.Results;
+﻿using ASP.Core.Results;
 using ASP.Infrastructure.DocumentDatabase;
 using Newtonsoft.Json;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
+using Reqnroll;
 using Xunit;
 
-namespace ASP.Test.SpecFlow;
+namespace ASP.Test.Reqnroll;
 
 [Binding]
 public partial class MultiAcademyTrustStepDefinitions
 {
     private readonly ScenarioContext _scenarioContext;
     private readonly IDocumentDatabase _database;
-    private readonly ISpecFlowOutputHelper _outputHelper;
+    private readonly IReqnrollOutputHelper _outputHelper;
 
     public MultiAcademyTrustStepDefinitions(ScenarioContext scenarioContext, IDocumentDatabase database,
-        ISpecFlowOutputHelper outputHelper)
+        IReqnrollOutputHelper outputHelper)
     {
         _scenarioContext = scenarioContext;
         _database = database;

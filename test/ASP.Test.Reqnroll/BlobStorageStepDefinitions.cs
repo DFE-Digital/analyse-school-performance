@@ -1,19 +1,18 @@
 ﻿using ASP.Core.Results;
 using ASP.Infrastructure.Blob;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
+using Reqnroll;
 using Xunit;
 
-namespace ASP.Test.SpecFlow
+namespace ASP.Test.Reqnroll
 {
     [Binding]
     public class BlobStorageStepDefinitions
     {
         private readonly ScenarioContext _scenarioContext;
         private readonly IBlobStorage _blobStorage;
-        private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly IReqnrollOutputHelper _outputHelper;
 
-        public BlobStorageStepDefinitions(IBlobStorage blobStorage, ISpecFlowOutputHelper outputHelper, ScenarioContext scenarioContext)
+        public BlobStorageStepDefinitions(IBlobStorage blobStorage, IReqnrollOutputHelper outputHelper, ScenarioContext scenarioContext)
         {
             _blobStorage = blobStorage;
             _outputHelper = outputHelper;

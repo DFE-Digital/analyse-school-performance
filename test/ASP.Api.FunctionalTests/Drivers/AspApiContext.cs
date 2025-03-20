@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Api.FunctionalTests.Drivers
 {
@@ -15,7 +14,7 @@ namespace ASP.Api.FunctionalTests.Drivers
         private static readonly IHost _host;
         private static readonly Client.ITransportLayer _transport;
 
-        private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly IReqnrollOutputHelper _outputHelper;
         private HttpRequestMessage? _lastRequest = null;
         private HttpResponseMessage? _lastResponse = null;
 
@@ -29,7 +28,7 @@ namespace ASP.Api.FunctionalTests.Drivers
             _transport = new InProcessTransportLayer(_host.Services);
         }
 
-        public AspApiContext(ISpecFlowOutputHelper outputHelper)
+        public AspApiContext(IReqnrollOutputHelper outputHelper)
         {
             _outputHelper = outputHelper;
         }

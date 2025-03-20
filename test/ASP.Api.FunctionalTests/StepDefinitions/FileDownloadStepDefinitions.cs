@@ -1,14 +1,13 @@
 using ASP.Api.FunctionalTests.Drivers;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Api.FunctionalTests.StepDefinitions
 {
     [Binding]
-    public class FileDownloadStepDefinitions : Test.SpecFlow.FileDownloadStepDefinitions
+    public class FileDownloadStepDefinitions : Test.Reqnroll.FileDownloadStepDefinitions
     {
         private readonly AspApiContext _api;
 
-        public FileDownloadStepDefinitions(AspApiContext api, ISpecFlowOutputHelper output)
+        public FileDownloadStepDefinitions(AspApiContext api, IReqnrollOutputHelper output)
             : base(output)
         {
             _api = api;

@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.Drivers
 {
@@ -7,9 +6,9 @@ namespace ASP.Web.FunctionalTests.Drivers
     {
         private readonly HttpResponseMessage _response;
         private readonly Stream _stream;
-        private ISpecFlowOutputHelper _outputHelper;
+        private IReqnrollOutputHelper _outputHelper;
 
-        public AngleSharpDownload(HttpResponseMessage response, Stream stream, ISpecFlowOutputHelper outputHelper)
+        public AngleSharpDownload(HttpResponseMessage response, Stream stream, IReqnrollOutputHelper outputHelper)
         {
             _response = response;
             _stream = stream;

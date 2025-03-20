@@ -1,5 +1,4 @@
 ﻿using ASP.Web.FunctionalTests.Drivers;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
@@ -8,9 +7,9 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
     public class CookieStepDefinitions
     {
         private readonly AspWebContext _web;
-        private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly IReqnrollOutputHelper _outputHelper;
 
-        public CookieStepDefinitions(AspWebContext web, ISpecFlowOutputHelper outputHelper)
+        public CookieStepDefinitions(AspWebContext web, IReqnrollOutputHelper outputHelper)
         {
             _web = web;
             _outputHelper = outputHelper;

@@ -1,8 +1,5 @@
 using ASP.Web.FunctionalTests.Drivers;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using TechTalk.SpecFlow.Infrastructure;
-using YamlDotNet.Core.Tokens;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
@@ -13,10 +10,10 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
         private const string HTTP_HEADER = @"""([^:""]+): ([^:""]+)""";
 
         private readonly IWebDriver _web;
-        private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly IReqnrollOutputHelper _outputHelper;
         private readonly ScenarioContext _scenarioContext;
 
-        public AspWebStepDefinitions(IWebDriver web, ISpecFlowOutputHelper outputHelper, ScenarioContext scenarioContext)
+        public AspWebStepDefinitions(IWebDriver web, IReqnrollOutputHelper outputHelper, ScenarioContext scenarioContext)
         {
             _web = web;
             _outputHelper = outputHelper;
@@ -429,7 +426,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             });
         }
 
-        private async Task AssertOnListOfLinks(string selector, string itemName, Table expectedListItems, Func<IElementDriver, IElementDriver, TableRow, string, Task>? extraItemAssertions = null)
+        private async Task AssertOnListOfLinks(string selector, string itemName, Table expectedListItems, Func<IElementDriver, IElementDriver, DataTableRow, string, Task>? extraItemAssertions = null)
         {
             var elements = await _web.CurrentPage.ElementsAsync(selector);
             var rowsAreIndexed = expectedListItems.ContainsColumn("Index");
@@ -521,7 +518,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             }
         }
 
-        private bool TryGetRowKey(string key, TableRow row, [NotNullWhen(true)] out string? value)
+        private bool TryGetRowKey(string key, DataTableRow row, [NotNullWhen(true)] out string? value)
         {
             if(row.ContainsKey(key))
             {

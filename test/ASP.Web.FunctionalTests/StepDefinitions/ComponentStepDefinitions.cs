@@ -1,8 +1,6 @@
 ﻿using ASP.Core.Text;
-using ASP.Test.Core;
 using ASP.Test.Web.Areas.ComponentTest;
 using ASP.Web.FunctionalTests.Drivers;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
@@ -11,9 +9,9 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
     public partial class ComponentStepDefinitions
     {
         private readonly IWebDriver _web;
-        private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly IReqnrollOutputHelper _outputHelper;
 
-        public ComponentStepDefinitions(IWebDriver web, ISpecFlowOutputHelper outputHelper)
+        public ComponentStepDefinitions(IWebDriver web, IReqnrollOutputHelper outputHelper)
         {
             _web = web;
             _outputHelper = outputHelper;

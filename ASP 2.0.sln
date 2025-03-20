@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Core", "test\ASP.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Api.FunctionalTests", "test\ASP.Api.FunctionalTests\ASP.Api.FunctionalTests.csproj", "{8CB3E6F6-8861-45AE-ACEE-1D09B65742F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.SpecFlow", "test\ASP.Test.SpecFlow\ASP.Test.SpecFlow.csproj", "{220F3AF8-EC52-4461-AADF-9110407EA106}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASP.Test.Reqnroll", "test\ASP.Test.Reqnroll\ASP.Test.Reqnroll.csproj", "{220F3AF8-EC52-4461-AADF-9110407EA106}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "non-project files", "non-project files", "{61B563C2-68E3-42C1-A008-0B4DABE02323}"
 	ProjectSection(SolutionItems) = preProject

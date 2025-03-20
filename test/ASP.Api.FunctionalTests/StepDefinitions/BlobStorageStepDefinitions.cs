@@ -1,12 +1,11 @@
 ﻿using ASP.Infrastructure.Blob;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Api.FunctionalTests.StepDefinitions
 {
     [Binding]
-    public partial class BlobStorageStepDefinitions : Test.SpecFlow.BlobStorageStepDefinitions
+    public partial class BlobStorageStepDefinitions : Test.Reqnroll.BlobStorageStepDefinitions
     {
-        public BlobStorageStepDefinitions(IBlobStorage blobStorage, ISpecFlowOutputHelper outputHelper, ScenarioContext scenarioContext)
+        public BlobStorageStepDefinitions(IBlobStorage blobStorage, IReqnrollOutputHelper outputHelper, ScenarioContext scenarioContext)
             : base(blobStorage, outputHelper, scenarioContext)
         {
         }

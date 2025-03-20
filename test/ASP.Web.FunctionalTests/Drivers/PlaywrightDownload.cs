@@ -1,13 +1,11 @@
-﻿using TechTalk.SpecFlow.Infrastructure;
-
-namespace ASP.Web.FunctionalTests.Drivers
+﻿namespace ASP.Web.FunctionalTests.Drivers
 {
     public class PlaywrightDownload : IDownload
     {
         private readonly Stream _stream;
-        private ISpecFlowOutputHelper _outputHelper;
+        private IReqnrollOutputHelper _outputHelper;
 
-        public PlaywrightDownload(Stream stream, ISpecFlowOutputHelper outputHelper)
+        public PlaywrightDownload(Stream stream, IReqnrollOutputHelper outputHelper)
         {
             _stream = new PlaywrightStreamWrapper(stream);
             _outputHelper = outputHelper;

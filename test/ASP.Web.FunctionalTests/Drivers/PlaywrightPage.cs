@@ -1,6 +1,4 @@
-﻿using ASP.Test.Core;
-using Microsoft.Playwright;
-using TechTalk.SpecFlow.Infrastructure;
+﻿using Microsoft.Playwright;
 
 namespace ASP.Web.FunctionalTests.Drivers
 {
@@ -8,10 +6,10 @@ namespace ASP.Web.FunctionalTests.Drivers
     {
         private readonly IPage _page;
         private readonly PlaywrightWebDriver _web;
-        private ISpecFlowOutputHelper _outputHelper;
+        private IReqnrollOutputHelper _outputHelper;
         private IResponse _lastResponse;
 
-        public PlaywrightPage(IPage page, PlaywrightWebDriver web, IResponse response, ISpecFlowOutputHelper outputHelper)
+        public PlaywrightPage(IPage page, PlaywrightWebDriver web, IResponse response, IReqnrollOutputHelper outputHelper)
         {
             _page = page;
             _web = web;

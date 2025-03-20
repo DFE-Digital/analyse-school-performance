@@ -1,2 +1,2 @@
-﻿global using TechTalk.SpecFlow;
+﻿global using Reqnroll;
 global using Xunit;

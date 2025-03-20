@@ -1,7 +1,5 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
-using System.Xml.Linq;
-using TechTalk.SpecFlow.Infrastructure;
 using Xunit.Sdk;
 
 namespace ASP.Web.FunctionalTests.Drivers
@@ -13,11 +11,11 @@ namespace ASP.Web.FunctionalTests.Drivers
         private readonly string _selector;
         private readonly AngleSharpPage _page;
         private readonly AngleSharpWebDriver _web;
-        private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly IReqnrollOutputHelper _outputHelper;
 
         private readonly IHtmlCollection<IElement> _elements;
 
-        public AngleSharpElementsDriver(IElement outerElement, string selector, AngleSharpPage page, AngleSharpWebDriver web, ISpecFlowOutputHelper outputHelper)
+        public AngleSharpElementsDriver(IElement outerElement, string selector, AngleSharpPage page, AngleSharpWebDriver web, IReqnrollOutputHelper outputHelper)
         {
             _outerElement = outerElement;
             _selector = selector;

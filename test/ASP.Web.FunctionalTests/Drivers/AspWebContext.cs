@@ -2,7 +2,6 @@
 using ASP.Core.Time;
 using ASP.Infrastructure.Blob;
 using ASP.Infrastructure.DocumentDatabase;
-using ASP.Infrastructure.InMemory;
 using ASP.Infrastructure.TableStorage;
 using ASP.Test.Web.Areas.ComponentTest;
 using ASP.Web.Features.Cookies;
@@ -17,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.Drivers;
 
@@ -36,7 +34,7 @@ public class AspWebContext
     // outstripped by the loss of launching more than one WebApplicationFactory.
     private static readonly HttpClient _client;
     private static readonly CustomWebApplicationFactory<Program> _factory;
-    private readonly ISpecFlowOutputHelper _output;
+    private readonly IReqnrollOutputHelper _output;
 
     static AspWebContext()
     {
@@ -44,7 +42,7 @@ public class AspWebContext
         _client = _factory.CreateClient();
     }
 
-    public AspWebContext(ISpecFlowOutputHelper output)
+    public AspWebContext(IReqnrollOutputHelper output)
     {
         _output = output;
         _output.WriteLine($"Test server running on: {ServerAddress}");

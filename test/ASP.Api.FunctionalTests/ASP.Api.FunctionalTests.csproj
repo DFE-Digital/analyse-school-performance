@@ -5,11 +5,20 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RunSettingsFilePath>$(MSBuildProjectDirectory)\test.runsettings</RunSettingsFilePath>
+    <!-- Reqnroll Configuration -->
+    <GenerateFeatureFileCodeBehind>true</GenerateFeatureFileCodeBehind>
   </PropertyGroup>
 
     <ItemGroup>
         <Content Remove="local.settings.test.secrets.template.json" />
     </ItemGroup>
+
+
+  <!-- Feature Files Configuration -->
+  <ItemGroup>
+    <None Include="**/*.feature" />
+    <None Remove="**/*.feature.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.2.1" />
@@ -17,8 +26,6 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.12.0" />
-    <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
-    <PackageReference Include="SpecFlow.xUnit" Version="3.9.74" />
     <PackageReference Include="xunit.analyzers" Version="1.17.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,15 +36,21 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    
+    <!-- Reqnroll Packages -->
+    <PackageReference Include="Reqnroll" Version="2.4.0" />
+    <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" Version="2.4.0" />
+    <PackageReference Include="Reqnroll.xUnit" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ASP.Api\ASP.Api.csproj" />
     <ProjectReference Include="..\..\src\ASP.Core\ASP.Core.csproj" />
     <ProjectReference Include="..\..\src\ASP.Api.Client.InProcess\ASP.Api.Client.InProcess.csproj" />
-    <ProjectReference Include="..\ASP.Test.SpecFlow\ASP.Test.SpecFlow.csproj" />
+    <ProjectReference Include="..\ASP.Test.Reqnroll\ASP.Test.Reqnroll.csproj" />
     <ProjectReference Include="..\ASP.Test.Core\ASP.Test.Core.csproj" />
   </ItemGroup>
+  
 
   <ItemGroup>
     <None Update="appsettings.api.test.json">

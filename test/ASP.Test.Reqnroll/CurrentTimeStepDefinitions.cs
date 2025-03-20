@@ -1,7 +1,7 @@
 ﻿using ASP.Core.Time;
-using TechTalk.SpecFlow;
+using Reqnroll;
 
-namespace ASP.Test.SpecFlow;
+namespace ASP.Test.Reqnroll;
 
 [Binding]
 public class CurrentTimeStepDefinitions
@@ -13,7 +13,7 @@ public class CurrentTimeStepDefinitions
         _timeProvider = timeProvider;
     }
 
-    [Given(@"the current time is (\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})")]
+    [Given(@"^the current time is (\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})")]
     public void GivenTheCurrentTimeIs(string dateTime)
     {
         _timeProvider.Override = DateTime.Parse(dateTime);

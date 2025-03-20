@@ -1,5 +1,5 @@
 ﻿using ASP.Web.FunctionalTests.Drivers;
-using BoDi;
+using Reqnroll.BoDi;
 
 namespace ASP.Web.FunctionalTests.Support
 {

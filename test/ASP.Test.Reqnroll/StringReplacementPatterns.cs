@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace ASP.Test.SpecFlow;
+namespace ASP.Test.Reqnroll;
 
 public class StringReplacementPatterns
 {

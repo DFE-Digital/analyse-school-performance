@@ -4,8 +4,6 @@ using AngleSharp.Dom;
 using AngleSharp.Dom.Events;
 using AngleSharp.Html.Dom;
 using AngleSharp.Io.Network;
-using ASP.Test.Core;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.Drivers
 {
@@ -18,12 +16,12 @@ namespace ASP.Web.FunctionalTests.Drivers
     {
         private static IBrowsingContext? _browsingContext;
         private readonly AspWebContext _web;
-        private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly IReqnrollOutputHelper _outputHelper;
         private AngleSharpDownload? _lastDownload;
         private AngleSharpPage? _lastPage;
         private AngleSharp.Io.IResponse? _lastResponse;
 
-        public AngleSharpWebDriver(AspWebContext web, ISpecFlowOutputHelper outputHelper)
+        public AngleSharpWebDriver(AspWebContext web, IReqnrollOutputHelper outputHelper)
         {
             _web = web;
             _outputHelper = outputHelper;

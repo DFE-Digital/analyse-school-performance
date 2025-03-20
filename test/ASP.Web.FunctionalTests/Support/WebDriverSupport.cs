@@ -1,6 +1,5 @@
 ﻿using ASP.Web.FunctionalTests.Drivers;
-using BoDi;
-using TechTalk.SpecFlow.Infrastructure;
+using Reqnroll.BoDi;
 
 namespace ASP.Web.FunctionalTests.Support
 {
@@ -11,9 +10,9 @@ namespace ASP.Web.FunctionalTests.Support
     public class WebDriverSupport
     {
         private readonly IObjectContainer _objectContainer;
-        private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly IReqnrollOutputHelper _outputHelper;
 
-        public WebDriverSupport(IObjectContainer objectContainer, ISpecFlowOutputHelper outputHelper)
+        public WebDriverSupport(IObjectContainer objectContainer, IReqnrollOutputHelper outputHelper)
         {
             _objectContainer = objectContainer;
             _outputHelper = outputHelper;

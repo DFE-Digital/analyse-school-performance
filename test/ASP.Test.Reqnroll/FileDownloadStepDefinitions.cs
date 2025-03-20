@@ -1,18 +1,17 @@
 ﻿using System.IO.Compression;
-using TechTalk.SpecFlow.Infrastructure;
-using TechTalk.SpecFlow;
+using Reqnroll;
 using Xunit;
 
-namespace ASP.Test.SpecFlow
+namespace ASP.Test.Reqnroll
 {
     [Binding]
     public abstract class FileDownloadStepDefinitions
     {
-        protected readonly ISpecFlowOutputHelper _output;
+        protected readonly IReqnrollOutputHelper _output;
         private ZipArchive? _zipArchive;
         private string? _fileContents;
 
-        public FileDownloadStepDefinitions(ISpecFlowOutputHelper output)
+        public FileDownloadStepDefinitions(IReqnrollOutputHelper output)
         {
             _output = output;
         }
@@ -49,13 +48,13 @@ namespace ASP.Test.SpecFlow
         protected abstract Dictionary<string, string> Headers { get; }
         protected abstract Task<Stream> StreamAsync();
 
-        [Then(@"the response should be an? (ZIP|CSV|TSV|TXT|XLSX|XML) file download")]
+        [Then(@"^the response should be an? (ZIP|CSV|TSV|TXT|XLSX|XML) file download")]
         public async Task ThenTheResponseShouldBeAFileDownload(string fileType)
         {
             await ThenTheResponseShouldBeAFileDownloadWithFilename(fileType, null);
         }
 
-        [Then(@"the response should be an? (ZIP|CSV|TSV|TXT|XLSX|XML) file download with filename (.*)")]
+        [Then(@"^the response should be an? (ZIP|CSV|TSV|TXT|XLSX|XML) file download with filename (.*)")]
         public async Task ThenTheResponseShouldBeAFileDownloadWithFilename(string fileType, string? filename)
         {
             var headers = Headers;

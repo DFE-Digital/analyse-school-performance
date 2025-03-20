@@ -1,14 +1,12 @@
 ﻿using ASP.Infrastructure.DocumentDatabase;
-using ASP.Test.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions;
 
 [Binding]
-public partial class LocalAuthorityStepDefinitions : Test.SpecFlow.LocalAuthorityStepDefinitions
+public partial class LocalAuthorityStepDefinitions : Test.Reqnroll.LocalAuthorityStepDefinitions
 {
     public LocalAuthorityStepDefinitions(ScenarioContext scenarioContext, IDocumentDatabase database,
-        ISpecFlowOutputHelper outputHelper)
+        IReqnrollOutputHelper outputHelper)
         : base(scenarioContext, database, outputHelper)
     {
     }

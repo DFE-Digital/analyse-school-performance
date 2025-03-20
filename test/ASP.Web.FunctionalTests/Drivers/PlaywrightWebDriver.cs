@@ -1,7 +1,5 @@
 ﻿using System.Net;
-using ASP.Test.Core;
 using Microsoft.Playwright;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.Drivers
 {
@@ -15,12 +13,12 @@ namespace ASP.Web.FunctionalTests.Drivers
         private static IPlaywright? _playwright;
         private static IBrowser? _browser;
         private readonly AspWebContext _web;
-        private readonly ISpecFlowOutputHelper _outputHelper;
+        private readonly IReqnrollOutputHelper _outputHelper;
         private PlaywrightDownload? _lastDownload;
         private PlaywrightPage? _lastPage;
         private IResponse? _lastResponse;
 
-        public PlaywrightWebDriver(AspWebContext web, ISpecFlowOutputHelper outputHelper)
+        public PlaywrightWebDriver(AspWebContext web, IReqnrollOutputHelper outputHelper)
         {
             _web = web;
             _outputHelper = outputHelper;

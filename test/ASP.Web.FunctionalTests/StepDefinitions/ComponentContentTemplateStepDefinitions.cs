@@ -1,14 +1,13 @@
 ﻿using ASP.Infrastructure.DocumentDatabase;
-using ASP.Test.SpecFlow;
+using ASP.Test.Reqnroll;
 using ASP.Test.Web.Areas.ComponentTest;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions
 {
     [Binding]
     public partial class ComponentContentTemplateStepDefinitions : ContentTemplateStepDefinitions
     {
-        public ComponentContentTemplateStepDefinitions(IDocumentDatabase database, ISpecFlowOutputHelper outputHelper, ScenarioContext scenarioContext)
+        public ComponentContentTemplateStepDefinitions(IDocumentDatabase database, IReqnrollOutputHelper outputHelper, ScenarioContext scenarioContext)
             : base(database, outputHelper, scenarioContext)
         {
         }

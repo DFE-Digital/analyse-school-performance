@@ -1,5 +1,4 @@
 ﻿using ASP.Web.FunctionalTests.Drivers;
-using TechTalk.SpecFlow.Infrastructure;
 
 namespace ASP.Web.FunctionalTests.StepDefinitions;
 
@@ -7,10 +6,10 @@ namespace ASP.Web.FunctionalTests.StepDefinitions;
 public class AutocompleteStepDefinitions
 {
     private readonly IWebDriver _web;
-    private readonly ISpecFlowOutputHelper _outputHelper;
+    private readonly IReqnrollOutputHelper _outputHelper;
     private readonly ScenarioContext _scenarioContext;
 
-    public AutocompleteStepDefinitions(IWebDriver web, ISpecFlowOutputHelper outputHelper,
+    public AutocompleteStepDefinitions(IWebDriver web, IReqnrollOutputHelper outputHelper,
         ScenarioContext scenarioContext)
     {
         _web = web;

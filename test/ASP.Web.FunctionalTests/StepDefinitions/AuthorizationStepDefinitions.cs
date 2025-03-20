@@ -30,7 +30,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             _web.TestClaimsProvider.SetRole(Role.SchoolUnnamed);
         }
 
-        [Given($@"I am a logged-in user called ""(.+) (.+)""")]
+        [Given(@"^I am a logged-in user called ""(.+) (.+)""")]
         public void GivenIAmALoggedInUserCalled(string firstName, string lastName)
         {
             _web.TestClaimsProvider.ClearClaims();
@@ -38,7 +38,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             _web.TestClaimsProvider.SetName(firstName, lastName);
         }
 
-        [Given($@"I am an? ({AllRoles}) user")]
+        [Given($@"^I am an? ({AllRoles}) user")]
         public void GivenIAmAUserWithTheRole(string roleName)
         {
             _web.TestClaimsProvider.ClearClaims();
@@ -52,7 +52,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             _web.TestClaimsProvider.SetRole(role);
         }
 
-        [Given($@"I am an? ({AllRoles}) user called ""(.+) (.+)""")]
+        [Given($@"^I am an? ({AllRoles}) user called ""(.+) (.+)""")]
         public void GivenIAmAUserWithTheRoleCalled(string roleName, string firstName, string lastName)
         {
             _web.TestClaimsProvider.ClearClaims();
@@ -67,7 +67,7 @@ namespace ASP.Web.FunctionalTests.StepDefinitions
             _web.TestClaimsProvider.SetName(firstName, lastName);
         }
 
-        [Given($@"I am an? ({ScopedRoles}) user for (Local Authority|Multi-Academy Trust|Diocese|Establishment) ([^""]+)")]
+        [Given($@"^I am an? ({ScopedRoles}) user for (Local Authority|Multi-Academy Trust|Diocese|Establishment) ([^""]+)")]
         public void GivenIAmAUserWithTheRoleFor(string roleName, string identifierType, string identifierValue)
         {
             var role = Role.FromName(roleName);
