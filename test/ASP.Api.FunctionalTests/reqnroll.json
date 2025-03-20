@@ -1,0 +1,9 @@
+﻿{
+  "$schema": "https://schemas.reqnroll.net/reqnroll-config-latest.json",
+  "livingDocExecutionDataCollector": {
+    "enabled": true,
+    "filepath": "TestExecution.json",
+    "projectLanguage": "en",
+    "projectName": "ASP.Api.FunctionalTests"
+  }
+}

@@ -88,19 +88,63 @@ stages:
           arguments: '--configuration $(BuildConfiguration) -o $(build.artifactstagingdirectory)\api'
           modifyOutputPath: false
 
-      - task: SpecFlowPlus@0
+      # Step 1: Install SpecFlow.Plus.LivingDoc.CLI
+      - task: PowerShell@2
+        displayName: 'Install SpecFlow Plus LivingDoc CLI'
         inputs:
-          generatorSource: 'TestAssembly'
-          testAssemblyFilePath:  'test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\ASP.Web.FunctionalTests.dll'
-          projectName: 'Web'
-          testExecutionJson: 'test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json'
+          targetType: 'inline'
+          script: |
+            dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
 
-      - task: SpecFlowPlus@0
+      # Step 2: Generate LivingDoc Report for Web Tests
+      - task: PowerShell@2
+        displayName: 'Generate LivingDoc Report for Web Tests'
         inputs:
-          generatorSource: 'TestAssembly'
-          testAssemblyFilePath:  'test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\ASP.Api.FunctionalTests.dll'
-          projectName: 'API'
-          testExecutionJson: 'test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json'
+          targetType: 'inline'
+          script: |
+            $testAssemblyPath = "test/ASP.Web.FunctionalTests/bin/$(BuildConfiguration)/ASP.Web.FunctionalTests.dll"
+            $testExecutionPath = "test/ASP.Web.FunctionalTests/bin/$(BuildConfiguration)/TestExecution.json"
+            $outputPath = "$(Build.ArtifactStagingDirectory)/Web_LivingDoc.html"
+
+            if (Test-Path $testAssemblyPath -and Test-Path $testExecutionPath) {
+              Write-Host "Generating LivingDoc for Web Tests..."
+              livingdoc test-assembly $testAssemblyPath `
+                --test-execution-json $testExecutionPath `
+                --output $outputPath
+              Write-Host "Web LivingDoc generated at: $outputPath"
+            } else {
+              Write-Error "Test assembly or TestExecution.json for Web Tests not found."
+              exit 1
+            }
+
+      # Step 3: Generate LivingDoc Report for API Tests
+      - task: PowerShell@2
+        displayName: 'Generate LivingDoc Report for API Tests'
+        inputs:
+          targetType: 'inline'
+          script: |
+            $testAssemblyPath = "test/ASP.Api.FunctionalTests/bin/$(BuildConfiguration)/ASP.Api.FunctionalTests.dll"
+            $testExecutionPath = "test/ASP.Api.FunctionalTests/bin/$(BuildConfiguration)/TestExecution.json"
+            $outputPath = "$(Build.ArtifactStagingDirectory)/API_LivingDoc.html"
+
+            if (Test-Path $testAssemblyPath -and Test-Path $testExecutionPath) {
+              Write-Host "Generating LivingDoc for API Tests..."
+              livingdoc test-assembly $testAssemblyPath `
+                --test-execution-json $testExecutionPath `
+                --output $outputPath
+              Write-Host "API LivingDoc generated at: $outputPath"
+            } else {
+              Write-Error "Test assembly or TestExecution.json for API Tests not found."
+              exit 1
+            }
+
+      # Step 4: Publish LivingDoc Reports as Build Artifacts
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish LivingDoc Reports'
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'LivingDoc'
+          publishLocation: 'Container'
 
       - task: PublishBuildArtifacts@1
         displayName: 'Publish Artifact'
