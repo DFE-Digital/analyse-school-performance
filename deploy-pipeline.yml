@@ -106,15 +106,24 @@ stages:
             $testExecutionPath = "test/ASP.Web.FunctionalTests/bin/$(BuildConfiguration)/TestExecution.json"
             $outputPath = "$(Build.ArtifactStagingDirectory)/Web_LivingDoc.html"
 
-            if (Test-Path $testAssemblyPath -and Test-Path $testExecutionPath) {
-              Write-Host "Generating LivingDoc for Web Tests..."
-              livingdoc test-assembly $testAssemblyPath `
-                --test-execution-json $testExecutionPath `
-                --output $outputPath
-              Write-Host "Web LivingDoc generated at: $outputPath"
+            # Check if both files exist separately
+            $assemblyExists = Test-Path $testAssemblyPath
+            $executionJsonExists = Test-Path $testExecutionPath
+
+            if ($assemblyExists -and $executionJsonExists) {
+                Write-Host "Generating LivingDoc for Web Tests..."
+                livingdoc test-assembly $testAssemblyPath `
+                    --test-execution-json $testExecutionPath `
+                    --output $outputPath
+                Write-Host "Web LivingDoc generated at: $outputPath"
             } else {
-              Write-Error "Test assembly or TestExecution.json for Web Tests not found."
-              exit 1
+                if (-not $assemblyExists) {
+                    Write-Error "Test assembly not found at: $testAssemblyPath"
+                }
+                if (-not $executionJsonExists) {
+                    Write-Error "TestExecution.json not found at: $testExecutionPath"
+                }
+                exit 1
             }
 
       # Step 3: Generate LivingDoc Report for API Tests
@@ -127,15 +136,24 @@ stages:
             $testExecutionPath = "test/ASP.Api.FunctionalTests/bin/$(BuildConfiguration)/TestExecution.json"
             $outputPath = "$(Build.ArtifactStagingDirectory)/API_LivingDoc.html"
 
-            if (Test-Path $testAssemblyPath -and Test-Path $testExecutionPath) {
-              Write-Host "Generating LivingDoc for API Tests..."
-              livingdoc test-assembly $testAssemblyPath `
-                --test-execution-json $testExecutionPath `
-                --output $outputPath
-              Write-Host "API LivingDoc generated at: $outputPath"
+            # Check if both files exist separately
+            $assemblyExists = Test-Path $testAssemblyPath
+            $executionJsonExists = Test-Path $testExecutionPath
+
+            if ($assemblyExists -and $executionJsonExists) {
+                Write-Host "Generating LivingDoc for API Tests..."
+                livingdoc test-assembly $testAssemblyPath `
+                    --test-execution-json $testExecutionPath `
+                    --output $outputPath
+                Write-Host "API LivingDoc generated at: $outputPath"
             } else {
-              Write-Error "Test assembly or TestExecution.json for API Tests not found."
-              exit 1
+                if (-not $assemblyExists) {
+                    Write-Error "Test assembly not found at: $testAssemblyPath"
+                }
+                if (-not $executionJsonExists) {
+                    Write-Error "TestExecution.json not found at: $testExecutionPath"
+                }
+                exit 1
             }
 
       # Step 4: Publish LivingDoc Reports as Build Artifacts
