@@ -102,9 +102,9 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            $testAssemblyPath = "test/ASP.Web.FunctionalTests/bin/$(BuildConfiguration)/ASP.Web.FunctionalTests.dll"
-            $testExecutionPath = "test/ASP.Web.FunctionalTests/bin/$(BuildConfiguration)/TestExecution.json"
-            $outputPath = "$(Build.ArtifactStagingDirectory)/Web_LivingDoc.html"
+            $testAssemblyPath = "test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\ASP.Web.FunctionalTests.dll"
+            $testExecutionPath = "test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json"
+            $outputPath = "$(Build.ArtifactStagingDirectory)\Web_LivingDoc.html"
 
             # Check if both files exist separately
             $assemblyExists = Test-Path $testAssemblyPath
@@ -132,9 +132,9 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            $testAssemblyPath = "test/ASP.Api.FunctionalTests/bin/$(BuildConfiguration)/ASP.Api.FunctionalTests.dll"
-            $testExecutionPath = "test/ASP.Api.FunctionalTests/bin/$(BuildConfiguration)/TestExecution.json"
-            $outputPath = "$(Build.ArtifactStagingDirectory)/API_LivingDoc.html"
+            $testAssemblyPath = "test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\ASP.Api.FunctionalTests.dll"
+            $testExecutionPath = "test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json"
+            $outputPath = "$(Build.ArtifactStagingDirectory)\API_LivingDoc.html"
 
             # Check if both files exist separately
             $assemblyExists = Test-Path $testAssemblyPath
