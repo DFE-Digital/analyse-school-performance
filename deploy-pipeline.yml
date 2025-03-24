@@ -102,60 +102,56 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            $testAssemblyPath = "test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\ASP.Web.FunctionalTests.dll"
-            $testExecutionPath = "test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json"
+            $featurePath = "test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\net8.0\"
+            $testExecutionPath = "test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\net8.0\TestExecution.json"
             $outputPath = "$(Build.ArtifactStagingDirectory)\Web_LivingDoc.html"
-
-            # Check if both files exist separately
-            $assemblyExists = Test-Path $testAssemblyPath
+      
+            # Check if both paths exist
+            $featuresExist = Test-Path $featurePath
             $executionJsonExists = Test-Path $testExecutionPath
-
-            if ($assemblyExists -and $executionJsonExists) {
+      
+            if ($featuresExist -and $executionJsonExists) {
                 Write-Host "Generating LivingDoc for Web Tests..."
-                livingdoc test-assembly $testAssemblyPath `
-                    --test-execution-json $testExecutionPath `
-                    --output $outputPath
+                livingdoc feature-folder $featurePath --test-execution-json $testExecutionPath --output $outputPath
                 Write-Host "Web LivingDoc generated at: $outputPath"
             } else {
-                if (-not $assemblyExists) {
-                    Write-Error "Test assembly not found at: $testAssemblyPath"
+                if (-not $featuresExist) {
+                    Write-Error "Features folder not found at: $featurePath"
                 }
                 if (-not $executionJsonExists) {
                     Write-Error "TestExecution.json not found at: $testExecutionPath"
                 }
                 exit 1
             }
-
+        
       # Step 3: Generate LivingDoc Report for API Tests
       - task: PowerShell@2
         displayName: 'Generate LivingDoc Report for API Tests'
         inputs:
           targetType: 'inline'
           script: |
-            $testAssemblyPath = "test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\ASP.Api.FunctionalTests.dll"
-            $testExecutionPath = "test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json"
-            $outputPath = "$(Build.ArtifactStagingDirectory)\API_LivingDoc.html"
-
-            # Check if both files exist separately
-            $assemblyExists = Test-Path $testAssemblyPath
+            $featurePath = "test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\net8.0\"
+            $testExecutionPath = "test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\net8.0\TestExecution.json"
+            $outputPath = "$(Build.ArtifactStagingDirectory)\Api_LivingDoc.html"
+      
+            # Check if both paths exist
+            $featuresExist = Test-Path $featurePath
             $executionJsonExists = Test-Path $testExecutionPath
-
-            if ($assemblyExists -and $executionJsonExists) {
+      
+            if ($featuresExist -and $executionJsonExists) {
                 Write-Host "Generating LivingDoc for API Tests..."
-                livingdoc test-assembly $testAssemblyPath `
-                    --test-execution-json $testExecutionPath `
-                    --output $outputPath
+                livingdoc feature-folder $featurePath --test-execution-json $testExecutionPath --output $outputPath
                 Write-Host "API LivingDoc generated at: $outputPath"
             } else {
-                if (-not $assemblyExists) {
-                    Write-Error "Test assembly not found at: $testAssemblyPath"
+                if (-not $featuresExist) {
+                    Write-Error "Features folder not found at: $featurePath"
                 }
                 if (-not $executionJsonExists) {
                     Write-Error "TestExecution.json not found at: $testExecutionPath"
                 }
                 exit 1
             }
-
+        
       # Step 4: Publish LivingDoc Reports as Build Artifacts
       - task: PublishBuildArtifacts@1
         displayName: 'Publish LivingDoc Reports'
@@ -163,14 +159,14 @@ stages:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
           ArtifactName: 'LivingDoc'
           publishLocation: 'Container'
-
+      
       - task: PublishBuildArtifacts@1
         displayName: 'Publish Artifact'
         inputs:
           PathtoPublish: '$(build.artifactstagingdirectory)'
           ArtifactName: drop-web
         condition: succeededOrFailed()
-
+        
       - task: PublishBuildArtifacts@1
         displayName: 'Publish Artifact'
         inputs:
