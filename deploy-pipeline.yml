@@ -88,77 +88,19 @@ stages:
           arguments: '--configuration $(BuildConfiguration) -o $(build.artifactstagingdirectory)\api'
           modifyOutputPath: false
 
-      # Step 1: Install SpecFlow.Plus.LivingDoc.CLI
-      - task: PowerShell@2
-        displayName: 'Install SpecFlow Plus LivingDoc CLI'
+      - task: SpecFlowPlus@0
         inputs:
-          targetType: 'inline'
-          script: |
-            dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
+          generatorSource: 'FeatureFolder'
+          projectFilePath: 'test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\'
+          projectName: 'Web'
+          testExecutionJson: 'test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json'
 
-      # Step 2: Generate LivingDoc Report for Web Tests
-      - task: PowerShell@2
-        displayName: 'Generate LivingDoc Report for Web Tests'
+      - task: SpecFlowPlus@0
         inputs:
-          targetType: 'inline'
-          script: |
-            $featurePath = "test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\net8.0\"
-            $testExecutionPath = "test\ASP.Web.FunctionalTests\bin\$(BuildConfiguration)\net8.0\TestExecution.json"
-            $outputPath = "$(Build.ArtifactStagingDirectory)\Web_LivingDoc.html"
-      
-            # Check if both paths exist
-            $featuresExist = Test-Path $featurePath
-            $executionJsonExists = Test-Path $testExecutionPath
-      
-            if ($featuresExist -and $executionJsonExists) {
-                Write-Host "Generating LivingDoc for Web Tests..."
-                livingdoc feature-folder $featurePath --test-execution-json $testExecutionPath --output $outputPath
-                Write-Host "Web LivingDoc generated at: $outputPath"
-            } else {
-                if (-not $featuresExist) {
-                    Write-Error "Features folder not found at: $featurePath"
-                }
-                if (-not $executionJsonExists) {
-                    Write-Error "TestExecution.json not found at: $testExecutionPath"
-                }
-                exit 1
-            }
-        
-      # Step 3: Generate LivingDoc Report for API Tests
-      - task: PowerShell@2
-        displayName: 'Generate LivingDoc Report for API Tests'
-        inputs:
-          targetType: 'inline'
-          script: |
-            $featurePath = "test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\net8.0\"
-            $testExecutionPath = "test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\net8.0\TestExecution.json"
-            $outputPath = "$(Build.ArtifactStagingDirectory)\Api_LivingDoc.html"
-      
-            # Check if both paths exist
-            $featuresExist = Test-Path $featurePath
-            $executionJsonExists = Test-Path $testExecutionPath
-      
-            if ($featuresExist -and $executionJsonExists) {
-                Write-Host "Generating LivingDoc for API Tests..."
-                livingdoc feature-folder $featurePath --test-execution-json $testExecutionPath --output $outputPath
-                Write-Host "API LivingDoc generated at: $outputPath"
-            } else {
-                if (-not $featuresExist) {
-                    Write-Error "Features folder not found at: $featurePath"
-                }
-                if (-not $executionJsonExists) {
-                    Write-Error "TestExecution.json not found at: $testExecutionPath"
-                }
-                exit 1
-            }
-        
-      # Step 4: Publish LivingDoc Reports as Build Artifacts
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish LivingDoc Reports'
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'LivingDoc'
-          publishLocation: 'Container'
+          generatorSource: 'FeatureFolder'
+          projectFilePath: 'test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\'
+          projectName: 'API'
+          testExecutionJson: 'test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json'
       
       - task: PublishBuildArtifacts@1
         displayName: 'Publish Artifact'
