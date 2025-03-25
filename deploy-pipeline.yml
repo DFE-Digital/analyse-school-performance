@@ -88,12 +88,13 @@ stages:
           arguments: '--configuration $(BuildConfiguration) -o $(build.artifactstagingdirectory)\api'
           modifyOutputPath: false
           
-      #- task: SpecFlowPlus@0
-      #  inputs:
-      #    generatorSource: 'FeatureFolder'
-      #    projectFilePath: 'test\ASP.Api.FunctionalTests'
-      #    projectName: 'API'
-      #    testExecutionJson: 'test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json'    
+      - task: SpecFlowPlus@0
+        inputs:
+          generatorSource: 'FeatureFolder'
+          projectFilePath: 'test\ASP.Api.FunctionalTests'
+          projectName: 'API'
+          testExecutionJson: 'test\ASP.Api.FunctionalTests\bin\$(BuildConfiguration)\**\TestExecution.json'   
+          output: 'API.html' 
 
       - task: SpecFlowPlus@0
         inputs:
