@@ -4,6 +4,7 @@ using ASP.Core.Results;
 using ASP.Web.Core.Templating;
 using ASP.Web.Extensions;
 using ASP.Web.Features.Authorization;
+using ASP.Web.Features.TermsOfUse;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,6 +43,7 @@ namespace ASP.Web.Areas.Help
         }
 
 
+        [ServiceFilter<TermsOfUseActionFilter>]
         [Authorize(Policy = Policy.AccessToEditPages)]
         [HttpGet("{contentId}/edit", Name = "app-route-help-edit")]
         public Task<IActionResult> EditPage(string contentId, string? revision)
@@ -56,6 +58,7 @@ namespace ASP.Web.Areas.Help
             return result.ToActionResult(View, _hostEnvironment);
         }
 
+        [ServiceFilter<TermsOfUseActionFilter>]
         [Authorize(Policy = Policy.AccessToEditPages)]
         [HttpPost("{contentId}/edit")]
         public Task<IActionResult> EditPage(string contentId, string revision, ContentTemplateEditModel model)
