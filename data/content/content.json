@@ -2621,6 +2621,7 @@
       {
         "ViewId": "Card",
         "ViewContent": {
+          "AuthorizationPolicy": "NamedData",
           "Id": "app-card-download-data",
           "Title": "Download data",
           "LinkUrl": "download-data/",
@@ -2791,6 +2792,7 @@
       {
         "ViewId": "Card",
         "ViewContent": {
+          "AuthorizationPolicy": "NamedData",
           "Id": "app-card-la-download",
           "Title": "Download data",
           "LinkUrl": "download-data/",
