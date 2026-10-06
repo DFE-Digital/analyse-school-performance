@@ -1,0 +1,3 @@
+- [x] Does Data Bricks support Blob storage?
+- [x] Meeting with Data team about new Cosmos structure
+- [ ] Meeting with Data team about Blob storage options

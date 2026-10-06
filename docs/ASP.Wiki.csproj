@@ -1,0 +1,109 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove=".git" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include=".attachments\asp-architecture-v2-3416ccae-54eb-4899-8db5-4d1020810407.png" />
+    <Content Include=".attachments\asp-architecture-v2-abd93cc8-24d0-418a-9c23-afc83b47387c.png" />
+    <Content Include=".attachments\asp-architecture-v2-e167a3f8-de4b-4ae9-86b9-3c28b6f297f2.png" />
+    <Content Include=".attachments\ASP2_Bookmarks_07_08_2023-d1370d59-2568-4a5e-bb6b-ee81391da877.html" />
+    <Content Include=".attachments\Data population-731ff1c0-c17f-46fc-a6cf-c348ffcb1888.png" />
+    <Content Include=".attachments\Data processing-d78e5f92-74a4-41c0-be33-dcf35dcd9634.png" />
+    <Content Include=".attachments\hla-f76057e2-2014-44ec-b957-fa8252da1c06.png" />
+    <Content Include=".attachments\image-04e91ba5-8fa0-4541-be0e-547b1f151419.png" />
+    <Content Include=".attachments\image-0c0521dd-a23e-43b0-82a5-bae7c359c0a5.png" />
+    <Content Include=".attachments\image-109c2b90-4bf9-4c7a-a9c9-afe981f93480.png" />
+    <Content Include=".attachments\image-1348b604-661f-425f-8475-079275e64f78.png" />
+    <Content Include=".attachments\image-15ad82c5-cc48-4b4b-a169-f5c68b0a6af8.png" />
+    <Content Include=".attachments\image-18eb51b7-f3bb-4d73-b92b-1a63b21988d6.png" />
+    <Content Include=".attachments\image-1cb008b0-31a8-4f6d-b65c-43756cb47819.png" />
+    <Content Include=".attachments\image-1e0f7d08-9892-4985-bba1-ed86e7afeabc.png" />
+    <Content Include=".attachments\image-1fb6dc35-9531-41e8-9706-f0462829a4f5.png" />
+    <Content Include=".attachments\image-21205301-35bd-4eda-b2af-fec443bc5834.png" />
+    <Content Include=".attachments\image-2d01a3dc-4880-4ae1-8e66-626f1a3366a1.png" />
+    <Content Include=".attachments\image-2d46d97f-63e1-4d4a-8476-d3cdb89ef1b0.png" />
+    <Content Include=".attachments\image-2d81c664-12d2-4f1b-945b-82c1815e39d6.png" />
+    <Content Include=".attachments\image-38a2878a-f2c1-44bf-ab0d-2d0d8712f1de.png" />
+    <Content Include=".attachments\image-3ae1326f-3fb4-4a0f-ac1f-aa268eaa840b.png" />
+    <Content Include=".attachments\image-3ce7c28e-c836-4bc0-b0c9-41545fa33acf.png" />
+    <Content Include=".attachments\image-3dd3582f-d6e9-4c1e-9dcd-ffae24b02d53.png" />
+    <Content Include=".attachments\image-42016834-9cda-488f-8be8-e2705cd176bc.png" />
+    <Content Include=".attachments\image-42d76117-a4be-4c2c-9927-398903ddb29d.png" />
+    <Content Include=".attachments\image-4864c800-3ded-4a2c-9b33-bc7c58cd7ca3.png" />
+    <Content Include=".attachments\image-48bd9c7f-9699-4091-a550-ac25263dc3c4.png" />
+    <Content Include=".attachments\image-4f094a76-56b7-4f46-8127-b1975f3d67cd.png" />
+    <Content Include=".attachments\image-53c9338d-2c50-4a3c-a4b5-efea8c2a2225.png" />
+    <Content Include=".attachments\image-54edc469-b847-4bb8-a996-c2bc8c6c27ab.png" />
+    <Content Include=".attachments\image-5837e99c-da0b-495e-99ae-067fd21b1cc2.png" />
+    <Content Include=".attachments\image-584d6265-a71e-465b-b2a9-80573eece685.png" />
+    <Content Include=".attachments\image-5a8fca28-2f39-4c56-9272-368e246b0eb6.png" />
+    <Content Include=".attachments\image-5bdeae1d-6487-4c2b-9a88-92d942e6983e.png" />
+    <Content Include=".attachments\image-63ed0247-5541-4769-a90f-72eceb8ca3f6.png" />
+    <Content Include=".attachments\image-6f0b6ce0-a9fb-4762-b9a0-99cd4a6321d3.png" />
+    <Content Include=".attachments\image-707d4402-a1c5-4fd7-a704-a6c8166f4114.png" />
+    <Content Include=".attachments\image-721009ba-8d8f-4ff5-80e1-4c4bffcecbc8.png" />
+    <Content Include=".attachments\image-762dc1fc-5087-459f-9f79-26be9a15b4cd.png" />
+    <Content Include=".attachments\image-7b0cebb4-4e84-45a0-bf1c-700eedbf8f03.png" />
+    <Content Include=".attachments\image-7b0ff59d-2cf0-4453-a1a2-00e8a8c4f879.png" />
+    <Content Include=".attachments\image-820a5962-d33a-4f7c-a014-56f6e9ee7f02.png" />
+    <Content Include=".attachments\image-853dafb3-92ed-4f94-95f3-847e6160fee6.png" />
+    <Content Include=".attachments\image-865dbd5b-665f-425a-af4c-7608c07fc9a4.png" />
+    <Content Include=".attachments\image-88322869-4869-4186-85a2-b3dd97547221.png" />
+    <Content Include=".attachments\image-894f3dee-93cc-4217-adff-caa7176e1924.png" />
+    <Content Include=".attachments\image-89ef2666-e26b-4c64-951b-1682d7965561.png" />
+    <Content Include=".attachments\image-8ccaeca1-2ecc-49a8-85b2-a52bd8f4e209.png" />
+    <Content Include=".attachments\image-8d8aaff3-f8f3-4abc-a77a-54c63d666c34.png" />
+    <Content Include=".attachments\image-8f3b7db4-82c7-4660-8717-0989c9e0bbb9.png" />
+    <Content Include=".attachments\image-a05d7645-4f8e-440d-b175-584274356e27.png" />
+    <Content Include=".attachments\image-a1e367a6-7a8d-49d1-8fdb-fb75f0fc03e1.png" />
+    <Content Include=".attachments\image-a50c80d4-1f49-4236-bd80-416b1662a0d5.png" />
+    <Content Include=".attachments\image-acb8b077-d5de-4c06-8277-7d8a344155dc.png" />
+    <Content Include=".attachments\image-b378765b-df5d-4bcc-85f2-7b64c26c4f28.png" />
+    <Content Include=".attachments\image-b8d3a36b-81a7-4c39-906c-216444b8ef70.png" />
+    <Content Include=".attachments\image-bb56e75a-faf0-4f43-a6eb-b9d20c1dac75.png" />
+    <Content Include=".attachments\image-bc7124da-9d0a-4be3-8806-90e24c483abc.png" />
+    <Content Include=".attachments\image-bcdbd4fb-7daf-486b-8e9b-54d1723ace92.png" />
+    <Content Include=".attachments\image-bfffb0dc-5676-43aa-aeb6-73d3fcd5a2ba.png" />
+    <Content Include=".attachments\image-c72bc8cf-9133-4869-b6c8-49fbe2fa5bca.png" />
+    <Content Include=".attachments\image-c75252bd-5a8b-4036-bdcc-8610627c5f14.png" />
+    <Content Include=".attachments\image-cafcbe33-c0b8-4850-bc37-b152a04d710b.png" />
+    <Content Include=".attachments\image-ccd39bad-14dc-4981-88c0-2c6d31a5deb3.png" />
+    <Content Include=".attachments\image-ce9277ba-1621-47d5-90b6-20d88c13325c.png" />
+    <Content Include=".attachments\image-d06c6329-2df7-42a3-b67a-bc5ce30835bb.png" />
+    <Content Include=".attachments\image-d25d0810-7603-45c4-b504-8c09d5bcb2c9.png" />
+    <Content Include=".attachments\image-d5ee9b5c-724e-4e08-bec3-9b85bb683ca9.png" />
+    <Content Include=".attachments\image-e0d8db29-0178-4f41-8091-96c7f2d653d4.png" />
+    <Content Include=".attachments\image-e7d7db32-d1da-477b-b4d4-f989b1d4e75a.png" />
+    <Content Include=".attachments\image-eac1faec-b87d-4e91-add7-bf57845f133b.png" />
+    <Content Include=".attachments\image-ee0d712c-0098-4c4f-b76d-ba12b78fe0ba.png" />
+    <Content Include=".attachments\image-efeffb1c-e645-4a38-89ca-b30fb95f6726.png" />
+    <Content Include=".attachments\image-f356f150-298a-4392-b2e4-0fd46376be3e.png" />
+    <Content Include=".attachments\image-f56dce17-1911-44aa-affd-944254e9cabe.png" />
+    <Content Include=".attachments\image-fac596c0-45fc-46cc-a4c6-975ccfa79df1.png" />
+    <Content Include=".attachments\Page template rendering-6f49a33f-9bd0-4c55-8f63-fe0a5a65c0d3.png" />
+    <Content Include=".attachments\Summary reports-3b3df1cd-5e4e-4cb9-8c86-8e1fd5fb53f0.png" />
+    <Content Include=".attachments\TopNav-06474e5b-0f16-4c1f-a3e3-b090e894ea4c.png" />
+    <Content Include=".attachments\web-running-locally-image-d43b878f-f720-457a-a8bc-ef0cf1d5e3fd.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".attachments\ASP 2.0 Data Structure-119c2cf6-9079-4f97-bf93-839713e311ed.pptx" />
+    <None Include=".attachments\ASP 2.0 MVP - DEV-1-15606e0d-8704-407f-9d06-a4b01942ac40.pdf" />
+    <None Include=".attachments\ASP 2.0 MVP - DEV-1-3018da8a-dbfd-43ba-9394-f45b76b7891a.pdf" />
+    <None Include=".attachments\ASP 2.0 MVP - DEV-1-64f4b27c-c918-4275-97c2-cab1e249f879.vsdx" />
+    <None Include=".attachments\ASP 2.0 MVP - DEV-1-8e7f0111-2da1-41af-9cd1-9f4777af98d7.vsdx" />
+    <None Include=".attachments\ASP 2.0 MVP - TEST V2-880af537-2755-4f0b-84fc-365e0bcdd2c5.vsdx" />
+    <None Include=".attachments\ASP 2.0 MVP - TEST V2-e41e2082-b057-4cc8-9cbb-126f0aac452d.pdf" />
+    <None Include=".attachments\ASP 2.0 Release-7f9dec12-a580-49f0-9288-fabb8183df58.pptx" />
+    <None Include=".attachments\Technical Onboarding Documentation 1 %281%29-f230a819-6173-486f-9a51-95e03164668a.pdf" />
+  </ItemGroup>
+
+</Project>

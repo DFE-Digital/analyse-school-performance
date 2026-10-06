@@ -1,0 +1,3 @@
+- [ ] Will editing page content (for MVP) be within a separate web app or as part of the main Web UI?
+  - Should it be locked down to internal access only?
+  - [ ] Seperate application with separate UAC?

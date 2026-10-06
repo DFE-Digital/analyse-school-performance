@@ -1,0 +1,18 @@
+ - Acceptance tests
+    - [ ] Research: Mocking DSI integration 
+      - [ ] POC
+    - [ ] Research: Best approach
+      - Finding right level of abstraction to minimise churn when refactoring
+      - Test data
+      - What are we testing exactly
+      - [ ] POC
+    - Document and co-ordinate with testing team
+  - UI tests
+    - [ ] Research: Web component tests
+      - [ ] POC
+    - [ ] Research: "Integration" tests
+      - [ ] Review Aasim's solution
+      - [ ] POC
+  - Unit tests
+- Only testing metadata (content templates/embedded components/data binding) rather than data/content as is done now
+- Regression/automated tests - old and new ASP

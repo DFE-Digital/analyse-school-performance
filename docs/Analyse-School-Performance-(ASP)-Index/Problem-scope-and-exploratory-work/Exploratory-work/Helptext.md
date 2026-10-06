@@ -1,0 +1,6 @@
+- [ ] Are we reproducing the helptext as it is currently in ASP (accessibility issues) or something different?
+- [ ] If reproducing the current system will need to have a helptext management system - part of the page template engine?
+  - [ ] Extend admin feature to modify helptext document? (user-friendly parsing of json somehow?)
+- Copster not needed going forward
+- [ ] Nested within the content template or separate template for helptext only?
+- [ ] Separate helptext template for each dataset-year?
