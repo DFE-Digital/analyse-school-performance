@@ -24,7 +24,7 @@ Information about DSI can be found in [this Google Doc](https://docs.google.com/
 
 The Get information about pupils services uses DSI and OIDC
 
-[Technical Onboarding Documentation.pdf](/.attachments/Technical%20Onboarding%20Documentation%201%20(1)-f230a819-6173-486f-9a51-95e03164668a.pdf) - Technical info about the integration types
+[Technical Onboarding Documentation.pdf](/docs/.attachments/Technical%20Onboarding%20Documentation%201%20(1)-f230a819-6173-486f-9a51-95e03164668a.pdf) - Technical info about the integration types
 
 
 

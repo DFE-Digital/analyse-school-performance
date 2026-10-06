@@ -7,19 +7,19 @@ To access Test, Pre-Production or Production resource groups, team members will 
 - Select 'Azure Resources'
 - Then 'Activate role'
 
-![image.png](/.attachments/image-a05d7645-4f8e-440d-b175-584274356e27.png)
+![image.png](/docs/.attachments/image-a05d7645-4f8e-440d-b175-584274356e27.png)
 
 - Select the resource you wish to access
 
 For example, if you needed to access resources within s192-analyse-school-performance-test, select Activate.
 
-![image.png](/.attachments/image-efeffb1c-e645-4a38-89ca-b30fb95f6726.png)
+![image.png](/docs/.attachments/image-efeffb1c-e645-4a38-89ca-b30fb95f6726.png)
 
 - In the 'Activate - Contributer' pop-up, add a brief Reason and click 'Activate'
 
 **Approval is automatic in Test**. The 'Activate - Contributer' pop-up should update to show that your role as a 'Contributer' has been activated and should will now be able to access Test resources.
 
-![image.png](/.attachments/image-762dc1fc-5087-459f-9f79-26be9a15b4cd.png)
+![image.png](/docs/.attachments/image-762dc1fc-5087-459f-9f79-26be9a15b4cd.png)
 
 ##Accessing resources in Pre-Prod and Prod
 

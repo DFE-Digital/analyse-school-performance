@@ -22,7 +22,7 @@ Each interface can have multiple implementations or maybe just a single implemen
 
 Here is a loose representation of the ASP 2.0 architecture, showing the API app and the Web app:
 
-![image.png](/.attachments/image-2d81c664-12d2-4f1b-945b-82c1815e39d6.png)
+![image.png](/docs/.attachments/image-2d81c664-12d2-4f1b-945b-82c1815e39d6.png)
 
 # API-first development
 Reading list:
@@ -64,29 +64,29 @@ ASP 2.0 tries not to have its architecture dictated by the technology it's imple
 
 It should hopefully be possible to see at a glance what each project does and where to look for any particular area of functionality:
 
-![image.png](/.attachments/image-0c0521dd-a23e-43b0-82a5-bae7c359c0a5.png)
+![image.png](/docs/.attachments/image-0c0521dd-a23e-43b0-82a5-bae7c359c0a5.png)
 
 ## ASP.Web project
 
 Rather than the familiar `Controllers`, `Models`, `Views` folders of MVC, we have `Areas\School` and `Features\Authentication`:
 
-![image.png](/.attachments/image-4864c800-3ded-4a2c-9b33-bc7c58cd7ca3.png)
+![image.png](/docs/.attachments/image-4864c800-3ded-4a2c-9b33-bc7c58cd7ca3.png)
 
 There is still room for improvement, for instance maybe `Images`, `Scripts` and `Styles` should be grouped together under `StaticContent`, and `Extensions` is a folder containing extension method classes, which could benefit from being grouped according to function rather than type.
 
 ### Areas
 Using .NET MVC Areas to represent the different physical sections of the website, each with their own sets of controllers and views:
 
-![image.png](/.attachments/image-acb8b077-d5de-4c06-8277-7d8a344155dc.png)
+![image.png](/docs/.attachments/image-acb8b077-d5de-4c06-8277-7d8a344155dc.png)
 
 This requires some custom view location formats to allow views to live directly within area folders and for views within area folders to find shared views:
 
-![image.png](/.attachments/image-2d46d97f-63e1-4d4a-8476-d3cdb89ef1b0.png)
+![image.png](/docs/.attachments/image-2d46d97f-63e1-4d4a-8476-d3cdb89ef1b0.png)
 
 ### Features
 Features are supposed to represent functionality of the web application that is not confined to one physical section, e.g. authentication or search:
 
-![image.png](/.attachments/image-a50c80d4-1f49-4236-bd80-416b1662a0d5.png)
+![image.png](/docs/.attachments/image-a50c80d4-1f49-4236-bd80-416b1662a0d5.png)
 
 Here we can see the common elements of the School search and LA search pages have been abstracted out into the concept of a Search feature, with its own controllers and views. Also note the `AccountController` lives within `Features\Authentication`, and the `TermsOfUse` feature contains:
 * the `TermsOfUseActionFilter` that attaches to each page to check whether the terms of use have been accepted
@@ -100,7 +100,7 @@ To achieve this requires a bit more finagling with MVC view locations and conven
 ## ASP.Core
 ASP.Core contains cross cutting concerns that can be shared across all projects. Care has been taken to group the code by functionality rather than by type (e.g. `Helpers`, `Extensions`, `Interfaces` etc.)
 
-![image.png](/.attachments/image-1cb008b0-31a8-4f6d-b65c-43756cb47819.png)
+![image.png](/docs/.attachments/image-1cb008b0-31a8-4f6d-b65c-43756cb47819.png)
 
 See [Application architecture](/Analyse-School-Performance-\(ASP\)-Index/Technical-specification/Application-architecture) for more of a deep dive into the application structure.
 
@@ -135,7 +135,7 @@ The key principle is that failure paths are just as valuable and valid as succes
 
 The result of the business operation should then be an object representing a success (and containing the return value of the operation) or a failure (and containing the error message). The calling code can then handle the failure case, or simply chain the next business logic action onto the successful path, creating a structure similar to a set of points on a railway (hence "Railway-Oriented Programming"), each business logic function having the ability to switch the code from the success path to the error path:
 
-![image.png](/.attachments/image-7346d537-4d7a-4441-a8e9-a03e91667109.png)
+![image.png](/docs/.attachments/image-7346d537-4d7a-4441-a8e9-a03e91667109.png)
 
 See the resources above for more details, or [Error handling and the Result<> object in ASP 2.0](/Analyse-School-Performance-\(ASP\)-Index/Technical-specification/Error-handling-and-the-Result<>-object-in-ASP-2.0) in this wiki for information on how this is implemented in ASP 2.0.
 

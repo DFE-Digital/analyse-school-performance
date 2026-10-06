@@ -9,7 +9,7 @@ The page content of each report page in ASP is defined using a page content temp
 * **Datasets** (dataset definitions)
 As the page content template engine is a shared service that doesn't have any concept of ASP datasets, we will need a way of wiring up a particular version of a page content template with a particular version of the data that's driving it. Datasets define the report pages that are contained within each dataset on ASP, what page template each report uses and the data to query to populate each report. These also need to be versioned as we will need to work on the next data release (which will include changes to the data and page templates) without affecting the current live version.
 
-This presentation goes step-by-step through a few data releases, showing the sorts of changes that might be made, and how versioning helps this process: [ASP 2.0 Release.pptx](/.attachments/ASP%202.0%20Release-7f9dec12-a580-49f0-9288-fabb8183df58.pptx)
+This presentation goes step-by-step through a few data releases, showing the sorts of changes that might be made, and how versioning helps this process: [ASP 2.0 Release.pptx](/docs/.attachments/ASP%202.0%20Release-7f9dec12-a580-49f0-9288-fabb8183df58.pptx)
 
 The **Code** and **Data** aspects will have their own approaches to versioning which we won't consider here, but **Page content templates** and **Datasets** are similar enough to be considered together when we decide what data structure to use. Both of these have the following characteristics:
 

@@ -3,7 +3,7 @@
 # High level architecture
 The following diagram shows a high level overview of the ASP 2.0 architecture. Dashed boxes/arrows represent components that haven't been implemented yet.
 
-![image.png](/.attachments/image-38a2878a-f2c1-44bf-ab0d-2d0d8712f1de.png)
+![image.png](/docs/.attachments/image-38a2878a-f2c1-44bf-ab0d-2d0d8712f1de.png)
 
 ## ASP Web application service
 This is the application service the end user interacts with. Users are authenticated with DfE Sign In (DSI).

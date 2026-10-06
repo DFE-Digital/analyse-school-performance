@@ -91,7 +91,7 @@ Finally, it would be nice to be able to frame the tests in such a way that they 
 `SpecFlow` provided us with this framework, which allowed us to create the tests in a natural language form using the Given, When, Then structure, and these test steps could have implementations that set up data in the in-memory store, interact with the API/application, and assert on the API responses/HTML on the page. The suite of functional tests along with the test results can then be published to ADO via the [SpecFlow+ LivingDoc page](https://dfe-ssp.visualstudio.com/s192-Analyse-School-Performance%20(ASP)/_apps/hub/techtalk.techtalk-specflow-plus.techtalk.specflow.plus.hub) whenever any code was merged.
 
 # Overview of test projects
-![image.png](/.attachments/image-e4466a9a-8073-4bc5-89dd-6ab9e4a1bdf4.png)
+![image.png](/docs/.attachments/image-e4466a9a-8073-4bc5-89dd-6ab9e4a1bdf4.png)
 
 ASP 2.0 uses [XUnit](https://xunit.net/) as its test framework, with [Reqnroll](https://reqnroll.net/) for functional tests, [AngleSharp](https://anglesharp.github.io/general/introduction) for parsing the HTML DOM, and [Playwright](https://playwright.dev/) for executing Javascript.
 

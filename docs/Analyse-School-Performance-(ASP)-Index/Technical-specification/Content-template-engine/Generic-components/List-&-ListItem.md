@@ -90,7 +90,7 @@ Combinations of these are also supported, e.g.:
 
 # Editing
 Tables can be edited within the page using the list component editor:
-![list edit](/.attachments/image-865dbd5b-665f-425a-af4c-7608c07fc9a4.png)
+![list edit](/docs/.attachments/image-865dbd5b-665f-425a-af4c-7608c07fc9a4.png)
 
 Note that only the text content of list items can be edited currently. List items cannot be added or deleted or moved. This is functionality that will be implemented at a later date.
 

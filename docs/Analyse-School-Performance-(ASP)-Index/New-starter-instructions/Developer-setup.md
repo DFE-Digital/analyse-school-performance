@@ -329,7 +329,7 @@ To run both **ASP.Api** and **ASP.Web** locally (when `InProcess` is set to `fal
 
 Configure the startup projects in the solution properties to be multiple startup projects as below:
 
-![web-running-locally-image.png](/.attachments/web-running-locally-image-d43b878f-f720-457a-a8bc-ef0cf1d5e3fd.png)
+![web-running-locally-image.png](/docs/.attachments/web-running-locally-image-d43b878f-f720-457a-a8bc-ef0cf1d5e3fd.png)
 
 * * *
 

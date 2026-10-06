@@ -4,16 +4,16 @@
 
 Here is the ASP 2.0 clean architecture diagram again we discussed in [Development principles](/Analyse-School-Performance-\(ASP\)-Index/Technical-specification/Development-principles):
 
-![image.png](/.attachments/image-2d81c664-12d2-4f1b-945b-82c1815e39d6.png)
+![image.png](/docs/.attachments/image-2d81c664-12d2-4f1b-945b-82c1815e39d6.png)
 
 Here's a more concrete diagram showing the different projects in the solution and how they depend on each other:
 
-![image.png](/.attachments/image-15ad82c5-cc48-4b4b-a169-f5c68b0a6af8.png)
+![image.png](/docs/.attachments/image-15ad82c5-cc48-4b4b-a169-f5c68b0a6af8.png)
 
 Note the different interfaces (represented as thin grey rectangles) that reflect a point of abstraction, or an application boundary. Note also that weird long arrow between `ASP.Api.Client.InProcess` and `ASP.Api` - this illustrates that the connection to the API can be swapped out for an in-process connection - we'll come on to that shortly.
 
 # Overview of src projects
-![image.png](/.attachments/image-159e14f7-dbc2-4e50-82dd-b6841b6722de.png)
+![image.png](/docs/.attachments/image-159e14f7-dbc2-4e50-82dd-b6841b6722de.png)
 
 ## <span>ASP.Web</span>
 This is the ASP web application - the entry point for the user.
@@ -108,7 +108,7 @@ There are two advantages to having the in-process implementation:
 1. It allows for much faster tests as a real API does not need to be spun up (which would incur large setup costs in terms of time for each test run), and means each API request is a function call rather than a network request
 2. It allows the production environment to be much more performant, as the API is effectively hosted within the application service, and API calls do not incur the network latency if it were a separate function app. See the image below for an illustration of difference in the request flow between the in-process or HTTP implementations:
 
-![image.png](/.attachments/image-bcdbd4fb-7daf-486b-8e9b-54d1723ace92.png)
+![image.png](/docs/.attachments/image-bcdbd4fb-7daf-486b-8e9b-54d1723ace92.png)
 
 Note that it's the `ITransportLayer` interface which is either implemented using `InProcessTransportLayer` in `ASP.Api.Client.InProcess` or `HttpTransportLayer` in `ASP.Api.Client`.
 

@@ -1,7 +1,7 @@
 # Browser Bookmarks
 Download the following file and import into your browser for the main ADO links.
 
-[ASP2_Bookmarks_07_08_2023.html](/.attachments/ASP2_Bookmarks_07_08_2023-d1370d59-2568-4a5e-bb6b-ee81391da877.html)
+[ASP2_Bookmarks_07_08_2023.html](/docs/.attachments/ASP2_Bookmarks_07_08_2023-d1370d59-2568-4a5e-bb6b-ee81391da877.html)
 
 # Accessing the ASP 2.0 environments via DfE Sign-in (DSI)
 

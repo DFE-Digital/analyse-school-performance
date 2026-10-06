@@ -56,7 +56,7 @@ This generates the following HTML:
 ```
 
 Which displays the following in the UI:
-![table with caption](/.attachments/image-8d8aaff3-f8f3-4abc-a77a-54c63d666c34.png)
+![table with caption](/docs/.attachments/image-8d8aaff3-f8f3-4abc-a77a-54c63d666c34.png)
 
 ## Headings property
 *Value: array of string values*
@@ -93,7 +93,7 @@ This generates the following HTML:
 </table>
 ```
 Which displays the following in the UI:
-![image.png](/.attachments/image-721009ba-8d8f-4ff5-80e1-4c4bffcecbc8.png)
+![image.png](/docs/.attachments/image-721009ba-8d8f-4ff5-80e1-4c4bffcecbc8.png)
 
 ## Rows property
 *Value: array of (array of string values)*
@@ -146,7 +146,7 @@ This generates the following HTML:
 ```
 Which displays the following in the UI:
 
-![image.png](/.attachments/image-53c9338d-2c50-4a3c-a4b5-efea8c2a2225.png)
+![image.png](/docs/.attachments/image-53c9338d-2c50-4a3c-a4b5-efea8c2a2225.png)
 
 **Note:** the number of headers always defaults to the maximum number of cells in each row. This is true of cells, so if there are an inconsistent number of cells in each row, the component will make sure each row has the same number of cells as the biggest row. This is to prevent styling issues with missing cells. For example given these rows:
 
@@ -213,7 +213,7 @@ If the property is missing, null, empty or a different value, the table will def
 
 # Editing
 Tables can be edited within the page using the table component editor:
-![table edit](/.attachments/image-cafcbe33-c0b8-4850-bc37-b152a04d710b.png)
+![table edit](/docs/.attachments/image-cafcbe33-c0b8-4850-bc37-b152a04d710b.png)
 
 ## Heading Type field
 *Dropdown, values `"H2"` or `"H3"`*

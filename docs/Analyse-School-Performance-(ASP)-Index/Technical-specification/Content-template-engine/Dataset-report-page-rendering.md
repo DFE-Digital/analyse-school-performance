@@ -38,7 +38,7 @@ Although an API is not directly necessary for the functioning of the application
 
 Here is a diagram of the above process:
 
-![Page template rendering.png](/.attachments/Page%20template%20rendering-6f49a33f-9bd0-4c55-8f63-fe0a5a65c0d3.png)
+![Page template rendering.png](/docs/.attachments/Page%20template%20rendering-6f49a33f-9bd0-4c55-8f63-fe0a5a65c0d3.png)
 
 ## Data processing
 ASP has some complex components which require some pre-processing of the raw data into a form that can be used to populate the page template. Also the data structures and formulas used to present them can change from year to year, so the more flexibility we have to make those changes without having to make any changes to code, the better.
@@ -88,5 +88,5 @@ which will ultimately be converted into HTML by the Web UI:
 ```
 Obviously the components can be much more complex than this, being charts or interactive tables
 
-![Data population.png](/.attachments/Data%20population-731ff1c0-c17f-46fc-a6cf-c348ffcb1888.png)
-![Data processing.png](/.attachments/Data%20processing-d78e5f92-74a4-41c0-be33-dcf35dcd9634.png)
+![Data population.png](/docs/.attachments/Data%20population-731ff1c0-c17f-46fc-a6cf-c348ffcb1888.png)
+![Data processing.png](/docs/.attachments/Data%20processing-d78e5f92-74a4-41c0-be33-dcf35dcd9634.png)

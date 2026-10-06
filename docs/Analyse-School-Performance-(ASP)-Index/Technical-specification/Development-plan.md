@@ -5,7 +5,7 @@ In 2023 the ASP team sat down and compiled a list of all the functionality of AS
 
 After this, [a feature map was created in LucidSpark](https://lucid.app/lucidspark/90f5310b-161d-47e0-bdbb-a8105558e55b/edit?beaconFlowId=9A1FB1069CC32CE5&invitationId=inv_be2964e3-83be-46f3-bfad-4149354d894f&page=0_0#), the aim of this being to lay out all the features showing a logical path for development, starting with simpler features and building on those to the more complex functionality:
 
-![image.png](/.attachments/image-bfffb0dc-5676-43aa-aeb6-73d3fcd5a2ba.png)
+![image.png](/docs/.attachments/image-bfffb0dc-5676-43aa-aeb6-73d3fcd5a2ba.png)
 
 In this diagram, features that built on previous features are connected with arrows such that `Feature A` -> `Feature B` means that Feature B is dependent on Feature A, or that  Feature A needs to be built first, then Feature B. This then allows us to identify what features can be built in parallel, and identify a critical path for development (shown as the thick set of arrows)
 
@@ -16,7 +16,7 @@ In this diagram, features that built on previous features are connected with arr
 Zooming in on this diagram we can see several distinct areas of functionality.
 
 ## Web application and static content pages
-![image.png](/.attachments/image-fac596c0-45fc-46cc-a4c6-975ccfa79df1.png)
+![image.png](/docs/.attachments/image-fac596c0-45fc-46cc-a4c6-975ccfa79df1.png)
 These features are concerned with getting a web application up and running that serves static content pages. These content pages should be data-driven and rendered using the page template engine. 
 
 In order to render the various types of content present in the static content pages, components for the template engine will need to be developed, such as paragraphs, links, lists, tables. These are represented by the light blue cards under each feature.
@@ -24,24 +24,24 @@ In order to render the various types of content present in the static content pa
 There is also a need for the static content pages to be editable, and site news articles to be created and managed. These are represented by the darker purple feature cards. There will eventually need to be an admin tool that can provide a user-friendly way to edit these pages, which will probably be a self-contained web application and should also provide versioning of pages. Until that is implemented the static content pages will need to be edited directly in the database.
 
 ## Banners
-![image.png](/.attachments/image-b8d3a36b-81a7-4c39-906c-216444b8ef70.png)
+![image.png](/docs/.attachments/image-b8d3a36b-81a7-4c39-906c-216444b8ef70.png)
 
 Banners are a way of communicating with users using the service, and should either be displayed permanently at the top of the page, or be able to be dismissed by the user. Banners are either purely informational (e.g. a pinned site news article) or provide some functionality (such as accepting the terms of use or the use of analytics cookies)
 
 ## Summary reports and data downloads
-![image.png](/.attachments/image-bc7124da-9d0a-4be3-8806-90e24c483abc.png)
+![image.png](/docs/.attachments/image-bc7124da-9d0a-4be3-8806-90e24c483abc.png)
 
 ASP BAU contains summary reports which are dynamically generated. In ASP 2.0, the idea is to remove the distinction between summary reports and reports for the current year, instead allowing the user to view the same report over historical years by means of a year dropdown or similar navigation method. However, there still needs to be a way of viewing historical reports (released before ASP 2.0 goes live), which will be achieved by scraping the summary reports from BAU for each school, and saving them as static HTML files into blob storage.
 
 Data downloads will also need a similar approach - data download files from the release of ASP 2.0 onwards can be generated as each dataset is released, but historical files will need to be extracted from the BAU service and imported into blob storage for use by ASP 2.0.
 
 ## School/LA pages and user roles
-![image.png](/.attachments/image-820a5962-d33a-4f7c-a014-56f6e9ee7f02.png)
+![image.png](/docs/.attachments/image-820a5962-d33a-4f7c-a014-56f6e9ee7f02.png)
 
 Showing the different pages required for the different user roles. **Note:** more pages were needed after enhancements were made to the UX prototype, such as My schools and the Generic school page.
 
 ## Data set reports
-![image.png](/.attachments/image-1348b604-661f-425f-8475-079275e64f78.png)
+![image.png](/docs/.attachments/image-1348b604-661f-425f-8475-079275e64f78.png)
 
 Each of the data sets in BAU are arranged in ascending order of complexity, showing the different components required for the report pages.
 

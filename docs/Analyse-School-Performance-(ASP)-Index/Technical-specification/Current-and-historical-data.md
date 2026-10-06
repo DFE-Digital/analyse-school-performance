@@ -12,7 +12,7 @@ For ASP 2.0 MVP we need to resolve some ambiguities about current behaviour in o
 Note that these behaviours are purely for ASP 2.0 MVP, we can change these in the future for ASP 2.0 proper.
 
 # Top navigation
-![TopNav.png](/.attachments/TopNav-06474e5b-0f16-4c1f-a3e3-b090e894ea4c.png)
+![TopNav.png](/docs/.attachments/TopNav-06474e5b-0f16-4c1f-a3e3-b090e894ea4c.png)
 
 * The top navigation will show all the Data Sets ***applicable*** to an establishment - i.e. only show the `Key Stage 2`  tab if it is a primary school
   * Each Establishment has a set of flags specifying what school years it covers: 
@@ -29,7 +29,7 @@ Note that these behaviours are purely for ASP 2.0 MVP, we can change these in th
   * If using a metadata table this will be updated whenever Data Set data is imported into ASP (or Data Set data is updated/corrected)
 * `All reports` will be replaced by a tab called `Summary reports` or `Historical reports` - this will  be a page containing just the list of School Performance Summary reports available for the establishment:
 
-  ![Summary reports.png](/.attachments/Summary%20reports-3b3df1cd-5e4e-4cb9-8c86-8e1fd5fb53f0.png)
+  ![Summary reports.png](/docs/.attachments/Summary%20reports-3b3df1cd-5e4e-4cb9-8c86-8e1fd5fb53f0.png)
 * Reports that currently sit within `All reports` will be moved under their own Data Set tab, e.g. `Absence and Exclusions` and `School characteristics` (maybe with shortened names so they don't take up too much space in the navigation)
 * **Note:** need to think about where KS4 Destinations will sit, it is released separately from the rest of Key Stage 4 and is for a different school year (2021, whereas KS4 release is 2022)
 

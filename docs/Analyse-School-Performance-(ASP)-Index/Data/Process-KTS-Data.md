@@ -18,7 +18,7 @@ The data processing as done automatically from adf pipelines. The data is read f
 </div>
 
 
-![image.png](/.attachments/image-2d01a3dc-4880-4ae1-8e66-626f1a3366a1.png)
+![image.png](/docs/.attachments/image-2d01a3dc-4880-4ae1-8e66-626f1a3366a1.png)
 
 This pipeline is the master for KTS and calls series of other pipelines passing the appropriate parameters.
 

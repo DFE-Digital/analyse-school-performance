@@ -22,7 +22,7 @@ Paragraphs are styled according to the [Paragraphs section of the GOV.UK Design 
 *Value: `true` or `false`*
 
 The *IsLarge* property provides an option for a larger size of paragraph. Example of a larger vs. a normal size of paragraph:
-![image.png](/.attachments/image-707d4402-a1c5-4fd7-a704-a6c8166f4114.png)
+![image.png](/docs/.attachments/image-707d4402-a1c5-4fd7-a704-a6c8166f4114.png)
 
 If the property is missing or set to null or any other value other than `true` or `false`, it will default to being a normal size paragraph.
 
@@ -51,7 +51,7 @@ Combinations of these are also supported, e.g.:
 
 # Editing
 Paragraphs can be edited within the page using the paragraph component editor:
-![image.png](/.attachments/image-bb56e75a-faf0-4f43-a6eb-b9d20c1dac75.png)
+![image.png](/docs/.attachments/image-bb56e75a-faf0-4f43-a6eb-b9d20c1dac75.png)
 
 ## Is Large field
 *Checkbox*

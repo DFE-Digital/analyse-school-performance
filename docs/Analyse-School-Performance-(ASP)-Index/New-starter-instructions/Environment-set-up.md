@@ -16,16 +16,16 @@ Next in order for the web application service and the API function app to be con
 
 To find the appropriate variable group to update go to Pipelines > Library in ADO:
 
-![image.png](/.attachments/image-add1e3ff-4dee-4c2c-bf08-1998e1d0cdcc.png)
+![image.png](/docs/.attachments/image-add1e3ff-4dee-4c2c-bf08-1998e1d0cdcc.png)
 
 Choose the appropriate variable group (either `s192d01-group` or `s192t01-group`, the `-data` groups are for the data pipelines):
 
-![image.png](/.attachments/image-b2f2f100-5fea-46fc-bc4e-39743cd25326.png)
+![image.png](/docs/.attachments/image-b2f2f100-5fea-46fc-bc4e-39743cd25326.png)
 
 The keys that will need updating are as follows:
 
-![image.png](/.attachments/image-3baa726e-bb75-4fa1-8f26-e3108085b4f3.png)
-![image.png](/.attachments/image-3e8ad8cb-53a9-4ea8-bd7d-4c6c0115b678.png)
+![image.png](/docs/.attachments/image-3baa726e-bb75-4fa1-8f26-e3108085b4f3.png)
+![image.png](/docs/.attachments/image-3e8ad8cb-53a9-4ea8-bd7d-4c6c0115b678.png)
 
 |Key|What it's for|Where to find it|
 |-|-|-|
@@ -41,7 +41,7 @@ The keys that will need updating are as follows:
 Certain secrets need to be added to the Key Vault in Azure Portal, Key vault `s192d01-kv-dev` or `s192t01-kv-test` > Objects > Secrets
 
 You may see a message saying you are unauthorized to view these contents:
-![==image_0==.jpeg](/.attachments/==image_0==-3e94d3c9-01cd-4379-b2c1-c123f4272011.jpeg) 
+![==image_0==.jpeg](/docs/.attachments/==image_0==-3e94d3c9-01cd-4379-b2c1-c123f4272011.jpeg) 
 
 In that case you will need to go to Access policies > `+ Create` and do the following:
 1. On the Permissions tab, select Configure from a template > `Key & Secret Management`

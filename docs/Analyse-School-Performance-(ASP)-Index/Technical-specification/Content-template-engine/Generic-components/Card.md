@@ -1,6 +1,6 @@
 This component is used to render cards on the homepage and LA/school landing pages, e.g. the **Phonics**, **Key stage 1**, **Multiplication table check (MTC)** etc. cards here:
 
-![image.png](/.attachments/image-a86019ad-bf20-40c7-9ba2-d157c88914a5.png)
+![image.png](/docs/.attachments/image-a86019ad-bf20-40c7-9ba2-d157c88914a5.png)
 
 # JSON structure
 

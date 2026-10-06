@@ -8,13 +8,13 @@ Bank Jamgbadi
 
 This includes being able to 'Invite new users' to the ASP 2.0 service
 
-![image.png](/.attachments/image-89ef2666-e26b-4c64-951b-1682d7965561.png =600x)
+![image.png](/docs/.attachments/image-89ef2666-e26b-4c64-951b-1682d7965561.png =600x)
 
 
 
 ##Managing user access
 
-![image.png](/.attachments/image-48bd9c7f-9699-4091-a550-ac25263dc3c4.png =600x)
+![image.png](/docs/.attachments/image-48bd9c7f-9699-4091-a550-ac25263dc3c4.png =600x)
 
 
 ###Managing user access includes:
@@ -25,4 +25,4 @@ This includes being able to 'Invite new users' to the ASP 2.0 service
 - Make approver - make the selected users an approver
 - Remove from organisation - removed a particular organisation that a user has access to.
 
-![image.png](/.attachments/image-c72bc8cf-9133-4869-b6c8-49fbe2fa5bca.png =600x)
+![image.png](/docs/.attachments/image-c72bc8cf-9133-4869-b6c8-49fbe2fa5bca.png =600x)

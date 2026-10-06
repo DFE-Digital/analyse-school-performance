@@ -6,7 +6,7 @@ For ASP 2.0 we need to think carefully about how to structure the data and make 
 
 There are a few different types of data in ASP, e.g. Establishments, Multi Academy Trusts, and in ASP 2.0 we'll have new things like Page Content Templates and Dataset Definitions (objects that represent the reports and page content templates making up a Dataset, along with where to find the data to drive the page content templates) but these are small in comparison to the Dataset data itself, so this is the logical place to start when thinking about the efficiency of storage and queries in ASP 2.0.
 
-**Aside:** there is a presentation covering most of this content at an overview level available here: [ASP 2.0 Data Structure.pptx](/.attachments/ASP%202.0%20Data%20Structure-119c2cf6-9079-4f97-bf93-839713e311ed.pptx)
+**Aside:** there is a presentation covering most of this content at an overview level available here: [ASP 2.0 Data Structure.pptx](/docs/.attachments/ASP%202.0%20Data%20Structure-119c2cf6-9079-4f97-bf93-839713e311ed.pptx)
 
 ## Data dimensions
 Dataset data in ASP can be broken down in several ways:

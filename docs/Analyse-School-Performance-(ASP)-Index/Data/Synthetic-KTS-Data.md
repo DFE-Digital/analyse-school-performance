@@ -10,7 +10,7 @@ There are 5 widgets at the top where you select which data you want to run.
     <tr>
       <td> 
 
-![image.png](/.attachments/image-1fb6dc35-9531-41e8-9706-f0462829a4f5.png)
+![image.png](/docs/.attachments/image-1fb6dc35-9531-41e8-9706-f0462829a4f5.png)
       </td>
     </tr>
   </thead>
@@ -44,4 +44,4 @@ School files have historically been output as one single csv and pupil files are
 
 The generated files are output here:- [s192d01stradfdev - Microsoft Azure](https://portal.azure.com/#@platform.education.gov.uk/resource/subscriptions/212193cd-152c-4621-97d1-85cb63f025b4/resourceGroups/s192d01-dev/providers/Microsoft.Storage/storageAccounts/s192d01stradfdev/storagebrowser)
 
-![image.png](/.attachments/image-4f094a76-56b7-4f46-8127-b1975f3d67cd.png)
+![image.png](/docs/.attachments/image-4f094a76-56b7-4f46-8127-b1975f3d67cd.png)

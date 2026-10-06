@@ -46,7 +46,7 @@ This generates the following HTML:
 ```
 
 Which displays the following in the UI:
-![h2](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-584d6265-a71e-465b-b2a9-80573eece685.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
+![h2](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/docs/.attachments/image-584d6265-a71e-465b-b2a9-80573eece685.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
 
 
 ### Example h3 heading
@@ -69,7 +69,7 @@ This generates the following HTML:
 ```
 
 Which displays the following in the UI:
-![h3](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-7b0ff59d-2cf0-4453-a1a2-00e8a8c4f879.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
+![h3](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/docs/.attachments/image-7b0ff59d-2cf0-4453-a1a2-00e8a8c4f879.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
 
 ## Text property
 *Value: any string*
@@ -103,7 +103,7 @@ This generates the following HTML:
 ```
 
 Which dispays the following in the UI:
-![h2 with caption](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-eac1faec-b87d-4e91-add7-bf57845f133b.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
+![h2 with caption](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/docs/.attachments/image-eac1faec-b87d-4e91-add7-bf57845f133b.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
 
 ### Example h3 heading with caption
 ```
@@ -126,7 +126,7 @@ This generates the following HTML:
 ```
 
 Which displays the following in the UI:
-![h3 with caption](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-21205301-35bd-4eda-b2af-fec443bc5834.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
+![h3 with caption](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/docs/.attachments/image-21205301-35bd-4eda-b2af-fec443bc5834.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
 
 ## LinkUrl property
 *Value: any string*
@@ -155,7 +155,7 @@ This generates the following HTML:
 ```
 
 Which displays the following in the UI:
-![h2 with link](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-88322869-4869-4186-85a2-b3dd97547221.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
+![h2 with link](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/docs/.attachments/image-88322869-4869-4186-85a2-b3dd97547221.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
 
 ### Example h3 heading with link
 ```
@@ -179,14 +179,14 @@ This generates the following HTML:
 ```
 
 Which displays the following in the UI:
-![h3 with link](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-109c2b90-4bf9-4c7a-a9c9-afe981f93480.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
+![h3 with link](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/docs/.attachments/image-109c2b90-4bf9-4c7a-a9c9-afe981f93480.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
 
 ### Example with caption and link:
-![image.png](/.attachments/image-3ae1326f-3fb4-4a0f-ac1f-aa268eaa840b.png)
+![image.png](/docs/.attachments/image-3ae1326f-3fb4-4a0f-ac1f-aa268eaa840b.png)
 
 # Editing
 Headings can be edited within the page using the heading component editor:
-![Heading edit](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/.attachments/image-853dafb3-92ed-4f94-95f3-847e6160fee6.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
+![Heading edit](https://dfe-ssp.visualstudio.com/eb62f5e3-e9f9-48e4-b1ad-1299fcc97149/_apis/git/repositories/64c84fc6-b50c-4733-b588-1cf324205824/Items?path=/docs/.attachments/image-853dafb3-92ed-4f94-95f3-847e6160fee6.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true&versionDescriptor.version=wikiMaster)
 
 ## Heading Type field
 *Dropdown, values `"H2"` or `"H3"`*
